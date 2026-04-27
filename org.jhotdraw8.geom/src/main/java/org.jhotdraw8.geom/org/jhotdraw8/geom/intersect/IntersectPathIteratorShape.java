@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom.intersect;
 
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,34 +15,32 @@ public class IntersectPathIteratorShape {
     }
 
 
-    /**
-     * Intersects the given path iterator with the given shape.
-     * <p>
-     * This method can produce the following {@link IntersectionStatus} codes:
-     * <dl>
-     *     <dt>{@link IntersectionStatus#INTERSECTION}</dt><dd>
-     *         The path iterator intersects with a segment of the shape within the
-     *         given tolerance radius.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_INSIDE}</dt><dd>
-     *         The path iterator lies inside the shape.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_OUTSIDE}</dt><dd>
-     *         The path iterator lies outside the shape.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_INSIDE_AND_OUTSIDE}</dt><dd>
-     *         The path iterator lies inside and outside the shape.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION}</dt><dd>
-     *         The path iterator does not intersect with the shape because either of the path iterator or the shape is
-     *         empty or because the path and the shape are coincident.
-     *     </dd>
-     * </dl>
-     *
-     * @param pit   the path iterator
-     * @param shape the shape
-     * @return the intersection result
-     */
+    /// Intersects the given path iterator with the given shape.
+    ///
+    /// This method can produce the following [IntersectionStatus] codes:
+    /// <dl>
+    ///     <dt>[IntersectionStatus#INTERSECTION]</dt><dd>
+    ///         The path iterator intersects with a segment of the shape within the
+    ///         given tolerance radius.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_INSIDE]</dt><dd>
+    ///         The path iterator lies inside the shape.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_OUTSIDE]</dt><dd>
+    ///         The path iterator lies outside the shape.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_INSIDE_AND_OUTSIDE]</dt><dd>
+    ///         The path iterator lies inside and outside the shape.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION]</dt><dd>
+    ///         The path iterator does not intersect with the shape because either of the path iterator or the shape is
+    ///         empty or because the path and the shape are coincident.
+    ///     </dd>
+    /// </dl>
+    ///
+    /// @param pit   the path iterator
+    /// @param shape the shape
+    /// @return the intersection result
     public static IntersectionResultEx intersectPathIteratorShapeEx(PathIterator pit, Shape shape) {
         List<IntersectionPointEx> intersections = new ArrayList<>();
         List<IntersectionPointEx> insideIntersections = new ArrayList<>();

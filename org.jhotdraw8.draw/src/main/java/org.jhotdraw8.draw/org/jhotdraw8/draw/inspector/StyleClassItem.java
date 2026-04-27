@@ -5,19 +5,12 @@
 package org.jhotdraw8.draw.inspector;
 
 
-/**
- * StyleClassItem.
- *
- */
+/// StyleClassItem.
 public class StyleClassItem {
 
-    /**
-     * The text of the tag.
-     */
+    /// The text of the tag.
     private final String text;
-    /**
-     * Whether the tag is present in all elements.
-     */
+    /// Whether the tag is present in all elements.
     private final boolean inAllElements;
 
     public StyleClassItem(String text, boolean isInAllElements) {

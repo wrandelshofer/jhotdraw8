@@ -8,8 +8,8 @@ package org.jhotdraw8.fxbase.control;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextInputControl;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxbase.undo.FXUndoManager;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -20,14 +20,12 @@ import javax.swing.undo.UndoableEdit;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.UnaryOperator;
 
-/**
- * This adapter can be bound to a {@link TextInputControl}
- * to support undo/redo with a {@link FXUndoManager}.
- * <p>
- * This text filter can be added to multiple text input controls.
- * If you do this, make sure that you add the {@link FXUndoManager}
- * only once as a listener.
- */
+/// This adapter can be bound to a [TextInputControl]
+/// to support undo/redo with a [FXUndoManager].
+///
+/// This text filter can be added to multiple text input controls.
+/// If you do this, make sure that you add the [FXUndoManager]
+/// only once as a listener.
 public class TextInputControlUndoAdapter implements UnaryOperator<TextFormatter.Change> {
     private final CopyOnWriteArrayList<UndoableEditListener> listeners = new CopyOnWriteArrayList<>();
 

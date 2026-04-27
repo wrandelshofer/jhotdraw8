@@ -11,97 +11,59 @@ import org.jspecify.annotations.Nullable;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.function.BiFunction;
-/**
- * Represents a node of a bezier path. A node has up to three control points:
- * <ul>
- * <li>px,py: POINT is the point through which the curve passes.</li>
- * <li>ix,iy: IN controls the tangent of the curve going towards C0.</li>
- * <li>ox,oy: OUT controls the tangent of the curve going away from C0.</li>
- * </ul>
- * A bit mask specifies which control points are in use.
- *
- */
+
+/// Represents a node of a bezier path. A node has up to three control points:
+///
+///   - px,py: POINT is the point through which the curve passes.
+///   - ix,iy: IN controls the tangent of the curve going towards C0.
+///   - ox,oy: OUT controls the tangent of the curve going away from C0.
+///
+/// A bit mask specifies which control points are in use.
 public class BezierNode {
 
-    /**
-     * Constant for having control point C0 in effect
-     */
+    /// Constant for having control point C0 in effect
     public static final int POINT_MASK = 1;
-    /**
-     * Constant for having control point C1 in effect (in addition to C0).
-     * C1 controls the curve going towards C0.
-     */
+    /// Constant for having control point C1 in effect (in addition to C0).
+    /// C1 controls the curve going towards C0.
     public static final int IN_MASK = 2;
-    /**
-     * Constant for having control points C0 and C1 in effect.
-     */
+    /// Constant for having control points C0 and C1 in effect.
     public static final int POINT_OUT_MASK = POINT_MASK | IN_MASK;
-    /**
-     * Constant for having control point C2 in effect (in addition to C0).
-     * C2 controls the curve going away from C0.
-     */
+    /// Constant for having control point C2 in effect (in addition to C0).
+    /// C2 controls the curve going away from C0.
     public static final int OUT_MASK = 4;
-    /**
-     * Constant for having control points C1 and C2 in effect.
-     */
+    /// Constant for having control points C1 and C2 in effect.
     public static final int IN_OUT_MASK = IN_MASK | OUT_MASK;
-    /**
-     * Constant for having control points C0, C1 and C2 in effect.
-     */
+    /// Constant for having control points C0, C1 and C2 in effect.
     public static final int POINT_IN_OUT_MASK = POINT_MASK | IN_MASK | OUT_MASK;
-    /**
-     * Constant for having control points C0 and C2 in effect.
-     */
+    /// Constant for having control points C0 and C2 in effect.
     public static final int C0C2_MASK = POINT_MASK | OUT_MASK;
-    /**
-     * Constant for moving to this bezier node.
-     */
+    /// Constant for moving to this bezier node.
     public static final int MOVE_MASK = 8;
-    /**
-     * Constant for closing the path by drawing a line or curve from this bezier node
-     * to the last node with a {@link #MOVE_MASK}.
-     */
+    /// Constant for closing the path by drawing a line or curve from this bezier node
+    /// to the last node with a [#MOVE_MASK].
     public static final int CLOSE_MASK = 16;
 
-    /**
-     * This is a hint for editing tools. If this is set to true, the editing
-     * tools shall keep all control points on the same line.
-     */
+    /// This is a hint for editing tools. If this is set to true, the editing
+    /// tools shall keep all control points on the same line.
     private final boolean collinear;
-    /**
-     * This is a hint for editing tools. If this is set to true, the editing
-     * tools shall keep C2 at the same distance from C0 as C1.
-     */
+    /// This is a hint for editing tools. If this is set to true, the editing
+    /// tools shall keep C2 at the same distance from C0 as C1.
     private final boolean equidistant;
-    /**
-     * This mask is used to describe which control points in addition to C0 are
-     * in effect.
-     */
+    /// This mask is used to describe which control points in addition to C0 are
+    /// in effect.
     private final int mask;
 
-    /**
-     * Holds the y-coordinates of the control points C0, C1, C2.
-     */
+    /// Holds the y-coordinates of the control points C0, C1, C2.
     private final double pointX;
-    /**
-     * Holds the y-coordinates of the control points C0, C1, C2.
-     */
+    /// Holds the y-coordinates of the control points C0, C1, C2.
     private final double inX;
-    /**
-     * Holds the y-coordinates of the control points C0, C1, C2.
-     */
+    /// Holds the y-coordinates of the control points C0, C1, C2.
     private final double outX;
-    /**
-     * Holds the y-coordinates of the control points C0, C1, C2.
-     */
+    /// Holds the y-coordinates of the control points C0, C1, C2.
     private final double pointY;
-    /**
-     * Holds the y-coordinates of the control points C0, C1, C2.
-     */
+    /// Holds the y-coordinates of the control points C0, C1, C2.
     private final double inY;
-    /**
-     * Holds the y-coordinates of the control points C0, C1, C2.
-     */
+    /// Holds the y-coordinates of the control points C0, C1, C2.
     private final double outY;
 
     public BezierNode(double pointX, double pointY) {
@@ -227,12 +189,10 @@ public class BezierNode {
         return Double.doubleToLongBits(this.outY) == Double.doubleToLongBits(other.outY);
     }
 
-    /**
-     * Gets a control point given the specified mask.
-     *
-     * @param mask a mask, one of {@link #POINT_MASK},{@link #IN_MASK},{@link #OUT_MASK}.
-     * @return the point
-     */
+    /// Gets a control point given the specified mask.
+    ///
+    /// @param mask a mask, one of [#POINT_MASK],[#IN_MASK],[#OUT_MASK].
+    /// @return the point
     public Point2D getC(int mask) {
         return switch (mask) {
             case POINT_MASK -> getPoint();
@@ -251,61 +211,48 @@ public class BezierNode {
         };
     }
 
-    /**
-     * Gets the point through which the curve passes.
-     *
-     * @return curve point
-     */
+    /// Gets the point through which the curve passes.
+    ///
+    /// @return curve point
     public Point2D getPoint() {
         return new Point2D.Double(pointX, pointY);
     }
 
-    /**
-     * Gets the incoming tangent point.
-     * @return incoming tangent point
-     */
+    /// Gets the incoming tangent point.
+    ///
+    /// @return incoming tangent point
     public Point2D getIn() {
         return new Point2D.Double(inX, inY);
     }
 
-    /**
-     * Gets the outgoing tangent point.
-     * @return outgoing tangent point
-     */
+    /// Gets the outgoing tangent point.
+    /// @return outgoing tangent point
     public <T> T getOut(BiFunction<Double, Double, T> f) {
         return f.apply(outX, outY);
     }
 
-    /**
-     * Gets the point through which the curve passes.
-     *
-     * @return curve point
-     */
+    /// Gets the point through which the curve passes.
+    ///
+    /// @return curve point
     public <T> T getPoint(BiFunction<Double, Double, T> f) {
         return f.apply(pointX, pointY);
     }
 
-    /**
-     * Gets the incoming tangent point.
-     *
-     * @return incoming tangent point
-     */
+    /// Gets the incoming tangent point.
+    ///
+    /// @return incoming tangent point
     public <T> T getIn(BiFunction<Double, Double, T> f) {
         return f.apply(inX, inY);
     }
 
-    /**
-     * Gets the outgoing tangent point.
-     *
-     * @return outgoing tangent point
-     */
+    /// Gets the outgoing tangent point.
+    ///
+    /// @return outgoing tangent point
     public Point2D getOut() {
         return new Point2D.Double(outX, outY);
     }
 
-    /**
-     * @return the mask
-     */
+    /// @return the mask
     public int getMask() {
         return mask;
     }
@@ -367,12 +314,10 @@ public class BezierNode {
     }
 
 
-    /**
-     * Gets the x-coordinate of a control point given the specified mask.
-     *
-     * @param mask a mask, one of {@link #POINT_MASK},{@link #IN_MASK},{@link #OUT_MASK}.
-     * @return the point
-     */
+    /// Gets the x-coordinate of a control point given the specified mask.
+    ///
+    /// @param mask a mask, one of [#POINT_MASK],[#IN_MASK],[#OUT_MASK].
+    /// @return the point
     public double getX(int mask) {
         return switch (mask) {
             case POINT_MASK -> pointX();
@@ -382,47 +327,35 @@ public class BezierNode {
         };
     }
 
-    /**
-     * @return the px
-     */
+    /// @return the px
     public double pointX() {
         return pointX;
     }
 
-    /**
-     * @param px the p to set
-     * @return a new instance
-     */
+    /// @param px the p to set
+    /// @return a new instance
     public BezierNode withPx(double px) {
         return new BezierNode(mask, equidistant, collinear, px, pointY, inX, inY, outX, outY);
     }
 
-    /**
-     * @return the ix
-     */
+    /// @return the ix
     public double inX() {
         return inX;
     }
 
-    /**
-     * @param ix the x1 to set
-     * @return a new instance
-     */
+    /// @param ix the x1 to set
+    /// @return a new instance
     public BezierNode withIx(double ix) {
         return new BezierNode(mask, equidistant, collinear, pointX, pointY, ix, inY, outX, outY);
     }
 
-    /**
-     * @return the x2
-     */
+    /// @return the x2
     public double outX() {
         return outX;
     }
 
-    /**
-     * @param ox the x2 to set
-     * @return a new instance
-     */
+    /// @param ox the x2 to set
+    /// @return a new instance
     public BezierNode withOx(double ox) {
         return new BezierNode(mask, equidistant, collinear, pointX, pointY, inX, inY, ox, outY);
     }
@@ -436,47 +369,35 @@ public class BezierNode {
         };
     }
 
-    /**
-     * @return the y0
-     */
+    /// @return the y0
     public double pointY() {
         return pointY;
     }
 
-    /**
-     * @param py the y0 to set
-     * @return a new instance
-     */
+    /// @param py the y0 to set
+    /// @return a new instance
     public BezierNode withPointY(double py) {
         return new BezierNode(mask, equidistant, collinear, pointX, py, inX, inY, outX, outY);
     }
 
-    /**
-     * @return the y1
-     */
+    /// @return the y1
     public double inY() {
         return inY;
     }
 
-    /**
-     * @param iy the y1 to set
-     * @return a new instance
-     */
+    /// @param iy the y1 to set
+    /// @return a new instance
     public BezierNode withIy(double iy) {
         return new BezierNode(mask, equidistant, collinear, pointX, pointY, inX, iy, outX, outY);
     }
 
-    /**
-     * @return the y2
-     */
+    /// @return the y2
     public double outY() {
         return outY;
     }
 
-    /**
-     * @param oy the y2 to set
-     * @return a new instance
-     */
+    /// @param oy the y2 to set
+    /// @return a new instance
     public BezierNode withOy(double oy) {
         return new BezierNode(mask, equidistant, collinear, pointX, pointY, inX, inY, outX, oy);
     }
@@ -508,16 +429,12 @@ public class BezierNode {
         return (mask & OUT_MASK) == OUT_MASK;
     }
 
-    /**
-     * @return the collinear
-     */
+    /// @return the collinear
     public boolean isCollinear() {
         return collinear;
     }
 
-    /**
-     * @return the equidistant
-     */
+    /// @return the equidistant
     public boolean isEquidistant() {
         return equidistant;
     }
@@ -530,11 +447,9 @@ public class BezierNode {
         return !isMoveTo() && (mask & CLOSE_MASK) == CLOSE_MASK;
     }
 
-    /**
-     * @param mask specifies which control point must be set
-     * @param c    the c to set
-     * @return a new instance
-     */
+    /// @param mask specifies which control point must be set
+    /// @param c    the c to set
+    /// @return a new instance
     public BezierNode withC(int mask, Point2D c) {
         return withC(mask, c.getX(), c.getY());
     }
@@ -566,118 +481,92 @@ public class BezierNode {
         return new BezierNode(this.mask, equidistant, collinear, nx0, ny0, nx1, ny1, nx2, ny2);
     }
 
-    /**
-     * @param c0 the c0 to set
-     * @return a new instance
-     */
+    /// @param c0 the c0 to set
+    /// @return a new instance
     public BezierNode withPoint(Point2D c0) {
         return new BezierNode(mask, equidistant, collinear, c0.getX(), c0.getY(), inX, inY, outX, outY);
     }
 
-    /**
-     * @param x0 the x0 to set
-     * @param y0 the y0 to set
-     * @return a new instance
-     */
+    /// @param x0 the x0 to set
+    /// @param y0 the y0 to set
+    /// @return a new instance
     public BezierNode withPoint(double x0, double y0) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, inX, inY, outX, outY);
     }
 
-    /**
-     * @param c0 the c0 to set
-     * @return a new instance
-     */
+    /// @param c0 the c0 to set
+    /// @return a new instance
     public BezierNode withPointAndTranslatedInOut(Point2D c0) {
         double x = c0.getX();
         double y = c0.getY();
         return new BezierNode(mask, equidistant, collinear, x, y, inX + x - pointX, inY + y - pointY, outX + x - pointX, outY + y - pointY);
     }
 
-    /**
-     * @param c0 the c0 to set
-     * @return a new instance
-     */
+    /// @param c0 the c0 to set
+    /// @return a new instance
     public BezierNode withPointAndTranslatedInOut(javafx.geometry.Point2D c0) {
         double x = c0.getX();
         double y = c0.getY();
         return new BezierNode(mask, equidistant, collinear, x, y, inX + x - pointX, inY + y - pointY, outX + x - pointX, outY + y - pointY);
     }
 
-    /**
-     * @param c1 the c0 to set
-     * @return a new instance
-     */
+    /// @param c1 the c0 to set
+    /// @return a new instance
     public BezierNode withIn(Point2D c1) {
         return new BezierNode(mask, equidistant, collinear, pointX, pointY, c1.getX(), c1.getY(), outX, outY);
     }
 
-    /**
-     * @param inX the x1 to set
-     * @param inY the y1to set
-     * @return a new instance
-     */
+    /// @param inX the x1 to set
+    /// @param inY the y1to set
+    /// @return a new instance
     public BezierNode withIn(double inX, double inY) {
         return new BezierNode(mask, equidistant, collinear, pointX, pointY, inX, inY, outX, outY);
     }
 
-    /**
-     * @param c2 the c0 to set
-     * @return a new instance
-     */
+    /// @param c2 the c0 to set
+    /// @return a new instance
     public BezierNode withOut(Point2D c2) {
         return new BezierNode(mask, equidistant, collinear, pointX, pointY, inX, inY, c2.getX(), c2.getY());
     }
 
-    /**
-     * @param outX the x2 to set
-     * @param outY the y2 to set
-     * @return a new instance
-     */
+    /// @param outX the x2 to set
+    /// @param outY the y2 to set
+    /// @return a new instance
     public BezierNode withOut(double outX, double outY) {
         return new BezierNode(mask, equidistant, collinear, pointX, pointY, inX, inY, outX, outY);
     }
 
-    /**
-     * @param collinear the collinear to set
-     * @return a new instance
-     */
+    /// @param collinear the collinear to set
+    /// @return a new instance
     public BezierNode withCollinear(boolean collinear) {
         return new BezierNode(mask, equidistant, collinear, pointX, pointY, inX, inY, outX, outY);
     }
 
-    /**
-     * @param equidistant the equidistant to set
-     * @return a new instance
-     */
+    /// @param equidistant the equidistant to set
+    /// @return a new instance
     public BezierNode withEquidistant(boolean equidistant) {
         return new BezierNode(mask, equidistant, collinear, pointX, pointY, inX, inY, outX, outY);
     }
 
-    /**
-     * @param mask the mask to set
-     * @return a new instance
-     */
+    /// @param mask the mask to set
+    /// @return a new instance
     public BezierNode withMask(int mask) {
         return mask == this.mask ? this : new BezierNode(mask, equidistant, collinear, pointX, pointY, inX, inY, outX, outY);
     }
 
-    /**
-     * Sets all the bits in the specified mask.
-     *
-     * @param mask the mask to set
-     * @return a new instance
-     */
+    /// Sets all the bits in the specified mask.
+    ///
+    /// @param mask the mask to set
+    /// @return a new instance
     public BezierNode withMaskBitsSet(int mask) {
         int newMask = this.mask | mask;
         return newMask == this.mask ? this : new BezierNode(newMask, equidistant, collinear, pointX, pointY, inX, inY, outX, outY);
     }
 
-    /**
-     * Clears all the bits in the specified mask.
-     *
-     * @param mask the mask to set
-     * @return a new instance
-     */
+    /// Clears all the bits in the specified mask.
+    ///
+    /// @param mask the mask to set
+    /// @return a new instance
     public BezierNode withMaskBitsClears(int mask) {
         int newMask = this.mask & ~mask;
         return newMask == this.mask ? this : new BezierNode(newMask, equidistant, collinear, pointX, pointY, inX, inY, outX, outY);

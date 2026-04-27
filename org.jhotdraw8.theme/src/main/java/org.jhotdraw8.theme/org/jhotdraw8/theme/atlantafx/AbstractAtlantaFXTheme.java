@@ -14,15 +14,13 @@ import org.jhotdraw8.theme.ThemeParameters;
 import static org.jhotdraw8.color.FXColorUtil.toWebColor;
 
 
-/**
- * Abstract base class for AtlantaFX themes.
- * <p>
- * References:
- * <dl>
- *     <dt>AtlantaFX, Copyright (c) 2022 mkpaz, MIT License</dt>
- *     <dd><a href="https://github.com/mkpaz/atlantafx">github.com</a></dd>
- * </dl>
- */
+/// Abstract base class for AtlantaFX themes.
+///
+/// References:
+/// <dl>
+///     <dt>AtlantaFX, Copyright (c) 2022 mkpaz, MIT License</dt>
+///     <dd><a href="https://github.com/mkpaz/atlantafx">github.com</a></dd>
+/// </dl>
 public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
     private final String uaStylesheetUrl;
 

@@ -8,7 +8,11 @@ package org.jhotdraw8.draw.io;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.GroupFigure;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
@@ -23,9 +27,18 @@ import javax.xml.stream.Location;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.SequencedSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.FutureTask;
@@ -34,9 +47,7 @@ import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Simple XML Reader for {@link Drawing}s.
- */
+/// Simple XML Reader for [Drawing]s.
 public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInputFormat {
     private static final Pattern hrefPattern = Pattern.compile("\\s+href=\"([^\"]*?)\"");
     private final IdFactory idFactory;
@@ -103,13 +114,11 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
         return read((AutoCloseable) in, drawing, documentHome, workState);
     }
 
-    /**
-     * Reads from the specified input stream.
-     *
-     * @param in must be an instanceof {@link InputStream} or of {@link Reader}.
-     * @return a deque of the figures in the files
-     * @throws IOException on IO failure
-     */
+    /// Reads from the specified input stream.
+    ///
+    /// @param in must be an instanceof [InputStream] or of [Reader].
+    /// @return a deque of the figures in the files
+    /// @throws IOException on IO failure
     private Deque<Figure> doRead(AutoCloseable in) throws IOException {
 
         Deque<Figure> stack = new ArrayDeque<>();

@@ -10,20 +10,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public abstract class AbstractSortedMapTest extends AbstractMapTest {
-    /**
-     * Creates a new empty instance.
-     */
+    /// Creates a new empty instance.
     protected abstract <K, V> SortedMap<K, V> newInstance();
 
-    /**
-     * Creates a new instance with the specified expected number of elements
-     * and load factor.
-     */
+    /// Creates a new instance with the specified expected number of elements
+    /// and load factor.
     protected abstract <K, V> SortedMap<K, V> newInstance(int numElements, float loadFactor);
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <K, V> SortedMap<K, V> newInstance(Map<K, V> m);
 
 

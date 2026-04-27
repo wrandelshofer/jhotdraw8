@@ -9,42 +9,29 @@ import javafx.geometry.Bounds;
 
 import java.util.stream.Collector;
 
-/**
- * A state object for finding the combined bounds of a stream of Bounds objects.
- * <p>
- * This class is designed to work with a (parallel) stream of Bounds objects with:
- * <pre>{@code
- * Stream<Bounds> boundsStream = ... ;
- * BoundsCalculator stats = boundsStream.collect(BoundsCalculator::new,
- *                                                    BoundsCalculator::accept,
- *                                                     BoundsCalculator::combine);
- * }</pre>
- * <p>
- * The BoundsCalculator can be used as a
- * {@linkplain java.util.stream.Stream#collect(Collector) reduction}
- * <pre> {@code
- * BoundsCalculator stats = figures.stream()
- *     .collect(BoundsCalculator.collectBounds(Figure::getBoundsInWorld));
- * }</pre>
- *
- */
+/// A state object for finding the combined bounds of a stream of Bounds objects.
+///
+/// This class is designed to work with a (parallel) stream of Bounds objects with:
+/// <pre>
+/// `Stream<Bounds> boundsStream = ... ;BoundsCalculator stats = boundsStream.collect(BoundsCalculator::new,BoundsCalculator::accept,BoundsCalculator::combine);`</pre>
+///
+/// The BoundsCalculator can be used as a
+/// {@linkplain java.util.stream.Stream#collect(Collector) reduction}
+/// <pre>
+/// `BoundsCalculator stats = figures.stream().collect(BoundsCalculator.collectBounds(Figure::getBoundsInWorld));`</pre>
 public class BoundsCalculator {
     private double minX = Double.POSITIVE_INFINITY;
     private double minY = Double.POSITIVE_INFINITY;
     private double maxX = Double.NEGATIVE_INFINITY;
     private double maxY = Double.NEGATIVE_INFINITY;
 
-    /**
-     * Constructs a new instance with initially empty bounds.
-     */
+    /// Constructs a new instance with initially empty bounds.
     public BoundsCalculator() {
     }
 
-    /**
-     * Adds another value to the bounds.
-     *
-     * @param value the input value
-     */
+    /// Adds another value to the bounds.
+    ///
+    /// @param value the input value
     public void accept(Bounds value) {
         minX = Math.min(minX, value.getMinX());
         maxX = Math.max(maxX, value.getMaxX());
@@ -52,13 +39,11 @@ public class BoundsCalculator {
         maxY = Math.max(maxY, value.getMaxY());
     }
 
-    /**
-     * Combines the state of another {@code BoundsCalculator} into this
-     * one.
-     *
-     * @param other another {@code BoundsCalculator}
-     * @throws NullPointerException if {@code other} is null
-     */
+    /// Combines the state of another `BoundsCalculator` into this
+    /// one.
+    ///
+    /// @param other another `BoundsCalculator`
+    /// @throws NullPointerException if `other` is null
     public void combine(BoundsCalculator other) {
         minX = Math.min(minX, other.minX);
         maxX = Math.max(maxX, other.maxX);
@@ -66,11 +51,9 @@ public class BoundsCalculator {
         maxY = Math.max(maxY, other.maxY);
     }
 
-    /**
-     * Getter.
-     *
-     * @return the calculated bounds
-     */
+    /// Getter.
+    ///
+    /// @return the calculated bounds
     public Bounds getBounds() {
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }

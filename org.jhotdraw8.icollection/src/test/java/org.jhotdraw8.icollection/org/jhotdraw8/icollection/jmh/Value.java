@@ -1,10 +1,8 @@
 package org.jhotdraw8.icollection.jmh;
 
 
-/**
- * A key with an integer value and a masked hash code.
- * The mask allows to provoke collisions in hash maps.
- */
+/// A key with an integer value and a masked hash code.
+/// The mask allows to provoke collisions in hash maps.
 public class Value implements Comparable<Value> {
     public final int value;
     public final int hashCode;

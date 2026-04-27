@@ -4,9 +4,8 @@
  */
 
 import org.jspecify.annotations.NullMarked;
-/**
- * Provides examples for various features of the JHotDraw drawing framework.
- */
+
+/// Provides examples for various features of the JHotDraw drawing framework.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.examples {

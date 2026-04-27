@@ -10,10 +10,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.NoSuchElementException;
 
-/**
- * BezierPathIterator.
- *
- */
+/// BezierPathIterator.
 public class BezierPathIterator implements PathIterator {
     enum State {
         PRODUCE_SEGMENT,
@@ -50,22 +47,18 @@ public class BezierPathIterator implements PathIterator {
         }
     }
 
-    /**
-     * Return the winding rule for determining the interior of the path.
-     *
-     * @see PathIterator#WIND_EVEN_ODD
-     * @see PathIterator#WIND_NON_ZERO
-     */
+    /// Return the winding rule for determining the interior of the path.
+    ///
+    /// @see PathIterator#WIND_EVEN_ODD
+    /// @see PathIterator#WIND_NON_ZERO
     @Override
     public int getWindingRule() {
         return path.getWindingRule();
     }
 
-    /**
-     * Tests if there are more points to read.
-     *
-     * @return true if there are more points to read
-     */
+    /// Tests if there are more points to read.
+    ///
+    /// @return true if there are more points to read
     @Override
     public boolean isDone() {
         return state == State.DONE;

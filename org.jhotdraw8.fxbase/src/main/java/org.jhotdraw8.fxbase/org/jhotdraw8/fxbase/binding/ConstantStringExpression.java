@@ -9,10 +9,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.value.ChangeListener;
 
-/**
- * ConstantStringExpression.
- *
- */
+/// ConstantStringExpression.
 public class ConstantStringExpression extends StringExpression {
 
     private final String value;

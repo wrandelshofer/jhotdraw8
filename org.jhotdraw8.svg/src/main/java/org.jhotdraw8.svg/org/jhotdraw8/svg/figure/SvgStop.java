@@ -4,18 +4,15 @@
  */
 package org.jhotdraw8.svg.figure;
 
+import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * CssStop.
- *
- */
+/// CssStop.
 public record SvgStop(double offset, SvgDefaultablePaint<CssColor> color, CssDefaultableValue<CssSize> opacity) {
 
     @Override

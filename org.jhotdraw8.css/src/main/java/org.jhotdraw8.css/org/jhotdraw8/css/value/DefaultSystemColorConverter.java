@@ -11,9 +11,7 @@ import org.jhotdraw8.icollection.persistent.PersistentMap;
 
 import java.util.Map;
 
-/**
- * The default color converter provides a fixed set of system colors.
- */
+/// The default color converter provides a fixed set of system colors.
 public class DefaultSystemColorConverter extends MappedSystemColorConverter {
     public static final PersistentMap<String, Color> LIGHT_SYSTEM_COLORS = ChampMap.copyOf(MapEntries.ofEntries(
                 Map.entry(CANVAS, Color.WHITE),

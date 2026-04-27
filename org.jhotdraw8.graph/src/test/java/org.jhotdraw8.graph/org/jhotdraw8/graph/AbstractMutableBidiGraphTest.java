@@ -9,13 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Base class for tests that test implementations of the {@link MutableBidiGraph}
- * interface.
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- */
+/// Base class for tests that test implementations of the [MutableBidiGraph]
+/// interface.
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
 public abstract class AbstractMutableBidiGraphTest<V, A>
         extends AbstractMutableDirectedGraphTest<V, A> {
     @Override
@@ -24,20 +22,18 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     @Override
     protected abstract MutableBidiGraph<V, A> newInstance(DirectedGraph<V, A> g);
 
-    /**
-     * Test getters.
-     * <pre>
-     * <pre>
-     *            x
-     *           ⟲
-     *     0 ─a→ 1 ─c→ 2
-     *     │     │
-     *     b     d
-     *     ↓     ↓
-     *     3 ←e─ 4
-     * </pre>
-     * </pre>
-     */
+    /// Test getters.
+    /// <pre>
+    /// <pre>
+    ///            x
+    ///           ⟲
+    ///     0 ─a→ 1 ─c→ 2
+    ///     │     │
+    ///     b     d
+    ///     ↓     ↓
+    ///     3 ←e─ 4
+    /// </pre>
+    /// </pre>
     @Override
     @Test
     public void testAddVerticesAndArrows() {
@@ -79,15 +75,13 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
         assertEquals('d', getArrowId(g.getPrevArrow(v[4], 0)));
     }
 
-    /**
-     * Test arrow removal.
-     * <pre>
-     *     0 ─x→ 1 ──→ 2
-     *     |     │
-     *     ↓     ↓
-     *     3 ←── 4
-     * </pre>
-     */
+    /// Test arrow removal.
+    /// <pre>
+    ///     0 ─x→ 1 ──→ 2
+    ///     |     │
+    ///     ↓     ↓
+    ///     3 ←── 4
+    /// </pre>
     @Test
     public void testRemoveArrowBidi() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
@@ -117,16 +111,14 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
         assertEquals('d', getArrowId(g.getPrevArrow(v[4], 0)));
     }
 
-    /**
-     * Test remove arrow.
-     * <pre>
-     *           ⟲
-     *     0 ─a→ 1 ──→ 2
-     *     |     │
-     *     ↓     ↓
-     *     3 ←── 4
-     * </pre>
-     */
+    /// Test remove arrow.
+    /// <pre>
+    ///           ⟲
+    ///     0 ─a→ 1 ──→ 2
+    ///     |     │
+    ///     ↓     ↓
+    ///     3 ←── 4
+    /// </pre>
     @Test
     public void testRemoveArrowAtBidi() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
@@ -158,16 +150,14 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
         assertEquals('d', getArrowId(g.getPrevArrow(v[4], 0)));
     }
 
-    /**
-     * Test remove arrow with self-loop.
-     * <pre>
-     *           ⟲x
-     *     0 ──→ 1 ──→ 2
-     *     |     │
-     *     ↓     ↓
-     *     3 ←── 4
-     * </pre>
-     */
+    /// Test remove arrow with self-loop.
+    /// <pre>
+    ///           ⟲x
+    ///     0 ──→ 1 ──→ 2
+    ///     |     │
+    ///     ↓     ↓
+    ///     3 ←── 4
+    /// </pre>
     @Test
     public void testRemoveArrowAtBidiWithSelfLoop() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
@@ -199,17 +189,15 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
         assertEquals('d', getArrowId(g.getPrevArrow(v[4], 0)));
     }
 
-    /**
-     * Test remove vertex 1.
-     * <p>
-     * Example graph after removal of 1:
-     * <pre>
-     *     0          2
-     *     │
-     *     ↓
-     *     3 ←── 4
-     * </pre>
-     */
+    /// Test remove vertex 1.
+    ///
+    /// Example graph after removal of 1:
+    /// <pre>
+    ///     0          2
+    ///     │
+    ///     ↓
+    ///     3 ←── 4
+    /// </pre>
     @Test
     public void testRemoveVertexBidi() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();

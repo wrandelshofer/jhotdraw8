@@ -12,14 +12,33 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.*;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.*;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.FillRule;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -34,7 +53,12 @@ import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.css.value.CssDimension2D;
 import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.FXPreciseRotate;
+import org.jhotdraw8.geom.FXRectangles;
+import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.FXSvgPaths;
+import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.svg.text.SvgPaintCssConverter;
@@ -55,7 +79,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.dom.DOMResult;
-import java.awt.*;
+import java.awt.BasicStroke;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
@@ -64,12 +88,19 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.io.Writer;
 import java.net.URI;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import static org.jhotdraw8.draw.io.BitmapExportOutputFormat.fromFXImage;
 
@@ -87,32 +118,28 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     private final Converter<PersistentList<Transform>> tx = new ListCssConverter<>(new SvgTransformConverter(false));
     protected final IdFactory idFactory = new SimpleIdFactory();
 
-    /**
-     * @param imageUriKey this property is used to retrieve an URL from an
-     *                    ImageView. If an ImageView does not have an URL,
-     *                    then the exporter includes the image with a data URL.
-     * @param skipKey     this property is used to retrieve a Boolean from a Node.
-     *                    If the Boolean is true, then the node is skipped.
-     */
+    /// @param imageUriKey this property is used to retrieve an URL from an
+    ///                    ImageView. If an ImageView does not have an URL,
+    ///                    then the exporter includes the image with a data URL.
+    /// @param skipKey     this property is used to retrieve a Boolean from a Node.
+    ///                    If the Boolean is true, then the node is skipped.
     public AbstractFXSvgWriter(@Nullable Object imageUriKey, @Nullable Object skipKey) {
         this.imageUriKey = imageUriKey;
         this.skipKey = skipKey;
     }
 
-    /**
-     * Draws or measures a paragraph of text at the specified y location and
-     * the bounds of the paragraph.
-     *
-     * @param styledText     the text of the paragraph.
-     * @param verticalPos    the top bound of the paragraph
-     * @param maxVerticalPos the bottom bound of the paragraph
-     * @param leftMargin     the left bound of the paragraph
-     * @param rightMargin    the right bound of the paragraph
-     * @param tabStops       an array with tab stops
-     * @param tabCount       the number of entries in tabStops which contain actual
-     *                       values
-     * @return Returns the actual bounds of the paragraph.
-     */
+    /// Draws or measures a paragraph of text at the specified y location and
+    /// the bounds of the paragraph.
+    ///
+    /// @param styledText     the text of the paragraph.
+    /// @param verticalPos    the top bound of the paragraph
+    /// @param maxVerticalPos the bottom bound of the paragraph
+    /// @param leftMargin     the left bound of the paragraph
+    /// @param rightMargin    the right bound of the paragraph
+    /// @param tabStops       an array with tab stops
+    /// @param tabCount       the number of entries in tabStops which contain actual
+    ///                       values
+    /// @return Returns the actual bounds of the paragraph.
     private Rectangle2D.Double drawParagraph(XMLStreamWriter w,
                                              FontRenderContext frc, String
                                                      paragraph, AttributedCharacterIterator styledText,
@@ -251,20 +278,18 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         return paragraphBounds;
     }
 
-    /**
-     * Writes text as a series of tspan elements.
-     *
-     * @param w               the writer
-     * @param str             the text
-     * @param textRect        the bounding rectangles of the text
-     * @param tfont           the font of the text
-     * @param tabSize         the tabulator size
-     * @param isUnderlined    whether the text is underlined
-     * @param isStrikethrough whether the text is striked through
-     * @param textAlignment   the alignment of the text
-     * @param lineSpacing     the line spacing of the text
-     * @throws XMLStreamException on write failure
-     */
+    /// Writes text as a series of tspan elements.
+    ///
+    /// @param w               the writer
+    /// @param str             the text
+    /// @param textRect        the bounding rectangles of the text
+    /// @param tfont           the font of the text
+    /// @param tabSize         the tabulator size
+    /// @param isUnderlined    whether the text is underlined
+    /// @param isStrikethrough whether the text is striked through
+    /// @param textAlignment   the alignment of the text
+    /// @param lineSpacing     the line spacing of the text
+    /// @throws XMLStreamException on write failure
     private void drawText(XMLStreamWriter w, @Nullable String str,
                           Bounds textRect,
                           Font tfont, int tabSize, boolean isUnderlined,

@@ -38,13 +38,11 @@ public class BinaryPListParserTest {
         NO_INDENT_XML_PROPERTIES.put(OutputKeys.ENCODING, "UTF-8");
     }
 
-    /**
-     * Tests a small property plist where the binary presentation has
-     * less than 256 objects. In this case objects are encoded in
-     * a byte array.
-     *
-     * @throws Exception on failure
-     */
+    /// Tests a small property plist where the binary presentation has
+    /// less than 256 objects. In this case objects are encoded in
+    /// a byte array.
+    ///
+    /// @throws Exception on failure
     @Test
     public void testSmallPropertyList() throws Exception {
         File xmlFile = new File(getClass().getResource("SmallXmlPropertyList.plist").toURI());
@@ -57,13 +55,11 @@ public class BinaryPListParserTest {
         // writeDocument(System.out, docFromBinary, INDENT_XML_PROPERTIES);
     }
 
-    /**
-     * Tests a small property plist where the binary presentation has
-     * exactly 256 objects.  In this case objects are encoded in
-     * a short array.
-     *
-     * @throws Exception on failure
-     */
+    /// Tests a small property plist where the binary presentation has
+    /// exactly 256 objects.  In this case objects are encoded in
+    /// a short array.
+    ///
+    /// @throws Exception on failure
     @Test
     public void testLargePropertyList() throws Exception {
         File xmlFile = new File(getClass().getResource("LargeXmlPropertyList.plist").toURI());

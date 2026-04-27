@@ -11,21 +11,16 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Presents an {@code URIChooser} and loads the selected URI into an empty view.
- * If no empty view is available, a new view is created.
- *
- */
+/// Presents an `URIChooser` and loads the selected URI into an empty view.
+/// If no empty view is available, a new view is created.
 public class OpenFileAction extends AbstractOpenFileAction {
 
     public static final String ID = "file.open";
     private final boolean reuseEmptyViews = true;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app the application
-     */
+    /// Creates a new instance.
+    ///
+    /// @param app the application
     @SuppressWarnings("this-escape")
     public OpenFileAction(FileBasedApplication app) {
         super(app);

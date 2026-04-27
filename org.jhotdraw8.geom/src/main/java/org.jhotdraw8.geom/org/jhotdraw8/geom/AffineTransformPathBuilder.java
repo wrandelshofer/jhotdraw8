@@ -9,11 +9,9 @@ import org.jspecify.annotations.Nullable;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
-/**
- * TransformPathBuilder.
- *
- * @param <T> the product type
- */
+/// TransformPathBuilder.
+///
+/// @param <T> the product type
 public class AffineTransformPathBuilder<T> extends AbstractPathBuilder<T> {
 
     private final PathBuilder<T> target;

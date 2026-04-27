@@ -8,11 +8,9 @@ package org.jhotdraw8.base.event;
 import java.io.Serial;
 import java.util.EventObject;
 
-/**
- * Event.
- *
- * @param <S> the type of the event source
- */
+/// Event.
+///
+/// @param <S> the type of the event source
 public class Event<S> extends EventObject {
 
     @Serial

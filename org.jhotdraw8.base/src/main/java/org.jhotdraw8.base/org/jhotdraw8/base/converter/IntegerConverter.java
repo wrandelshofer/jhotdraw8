@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-/**
- * Converts a Java double from/to String.
- */
+/// Converts a Java double from/to String.
 public class IntegerConverter implements Converter<Integer> {
     private final boolean nullable;
 

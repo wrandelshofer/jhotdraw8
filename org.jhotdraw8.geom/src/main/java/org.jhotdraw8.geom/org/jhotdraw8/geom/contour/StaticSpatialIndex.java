@@ -11,112 +11,84 @@ import java.util.function.IntPredicate;
 
 import static java.lang.Math.min;
 
-/**
- * StaticSpatialIndex.
- * <p>
- * References:
- * <p>
- * This code has been derived from CavalierContours.
- * <dl>
- *     <dt>CavalierContours. Copyright (c) 2019 Jedidiah Buck McCready.
- *    <a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
- *     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
- * </dl>
- */
+/// StaticSpatialIndex.
+///
+/// References:
+///
+/// This code has been derived from CavalierContours.
+/// <dl>
+///     <dt>CavalierContours. Copyright (c) 2019 Jedidiah Buck McCready.
+///    <a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
+///     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
+/// </dl>
 public class StaticSpatialIndex {
-    /**
-     * Points for each added element to the first element in the m_boxes
-     * array that describes the bounding box of the element.
-     * <p>
-     * The index must be multiplied by 4 (or shift left by 2) to get the
-     * corresponding element in m_boxes.
-     * <p>
-     * Invariants:
-     * <pre>
-     * Context StaticSpatialIndex inv:
-     *   m_indices.length = numItems
-     *   m_indices->forAll( i | i &gt;= 0 )
-     * </pre>
-     */
+    /// Points for each added element to the first element in the m_boxes
+    /// array that describes the bounding box of the element.
+    ///
+    /// The index must be multiplied by 4 (or shift left by 2) to get the
+    /// corresponding element in m_boxes.
+    ///
+    /// Invariants:
+    /// <pre>
+    /// Context StaticSpatialIndex inv:
+    ///   m_indices.length = numItems
+    ///   m_indices->forAll( i | i &gt;= 0 )
+    /// </pre>
     private final int[] m_indices;
-    /**
-     * Describes the bounding box of the elements. Contains 4 entries
-     * for each element: minX,minY,maxX,maxY.
-     * <p>
-     * Invariants:
-     * <pre>
-     * Context StaticSpatialIndex inv:
-     *   m_boxes.length = numItems * 4
-     * </pre>
-     */
+    /// Describes the bounding box of the elements. Contains 4 entries
+    /// for each element: minX,minY,maxX,maxY.
+    ///
+    /// Invariants:
+    /// <pre>
+    /// Context StaticSpatialIndex inv:
+    ///   m_boxes.length = numItems * 4
+    /// </pre>
     private final double[] m_boxes;
-    /**
-     * Maximal number of elements inside a level.
-     */
+    /// Maximal number of elements inside a level.
     private final int nodeSize;
-    /**
-     * Describes the bounding box of the levels. Contains 4 entries
-     * for each level: minX,minY,maxX,maxY.
-     * <p>
-     * Invariants:
-     * <pre>
-     * Context StaticSpatialIndex inv:
-     *   m_levelBounds.length = m_numNodes * 4
-     * </pre>
-     */
+    /// Describes the bounding box of the levels. Contains 4 entries
+    /// for each level: minX,minY,maxX,maxY.
+    ///
+    /// Invariants:
+    /// <pre>
+    /// Context StaticSpatialIndex inv:
+    ///   m_levelBounds.length = m_numNodes * 4
+    /// </pre>
     private final int[] m_levelBounds;
     private final int m_numItems;
-    /**
-     * Number of levels in the spatial index.
-     * <p>
-     * Invariants:
-     * <pre>
-     * Context StaticSpatialIndex inv:
-     *   m_numLevels = ceil( ln(m_numItems) / ln(nodeSize )
-     * </pre>
-     */
+    /// Number of levels in the spatial index.
+    ///
+    /// Invariants:
+    /// <pre>
+    /// Context StaticSpatialIndex inv:
+    ///   m_numLevels = ceil( ln(m_numItems) / ln(nodeSize )
+    /// </pre>
     private final int m_numLevels;
-    /**
-     * The total number of nodes (the sum of all nodes in all levels).
-     */
+    /// The total number of nodes (the sum of all nodes in all levels).
     private final int m_numNodes;
-    /**
-     * The minimal x coordinate of the bounds of the spatial index.
-     */
+    /// The minimal x coordinate of the bounds of the spatial index.
     private double m_minX;
-    /**
-     * The minimal y coordinate of the bounds of the spatial index.
-     */
+    /// The minimal y coordinate of the bounds of the spatial index.
     private double m_minY;
-    /**
-     * The maximal x coordinate of the bounds of the spatial index.
-     */
+    /// The maximal x coordinate of the bounds of the spatial index.
     private double m_maxX;
-    /**
-     * The maximal y coordinate of the bounds of the spatial index.
-     */
+    /// The maximal y coordinate of the bounds of the spatial index.
     private double m_maxY;
-    /**
-     * The number of elements currently stored in the spatial index.
-     */
+    /// The number of elements currently stored in the spatial index.
     private int m_pos;
 
-    /**
-     * Creates a new instance which can hold the specified number of items.
-     *
-     * @param numItems number of items in spatial index
-     */
+    /// Creates a new instance which can hold the specified number of items.
+    ///
+    /// @param numItems number of items in spatial index
     public StaticSpatialIndex(int numItems) {
         this(numItems, 16);
     }
 
-    /**
-     * Creates a new instance which can hold the specified number of items,
-     * and which uses the specified number of items per node.
-     *
-     * @param numItems number of items in spatial index
-     * @param nodeSize number of items per node
-     */
+    /// Creates a new instance which can hold the specified number of items,
+    /// and which uses the specified number of items per node.
+    ///
+    /// @param numItems number of items in spatial index
+    /// @param nodeSize number of items per node
     public StaticSpatialIndex(int numItems, int nodeSize) {
         if (numItems <= 0) {
             throw new IllegalArgumentException("number of items (" + numItems + ") must be greater than 0");
@@ -153,15 +125,13 @@ public class StaticSpatialIndex {
         m_maxY = Double.NEGATIVE_INFINITY;
     }
 
-    /**
-     * Returns the Hilbert curve index for the given vertex coordinates.
-     * <p>
-     * See [2] for a description of the algorithm.
-     *
-     * @param x the x-coordinate of the vertex in the Hilbert curve
-     * @param y the y-coordinate of the vertex in the Hilbert curve
-     * @return the hilbert curve index for the given vertex coordinates (x,y)
-     */
+    /// Returns the Hilbert curve index for the given vertex coordinates.
+    ///
+    /// See [2] for a description of the algorithm.
+    ///
+    /// @param x the x-coordinate of the vertex in the Hilbert curve
+    /// @param y the y-coordinate of the vertex in the Hilbert curve
+    /// @return the hilbert curve index for the given vertex coordinates (x,y)
     static int hilbertXYToIndex(int x, int y) {
         int a = x ^ y;
         int b = 0xFFFF ^ a;
@@ -380,11 +350,9 @@ public class StaticSpatialIndex {
         }
     }
 
-    /**
-     * Visit all the bounding boxes in the spatial index. Visitor function has the signature
-     * boolean(int level, double xmin, double ymin, double xmax, double ymax).
-     * Visiting stops early if false is returned.
-     */
+    /// Visit all the bounding boxes in the spatial index. Visitor function has the signature
+    /// boolean(int level, double xmin, double ymin, double xmax, double ymax).
+    /// Visiting stops early if false is returned.
     void visitBoundingBoxes(Visitor visitor) {
         int nodeIndex = 4 * m_numNodes - 4;
         int level = m_numLevels - 1;
@@ -415,11 +383,9 @@ public class StaticSpatialIndex {
         }
     }
 
-    /**
-     * Visit only the item bounding boxes in the spatial index. Visitor function has the signature
-     * boolean(int index, double xmin, double ymin, double xmax, double ymax). Visiting stops early if
-     * false is returned.
-     */
+    /// Visit only the item bounding boxes in the spatial index. Visitor function has the signature
+    /// boolean(int index, double xmin, double ymin, double xmax, double ymax). Visiting stops early if
+    /// false is returned.
     void visitItemBoxes(Visitor visitor) {
         for (int i = 0; i < m_levelBounds[0]; i += 4) {
             if (!visitor.visit(m_indices[i >> 2], m_boxes[i], m_boxes[i + 1], m_boxes[i + 2], m_boxes[i + 3])) {
@@ -428,15 +394,13 @@ public class StaticSpatialIndex {
         }
     }
 
-    /**
-     * {@link #query(double, double, double, double, IntArrayList, IntArrayDeque)}
-     *
-     * @param minX query rectangle min x coordinate
-     * @param minY query rectangle min y coordinate
-     * @param maxX query rectangle max x coordinate
-     * @param maxY query rectangle max y coordinate
-     * @param results result indices
-     */
+    /// [#query(double, double, double, double, IntArrayList, IntArrayDeque)]
+    ///
+    /// @param minX    query rectangle min x coordinate
+    /// @param minY    query rectangle min y coordinate
+    /// @param maxX    query rectangle max x coordinate
+    /// @param maxY    query rectangle max y coordinate
+    /// @param results result indices
     // See other overloads for details.
     public void query(double minX, double minY, double maxX, double maxY, IntArrayList results) {
         IntPredicate visitor = (index) -> {
@@ -447,17 +411,15 @@ public class StaticSpatialIndex {
         visitQuery(minX, minY, maxX, maxY, visitor);
     }
 
-    /**
-     * Query the spatial index adding indexes to the results vector given. This overload accepts an
-     * existing vector to use as a stack and takes care of clearing the stack before use.
-     *
-     * @param minX query rectangle min x coordinate
-     * @param minY query rectangle min y coordinate
-     * @param maxX query rectangle max x coordinate
-     * @param maxY query rectangle max y coordinate
-     * @param results result indices
-     * @param stack stack for reuse
-     */
+    /// Query the spatial index adding indexes to the results vector given. This overload accepts an
+    /// existing vector to use as a stack and takes care of clearing the stack before use.
+    ///
+    /// @param minX query rectangle min x coordinate
+    /// @param minY query rectangle min y coordinate
+    /// @param maxX query rectangle max x coordinate
+    /// @param maxY query rectangle max y coordinate
+    /// @param results result indices
+    /// @param stack stack for reuse
     public void query(double minX, double minY, double maxX, double maxY, IntArrayList results,
                       IntArrayDeque stack) {
         IntPredicate visitor = (index) -> {
@@ -468,34 +430,29 @@ public class StaticSpatialIndex {
         visitQuery(minX, minY, maxX, maxY, visitor, stack);
     }
 
-    /**
-     * {@link #visitQuery(double, double, double, double, IntPredicate, IntArrayDeque)}
-     *
-     *
-     * @param minX query rectangle min x coordinate
-     * @param minY query rectangle min y coordinate
-     * @param maxX query rectangle max x coordinate
-     * @param maxY query rectangle max y coordinate
-     * @param visitor visitor
-     */
+    /// [#visitQuery(double, double, double, double, IntPredicate, IntArrayDeque)]
+    ///
+    /// @param minX query rectangle min x coordinate
+    /// @param minY query rectangle min y coordinate
+    /// @param maxX query rectangle max x coordinate
+    /// @param maxY query rectangle max y coordinate
+    /// @param visitor visitor
     public void visitQuery(double minX, double minY, double maxX, double maxY, IntPredicate visitor) {
         IntArrayDeque stack = new IntArrayDeque(16);
         visitQuery(minX, minY, maxX, maxY, visitor, stack);
     }
 
-    /**
-     * Query the spatial index, invoking a visitor function for each index that overlaps the bounding
-     * box given. Visitor function has the signature boolean(int index), if visitor returns false
-     * the query stops early, otherwise the query continues. This overload accepts an existing vector
-     * to use as a stack and takes care of clearing the stack before use.
-     *
-     * @param minX query rectangle min x coordinate
-     * @param minY query rectangle min y coordinate
-     * @param maxX query rectangle max x coordinate
-     * @param maxY query rectangle max y coordinate
-     * @param visitor visitor
-     * @param stack stack for reuse
-     */
+    /// Query the spatial index, invoking a visitor function for each index that overlaps the bounding
+    /// box given. Visitor function has the signature boolean(int index), if visitor returns false
+    /// the query stops early, otherwise the query continues. This overload accepts an existing vector
+    /// to use as a stack and takes care of clearing the stack before use.
+    ///
+    /// @param minX query rectangle min x coordinate
+    /// @param minY query rectangle min y coordinate
+    /// @param maxX query rectangle max x coordinate
+    /// @param maxY query rectangle max y coordinate
+    /// @param visitor visitor
+    /// @param stack stack for reuse
     public void visitQuery(double minX, double minY, double maxX, double maxY, IntPredicate visitor,
                            IntArrayDeque stack) {
         if (m_pos != 4 * m_numNodes) {
@@ -543,9 +500,7 @@ public class StaticSpatialIndex {
         }
     }
 
-    /**
-     * Quicksort that partially sorts the bounding box data alongside the Hilbert values.
-     */
+    /// Quicksort that partially sorts the bounding box data alongside the Hilbert values.
     void sort(int[] values, double[] boxes, int[] indices, int left,
               int right) {
         assert left <= right : "left index should never be past right index";

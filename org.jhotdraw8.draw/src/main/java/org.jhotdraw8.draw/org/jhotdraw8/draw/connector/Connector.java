@@ -19,33 +19,26 @@ import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.Rectangle2D;
 
-/**
- * A <em>connector</em> encapsulates a strategy for locating a connection point
- * for a connection figure on a target figure.
- *
- */
+/// A _connector_ encapsulates a strategy for locating a connection point
+/// for a connection figure on a target figure.
 public interface Connector {
 
-    /**
-     * Returns a point and derivative on the target figure for the specified
-     * connection figure in local coordinates.
-     *
-     * @param connection a connection figure
-     * @param target     the target
-     * @return A point and derivative on the target figure in local coordinates of the target
-     * figure.
-     */
+    /// Returns a point and derivative on the target figure for the specified
+    /// connection figure in local coordinates.
+    ///
+    /// @param connection a connection figure
+    /// @param target     the target
+    /// @return A point and derivative on the target figure in local coordinates of the target
+    /// figure.
     PointAndDerivative getPointAndDerivativeInLocal(Figure connection,
                                                     Figure target);
 
-    /**
-     * Returns a point and derivative on the target figure for the specified
-     * connection figure in world coordinates.
-     *
-     * @param connection a connection figure
-     * @param target     the target
-     * @return A point and derivative on the target figure in world coordinates
-     */
+    /// Returns a point and derivative on the target figure for the specified
+    /// connection figure in world coordinates.
+    ///
+    /// @param connection a connection figure
+    /// @param target     the target
+    /// @return A point and derivative on the target figure in world coordinates
     default PointAndDerivative getPointAndDerivativeInWorld(Figure connection, Figure target) {
         PointAndDerivative inLocal = getPointAndDerivativeInLocal(connection, target);
         Transform localToWorld = target.getLocalToWorld();
@@ -55,35 +48,31 @@ public interface Connector {
                 derivativeInWorld.getX(), derivativeInWorld.getY());
     }
 
-    /**
-     * Clips the start of the provided line at the bounds of the target figure.
-     * The line must be given in world coordinates.
-     *
-     * @param ctx        the render context
-     * @param connection a connection figure
-     * @param target     the target
-     * @param sx         x-coordinate at the start of the line
-     * @param sy         x-coordinate at the start of the line
-     * @param ex         x-coordinate at the end of the line
-     * @param ey         y-coordinate at the end of the line
-     * @return the new start point in world coordinates
-     */
+    /// Clips the start of the provided line at the bounds of the target figure.
+    /// The line must be given in world coordinates.
+    ///
+    /// @param ctx        the render context
+    /// @param connection a connection figure
+    /// @param target     the target
+    /// @param sx         x-coordinate at the start of the line
+    /// @param sy         x-coordinate at the start of the line
+    /// @param ex         x-coordinate at the end of the line
+    /// @param ey         y-coordinate at the end of the line
+    /// @return the new start point in world coordinates
     default IntersectionPointEx chopStart(RenderContext ctx, Figure connection, Figure target, double sx, double sy, double ex, double ey) {
         return chopStart(ctx, connection, target, new Point2D(sx, sy), new Point2D(ex, ey));
     }
 
 
-    /**
-     * Clips the start of the provided line at the bounds of the target figure.
-     * The line must be given in world coordinates.
-     *
-     * @param ctx        the render context
-     * @param connection a connection figure
-     * @param target     the target
-     * @param start      the start of the line, should be inside the target figure
-     * @param end        the end of the line, should be outside the target figure
-     * @return the new start point in world coordinates
-     */
+    /// Clips the start of the provided line at the bounds of the target figure.
+    /// The line must be given in world coordinates.
+    ///
+    /// @param ctx        the render context
+    /// @param connection a connection figure
+    /// @param target     the target
+    /// @param start      the start of the line, should be inside the target figure
+    /// @param end        the end of the line, should be outside the target figure
+    /// @return the new start point in world coordinates
     default IntersectionPointEx chopStart(RenderContext ctx, Figure connection, Figure target, Point2D start, Point2D end) {
         IntersectionPointEx ip = intersect(ctx, connection, target, start, end);
         Point2D derivative = end.subtract(start);
@@ -91,20 +80,18 @@ public interface Connector {
                 new IntersectionPointEx(Lines.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.argumentA()), ip.argumentA(), ip.getDerivativeA(), ip.getArgumentB(), ip.getDerivativeB());
     }
 
-    /**
-     * Returns the intersection of the line going from start to end with the
-     * target figure. The line must be given in world coordinates.
-     *
-     * @param ctx the render context
-     * @param connection the connection figure
-     * @param target     the target figure
-     * @param start      the start point of the line in world coordinates, should be
-     *                   inside the target figure
-     * @param end        the end point of the line in world coordinates, should be
-     *                   outside the target figure
-     * @return the intersection in the interval [0,1], null if no intersection.
-     * In case of multiple intersections returns the largest value.
-     */
+    /// Returns the intersection of the line going from start to end with the
+    /// target figure. The line must be given in world coordinates.
+    ///
+    /// @param ctx        the render context
+    /// @param connection the connection figure
+    /// @param target     the target figure
+    /// @param start      the start point of the line in world coordinates, should be
+    ///                   inside the target figure
+    /// @param end        the end point of the line in world coordinates, should be
+    ///                   outside the target figure
+    /// @return the intersection in the interval [0,1], null if no intersection.
+    /// In case of multiple intersections returns the largest value.
     default @Nullable IntersectionPointEx intersect(RenderContext ctx, Figure connection, Figure target, Point2D start, Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);

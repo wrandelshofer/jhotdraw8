@@ -12,16 +12,12 @@ import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
-import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-/**
- * Converts a list of {@link PathElement} from/to an XML attribute text.
- *
- */
+/// Converts a list of [PathElement] from/to an XML attribute text.
 public class FXPathElementsXmlConverter implements Converter<PersistentList<PathElement>> {
 
     public FXPathElementsXmlConverter() {

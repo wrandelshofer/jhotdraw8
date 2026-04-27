@@ -17,37 +17,33 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
- * See {@link UniqueShortestArcPathSearchAlgo} for a description of this
- * algorithm.
- *
- * @param <V> the vertex data type
- * @param <C> the cost number type
- */
+/// See [UniqueShortestArcPathSearchAlgo] for a description of this
+/// algorithm.
+///
+/// @param <V> the vertex data type
+/// @param <C> the cost number type
 public class UniqueShortestVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
     public UniqueShortestVertexPathSearchAlgo() {
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param startVertices the set of start vertices
-     * @param goalPredicate the goal predicate
-     * @param nextVertices  the next vertices function
-     * @param maxDepth      the maximal depth (inclusive) of the search
-     *                      Must be {@literal >= 0}.
-     * @param zero          the zero cost value
-     * @param costLimit     the maximal cost (inclusive) of a path.
-     *                      Must be {@literal >= zero}.
-     * @param costFunction  the cost function<br>
-     *                      The cost must be {@literal > 0} if the graph
-     *                      has cycles.<br>
-     *                      The cost must be {@literal >= 0} if the graph
-     *                      is acyclic.
-     * @param sumFunction   the sum function for adding two cost values
-     * @param visited
-     * @return on success: a back link, otherwise: null
-     */
+    /// {@inheritDoc}
+    ///
+    /// @param startVertices the set of start vertices
+    /// @param goalPredicate the goal predicate
+    /// @param nextVertices  the next vertices function
+    /// @param maxDepth      the maximal depth (inclusive) of the search
+    ///                      Must be {@literal >= 0}.
+    /// @param zero          the zero cost value
+    /// @param costLimit     the maximal cost (inclusive) of a path.
+    ///                      Must be {@literal >= zero}.
+    /// @param costFunction  the cost function
+    ///                      The cost must be {@literal > 0} if the graph
+    ///                      has cycles.
+    ///                      The cost must be {@literal >= 0} if the graph
+    ///                      is acyclic.
+    /// @param sumFunction   the sum function for adding two cost values
+    /// @param visited
+    /// @return on success: a back link, otherwise: null
     @Override
     public @Nullable VertexBackLinkWithCost<V, C> search(
             final Iterable<V> startVertices,

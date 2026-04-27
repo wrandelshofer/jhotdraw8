@@ -22,20 +22,15 @@ import java.util.function.BiFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Lets the user write unsaved changes of the active view, then presents an
- * {@code URIChooser} and loads the selected URI into the active view.
- *
- */
+/// Lets the user write unsaved changes of the active view, then presents an
+/// `URIChooser` and loads the selected URI into the active view.
 public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> {
 
     public static final String ID = "file.revert";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param view the view
-     */
+    /// Creates a new instance.
+    ///
+    /// @param view the view
     @SuppressWarnings("this-escape")
     public RevertFileAction(FileBasedActivity view) {
         super(view);

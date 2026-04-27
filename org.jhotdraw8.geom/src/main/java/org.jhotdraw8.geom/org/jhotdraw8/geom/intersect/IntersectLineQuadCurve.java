@@ -22,20 +22,18 @@ public class IntersectLineQuadCurve {
     private IntersectLineQuadCurve() {
     }
 
-    /**
-     * Computes the intersection between quadratic bezier curve 'p' and the line
-     * 'a'.
-     * <p>
-     * The intersection will contain the parameters 't' of curve 'a' in range
-     * [0,1].
-     *
-     * @param p0 control point P0 of 'p'
-     * @param p1 control point P1 of 'p'
-     * @param p2 control point P2 of 'p'
-     * @param a0 point 0 of 'a'
-     * @param a1 point 0 of 'a'
-     * @return the computed intersection
-     */
+    /// Computes the intersection between quadratic bezier curve 'p' and the line
+    /// 'a'.
+    ///
+    /// The intersection will contain the parameters 't' of curve 'a' in range
+    /// [0,1].
+    ///
+    /// @param p0 control point P0 of 'p'
+    /// @param p1 control point P1 of 'p'
+    /// @param p2 control point P2 of 'p'
+    /// @param a0 point 0 of 'a'
+    /// @param a1 point 0 of 'a'
+    /// @return the computed intersection
     public static IntersectionResult intersectLineQuadCurve(Point2D a0, Point2D a1, Point2D p0, Point2D p1, Point2D p2) {
         return intersectLineQuadCurve(
                 a0.getX(), a0.getY(),
@@ -55,20 +53,18 @@ public class IntersectLineQuadCurve {
                 p2x, p2y, Scalars.REAL_THRESHOLD);
     }
 
-    /**
-     * @param a0x
-     * @param a0y
-     * @param a1x
-     * @param a1y
-     * @param p0x
-     * @param p0y
-     * @param p1x
-     * @param p1y
-     * @param p2x
-     * @param p2y
-     * @param epsilon
-     * @return
-     */
+    /// @param a0x
+    /// @param a0y
+    /// @param a1x
+    /// @param a1y
+    /// @param p0x
+    /// @param p0y
+    /// @param p1x
+    /// @param p1y
+    /// @param p2x
+    /// @param p2y
+    /// @param epsilon
+    /// @return
     public static IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
                                                             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
                                                             double epsilon) {

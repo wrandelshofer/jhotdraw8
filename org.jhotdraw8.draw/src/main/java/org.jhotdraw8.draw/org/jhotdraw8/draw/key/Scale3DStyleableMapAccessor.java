@@ -17,9 +17,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * Scale3DStyleableMapAccessor.
- */
+/// Scale3DStyleableMapAccessor.
 public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point3D>
         implements NonNullMapAccessor<Point3D> {
 
@@ -29,27 +27,23 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     private final MapAccessor<Double> zKey;
     private final Converter<Point3D> converter;
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name the name of the accessor
-     * @param xKey the key for the x coordinate of the point
-     * @param yKey the key for the y coordinate of the point
-     * @param zKey the key for the u coordinate of the point
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name the name of the accessor
+    /// @param xKey the key for the x coordinate of the point
+    /// @param yKey the key for the y coordinate of the point
+    /// @param zKey the key for the u coordinate of the point
     public Scale3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey) {
         this(name, xKey, yKey, zKey, new Scale3DCssConverter(false));
     }
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name      the name of the accessor
-     * @param xKey      the key for the x coordinate of the point
-     * @param yKey      the key for the y coordinate of the point
-     * @param zKey      the key for the u coordinate of the point
-     * @param converter String converter for the scale factor with 3 coordinates (x-factor, y-factor, z-factor).
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name      the name of the accessor
+    /// @param xKey      the key for the x coordinate of the point
+    /// @param yKey      the key for the y coordinate of the point
+    /// @param zKey      the key for the u coordinate of the point
+    /// @param converter String converter for the scale factor with 3 coordinates (x-factor, y-factor, z-factor).
     public Scale3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey, Converter<Point3D> converter) {
         super(name, Point3D.class, new MapAccessor<?>[]{xKey, yKey, zKey}, new Point3D(xKey.getDefaultValue(), yKey.getDefaultValue(), zKey.getDefaultValue()));
         this.converter = converter;

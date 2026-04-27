@@ -24,9 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SequencedMap;
 
-/**
- * Reads an SVG "Tiny" 1.2 file and creates JavaFX nodes from it.
- */
+/// Reads an SVG "Tiny" 1.2 file and creates JavaFX nodes from it.
 public class FXSvgTinyReader {
     public FXSvgTinyReader() {
     }
@@ -43,18 +41,14 @@ public class FXSvgTinyReader {
         }
     }
 
-    /**
-     * The reader does not close the provided source.
-     */
+    /// The reader does not close the provided source.
     public Node read(Source in) throws IOException {
         SequencedMap<MapAccessor<?>, Object> m = new LinkedHashMap<>();
         RenderContext.RENDERING_INTENT.put(m, RenderingIntent.EXPORT);
         return read(in, m);
     }
 
-    /**
-     * The reader does not close the provided source.
-     */
+    /// The reader does not close the provided source.
     @SuppressWarnings("unchecked")
     public Node read(Source in, Map<MapAccessor<?>, Object> renderingHints) throws IOException {
         Figure figure = new FigureSvgTinyReader().read(in);

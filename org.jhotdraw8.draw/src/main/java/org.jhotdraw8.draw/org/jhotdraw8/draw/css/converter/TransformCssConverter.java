@@ -26,39 +26,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * CssTransformConverter.
- * <p>
- * Parses a transform given in the following EBNF:
- * <pre>
- * Transform     = ( Affine | Matrix | Translate | Scale | Rotate | Shear ) ;
- *
- * Affine        = "affine(" , [S] ,
- *                  ( mxx , C, mxy, C, tx, C, myx, C, myy, C, ty
- *                  | mxx , C, mxy, C, mxz, C, tx, C, myx, C, myy, C, myz, C, tz, C, mzx, C, mzy, C, mzz, C, tz)
- *                  ) , [S], ")" ;
- * Matrix        = "matrix(" , [S] ,
- *                  ( mxx , C, myx, C, mxy, C, myy, C, tx, C, ty
- *                  | mxx , C, myx, C, mzx, C, mxy, C, myy, C, mzy, C, mxz, C, myz, C, mzz, C, tx, C, ty, C, tz)
- *                  ) , [S], ")" ;
- * Translate     = "translate(" , [S] , tx , [ C , ty, [ C , tz ] ] , [S], ")" ;
- * Scale         = "scale(" , [S] ,
- *                 ( sx , [ C , sy, [ C , Pivot2D ] ]
- *                 | sx , C , sy, C , sz, [ C , Pivot ]
- *                 ) , [S], ")" ;
- * Rotate        = "rotate(" , [S] ,
- *                  rotate-angle , [ C , Pivot , [ C, Axis ] , [S], ")" ;
- *
- * Shear         = "shear(" , [S] , x , Sep , y , [ Sep , Pivot2D ], [S], ")" ;
- *
- * Axis          =  axisX, Sep , axisY, Sep , axisZ ;
- * Pivot         =  pivotX, Sep , pivotY, [ Sep , pivotZ ] ;
- * Pivot2D       =  pivotX, Sep , pivotY] ;
- *
- * C             = ( S , { S } | { S } , "," , { S } ) ;
- * S             = (* white space *)
- * </pre>
- */
+/// CssTransformConverter.
+///
+/// Parses a transform given in the following EBNF:
+/// <pre>
+/// Transform     = ( Affine | Matrix | Translate | Scale | Rotate | Shear ) ;
+///
+/// Affine        = "affine(" , [S] ,
+///                  ( mxx , C, mxy, C, tx, C, myx, C, myy, C, ty
+///                  | mxx , C, mxy, C, mxz, C, tx, C, myx, C, myy, C, myz, C, tz, C, mzx, C, mzy, C, mzz, C, tz)
+///                  ) , [S], ")" ;
+/// Matrix        = "matrix(" , [S] ,
+///                  ( mxx , C, myx, C, mxy, C, myy, C, tx, C, ty
+///                  | mxx , C, myx, C, mzx, C, mxy, C, myy, C, mzy, C, mxz, C, myz, C, mzz, C, tx, C, ty, C, tz)
+///                  ) , [S], ")" ;
+/// Translate     = "translate(" , [S] , tx , [ C , ty, [ C , tz ] ] , [S], ")" ;
+/// Scale         = "scale(" , [S] ,
+///                 ( sx , [ C , sy, [ C , Pivot2D ] ]
+///                 | sx , C , sy, C , sz, [C,Pivot]
+///                 ) , [S], ")" ;
+/// Rotate        = "rotate(" , [S] ,
+///                  rotate-angle , [ C , Pivot , [ C, Axis ] , [S], ")" ;
+///
+/// Shear         = "shear(" , [S] , x , Sep , y , [Sep,Pivot2D], [S], ")" ;
+///
+/// Axis          =  axisX, Sep , axisY, Sep , axisZ ;
+/// Pivot         =  pivotX, Sep , pivotY, [Sep,pivotZ] ;
+/// Pivot2D       =  pivotX, Sep , pivotY] ;
+///
+/// C             = ( S , { S } | { S } , "," , { S } ) ;
+/// S             = (* white space *)
+/// </pre>
 public class TransformCssConverter extends AbstractCssConverter<Transform> {
 
     public TransformCssConverter() {

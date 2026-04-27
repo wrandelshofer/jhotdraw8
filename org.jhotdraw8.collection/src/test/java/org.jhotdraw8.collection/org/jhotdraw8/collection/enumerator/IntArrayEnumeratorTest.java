@@ -20,15 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class IntArrayEnumeratorTest {
 
-    /**
-     * Tests if it is possible to iterate over a given array
-     * using the {@link IntArrayEnumerator#moveNext()} method.
-     * <p>
-     * Tests methods: {@link IntArrayEnumerator#estimateSize()} ,
-     * {@link IntArrayEnumerator#moveNext()},
-     * {@link IntArrayEnumerator#current()},
-     * {@link IntArrayEnumerator#currentAsInt()}.
-     */
+    /// Tests if it is possible to iterate over a given array
+    /// using the [IntArrayEnumerator#moveNext()] method.
+    ///
+    /// Tests methods: [IntArrayEnumerator#estimateSize()] ,
+    /// [IntArrayEnumerator#moveNext()],
+    /// [IntArrayEnumerator#current()],
+    /// [IntArrayEnumerator#currentAsInt()].
     @Test
     public void testMoveNext() {
         int[] a = {1, 2, 3, 4, 5};
@@ -42,13 +40,11 @@ public class IntArrayEnumeratorTest {
         assertFalse(instance.moveNext());
     }
 
-    /**
-     * Tests if it is possible to iterate over a given array
-     * using the {@link IntArrayEnumerator#tryAdvance(IntConsumer)} ()} method.
-     * <p>
-     * Tests methods: {@link IntArrayEnumerator#estimateSize()} ,
-     * {@link IntArrayEnumerator#tryAdvance(IntConsumer)}}.
-     */
+    /// Tests if it is possible to iterate over a given array
+    /// using the [IntArrayEnumerator#tryAdvance(IntConsumer)] ()} method.
+    ///
+    /// Tests methods: [IntArrayEnumerator#estimateSize()] ,
+    /// [IntArrayEnumerator#tryAdvance(IntConsumer)]}.
     @Test
     public void testTryAdvance() {
         int[] a = {1, 2, 3, 4, 5};
@@ -62,12 +58,10 @@ public class IntArrayEnumeratorTest {
         assertFalse(instance.tryAdvance((IntConsumer) e -> element[0] = e));
     }
 
-    /**
-     * Tests if it is possible to iterate over a given sub-array.
-     * <p>
-     * Tests methods: {@link IntArrayEnumerator#estimateSize()} ,
-     * {@link IntArrayEnumerator#moveNext()}, {@link IntArrayEnumerator#current()}.
-     */
+    /// Tests if it is possible to iterate over a given sub-array.
+    ///
+    /// Tests methods: [IntArrayEnumerator#estimateSize()] ,
+    /// [IntArrayEnumerator#moveNext()], [IntArrayEnumerator#current()].
     @Test
     public void testSubArray() {
         final int toExclusive = 4;
@@ -81,11 +75,9 @@ public class IntArrayEnumeratorTest {
         }
     }
 
-    /**
-     * Tests if it is possible to split the iterator once.
-     * <p>
-     * Tests methods: {@link IntArrayEnumerator#trySplit()}.
-     */
+    /// Tests if it is possible to split the iterator once.
+    ///
+    /// Tests methods: [IntArrayEnumerator#trySplit()].
     @Test
     public void testTrySplit() {
         int[] a = {1, 2, 3, 4, 5};
@@ -106,12 +98,10 @@ public class IntArrayEnumeratorTest {
         assertArrayEquals(a, actual);
     }
 
-    /**
-     * Tests if it is possible to split the repeated times until it
-     * is too small.
-     * <p>
-     * Tests methods: {@link IntArrayEnumerator#trySplit()}.
-     */
+    /// Tests if it is possible to split the repeated times until it
+    /// is too small.
+    ///
+    /// Tests methods: [IntArrayEnumerator#trySplit()].
     @Test
     public void testTrySplitUnlessTooSmall() {
         int[] a = {1, 2, 3, 4, 5};

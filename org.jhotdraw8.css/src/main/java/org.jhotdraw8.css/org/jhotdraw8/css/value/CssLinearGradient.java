@@ -16,10 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Represents a linear gradient.
- *
- */
+/// Represents a linear gradient.
 public class CssLinearGradient implements Paintable {
 
     private LinearGradient linearGradient;

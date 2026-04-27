@@ -74,21 +74,19 @@ public class IntersectQuadCurveQuadCurve {
 
     }
 
-    /**
-     * Computes the intersection between quadratic bezier curve 'a' and
-     * quadratic bezier curve 'b'.
-     * <p>
-     * The intersection will contain the parameters 't1' of curve 'a' in range
-     * [0,1].
-     *
-     * @param a0 control point P0 of 'a'
-     * @param a1 control point P1 of 'a'
-     * @param a2 control point P2 of 'a'
-     * @param b0 control point P0 of 'b'
-     * @param b1 control point P1 of 'b'
-     * @param b2 control point P2 of 'b'
-     * @return the computed result
-     */
+    /// Computes the intersection between quadratic bezier curve 'a' and
+    /// quadratic bezier curve 'b'.
+    ///
+    /// The intersection will contain the parameters 't1' of curve 'a' in range
+    /// [0,1].
+    ///
+    /// @param a0 control point P0 of 'a'
+    /// @param a1 control point P1 of 'a'
+    /// @param a2 control point P2 of 'a'
+    /// @param b0 control point P0 of 'b'
+    /// @param b1 control point P1 of 'b'
+    /// @param b2 control point P2 of 'b'
+    /// @return the computed result
     public static IntersectionResult intersectQuadCurveQuadCurve(Point2D a0, Point2D a1, Point2D a2, Point2D b0, Point2D b1, Point2D b2,
                                                                  double epsilon) {
         final Point2D c12, c11, c10;

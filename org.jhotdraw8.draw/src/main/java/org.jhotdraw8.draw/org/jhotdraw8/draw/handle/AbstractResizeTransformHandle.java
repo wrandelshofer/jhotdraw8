@@ -34,18 +34,14 @@ import java.util.function.Function;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
-/**
- * AbstractResizeTransformHandle.
- */
+/// AbstractResizeTransformHandle.
 abstract class AbstractResizeTransformHandle extends LocatorHandle {
     public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     private final Region node;
     private Point2D oldPoint;
     private Point2D pickLocation;
-    /**
-     * The height divided by the width.
-     */
+    /// The height divided by the width.
     protected double preferredAspectRatio;
     protected CssRectangle2D startBounds;
     private @Nullable Transform startWorldToLocal;
@@ -126,17 +122,14 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         return true;
     }
 
-    /**
-     * Resizes the figure.
-     *
-     * @param newPoint   new point in local coordinates
-     * @param owner      the figure
-     * @param bounds     the bounds of the figure on mouse pressed
-     * @param model      the drawing model
-     * @param keepAspect whether the aspect should be preserved. The bounds of
-     *                   the figure on mouse pressed can be used as a reference.
-     */
-
+    /// Resizes the figure.
+    ///
+    /// @param newPoint   new point in local coordinates
+    /// @param owner      the figure
+    /// @param bounds     the bounds of the figure on mouse pressed
+    /// @param model      the drawing model
+    /// @param keepAspect whether the aspect should be preserved. The bounds of
+    ///                   the figure on mouse pressed can be used as a reference.
     protected abstract void resize(CssPoint2D newPoint, Figure owner, CssRectangle2D bounds, DrawingModel model, boolean keepAspect);
 
     @Override

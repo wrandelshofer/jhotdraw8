@@ -9,10 +9,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * Represents a point with x, y, z values specified as {@link CssSize}s.
- *
- */
+/// Represents a point with x, y, z values specified as [CssSize]s.
 public class CssPoint3D {
 
     public static final CssPoint3D ZERO = new CssPoint3D();

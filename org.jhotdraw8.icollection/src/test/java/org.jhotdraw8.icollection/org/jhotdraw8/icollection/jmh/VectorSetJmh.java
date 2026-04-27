@@ -15,30 +15,28 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * <pre>
- * # JMH version: 1.36
- * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
- * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
- *
- * Benchmark                                (mask)  (size)  Mode  Cnt         Score   Error  Units
- * mContainsFound                              -65  100000  avgt             74.817          ns/op
- * mContainsNotFound                           -65  100000  avgt             61.176          ns/op
- * mCopyOf                                     -65  100000  avgt       29902464.797          ns/op
- * mCopyOnyByOne                               -65  100000  avgt       35587944.904          ns/op
- * mHead                                       -65  100000  avgt             28.361          ns/op
- * mIterate                                    -65  100000  avgt        2081909.162          ns/op
- * mRemoveAllFromDifferentType                 -65  100000  avgt       26291910.722          ns/op
- * mRemoveAllFromSameType                      -65  100000  avgt       76970592.715          ns/op
- * mRemoveOneByOne                             -65  100000  avgt       88791019.823          ns/op
- * mRemoveThenAdd                              -65  100000  avgt            593.484          ns/op
- * mRetainAllFromDifferentTypeAllRetained      -65  100000  avgt        3357320.133          ns/op
- * mRetainAllFromDifferentTypeNoneRetained     -65  100000  avgt       32932049.161          ns/op
- * mRetainAllFromSameTypeAllRetained           -65  100000  avgt       10976004.332          ns/op
- * mRetainAllFromSameTypeNoneRetained          -65  100000  avgt       43730938.022          ns/op
- * mTail                                       -65  100000  avgt            144.784          ns/op
- * </pre>
- */
+/// <pre>
+/// # JMH version: 1.36
+/// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
+/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+///
+/// Benchmark                                (mask)  (size)  Mode  Cnt         Score   Error  Units
+/// mContainsFound                              -65  100000  avgt             74.817          ns/op
+/// mContainsNotFound                           -65  100000  avgt             61.176          ns/op
+/// mCopyOf                                     -65  100000  avgt       29902464.797          ns/op
+/// mCopyOnyByOne                               -65  100000  avgt       35587944.904          ns/op
+/// mHead                                       -65  100000  avgt             28.361          ns/op
+/// mIterate                                    -65  100000  avgt        2081909.162          ns/op
+/// mRemoveAllFromDifferentType                 -65  100000  avgt       26291910.722          ns/op
+/// mRemoveAllFromSameType                      -65  100000  avgt       76970592.715          ns/op
+/// mRemoveOneByOne                             -65  100000  avgt       88791019.823          ns/op
+/// mRemoveThenAdd                              -65  100000  avgt            593.484          ns/op
+/// mRetainAllFromDifferentTypeAllRetained      -65  100000  avgt        3357320.133          ns/op
+/// mRetainAllFromDifferentTypeNoneRetained     -65  100000  avgt       32932049.161          ns/op
+/// mRetainAllFromSameTypeAllRetained           -65  100000  avgt       10976004.332          ns/op
+/// mRetainAllFromSameTypeNoneRetained          -65  100000  avgt       43730938.022          ns/op
+/// mTail                                       -65  100000  avgt            144.784          ns/op
+/// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)

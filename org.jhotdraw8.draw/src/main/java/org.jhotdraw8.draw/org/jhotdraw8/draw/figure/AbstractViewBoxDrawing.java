@@ -13,9 +13,7 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.render.RenderContext;
 
-/**
- * Abstract drawing that supports {@link ViewBoxableDrawing}.
- */
+/// Abstract drawing that supports [ViewBoxableDrawing].
 public abstract class AbstractViewBoxDrawing extends AbstractDrawing implements ViewBoxableDrawing, Figure {
     public AbstractViewBoxDrawing() {
     }

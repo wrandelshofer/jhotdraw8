@@ -23,26 +23,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * CssLinearGradientConverter.
- * <p>
- * Parses the following EBNF from the
- * <a href="https://openjfx.io/javadoc/22/javafx.graphics/javafx/scene/doc-files/cssref.html#typepaint">JavaFX
- * CSS Reference Guide</a>.
- * </p>
- * <pre>
- * Paint := (Color|LinearGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
- * LinearGradient := "linear-gradient(", LinearGradientParameters, [ Cycle ], ColorStop,{"," ColorStop} ")"
- * LinearGradientParameters := [ PointToPoint | SideOrCorner] ]) ;
- * PointToPoint = "from", Point, "to", Point
- * SideOrCorner = "to" ["left" | "right"] , ["top" | "bottom"]
- * Cycle = ( "repeat" | "reflect" )
- * Point = (Number|CssSize|Percentage), (Number|CssSize|Percentage) ;
- * ColorStop = Color, [" ", Offset] ;
- *
- * </pre>
- *
- */
+/// CssLinearGradientConverter.
+///
+/// Parses the following EBNF from the
+/// <a href="https://openjfx.io/javadoc/22/javafx.graphics/javafx/scene/doc-files/cssref.html#typepaint">JavaFX
+/// CSS Reference Guide</a>.
+///
+/// <pre>
+/// Paint := (Color|LinearGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
+/// LinearGradient := "linear-gradient(", LinearGradientParameters, [Cycle], ColorStop,{"," ColorStop} ")"
+/// LinearGradientParameters := [PointToPoint|SideOrCorner] ]) ;
+/// PointToPoint = "from", Point, "to", Point
+/// SideOrCorner = "to" ["left"|"right"] , ["top"|"bottom"]
+/// Cycle = ( "repeat" | "reflect" )
+/// Point = (Number|CssSize|Percentage), (Number|CssSize|Percentage) ;
+/// ColorStop = Color, ["",Offset] ;
+///
+/// </pre>
 public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGradient> {
     private static final ColorCssConverter colorConverter = new ColorCssConverter(false);
     public static final String LINEAR_GRADIENT_FUNCTION = "linear-gradient";

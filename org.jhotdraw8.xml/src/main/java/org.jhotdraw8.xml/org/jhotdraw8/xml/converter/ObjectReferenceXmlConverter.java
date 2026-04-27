@@ -14,24 +14,20 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.logging.Logger;
 
-/**
- * ObjectReferenceV2XmlConverter.
- * <p>
- * Converts references to figures.
- *
- * @param <T> the type
- */
+/// ObjectReferenceV2XmlConverter.
+///
+/// Converts references to figures.
+///
+/// @param <T> the type
 public class ObjectReferenceXmlConverter<T> implements Converter<T> {
 
     private static final Logger LOGGER = Logger.getLogger(ObjectReferenceXmlConverter.class.getName());
     private final Class<T> clazz;
 
-    /**
-     * Creates a new instance
-     *
-     * @param clazz the type class
-     * @throws IllegalArgumentException if clazz is null
-     */
+    /// Creates a new instance
+    ///
+    /// @param clazz the type class
+    /// @throws IllegalArgumentException if clazz is null
     public ObjectReferenceXmlConverter(Class<T> clazz) {
         this.clazz = clazz;
     }

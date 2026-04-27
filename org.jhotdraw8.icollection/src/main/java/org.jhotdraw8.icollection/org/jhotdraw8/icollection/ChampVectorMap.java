@@ -29,90 +29,88 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
-/**
- * Implements the {@link PersistentSequencedMap} interface using a Compressed
- * Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
- * <p>
- * Features:
- * <ul>
- *     <li>supports up to 2<sup>30</sup> entries</li>
- *     <li>allows null keys and null values</li>
- *     <li>is persistent</li>
- *     <li>is thread-safe</li>
- *     <li>iterates in the order, in which keys were inserted</li>
- * </ul>
- * <p>
- * Performance characteristics:
- * <ul>
- *     <li>put, putFirst, putLast: O(log₃₂ N) in an amortized sense, because we sometimes have to
- *     renumber the elements.</li>
- *     <li>remove: O(log₃₂ N) in an amortized sense, because we sometimes have to renumber the elements.</li>
- *     <li>containsKey: O(log₃₂ N)</li>
- *     <li>toMutable: O(1) + O(log₃₂ N) distributed across subsequent updates in
- *     the mutable copy</li>
- *     <li>clone: O(1)</li>
- *     <li>iterator creation: O(log₃₂ N)</li>
- *     <li>iterator.next: O(1)</li>
- *     <li>getFirst, getLast: O(log₃₂ N)</li>
- * </ul>
- * <p>
- * Implementation details:
- * <p>
- * This map performs read and write operations of single elements in O(log N) time,
- * and in O(log N) space, where N is the number of elements in the set.
- * <p>
- * The CHAMP trie contains nodes that may be shared with other maps.
- * <p>
- * If a write operation is performed on a node, then this set creates a
- * copy of the node and of all parent nodes up to the root (copy-path-on-write).
- * Since the CHAMP trie has a fixed maximal height, the cost is O(1).
- * <p>
- * This map can create a mutable copy of itself in O(1) time and O(1) space
- * using method {@link #toMutable()}. The mutable copy shares its nodes
- * with this map, until it has gradually replaced the nodes with exclusively
- * owned nodes.
- * <p>
- * Insertion Order:
- * <p>
- * This map uses a counter to keep track of the insertion order.
- * It stores the current value of the counter in the sequence number
- * field of each data entry. If the counter wraps around, it must renumber all
- * sequence numbers.
- * <p>
- * The renumbering is why the {@code add} and {@code remove} methods are O(1)
- * only in an amortized sense.
- * <p>
- * To support iteration, we use a Vector. The Vector has the same contents
- * as the CHAMP trie. However, its elements are stored in insertion order.
- * <p>
- * If an element is removed from the CHAMP trie that is not the first or the
- * last element of the Vector, we replace its corresponding element in
- * the Vector by a tombstone. If the element is at the start or end of the Vector,
- * we remove the element and all its neighboring tombstones from the Vector.
- * <p>
- * A tombstone can store the number of neighboring tombstones in ascending and in descending
- * direction. We use these numbers to skip tombstones when we iterate over the vector.
- * Since we only allow iteration in ascending or descending order from one of the ends of
- * the vector, we do not need to keep the number of neighbors in all tombstones up to date.
- * It is sufficient, if we update the neighbor with the lowest index and the one with the
- * highest index.
- * <p>
- * If the number of tombstones exceeds half of the size of the collection, we renumber all
- * sequence numbers, and we create a new Vector.
- * <p>
- * References:
- * <p>
- * For a similar design, see 'SimplePersistentSequencedMap.scala'. Note, that this code is not a derivative
- * of that code.
- * <dl>
- *     <dt>The Scala library. SimplePersistentSequencedMap.scala. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
- *     <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/persistent/VectorMap.scala">github.com</a>
- *     </dd>
- * </dl>
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Implements the [PersistentSequencedMap] interface using a Compressed
+/// Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
+///
+/// Features:
+///
+///   - supports up to 2<sup>30</sup> entries
+///   - allows null keys and null values
+///   - is persistent
+///   - is thread-safe
+///   - iterates in the order, in which keys were inserted
+///
+///
+/// Performance characteristics:
+///
+///   - put, putFirst, putLast: O(log₃₂ N) in an amortized sense, because we sometimes have to
+///     renumber the elements.
+///   - remove: O(log₃₂ N) in an amortized sense, because we sometimes have to renumber the elements.
+///   - containsKey: O(log₃₂ N)
+///   - toMutable: O(1) + O(log₃₂ N) distributed across subsequent updates in
+///     the mutable copy
+///   - clone: O(1)
+///   - iterator creation: O(log₃₂ N)
+///   - iterator.next: O(1)
+///   - getFirst, getLast: O(log₃₂ N)
+///
+///
+/// Implementation details:
+///
+/// This map performs read and write operations of single elements in O(log N) time,
+/// and in O(log N) space, where N is the number of elements in the set.
+///
+/// The CHAMP trie contains nodes that may be shared with other maps.
+///
+/// If a write operation is performed on a node, then this set creates a
+/// copy of the node and of all parent nodes up to the root (copy-path-on-write).
+/// Since the CHAMP trie has a fixed maximal height, the cost is O(1).
+///
+/// This map can create a mutable copy of itself in O(1) time and O(1) space
+/// using method [#toMutable()]. The mutable copy shares its nodes
+/// with this map, until it has gradually replaced the nodes with exclusively
+/// owned nodes.
+///
+/// Insertion Order:
+///
+/// This map uses a counter to keep track of the insertion order.
+/// It stores the current value of the counter in the sequence number
+/// field of each data entry. If the counter wraps around, it must renumber all
+/// sequence numbers.
+///
+/// The renumbering is why the `add` and `remove` methods are O(1)
+/// only in an amortized sense.
+///
+/// To support iteration, we use a Vector. The Vector has the same contents
+/// as the CHAMP trie. However, its elements are stored in insertion order.
+///
+/// If an element is removed from the CHAMP trie that is not the first or the
+/// last element of the Vector, we replace its corresponding element in
+/// the Vector by a tombstone. If the element is at the start or end of the Vector,
+/// we remove the element and all its neighboring tombstones from the Vector.
+///
+/// A tombstone can store the number of neighboring tombstones in ascending and in descending
+/// direction. We use these numbers to skip tombstones when we iterate over the vector.
+/// Since we only allow iteration in ascending or descending order from one of the ends of
+/// the vector, we do not need to keep the number of neighbors in all tombstones up to date.
+/// It is sufficient, if we update the neighbor with the lowest index and the one with the
+/// highest index.
+///
+/// If the number of tombstones exceeds half of the size of the collection, we renumber all
+/// sequence numbers, and we create a new Vector.
+///
+/// References:
+///
+/// For a similar design, see 'SimplePersistentSequencedMap.scala'. Note, that this code is not a derivative
+/// of that code.
+/// <dl>
+///     <dt>The Scala library. SimplePersistentSequencedMap.scala. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
+///     <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/persistent/VectorMap.scala">github.com</a>
+///     </dd>
+/// </dl>
+///
+/// @param <K> the key type
+/// @param <V> the value type
 @SuppressWarnings("exports")
 public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Serializable {
     private static final ChampVectorMap<?, ?> EMPTY = new ChampVectorMap<>(
@@ -120,19 +118,12 @@ public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Seria
     @Serial
     private static final long serialVersionUID = 0L;
     final transient BitmapIndexedNode<SequencedEntry<K, V>> root;
-    /**
-     * Offset of sequence numbers to vector indices.
-     *
-     * <pre>vector index = sequence number + offset</pre>
-     */
+    /// Offset of sequence numbers to vector indices.
+    /// <pre>vector index = sequence number + offset</pre>
     final int offset;
-    /**
-     * The size of the map.
-     */
+    /// The size of the map.
     final int size;
-    /**
-     * In this vector we store the elements in the order in which they were inserted.
-     */
+    /// In this vector we store the elements in the order in which they were inserted.
     final VectorList<Object> vector;
 
     private record OpaqueRecord<K, V>(BitmapIndexedNode<SequencedEntry<K, V>> root,
@@ -140,14 +131,12 @@ public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Seria
                                       int size, int offset) {
     }
 
-    /**
-     * Creates a new instance with the provided privateData data object.
-     * <p>
-     * This constructor is intended to be called from a constructor
-     * of the subclass, that is called from method {@link #newInstance(PrivateData)}.
-     *
-     * @param privateData an privateData data object
-     */
+    /// Creates a new instance with the provided privateData data object.
+    ///
+    /// This constructor is intended to be called from a constructor
+    /// of the subclass, that is called from method [#newInstance(PrivateData)].
+    ///
+    /// @param privateData an privateData data object
     @SuppressWarnings("unchecked")
     protected ChampVectorMap(PrivateData privateData) {
         this(((OpaqueRecord<K, V>) privateData.get()).root,
@@ -156,14 +145,12 @@ public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Seria
                 ((OpaqueRecord<K, V>) privateData.get()).offset);
     }
 
-    /**
-     * Creates a new instance with the provided privateData object as its internal data structure.
-     * <p>
-     * Subclasses must override this method, and return a new instance of their subclass!
-     *
-     * @param privateData the internal data structure needed by this class for creating the instance.
-     * @return a new instance of the subclass
-     */
+    /// Creates a new instance with the provided privateData object as its internal data structure.
+    ///
+    /// Subclasses must override this method, and return a new instance of their subclass!
+    ///
+    /// @param privateData the internal data structure needed by this class for creating the instance.
+    /// @return a new instance of the subclass
     protected ChampVectorMap<K, V> newInstance(PrivateData privateData) {
         return new ChampVectorMap<>(privateData);
     }
@@ -183,46 +170,38 @@ public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Seria
         this.vector = Objects.requireNonNull(vector);
     }
 
-    /**
-     * Returns an persistent copy of the provided map.
-     *
-     * @param map a map
-     * @param <K> the key type
-     * @param <V> the value type
-     * @return an persistent copy
-     */
+    /// Returns an persistent copy of the provided map.
+    ///
+    /// @param map a map
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an persistent copy
     public static <K, V> ChampVectorMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
         return ChampVectorMap.<K, V>of().putAll(map);
     }
 
-    /**
-     * Returns an persistent copy of the provided map.
-     *
-     * @param map a map
-     * @param <K> the key type
-     * @param <V> the value type
-     * @return an persistent copy
-     */
+    /// Returns an persistent copy of the provided map.
+    ///
+    /// @param map a map
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an persistent copy
     public static <K, V> ChampVectorMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
         return ChampVectorMap.<K, V>of().putAll(map);
     }
 
-    /**
-     * Returns an empty persistent map.
-     *
-     * @param <K> the key type
-     * @param <V> the value type
-     * @return an empty persistent map
-     */
+    /// Returns an empty persistent map.
+    ///
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an empty persistent map
     @SuppressWarnings("unchecked")
     public static <K, V> ChampVectorMap<K, V> of() {
         return (ChampVectorMap<K, V>) ChampVectorMap.EMPTY;
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
+    /// {@inheritDoc}
     @Override
     public ChampVectorMap<K, V> clear() {
         return isEmpty() ? this : of();
@@ -465,11 +444,9 @@ public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Seria
                 Spliterator.NONNULL | characteristics());
     }
 
-    /**
-     * Creates a mutable copy of this map.
-     *
-     * @return a mutable sequenced CHAMP map
-     */
+    /// Creates a mutable copy of this map.
+    ///
+    /// @return a mutable sequenced CHAMP map
     @Override
     public MutableChampVectorMap<K, V> toMutable() {
         return new MutableChampVectorMap<>(this);
@@ -480,14 +457,12 @@ public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Seria
         return new MutableChampVectorMap<>(this);
     }
 
-    /**
-     * Returns a string representation of this map.
-     * <p>
-     * The string representation is consistent with the one produced
-     * by {@link AbstractMap#toString()}.
-     *
-     * @return a string representation
-     */
+    /// Returns a string representation of this map.
+    ///
+    /// The string representation is consistent with the one produced
+    /// by [AbstractMap#toString()].
+    ///
+    /// @return a string representation
     @Override
     public String toString() {
         return ReadableMap.mapToString(this);

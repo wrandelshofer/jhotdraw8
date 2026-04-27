@@ -11,8 +11,8 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.base.event.Listener;
-import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.CssPoint2D;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.figure.ChildLayoutingFigure;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -39,12 +39,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-/**
- * A DrawingModel for drawings which can handle {@link TransformableFigure}s,
- * {@link ChildLayoutingFigure} and layout observing figures,
- * like {@code LineConnectionFigure}.
- *
- */
+/// A DrawingModel for drawings which can handle [TransformableFigure]s,
+/// [ChildLayoutingFigure] and layout observing figures,
+/// like `LineConnectionFigure`.
 public class SimpleDrawingModel extends AbstractDrawingModel {
 
     public SimpleDrawingModel() {

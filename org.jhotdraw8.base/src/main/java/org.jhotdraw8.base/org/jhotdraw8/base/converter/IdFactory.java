@@ -8,73 +8,58 @@ import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 
-/**
- * IdFactory.
- *
- */
+/// IdFactory.
 public interface IdFactory extends IdResolver, IdSupplier {
     void setDocumentHome(@Nullable URI documentHome);
 
-    /**
-     * Creates an id for the specified object. If the object already has an id,
-     * then that id is returned.
-     *
-     * @param object the object
-     * @return the id
-     */
+    /// Creates an id for the specified object. If the object already has an id,
+    /// then that id is returned.
+    ///
+    /// @param object the object
+    /// @return the id
     default @Nullable String createId(Object object) {
         return createId(object, "");
     }
 
-    /**
-     * Creates an id for the specified object. If the object already has an id,
-     * then that id is returned.
-     *
-     * @param object the object
-     * @param prefix the desired prefix for the id
-     * @return the id
-     */
+    /// Creates an id for the specified object. If the object already has an id,
+    /// then that id is returned.
+    ///
+    /// @param object the object
+    /// @param prefix the desired prefix for the id
+    /// @return the id
     String createId(Object object, @Nullable String prefix);
 
-    /**
-     * Creates an id for the specified object. If the object already has an id,
-     * then that id is returned. If the object has no id and the suggestedId
-     * has not been assigned to an object yet, then the suggestedId is
-     * used.
-     *
-     * @param object      the object
-     * @param prefix      the prefix used to create a new id, if the suggested id is
-     *                    taken
-     * @param suggestedId the suggested id
-     * @return the id
-     */
+    /// Creates an id for the specified object. If the object already has an id,
+    /// then that id is returned. If the object has no id and the suggestedId
+    /// has not been assigned to an object yet, then the suggestedId is
+    /// used.
+    ///
+    /// @param object      the object
+    /// @param prefix      the prefix used to create a new id, if the suggested id is
+    ///                    taken
+    /// @param suggestedId the suggested id
+    /// @return the id
     @Nullable
     String createId(Object object, @Nullable String prefix, String suggestedId);
 
-    /**
-     * Puts the id and the object for mapping between them.
-     * <p>
-     * If the object already has an id, the old id is replaced.
-     *
-     * @param id     the id
-     * @param object the object
-     * @return the object that previously was assigned to this id
-     */
+    /// Puts the id and the object for mapping between them.
+    ///
+    /// If the object already has an id, the old id is replaced.
+    ///
+    /// @param id     the id
+    /// @param object the object
+    /// @return the object that previously was assigned to this id
     @Nullable
     Object putIdAndObject(String id, Object object);
 
-    /**
-     * Puts the id for mapping to the specified object.
-     *
-     * @param id     the id
-     * @param object the object
-     * @return the object that previously was assigned to this id
-     */
+    /// Puts the id for mapping to the specified object.
+    ///
+    /// @param id     the id
+    /// @param object the object
+    /// @return the object that previously was assigned to this id
     @Nullable
     Object putIdToObject(String id, Object object);
 
-    /**
-     * Clears all ids.
-     */
+    /// Clears all ids.
     void reset();
 }

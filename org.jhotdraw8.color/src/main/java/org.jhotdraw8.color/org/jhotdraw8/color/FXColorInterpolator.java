@@ -9,9 +9,7 @@ import javafx.scene.paint.Color;
 
 import java.awt.color.ColorSpace;
 
-/**
- * Linear interpolation between two colors in the specified color space.
- */
+/// Linear interpolation between two colors in the specified color space.
 public class FXColorInterpolator {
     private final NamedColorSpace cs;
     private final float[] fromColor;
@@ -21,37 +19,33 @@ public class FXColorInterpolator {
     private final int hueComponent;
     private final boolean wrapAroundHue;
 
-    /**
-     * Creates a new instance that interpolates between the specified colors
-     * in the specified color space.
-     * <p>
-     * If the color space is of type {@link ColorSpace#TYPE_HSV} or of
-     * type {@link ColorSpace#TYPE_HLS} then it will interpolate along
-     * the shorter arc of the hue.
-     *
-     * @param cs        the color space
-     * @param fromColor the color at interpolation time 0
-     * @param toColor   the color at interpolation time 1
-     */
+    /// Creates a new instance that interpolates between the specified colors
+    /// in the specified color space.
+    ///
+    /// If the color space is of type [ColorSpace#TYPE_HSV] or of
+    /// type [ColorSpace#TYPE_HLS] then it will interpolate along
+    /// the shorter arc of the hue.
+    ///
+    /// @param cs        the color space
+    /// @param fromColor the color at interpolation time 0
+    /// @param toColor   the color at interpolation time 1
     public FXColorInterpolator(NamedColorSpace cs, float[] fromColor, float[] toColor) {
         this(cs, fromColor, toColor,
                 cs.getType() == ColorSpace.TYPE_HSV
                         || cs.getType() == ColorSpace.TYPE_HLS ? 0 : -1);
     }
 
-    /**
-     * Creates a new instance that interpolates between the specified colors
-     * in the specified color space.
-     * <p>
-     * If {@code hasHue} is set to true, then it will interpolate along
-     * the shorter arc of the hue.
-     *
-     * @param cs           the color space
-     * @param fromColor    the color at interpolation time 0
-     * @param toColor      the color at interpolation time 1
-     * @param hueComponent the index of the hue component, or -1 if the color space
-     *                     does not have a hue component
-     */
+    /// Creates a new instance that interpolates between the specified colors
+    /// in the specified color space.
+    ///
+    /// If `hasHue` is set to true, then it will interpolate along
+    /// the shorter arc of the hue.
+    ///
+    /// @param cs           the color space
+    /// @param fromColor    the color at interpolation time 0
+    /// @param toColor      the color at interpolation time 1
+    /// @param hueComponent the index of the hue component, or -1 if the color space
+    ///                     does not have a hue component
     public FXColorInterpolator(NamedColorSpace cs, float[] fromColor, float[] toColor, int hueComponent) {
         this.cs = cs;
         this.fromColor = fromColor;

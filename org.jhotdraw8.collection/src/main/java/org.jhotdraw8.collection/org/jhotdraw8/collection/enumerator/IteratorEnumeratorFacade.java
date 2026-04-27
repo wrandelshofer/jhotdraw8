@@ -9,11 +9,9 @@ import org.jspecify.annotations.Nullable;
 import java.util.Iterator;
 import java.util.Spliterator;
 
-/**
- * Provides a {@link Enumerator} facade for an {@link Iterator}.
- *
- * @param <E> the element type
- */
+/// Provides a [Enumerator] facade for an [Iterator].
+///
+/// @param <E> the element type
 public class IteratorEnumeratorFacade<E> implements Enumerator<E> {
     private final Iterator<? extends E> iterator;
 

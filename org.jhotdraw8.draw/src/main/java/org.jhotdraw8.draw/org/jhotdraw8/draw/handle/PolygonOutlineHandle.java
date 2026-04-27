@@ -37,12 +37,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.PathIterator;
 
-/**
- * Draws the {@code wireframe} ofCollection a {@code PolygonFigure}.
- * <p>
- * The user can insert a new point by double clicking the line.
- *
- */
+/// Draws the `wireframe` ofCollection a `PolygonFigure`.
+///
+/// The user can insert a new point by double clicking the line.
 public class PolygonOutlineHandle extends AbstractHandle {
 
     private final boolean editable;

@@ -45,10 +45,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * FXML Controller class
- *
- */
+/// FXML Controller class
 public class StylesheetsInspector extends AbstractDrawingInspector {
 
     @FXML
@@ -65,9 +62,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
 
     private ListProperty<URI> stylesheetsProperty;
     private Node node;
-    /**
-     * Counter for incrementing stylesheet names.
-     */
+    /// Counter for incrementing stylesheet names.
     private int counter;
 
     public StylesheetsInspector() {

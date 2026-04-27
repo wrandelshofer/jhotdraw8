@@ -9,11 +9,9 @@ import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.lang.reflect.Type;
 
-/**
- * A {@link Key} that stores a list of values.
- *
- * @param <E> the element type of the list
- */
+/// A [Key] that stores a list of values.
+///
+/// @param <E> the element type of the list
 public class NonNullListKey<E> extends SimpleNonNullKey<PersistentList<E>> {
 
 

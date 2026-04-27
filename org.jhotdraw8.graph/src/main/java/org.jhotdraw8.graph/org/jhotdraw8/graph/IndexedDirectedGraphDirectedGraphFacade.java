@@ -9,9 +9,7 @@ package org.jhotdraw8.graph;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * Provides a {@link DirectedGraph} facade for an {@link IndexedDirectedGraph}.
- */
+/// Provides a [DirectedGraph] facade for an [IndexedDirectedGraph].
 public class IndexedDirectedGraphDirectedGraphFacade implements DirectedGraph<Integer, Integer> {
     private final IndexedDirectedGraph graph;
 

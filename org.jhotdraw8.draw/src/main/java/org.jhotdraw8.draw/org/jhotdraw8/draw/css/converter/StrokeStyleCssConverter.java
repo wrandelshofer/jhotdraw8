@@ -26,19 +26,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Allows to set all stroke properties at once.
- * <pre>
- *     StrokeStyle := {Options};
- *     Options = ( Type | Linecap | Linejoin | Miterlimit | Dashoffset | Dasharray );
- *     Type = "type(" , ("inside"|"outside"|"centered"), ")";
- *     Linecap = "linecap(",("square"|"butt"|"round"),")";
- *     Linejoin = "linecap(",("miter"|"bevel"|"round"),")";
- *     Miterlimit = "miterlimit(",Size,")";
- *     Dashoffset = "dashoffset(",Size,")";
- *     Dasharray = "dasharray(",Size,{Size},")";
- * </pre>
- */
+/// Allows to set all stroke properties at once.
+/// <pre>
+///     StrokeStyle := {Options};
+///     Options = ( Type | Linecap | Linejoin | Miterlimit | Dashoffset | Dasharray );
+///     Type = "type(" , ("inside"|"outside"|"centered"), ")";
+///     Linecap = "linecap(",("square"|"butt"|"round"),")";
+///     Linejoin = "linecap(",("miter"|"bevel"|"round"),")";
+///     Miterlimit = "miterlimit(",Size,")";
+///     Dashoffset = "dashoffset(",Size,")";
+///     Dasharray = "dasharray(",Size,{Size},")";
+/// </pre>
 public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle> {
 
     public static final String INSIDE = "inside";

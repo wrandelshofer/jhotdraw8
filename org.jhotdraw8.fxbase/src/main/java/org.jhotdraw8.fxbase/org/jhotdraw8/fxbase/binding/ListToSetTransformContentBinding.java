@@ -12,9 +12,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * Binds the content of a list to a set.
- */
+/// Binds the content of a list to a set.
 class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
     private final ObservableList<D> dest;
     private final ObservableSet<S> source;
@@ -22,20 +20,16 @@ class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
     private final Consumer<D> disposeDest;
 
 
-    /**
-     * @param dest
-     * @param source
-     * @param toDest may only be null, if this instance is used for unbinding!
-     */
+    /// @param dest
+    /// @param source
+    /// @param toDest may only be null, if this instance is used for unbinding!
     ListToSetTransformContentBinding(ObservableList<D> dest, ObservableSet<S> source, @Nullable Function<S, D> toDest) {
         this(dest, source, toDest, null);
     }
 
-    /**
-     * @param dest
-     * @param source
-     * @param toDest may only be null, if this instance is used for unbinding!
-     */
+    /// @param dest
+    /// @param source
+    /// @param toDest may only be null, if this instance is used for unbinding!
     ListToSetTransformContentBinding(ObservableList<D> dest, ObservableSet<S> source,
                                      @Nullable Function<S, D> toDest,
                                      @Nullable Consumer<D> disposeDest) {

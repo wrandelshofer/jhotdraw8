@@ -30,10 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-/**
- * FXML Controller class
- *
- */
+/// FXML Controller class
 public class DrawingInspector extends AbstractDrawingInspector {
 
     @FXML

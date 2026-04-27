@@ -32,16 +32,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Represents an SVG 'polyline' element.
- *
- */
+/// Represents an SVG 'polyline' element.
 public class SvgPolylineFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,
         SvgElementFigure {
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "polyline";
     public static final DoubleListStyleableKey POINTS = new DoubleListStyleableKey("points");
 

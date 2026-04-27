@@ -4,19 +4,14 @@
  */
 package org.jhotdraw8.base.function;
 
-/**
- * DoubleConsumer2.
- *
- */
+/// DoubleConsumer2.
 @FunctionalInterface
 public interface DoubleConsumer2 {
 
-    /**
-     * Performs this operation on the given argument.
-     *
-     * @param v1 the input argument
-     * @param v2 the input argument
-     */
+    /// Performs this operation on the given argument.
+    ///
+    /// @param v1 the input argument
+    /// @param v2 the input argument
     void accept(double v1, double v2);
 
 }

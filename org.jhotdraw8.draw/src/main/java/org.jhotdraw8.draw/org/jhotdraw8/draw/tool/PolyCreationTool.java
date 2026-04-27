@@ -8,9 +8,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.application.resources.Resources;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
@@ -24,15 +24,10 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-/**
- * CreationTool for polyline figures.
- *
- */
+/// CreationTool for polyline figures.
 public class PolyCreationTool extends AbstractCreationTool<Figure> {
 
-    /**
-     * The rubber band.
-     */
+    /// The rubber band.
     private @Nullable ArrayList<Point2D> points;
 
     private final Point2DListStyleableKey key;

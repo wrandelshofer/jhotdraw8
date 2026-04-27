@@ -20,11 +20,9 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Abstract base class for CSS functions that process a color value.
- *
- * @param <T> the element type of the DOM
- */
+/// Abstract base class for CSS functions that process a color value.
+///
+/// @param <T> the element type of the DOM
 public abstract class AbstractColorCssFunction<T> extends AbstractCssFunction<T> {
     protected final ColorCssConverter converter = new ColorCssConverter();
 

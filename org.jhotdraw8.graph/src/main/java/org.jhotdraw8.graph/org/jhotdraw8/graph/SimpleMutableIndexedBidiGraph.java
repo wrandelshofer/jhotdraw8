@@ -11,48 +11,44 @@ import org.jhotdraw8.collection.primitive.IntArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-/**
- * A simple implementation of the {@link MutableIndexedDirectedGraph} interface.
- * <p>
- * <b>Implementation:</b>
- * <p>
- * Example graph:
- * <pre>
- *     0 ──→ 1 ──→ 2
- *     │     │
- *     ↓     ↓
- *     3 ←── 4
- * </pre>
- * If the graph is inserted in the following sequence
- * into the builder:
- * <pre>
- *     buildAddVertex();
- *     buildAddVertex();
- *     buildAddVertex();
- *     buildAddVertex();
- *     buildAddVertex();
- *     buildAddVertex();
- *     build.addArrow(0, 1);
- *     build.addArrow(0, 3);
- *     build.addArrow(1, 2);
- *     build.addArrow(1, 4);
- *     build.addArrow(4, 3);
- * </pre>
- * Then the internal representation is as follows:
- * <pre>
- *     vertexCount: 5
- *
- *  vertex#    nodes
- *
- *    0        Node.next{1,3}
- *    1        Node.next{2,4}.prev{0}
- *    2        Node.prev{1}
- *    3        Node.prev{0}.prev{4}
- *    4        Node.next{3}.prev{1}
- * </pre>
- *
- */
-
+/// A simple implementation of the [MutableIndexedDirectedGraph] interface.
+///
+/// **Implementation:**
+///
+/// Example graph:
+/// <pre>
+///     0 ──→ 1 ──→ 2
+///     │     │
+///     ↓     ↓
+///     3 ←── 4
+/// </pre>
+/// If the graph is inserted in the following sequence
+/// into the builder:
+/// <pre>
+///     buildAddVertex();
+///     buildAddVertex();
+///     buildAddVertex();
+///     buildAddVertex();
+///     buildAddVertex();
+///     buildAddVertex();
+///     build.addArrow(0, 1);
+///     build.addArrow(0, 3);
+///     build.addArrow(1, 2);
+///     build.addArrow(1, 4);
+///     build.addArrow(4, 3);
+/// </pre>
+/// Then the internal representation is as follows:
+/// <pre>
+///     vertexCount: 5
+///
+///  vertex#    nodes
+///
+///    0        Node.next{1,3}
+///    1        Node.next{2,4}.prev{0}
+///    2        Node.prev{1}
+///    3        Node.prev{0}.prev{4}
+///    4        Node.next{3}.prev{1}
+/// </pre>
 public class SimpleMutableIndexedBidiGraph implements IndexedBidiGraph {
     private Node[] nodes = new Node[0];
     private int vertexCount;
@@ -127,12 +123,10 @@ public class SimpleMutableIndexedBidiGraph implements IndexedBidiGraph {
         }
     }
 
-    /**
-     * Builder-method: adds a directed arrow from 'v' to 'u'.
-     *
-     * @param vidx index of v
-     * @param uidx index of u
-     */
+    /// Builder-method: adds a directed arrow from 'v' to 'u'.
+    ///
+    /// @param vidx index of v
+    /// @param uidx index of u
     protected void addArrowAsInt(int vidx, int uidx) {
         Node node = nodes[vidx];
         if (node == null) {
@@ -149,12 +143,10 @@ public class SimpleMutableIndexedBidiGraph implements IndexedBidiGraph {
         arrowCount++;
     }
 
-    /**
-     * Removes an arrow from v to u.
-     *
-     * @param vidx index of v
-     * @param uidx index of u
-     */
+    /// Removes an arrow from v to u.
+    ///
+    /// @param vidx index of v
+    /// @param uidx index of u
     protected void removeArrowAsInt(int vidx, int uidx) {
         Node node = nodes[vidx];
         if (node == null) {
@@ -163,12 +155,10 @@ public class SimpleMutableIndexedBidiGraph implements IndexedBidiGraph {
         removeArrowAtAsInt(vidx, node.next.indexOfAsInt(uidx));
     }
 
-    /**
-     * Removes the i-th arrow of vertex v.
-     *
-     * @param vidx index of v
-     * @param i    the i-th arrow of the vertex
-     */
+    /// Removes the i-th arrow of vertex v.
+    ///
+    /// @param vidx index of v
+    /// @param i    the i-th arrow of the vertex
     protected void removeArrowAtAsInt(int vidx, int i) {
         Node vnode = nodes[vidx];
         if (vnode == null) {
@@ -240,9 +230,7 @@ public class SimpleMutableIndexedBidiGraph implements IndexedBidiGraph {
         return vertexCount;
     }
 
-    /**
-     * Performance: node.next is node.this. This saves 1 object per node.
-     */
+    /// Performance: node.next is node.this. This saves 1 object per node.
     private static class Node extends IntArrayList {
         private final IntArrayList next = this;
         private final IntArrayList prev = new IntArrayList();

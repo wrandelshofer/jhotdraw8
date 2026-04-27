@@ -7,9 +7,7 @@ package org.jhotdraw8.collection.primitive;
 
 import java.util.List;
 
-/**
- * Interface for a {@link List} with a primitive integer data elements.
- */
+/// Interface for a [List] with a primitive integer data elements.
 public interface IntList extends List<Integer>, IntSequencedCollection {
     @Override
     default boolean add(Integer integer) {
@@ -27,29 +25,19 @@ public interface IntList extends List<Integer>, IntSequencedCollection {
         return lastIndexOfAsInt((Integer) o);
     }
 
-    /**
-     * @see List#lastIndexOf(Object)
-     */
+    /// @see List#lastIndexOf(Object)
     int lastIndexOfAsInt(int o);
 
-    /**
-     * @see List#indexOf(Object)
-     */
+    /// @see List#indexOf(Object)
     int indexOfAsInt(int o);
 
-    /**
-     * @see List#add(Object)
-     */
+    /// @see List#add(Object)
     void addAsInt(int e);
 
-    /**
-     * @see List#add(int, Object)
-     */
+    /// @see List#add(int, Object)
     void addAsInt(int index, int e);
 
-    /**
-     * @see List#get(int)
-     */
+    /// @see List#get(int)
     int getAsInt(int index);
 
     @Override
@@ -62,12 +50,10 @@ public interface IntList extends List<Integer>, IntSequencedCollection {
         addAsInt(size(), e);
     }
 
-    /**
-     * Removes the item at the specified index from this list.
-     *
-     * @param index an index
-     * @return the removed item
-     */
+    /// Removes the item at the specified index from this list.
+    ///
+    /// @param index an index
+    /// @return the removed item
     int removeAtAsInt(int index);
 
     @Override

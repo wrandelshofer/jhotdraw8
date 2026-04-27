@@ -21,10 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-/**
- * Tests {@link ChampSet} with the Guava test suite.
- */
-
+/// Tests [ChampSet] with the Guava test suite.
 public class ChampSetGuavaTests {
 
     public static Test suite() {

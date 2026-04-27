@@ -35,10 +35,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.Math.max;
 
-/**
- * LayerFigure.
- *
- */
+/// LayerFigure.
 public class LayerFigure extends AbstractCompositeFigure
         implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure, CompositableFigure {
 
@@ -156,12 +153,10 @@ public class LayerFigure extends AbstractCompositeFigure
         return n;
     }
 
-    /**
-     * This method throws an illegal argument exception if the new parent is not
-     * an instance of Drawing.
-     *
-     * @param newValue the desired parent
-     */
+    /// This method throws an illegal argument exception if the new parent is not
+    /// an instance of Drawing.
+    ///
+    /// @param newValue the desired parent
     protected void checkNewParent(@Nullable Figure newValue) {
         if (newValue != null && !(newValue instanceof Drawing) && !(newValue instanceof Clipping)) {
             throw new IllegalArgumentException("A Layer can only be added as a child to a Drawing. Illegal parent: "
@@ -169,20 +164,16 @@ public class LayerFigure extends AbstractCompositeFigure
         }
     }
 
-    /**
-     * Layer figures always return false for isSelectable.
-     *
-     * @return false
-     */
+    /// Layer figures always return false for isSelectable.
+    ///
+    /// @return false
     @Override
     public boolean isSelectable() {
         return false;
     }
 
 
-    /**
-     * Layers never create handles.
-     */
+    /// Layers never create handles.
     @Override
     public void createHandles(HandleType handleType, List<Handle> list) {
         // empty
@@ -198,11 +189,9 @@ public class LayerFigure extends AbstractCompositeFigure
         return "LayerFigure@" + Integer.toHexString(System.identityHashCode(this)) + "{" + getId() + "}";
     }
 
-    /**
-     * A layer always has the following bounds [0,0,MAX_VALUE,MAX_VALUE].
-     *
-     * @return [0, 0, MAX_VALUE, MAX_VALUE].
-     */
+    /// A layer always has the following bounds [0,0,MAX_VALUE,MAX_VALUE].
+    ///
+    /// @return [0,0,MAX_VALUE,MAX_VALUE].
     @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(0, 0, Double.MAX_VALUE, Double.MAX_VALUE);

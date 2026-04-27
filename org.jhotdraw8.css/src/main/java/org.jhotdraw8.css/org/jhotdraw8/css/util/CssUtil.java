@@ -13,19 +13,13 @@ import java.text.ParseException;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-/**
- * Provides utility methods for CSS.
- */
+/// Provides utility methods for CSS.
 public class CssUtil {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private CssUtil() {
     }
 
-    /**
-     * Returns the selected elements.
-     */
+    /// Returns the selected elements.
     public static <E> Stream<E> select(String selector, Iterable<E> elements, SelectorModel<E> model, boolean parallel) throws ParseException {
         CssParser parser = new CssParser();
         Selector s = parser.parseSelector(selector);

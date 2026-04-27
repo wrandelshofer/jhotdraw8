@@ -19,11 +19,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * Converts a {@code javafx.geometry.CssPoint3D} into a {@code String} and vice
- * versa.
- *
- */
+/// Converts a `javafx.geometry.CssPoint3D` into a `String` and vice
+/// versa.
 public class Point3DCssConverter extends AbstractCssConverter<CssPoint3D> {
     private final boolean withSpace;
     private final boolean withComma;

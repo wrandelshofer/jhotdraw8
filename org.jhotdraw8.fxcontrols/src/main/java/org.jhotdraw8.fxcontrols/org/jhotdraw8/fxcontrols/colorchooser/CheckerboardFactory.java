@@ -14,20 +14,16 @@ import java.nio.IntBuffer;
 import java.util.Arrays;
 
 class CheckerboardFactory {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private CheckerboardFactory() {
     }
 
-    /**
-     * Creates a checkerboard image pattern.
-     *
-     * @param size     size of a checkerboard tile
-     * @param evenArgb color for even tiles
-     * @param oddArgb  color for odd tiles
-     * @return the image pattern
-     */
+    /// Creates a checkerboard image pattern.
+    ///
+    /// @param size     size of a checkerboard tile
+    /// @param evenArgb color for even tiles
+    /// @param oddArgb  color for odd tiles
+    /// @return the image pattern
     public static ImagePattern createCheckerboardPattern(int size, int evenArgb, int oddArgb) {
         int width = size * 2;
         int height = width;

@@ -21,15 +21,13 @@ public class IntersectRectangleRectangle {
 
     }
 
-    /**
-     * Computes the intersection between two rectangles 'a' and 'b'.
-     *
-     * @param a0 corner point 0 of rectangle 'a'
-     * @param a1 corner point 1 of rectangle 'a'
-     * @param b0 corner point 0 of rectangle 'b'
-     * @param b1 corner point 1 of rectangle 'b'
-     * @return computed intersection
-     */
+    /// Computes the intersection between two rectangles 'a' and 'b'.
+    ///
+    /// @param a0 corner point 0 of rectangle 'a'
+    /// @param a1 corner point 1 of rectangle 'a'
+    /// @param b0 corner point 0 of rectangle 'b'
+    /// @param b1 corner point 1 of rectangle 'b'
+    /// @return computed intersection
     public static IntersectionResultEx intersectRectangleRectangleEx(Point2D a0, Point2D a1, Point2D b0, Point2D b1) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(a0, a1);

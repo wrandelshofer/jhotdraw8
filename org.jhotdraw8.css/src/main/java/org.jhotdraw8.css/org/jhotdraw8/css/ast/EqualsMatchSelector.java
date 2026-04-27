@@ -12,25 +12,20 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * An "attribute value selector" matches an element if the element has an
- * attribute with the specified name and value.
- *
- */
+/// An "attribute value selector" matches an element if the element has an
+/// attribute with the specified name and value.
 public class EqualsMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;
     private final String attributeName;
     private final String attributeValue;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param sourceLocator    source locator for debugging
-     * @param namespacePattern an optional namespace ("*" means any namespace,
-     *                         null means no namespace)
-     * @param attributeName    the attribute name
-     * @param attributeValue   the attribute value
-     */
+    /// Creates a new instance.
+    ///
+    /// @param sourceLocator    source locator for debugging
+    /// @param namespacePattern an optional namespace ("*" means any namespace,
+    ///                         null means no namespace)
+    /// @param attributeName    the attribute name
+    /// @param attributeValue   the attribute value
     public EqualsMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, String attributeName, String attributeValue) {
         super(sourceLocator);
         this.namespacePattern = namespacePattern;

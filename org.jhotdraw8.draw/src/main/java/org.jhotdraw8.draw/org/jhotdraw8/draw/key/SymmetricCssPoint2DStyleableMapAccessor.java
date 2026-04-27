@@ -17,9 +17,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * SymmetricCssPoint2DStyleableMapAccessor.
- */
+/// SymmetricCssPoint2DStyleableMapAccessor.
 public class SymmetricCssPoint2DStyleableMapAccessor
         extends AbstractStyleableMapAccessor<CssPoint2D>
         implements NonNullMapAccessor<CssPoint2D> {
@@ -30,27 +28,23 @@ public class SymmetricCssPoint2DStyleableMapAccessor
     private final NonNullMapAccessor<CssSize> xKey;
     private final NonNullMapAccessor<CssSize> yKey;
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name the name of the accessor
-     * @param xKey the key for the x coordinate of the point
-     * @param yKey the key for the y coordinate of the point
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name the name of the accessor
+    /// @param xKey the key for the x coordinate of the point
+    /// @param yKey the key for the y coordinate of the point
     public SymmetricCssPoint2DStyleableMapAccessor(String name,
                                                    NonNullMapAccessor<CssSize> xKey,
                                                    NonNullMapAccessor<CssSize> yKey) {
         this(name, xKey, yKey, VectorList.of());
     }
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name     the name of the accessor
-     * @param xKey     the key for the x coordinate of the point
-     * @param yKey     the key for the y coordinate of the point
-     * @param examples example values
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name     the name of the accessor
+    /// @param xKey     the key for the x coordinate of the point
+    /// @param yKey     the key for the y coordinate of the point
+    /// @param examples example values
     public SymmetricCssPoint2DStyleableMapAccessor(String name,
                                                    NonNullMapAccessor<CssSize> xKey,
                                                    NonNullMapAccessor<CssSize> yKey,

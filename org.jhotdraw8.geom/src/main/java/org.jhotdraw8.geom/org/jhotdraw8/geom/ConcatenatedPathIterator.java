@@ -13,10 +13,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-/**
- * Concatenates multiple path iterators.
- *
- */
+/// Concatenates multiple path iterators.
 public class ConcatenatedPathIterator implements PathIterator {
 
     private @Nullable PathIterator current;

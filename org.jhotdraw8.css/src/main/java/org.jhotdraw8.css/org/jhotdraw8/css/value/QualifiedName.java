@@ -9,16 +9,12 @@ import org.jspecify.annotations.Nullable;
 
 import static org.jhotdraw8.css.ast.TypeSelector.ANY_NAMESPACE;
 
-/**
- * Represents a name that is optionally restricted to a specific namespace.
- */
+/// Represents a name that is optionally restricted to a specific namespace.
 public record QualifiedName(String namespace, String name) implements Comparable<QualifiedName> {
-    /**
-     * Creates a qualified name
-     *
-     * @param namespace namespace, if null assigns {@link TypeSelector#ANY_NAMESPACE}
-     * @param name      the name
-     */
+    /// Creates a qualified name
+    ///
+    /// @param namespace namespace, if null assigns [TypeSelector#ANY_NAMESPACE]
+    /// @param name      the name
     public QualifiedName(@Nullable String namespace, String name) {
         this.namespace = namespace == null ? ANY_NAMESPACE : namespace;
         this.name = name;

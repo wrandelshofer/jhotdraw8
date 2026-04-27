@@ -11,9 +11,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Deque;
 import java.util.NoSuchElementException;
 
-/**
- * Interface for a {@link Deque} with a primitive {@code long} data elements.
- */
+/// Interface for a [Deque] with a primitive `long` data elements.
 public interface LongDeque extends Deque<Long> {
     @Override
     default boolean add(Long integer) {
@@ -26,9 +24,7 @@ public interface LongDeque extends Deque<Long> {
         addFirstAsLong(integer);
     }
 
-    /**
-     * @see Deque#addFirst(Object)
-     */
+    /// @see Deque#addFirst(Object)
     void addFirstAsLong(long e);
 
     @Override
@@ -36,9 +32,7 @@ public interface LongDeque extends Deque<Long> {
         addLastAsLong(integer);
     }
 
-    /**
-     * @see Deque#addLast(Object)
-     */
+    /// @see Deque#addLast(Object)
     void addLastAsLong(long e);
 
     @Override
@@ -57,10 +51,8 @@ public interface LongDeque extends Deque<Long> {
         return getFirstAsLong();
     }
 
-    /**
-     * Returns the first index of the specified element
-     * or -1 if this deque does not contain the element.
-     */
+    /// Returns the first index of the specified element
+    /// or -1 if this deque does not contain the element.
     int firstIndexOfAsLong(long o);
 
     @Override
@@ -68,9 +60,7 @@ public interface LongDeque extends Deque<Long> {
         return getFirstAsLong();
     }
 
-    /**
-     * @see Deque#getFirst()
-     */
+    /// @see Deque#getFirst()
     long getFirstAsLong();
 
     @Override
@@ -78,15 +68,11 @@ public interface LongDeque extends Deque<Long> {
         return getLastAsLong();
     }
 
-    /**
-     * @see Deque#getLast()
-     */
+    /// @see Deque#getLast()
     long getLastAsLong();
 
-    /**
-     * Returns the last index of the specified element
-     * or -1 if this deque does not contain the element.
-     */
+    /// Returns the last index of the specified element
+    /// or -1 if this deque does not contain the element.
     int lastIndexOfAsLong(long o);
 
     @Override
@@ -160,9 +146,7 @@ public interface LongDeque extends Deque<Long> {
         return removeFirstAsLong();
     }
 
-    /**
-     * @see Deque#pop()
-     */
+    /// @see Deque#pop()
     default long popAsLong() {
         return removeFirstAsLong();
     }
@@ -172,9 +156,7 @@ public interface LongDeque extends Deque<Long> {
         addFirstAsLong(integer);
     }
 
-    /**
-     * @see Deque#push(Object)
-     */
+    /// @see Deque#push(Object)
     default void pushAsLong(long e) {
         addFirstAsLong(e);
     }
@@ -197,9 +179,7 @@ public interface LongDeque extends Deque<Long> {
         return removeFirstAsLong();
     }
 
-    /**
-     * @see Deque#removeFirst()
-     */
+    /// @see Deque#removeFirst()
     long removeFirstAsLong();
 
     @Override
@@ -210,9 +190,7 @@ public interface LongDeque extends Deque<Long> {
         return false;
     }
 
-    /**
-     * @see Deque#removeFirstOccurrence(Object)
-     */
+    /// @see Deque#removeFirstOccurrence(Object)
     boolean removeFirstOccurrenceAsLong(long o);
 
     @Override
@@ -220,9 +198,7 @@ public interface LongDeque extends Deque<Long> {
         return removeLastAsLong();
     }
 
-    /**
-     * @see Deque#removeLast()
-     */
+    /// @see Deque#removeLast()
     long removeLastAsLong();
 
 

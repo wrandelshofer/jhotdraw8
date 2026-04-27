@@ -13,16 +13,14 @@ import java.util.NoSuchElementException;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-/**
- * Entry iterator over a CHAMP trie.
- * <p>
- * Uses a fixed stack in depth.
- * Iterates first over inlined data entries and then continues depth first.
- * <p>
- * Supports remove and {@link Map.Entry#setValue}. The functions that are
- * passed to this iterator must not change the trie structure that the iterator
- * currently uses.
- */
+/// Entry iterator over a CHAMP trie.
+///
+/// Uses a fixed stack in depth.
+/// Iterates first over inlined data entries and then continues depth first.
+///
+/// Supports remove and [Map.Entry#setValue]. The functions that are
+/// passed to this iterator must not change the trie structure that the iterator
+/// currently uses.
 public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
 
     private final int[] nodeCursorsAndLengths = new int[Node.MAX_DEPTH * 2];
@@ -37,17 +35,15 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
     @SuppressWarnings({"unchecked", "rawtypes"})
     final Node<K, V>[] nodes = new Node[Node.MAX_DEPTH];
 
-    /**
-     * Creates a new instance.
-     *
-     * @param rootNode                       the root node of the trie
-     * @param persistentRemoveFunction       a function that removes an entry from a field;
-     *                                       the function must not change the trie that was passed
-     *                                       to this iterator
-     * @param persistentPutIfPresentFunction a function that replaces the value of an entry;
-     *                                       the function must not change the trie that was passed
-     *                                       to this iterator
-     */
+    /// Creates a new instance.
+    ///
+    /// @param rootNode                       the root node of the trie
+    /// @param persistentRemoveFunction       a function that removes an entry from a field;
+    ///                                       the function must not change the trie that was passed
+    ///                                       to this iterator
+    /// @param persistentPutIfPresentFunction a function that replaces the value of an entry;
+    ///                                       the function must not change the trie that was passed
+    ///                                       to this iterator
     public EntryIterator(Node<K, V> rootNode, @Nullable Consumer<K> persistentRemoveFunction, @Nullable BiConsumer<K, V> persistentPutIfPresentFunction) {
         this.persistentRemoveFunction = persistentRemoveFunction;
         this.persistentPutIfPresentFunction = persistentPutIfPresentFunction;

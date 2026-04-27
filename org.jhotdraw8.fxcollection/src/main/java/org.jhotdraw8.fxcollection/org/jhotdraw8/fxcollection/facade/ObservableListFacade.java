@@ -12,14 +12,12 @@ import org.jhotdraw8.icollection.readable.ReadableList;
 
 import java.util.Collection;
 
-/**
- * Wraps a {@link ReadableList} in the {@link ObservableList} interface.
- * <p>
- * The underlying ReadableList is referenced - not copied. This allows to pass a
- * ReadableList to a client who does not understand the ReadableList APi.
- *
- * @param <E> the element type
- */
+/// Wraps a [ReadableList] in the [ObservableList] interface.
+///
+/// The underlying ReadableList is referenced - not copied. This allows to pass a
+/// ReadableList to a client who does not understand the ReadableList APi.
+///
+/// @param <E> the element type
 public class ObservableListFacade<E> extends ListFacade<E> implements ObservableList<E> {
     public ObservableListFacade(ReadableList<E> backingList) {
         super(backingList);

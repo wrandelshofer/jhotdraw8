@@ -22,10 +22,7 @@ import java.util.Map;
 import java.util.SequencedMap;
 import java.util.function.Consumer;
 
-/**
- * Converts a {@code CssDimension2D} into a {@code String} and vice versa.
- *
- */
+/// Converts a `CssDimension2D` into a `String` and vice versa.
 public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> {
 
     private final SizeCssConverter sizeConverter = new SizeCssConverter(false);

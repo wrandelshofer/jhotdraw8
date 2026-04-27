@@ -25,15 +25,13 @@ public class FXLines {
                 x1 - x0, y1 - y0);
     }
 
-    /**
-     * Computes the linear interpolation/extrapolation between two points.
-     *
-     * @param start point a
-     * @param end   point b
-     * @param t     a value between [0, 1] defines the interpolation between a and
-     *              b. Values outside this range yield an extrapolation.
-     * @return the interpolated or extrapolated value
-     */
+    /// Computes the linear interpolation/extrapolation between two points.
+    ///
+    /// @param start point a
+    /// @param end   point b
+    /// @param t     a value between [0,1] defines the interpolation between a and
+    ///              b. Values outside this range yield an extrapolation.
+    /// @return the interpolated or extrapolated value
     public static Point2D lerp(Point2D start, Point2D end, double t) {
         return lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
     }

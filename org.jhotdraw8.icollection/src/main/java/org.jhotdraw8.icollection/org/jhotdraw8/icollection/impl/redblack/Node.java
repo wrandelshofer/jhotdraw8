@@ -11,27 +11,23 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
-/**
- * A non-empty tree node.
- * <p>
- * This class has been derived from 'vavr' RedBlackTree.java.
- * <dl>
- *     <dt>RedBlackTree.java. Copyright 2023 (c) vavr. MIT License.</dt>
- *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/RedBlackTree.java">github.com</a></dd>
- * </dl>
- *
- * @param <K> Component type
- */
+/// A non-empty tree node.
+///
+/// This class has been derived from 'vavr' RedBlackTree.java.
+/// <dl>
+///     <dt>RedBlackTree.java. Copyright 2023 (c) vavr. MIT License.</dt>
+///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/RedBlackTree.java">github.com</a></dd>
+/// </dl>
+///
+/// @param <K> Component type
 public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     final RedBlackTree<K, V> left;
     final K key;
     final V value;
     final RedBlackTree<K, V> right;
-    /**
-     * The sign bit encodes the color.
-     * The size is Math.abs(sizeAndColor).
-     */
+    /// The sign bit encodes the color.
+    /// The size is Math.abs(sizeAndColor).
     final int sizeAndColor;
     // This is no public API! The RedBlackTree takes care of passing the correct Comparator.
     Node(boolean color, RedBlackTree<K, V> left, K key, V value, RedBlackTree<K, V> right) {
@@ -205,16 +201,14 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
         }
     }
 
-    /**
-     * Inserts or updates an element in the tree.
-     *
-     * @param <K>        the element type
-     * @param tree       the tree
-     * @param key        the new element value
-     * @param value      the new element value
-     * @param comparator the comparator on which the elements are sorted in the tree
-     * @return the same tree instance if the element value is already in the tree, otherwise a new tree instance
-     */
+    /// Inserts or updates an element in the tree.
+    ///
+    /// @param <K>        the element type
+    /// @param tree       the tree
+    /// @param key        the new element value
+    /// @param value      the new element value
+    /// @param comparator the comparator on which the elements are sorted in the tree
+    /// @return the same tree instance if the element value is already in the tree, otherwise a new tree instance
     static <K, V> Node<K, V> insert(RedBlackTree<K, V> tree, K key, V value, Comparator<? super K> comparator) {
         if (tree.isEmpty()) {
             final Empty<K, V> empty = (Empty<K, V>) tree;

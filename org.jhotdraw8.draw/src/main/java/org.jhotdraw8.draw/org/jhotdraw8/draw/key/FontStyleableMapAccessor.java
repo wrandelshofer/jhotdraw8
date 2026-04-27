@@ -18,10 +18,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * FontStyleableMapAccessor.
- *
- */
+/// FontStyleableMapAccessor.
 public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFont>
         implements NonNullMapAccessor<CssFont> {
 
@@ -32,15 +29,13 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFo
     private final MapAccessor<CssSize> sizeKey;
     private final Converter<CssFont> converter = new FontCssConverter(false);
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name       the name of the accessor
-     * @param familyKey  the font family key
-     * @param weightKey  the font weight key
-     * @param postureKey the font posture key
-     * @param sizeKey    the font size key
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name       the name of the accessor
+    /// @param familyKey  the font family key
+    /// @param weightKey  the font weight key
+    /// @param postureKey the font posture key
+    /// @param sizeKey    the font size key
     public FontStyleableMapAccessor(String name,
                                     MapAccessor<String> familyKey, MapAccessor<FontWeight> weightKey,
                                     MapAccessor<FontPosture> postureKey, MapAccessor<CssSize> sizeKey) {

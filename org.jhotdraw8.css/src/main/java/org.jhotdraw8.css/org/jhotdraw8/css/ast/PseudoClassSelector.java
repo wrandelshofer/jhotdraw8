@@ -6,11 +6,8 @@ package org.jhotdraw8.css.ast;
 
 import org.jspecify.annotations.Nullable;
 
-/**
- * A "pseudo class selector" matches an element based on criteria which are not
- * directly encoded in the element.
- *
- */
+/// A "pseudo class selector" matches an element based on criteria which are not
+/// directly encoded in the element.
 public abstract class PseudoClassSelector extends SimpleSelector {
 
     public PseudoClassSelector(@Nullable SourceLocator sourceLocator) {

@@ -9,20 +9,14 @@ import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Interface for inspectors.
- *
- * @param <S> the subject type
- */
+/// Interface for inspectors.
+///
+/// @param <S> the subject type
 public interface Inspector<S> {
-    /**
-     * The name of the {@link #subjectProperty}.
-     */
+    /// The name of the [#subjectProperty].
     String SUBJECT_PROPERTY = "subject";
 
-    /**
-     * The name of the {@link #showingProperty}.
-     */
+    /// The name of the [#showingProperty].
     String SHOWING_PROPERTY = "showing";
 
     ObjectProperty<S> subjectProperty();
@@ -37,16 +31,14 @@ public interface Inspector<S> {
 
     Node getNode();
 
-    /**
-     * Whether this inspector is showing.
-     * <p>
-     * An inspector that is not showing should not consume CPU resources.
-     * <p>
-     * This property is set by parent nodes in the scene graph,, for example
-     * depending on whether this inspector is in a collapsed pane.
-     *
-     * @return true if this inspector is showing.
-     */
+    /// Whether this inspector is showing.
+    ///
+    /// An inspector that is not showing should not consume CPU resources.
+    ///
+    /// This property is set by parent nodes in the scene graph,, for example
+    /// depending on whether this inspector is in a collapsed pane.
+    ///
+    /// @return true if this inspector is showing.
     BooleanProperty showingProperty();
 
     default boolean isShowing() {

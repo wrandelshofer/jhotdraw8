@@ -29,23 +29,18 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.text.ParseException;
 import java.util.List;
 
 
-/**
- * Represents an SVG 'path' element.
- *
- */
+/// Represents an SVG 'path' element.
 public class SvgPathFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,
         SvgElementFigure {
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "path";
     public static final StringStyleableKey D = new StringStyleableKey("d");
 

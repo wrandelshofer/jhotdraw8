@@ -9,25 +9,17 @@ import javafx.scene.Node;
 import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Represents a node in a tree structure.
- */
+/// Represents a node in a tree structure.
 public interface DockNode {
-    /**
-     * The name of the {@link #dockParentProperty()}.
-     */
+    /// The name of the [#dockParentProperty()].
     String DOCK_PARENT_PROPERTY = "dockParent";
 
-    /**
-     * Gets the parent of this node.
-     */
+    /// Gets the parent of this node.
     ObjectProperty<DockParent> dockParentProperty();
 
-    /**
-     * Gets the children of this node.
-     *
-     * @return the children
-     */
+    /// Gets the children of this node.
+    ///
+    /// @return the children
     ReadableList<DockChild> getDockChildrenReadOnly();
 
     default @Nullable DockRoot getDockRoot() {

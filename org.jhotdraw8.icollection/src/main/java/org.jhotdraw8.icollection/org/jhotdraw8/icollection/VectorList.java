@@ -26,66 +26,60 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 
-/**
- * Implements the {@link PersistentList} interface using a bit-mapped trie
- * (Vector).
- * <p>
- * The code has been derived from Vavr Vector.java.
- * <p>
- * Features:
- * <ul>
- *     <li>supports up to 2<sup>31</sup> - 1 elements</li>
- *     <li>allows null elements</li>
- *     <li>is persistent</li>
- *     <li>is thread-safe</li>
- *     <li>iterates in the order of the list</li>
- * </ul>
- * <p>
- * Performance characteristics:
- * <ul>
- *     <li>addLast: O(log₃₂ N)</li>
- *     <li>set: O(log₃₂ N)</li>
- *     <li>removeAt: O(N)</li>
- *     <li>removeFirst,removeLast: O(log₃₂ N)</li>
- *     <li>contains: O(N)</li>
- *     <li>toMutable: O(1)</li>
- *     <li>clone: O(1)</li>
- *     <li>iterator creation: O(log₃₂ N)</li>
- *     <li>iterator.next: O(1)</li>
- *     <li>getFirst, getLast: O(log₃₂ N)</li>
- *     <li>reversed: O(N)</li>
- * </ul>
- * <p>
- * References:
- * <p>
- * For a similar design, see 'Vector.java' in vavr. The internal data structure of
- * this class is licensed from vavr.
- * <dl>
- *     <dt>Vector.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
- *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Vector.java">github.com</a></dd>
- * </dl>
- *
- * @param <E> the element type
- */
+/// Implements the [PersistentList] interface using a bit-mapped trie
+/// (Vector).
+///
+/// The code has been derived from Vavr Vector.java.
+///
+/// Features:
+///
+///   - supports up to 2<sup>31</sup> - 1 elements
+///   - allows null elements
+///   - is persistent
+///   - is thread-safe
+///   - iterates in the order of the list
+///
+///
+/// Performance characteristics:
+///
+///   - addLast: O(log₃₂ N)
+///   - set: O(log₃₂ N)
+///   - removeAt: O(N)
+///   - removeFirst,removeLast: O(log₃₂ N)
+///   - contains: O(N)
+///   - toMutable: O(1)
+///   - clone: O(1)
+///   - iterator creation: O(log₃₂ N)
+///   - iterator.next: O(1)
+///   - getFirst, getLast: O(log₃₂ N)
+///   - reversed: O(N)
+///
+///
+/// References:
+///
+/// For a similar design, see 'Vector.java' in vavr. The internal data structure of
+/// this class is licensed from vavr.
+/// <dl>
+///     <dt>Vector.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
+///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Vector.java">github.com</a></dd>
+/// </dl>
+///
+/// @param <E> the element type
 public class VectorList<E> implements PersistentList<E>, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
     private static final VectorList<?> EMPTY = new VectorList<>();
     final transient BitMappedTrie<E> trie;
 
-    /**
-     * Constructs a new empty list.
-     */
+    /// Constructs a new empty list.
     protected VectorList() {
         this.trie = BitMappedTrie.empty();
     }
 
-    /**
-     * Constructs a new list that contains all the elements of
-     * the specified iterable.
-     *
-     * @param iterable an iterable
-     */
+    /// Constructs a new list that contains all the elements of
+    /// the specified iterable.
+    ///
+    /// @param iterable an iterable
     @SuppressWarnings("unchecked")
     protected VectorList(final @Nullable Iterable<? extends E> iterable) {
         if (iterable == null) {
@@ -111,26 +105,22 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
         this.trie = trie;
     }
 
-    /**
-     * Creates a new instance with the provided privateData data object.
-     * <p>
-     * This constructor is intended to be called from a constructor
-     * of the subclass, that is called from method {@link #newInstance(PrivateData)}.
-     *
-     * @param privateData an privateData data object
-     */
+    /// Creates a new instance with the provided privateData data object.
+    ///
+    /// This constructor is intended to be called from a constructor
+    /// of the subclass, that is called from method [#newInstance(PrivateData)].
+    ///
+    /// @param privateData an privateData data object
     protected VectorList(PrivateData privateData) {
         this.trie = privateData.get();
     }
 
-    /**
-     * Creates a new instance with the provided privateData object as its internal data structure.
-     * <p>
-     * Subclasses must override this method, and return a new instance of their subclass!
-     *
-     * @param privateData the internal data structure needed by this class for creating the instance.
-     * @return a new instance of the subclass
-     */
+    /// Creates a new instance with the provided privateData object as its internal data structure.
+    ///
+    /// Subclasses must override this method, and return a new instance of their subclass!
+    ///
+    /// @param privateData the internal data structure needed by this class for creating the instance.
+    /// @return a new instance of the subclass
     protected VectorList<E> newInstance(PrivateData privateData) {
         return new VectorList<>(privateData);
     }
@@ -431,14 +421,12 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
         return ReadableList.listEquals(this, obj);
     }
 
-    /**
-     * Returns a string representation of this list.
-     * <p>
-     * The string representation is consistent with the one produced
-     * by {@link AbstractList#toString()}.
-     *
-     * @return a string representation
-     */
+    /// Returns a string representation of this list.
+    ///
+    /// The string representation is consistent with the one produced
+    /// by [AbstractList#toString()].
+    ///
+    /// @return a string representation
     @Override
     public String toString() {
         return ReadableCollection.iterableToString(this);

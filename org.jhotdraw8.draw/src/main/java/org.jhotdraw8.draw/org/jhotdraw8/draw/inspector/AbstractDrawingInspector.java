@@ -14,10 +14,7 @@ import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 
-/**
- * AbstractDrawingInspector.
- *
- */
+/// AbstractDrawingInspector.
 public abstract class AbstractDrawingInspector extends AbstractInspector<DrawingView> {
     protected @Nullable DrawingModel drawingModel;
     protected @Nullable Drawing drawing;
@@ -64,23 +61,19 @@ public abstract class AbstractDrawingInspector extends AbstractInspector<Drawing
     }
 
 
-    /**
-     * Must be implemented by subclasses.
-     *
-     * @param observable
-     * @param oldValue   the old drawing
-     * @param newValue   the new drawing
-     */
+    /// Must be implemented by subclasses.
+    ///
+    /// @param observable
+    /// @param oldValue   the old drawing
+    /// @param newValue   the new drawing
     protected abstract void onDrawingChanged(@Nullable ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue);
 
-    /**
-     * Can be overriden by subclasses.
-     * This implementation is empty.
-     *
-     * @param observable
-     * @param oldValue   the old drawing model
-     * @param newValue   the new drawing model
-     */
+    /// Can be overriden by subclasses.
+    /// This implementation is empty.
+    ///
+    /// @param observable
+    /// @param oldValue   the old drawing model
+    /// @param newValue   the new drawing model
     protected void onDrawingModelChanged(@Nullable ObservableValue<? extends DrawingModel> observable, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
 
     }

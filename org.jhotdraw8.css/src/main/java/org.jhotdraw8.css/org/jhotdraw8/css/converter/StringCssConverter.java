@@ -15,10 +15,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * Converts an {@code String} to a quoted CSS {@code String}.
- *
- */
+/// Converts an `String` to a quoted CSS `String`.
 public class StringCssConverter extends AbstractCssConverter<String> {
     private final @Nullable String helpText;
     private final char quoteChar;

@@ -14,12 +14,10 @@ import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 
-/**
- * A spliterator that fails when a provided modification counter does not have an
- * expected value.
- *
- * @param <E> the element type
- */
+/// A spliterator that fails when a provided modification counter does not have an
+/// expected value.
+///
+/// @param <E> the element type
 public class FailFastSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
     private final Spliterator<? extends E> s;
     private final int expectedModCount;

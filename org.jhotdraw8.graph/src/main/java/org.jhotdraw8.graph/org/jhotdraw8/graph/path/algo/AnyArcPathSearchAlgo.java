@@ -18,50 +18,46 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
- * Searches an arbitrary path from a set of start vertices to a set of goal
- * vertices using a breadth-first search algorithm.
- * <p>
- * This algorithm <b>ignores</b> cost limit. If you need it, use one of
- * the shortest path search algorithms.
- * <p>
- * Expected run time:
- * <dl>
- *     <dt>When the algorithm returns a back link</dt><dd>less or equal O( |A| + |V| ) within max depth</dd>
- *     <dt>When the algorithm returns null</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
- * </dl>
- * <p>
- * References:
- * <dl>
- *     <dt>Robert Sedgewick, Kevin Wayne. (2011)</dt>
- *     <dd>Algorithms, 4th Edition. Chapter 4. Breadth-First Search.
- *          <a href="https://algs4.cs.princeton.edu/home/">algs4.cs.princeton.edu</a>
- *     </dd>
- * </dl>
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- * @param <C> the cost number type
- */
+/// Searches an arbitrary path from a set of start vertices to a set of goal
+/// vertices using a breadth-first search algorithm.
+///
+/// This algorithm **ignores** cost limit. If you need it, use one of
+/// the shortest path search algorithms.
+///
+/// Expected run time:
+/// <dl>
+///     <dt>When the algorithm returns a back link</dt><dd>less or equal O( |A| + |V| ) within max depth</dd>
+///     <dt>When the algorithm returns null</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
+/// </dl>
+///
+/// References:
+/// <dl>
+///     <dt>Robert Sedgewick, Kevin Wayne. (2011)</dt>
+///     <dd>Algorithms, 4th Edition. Chapter 4. Breadth-First Search.
+///          <a href="https://algs4.cs.princeton.edu/home/">algs4.cs.princeton.edu</a>
+///     </dd>
+/// </dl>
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
+/// @param <C> the cost number type
 public class AnyArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
     public AnyArcPathSearchAlgo() {
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param startVertices    the set of start vertices
-     * @param goalPredicate    the goal predicate
-     * @param nextArcsFunction the next arcs function
-     * @param maxDepth         the maximal depth (inclusive) of the search
-     *                         Must be {@literal >= 0}.
-     * @param zero             the zero cost value
-     * @param costLimit        the cost limit is <b>ignored</b>
-     * @param costFunction     the cost function
-     * @param sumFunction      the sum function for adding two cost values
-     * @param visited
-     * @return
-     */
+    /// {@inheritDoc}
+    ///
+    /// @param startVertices    the set of start vertices
+    /// @param goalPredicate    the goal predicate
+    /// @param nextArcsFunction the next arcs function
+    /// @param maxDepth         the maximal depth (inclusive) of the search
+    ///                         Must be {@literal >= 0}.
+    /// @param zero             the zero cost value
+    /// @param costLimit        the cost limit is **ignored**
+    /// @param costFunction     the cost function
+    /// @param sumFunction      the sum function for adding two cost values
+    /// @param visited
+    /// @return
     @Override
     public @Nullable ArcBackLinkWithCost<V, A, C> search(Iterable<V> startVertices,
                                                          Predicate<V> goalPredicate,
@@ -79,17 +75,15 @@ public class AnyArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implem
                 zero, costFunction, sumFunction);
     }
 
-    /**
-     * Search engine method.
-     *
-     * @param startVertices    the set of start vertices
-     * @param goalPredicate    the goal predicate
-     * @param nextArcsFunction the next arcs function
-     * @param visited          the set of visited vertices (see {@link AddToSet})
-     * @param maxDepth         the maximal depth (inclusive) of the search
-     *                         Must be {@literal >= 0}.
-     * @return on success: a back link, otherwise: null
-     */
+    /// Search engine method.
+    ///
+    /// @param startVertices    the set of start vertices
+    /// @param goalPredicate    the goal predicate
+    /// @param nextArcsFunction the next arcs function
+    /// @param visited          the set of visited vertices (see [AddToSet])
+    /// @param maxDepth         the maximal depth (inclusive) of the search
+    ///                         Must be {@literal >= 0}.
+    /// @return on success: a back link, otherwise: null
     public @Nullable ArcBackLink<V, A> search(Iterable<V> startVertices,
                                               Predicate<V> goalPredicate,
                                               Function<V, Iterable<Arc<V, A>>> nextArcsFunction,

@@ -7,9 +7,7 @@ package org.jhotdraw8.graph;
 
 import org.jspecify.annotations.Nullable;
 
-/**
- * Tests {@link SimpleMutableBidiGraph}.
- */
+/// Tests [SimpleMutableBidiGraph].
 public class SimpleMutableBidiGraphTest extends AbstractMutableBidiGraphTest<Integer, Character> {
     @Override
     protected MutableBidiGraph<Integer, Character> newInstance() {

@@ -14,32 +14,30 @@ public class IntersectPathIteratorPoint {
     private IntersectPathIteratorPoint() {
     }
 
-    /**
-     * Intersects the given path iterator with the given point.
-     * <p>
-     * This method can produce the following {@link IntersectionStatus} codes:
-     * <dl>
-     *     <dt>{@link IntersectionStatus#INTERSECTION}</dt><dd>
-     *         The point intersects with a segment of the path within the
-     *         given tolerance radius.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_INSIDE}</dt><dd>
-     *         The point lies inside a path segment. The segment returned
-     *         by {@link IntersectionPointEx#getSegmentB()} points to the
-     *         segment that closes the path segment with
-     *         {@link PathIterator#SEG_CLOSE}.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_OUTSIDE}</dt><dd>
-     *         The point lies outside the path.
-     *     </dd>
-     * </dl>
-     *
-     * @param pit       the path iterator
-     * @param px        the x-coordinate of the point
-     * @param py        the y-coordinate of the point
-     * @param tolerance radius around the point which counts as a hit.
-     * @return the intersection
-     */
+    /// Intersects the given path iterator with the given point.
+    ///
+    /// This method can produce the following [IntersectionStatus] codes:
+    /// <dl>
+    ///     <dt>[IntersectionStatus#INTERSECTION]</dt><dd>
+    ///         The point intersects with a segment of the path within the
+    ///         given tolerance radius.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_INSIDE]</dt><dd>
+    ///         The point lies inside a path segment. The segment returned
+    ///         by [IntersectionPointEx#getSegmentB()] points to the
+    ///         segment that closes the path segment with
+    ///         [PathIterator#SEG_CLOSE].
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_OUTSIDE]</dt><dd>
+    ///         The point lies outside the path.
+    ///     </dd>
+    /// </dl>
+    ///
+    /// @param pit       the path iterator
+    /// @param px        the x-coordinate of the point
+    /// @param py        the y-coordinate of the point
+    /// @param tolerance radius around the point which counts as a hit.
+    /// @return the intersection
     public static IntersectionResult intersectPathIteratorPoint(PathIterator pit, double px, double py, double tolerance) {
         // FIXME we must take the winding rule into account!
         List<IntersectionPoint> lineIntersections = new ArrayList<>();

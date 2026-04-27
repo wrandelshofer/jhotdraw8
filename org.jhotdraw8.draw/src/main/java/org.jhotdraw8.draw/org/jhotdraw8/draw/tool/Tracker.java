@@ -9,10 +9,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.draw.DrawingView;
 
-/**
- * Tracker.
- *
- */
+/// Tracker.
 public interface Tracker {
 
     // ---
@@ -25,43 +22,33 @@ public interface Tracker {
     // Behaviors
     // ---
 
-    /**
-     * Returns the node which presents the tracker.
-     *
-     * @return a node
-     */
+    /// Returns the node which presents the tracker.
+    ///
+    /// @return a node
     Node getNode();
 
-    /**
-     * Handle input event forwarded from the parent Tool.
-     *
-     * @param evt  an event
-     * @param view a view
-     */
+    /// Handle input event forwarded from the parent Tool.
+    ///
+    /// @param evt  an event
+    /// @param view a view
     void trackMousePressed(MouseEvent evt, DrawingView view);
 
-    /**
-     * Handle input event forwarded from the parent Tool.
-     *
-     * @param evt  an event
-     * @param view a view
-     */
+    /// Handle input event forwarded from the parent Tool.
+    ///
+    /// @param evt  an event
+    /// @param view a view
     void trackMouseReleased(MouseEvent evt, DrawingView view);
 
-    /**
-     * Handle input event forwarded from the parent Tool.
-     *
-     * @param evt  an event
-     * @param view a view
-     */
+    /// Handle input event forwarded from the parent Tool.
+    ///
+    /// @param evt  an event
+    /// @param view a view
     void trackMouseClicked(MouseEvent evt, DrawingView view);
 
-    /**
-     * Handle input event forwarded from the parent Tool.
-     *
-     * @param evt  an event
-     * @param view a view
-     */
+    /// Handle input event forwarded from the parent Tool.
+    ///
+    /// @param evt  an event
+    /// @param view a view
     void trackMouseDragged(MouseEvent evt, DrawingView view);
 
     void trackKeyPressed(KeyEvent event, DrawingView view);

@@ -15,13 +15,11 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.Function;
 
-/**
- * Enumerates arcs in a graph starting from a root vertex in
- * breadth-first-order or in depth-first-order.
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- */
+/// Enumerates arcs in a graph starting from a root vertex in
+/// breadth-first-order or in depth-first-order.
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
 public class BfsDfsArcSpliterator<V, A> extends AbstractEnumerator<Arc<V, A>> {
 
     private final Function<V, Iterable<Arc<V, A>>> nextFunction;
@@ -29,26 +27,22 @@ public class BfsDfsArcSpliterator<V, A> extends AbstractEnumerator<Arc<V, A>> {
     private final AddToSet<Arc<V, A>> visited;
     private final boolean dfs;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param nextArcsFunction the nextFunction
-     * @param root             the root vertex
-     * @param dfs              whether to perform depth-first-search instead of breadth-first-search
-     */
+    /// Creates a new instance.
+    ///
+    /// @param nextArcsFunction the nextFunction
+    /// @param root             the root vertex
+    /// @param dfs              whether to perform depth-first-search instead of breadth-first-search
     public BfsDfsArcSpliterator(Function<V, Iterable<Arc<V, A>>> nextArcsFunction, V root, boolean dfs) {
         this(nextArcsFunction, root, new HashSet<>()::add, dfs);
     }
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param nextFunction the function that returns the next vertices of a given vertex
-     * @param root         the root vertex
-     * @param visited      a function that adds an arc to a set, and returns true if the arc was not yet in the set
-     * @param dfs whether to perform depth-first-search instead of breadth-first-search
-     */
+    /// Creates a new instance.
+    ///
+    /// @param nextFunction the function that returns the next vertices of a given vertex
+    /// @param root         the root vertex
+    /// @param visited      a function that adds an arc to a set, and returns true if the arc was not yet in the set
+    /// @param dfs          whether to perform depth-first-search instead of breadth-first-search
     public BfsDfsArcSpliterator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable AddToSet<Arc<V, A>> visited, boolean dfs) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;

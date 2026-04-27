@@ -22,15 +22,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * CssStrokeConverterTest.
- *
- */
+/// CssStrokeConverterTest.
 public class CssStrokeConverterTest {
 
-    /**
-     * Test of fromString method, of class CssStrokeStyleConverter.
-     */
+    /// Test of fromString method, of class CssStrokeStyleConverter.
     public static void doTestFromString(CssStrokeStyle expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -39,18 +34,14 @@ public class CssStrokeConverterTest {
         assertEquals(expected, actual);
     }
 
-    /**
-     * Test of toString method, of class CssStrokeStyleConverter.
-     */
+    /// Test of toString method, of class CssStrokeStyleConverter.
     public static void doTestToString(CssStrokeStyle value, String expected) throws Exception {
         StrokeStyleCssConverter instance = new StrokeStyleCssConverter(false);
         String actual = instance.toString(value);
         assertEquals(expected, actual);
     }
 
-    /**
-     * Test of fromString and toString methods, of class CssStrokeStyleConverter.
-     */
+    /// Test of fromString and toString methods, of class CssStrokeStyleConverter.
     public static void testStrokeStyle(CssStrokeStyle value, String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);

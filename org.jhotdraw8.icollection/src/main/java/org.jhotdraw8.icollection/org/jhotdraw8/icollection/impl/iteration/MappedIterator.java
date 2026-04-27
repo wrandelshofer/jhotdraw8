@@ -9,14 +9,12 @@ package org.jhotdraw8.icollection.impl.iteration;
 import java.util.Iterator;
 import java.util.function.Function;
 
-/**
- * Maps an {@link Iterator} to a different element type.
- * <p>
- * The underlying iterator is referenced - not copied.
- *
- * @param <E> the mapped element type
- * @param <F> the original element type
- */
+/// Maps an [Iterator] to a different element type.
+///
+/// The underlying iterator is referenced - not copied.
+///
+/// @param <E> the mapped element type
+/// @param <F> the original element type
 public class MappedIterator<E, F> implements Iterator<E> {
     private final Iterator<F> i;
 

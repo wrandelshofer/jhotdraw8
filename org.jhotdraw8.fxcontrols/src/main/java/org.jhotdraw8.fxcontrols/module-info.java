@@ -7,9 +7,7 @@
 import org.jhotdraw8.fxcontrols.spi.FXControlsResourceBundleProvider;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Provides controls that are based on JavaFX controls.
- */
+/// Provides controls that are based on JavaFX controls.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.fxcontrols {

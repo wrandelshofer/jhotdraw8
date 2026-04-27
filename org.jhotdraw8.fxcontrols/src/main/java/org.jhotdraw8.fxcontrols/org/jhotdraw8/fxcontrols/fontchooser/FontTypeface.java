@@ -9,10 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-/**
- * FontTypeface.
- *
- */
+/// FontTypeface.
 public class FontTypeface {
 
     private final StringProperty name = new SimpleStringProperty();

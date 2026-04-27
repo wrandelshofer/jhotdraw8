@@ -12,12 +12,10 @@ import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * A spliterator for a {@code SimplePersistentSequencedMap} or {@code SimplePersistentSequencedSet} that skips
- * tombstones.
- *
- * @param <K> the key type
- */
+/// A spliterator for a `SimplePersistentSequencedMap` or `SimplePersistentSequencedSet` that skips
+/// tombstones.
+///
+/// @param <K> the key type
 public class TombSkippingVectorSpliterator<K> extends Spliterators.AbstractSpliterator<K> implements Consumer<Object> {
     private final BitMappedTrie.BitMappedTrieSpliterator<Object> vector;
     private final Function<Object, K> mapper;

@@ -13,10 +13,7 @@ import javafx.collections.ObservableList;
 
 import java.util.List;
 
-/**
- * FontCollection.
- *
- */
+/// FontCollection.
 public class FontCollection {
 
     private final StringProperty name = new SimpleStringProperty();

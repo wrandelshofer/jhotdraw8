@@ -23,40 +23,26 @@ import java.util.Objects;
 import java.util.function.ToIntFunction;
 
 
-/**
- * This slider shows two component dimension of an {@link NamedColorSpace}
- * in a rectangular shape.
- */
+/// This slider shows two component dimension of an [NamedColorSpace]
+/// in a rectangular shape.
 public class ColorRectangleSlider extends AbstractColorSlider {
-    /**
-     * The index of the color space component that is displayed along the x-axis of the rectangle.
-     */
+    /// The index of the color space component that is displayed along the x-axis of the rectangle.
     @SuppressWarnings("this-escape")
     private final IntegerProperty xComponentIndex = new SimpleIntegerProperty(this, "xComponentIndex", 1);
-    /**
-     * The index of the color space component that is displayed along the y-axis of the rectangle.
-     */
+    /// The index of the color space component that is displayed along the y-axis of the rectangle.
     @SuppressWarnings("this-escape")
     private final IntegerProperty yComponentIndex = new SimpleIntegerProperty(this, "yComponentIndex", 2);
 
-    /**
-     * The minor unit distance between tick marks on the x-axis.
-     */
+    /// The minor unit distance between tick marks on the x-axis.
     @SuppressWarnings("this-escape")
     private final DoubleProperty xMinorTickUnit = new SimpleDoubleProperty(this, "xMinorTickUnit", 1f / 255);
-    /**
-     * The minor unit distance between tick marks on the y-axis.
-     */
+    /// The minor unit distance between tick marks on the y-axis.
     @SuppressWarnings("this-escape")
     private final DoubleProperty yMinorTickUnit = new SimpleDoubleProperty(this, "yMinorTickUnit", 1f / 255);
-    /**
-     * The major unit distance between tick marks on the x-axis.
-     */
+    /// The major unit distance between tick marks on the x-axis.
     @SuppressWarnings("this-escape")
     private final DoubleProperty xMajorTickUnit = new SimpleDoubleProperty(this, "xMajorTickUnit", 1f / 255);
-    /**
-     * The major unit distance between tick marks on the y-axis.
-     */
+    /// The major unit distance between tick marks on the y-axis.
     @SuppressWarnings("this-escape")
     private final DoubleProperty yMajorTickUnit = new SimpleDoubleProperty(this, "yMajorTickUnit", 1f / 255);
 
@@ -136,13 +122,9 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         setYValue(maybeSnapToTicks((height - y) * (ymax - ymin) / height + ymin, getYMinorTickUnit(), mouseEvent));
     }
 
-    /**
-     * The slider x-value.
-     */
+    /// The slider x-value.
     private final FloatProperty xValue = new SimpleFloatProperty(this, "xValue", 0);
-    /**
-     * The slider y-value.
-     */
+    /// The slider y-value.
     private final FloatProperty yValue = new SimpleFloatProperty(this, "yValue", 0);
 
     public float getXValue() {

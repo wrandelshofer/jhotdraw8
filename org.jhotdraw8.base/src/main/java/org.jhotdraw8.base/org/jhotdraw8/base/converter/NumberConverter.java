@@ -13,21 +13,16 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.Locale;
 
-/**
- * Formats real numbers.
- * <p>
- * Supports clamping into a {@code [min,max]} range (inclusive), a scale factor
- * and a unit label.
- * <p>
- * Also allows to specify the minimum and maximum of integer digits, fraction
- * digits, as well as the minimum of negative and positive exponent.
- *
- */
+/// Formats real numbers.
+///
+/// Supports clamping into a `[min,max]` range (inclusive), a scale factor
+/// and a unit label.
+///
+/// Also allows to specify the minimum and maximum of integer digits, fraction
+/// digits, as well as the minimum of negative and positive exponent.
 public class NumberConverter implements Converter<Number> {
 
-    /**
-     * Specifies whether the formatter allows null values.
-     */
+    /// Specifies whether the formatter allows null values.
     private final boolean allowsNullValue;
     @SuppressWarnings("rawtypes")
     private final Number min;
@@ -43,11 +38,9 @@ public class NumberConverter implements Converter<Number> {
     private final boolean usesScientificNotation = true;
     private final Class<? extends Number> valueClass;
 
-    /**
-     * Creates a <code>NumberFormatter</code> with the a default
-     * <code>NumberFormat</code> instance obtained from
-     * <code>NumberFormat.getNumberInstance()</code>.
-     */
+    /// Creates a <code>NumberFormatter</code> with the a default
+    /// <code>NumberFormat</code> instance obtained from
+    /// <code>NumberFormat.getNumberInstance()</code>.
     @SuppressWarnings("WeakerAccess")
     public NumberConverter() {
         this(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0);
@@ -57,40 +50,34 @@ public class NumberConverter implements Converter<Number> {
         this(valueClass, null, null, 1.0, false, null);
     }
 
-    /**
-     * Creates a NumberFormatter with the specified Format instance.
-     *
-     * @param min        the min
-     * @param max        the max
-     * @param multiplier the multiplier
-     */
+    /// Creates a NumberFormatter with the specified Format instance.
+    ///
+    /// @param min        the min
+    /// @param max        the max
+    /// @param multiplier the multiplier
     @SuppressWarnings("WeakerAccess")
     public NumberConverter(double min, double max, double multiplier) {
         this(Double.class, min, max, multiplier, false, null);
     }
 
-    /**
-     * Creates a NumberFormatter with the specified Format instance.
-     *
-     * @param min             the min
-     * @param max             the max
-     * @param multiplier      the multiplier
-     * @param allowsNullValue whether null values are allowed
-     */
+    /// Creates a NumberFormatter with the specified Format instance.
+    ///
+    /// @param min             the min
+    /// @param max             the max
+    /// @param multiplier      the multiplier
+    /// @param allowsNullValue whether null values are allowed
     @SuppressWarnings("WeakerAccess")
     public NumberConverter(double min, double max, double multiplier, boolean allowsNullValue) {
         this(Double.class, min, max, multiplier, allowsNullValue, null);
     }
 
-    /**
-     * Creates a NumberFormatter with the specified Format instance.
-     *
-     * @param min             the min
-     * @param max             the max
-     * @param multiplier      the multiplier
-     * @param allowsNullValue whether null values are allowed
-     * @param unit            the unit string
-     */
+    /// Creates a NumberFormatter with the specified Format instance.
+    ///
+    /// @param min             the min
+    /// @param max             the max
+    /// @param multiplier      the multiplier
+    /// @param allowsNullValue whether null values are allowed
+    /// @param unit            the unit string
     @SuppressWarnings("WeakerAccess")
     public NumberConverter(Class<? extends Number> valueClass,
                            Number min, Number max, double multiplier, boolean allowsNullValue, String unit) {
@@ -121,41 +108,33 @@ public class NumberConverter implements Converter<Number> {
     }
 
 
-    /**
-     * Returns the minimum permissible value.
-     *
-     * @return Minimum legal value that can be input
-     */
+    /// Returns the minimum permissible value.
+    ///
+    /// @return Minimum legal value that can be input
     @SuppressWarnings({"rawtypes", "unused"})
     public Number getMinimum() {
         return min;
     }
 
 
-    /**
-     * Returns the maximum permissible value.
-     *
-     * @return Maximum legal value that can be input
-     */
+    /// Returns the maximum permissible value.
+    ///
+    /// @return Maximum legal value that can be input
     @SuppressWarnings({"rawtypes", "unused"})
     public Number getMaximum() {
         return max;
     }
 
-    /**
-     * Gets the factor for use in percent, per mille, and similar formats.
-     *
-     * @return the factor
-     */
+    /// Gets the factor for use in percent, per mille, and similar formats.
+    ///
+    /// @return the factor
     public double getFactor() {
         return factor;
     }
 
-    /**
-     * Returns true if null values are allowed.
-     *
-     * @return true if null values are allowed
-     */
+    /// Returns true if null values are allowed.
+    ///
+    /// @return true if null values are allowed
     @SuppressWarnings("WeakerAccess")
     public boolean getAllowsNullValue() {
         return allowsNullValue;
@@ -418,12 +397,10 @@ public class NumberConverter implements Converter<Number> {
         return value;
     }
 
-    /**
-     * Returns true if <code>value</code> is between the min/max.
-     *
-     * @param wantsCCE If false, and a ClassCastException is thrown in comparing
-     *                 the values, the exception is consumed and false is returned.
-     */
+    /// Returns true if <code>value</code> is between the min/max.
+    ///
+    /// @param wantsCCE If false, and a ClassCastException is thrown in comparing
+    ///                 the values, the exception is consumed and false is returned.
     @SuppressWarnings({"unchecked", "WeakerAccess"})
     private boolean isValidValue(Number value, boolean wantsCCE) {
         try {
@@ -451,43 +428,35 @@ public class NumberConverter implements Converter<Number> {
     }
 
 
-    /**
-     * Gets the minimum negative exponent value for scientific notation.
-     *
-     * @return the minimum negative exponent
-     */
+    /// Gets the minimum negative exponent value for scientific notation.
+    ///
+    /// @return the minimum negative exponent
     @SuppressWarnings("unused")
     public int getMinimumNegativeExponent() {
         return minNegativeExponent;
     }
 
 
-    /**
-     * Gets the minimum positive exponent value for scientific notation.
-     *
-     * @return the minimum positive exponent
-     */
+    /// Gets the minimum positive exponent value for scientific notation.
+    ///
+    /// @return the minimum positive exponent
     @SuppressWarnings("unused")
     public int getMinimumPositiveExponent() {
         return minPositiveExponent;
     }
 
 
-    /**
-     * Returns true if scientific notation is used.
-     *
-     * @return true if scientific notation is used
-     */
+    /// Returns true if scientific notation is used.
+    ///
+    /// @return true if scientific notation is used
     @SuppressWarnings("unused")
     public boolean isUsesScientificNotation() {
         return usesScientificNotation;
     }
 
-    /**
-     * Gets the value class.
-     *
-     * @return the value class
-     */
+    /// Gets the value class.
+    ///
+    /// @return the value class
     public Class<? extends Number> getValueClass() {
         return valueClass;
     }

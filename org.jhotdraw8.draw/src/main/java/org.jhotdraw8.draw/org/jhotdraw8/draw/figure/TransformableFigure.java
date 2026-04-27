@@ -39,84 +39,60 @@ import java.util.Objects;
 import java.util.SequencedSet;
 import java.util.Set;
 
-/**
- * A transformable figure supports the transformation of a figure.
- * <p>
- * The following transformations are supported:
- * <ul>
- * <li>Translation of the local bounds of the figure.</li>
- * <li>Rotation around the center of the untransformed local bounds
- * of the figure.</li>
- * <li>Scaling around the center of the untransformed local bounds
- * of the figure.</li>
- * <li>Arbitrary sequence of affine transformations of the
- * figure.</li>
- * </ul>
- * Note that transformation matrices computed from the Rotation and Scaling must
- * be recomputed every time when the local bounds of the figure
- * change.
- */
+/// A transformable figure supports the transformation of a figure.
+///
+/// The following transformations are supported:
+///
+///   - Translation of the local bounds of the figure.
+///   - Rotation around the center of the untransformed local bounds
+///     of the figure.
+///   - Scaling around the center of the untransformed local bounds
+///     of the figure.
+///   - Arbitrary sequence of affine transformations of the
+///     figure.
+///
+/// Note that transformation matrices computed from the Rotation and Scaling must
+/// be recomputed every time when the local bounds of the figure
+/// change.
 public interface TransformableFigure extends TransformCachingFigure, Figure {
     boolean CACHE = true;
-    /**
-     * Defines the angle of rotation around the rotation pivot of the figure in degrees.
-     * <p>
-     * Default value: {@code 0}.
-     */
+    /// Defines the angle of rotation around the rotation pivot of the figure in degrees.
+    ///
+    /// Default value: `0`.
     NonNullObjectStyleableKey<Double> ROTATE = new NonNullObjectStyleableKey<>("rotate", Double.class, new DoubleCssConverter(false), 0.0,
             VectorList.of("0", "45", "90", "135", "180", "225", "270", "315"));
-    /**
-     * Defines the pivot of the rotation.
-     * <p>
-     * Default value: {@code 0.5, 0.5}.
-     */
+    /// Defines the pivot of the rotation.
+    ///
+    /// Default value: `0.5, 0.5`.
     CssPoint2DStyleableKey ROTATION_PIVOT = new CssPoint2DStyleableKey("rotation-pivot", new CssPoint2D(0.5, 0.5));
-    /**
-     * Defines the rotation axis used.
-     * <p>
-     * Default value: {@code Rotate.Z_AXIS}.
-     */
+    /// Defines the rotation axis used.
+    ///
+    /// Default value: `Rotate.Z_AXIS`.
     SimpleNonNullKey<Point3D> ROTATION_AXIS = new SimpleNonNullKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
-    /**
-     * Defines the scale factor by which coordinates are scaled on the x axis
-     * about the center of the figure. Default value: {@code 1}.
-     */
+    /// Defines the scale factor by which coordinates are scaled on the x axis
+    /// about the center of the figure. Default value: `1`.
     DoubleStyleableKey SCALE_X = new DoubleStyleableKey("scaleX", 1.0);
-    /**
-     * Defines the scale factor by which coordinates are scaled on the y axis
-     * about the center of the figure. Default value: {@code 1}.
-     */
+    /// Defines the scale factor by which coordinates are scaled on the y axis
+    /// about the center of the figure. Default value: `1`.
     DoubleStyleableKey SCALE_Y = new DoubleStyleableKey("scaleY", 1.0);
-    /**
-     * Defines the scale factor by which coordinates are scaled on the z axis
-     * about the center of the figure. Default value: {@code 1}.
-     */
+    /// Defines the scale factor by which coordinates are scaled on the z axis
+    /// about the center of the figure. Default value: `1`.
     DoubleStyleableKey SCALE_Z = new DoubleStyleableKey("scaleZ", 1.0);
-    /**
-     * Defines the scale factor by which coordinates are scaled on the axes
-     * about the center of the figure.
-     */
+    /// Defines the scale factor by which coordinates are scaled on the axes
+    /// about the center of the figure.
     Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
     TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", VectorList.of());
-    /**
-     * Defines the translation on the x axis about the center of the figure.
-     * Default value: {@code 0}.
-     */
+    /// Defines the translation on the x axis about the center of the figure.
+    /// Default value: `0`.
     DoubleStyleableKey TRANSLATE_X = new DoubleStyleableKey("translateX", 0.0);
-    /**
-     * Defines the translation on the y axis about the center of the figure.
-     * Default value: {@code 0}.
-     */
+    /// Defines the translation on the y axis about the center of the figure.
+    /// Default value: `0`.
     DoubleStyleableKey TRANSLATE_Y = new DoubleStyleableKey("translateY", 0.0);
-    /**
-     * Defines the translation on the z axis about the center of the figure.
-     * Default value: {@code 0}.
-     */
+    /// Defines the translation on the z axis about the center of the figure.
+    /// Default value: `0`.
     DoubleStyleableKey TRANSLATE_Z = new DoubleStyleableKey("translateZ", 0.0);
-    /**
-     * Defines the translation on the axes about the center of the
-     * figure.
-     */
+    /// Defines the translation on the axes about the center of the
+    /// figure.
     Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, new Translate3DCssConverter(false));
 
     static Set<Key<?>> getDeclaredKeys() {
@@ -125,20 +101,18 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         return keys;
     }
 
-    /**
-     * Updates a figure node with all transformation properties defined in this
-     * interface.
-     * <p>
-     * Applies the following properties: {@code TRANSFORM}, translation
-     * {@code TRANSLATE_X}, {@code TRANSLATE_Y}, {@code TRANSLATE_Z}, scale
-     * {@code SCALE_X}, {@code SCALE_Y}, {@code SCALE_Z}, and rotation
-     * {@code ROTATE}, {@code ROTATION_AXIS}.
-     * <p>
-     * This method is intended to be used by {@link #updateNode}.
-     *
-     * @param ctx  the render context
-     * @param node a node which was created with method {@link #createNode}.
-     */
+    /// Updates a figure node with all transformation properties defined in this
+    /// interface.
+    ///
+    /// Applies the following properties: `TRANSFORM`, translation
+    /// `TRANSLATE_X`, `TRANSLATE_Y`, `TRANSLATE_Z`, scale
+    /// `SCALE_X`, `SCALE_Y`, `SCALE_Z`, and rotation
+    /// `ROTATE`, `ROTATION_AXIS`.
+    ///
+    /// This method is intended to be used by [#updateNode].
+    ///
+    /// @param ctx  the render context
+    /// @param node a node which was created with method [#createNode].
     default void applyTransformableFigureProperties(RenderContext ctx, Node node) {
         Transform t = getLocalToParent();
         List<Transform> transforms = node.getTransforms();
@@ -308,11 +282,9 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     }
 
 
-    /**
-     * Gets the {@link #TRANSFORMS} flattened into a single transform.
-     *
-     * @return the flattened transforms
-     */
+    /// Gets the [#TRANSFORMS] flattened into a single transform.
+    ///
+    /// @return the flattened transforms
     default Transform getTransform(boolean styled) {
         PersistentList<Transform> list = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
         Transform t = null;
@@ -367,12 +339,10 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         }
     }
 
-    /**
-     * Convenience method for setting a new value for the {@link #TRANSFORMS}
-     * property.
-     *
-     * @param transforms new value
-     */
+    /// Convenience method for setting a new value for the [#TRANSFORMS]
+    /// property.
+    ///
+    /// @param transforms new value
     default void setTransforms(Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
             set(TRANSFORMS, VectorList.of());

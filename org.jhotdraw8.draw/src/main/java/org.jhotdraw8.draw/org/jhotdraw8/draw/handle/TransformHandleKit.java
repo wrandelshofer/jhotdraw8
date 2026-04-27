@@ -43,12 +43,10 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_PIVOT;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
 
-/**
- * A set of utility methods to create handles which transform a Figure by using
- * its {@code transform} method, if the Figure is transformable.
- * <p>
- * FIXME implement me
- */
+/// A set of utility methods to create handles which transform a Figure by using
+/// its `transform` method, if the Figure is transformable.
+///
+/// FIXME implement me
 public class TransformHandleKit {
 
     protected static final SVGPath NORTH_SHAPE = new SVGPath();
@@ -77,20 +75,16 @@ public class TransformHandleKit {
             new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
     );
 
-    /**
-     * Prevent instance creation.
-     */
+    /// Prevent instance creation.
     private TransformHandleKit() {
 
     }
 
-    /**
-     * Creates handles for each corner of a figure and adds them to the provided
-     * collection.
-     *
-     * @param f       the figure which will own the handles
-     * @param handles the list to which the handles should be added
-     */
+    /// Creates handles for each corner of a figure and adds them to the provided
+    /// collection.
+    ///
+    /// @param f       the figure which will own the handles
+    /// @param handles the list to which the handles should be added
     public static void addCornerTransformHandles(TransformableFigure f, Collection<Handle> handles) {
         handles.add(southEast(f));
         handles.add(southWest(f));
@@ -98,13 +92,11 @@ public class TransformHandleKit {
         handles.add(northWest(f));
     }
 
-    /**
-     * Fills the given collection with handles at each the north, south, east,
-     * and west of the figure.
-     *
-     * @param f       the figure which will own the handles
-     * @param handles the list to which the handles should be added
-     */
+    /// Fills the given collection with handles at each the north, south, east,
+    /// and west of the figure.
+    ///
+    /// @param f       the figure which will own the handles
+    /// @param handles the list to which the handles should be added
     public static void addEdgeTransformHandles(TransformableFigure f, Collection<Handle> handles) {
         handles.add(south(f));
         handles.add(north(f));
@@ -112,94 +104,76 @@ public class TransformHandleKit {
         handles.add(west(f));
     }
 
-    /**
-     * Fills the given collection with handles at each the north, south, east,
-     * and west of the figure.
-     *
-     * @param f       the figure which will own the handles
-     * @param handles the list to which the handles should be added
-     */
+    /// Fills the given collection with handles at each the north, south, east,
+    /// and west of the figure.
+    ///
+    /// @param f       the figure which will own the handles
+    /// @param handles the list to which the handles should be added
     public static void addTransformHandles(TransformableFigure f, Collection<Handle> handles) {
         addCornerTransformHandles(f, handles);
         addEdgeTransformHandles(f, handles);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle south(TransformableFigure owner) {
         return new SouthHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle southEast(TransformableFigure owner) {
         return new SouthEastHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle southWest(TransformableFigure owner) {
         return new SouthWestHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle north(TransformableFigure owner) {
         return new NorthHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle northEast(TransformableFigure owner) {
         return new NorthEastHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle northWest(TransformableFigure owner) {
         return new NorthWestHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle east(TransformableFigure owner) {
         return new EastHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle west(TransformableFigure owner) {
         return new WestHandle(owner);
     }

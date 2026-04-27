@@ -14,29 +14,25 @@ import static org.jhotdraw8.geom.Scalars.REAL_THRESHOLD;
 
 public class IntersectRayRay {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private IntersectRayRay() {
     }
 
-    /**
-     * Computes the intersection between two infinitely long rays 'a' and 'b'.
-     * <p>
-     * The intersection will contain the parameters 't' of ray 'a' in range
-     * [0,MAX_VALUE].
-     * <p>
-     * The computed intersection will have one of the states
-     * {@link IntersectionStatus#INTERSECTION},
-     * {@link IntersectionStatus#NO_INTERSECTION_COINCIDENT},
-     * {@link IntersectionStatus#NO_INTERSECTION_PARALLEL},
-     *
-     * @param ao origin of ray 'a'
-     * @param ad direction of ray 'a'
-     * @param bo origin of ray 'b'
-     * @param bd directoin of ray 'b'
-     * @return computed intersection
-     */
+    /// Computes the intersection between two infinitely long rays 'a' and 'b'.
+    ///
+    /// The intersection will contain the parameters 't' of ray 'a' in range
+    /// [0,MAX_VALUE].
+    ///
+    /// The computed intersection will have one of the states
+    /// [IntersectionStatus#INTERSECTION],
+    /// [IntersectionStatus#NO_INTERSECTION_COINCIDENT],
+    /// [IntersectionStatus#NO_INTERSECTION_PARALLEL],
+    ///
+    /// @param ao origin of ray 'a'
+    /// @param ad direction of ray 'a'
+    /// @param bo origin of ray 'b'
+    /// @param bd directoin of ray 'b'
+    /// @return computed intersection
     public static IntersectionResultEx intersectRayRayEx(Point2D ao,
                                                          Point2D ad,
                                                          Point2D bo,
@@ -45,22 +41,20 @@ public class IntersectRayRay {
 
     }
 
-    /**
-     * Computes the intersection between two infinitely long rays 'a' and 'b'.
-     * <p>
-     * The intersection will contain the parameters 't' of ray 'a' and ray
-     * 'b' in range [0,MAX_VALUE].
-     *
-     * @param aox x origin of ray 'a'
-     * @param aoy y origin of ray 'a'
-     * @param adx x direction of ray 'a'
-     * @param ady y direction of ray 'a'
-     * @param box x origin of ray 'b'
-     * @param boy y origin of ray 'b'
-     * @param bdx x direction of ray 'b'
-     * @param bdy y direction of ray 'b'
-     * @return computed intersection
-     */
+    /// Computes the intersection between two infinitely long rays 'a' and 'b'.
+    ///
+    /// The intersection will contain the parameters 't' of ray 'a' and ray
+    /// 'b' in range [0,MAX_VALUE].
+    ///
+    /// @param aox x origin of ray 'a'
+    /// @param aoy y origin of ray 'a'
+    /// @param adx x direction of ray 'a'
+    /// @param ady y direction of ray 'a'
+    /// @param box x origin of ray 'b'
+    /// @param boy y origin of ray 'b'
+    /// @param bdx x direction of ray 'b'
+    /// @param bdy y direction of ray 'b'
+    /// @return computed intersection
     public static IntersectionResultEx intersectRayRayEx(
             double aox, double aoy, double adx, double ady,
             double box, double boy, double bdx, double bdy) {
@@ -68,45 +62,43 @@ public class IntersectRayRay {
                 box, boy, bdx, bdy, Double.MAX_VALUE, REAL_THRESHOLD);
     }
 
-    /**
-     * Computes the intersection between two infinitely long rays 'a' and 'b'.
-     * <p>
-     * The intersection will contain the parameters 't' of ray 'a' in range
-     * [0,maxT].
-     * <p>
-     * This method can produce the following {@link IntersectionStatus} codes:
-     * <dl>
-     *     <dt>{@link IntersectionStatus#INTERSECTION}</dt><dd>
-     *         The line segments intersect at the {@link IntersectionPointEx} given
-     *         in the result.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION}</dt><dd>
-     *         The line segments do not intersect, but lines of infinite length,
-     *         will intersect at the {@link IntersectionPointEx} given
-     *         in the result.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_COINCIDENT}</dt><dd>
-     *         The lines segments do not intersect because they are
-     *         coincident. Coincidence starts and ends at the two
-     *         {@link IntersectionPointEx}s given in the result.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_PARALLEL}</dt><dd>
-     *         The lines segments do not intersect because they are parallel.
-     *     </dd>
-     * </dl>
-     *
-     * @param aox  x origin of ray 'a'
-     * @param aoy  y origin of ray 'a'
-     * @param adx  x direction of ray 'a'
-     * @param ady  y direction of ray 'a'
-     * @param amax maximal parameter value of ray 'a'
-     * @param box  x origin of ray 'b'
-     * @param boy  y origin of ray 'b'
-     * @param bdx  x direction of ray 'b'
-     * @param bdy  y direction of ray 'b'
-     * @param bmax maximal parameter value of ray 'b'
-     * @return computed intersection
-     */
+    /// Computes the intersection between two infinitely long rays 'a' and 'b'.
+    ///
+    /// The intersection will contain the parameters 't' of ray 'a' in range
+    /// [0,maxT].
+    ///
+    /// This method can produce the following [IntersectionStatus] codes:
+    /// <dl>
+    ///     <dt>[IntersectionStatus#INTERSECTION]</dt><dd>
+    ///         The line segments intersect at the [IntersectionPointEx] given
+    ///         in the result.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION]</dt><dd>
+    ///         The line segments do not intersect, but lines of infinite length,
+    ///         will intersect at the [IntersectionPointEx] given
+    ///         in the result.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_COINCIDENT]</dt><dd>
+    ///         The lines segments do not intersect because they are
+    ///         coincident. Coincidence starts and ends at the two
+    ///         [IntersectionPointEx]s given in the result.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_PARALLEL]</dt><dd>
+    ///         The lines segments do not intersect because they are parallel.
+    ///     </dd>
+    /// </dl>
+    ///
+    /// @param aox  x origin of ray 'a'
+    /// @param aoy  y origin of ray 'a'
+    /// @param adx  x direction of ray 'a'
+    /// @param ady  y direction of ray 'a'
+    /// @param amax maximal parameter value of ray 'a'
+    /// @param box  x origin of ray 'b'
+    /// @param boy  y origin of ray 'b'
+    /// @param bdx  x direction of ray 'b'
+    /// @param bdy  y direction of ray 'b'
+    /// @param bmax maximal parameter value of ray 'b'
+    /// @return computed intersection
     public static IntersectionResultEx intersectRayRayEx(
             double aox, double aoy, double adx, double ady, double amax,
             double box, double boy, double bdx, double bdy, double bmax,

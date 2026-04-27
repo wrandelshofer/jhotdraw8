@@ -12,9 +12,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Encapsulates system preferences.
- */
+/// Encapsulates system preferences.
 public interface SystemPreferences {
     ObjectProperty<SystemPreferences> instance = new SimpleObjectProperty<>();
 
@@ -30,33 +28,27 @@ public interface SystemPreferences {
         return instance.get();
     }
 
-    /**
-     * The accent color.
-     *
-     * @return accent color property
-     */
+    /// The accent color.
+    ///
+    /// @return accent color property
     ReadOnlyObjectProperty<Color> accentColorProperty();
 
     default @Nullable Color getAccentColor() {
         return accentColorProperty().get();
     }
 
-    /**
-     * The appearance.
-     *
-     * @return accent color property
-     */
+    /// The appearance.
+    ///
+    /// @return accent color property
     ReadOnlyObjectProperty<String> appearanceProperty();
 
     default @Nullable String getAppearance() {
         return appearanceProperty().get();
     }
 
-    /**
-     * The base font size.
-     *
-     * @return font size property
-     */
+    /// The base font size.
+    ///
+    /// @return font size property
     ReadOnlyDoubleProperty fontSizeProperty();
 
     default double getFontSize() {

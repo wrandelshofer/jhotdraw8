@@ -18,12 +18,10 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Provides a {@link ReadableSequencedMap} facade to a set of {@code ReadableSequencedMap} functions.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Provides a [ReadableSequencedMap] facade to a set of `ReadableSequencedMap` functions.
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public class ReadableSequencedMapFacade<K, V> extends ReadableMapFacade<K, V>
         implements ReadableSequencedMap<K, V> {
     private final Supplier<Map.Entry<K, V>> firstEntryFunction;

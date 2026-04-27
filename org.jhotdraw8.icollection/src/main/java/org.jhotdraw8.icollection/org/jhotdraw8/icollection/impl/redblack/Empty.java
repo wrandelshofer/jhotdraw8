@@ -11,17 +11,15 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 
-/**
- * The empty tree node.
- * <p>
- * This class has been derived from 'vavr' RedBlackTree.java.
- * <dl>
- *     <dt>RedBlackTree.java. Copyright 2023 (c) vavr. MIT License.</dt>
- *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/RedBlackTree.java">github.com</a></dd>
- * </dl>
- *
- * @param <K> Component type
- */
+/// The empty tree node.
+///
+/// This class has been derived from 'vavr' RedBlackTree.java.
+/// <dl>
+///     <dt>RedBlackTree.java. Copyright 2023 (c) vavr. MIT License.</dt>
+///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/RedBlackTree.java">github.com</a></dd>
+/// </dl>
+///
+/// @param <K> Component type
 public final class Empty<K, V> implements RedBlackTree<K, V> {
     public final static Empty<?, ?> EMPTY = new Empty<>();
 

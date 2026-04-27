@@ -13,17 +13,15 @@ public class IntersectLinePolygon {
     private IntersectLinePolygon() {
     }
 
-    /**
-     * Computes the intersection between a line and a polygon.
-     * <p>
-     * The intersection will contain the parameters 't1' of the line in range
-     * [0,1].
-     *
-     * @param a0     point 0 of the line
-     * @param a1     point 1 of the line
-     * @param points the points of the polygon
-     * @return computed intersection
-     */
+    /// Computes the intersection between a line and a polygon.
+    ///
+    /// The intersection will contain the parameters 't1' of the line in range
+    /// [0,1].
+    ///
+    /// @param a0     point 0 of the line
+    /// @param a1     point 1 of the line
+    /// @param points the points of the polygon
+    /// @return computed intersection
     public static IntersectionResultEx intersectLinePolygonEx(Point2D a0, Point2D a1, List<Point2D.Double> points) {
         List<IntersectionPointEx> result = new ArrayList<>();
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;

@@ -23,7 +23,7 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
@@ -31,13 +31,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * This is lake a group, but the shapes of the child figures are presented as a
- * unified path.
- * <p>
- * Only children which are PathIterableFigures are considered.
- *
- */
+/// This is lake a group, but the shapes of the child figures are presented as a
+/// unified path.
+///
+/// Only children which are PathIterableFigures are considered.
 public class CombinedPathFigure extends AbstractCompositeFigure
         implements StrokableFigure, FillableFigure, Grouping,
         ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
@@ -45,9 +42,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         ConnectableFigure, PathIterableFigure {
 
     public static final NullableEnumStyleableKey<CagOperation> CAG_OPERATION = new NullableEnumStyleableKey<>("cag-operation", CagOperation.class, null);
-    /**
-     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "CombinedPath";
 
     public CombinedPathFigure() {
@@ -165,9 +160,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         return TYPE_SELECTOR;
     }
 
-    /**
-     * Always returns true.
-     */
+    /// Always returns true.
     @Override
     public boolean isLayoutable() {
         return true;
@@ -210,9 +203,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         n.getElements().setAll(FXShapes.awtPathIteratorToFXPathElements(getPathIterator(ctx, null)));
     }
 
-    /**
-     * Constructive Area Geometry Operation (CAG Operation.
-     */
+    /// Constructive Area Geometry Operation (CAG Operation.
     public enum CagOperation {
         ADD, SUBTRACT, INTERSECT, XOR
     }
@@ -223,12 +214,10 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         return true;
     }
 
-    /**
-     * This method returns true for instances of PathIterableFigure.
-     *
-     * @param newChild The new child figure.
-     * @return true if instanceof PathIterableFigure.
-     */
+    /// This method returns true for instances of PathIterableFigure.
+    ///
+    /// @param newChild The new child figure.
+    /// @return true if instanceof PathIterableFigure.
     @Override
     public boolean isSuitableChild(Figure newChild) {
         return newChild instanceof PathIterableFigure;

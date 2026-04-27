@@ -31,18 +31,13 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-/**
- * AbstractActivity.
- *
- */
+/// AbstractActivity.
 public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 
     @SuppressWarnings("this-escape")
     protected final ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
     protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
-    /**
-     * The title of {@link Stage} that contains the activity will be bound to the title of the activity.
-     */
+    /// The title of [Stage] that contains the activity will be bound to the title of the activity.
     @SuppressWarnings("this-escape")
     protected final StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY,
             ApplicationLabels.getResources().getString("unnamedFile"));

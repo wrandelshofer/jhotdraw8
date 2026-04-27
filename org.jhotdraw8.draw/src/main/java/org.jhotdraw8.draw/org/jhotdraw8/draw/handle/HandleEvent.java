@@ -8,10 +8,7 @@ import org.jhotdraw8.base.event.Event;
 
 import java.io.Serial;
 
-/**
- * HandleEvent.
- *
- */
+/// HandleEvent.
 public class HandleEvent extends Event<Handle> {
 
     @Serial

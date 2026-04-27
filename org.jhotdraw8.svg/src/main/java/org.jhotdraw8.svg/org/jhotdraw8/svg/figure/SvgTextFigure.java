@@ -35,18 +35,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.Objects;
 
-/**
- * Represents an SVG 'text' element.
- *
- */
+/// Represents an SVG 'text' element.
 public class SvgTextFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure,
         PathIterableFigure, HideableFigure, TextableFigure,
         SvgDefaultableFigure,
         SvgElementFigure {
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "text";
     public static final CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
     public static final CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
@@ -109,12 +104,10 @@ public class SvgTextFigure extends AbstractLeafFigure
         return new CssRectangle2D(getLayoutBounds());
     }
 
-    /**
-     * Computes the bounds of the node for layout calculations. These bounds
-     * include the text of the node and the padding.
-     *
-     * @return the layout bounds
-     */
+    /// Computes the bounds of the node for layout calculations. These bounds
+    /// include the text of the node and the padding.
+    ///
+    /// @return the layout bounds
     public Bounds computeLayoutBounds() {
         return computeLayoutBounds(new SimpleRenderContext(), new Text());
     }
@@ -131,13 +124,11 @@ public class SvgTextFigure extends AbstractLeafFigure
                 textNode.getBaselineOffset() + i.getTop() + i.getBottom());
     }
 
-    /**
-     * Returns the bounds of the text node for layout calculations. These bounds
-     * only includes the text - without padding.
-     *
-     * @param ctx the render context
-     * @return the layout bounds of the text
-     */
+    /// Returns the bounds of the text node for layout calculations. These bounds
+    /// only includes the text - without padding.
+    ///
+    /// @param ctx the render context
+    /// @return the layout bounds of the text
     protected Bounds getTextBounds(@Nullable RenderContext ctx) {
         Text textNode = new Text();
         updateTextNode(ctx, textNode);

@@ -11,17 +11,12 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jspecify.annotations.Nullable;
 
-/**
- * LabelFigure presents a text on a drawing.
- *
- */
+/// LabelFigure presents a text on a drawing.
 public class LabelFigure extends AbstractLabelFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure,
         TextableFigure, StyleableFigure, LockableFigure, TransformableFigure,
         CompositableFigure, TextEditableFigure {
-    /**
-     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Label";
 
     public LabelFigure() {

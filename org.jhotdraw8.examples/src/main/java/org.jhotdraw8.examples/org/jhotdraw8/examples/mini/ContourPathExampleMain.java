@@ -34,10 +34,7 @@ import org.jhotdraw8.geom.contour.PlineVertex;
 
 import java.util.List;
 
-/**
- * OffsetPathSampleMain.
- *
- */
+/// OffsetPathSampleMain.
 public class ContourPathExampleMain extends Application {
     private final Polyline polyline = new Polyline(
             110, 200,
@@ -221,9 +218,7 @@ public class ContourPathExampleMain extends Application {
         return index;
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         launch(args);
     }

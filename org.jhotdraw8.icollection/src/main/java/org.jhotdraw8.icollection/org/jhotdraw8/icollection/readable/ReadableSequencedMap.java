@@ -16,55 +16,45 @@ import java.util.NoSuchElementException;
 import java.util.SequencedMap;
 import java.util.Spliterator;
 
-/**
- * A readable interface to a sequenced map. A sequenced map has a well-defined encounter order, that supports
- * operations at both ends, and that is reversible.
- * <p>
- * References:
- * <dl>
- *     <dt>JEP draft: Sequenced Collections</dt>
- *     <dd><a href="https://openjdk.java.net/jeps/8280836">java.ne</a></dd>
- * </dl>
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// A readable interface to a sequenced map. A sequenced map has a well-defined encounter order, that supports
+/// operations at both ends, and that is reversible.
+///
+/// References:
+/// <dl>
+///     <dt>JEP draft: Sequenced Collections</dt>
+///     <dd><a href="https://openjdk.java.net/jeps/8280836">java.ne</a></dd>
+/// </dl>
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public interface ReadableSequencedMap<K, V> extends ReadableMap<K, V> {
-    /**
-     * Returns a reversed-order view of this map.
-     * <p>
-     * Changes to the underlying map are visible in the reversed view.
-     *
-     * @return a reversed-order view of this map
-     */
+    /// Returns a reversed-order view of this map.
+    ///
+    /// Changes to the underlying map are visible in the reversed view.
+    ///
+    /// @return a reversed-order view of this map
     ReadableSequencedMap<K, V> readableReversed();
 
-    /**
-     * Gets the first entry in this map or {@code null} if this map is empty.
-     *
-     * @return the first entry or {@code null}
-     * @throws NoSuchElementException if the map is empty
-     */
+    /// Gets the first entry in this map or `null` if this map is empty.
+    ///
+    /// @return the first entry or `null`
+    /// @throws NoSuchElementException if the map is empty
     default Map.@Nullable Entry<K, V> firstEntry() {
         return isEmpty() ? null : readableEntrySet().iterator().next();
     }
 
-    /**
-     * Gets the last entry in this map or {@code null} if this map is empty.
-     *
-     * @return the last entry or {@code null}
-     * @throws NoSuchElementException if the map is empty
-     */
+    /// Gets the last entry in this map or `null` if this map is empty.
+    ///
+    /// @return the last entry or `null`
+    /// @throws NoSuchElementException if the map is empty
     default Map.@Nullable Entry<K, V> lastEntry() {
         return isEmpty() ? null : readableReversed().readableEntrySet().iterator().next();
     }
 
 
-    /**
-     * Returns a {@link ReadableSequencedSet} view of the entries contained in this map.
-     *
-     * @return a {@link ReadableSequencedSet} view of the entries
-     */
+    /// Returns a [ReadableSequencedSet] view of the entries contained in this map.
+    ///
+    /// @return a [ReadableSequencedSet] view of the entries
     @Override
     default ReadableSequencedSet<Map.Entry<K, V>> readableEntrySet() {
         return new ReadableSequencedSetFacade<>(
@@ -77,21 +67,17 @@ public interface ReadableSequencedMap<K, V> extends ReadableMap<K, V> {
                 characteristics() | Spliterator.NONNULL);
     }
 
-    /**
-     * Returns the spliterator characteristics of the key set.
-     * This implementation returns {@link Spliterator#SIZED}|{@link Spliterator#DISTINCT}.
-     *
-     * @return characteristics.
-     */
+    /// Returns the spliterator characteristics of the key set.
+    /// This implementation returns [Spliterator#SIZED]|[Spliterator#DISTINCT].
+    ///
+    /// @return characteristics.
     default int characteristics() {
         return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.DISTINCT;
     }
 
-    /**
-     * Returns a {@link ReadableSequencedSet} view of the keys contained in this map.
-     *
-     * @return a {@link ReadableSequencedSet} view of the keys
-     */
+    /// Returns a [ReadableSequencedSet] view of the keys contained in this map.
+    ///
+    /// @return a [ReadableSequencedSet] view of the keys
     @Override
     default ReadableSequencedSet<K> readableKeySet() {
         return new ReadableSequencedSetFacade<>(
@@ -116,12 +102,10 @@ public interface ReadableSequencedMap<K, V> extends ReadableMap<K, V> {
                 characteristics());
     }
 
-    /**
-     * Returns a {@link ReadableSequencedCollection} view of the values contained in
-     * this map.
-     *
-     * @return a {@link ReadableSequencedCollection} view of the values
-     */
+    /// Returns a [ReadableSequencedCollection] view of the values contained in
+    /// this map.
+    ///
+    /// @return a [ReadableSequencedCollection] view of the values
     @Override
     default ReadableSequencedCollection<V> readableValues() {
         return new ReadableSequencedCollectionFacade<>(

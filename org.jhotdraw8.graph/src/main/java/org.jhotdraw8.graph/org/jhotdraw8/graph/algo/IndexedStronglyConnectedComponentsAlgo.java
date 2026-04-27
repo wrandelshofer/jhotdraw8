@@ -20,19 +20,16 @@ import java.util.function.Function;
 
 import static java.lang.Math.min;
 
-/**
- * Computes the sets of strongly connected components in an indexed directed graph.
- * <p>
- * References:
- * <dl>
- *     <dt>Robert Tarjan (1972). Depth-first search and linear graph algorithms.
- *     </dt>
- *     <dd><a href="http://www.cs.ucsb.edu/~gilbert/cs240a/old/cs240aSpr2011/slides/TarjanDFS.pdf">cs.ucsb.edu</a></dd>
- *
- *     <dt>Wikipedia. Tarjan's strongly connected components algorithm</dt>
- *     <dd><a href="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm">wikipedia.org</a></dd>
- * </dl>
- */
+/// Computes the sets of strongly connected components in an indexed directed graph.
+///
+/// References:
+/// <dl>
+///     <dt>Robert Tarjan (1972). Depth-first search and linear graph algorithms.
+///     </dt>
+///     <dd><a href="http://www.cs.ucsb.edu/~gilbert/cs240a/old/cs240aSpr2011/slides/TarjanDFS.pdf">cs.ucsb.edu</a></dd>
+///     <dt>Wikipedia. Tarjan's strongly connected components algorithm</dt>
+///     <dd><a href="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm">wikipedia.org</a></dd>
+/// </dl>
 public class IndexedStronglyConnectedComponentsAlgo {
 
     public IndexedStronglyConnectedComponentsAlgo() {
@@ -45,13 +42,11 @@ public class IndexedStronglyConnectedComponentsAlgo {
     }
 
 
-    /**
-     * Returns all strongly connected components in the specified graph.
-     *
-     * @param vertexCount      the vertices of the graph
-     * @param nextNodeFunction returns the next nodes of a given node
-     * @return set of strongly connected components (sets of vertices).
-     */
+    /// Returns all strongly connected components in the specified graph.
+    ///
+    /// @param vertexCount      the vertices of the graph
+    /// @param nextNodeFunction returns the next nodes of a given node
+    /// @return set of strongly connected components (sets of vertices).
     public List<IntList> findStronglyConnectedComponents(
             int vertexCount, Function<Integer, Enumerator.OfInt> nextNodeFunction) {
         return new SCCAlgo(vertexCount, nextNodeFunction).findSCCs();
@@ -61,62 +56,46 @@ public class IndexedStronglyConnectedComponentsAlgo {
 
     }
 
-    /**
-     * This object holds the algorithm and its current state.
-     */
+    /// This object holds the algorithm and its current state.
     private static class SCCAlgo {
         final Function<Integer, Enumerator.OfInt> getNeighbors;
         final List<IntList> SCCs;
         final int vertexCount;
 
-        /**
-         * This time value is used to indicate that a vertex has not yet been visited.
-         */
+        /// This time value is used to indicate that a vertex has not yet been visited.
         final static int UNVISITED = 0;
-        /**
-         * Visit time of a vertex.
-         * <p>
-         * This array is initialized with {@link #UNVISITED}.
-         * <p>
-         * Note: We choose {@link #UNVISITED} = 0, so that we do not have to explicitly fill this array.
-         */
+        /// Visit time of a vertex.
+        ///
+        /// This array is initialized with [#UNVISITED].
+        ///
+        /// Note: We choose [#UNVISITED] = 0, so that we do not have to explicitly fill this array.
         final int[] visited;
-        /**
-         * Visit time counter.
-         */
+        /// Visit time counter.
         private int time = UNVISITED;
-        /**
-         * Earliest time a vertex could have been visited.
-         * <p<
-         * This is the earliest visit time of a vertex if we had performed the depth-first search
-         * using a different permutation of the 'neighbor' vertices.
-         */
+        /// Earliest time a vertex could have been visited.
+        /// <p<
+        /// This is the earliest visit time of a vertex if we had performed the depth-first search
+        /// using a different permutation of the 'neighbor' vertices.
         final int[] earliest;
-        /**
-         * Tracks vertices that lie on the current path.
-         */
+        /// Tracks vertices that lie on the current path.
         final boolean[] onStack;
-        /**
-         * The current stack.
-         * <p>
-         * The topmost elements of the stack contain the current
-         * strongly connected component ('scc').
-         * <p>
-         * The 'scc' extends from the top of the stack down to vertex 'v',
-         * if 'v' is the root of the 'scc'.
-         * <p>
-         * 'v' is the root if the 'scc', if its {@link #visited} time is equal to
-         * the earliest possible time that we have determined in {@link #earliest}.
-         * <p>
-         * If we find a neighbor 'w' that is on the current stack,
-         * and if it its {@link #visited} time is earlier than {@link #earliest} of 'v',
-         * then this means that 'w' and 'v' are on the same strongly connected component.
-         * Thus, we can update the {@link #earliest} of 'v' with that earlier time.
-         */
+        /// The current stack.
+        ///
+        /// The topmost elements of the stack contain the current
+        /// strongly connected component ('scc').
+        ///
+        /// The 'scc' extends from the top of the stack down to vertex 'v',
+        /// if 'v' is the root of the 'scc'.
+        ///
+        /// 'v' is the root if the 'scc', if its [#visited] time is equal to
+        /// the earliest possible time that we have determined in [#earliest].
+        ///
+        /// If we find a neighbor 'w' that is on the current stack,
+        /// and if it its [#visited] time is earlier than [#earliest] of 'v',
+        /// then this means that 'w' and 'v' are on the same strongly connected component.
+        /// Thus, we can update the [#earliest] of 'v' with that earlier time.
         private final IntDeque stack;
-        /**
-         * The explicit call stack of the non-recursive depth first search.
-         */
+        /// The explicit call stack of the non-recursive depth first search.
         private final Deque<StackFrame> callStack = new ArrayDeque<>();
 
 
@@ -141,9 +120,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
             return SCCs;
         }
 
-        /**
-         * Non-recursive depth-first search using an explicit call stack.
-         */
+        /// Non-recursive depth-first search using an explicit call stack.
         private void dfs(int start) {
             callStack.push(new StackFrame(start, getNeighbors.apply(start)));
 

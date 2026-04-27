@@ -5,16 +5,12 @@
 package org.jhotdraw8.icollection.readable;
 
 
-/**
- * Abstract base class for {@link ReadableMap}s.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Abstract base class for [ReadableMap]s.
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public abstract class AbstractReadableMap<K, V> implements ReadableMap<K, V> {
-    /**
-     * Constructs a new instance.
-     */
+    /// Constructs a new instance.
     public AbstractReadableMap() {
     }
 

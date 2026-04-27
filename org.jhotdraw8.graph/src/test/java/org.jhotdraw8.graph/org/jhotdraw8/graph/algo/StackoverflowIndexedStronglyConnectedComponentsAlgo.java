@@ -21,16 +21,14 @@ import java.util.function.Function;
 
 import static java.lang.Math.min;
 
-/**
- * Computes the sets of strongly connected components in an indexed directed graph.
- * <p>
- * References:
- * <dl>
- *     <dt>Stackoverflow. Non-recursive version of Tarjan's algorithm.
- *     Copyright Ivan Stoev. CC BY-SA 4.0 license.</dt>
- *     <dd><a href="https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm">stackoverflow.com</a></dd>
- * </dl>
- */
+/// Computes the sets of strongly connected components in an indexed directed graph.
+///
+/// References:
+/// <dl>
+///     <dt>Stackoverflow. Non-recursive version of Tarjan's algorithm.
+///     Copyright Ivan Stoev. CC BY-SA 4.0 license.</dt>
+///     <dd><a href="https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm">stackoverflow.com</a></dd>
+/// </dl>
 public class StackoverflowIndexedStronglyConnectedComponentsAlgo {
 
     private static final int UNVISITED = -1;
@@ -45,13 +43,11 @@ public class StackoverflowIndexedStronglyConnectedComponentsAlgo {
     }
 
 
-    /**
-     * Returns all strongly connected components in the specified graph.
-     *
-     * @param vertexCount      the vertices of the graph
-     * @param nextNodeFunction returns the next nodes of a given node
-     * @return set of strongly connected components (sets of vertices).
-     */
+    /// Returns all strongly connected components in the specified graph.
+    ///
+    /// @param vertexCount      the vertices of the graph
+    /// @param nextNodeFunction returns the next nodes of a given node
+    /// @return set of strongly connected components (sets of vertices).
     public List<IntList> findStronglyConnectedComponents(
             int vertexCount, Function<Integer, Enumerator.OfInt> nextNodeFunction) {
 

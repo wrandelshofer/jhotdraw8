@@ -33,10 +33,7 @@ import java.util.Map;
 
 import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 
-/**
- * AbstractExportOutputFormat.
- *
- */
+/// AbstractExportOutputFormat.
 public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     private PersistentMap<Key<?>, Object> options = ChampMap.of();
 
@@ -68,17 +65,15 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 
     protected abstract boolean isResolutionIndependent();
 
-    /**
-     * Writes a page.
-     *
-     * @param file               the output file or null
-     * @param page               the page figure
-     * @param node               the node of the drawing
-     * @param pageCount          the page count
-     * @param pageNumber         the page number
-     * @param internalPageNumber the internal page number of the page figure
-     * @throws IOException if writing fails
-     */
+    /// Writes a page.
+    ///
+    /// @param file               the output file or null
+    /// @param page               the page figure
+    /// @param node               the node of the drawing
+    /// @param pageCount          the page count
+    /// @param pageNumber         the page number
+    /// @param internalPageNumber the internal page number of the page figure
+    /// @throws IOException if writing fails
     protected abstract void writePage(@Nullable Path file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
     protected void writePages(@Nullable Path dir, String basename, Drawing drawing) throws IOException {
@@ -95,15 +90,13 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         writePages(dir, basename, drawing, pages, hints);
     }
 
-    /**
-     * Writes all pages of the drawing.
-     *
-     * @param basename the basename of the pages, null for print output
-     * @param drawing  the drawing
-     * @param pages    the pages
-     * @param hints    the hints
-     * @throws IOException in case of failure
-     */
+    /// Writes all pages of the drawing.
+    ///
+    /// @param basename the basename of the pages, null for print output
+    /// @param drawing  the drawing
+    /// @param pages    the pages
+    /// @param hints    the hints
+    /// @throws IOException in case of failure
     protected void writePages(@Nullable Path dir, String basename, Drawing drawing, List<Page> pages, Map<Key<?>, Object> hints) throws IOException {
         IdFactory idFactory = new SimpleIdFactory();
         int numberOfPages = 0;
@@ -154,16 +147,14 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         }
     }
 
-    /**
-     * Writes the node to the specified file as a Slice. May destroy the state of the node in the process!
-     *
-     * @param file  a file
-     * @param slice the Slice
-     * @param node  a node
-     * @param dpi   dots per inch
-     * @return returns true if the state of the node was destroyed
-     * @throws IOException in case of failure
-     */
+    /// Writes the node to the specified file as a Slice. May destroy the state of the node in the process!
+    ///
+    /// @param file  a file
+    /// @param slice the Slice
+    /// @param node  a node
+    /// @param dpi   dots per inch
+    /// @return returns true if the state of the node was destroyed
+    /// @throws IOException in case of failure
     protected abstract boolean writeSlice(@Nullable Path file, Slice slice, Node node, double dpi) throws IOException;
 
     protected void writeSlices(@Nullable Path dir, Drawing drawing) throws IOException {
@@ -185,12 +176,10 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         }
     }
 
-    /**
-     * @param dir
-     * @param drawing
-     * @param slices
-     * @throws IOException
-     */
+    /// @param dir
+    /// @param drawing
+    /// @param slices
+    /// @throws IOException
     private void writeSlices(@Nullable Path dir, Drawing drawing, List<Slice> slices, String suffix, double dpi) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);

@@ -27,112 +27,89 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-/**
- * {@code TextStrokeableFigure} allows to change the stroke of the
- * text.
- *
- */
+/// `TextStrokeableFigure` allows to change the stroke of the
+/// text.
 public interface TextStrokeableFigure extends Figure {
 
-    /**
-     * Defines the distance in user coordinates for the dashing pattern. Default
-     * value: {@code 0}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the distance in user coordinates for the dashing pattern. Default
+    /// value: `0`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     CssSizeStyleableKey TEXT_STROKE_DASH_OFFSET = new CssSizeStyleableKey("text-stroke-dashoffset", CssSize.ZERO);
-    /**
-     * Defines the end cap style. Default value: {@code SQUARE}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the end cap style. Default value: `SQUARE`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     NonNullEnumStyleableKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new NonNullEnumStyleableKey<>("text-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
-    /**
-     * Defines the style applied where path segments meet. Default value:
-     * {@code MITER}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the style applied where path segments meet. Default value:
+    /// `MITER`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     NonNullEnumStyleableKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new NonNullEnumStyleableKey<>("text-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
-    /**
-     * Defines the limit for the {@code StrokeLineJoin.MITER} style. Default
-     * value: {@code 4.0}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the limit for the `StrokeLineJoin.MITER` style. Default
+    /// value: `4.0`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     CssSizeStyleableKey TEXT_STROKE_MITER_LIMIT = new CssSizeStyleableKey("text-stroke-miterlimit", CssSize.of(10.0));
-    /**
-     * Defines the paint used for filling the outline of the figure. Default
-     * value: {@code null}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the paint used for filling the outline of the figure. Default
+    /// value: `null`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     NullablePaintableStyleableKey TEXT_STROKE = new NullablePaintableStyleableKey("text-stroke", null);
-    /**
-     * Defines the stroke type used for drawing outline of the figure.
-     * <p>
-     * Default value: {@code StrokeType.OUTSIDE}.
-     */
+    /// Defines the stroke type used for drawing outline of the figure.
+    ///
+    /// Default value: `StrokeType.OUTSIDE`.
     NonNullEnumStyleableKey<StrokeType> TEXT_STROKE_TYPE = new NonNullEnumStyleableKey<>("text-stroke-type", StrokeType.class, StrokeType.OUTSIDE);
-    /**
-     * Defines the width of the outline of the figure.
-     * <p>
-     * Default value: {@code 1.0}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the width of the outline of the figure.
+    ///
+    /// Default value: `1.0`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     CssSizeStyleableKey TEXT_STROKE_WIDTH = new CssSizeStyleableKey("text-stroke-width", CssSize.ONE);
 
-    /**
-     * Defines the dash array used. Default value: {@code empty array}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the dash array used. Default value: `empty array`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     NonNullListStyleableKey<CssSize> TEXT_STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("text-stroke-dasharray",
             CssSize.class,
             new SizeCssConverter(false), VectorList.of());
 
-    /**
-     * Combined map accessor for all stroke style properties.
-     */
+    /// Combined map accessor for all stroke style properties.
     @SuppressWarnings("unused")//Field is accessed by CSS using Reflection
     StrokeStyleableMapAccessor TEXT_STROKE_STYLE = new StrokeStyleableMapAccessor("text-stroke-style",
             TEXT_STROKE_TYPE, TEXT_STROKE_LINE_CAP, TEXT_STROKE_LINE_JOIN, TEXT_STROKE_MITER_LIMIT, TEXT_STROKE_DASH_OFFSET, TEXT_STROKE_DASH_ARRAY);
 
-    /**
-     * Updates a shape node.
-     *
-     * @param ctx   the render context
-     * @param shape a shape node
-     */
+    /// Updates a shape node.
+    ///
+    /// @param ctx   the render context
+    /// @param shape a shape node
     default void applyTextStrokeableFigureProperties(@Nullable RenderContext ctx, Shape shape) {
         Paint paint = Paintable.getPaint(getStyled(TEXT_STROKE), ctx);
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);

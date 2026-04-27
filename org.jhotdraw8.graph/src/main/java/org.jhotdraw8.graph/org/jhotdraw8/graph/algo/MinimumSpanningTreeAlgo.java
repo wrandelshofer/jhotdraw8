@@ -56,20 +56,18 @@ public class MinimumSpanningTreeAlgo {
         }
     }
 
-    /**
-     * Given a set of vertices and a list of arrows ordered by cost, returns
-     * the minimum spanning tree.
-     * <p>
-     * Uses Kruskal's algorithm.
-     *
-     * @param <P>           the pair data type
-     * @param vertices      a directed graph
-     * @param orderedEdges  list of edges sorted by cost in ascending order
-     *                      (lowest cost first, highest cost last).
-     * @param rejectedEdges optional, all excluded edges are added to this
-     *                      list, if it is provided.
-     * @return the arrows that are part of the minimum spanning tree.
-     */
+    /// Given a set of vertices and a list of arrows ordered by cost, returns
+    /// the minimum spanning tree.
+    ///
+    /// Uses Kruskal's algorithm.
+    ///
+    /// @param <P>           the pair data type
+    /// @param vertices      a directed graph
+    /// @param orderedEdges  list of edges sorted by cost in ascending order
+    ///                      (lowest cost first, highest cost last).
+    /// @param rejectedEdges optional, all excluded edges are added to this
+    ///                      list, if it is provided.
+    /// @return the arrows that are part of the minimum spanning tree.
     public <V, A, C extends Number & Comparable<C>, P extends OrderedPair<V, V>> List<P> findMinimumSpanningTree(Collection<V> vertices, List<P> orderedEdges, @Nullable List<P> rejectedEdges) {
         List<P> minimumSpanningTree = new ArrayList<>(orderedEdges.size());
         if (rejectedEdges == null) {
@@ -94,29 +92,25 @@ public class MinimumSpanningTreeAlgo {
         return minimumSpanningTree;
     }
 
-    /**
-     * Given an undirected graph and a cost function, returns a builder
-     * with the minimum spanning tree.
-     *
-     * @param graph the graph. This must be an undirected graph
-     *              represented as a directed graph with two identical arrows for each edge.
-     * @param costf the cost function
-     * @return the graph builder
-     */
+    /// Given an undirected graph and a cost function, returns a builder
+    /// with the minimum spanning tree.
+    ///
+    /// @param graph the graph. This must be an undirected graph
+    ///              represented as a directed graph with two identical arrows for each edge.
+    /// @param costf the cost function
+    /// @return the graph builder
     public <V, A, C extends Number & Comparable<C>> SimpleMutableDirectedGraph<V, A> findMinimumSpanningTreeGraph(DirectedGraph<V, A> graph, Function<A, C> costf) {
         return findMinimumSpanningTreeGraph(graph, (u, v, a) -> costf.apply(a));
 
     }
 
-    /**
-     * Given an undirected graph and a cost function, returns a builder
-     * with the minimum spanning tree.
-     *
-     * @param graph the graph. This must be an undirected graph
-     *              represented as a directed graph with two identical arrows for each edge.
-     * @param costf the cost function
-     * @return the graph builder
-     */
+    /// Given an undirected graph and a cost function, returns a builder
+    /// with the minimum spanning tree.
+    ///
+    /// @param graph the graph. This must be an undirected graph
+    ///              represented as a directed graph with two identical arrows for each edge.
+    /// @param costf the cost function
+    /// @return the graph builder
     public <V, A, C extends Number & Comparable<C>> SimpleMutableDirectedGraph<V, A> findMinimumSpanningTreeGraph(DirectedGraph<V, A> graph, Function3<V, V, A, C> costf) {
         Collection<V> vertices = graph.getVertices();
         Set<V> done = new HashSet<>();
@@ -144,21 +138,19 @@ public class MinimumSpanningTreeAlgo {
         return builder;
     }
 
-    /**
-     * Given a set of vertices and a list of arrows ordered by cost, returns a
-     * builder with the minimum spanning tree. This is an undirected graph with
-     * an arrow in each direction.
-     *
-     * @param <P>            the pair data type
-     * @param vertices       the list of vertices
-     * @param orderedArrows  list of arrows sorted by cost in ascending order
-     *                       (lowest cost first, highest cost last)
-     * @param includedArrows optional, all included arrows are added to this
-     *                       list, if it is provided.
-     * @param rejectedArrows optional, all excluded arrows are added to this
-     *                       list, if it is provided.
-     * @return the graph builder
-     */
+    /// Given a set of vertices and a list of arrows ordered by cost, returns a
+    /// builder with the minimum spanning tree. This is an undirected graph with
+    /// an arrow in each direction.
+    ///
+    /// @param <P>            the pair data type
+    /// @param vertices       the list of vertices
+    /// @param orderedArrows  list of arrows sorted by cost in ascending order
+    ///                       (lowest cost first, highest cost last)
+    /// @param includedArrows optional, all included arrows are added to this
+    ///                       list, if it is provided.
+    /// @param rejectedArrows optional, all excluded arrows are added to this
+    ///                       list, if it is provided.
+    /// @return the graph builder
     public <V, A, C extends Number & Comparable<C>, P extends OrderedPair<V, V>> SimpleMutableDirectedGraph<V, P> findMinimumSpanningTreeGraph(Collection<V> vertices, List<P> orderedArrows, @Nullable List<P> includedArrows, List<P> rejectedArrows) {
         List<P> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
         if (includedArrows != null) {

@@ -9,20 +9,16 @@ import java.util.SequencedMap;
 import java.util.SequencedSet;
 import java.util.Set;
 
-/**
- * Provides a reversed view on a {@link SequencedMap}.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Provides a reversed view on a [SequencedMap].
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public class ReversedSequencedMapView<K, V> extends AbstractMap<K, V> implements SequencedMap<K, V> {
     private final SequencedMap<K, V> src;
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param src the source map
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param src the source map
     public ReversedSequencedMapView(SequencedMap<K, V> src) {
         this.src = src;
     }

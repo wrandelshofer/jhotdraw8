@@ -9,26 +9,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Provides static utility methods for iterators.
- *
- */
+/// Provides static utility methods for iterators.
 public class Iterators {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private Iterators() {
     }
 
-    /**
-     * Creates a list from an {@code Iterable}.
-     * If the {@code Iterable} is a list, it is returned.
-     *
-     * @param <T>      the value type
-     * @param iterable the iterable
-     * @return the list
-     */
+    /// Creates a list from an `Iterable`.
+    /// If the `Iterable` is a list, it is returned.
+    ///
+    /// @param <T>      the value type
+    /// @param iterable the iterable
+    /// @return the list
     public static <T> List<T> toList(Iterable<T> iterable) {
         if (iterable instanceof List<?>) {
             return (List<T>) iterable;

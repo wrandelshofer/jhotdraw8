@@ -18,9 +18,7 @@ import java.util.ResourceBundle;
 import java.util.function.Supplier;
 
 public class FxmlUtil {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private FxmlUtil() {
     }
 

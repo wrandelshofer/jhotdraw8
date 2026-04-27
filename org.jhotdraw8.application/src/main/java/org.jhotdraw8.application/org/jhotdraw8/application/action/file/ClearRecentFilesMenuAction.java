@@ -11,26 +11,21 @@ import org.jhotdraw8.application.action.AbstractApplicationAction;
 
 import java.beans.PropertyChangeListener;
 
-/**
- * Clears (empties) the Recent Files sub-menu in the File menu.
- * <p>
- * This action is called when the user selects the Clear Recent Files item in
- * the Recent Files sub-menu of the File menu. The action and the menu item is
- * automatically created by the application, when the {@code ApplicationModel}
- * provides a {@code LoadFileAction} or a {@code OpenFileAction}.
- *
- */
+/// Clears (empties) the Recent Files sub-menu in the File menu.
+///
+/// This action is called when the user selects the Clear Recent Files item in
+/// the Recent Files sub-menu of the File menu. The action and the menu item is
+/// automatically created by the application, when the `ApplicationModel`
+/// provides a `LoadFileAction` or a `OpenFileAction`.
 public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
 
     public static final String ID = "file.clearRecentFiles";
 
     private PropertyChangeListener applicationListener;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app the application
-     */
+    /// Creates a new instance.
+    ///
+    /// @param app the application
     public ClearRecentFilesMenuAction(Application app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);

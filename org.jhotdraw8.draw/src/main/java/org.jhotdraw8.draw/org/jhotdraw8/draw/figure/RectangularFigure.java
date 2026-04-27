@@ -10,9 +10,7 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 
-/**
- * Defines properties and default methods for figures which have a rectangular shape.
- */
+/// Defines properties and default methods for figures which have a rectangular shape.
 public interface RectangularFigure extends Figure {
     CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
     CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);

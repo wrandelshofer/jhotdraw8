@@ -5,10 +5,8 @@
 
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Defines interfaces for read-only collections and immutable collections,
- * and provides efficient implementations of these interfaces.
- */
+/// Defines interfaces for read-only collections and immutable collections,
+/// and provides efficient implementations of these interfaces.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.icollection {

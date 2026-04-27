@@ -19,28 +19,24 @@ import java.util.Deque;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Processes the var() function.
- * <pre>
- *     var = "var(" ,  s* , custom-property-name, s* , [ "," ,  s* , declaration-value ] ,  s* , ")" ;
- *     custom-property-name = ident-token;
- *     declaration-value = fallback-value;
- * </pre>
- * The custom-property-name must start with two dashes "--".
- * <p>
- * References:
- * <dl>
- * <dt>CSS Custom Properties for Cascading Variables Module Level 2.
- * Paragraph 3. Using Cascading Variables: the var() notation</dt>
- * <dd><a href="https://drafts.csswg.org/css-variables-2/#using-variables">csswg.org</a></dd>
- * </dl>
- *
- * @param <T> the element type of the DOM
- */
+/// Processes the var() function.
+/// <pre>
+///     var = "var(" ,  s* , custom-property-name, s* , [",",s*,declaration-value] ,  s* , ")" ;
+///     custom-property-name = ident-token;
+///     declaration-value = fallback-value;
+/// </pre>
+/// The custom-property-name must start with two dashes "--".
+///
+/// References:
+/// <dl>
+/// <dt>CSS Custom Properties for Cascading Variables Module Level 2.
+/// Paragraph 3. Using Cascading Variables: the var() notation</dt>
+/// <dd><a href="https://drafts.csswg.org/css-variables-2/#using-variables">csswg.org</a></dd>
+/// </dl>
+///
+/// @param <T> the element type of the DOM
 public class VarCssFunction<T> extends AbstractCssFunction<T> {
-    /**
-     * Function name.
-     */
+    /// Function name.
     public static final String NAME = "var";
 
     public VarCssFunction() {

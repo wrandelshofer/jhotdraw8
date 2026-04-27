@@ -10,15 +10,13 @@ import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jspecify.annotations.Nullable;
 
-/**
- * SVG font size.
- * <p>
- * References:
- * <dl>
- *     <dt>CSS-Fonts-3</dt>
- *     <dd><a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">w3.org</a></dd>
- * </dl>
- */
+/// SVG font size.
+///
+/// References:
+/// <dl>
+///     <dt>CSS-Fonts-3</dt>
+///     <dd><a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">w3.org</a></dd>
+/// </dl>
 public record SvgFontSize(SvgFontSize.@Nullable SizeKeyword keyword, @Nullable CssSize length) {
     public enum SizeKeyword {
         XX_SMALL, X_SMALL, SMALL, MEDIUM, LARGE, X_LARGE, XX_LARGE,

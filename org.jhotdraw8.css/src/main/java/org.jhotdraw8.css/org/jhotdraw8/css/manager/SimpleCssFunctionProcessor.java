@@ -27,18 +27,14 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Takes a list of tokens and evaluates Css functions on them.
- *
- * @param <T> the element type
- */
+/// Takes a list of tokens and evaluates Css functions on them.
+///
+/// @param <T> the element type
 public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     protected SelectorModel<T> model;
     protected @Nullable Map<String, PersistentList<CssToken>> customProperties;
     private final Map<String, CssFunction<T>> functions;
-    /**
-     * Value must be greater equal to zero.
-     */
+    /// Value must be greater equal to zero.
     private int maxRecursionDepth = 256;
 
     public SimpleCssFunctionProcessor(List<CssFunction<T>> functions) {
@@ -147,16 +143,14 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     }
 
 
-    /**
-     * Processes an unknown function. Unknown functions will just be passed through.
-     *
-     * @param element        the element
-     * @param tt             the tokenizer
-     * @param out            the consumer
-     * @param recursionStack recursion stack for detecting infinite recursions
-     * @throws IOException    on io failure
-     * @throws ParseException on parse failure
-     */
+    /// Processes an unknown function. Unknown functions will just be passed through.
+    ///
+    /// @param element        the element
+    /// @param tt             the tokenizer
+    /// @param out            the consumer
+    /// @param recursionStack recursion stack for detecting infinite recursions
+    /// @throws IOException    on io failure
+    /// @throws ParseException on parse failure
     private void processUnknownFunction(T element, CssTokenizer tt, Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈func〉: function expected.");
         out.accept(tt.getToken());

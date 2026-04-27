@@ -11,9 +11,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.paint.Color;
 
-/**
- * Abstract base class for system preferences.
- */
+/// Abstract base class for system preferences.
 public abstract class AbstractSystemPreferences implements SystemPreferences {
     protected final ReadOnlyObjectWrapper<Color> accentColor = new ReadOnlyObjectWrapper<>();
     protected final ReadOnlyObjectWrapper<String> appearance = new ReadOnlyObjectWrapper<>();

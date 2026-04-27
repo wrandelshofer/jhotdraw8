@@ -31,10 +31,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
-/**
- * AbstractFigureFactory.
- *
- */
+/// AbstractFigureFactory.
 public abstract class AbstractFigureFactory implements FigureFactory {
     private static final Logger LOGGER = Logger.getLogger(AbstractFigureFactory.class.getName());
     private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> attrToKey = new HashMap<>();
@@ -66,25 +63,21 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         this.idFactory = idFactory;
     }
 
-    /**
-     * Adds a converter for the specified key.
-     *
-     * @param <T>       the type of the value
-     * @param key       the key
-     * @param converter the converter
-     */
+    /// Adds a converter for the specified key.
+    ///
+    /// @param <T>       the type of the value
+    /// @param key       the key
+    /// @param converter the converter
     public <T> void addConverter(MapAccessor<T> key, Converter<T> converter) {
         keyValueToXML.put(key, converter);
         keyValueFromXML.put(key, converter);
     }
 
-    /**
-     * Adds a converter.
-     *
-     * @param fullValueType A value type returned by
-     *                      {@code MapAccessor.getFullValueType();}.
-     * @param converter     the converter
-     */
+    /// Adds a converter.
+    ///
+    /// @param fullValueType A value type returned by
+    ///                      `MapAccessor.getFullValueType();`.
+    /// @param converter     the converter
     public void addConverterForType(Type fullValueType, Converter<?> converter) {
         addConverterForType(fullValueType, converter, false);
     }
@@ -102,19 +95,17 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         defaultValueMap.put(new FigureAccessorKey<>(figure, acc), value);
     }
 
-    /**
-     * Adds the provided mappings of XML attribute names from/to
-     * {@code Figure}s.
-     * <p>
-     * {@code figureClass.newInstance()} is used to instantiate a figure from a
-     * name.</p>
-     * <p>
-     * If a figure with this name has already been added, it will be replaced by this figure.
-     *
-     * @param name        The element name
-     * @param figureClass The figure class is used both for instantiation of a
-     *                    new figure and for determining the name of a figure.
-     */
+    /// Adds the provided mappings of XML attribute names from/to
+    /// `Figure`s.
+    ///
+    /// `figureClass.newInstance()` is used to instantiate a figure from a
+    /// name.
+    ///
+    /// If a figure with this name has already been added, it will be replaced by this figure.
+    ///
+    /// @param name        The element name
+    /// @param figureClass The figure class is used both for instantiation of a
+    ///                    new figure and for determining the name of a figure.
     public void addFigure(String name, Class<? extends Figure> figureClass) {
         final Constructor<? extends Figure> declaredConstructor;
         try {
@@ -134,12 +125,10 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
 
-    /**
-     * Adds the provided keys to the figure.
-     *
-     * @param f    the figure
-     * @param keys the keys
-     */
+    /// Adds the provided keys to the figure.
+    ///
+    /// @param f    the figure
+    /// @param keys the keys
     public void addFigureAttributeKeys(Class<? extends Figure> f, Iterable<MapAccessor<?>> keys) {
         for (MapAccessor<?> key : keys) {
             addKey(f, key.getName(), key);
@@ -165,16 +154,14 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         }
     }
 
-    /**
-     * Adds the provided mapping of XML attribute names from/to
-     * {@code MapAccessor}s.
-     * <p>
-     * The same key can be added more than once.
-     *
-     * @param figure the figure
-     * @param name   The attribute name
-     * @param key    The key
-     */
+    /// Adds the provided mapping of XML attribute names from/to
+    /// `MapAccessor`s.
+    ///
+    /// The same key can be added more than once.
+    ///
+    /// @param figure the figure
+    /// @param name   The attribute name
+    /// @param key    The key
     public void addKey(Class<? extends Figure> figure, String name, MapAccessor<?> key) {
         figureAttributeKeys.computeIfAbsent(figure, k -> new HashSet<>()).add(key);
 
@@ -185,28 +172,24 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         keyToStr.putIfAbsent(key, name);
     }
 
-    /**
-     * Adds the provided mapping of XML attribute names from/to
-     * {@code MapAccessor}s.
-     * <p>
-     * The same key can be added more than once.
-     *
-     * @param f    The figure
-     * @param keys The mapping from attribute names to keys
-     */
+    /// Adds the provided mapping of XML attribute names from/to
+    /// `MapAccessor`s.
+    ///
+    /// The same key can be added more than once.
+    ///
+    /// @param f    The figure
+    /// @param keys The mapping from attribute names to keys
     public void addKeys(Class<? extends Figure> f, HashMap<String, MapAccessor<?>> keys) {
         for (Map.Entry<String, MapAccessor<?>> entry : keys.entrySet()) {
             addKey(f, entry.getKey(), entry.getValue());
         }
     }
 
-    /**
-     * Adds the provided keys to the figure.
-     *
-     * @param figure the figure
-     * @param name   the element name
-     * @param key    the keys
-     */
+    /// Adds the provided keys to the figure.
+    ///
+    /// @param figure the figure
+    /// @param name   the element name
+    /// @param key    the keys
     public void addNodeListKey(Class<? extends Figure> figure, String name, MapAccessor<?> key) {
         if (figureNodeListKeys.containsKey(figure)) {
             figureNodeListKeys.get(figure).add(key);
@@ -227,34 +210,28 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         }
     }
 
-    /**
-     * Adds an attribute to the list of attributes which will be skipped when
-     * reading the DOM.
-     *
-     * @param figure        the figure class
-     * @param attributeName the attribute name
-     */
+    /// Adds an attribute to the list of attributes which will be skipped when
+    /// reading the DOM.
+    ///
+    /// @param figure        the figure class
+    /// @param attributeName the attribute name
     public void addSkipAttribute(Class<? extends Figure> figure, String attributeName) {
         HashSet<Class<? extends Figure>> set = skipAttributes.computeIfAbsent(attributeName, k -> new HashSet<>());
         set.add(figure);
     }
 
-    /**
-     * Adds an element to the list of elements which will be skipped when
-     * reading the DOM.
-     *
-     * @param elementName the element name
-     */
+    /// Adds an element to the list of elements which will be skipped when
+    /// reading the DOM.
+    ///
+    /// @param elementName the element name
     public void addSkipElement(String elementName) {
         skipElements.add(elementName);
     }
 
-    /**
-     * Adds a figure class to the list of {@code Figure}s which will be skipped
-     * when writing the DOM.
-     *
-     * @param figure The figure class
-     */
+    /// Adds a figure class to the list of `Figure`s which will be skipped
+    /// when writing the DOM.
+    ///
+    /// @param figure The figure class
     public void addSkipFigure(Class<? extends Figure> figure) {
         skipFigures.add(figure);
     }
@@ -275,17 +252,13 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         }
     }
 
-    /**
-     * Clears the mapping of XML attributes from/to {@code MapAccessor}s.
-     */
+    /// Clears the mapping of XML attributes from/to `MapAccessor`s.
     public void clearAttributeMap() {
         attrToKey.clear();
         keyToAttr.clear();
     }
 
-    /**
-     * Clears the mapping of XML attributes from/to {@code MapAccessor}s.
-     */
+    /// Clears the mapping of XML attributes from/to `MapAccessor`s.
     public void clearElementMap() {
         attrToKey.clear();
         keyToAttr.clear();
@@ -345,25 +318,21 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         this.idFactory = idFactory;
     }
 
-    /**
-     * Returns the name of the object id attribute. The object id attribute is
-     * used for referencing other objects in the XML file.
-     * <p>
-     * The default value is "oid".
-     *
-     * @return name of the object id attribute
-     */
+    /// Returns the name of the object id attribute. The object id attribute is
+    /// used for referencing other objects in the XML file.
+    ///
+    /// The default value is "oid".
+    ///
+    /// @return name of the object id attribute
     @Override
     public String getObjectIdAttribute() {
         return objectIdAttribute;
     }
 
-    /**
-     * Sets the name of the object id attribute. The object id attribute is used
-     * for referencing other objects in the XML file.
-     *
-     * @param newValue name of the object id attribute
-     */
+    /// Sets the name of the object id attribute. The object id attribute is used
+    /// for referencing other objects in the XML file.
+    ///
+    /// @param newValue name of the object id attribute
     public void setObjectIdAttribute(String newValue) {
         objectIdAttribute = newValue;
     }
@@ -448,11 +417,9 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         }
     }
 
-    /**
-     * Globally removes the specified key.
-     *
-     * @param key the key
-     */
+    /// Globally removes the specified key.
+    ///
+    /// @param key the key
     public void removeKey(MapAccessor<?> key) {
         for (Map.Entry<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> entry : attrToKey.entrySet()) {
             for (Map.Entry<String, MapAccessor<?>> e : new ArrayList<>(entry.getValue().entrySet())) {

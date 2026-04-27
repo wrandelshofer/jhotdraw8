@@ -16,31 +16,28 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * CssIdentifier converter.
- * <pre>
- * ident         = [ '-' ] , nmstart , { nmchar } ;
- * name          = { nmchar }- ;
- * nmstart       = '_' | letter | nonascii | escape ;
- * nonascii      = ? U+00A0 through U+10FFFF ? ;
- * letter        = ? 'a' through 'z' or 'A' through 'Z' ?
- * unicode       = '\' , ( 6 * hexd
- *                       | hexd , 5 * [hexd] , w
- *                       );
- * escape        = ( unicode
- *                 | '\' , -( newline | hexd)
- *                 ) ;
- * nmchar        = '_' | letter | digit | '-' | nonascii | escape ;
- * num           = [ '+' | '-' ] ,
- *                 ( { digit }-
- *                 | { digit } , '.' , { digit }-
- *                 )
- *                 [ 'e'  , [ '+' | '-' ] , { digit }- ] ;
- * digit         = ? '0' through '9' ?
- * letter        = ? 'a' through 'z' ? | ? 'A' through 'Z' ? ;
- * </pre>
- *
- */
+/// CssIdentifier converter.
+/// <pre>
+/// ident         = ['-'] , nmstart , { nmchar } ;
+/// name          = { nmchar }- ;
+/// nmstart       = '_' | letter | nonascii | escape ;
+/// nonascii      = ? U+00A0 through U+10FFFF ? ;
+/// letter        = ? 'a' through 'z' or 'A' through 'Z' ?
+/// unicode       = '\' , ( 6 * hexd
+///                       | hexd , 5 * [hexd] , w
+///                       );
+/// escape        = ( unicode
+///                 | '\' , -( newline | hexd)
+///                 ) ;
+/// nmchar        = '_' | letter | digit | '-' | nonascii | escape ;
+/// num           = ['+'|'-'] ,
+///                 ( { digit }-
+///                 | { digit } , '.' , { digit }-
+///                 )
+///                 [ 'e'  , [ '+' | '-' ] , { digit }- ] ;
+/// digit         = ? '0' through '9' ?
+/// letter        = ? 'a' through 'z' ? | ? 'A' through 'Z' ? ;
+/// </pre>
 public class IdentCssConverter extends AbstractCssConverter<String> {
 
     public IdentCssConverter(boolean nullable) {

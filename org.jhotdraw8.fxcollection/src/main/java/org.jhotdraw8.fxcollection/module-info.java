@@ -5,9 +5,7 @@
 
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Provides additional collection classes that interoperate with JavaFX observable collections.
- */
+/// Provides additional collection classes that interoperate with JavaFX observable collections.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.fxcollection {

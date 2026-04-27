@@ -14,10 +14,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
 
-/**
- * MultiClipboardOutputFormat.
- *
- */
+/// MultiClipboardOutputFormat.
 public class MultiClipboardOutputFormat implements ClipboardOutputFormat {
     private @Nullable Supplier<ClipboardOutputFormat>[] formatSuppliers;
 

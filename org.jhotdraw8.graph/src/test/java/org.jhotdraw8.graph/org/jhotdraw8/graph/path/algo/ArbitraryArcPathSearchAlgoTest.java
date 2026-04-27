@@ -24,10 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * AnyPathBuilderTest.
- *
- */
+/// AnyPathBuilderTest.
 public class ArbitraryArcPathSearchAlgoTest {
 
     public ArbitraryArcPathSearchAlgoTest() {
@@ -92,9 +89,7 @@ public class ArbitraryArcPathSearchAlgoTest {
     }
 
 
-    /**
-     * Test of findAnyVertexPath method, of class AnyPathBuilder.
-     */
+    /// Test of findAnyVertexPath method, of class AnyPathBuilder.
     public void testFindVertexPath_3args(Integer start, Integer goal, PersistentList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);
@@ -128,9 +123,7 @@ public class ArbitraryArcPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyVertexPath method, of class AnyPathBuilder.
-     */
+    /// Test of findAnyVertexPath method, of class AnyPathBuilder.
     private void testFindVertexPathOverWaypoints(List<Integer> waypoints, PersistentList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);

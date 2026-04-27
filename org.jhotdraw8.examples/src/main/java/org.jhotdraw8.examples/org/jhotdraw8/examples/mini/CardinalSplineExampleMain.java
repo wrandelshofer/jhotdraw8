@@ -33,10 +33,7 @@ import org.jhotdraw8.geom.Points;
 
 import java.util.ArrayList;
 
-/**
- * CardinalSplineSampleMain.
- *
- */
+/// CardinalSplineSampleMain.
 public class CardinalSplineExampleMain extends Application {
     private final Polyline polyline = new Polyline(
             10, 100,
@@ -171,9 +168,7 @@ public class CardinalSplineExampleMain extends Application {
         return index;
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         launch(args);
     }

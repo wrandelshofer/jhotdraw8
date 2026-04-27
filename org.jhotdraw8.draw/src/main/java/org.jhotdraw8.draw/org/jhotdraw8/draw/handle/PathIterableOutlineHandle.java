@@ -24,10 +24,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Draws an outline of the path of a {@link PathIterableFigure}.
- *
- */
+/// Draws an outline of the path of a [PathIterableFigure].
 public class PathIterableOutlineHandle extends AbstractHandle {
 
     private final Group node;

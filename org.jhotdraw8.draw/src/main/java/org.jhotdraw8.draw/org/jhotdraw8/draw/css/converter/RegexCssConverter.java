@@ -17,17 +17,14 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * CssRegexConverter.
- * <p>
- * Parses the following EBNF:
- * <pre>
- * RegexReplace := "none" | "replace(" Find  ","   [ Replace ] ")" ;
- * Find := TT_STRING;
- * Replace := TT_STRING;
- * </pre>
- *
- */
+/// CssRegexConverter.
+///
+/// Parses the following EBNF:
+/// <pre>
+/// RegexReplace := "none" | "replace(" Find  ","   [Replace] ")" ;
+/// Find := TT_STRING;
+/// Replace := TT_STRING;
+/// </pre>
 public class RegexCssConverter extends AbstractCssConverter<RegexReplace> {
 
     public static final String REPLACE_FUNCTION = "replace";

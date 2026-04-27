@@ -9,10 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Cursor;
 import javafx.scene.layout.BorderPane;
 
-/**
- * ResizePane.
- *
- */
+/// ResizePane.
 public class ResizePane extends BorderPane {
 
     private final BooleanProperty userResizable = new SimpleBooleanProperty(true);

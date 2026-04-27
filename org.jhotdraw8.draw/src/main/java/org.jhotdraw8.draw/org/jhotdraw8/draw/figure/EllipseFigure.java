@@ -24,10 +24,7 @@ import org.jspecify.annotations.Nullable;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-/**
- * Renders a {@code javafx.scene.shape.Ellipse}.
- *
- */
+/// Renders a `javafx.scene.shape.Ellipse`.
 public class EllipseFigure extends AbstractLeafFigure
         implements StrokableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, ConnectableFigure, PathIterableFigure {
@@ -38,9 +35,7 @@ public class EllipseFigure extends AbstractLeafFigure
     public static final CssSizeStyleableKey RADIUS_X = new CssSizeStyleableKey("radiusX", CssSize.ONE);
     public static final CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", CssSize.ONE);
     public static final CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Ellipse";
 
     public EllipseFigure() {

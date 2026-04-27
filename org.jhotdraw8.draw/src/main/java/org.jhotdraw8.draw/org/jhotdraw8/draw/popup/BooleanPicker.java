@@ -13,9 +13,7 @@ import org.jhotdraw8.draw.DrawLabels;
 
 import java.util.function.BiConsumer;
 
-/**
- * Picker for boolean values.
- */
+/// Picker for boolean values.
 public class BooleanPicker extends AbstractPicker<Boolean> {
     private ContextMenu contextMenu;
     private MenuItem noneItem;

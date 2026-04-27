@@ -8,12 +8,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * Abstract superclass for "combinator"s.
- * <p>
- * A combinator combines the results of two selectors.
- *
- */
+/// Abstract superclass for "combinator"s.
+///
+/// A combinator combines the results of two selectors.
 public abstract class Combinator extends Selector {
 
     protected final SimpleSelector first;

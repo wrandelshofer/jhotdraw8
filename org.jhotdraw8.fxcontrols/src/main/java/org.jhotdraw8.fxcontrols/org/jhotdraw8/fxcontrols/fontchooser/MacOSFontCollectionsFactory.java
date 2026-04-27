@@ -70,14 +70,12 @@ public class MacOSFontCollectionsFactory extends DefaultFontCollectionsFactory {
         return FXCollections.observableArrayList(collections);
     }
 
-    /**
-     * Reads a font collection from the specified font collection file.
-     *
-     * @param families the list of font families from which the font collection can choose from
-     * @param path     the path to the font collection file
-     * @return
-     * @throws IOException
-     */
+    /// Reads a font collection from the specified font collection file.
+    ///
+    /// @param families the list of font families from which the font collection can choose from
+    /// @param path     the path to the font collection file
+    /// @return
+    /// @throws IOException
     private FontCollection readFontCollection(Map<String, FontFamily> families, Path path) throws IOException {
         try {
             var map = PListParsers.toMap(PListParsers.readPList(path.toFile()));

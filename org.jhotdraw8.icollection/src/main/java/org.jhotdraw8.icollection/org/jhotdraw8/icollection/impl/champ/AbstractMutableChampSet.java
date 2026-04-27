@@ -19,40 +19,30 @@ import java.util.Iterator;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-/**
- * Abstract base class for CHAMP sets.
- *
- * @param <E> the element type of the set
- * @param <D> the data type of the CHAMP trie
- */
+/// Abstract base class for CHAMP sets.
+///
+/// @param <E> the element type of the set
+/// @param <D> the data type of the CHAMP trie
 public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> implements Serializable, Cloneable,
         ReadableSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
 
-    /**
-     * The current owner id of this set.
-     * <p>
-     * All nodes that have the same non-null owner id, are exclusively owned
-     * by this set, and therefore can be mutated without affecting other sets.
-     * <p>
-     * If this owner id is null, then this set does not own any nodes.
-     */
+    /// The current owner id of this set.
+    ///
+    /// All nodes that have the same non-null owner id, are exclusively owned
+    /// by this set, and therefore can be mutated without affecting other sets.
+    ///
+    /// If this owner id is null, then this set does not own any nodes.
     protected transient @Nullable IdentityObject owner;
 
-    /**
-     * The root of this CHAMP trie.
-     */
+    /// The root of this CHAMP trie.
     protected transient BitmapIndexedNode<D> root;
 
-    /**
-     * The number of elements in this set.
-     */
+    /// The number of elements in this set.
     protected int size;
 
-    /**
-     * The number of times this set has been structurally modified.
-     */
+    /// The number of times this set has been structurally modified.
     protected transient int modCount;
 
     @Override
@@ -60,12 +50,10 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
         return addAll((Iterable<? extends E>) c);
     }
 
-    /**
-     * Adds all specified elements that are not already in this set.
-     *
-     * @param c an iterable of elements
-     * @return {@code true} if this set changed
-     */
+    /// Adds all specified elements that are not already in this set.
+    ///
+    /// @param c an iterable of elements
+    /// @return `true` if this set changed
     @SuppressWarnings("unchecked")
     public boolean addAll(Iterable<? extends E> c) {
         boolean added = false;
@@ -75,12 +63,10 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
         return added;
     }
 
-    /**
-     * Retains all specified elements that are in this set.
-     *
-     * @param c an iterable of elements
-     * @return {@code true} if this set changed
-     */
+    /// Retains all specified elements that are in this set.
+    ///
+    /// @param c an iterable of elements
+    /// @return `true` if this set changed
     public boolean retainAll(Iterable<?> c) {
         if (c == this || isEmpty()) {
             return false;
@@ -122,11 +108,9 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
         return super.equals(o);
     }
 
-    /**
-     * Returns the current value of the modification counter.
-     *
-     * @return value of modification counter
-     */
+    /// Returns the current value of the modification counter.
+    ///
+    /// @return value of modification counter
     protected int getModCount() {
         return modCount;
     }
@@ -136,12 +120,10 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
         return size;
     }
 
-    /**
-     * Gets the owner id of this set. Creates a new id, if this
-     * set has no owner id.
-     *
-     * @return a new unique id or the existing unique id.
-     */
+    /// Gets the owner id of this set. Creates a new id, if this
+    /// set has no owner id.
+    ///
+    /// @return a new unique id or the existing unique id.
     protected IdentityObject makeOwner() {
         if (owner == null) {
             owner = new IdentityObject();
@@ -154,12 +136,10 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
         return removeAll((Iterable<?>) c);
     }
 
-    /**
-     * Removes all specified elements that are in this set.
-     *
-     * @param c an iterable of elements
-     * @return {@code true} if this set changed
-     */
+    /// Removes all specified elements that are in this set.
+    ///
+    /// @param c an iterable of elements
+    /// @return `true` if this set changed
     public boolean removeAll(Iterable<?> c) {
         if (isEmpty()) {
             return false;

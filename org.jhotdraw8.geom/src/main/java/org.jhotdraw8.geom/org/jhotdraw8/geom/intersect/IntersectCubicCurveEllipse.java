@@ -69,37 +69,33 @@ public class IntersectCubicCurveEllipse {
 
     }
 
-    /**
-     * Computes the intersection between cubic bezier curve 'p' and the given
-     * ellipse.
-     *
-     * @param p0 control point P0 of 'p'
-     * @param p1 control point P1 of 'p'
-     * @param p2 control point P2 of 'p'
-     * @param p3 control point P3 of 'p'
-     * @param ec the center of the ellipse
-     * @param rx the x-radius of the ellipse
-     * @param ry the y-radius of the ellipse
-     * @return the computed result. Status can be{@link IntersectionStatus#INTERSECTION},
-     * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
-     */
+    /// Computes the intersection between cubic bezier curve 'p' and the given
+    /// ellipse.
+    ///
+    /// @param p0 control point P0 of 'p'
+    /// @param p1 control point P1 of 'p'
+    /// @param p2 control point P2 of 'p'
+    /// @param p3 control point P3 of 'p'
+    /// @param ec the center of the ellipse
+    /// @param rx the x-radius of the ellipse
+    /// @param ry the y-radius of the ellipse
+    /// @return the computed result. Status can be[IntersectionStatus#INTERSECTION],
+    /// Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
     public static IntersectionResult intersectCubicCurveEllipse(
             Point2D p0, Point2D p1, Point2D p2, Point2D p3,
             Point2D ec, double rx, double ry) {
         return intersectCubicCurveEllipse(p0, p1, p2, p3, ec, rx, ry, Scalars.REAL_THRESHOLD);
     }
 
-    /**
-     * @param p0
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param ec
-     * @param rx
-     * @param ry
-     * @param epsilon
-     * @return
-     */
+    /// @param p0
+    /// @param p1
+    /// @param p2
+    /// @param p3
+    /// @param ec
+    /// @param rx
+    /// @param ry
+    /// @param epsilon
+    /// @return
     public static IntersectionResult intersectCubicCurveEllipse(
             Point2D p0, Point2D p1, Point2D p2, Point2D p3,
             Point2D ec, double rx, double ry, double epsilon) {

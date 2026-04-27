@@ -151,15 +151,13 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         });
     }
 
-    /**
-     * Gets options for {@link FileBasedActivity#read}.
-     * The options can be null, a constant, or from user input through a dialog window.
-     * <p>
-     * The value null means that the user has aborted the dialog window. In this case, the action
-     * will not open a file!
-     *
-     * @return options or null if the user has aborted the dialog window
-     */
+    /// Gets options for [FileBasedActivity#read].
+    /// The options can be null, a constant, or from user input through a dialog window.
+    ///
+    /// The value null means that the user has aborted the dialog window. In this case, the action
+    /// will not open a file!
+    ///
+    /// @return options or null if the user has aborted the dialog window
     protected abstract Map<Key<?>, Object> getReadOptions();
 
 

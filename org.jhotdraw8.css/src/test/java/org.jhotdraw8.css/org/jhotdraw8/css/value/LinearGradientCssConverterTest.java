@@ -18,16 +18,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- */
+///
 public class LinearGradientCssConverterTest {
 
     public LinearGradientCssConverterTest() {
     }
 
-    /**
-     * Test of toString method, of class CssLinearGradientConverter.
-     */
+    /// Test of toString method, of class CssLinearGradientConverter.
     public static void testToString(CssLinearGradient value, String expected) throws Exception {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
@@ -37,9 +34,7 @@ public class LinearGradientCssConverterTest {
         assertEquals(expected, actual);
     }
 
-    /**
-     * Test of fromString method, of class CssLinearGradientConverter.
-     */
+    /// Test of fromString method, of class CssLinearGradientConverter.
     public static void testFromString(CssLinearGradient expected, String string) throws Exception {
         CharBuffer in = CharBuffer.wrap(string);
         IdFactory idFactory = null;

@@ -7,14 +7,12 @@ package org.jhotdraw8.fxbase.tree;
 
 import org.jhotdraw8.fxcollection.indexedset.AbstractIndexedArrayObservableSet;
 
-/**
- * A child list for implementations of the {@link TreeNode} interface.
- * <p>
- * This list maintains the parent of tree nodes that are added/removed
- * from the child list, as described in {@link TreeNode#getChildren()}.
- *
- * @param <E> the node type
- */
+/// A child list for implementations of the [TreeNode] interface.
+///
+/// This list maintains the parent of tree nodes that are added/removed
+/// from the child list, as described in [TreeNode#getChildren()].
+///
+/// @param <E> the node type
 public class ChildList<E extends TreeNode<E>> extends AbstractIndexedArrayObservableSet<E> {
 
     private final E parent;

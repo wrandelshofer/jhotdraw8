@@ -19,23 +19,18 @@ import javafx.stage.Stage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.prefs.Preferences;
 
-/**
- * {@code PreferencesUtil} provides utility methods for {@code
- * java.util.prefs.Preferences}, and can be used as a proxy when the system
- * preferences are not available due to security restrictions.
- *
- */
+/// `PreferencesUtil` provides utility methods for
+/// `java.util.prefs.Preferences`, and can be used as a proxy when the system
+/// preferences are not available due to security restrictions.
 public class PreferencesUtil {
     private static final ConcurrentHashMap<Package, Preferences> systemNodes = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Package, Preferences> userNodes = new ConcurrentHashMap<>();
 
-    /**
-     * Gets the system node for the package of the class if permitted, gets a
-     * stub otherwise.
-     *
-     * @param c The class
-     * @return system node or a proxy.
-     */
+    /// Gets the system node for the package of the class if permitted, gets a
+    /// stub otherwise.
+    ///
+    /// @param c The class
+    /// @return system node or a proxy.
     public static Preferences systemNodeForPackage(Class<?> c) {
         return systemNodes.computeIfAbsent(c.getPackage(), pckg -> {
             try {
@@ -46,13 +41,11 @@ public class PreferencesUtil {
         });
     }
 
-    /**
-     * Gets the user node for the package of the class if permitted, gets a
-     * stub otherwise.
-     *
-     * @param c The class
-     * @return user node or a proxy.
-     */
+    /// Gets the user node for the package of the class if permitted, gets a
+    /// stub otherwise.
+    ///
+    /// @param c The class
+    /// @return user node or a proxy.
     public static Preferences userNodeForPackage(Class<?> c) {
         return userNodes.computeIfAbsent(c.getPackage(), pckg -> {
             try {
@@ -63,41 +56,35 @@ public class PreferencesUtil {
         });
     }
 
-    /**
-     * Prevents instance creation.
-     */
+    /// Prevents instance creation.
     private PreferencesUtil() {
     }
 
-    /**
-     * Installs a frame preferences handler. On first run, sets the window to
-     * its preferred size at the top left corner of the screen. On subsequent
-     * runs, sets the window the last size and location where the user had
-     * placed it before.
-     * <p>
-     * If no preferences are stored yet for this window, a default size of 400 x
-     * 300 pixels is used.
-     *
-     * @param prefs Preferences for storing/retrieving preferences values.
-     * @param name  Base name of the preference.
-     * @param stage The window for which to track preferences.
-     */
+    /// Installs a frame preferences handler. On first run, sets the window to
+    /// its preferred size at the top left corner of the screen. On subsequent
+    /// runs, sets the window the last size and location where the user had
+    /// placed it before.
+    ///
+    /// If no preferences are stored yet for this window, a default size of 400 x
+    /// 300 pixels is used.
+    ///
+    /// @param prefs Preferences for storing/retrieving preferences values.
+    /// @param name  Base name of the preference.
+    /// @param stage The window for which to track preferences.
     public static void installStagePrefsHandler(final Preferences prefs, final String name, Stage stage) {
         installStagePrefsHandler(prefs, name, stage, new Dimension2D(400, 300));
     }
 
-    /**
-     * Installs a frame preferences handler. On first run, sets the window to
-     * its preferred size at the top left corner of the screen. On subsequent
-     * runs, sets the window the last size and location where the user had
-     * placed it before.
-     *
-     * @param prefs       Preferences for storing/retrieving preferences values.
-     * @param name        Base name of the preference.
-     * @param stage       The window for which to track preferences.
-     * @param defaultSize This size is used when no preferences are stored yet for
-     *                    this window.
-     */
+    /// Installs a frame preferences handler. On first run, sets the window to
+    /// its preferred size at the top left corner of the screen. On subsequent
+    /// runs, sets the window the last size and location where the user had
+    /// placed it before.
+    ///
+    /// @param prefs       Preferences for storing/retrieving preferences values.
+    /// @param name        Base name of the preference.
+    /// @param stage       The window for which to track preferences.
+    /// @param defaultSize This size is used when no preferences are stored yet for
+    ///                    this window.
     public static void installStagePrefsHandler(final Preferences prefs, final String name, Stage stage, Dimension2D defaultSize) {
         double prefWidth = prefs.getDouble(name + ".width", defaultSize.getWidth());
         double prefHeight = prefs.getDouble(name + ".height", defaultSize.getHeight());
@@ -110,21 +97,19 @@ public class PreferencesUtil {
         stage.heightProperty().addListener((o, oldValue, newValue) -> prefs.putDouble(name + ".height", newValue.doubleValue()));
     }
 
-    /**
-     * Inits handlers which toggle the visibility of the given node in the split
-     * pane and remembers user preferences.
-     * <p>
-     * The name attribute of the {@code visiblityProperty} is used to identify
-     * preferences values.
-     *
-     * @param prefs              The preferences object to use.
-     * @param node               The node which is added or removed to the split pane. The
-     *                           node is also made visible/invisible.
-     * @param visibilityProperty the boolean property which holds the visibility
-     *                           state
-     * @param splitPane          splitPane to which the node is added or removed
-     * @param side               on which side of the split pane the element should be added
-     */
+    /// Inits handlers which toggle the visibility of the given node in the split
+    /// pane and remembers user preferences.
+    ///
+    /// The name attribute of the `visiblityProperty` is used to identify
+    /// preferences values.
+    ///
+    /// @param prefs              The preferences object to use.
+    /// @param node               The node which is added or removed to the split pane. The
+    ///                           node is also made visible/invisible.
+    /// @param visibilityProperty the boolean property which holds the visibility
+    ///                           state
+    /// @param splitPane          splitPane to which the node is added or removed
+    /// @param side               on which side of the split pane the element should be added
     public static void installVisibilityPrefsHandlers(Preferences prefs, Node node, BooleanProperty visibilityProperty, SplitPane splitPane, Side side) {
         ChangeListener<? super Number> positionListener = (o, oldValue, newValue) -> prefs.putDouble(visibilityProperty.getName() + ".dividerPosition", newValue.doubleValue());
 

@@ -17,35 +17,29 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Adds convenience methods to the interface defined in {@link BareDirectedGraph}.
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- */
+/// Adds convenience methods to the interface defined in [BareDirectedGraph].
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
 public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
 
-    /**
-     * Returns the arrow data for the arrow going from {@code u} to {@code v}
-     * if the arrow exists.
-     *
-     * @param u a vertex
-     * @param v a vertex
-     * @return the arrow data or null
-     */
+    /// Returns the arrow data for the arrow going from `u` to `v`
+    /// if the arrow exists.
+    ///
+    /// @param u a vertex
+    /// @param v a vertex
+    /// @return the arrow data or null
     default @Nullable A findArrow(V u, V v) {
         int index = findIndexOfNext(u, v);
         return index < 0 ? null : getNextArrow(u, index);
     }
 
-    /**
-     * Returns the index of vertex {@code u} in the list of next vertices
-     * of {@code v} if an arrow from {@code v} to {@code u} exists.
-     *
-     * @param v a vertex
-     * @param u a vertex
-     * @return index of vertex {@code u} or a value {@literal < 0}
-     */
+    /// Returns the index of vertex `u` in the list of next vertices
+    /// of `v` if an arrow from `v` to `u` exists.
+    ///
+    /// @param v a vertex
+    /// @param u a vertex
+    /// @return index of vertex `u` or a value {@literal < 0}
     default int findIndexOfNext(V v, V u) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {
             if (u.equals(getNext(v, i))) {
@@ -55,71 +49,57 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
         return -1;
     }
 
-    /**
-     * Returns the list of next vertices of vertex {@code v}.
-     *
-     * @param v a vertex
-     * @return a collection view on the direct successor vertices of vertex
-     */
+    /// Returns the list of next vertices of vertex `v`.
+    ///
+    /// @param v a vertex
+    /// @return a collection view on the direct successor vertices of vertex
     default Collection<V> getNextVertices(V v) {
         return new ListFacade<>(() -> this.getNextCount(v), i -> getNext(v, i));
     }
 
-    /**
-     * Returns the arc data for the {@code i}-th next (outgoing)
-     * arrow from vertex {@code v}.
-     *
-     * @param v a vertex
-     * @param i the index into the list of outgoing arrows
-     * @return the arc data
-     */
+    /// Returns the arc data for the `i`-th next (outgoing)
+    /// arrow from vertex `v`.
+    ///
+    /// @param v a vertex
+    /// @param i the index into the list of outgoing arrows
+    /// @return the arc data
     default Arc<V, A> getNextArc(V v, int i) {
         return new Arc<>(v, getNext(v, i), getNextArrow(v, i));
     }
 
-    /**
-     * Returns the list of next arrow data of vertex {@code v}.
-     *
-     * @param v a vertex
-     * @return a collection view on the arrow data
-     */
+    /// Returns the list of next arrow data of vertex `v`.
+    ///
+    /// @param v a vertex
+    /// @return a collection view on the arrow data
     default Collection<A> getNextArrows(V v) {
         return new ListFacade<>(() -> this.getNextCount(v), i -> getNextArrow(v, i));
     }
 
-    /**
-     * Returns the list of next arc data of vertex {@code v}.
-     *
-     * @param v a vertex
-     * @return a collection view on the arc data
-     */
+    /// Returns the list of next arc data of vertex `v`.
+    ///
+    /// @param v a vertex
+    /// @return a collection view on the arc data
     default Collection<Arc<V, A>> getNextArcs(V v) {
         return new ListFacade<>(() -> this.getNextCount(v), i -> getNextArc(v, i));
     }
 
-    /**
-     * Returns the number of vertices.
-     *
-     * @return vertex count
-     */
+    /// Returns the number of vertices.
+    ///
+    /// @return vertex count
     default int getVertexCount() {
         return getVertices().size();
     }
 
-    /**
-     * Returns the number of arrows.
-     *
-     * @return arrow count
-     */
+    /// Returns the number of arrows.
+    ///
+    /// @return arrow count
     int getArrowCount();
 
-    /**
-     * Returns all arrows between two vertices.
-     *
-     * @param v1 vertex 1
-     * @param v2 vertex 2
-     * @return a collection of all arrows
-     */
+    /// Returns all arrows between two vertices.
+    ///
+    /// @param v1 vertex 1
+    /// @param v2 vertex 2
+    /// @return a collection of all arrows
     default Collection<A> getArrows(V v1, V v2) {
         int n = getNextCount(v1);
         List<A> arrows = new ArrayList<>(n);
@@ -131,11 +111,9 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
         return Collections.unmodifiableList(arrows);
     }
 
-    /**
-     * Returns all arrows.
-     *
-     * @return a collection of all arrows
-     */
+    /// Returns all arrows.
+    ///
+    /// @return a collection of all arrows
     default Collection<A> getArrows() {
         ArrayList<A> arrows = new ArrayList<>(getArrowCount());
         for (V v1 : getVertices()) {
@@ -147,47 +125,39 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
         return Collections.unmodifiableList(arrows);
     }
 
-    /**
-     * Returns true if there is an arrow from vertex {@code v} to
-     * vertex {@code u}.
-     *
-     * @param v a vertex
-     * @param u a vertex
-     * @return true if {@code u} is next of {@code v}
-     */
+    /// Returns true if there is an arrow from vertex `v` to
+    /// vertex `u`.
+    ///
+    /// @param v a vertex
+    /// @param u a vertex
+    /// @return true if `u` is next of `v`
     default boolean isNext(V v, V u) {
         return findIndexOfNext(v, u) != -1;
     }
 
-    /**
-     * Gets the vertex data at the specified index.
-     *
-     * @param index an index
-     * @return vertex data
-     * @throws IndexOutOfBoundsException if the index is out of bounds
-     */
+    /// Gets the vertex data at the specified index.
+    ///
+    /// @param index an index
+    /// @return vertex data
+    /// @throws IndexOutOfBoundsException if the index is out of bounds
     V getVertex(int index);
 
-    /**
-     * Searches for vertices starting at the provided vertex.
-     *
-     * @param start the start vertex
-     * @param dfs   whether to search depth-first instead of breadth-first
-     * @return breadth first search
-     */
+    /// Searches for vertices starting at the provided vertex.
+    ///
+    /// @param start the start vertex
+    /// @param dfs   whether to search depth-first instead of breadth-first
+    /// @return breadth first search
     default Enumerator<V> searchNextVertices(final V start, final boolean dfs) {
         final Set<V> visited = new HashSet<>();
         return searchNextVertices(start, visited::add, dfs);
     }
 
-    /**
-     * Searches for vertices starting at the provided vertex.
-     *
-     * @param start   the start vertex
-     * @param visited the add method of the visited set, see {@link Set#add}.
-     * @param dfs     whether to search depth-first instead of breadth-first
-     * @return breadth first search
-     */
+    /// Searches for vertices starting at the provided vertex.
+    ///
+    /// @param start   the start vertex
+    /// @param visited the add method of the visited set, see [Set#add].
+    /// @param dfs     whether to search depth-first instead of breadth-first
+    /// @return breadth first search
     default Enumerator<V> searchNextVertices(final V start, final AddToSet<V> visited, final boolean dfs) {
         return new BfsDfsVertexSpliterator<>(this::getNextVertices, start, visited, dfs);
     }

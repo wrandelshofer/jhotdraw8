@@ -4,10 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
-/**
- * Interface for figures which can be resized by the user through handles..
- *
- */
+/// Interface for figures which can be resized by the user through handles..
 public interface ResizableFigure extends Figure {
 
 }

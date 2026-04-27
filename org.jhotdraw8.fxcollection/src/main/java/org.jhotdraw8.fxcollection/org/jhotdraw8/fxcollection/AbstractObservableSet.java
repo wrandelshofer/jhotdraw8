@@ -17,12 +17,10 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
 
-/**
- * Abstract base class for {@link ObservableSet}s. This implementation provides
- * overridable fire methods, saving one level of indirection.
- *
- * @param <E> the element type
- */
+/// Abstract base class for [ObservableSet]s. This implementation provides
+/// overridable fire methods, saving one level of indirection.
+///
+/// @param <E> the element type
 public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E>, ReadableSet<E> {
 
     private final List<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArrayList<>();
@@ -141,13 +139,11 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
         fireInvalidated();
     }
 
-    /**
-     * The method {@code invalidated()} can be overridden to receive
-     * invalidation notifications. This is the preferred option in
-     * {@code Objects} defining the property, because it requires less memory.
-     * <p>
-     * The default implementation is empty.
-     */
+    /// The method `invalidated()` can be overridden to receive
+    /// invalidation notifications. This is the preferred option in
+    /// `Objects` defining the property, because it requires less memory.
+    ///
+    /// The default implementation is empty.
     protected void invalidated() {
     }
 

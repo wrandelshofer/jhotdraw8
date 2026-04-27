@@ -16,19 +16,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * SelectChildrenAction.
- *
- */
+/// SelectChildrenAction.
 public class SelectChildrenAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.selectChildren";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public SelectChildrenAction(DrawingEditor editor) {
         super(editor);
         Resources labels = DrawLabels.getResources();

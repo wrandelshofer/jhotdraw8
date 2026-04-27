@@ -29,17 +29,12 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.List;
 
-/**
- * A figure which draws a straight line from a start point to an end point.
- *
- */
+/// A figure which draws a straight line from a start point to an end point.
 public class LineFigure extends AbstractLeafFigure
         implements StrokableFigure, HideableFigure, StyleableFigure, LockableFigure,
         CompositableFigure, TransformableFigure, PathIterableFigure {
 
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Line";
 
     public static final CssSizeStyleableKey START_X = new CssSizeStyleableKey("startX", CssSize.ZERO);

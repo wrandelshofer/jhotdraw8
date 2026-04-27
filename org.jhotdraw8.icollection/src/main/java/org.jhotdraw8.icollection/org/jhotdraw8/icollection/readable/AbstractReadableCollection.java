@@ -7,28 +7,22 @@ package org.jhotdraw8.icollection.readable;
 
 import java.util.Objects;
 
-/**
- * Abstract base class for {@link ReadableCollection}s.
- *
- * @param <E> the element type
- */
+/// Abstract base class for [ReadableCollection]s.
+///
+/// @param <E> the element type
 public abstract class AbstractReadableCollection<E> implements ReadableCollection<E> {
-    /**
-     * Sole constructor. (For invocation by subclass constructors, typically implicit.).
-     */
+    /// Sole constructor. (For invocation by subclass constructors, typically implicit.).
     public AbstractReadableCollection() {
     }
 
-    /**
-     * Returns a string representation of this collection.  The string
-     * representation consists of a list of the collection's elements in the
-     * order they are returned by its iterator, enclosed in square brackets
-     * ({@code "[]"}).  Adjacent elements are separated by the characters
-     * {@code ", "} (comma and space).  Elements are converted to strings as
-     * by {@link String#valueOf(Object)}.
-     *
-     * @return a string representation of this collection
-     */
+    /// Returns a string representation of this collection.  The string
+    /// representation consists of a list of the collection's elements in the
+    /// order they are returned by its iterator, enclosed in square brackets
+    /// (`"[]"`).  Adjacent elements are separated by the characters
+    /// `", "` (comma and space).  Elements are converted to strings as
+    /// by [String#valueOf(Object)].
+    ///
+    /// @return a string representation of this collection
     public final String toString() {
         return ReadableCollection.iterableToString(this);
     }

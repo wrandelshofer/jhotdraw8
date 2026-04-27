@@ -22,12 +22,9 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Draws points of the path of a {@link PathIterableFigure}.
- * <p>
- * Does not provide interactions. Just increases the hit area of the figure.
- *
- */
+/// Draws points of the path of a [PathIterableFigure].
+///
+/// Does not provide interactions. Just increases the hit area of the figure.
 public class PathIterablePointsHandle extends AbstractHandle {
 
     private final Path node;

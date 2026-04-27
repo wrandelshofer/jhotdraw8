@@ -9,34 +9,25 @@ import javafx.geometry.Point2D;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Provides utility methods for computing the convex hull from a set of points.
- *
- */
+/// Provides utility methods for computing the convex hull from a set of points.
 public class FXConvexHull {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private FXConvexHull() {
     }
 
-    /**
-     * Computes the convex hull from a set of points.
-     *
-     * @param points the points
-     * @return convex hull of the points
-     */
+    /// Computes the convex hull from a set of points.
+    ///
+    /// @param points the points
+    /// @return convex hull of the points
     public static List<Point2D> getConvexHull(List<Point2D> points) {
         return Arrays.asList(getConvexHull(points.toArray(new Point2D[0])));
     }
 
-    /**
-     * Computes the convex hull from a set of points.
-     *
-     * @param points the points
-     * @return convex hull of the points
-     */
+    /// Computes the convex hull from a set of points.
+    ///
+    /// @param points the points
+    /// @return convex hull of the points
     public static Point2D[] getConvexHull(Point2D[] points) {
         // Quickly return if no work is needed
         if (points.length < 3) {
@@ -85,14 +76,12 @@ public class FXConvexHull {
         return convexHull;
     }
 
-    /**
-     * Returns true, if the three given points make a right turn.
-     *
-     * @param p1 first point
-     * @param p2 second point
-     * @param p3 third point
-     * @return true if right turn.
-     */
+    /// Returns true, if the three given points make a right turn.
+    ///
+    /// @param p1 first point
+    /// @param p2 second point
+    /// @param p3 third point
+    /// @return true if right turn.
     public static boolean isRightTurn(Point2D p1, Point2D p2, Point2D p3) {
         if (p1.equals(p2) || p2.equals(p3)) {
             // no right turn if points are at same location

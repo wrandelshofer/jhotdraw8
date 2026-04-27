@@ -15,11 +15,9 @@ public interface ToFloatFunction<T1> extends Function<T1, Float> {
         return applyAsFloat(t1);
     }
 
-    /**
-     * Applies this function to the given arguments.
-     *
-     * @param t1 the first function argument
-     * @return the function result
-     */
+    /// Applies this function to the given arguments.
+    ///
+    /// @param t1 the first function argument
+    /// @return the function result
     float applyAsFloat(T1 t1);
 }

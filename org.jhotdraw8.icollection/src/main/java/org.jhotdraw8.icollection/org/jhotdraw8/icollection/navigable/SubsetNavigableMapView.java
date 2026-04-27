@@ -34,11 +34,9 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
     private final boolean toInclusive;
     private final boolean nullFirst;
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param src the source set
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param src the source set
     public SubsetNavigableMapView(NavigableMap<K, V> src, IntSupplier modCount, boolean fromStart, @Nullable K fromKey, boolean fromInclusive, boolean toEnd, @Nullable K toKey, boolean toInclusive, boolean nullFirst) {
         this.src = src;
         this.modCount = modCount;
@@ -319,12 +317,10 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
         return inRange(o) ? src.remove(o) : null;
     }
 
-    /**
-     * Removes the specified entry from the map.
-     *
-     * @param o an entry (should be a {@link Map.Entry}).
-     * @return true if the element was contained in the map
-     */
+    /// Removes the specified entry from the map.
+    ///
+    /// @param o an entry (should be a [Map.Entry]).
+    /// @return true if the element was contained in the map
     @SuppressWarnings("unchecked")
     private boolean removeEntry(@Nullable Object o) {
         if (containsEntry(o)) {

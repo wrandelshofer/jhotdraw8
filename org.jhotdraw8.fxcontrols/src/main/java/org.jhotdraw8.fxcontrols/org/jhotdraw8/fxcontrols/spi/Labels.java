@@ -10,9 +10,7 @@ import org.jhotdraw8.application.resources.Resources;
 import java.util.ResourceBundle;
 
 public class Labels {
-    /**
-     * Dont' let anyone instantiate this class.
-     */
+    /// Dont' let anyone instantiate this class.
     private Labels() {
     }
 

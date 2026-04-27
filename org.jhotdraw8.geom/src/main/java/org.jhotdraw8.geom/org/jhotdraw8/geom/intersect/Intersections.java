@@ -11,15 +11,11 @@ import java.util.Arrays;
 
 class Intersections {
 
-    /**
-     * Values closer to zero than epsilon are treated as zero .
-     * Machine precision for double is 2^-53.
-     */
+    /// Values closer to zero than epsilon are treated as zero .
+    /// Machine precision for double is 2^-53.
     public static final double EPSILON = 1.0 / (1L << 33);
 
-    /**
-     * Prevent instantiation.
-     */
+    /// Prevent instantiation.
     private Intersections() {
     }
 
@@ -39,13 +35,11 @@ class Intersections {
         return Polynomial.trim(numRoots, roots);
     }
 
-    /**
-     * Constructs Bézout determinant polynomial given two polynomials e1 and e2.
-     *
-     * @param e1 polynomial e1 of degree 5
-     * @param e2 polynomial e2 of degree 5
-     * @return the Bézout determinant polynomial
-     */
+    /// Constructs Bézout determinant polynomial given two polynomials e1 and e2.
+    ///
+    /// @param e1 polynomial e1 of degree 5
+    /// @param e2 polynomial e2 of degree 5
+    /// @return the Bézout determinant polynomial
     public static Polynomial bezout(double[] e1, double[] e2) {
         double AB = e1[0] * e2[1] - e2[0] * e1[1];
         double AC = e1[0] * e2[2] - e2[0] * e1[2];
@@ -71,14 +65,12 @@ class Intersections {
 
     }
 
-    /**
-     * Computes the coordinates of the bottom right corner of a rectangle given
-     * two corner points defining the extrema of the rectangle.
-     *
-     * @param a corner point a
-     * @param b corner point b
-     * @return the bottom right corner
-     */
+    /// Computes the coordinates of the bottom right corner of a rectangle given
+    /// two corner points defining the extrema of the rectangle.
+    ///
+    /// @param a corner point a
+    /// @param b corner point b
+    /// @return the bottom right corner
     public static Point2D.Double bottomRight(Point2D a, Point2D b) {
         return new Point2D.Double(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()));
     }
@@ -87,39 +79,33 @@ class Intersections {
         return new Point2D.Double(Math.max(ax, bx), Math.max(ay, by));
     }
 
-    /**
-     * Returns true if point 'a' is greater or equal to point 'b'. Compares the
-     * x-coordinates first, and if they are equal compares the y-coordinates.
-     *
-     * @param a point a
-     * @param b point b
-     * @return true if a is greater or equal b
-     */
+    /// Returns true if point 'a' is greater or equal to point 'b'. Compares the
+    /// x-coordinates first, and if they are equal compares the y-coordinates.
+    ///
+    /// @param a point a
+    /// @param b point b
+    /// @return true if a is greater or equal b
     static boolean gte(Point2D a, Point2D b) {
         return a.getX() >= b.getX() && a.getY() >= b.getY();
     }
 
 
-    /**
-     * Returns true if point 'a' is less or equal to point 'b'. Compares the
-     * x-coordinates first, and if they are equal compares the y-coordinates.
-     *
-     * @param a point a
-     * @param b point b
-     * @return true if a is less or equal b
-     */
+    /// Returns true if point 'a' is less or equal to point 'b'. Compares the
+    /// x-coordinates first, and if they are equal compares the y-coordinates.
+    ///
+    /// @param a point a
+    /// @param b point b
+    /// @return true if a is less or equal b
     static boolean lte(Point2D a, Point2D b) {
         return a.getX() <= b.getX() && a.getY() <= b.getY();
     }
 
-    /**
-     * Computes the coordinates of the top left corner of a rectangle given two
-     * corner points defining the extrema of the rectangle.
-     *
-     * @param a corner point a
-     * @param b corner point b
-     * @return the top left corner
-     */
+    /// Computes the coordinates of the top left corner of a rectangle given two
+    /// corner points defining the extrema of the rectangle.
+    ///
+    /// @param a corner point a
+    /// @param b corner point b
+    /// @return the top left corner
     public static Point2D.Double topLeft(Point2D a, Point2D b) {
         return new Point2D.Double(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()));
     }

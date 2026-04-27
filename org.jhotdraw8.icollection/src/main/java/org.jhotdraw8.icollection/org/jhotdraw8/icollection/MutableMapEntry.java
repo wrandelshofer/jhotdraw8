@@ -10,12 +10,10 @@ import java.io.Serial;
 import java.util.AbstractMap;
 import java.util.function.BiConsumer;
 
-/**
- * A map entry that supports mutation of the map that contains the entry.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// A map entry that supports mutation of the map that contains the entry.
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public class MutableMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;

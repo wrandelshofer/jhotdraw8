@@ -16,11 +16,9 @@ import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 import java.util.stream.Stream;
 
-/**
- * Provides a {@link List} facade to a set of {@code List} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [List] facade to a set of `List` functions.
+///
+/// @param <E> the element type
 public class ListFacade<E> extends AbstractList<E>
         implements SequencedCollection<E> {
     private final IntSupplier sizeFunction;

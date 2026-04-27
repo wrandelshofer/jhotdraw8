@@ -14,38 +14,29 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
 
-/**
- * {@code FXWorker} provides convenience methods for
- * executing {@link CheckedRunnable} objects on a
- *
- */
+/// `FXWorker` provides convenience methods for
+/// executing [CheckedRunnable] objects on a
 public class FXWorker {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private FXWorker() {
     }
 
-    /**
-     * Calls the runnable on a new Thread. The completion stage is
-     * completed on the FX Application Thread.
-     *
-     * @param runnable the runnable
-     * @return the CompletableFuture
-     */
+    /// Calls the runnable on a new Thread. The completion stage is
+    /// completed on the FX Application Thread.
+    ///
+    /// @param runnable the runnable
+    /// @return the CompletableFuture
     public static CompletableFuture<Void> run(CheckedRunnable runnable) {
         return run(ForkJoinPool.commonPool(), runnable);
     }
 
-    /**
-     * Calls the runnable on the executor thread. The completion stage is
-     * completed on the FX Application Thread.
-     *
-     * @param runnable the runnable
-     * @param executor the executor, if null then a new thread is created
-     * @return the CompletableFuture
-     */
+    /// Calls the runnable on the executor thread. The completion stage is
+    /// completed on the FX Application Thread.
+    ///
+    /// @param runnable the runnable
+    /// @param executor the executor, if null then a new thread is created
+    /// @return the CompletableFuture
     public static CompletableFuture<Void> run(Executor executor, CheckedRunnable runnable) {
         CompletableFuture<Void> f = new CompletableFuture<>();
         Runnable worker = () -> {
@@ -60,27 +51,23 @@ public class FXWorker {
         return f;
     }
 
-    /**
-     * Calls the supplier on a thread of the common fork join pool. The completion stage is
-     * completed on the FX Application Thread.
-     *
-     * @param <T>      the value type
-     * @param supplier the supplier
-     * @return the CompletableFuture
-     */
+    /// Calls the supplier on a thread of the common fork join pool. The completion stage is
+    /// completed on the FX Application Thread.
+    ///
+    /// @param <T>      the value type
+    /// @param supplier the supplier
+    /// @return the CompletableFuture
     public static <T> CompletableFuture<T> supply(Callable<T> supplier) {
         return supply(ForkJoinPool.commonPool(), supplier);
     }
 
-    /**
-     * Calls the supplier on the executor thread. The  {@link CompletableFuture} is
-     * completed on the FX Application Thread.
-     *
-     * @param <T>      the value type
-     * @param supplier the supplier
-     * @param executor the executor
-     * @return the {@link CompletableFuture}
-     */
+    /// Calls the supplier on the executor thread. The  [CompletableFuture] is
+    /// completed on the FX Application Thread.
+    ///
+    /// @param <T>      the value type
+    /// @param supplier the supplier
+    /// @param executor the executor
+    /// @return the [CompletableFuture]
     public static <T> CompletableFuture<T> supply(Executor executor, Callable<T> supplier) {
         CompletableFuture<T> f = new CompletableFuture<>();
         executor.execute(() -> {
@@ -94,15 +81,13 @@ public class FXWorker {
         return f;
     }
 
-    /**
-     * Calls the supplier on the executor thread. The {@link CompletableWorker} is
-     * completed on the FX Application Thread.
-     *
-     * @param <T>      the value type
-     * @param supplier the supplier
-     * @param executor the executor
-     * @return the {@link CompletableWorker}
-     */
+    /// Calls the supplier on the executor thread. The [CompletableWorker] is
+    /// completed on the FX Application Thread.
+    ///
+    /// @param <T>      the value type
+    /// @param supplier the supplier
+    /// @param executor the executor
+    /// @return the [CompletableWorker]
     public static <T> CompletableWorker<T> work(Executor executor, CheckedFunction<WorkState<T>, T> supplier, WorkState<T> workState) {
         SimpleCompletableWorker<T> w = new SimpleCompletableWorker<>(workState);
 

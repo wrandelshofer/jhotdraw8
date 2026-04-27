@@ -10,53 +10,45 @@ import java.util.function.ToDoubleFunction;
 
 import static java.lang.Math.abs;
 
-/**
- * Provides algorithms for computing the integral of a function.
- */
+/// Provides algorithms for computing the integral of a function.
 public class Integrals {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private Integrals() {
     }
 
-    /**
-     * Romberg Quadrature.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>waruyama</dt>
-     *     <dd><a href="https://github.com/Pomax/BezierInfo-2/issues/77">github.com</a></dd>
-     *     <dt>Wikipedia. Romberg's method.</dt>
-     *     <dd><a href="https://en.wikipedia.org/wiki/Romberg%27s_method">wikipedia.org</a></dd>
-     * </dl>
-     *
-     * @param f  the function
-     * @param t0 the lower bound of the integral
-     * @param t1 the upper bound of the integral
-     * @return the estimated integral
-     */
+    /// Romberg Quadrature.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>waruyama</dt>
+    ///     <dd><a href="https://github.com/Pomax/BezierInfo-2/issues/77">github.com</a></dd>
+    ///     <dt>Wikipedia. Romberg's method.</dt>
+    ///     <dd><a href="https://en.wikipedia.org/wiki/Romberg%27s_method">wikipedia.org</a></dd>
+    /// </dl>
+    ///
+    /// @param f  the function
+    /// @param t0 the lower bound of the integral
+    /// @param t1 the upper bound of the integral
+    /// @return the estimated integral
     public static double rombergQuadrature(ToDoubleFunction<Double> f, double t0, double t1) {
         return rombergQuadrature(f, t0, t1, 0.1);
     }
 
-    /**
-     * Romberg Quadrature.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>waruyama</dt>
-     *     <dd><a href="https://github.com/Pomax/BezierInfo-2/issues/77">github.com</a></dd>
-     *     <dt>Wikipedia. Romberg's method.</dt>
-     *     <dd><a href="https://en.wikipedia.org/wiki/Romberg%27s_method">wikipedia.org</a></dd>
-     * </dl>
-     *
-     * @param f       the function
-     * @param t0      the lower bound of the integral
-     * @param t1      the upper bound of the integral
-     * @param epsilon the desired precision
-     * @return the estimated integral
-     */
+    /// Romberg Quadrature.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>waruyama</dt>
+    ///     <dd><a href="https://github.com/Pomax/BezierInfo-2/issues/77">github.com</a></dd>
+    ///     <dt>Wikipedia. Romberg's method.</dt>
+    ///     <dd><a href="https://en.wikipedia.org/wiki/Romberg%27s_method">wikipedia.org</a></dd>
+    /// </dl>
+    ///
+    /// @param f       the function
+    /// @param t0      the lower bound of the integral
+    /// @param t1      the upper bound of the integral
+    /// @param epsilon the desired precision
+    /// @return the estimated integral
     public static double rombergQuadrature(ToDoubleFunction<Double> f, double t0, double t1, double epsilon) {
         int maxSteps = 5;
         double h = t1 - t0;
@@ -89,17 +81,15 @@ public class Integrals {
     }
 
 
-    /**
-     * Estimates the integral of the given function in the given interval using
-     * Simpsons's rule.
-     * <p>
-     * simpson Based on trapzd in "Numerical Recipes in C", page 139
-     *
-     * @param func the function
-     * @param min  the lower bound of the interval
-     * @param max  the upper bound of the interval
-     * @return the area under the curve
-     */
+    /// Estimates the integral of the given function in the given interval using
+    /// Simpsons's rule.
+    ///
+    /// simpson Based on trapzd in "Numerical Recipes in C", page 139
+    ///
+    /// @param func the function
+    /// @param min  the lower bound of the interval
+    /// @param max  the upper bound of the interval
+    /// @return the area under the curve
     public static double simpson(ToDoubleFunction<Double> func, double min, double max, double eps) {
         int maxSteps = 20;
 
@@ -137,24 +127,21 @@ public class Integrals {
         return s;
     }
 
-    /**
-     * Gauss-Legendre quadrature integration from a to b with n=3.
-     * <p>
-     * See <a href="https://pomax.github.io/bezierinfo/legendre-gauss.html">pomax</a>
-     * for more values.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
-     *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
-     * </dl>
-     *
-     * @param func the function
-     * @param a    the lower bound of the interval
-     * @param b    the upper bound of the interval
-     * @return the area under the curve
-     */
-
+    /// Gauss-Legendre quadrature integration from a to b with n=3.
+    ///
+    /// See <a href="https://pomax.github.io/bezierinfo/legendre-gauss.html">pomax</a>
+    /// for more values.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
+    ///     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
+    /// </dl>
+    ///
+    /// @param func the function
+    /// @param a    the lower bound of the interval
+    /// @param b    the upper bound of the interval
+    /// @return the area under the curve
     public static double gaussLegendre3(ToDoubleFunction<Double> func, double a, double b) {
         double c = (b - a) * 0.5;
         double d = (a + b) * 0.5;
@@ -164,20 +151,18 @@ public class Integrals {
         return c * ((5.0 / 9.0) * (Qd1 + Qd3) + (8.0 / 9.0) * Qd2);
     }
 
-    /**
-     * Gauss-Legendre quadrature integration from a to b with n=5.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
-     *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
-     * </dl>
-     *
-     * @param func the function
-     * @param a    the lower bound of the interval
-     * @param b    the upper bound of the interval
-     * @return the area under the curve
-     */
+    /// Gauss-Legendre quadrature integration from a to b with n=5.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
+    ///     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
+    /// </dl>
+    ///
+    /// @param func the function
+    /// @param a    the lower bound of the interval
+    /// @param b    the upper bound of the interval
+    /// @return the area under the curve
     public static double gaussLegendre5(ToDoubleFunction<Double> func, double a, double b) {
         double c = (b - a) * 0.5;
         double d = (a + b) * 0.5;
@@ -189,20 +174,18 @@ public class Integrals {
         return c * (0.236927 * (Qd1 + Qd5) + 0.478629 * (Qd2 + Qd4) + 0.568889 * Qd3);
     }
 
-    /**
-     * Gauss-Legendre quadrature integration from a to b with n=7.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
-     *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
-     * </dl>
-     *
-     * @param func the function
-     * @param a    the lower bound of the interval
-     * @param b    the upper bound of the interval
-     * @return the area under the curve
-     */
+    /// Gauss-Legendre quadrature integration from a to b with n=7.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
+    ///     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
+    /// </dl>
+    ///
+    /// @param func the function
+    /// @param a    the lower bound of the interval
+    /// @param b    the upper bound of the interval
+    /// @return the area under the curve
     public static double gaussLegendre7(ToDoubleFunction<Double> func, double a, double b) {
         double c = (b - a) * 0.5;
         double d = (a + b) * 0.5;

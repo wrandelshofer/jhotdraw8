@@ -19,11 +19,8 @@ import java.util.SequencedMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-/**
- * Presents a file chooser to the user and then exports the contents of the
- * active view to the chosen file.
- *
- */
+/// Presents a file chooser to the user and then exports the contents of the
+/// active view to the chosen file.
 public class ExportFileAction extends AbstractSaveFileAction {
 
     public static final String ID = "file.export";
@@ -32,11 +29,9 @@ public class ExportFileAction extends AbstractSaveFileAction {
     public static final Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new SimpleNullableKey<>("exportChooserFactory",
             new SimpleParameterizedType(Supplier.class, URIChooser.class));
 
-    /**
-     * Creates a new instance.
-     *
-     * @param activity the view
-     */
+    /// Creates a new instance.
+    ///
+    /// @param activity the view
     public ExportFileAction(FileBasedActivity activity) {
         this(activity, ID, null);
     }
@@ -46,13 +41,11 @@ public class ExportFileAction extends AbstractSaveFileAction {
     }
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param activity      the view, nullable
-     * @param id            the id, nonnull
-     * @param optionsDialog the dialog for specifying export options
-     */
+    /// Creates a new instance.
+    ///
+    /// @param activity      the view, nullable
+    /// @param id            the id, nonnull
+    /// @param optionsDialog the dialog for specifying export options
     public ExportFileAction(FileBasedActivity activity, String id, Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialog) {
         super(activity, id, true);
         this.optionsDialogFactory = optionsDialog;

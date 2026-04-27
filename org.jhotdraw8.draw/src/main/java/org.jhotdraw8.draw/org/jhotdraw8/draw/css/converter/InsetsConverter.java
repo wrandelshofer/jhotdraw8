@@ -19,20 +19,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Converts a {@link Insets} object into a {@code String} and vice
- * versa.
- * <p>
- * List of four sizes in the sequence top, right, bottom, left. If left is
- * omitted, it is the same as right. If bottom is omitted, it is the same as
- * top. If right is omitted it is the same as top.
- * <pre>
- * insets       = top-right-bottom-left ;
- * insets       = top-bottom, right-left ;
- * insets       = top , right , bottom, left ;
- * </pre> *
- *
- */
+/// Converts a [Insets] object into a `String` and vice
+/// versa.
+///
+/// List of four sizes in the sequence top, right, bottom, left. If left is
+/// omitted, it is the same as right. If bottom is omitted, it is the same as
+/// top. If right is omitted it is the same as top.
+/// <pre>
+/// insets       = top-right-bottom-left ;
+/// insets       = top-bottom, right-left ;
+/// insets       = top , right , bottom, left ;
+/// </pre> *
 public class InsetsConverter extends AbstractCssConverter<Insets> {
     public InsetsConverter(boolean nullable) {
         super(nullable);

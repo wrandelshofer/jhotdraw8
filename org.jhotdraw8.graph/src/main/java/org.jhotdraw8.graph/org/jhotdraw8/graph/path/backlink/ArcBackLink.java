@@ -12,23 +12,19 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.function.BiFunction;
 
-/**
- * Represents an arc back link with depth.
- *
- * @param <V> the vertex type
- * @param <A> the arrow type
- */
+/// Represents an arc back link with depth.
+///
+/// @param <V> the vertex type
+/// @param <A> the arrow type
 public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
     private final V vertex;
     private final @Nullable A arrow;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param vertex the vertex data
-     * @param arrow  the arrow data
-     * @param parent the parent back link
-     */
+    /// Creates a new instance.
+    ///
+    /// @param vertex the vertex data
+    /// @param arrow  the arrow data
+    /// @param parent the parent back link
     public ArcBackLink(V vertex, @Nullable A arrow, @Nullable ArcBackLink<V, A> parent) {
         super(parent);
         this.vertex = vertex;
@@ -53,18 +49,16 @@ public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
                 '}';
     }
 
-    /**
-     * Converts an {@link ArcBackLink} to {@link ArcBackLinkWithCost}.
-     *
-     * @param node         the {@link ArcBackLink}
-     * @param zero         the zero cost value
-     * @param costFunction the cost function
-     * @param sumFunction  the sum function for cost values
-     * @param <VV>         the vertex data type
-     * @param <AA>         the arrow data type
-     * @param <CC>         the cost number type
-     * @return the converted {@link ArcBackLinkWithCost}
-     */
+    /// Converts an [ArcBackLink] to [ArcBackLinkWithCost].
+    ///
+    /// @param node         the [ArcBackLink]
+    /// @param zero         the zero cost value
+    /// @param costFunction the cost function
+    /// @param sumFunction  the sum function for cost values
+    /// @param <VV>         the vertex data type
+    /// @param <AA>         the arrow data type
+    /// @param <CC>         the cost number type
+    /// @return the converted [ArcBackLinkWithCost]
     public static <VV, AA, CC extends Number & Comparable<CC>> @Nullable ArcBackLinkWithCost<VV, AA, CC> toArcBackLinkWithCost(@Nullable ArcBackLink<VV, AA> node,
                                                                                                                                CC zero,
                                                                                                                                Function3<VV, VV, AA, CC> costFunction,

@@ -19,19 +19,14 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * AddToGroupAction.
- *
- */
+/// AddToGroupAction.
 public class RemoveFromGroupAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.removeFromGroup";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public RemoveFromGroupAction(DrawingEditor editor) {
         super(editor);
         Resources labels

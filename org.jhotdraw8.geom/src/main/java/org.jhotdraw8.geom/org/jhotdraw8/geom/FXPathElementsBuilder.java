@@ -15,10 +15,7 @@ import javafx.scene.shape.QuadCurveTo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * FXPathElementsBuilder.
- *
- */
+/// FXPathElementsBuilder.
 public class FXPathElementsBuilder extends AbstractPathBuilder<List<PathElement>> {
     public static final ClosePath CLOSE_PATH = new ClosePath();
     private final List<PathElement> elements;

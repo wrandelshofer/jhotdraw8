@@ -8,16 +8,14 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * Data record for an arrow with associated data in a directed graph.
- * <p>
- * "Arc" is used as a synonym for arrow in some definitions for directed
- * graphs. In this design, "Arc" explicitly means a data object that contains
- * the start and end vertices of and arrow and an associated data object.
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- */
+/// Data record for an arrow with associated data in a directed graph.
+///
+/// "Arc" is used as a synonym for arrow in some definitions for directed
+/// graphs. In this design, "Arc" explicitly means a data object that contains
+/// the start and end vertices of and arrow and an associated data object.
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
 public class Arc<V, A> {
     private final V start;
     private final V end;

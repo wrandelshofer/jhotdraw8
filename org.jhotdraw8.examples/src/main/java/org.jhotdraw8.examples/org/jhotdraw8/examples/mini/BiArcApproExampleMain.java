@@ -32,10 +32,7 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.util.List;
 
-/**
- * Example of approximation of Bézier curves by bi-arcs.
- *
- */
+/// Example of approximation of Bézier curves by bi-arcs.
 public class BiArcApproExampleMain extends Application {
     private final Polyline polyline = new Polyline(
             110, 200,
@@ -221,9 +218,7 @@ public class BiArcApproExampleMain extends Application {
         }
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         launch(args);
     }

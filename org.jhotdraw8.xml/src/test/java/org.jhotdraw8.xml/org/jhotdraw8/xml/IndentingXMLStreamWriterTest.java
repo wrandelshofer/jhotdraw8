@@ -16,24 +16,20 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * Tests {@link IndentingXMLStreamWriter}.
- */
+/// Tests [IndentingXMLStreamWriter].
 public class IndentingXMLStreamWriterTest {
-    /**
-     * Tests examples from the web-site "Canonical XML Version 1.1".
-     * <p>
-     * Note that the {@link IndentingXMLStreamWriter} does not generate a
-     * canonical XML representation.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Canonical XML Version 1.1</dt>
-     *     <dd><a href="https://www.w3.org/TR/xml-c14n/">w3.org</a></dd>
-     * </dl>
-     *
-     * @return
-     */
+    /// Tests examples from the web-site "Canonical XML Version 1.1".
+    ///
+    /// Note that the [IndentingXMLStreamWriter] does not generate a
+    /// canonical XML representation.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Canonical XML Version 1.1</dt>
+    ///     <dd><a href="https://www.w3.org/TR/xml-c14n/">w3.org</a></dd>
+    /// </dl>
+    ///
+    /// @return
     @TestFactory
     public List<DynamicTest> dynamicTestsCanonicalXml() {
         return Arrays.asList(
@@ -64,17 +60,15 @@ public class IndentingXMLStreamWriterTest {
         );
     }
 
-    /**
-     * Tests examples from the web-site "Understanding xml:space".
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Understanding xml:space</dt>
-     *     <dd><a href="http://www.xmlplease.com/xml/xmlspace/">xmlplease.com</a></dd>
-     * </dl>
-     *
-     * @return
-     */
+    /// Tests examples from the web-site "Understanding xml:space".
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Understanding xml:space</dt>
+    ///     <dd><a href="http://www.xmlplease.com/xml/xmlspace/">xmlplease.com</a></dd>
+    /// </dl>
+    ///
+    /// @return
     @TestFactory
     public List<DynamicTest> dynamicTestsXmlSpace() {
         return Arrays.asList(
@@ -152,13 +146,11 @@ public class IndentingXMLStreamWriterTest {
         );
     }
 
-    /**
-     * Given an expected XML String representation.
-     * Parsing that String and writing it out again with the
-     * {@link IndentingXMLStreamWriter} should give the same result.
-     *
-     * @param expected expected output
-     */
+    /// Given an expected XML String representation.
+    /// Parsing that String and writing it out again with the
+    /// [IndentingXMLStreamWriter] should give the same result.
+    ///
+    /// @param expected expected output
     private void shouldHonourXmlSpaceAttribute(String input, String expected) throws Exception {
         Document doc = XmlUtil.read(new StringReader(input), true);
 

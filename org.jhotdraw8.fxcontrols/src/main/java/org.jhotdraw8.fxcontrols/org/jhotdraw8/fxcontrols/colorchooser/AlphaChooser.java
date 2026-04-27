@@ -3,10 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-/**
- * Sample Skeleton for 'ColorChooserPane.fxml' Controller Class
- */
-
+/// Sample Skeleton for 'ColorChooserPane.fxml' Controller Class
 package org.jhotdraw8.fxcontrols.colorchooser;
 
 import javafx.beans.property.ObjectProperty;

@@ -9,11 +9,9 @@ import org.jhotdraw8.collection.enumerator.Enumerator;
 
 import java.util.Spliterators;
 
-/**
- * An enumerator over a single element.
- *
- * @param <E> the element type
- */
+/// An enumerator over a single element.
+///
+/// @param <E> the element type
 public class SingletonSpliterator<E> extends Spliterators.AbstractSpliterator<E> implements Enumerator<E> {
     private final E current;
     private boolean canMove = true;

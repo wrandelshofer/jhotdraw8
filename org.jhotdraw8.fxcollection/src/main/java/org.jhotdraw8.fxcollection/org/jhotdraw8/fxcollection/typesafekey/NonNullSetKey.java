@@ -9,11 +9,9 @@ import org.jhotdraw8.icollection.persistent.PersistentSet;
 
 import java.lang.reflect.Type;
 
-/**
- * A {@link Key} that stores a set of values.
- *
- * @param <E> the element type of the set
- */
+/// A [Key] that stores a set of values.
+///
+/// @param <E> the element type of the set
 public class NonNullSetKey<E> extends SimpleNonNullKey<PersistentSet<E>> {
 
 

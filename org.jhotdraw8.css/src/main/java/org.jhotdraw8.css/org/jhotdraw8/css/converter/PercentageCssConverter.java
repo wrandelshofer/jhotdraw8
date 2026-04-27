@@ -15,12 +15,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * CssDoubleConverter.
- * <p>
- * Parses an attribute value of type double.
- *
- */
+/// CssDoubleConverter.
+///
+/// Parses an attribute value of type double.
 public class PercentageCssConverter extends AbstractCssConverter<Double> {
 
     public PercentageCssConverter(boolean nullable) {

@@ -37,17 +37,12 @@ import java.util.List;
 
 import static java.lang.Math.min;
 
-/**
- * Represents an SVG 'rect' element.
- *
- */
+/// Represents an SVG 'rect' element.
 public class SvgRectFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure,
         PathIterableFigure, HideableFigure, SvgPathLengthFigure,
         SvgDefaultableFigure, SvgElementFigure {
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "rect";
     public static final CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
     public static final CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);

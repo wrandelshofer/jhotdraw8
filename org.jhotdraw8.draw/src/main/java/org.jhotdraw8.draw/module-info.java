@@ -6,9 +6,7 @@
 import org.jhotdraw8.draw.spi.DrawResourceBundleProvider;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Defines a framework for vector drawing editors.
- */
+/// Defines a framework for vector drawing editors.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.draw {

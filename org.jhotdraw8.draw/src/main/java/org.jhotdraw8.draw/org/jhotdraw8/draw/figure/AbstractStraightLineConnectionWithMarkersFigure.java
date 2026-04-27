@@ -32,14 +32,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.List;
 
-/**
- * AbstractStraightLineConnectionWithMarkersFigure draws a straight line from start to end.
- * <p>
- * A subclass can hardcode the markers, or can implement one or multiple "marker-able" interfaces
- * that allow user-definable markers: {@link MarkerStartableFigure}, {@link MarkerEndableFigure},
- * {@link MarkerSegmentableFigure}.
- *
- */
+/// AbstractStraightLineConnectionWithMarkersFigure draws a straight line from start to end.
+///
+/// A subclass can hardcode the markers, or can implement one or multiple "marker-able" interfaces
+/// that allow user-definable markers: [MarkerStartableFigure], [MarkerEndableFigure],
+/// [MarkerSegmentableFigure].
 public abstract class AbstractStraightLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
@@ -159,25 +156,20 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         set(END, getNonNull(END).add(t));
     }
 
-    /**
-     * This method can be overridden by a subclass to apply styles to the marker
-     * node.
-     *
-     * @param ctx  the context
-     * @param node the node
-     */
+    /// This method can be overridden by a subclass to apply styles to the marker
+    /// node.
+    ///
+    /// @param ctx  the context
+    /// @param node the node
     protected void updateEndMarkerNode(RenderContext ctx, Path node) {
         // empty
     }
 
-    /**
-     * This method can be overridden by a subclass to apply styles to the line
-     * node.
-     *
-     * @param ctx  the context
-     * @param node the node
-     */
-
+    /// This method can be overridden by a subclass to apply styles to the line
+    /// node.
+    ///
+    /// @param ctx  the context
+    /// @param node the node
     protected void updateLineNode(RenderContext ctx, Line node) {
     }
 
@@ -239,13 +231,11 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         updateEndMarkerNode(ctx, endMarkerNode);
     }
 
-    /**
-     * This method can be overridden by a subclass to apply styles to the marker
-     * node.
-     *
-     * @param ctx  the context
-     * @param node the node
-     */
+    /// This method can be overridden by a subclass to apply styles to the marker
+    /// node.
+    ///
+    /// @param ctx  the context
+    /// @param node the node
     protected void updateStartMarkerNode(RenderContext ctx, Path node) {
         // empty
     }

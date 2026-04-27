@@ -24,15 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     protected abstract <E> SequencedSet<E> newInstance();
 
-    /**
-     * Creates a new instance with the specified expected number of elements
-     * and load factor.
-     */
+    /// Creates a new instance with the specified expected number of elements
+    /// and load factor.
     protected abstract <E> SequencedSet<E> newInstance(int numElements, float loadFactor);
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <E> SequencedSet<E> newInstance(SequencedSet<E> m);
 
     protected abstract <E> SequencedSet<E> newInstance(ReadableSequencedSet<E> m);
@@ -41,9 +37,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     protected abstract <E> SequencedSet<E> toClonedInstance(SequencedSet<E> m);
 
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <E> SequencedSet<E> newInstance(Set<E> m);
 
     protected abstract <E> SequencedSet<E> newInstance(ReadableSet<E> m);
@@ -51,9 +45,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     protected abstract <E> SequencedSet<E> toClonedInstance(Set<E> m);
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <E> SequencedSet<E> newInstance(Iterable<E> m);
 
     @ParameterizedTest

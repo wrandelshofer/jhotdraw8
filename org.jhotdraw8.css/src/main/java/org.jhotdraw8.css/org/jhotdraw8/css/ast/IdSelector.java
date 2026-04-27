@@ -12,11 +12,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * An "id selector" matches an element if the element has an id with the
- * specified value.
- *
- */
+/// An "id selector" matches an element if the element has an id with the
+/// specified value.
 public class IdSelector extends SimpleSelector {
 
     private final String id;

@@ -9,16 +9,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * A set that provides precise control where each element is inserted;
- * this set is backed by an array and a hash set.
- *
- * @param <E> the element type
- */
+/// A set that provides precise control where each element is inserted;
+/// this set is backed by an array and a hash set.
+///
+/// @param <E> the element type
 public class IndexedHashObservableSet<E> extends AbstractIndexedArrayObservableSet<E> {
-    /**
-     * The hash set.
-     */
+    /// The hash set.
     private final Set<E> set = new HashSet<>();
 
     public IndexedHashObservableSet() {

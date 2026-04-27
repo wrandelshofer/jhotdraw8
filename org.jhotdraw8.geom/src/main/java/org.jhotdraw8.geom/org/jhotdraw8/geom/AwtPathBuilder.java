@@ -7,10 +7,7 @@ package org.jhotdraw8.geom;
 
 import java.awt.geom.Path2D;
 
-/**
- * Builds an AWT {@code Path2D}.
- *
- */
+/// Builds an AWT `Path2D`.
 public class AwtPathBuilder extends AbstractPathBuilder<Path2D.Double> {
 
     private final Path2D.Double path;

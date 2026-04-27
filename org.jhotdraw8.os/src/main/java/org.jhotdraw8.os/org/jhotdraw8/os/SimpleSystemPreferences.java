@@ -8,9 +8,7 @@ package org.jhotdraw8.os;
 import javafx.scene.paint.Color;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Simple implementation of system preferences with setter methods.
- */
+/// Simple implementation of system preferences with setter methods.
 public class SimpleSystemPreferences extends AbstractSystemPreferences {
     public SimpleSystemPreferences() {
     }

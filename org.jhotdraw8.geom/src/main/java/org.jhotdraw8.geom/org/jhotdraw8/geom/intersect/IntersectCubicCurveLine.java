@@ -28,32 +28,28 @@ public class IntersectCubicCurveLine {
                 new Point2D.Double(b0x, b0y), new Point2D.Double(b1x, b1y), epsilon);
     }
 
-    /**
-     * Computes the intersection between cubic bezier curve 'p' and the line
-     * 'a'.
-     *
-     * @param a0 control point P0 of 'p'
-     * @param a1 control point P1 of 'p'
-     * @param a2 control point P2 of 'p'
-     * @param a3 control point P3 of 'p'
-     * @param b0 point 0 of 'a'
-     * @param b1 point 1 of 'a'
-     * @return the computed intersection
-     */
+    /// Computes the intersection between cubic bezier curve 'p' and the line
+    /// 'a'.
+    ///
+    /// @param a0 control point P0 of 'p'
+    /// @param a1 control point P1 of 'p'
+    /// @param a2 control point P2 of 'p'
+    /// @param a3 control point P3 of 'p'
+    /// @param b0 point 0 of 'a'
+    /// @param b1 point 1 of 'a'
+    /// @return the computed intersection
     public static IntersectionResult intersectCubicCurveLine(Point2D a0, Point2D a1, Point2D a2, Point2D a3, Point2D b0, Point2D b1) {
         return intersectCubicCurveLine(a0, a1, a2, a3, b0, b1, Scalars.REAL_THRESHOLD);
     }
 
-    /**
-     * @param p0
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param a0
-     * @param a1
-     * @param epsilon
-     * @return
-     */
+    /// @param p0
+    /// @param p1
+    /// @param p2
+    /// @param p3
+    /// @param a0
+    /// @param a1
+    /// @param epsilon
+    /// @return
     public static IntersectionResult intersectCubicCurveLine(Point2D p0, Point2D p1, Point2D p2, Point2D p3,
                                                              Point2D a0, Point2D a1, double epsilon) {
         final Point2D.Double topLeft = Intersections.topLeft(a0, a1); // used to determine if point is on line segment

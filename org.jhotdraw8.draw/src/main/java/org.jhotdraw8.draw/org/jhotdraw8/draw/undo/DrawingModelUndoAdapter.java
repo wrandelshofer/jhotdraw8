@@ -5,13 +5,13 @@
 
 package org.jhotdraw8.draw.undo;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.fxbase.tree.TreeModelUndoAdapter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.AbstractUndoableEdit;
@@ -20,9 +20,7 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 import java.text.MessageFormat;
 
-/**
- * Emits {@link UndoableEditEvent}s.
- */
+/// Emits [UndoableEditEvent]s.
 public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
 
     private final Listener<DrawingModelEvent> drawingModelListener = event -> {
@@ -66,13 +64,9 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
         private final Key<Object> key;
         private final @Nullable Object oldValue;
         private @Nullable Object newValue;
-        /**
-         * True if the change is the result of an add operation.
-         */
+        /// True if the change is the result of an add operation.
         private final boolean wasAdded;
-        /**
-         * True if the change is the result of a remove operation.
-         */
+        /// True if the change is the result of a remove operation.
         private final boolean wasRemoved;
 
 

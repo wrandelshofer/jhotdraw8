@@ -4,30 +4,26 @@ import org.jhotdraw8.collection.primitive.DoubleArrayList;
 
 import java.awt.geom.CubicCurve2D;
 
-/**
- * Approximates a cubic Bézier curve with quadratic Bézier curves.
- * <p>
- * References:
- * <dl>
- *     <dt>Proc. ACM Comput. Graph. Interact. Tech., Vol. 3, No. 2, Article 16. Publication date: August 2020.
- *     Quadratic Approximation of Cubic Curves.
- *     NGHIA TRUONG, University of Utah, CEM YUKSEL, University of Utah, LARRY SEILER, Facebook Reality Labs.
- *     Copyright 2020 held by the owner/author(s). Publication rights licensed to ACM.
- *     </dt>
- *     <dd><a href="https://ttnghia.github.io/pdf/QuadraticApproximation.pdf">ttnghia.github.io</a>
- *     </dd>
- * </dl>
- */
+/// Approximates a cubic Bézier curve with quadratic Bézier curves.
+///
+/// References:
+/// <dl>
+///     <dt>Proc. ACM Comput. Graph. Interact. Tech., Vol. 3, No. 2, Article 16. Publication date: August 2020.
+///     Quadratic Approximation of Cubic Curves.
+///     NGHIA TRUONG, University of Utah, CEM YUKSEL, University of Utah, LARRY SEILER, Facebook Reality Labs.
+///     Copyright 2020 held by the owner/author(s). Publication rights licensed to ACM.
+///     </dt>
+///     <dd><a href="https://ttnghia.github.io/pdf/QuadraticApproximation.pdf">ttnghia.github.io</a>
+///     </dd>
+/// </dl>
 public class CubicCurveToQuadCurves {
-    /**
-     * Approximates a cubic curve with up to 8 quadratic curves.
-     *
-     * @param p       the points of the cubic curve
-     * @param offsetP the index of the first point in p
-     * @param q       the points of the quadratic curves (on output, must space for up to 8*6=48 coords).
-     * @param offsetQ the index of the first point in q
-     * @return the number of quadratic curves
-     */
+    /// Approximates a cubic curve with up to 8 quadratic curves.
+    ///
+    /// @param p       the points of the cubic curve
+    /// @param offsetP the index of the first point in p
+    /// @param q       the points of the quadratic curves (on output, must space for up to 8*6=48 coords).
+    /// @param offsetQ the index of the first point in q
+    /// @return the number of quadratic curves
     public int approximateCubicCurve(double[] p, int offsetP, double[] q, int offsetQ, double tolerance) {
         return approximateCubicCurve(p, offsetP, q, offsetQ, tolerance, 2);
     }

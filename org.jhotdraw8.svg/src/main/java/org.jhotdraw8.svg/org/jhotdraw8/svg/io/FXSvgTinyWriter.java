@@ -19,27 +19,22 @@ import javax.xml.stream.XMLStreamWriter;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Exports a JavaFX scene graph to SVG Tiny 1.2.
- * <p>
- * References:
- * <dl>
- *     <dt>SVG Tiny 1.2</dt>
- *     <dd><a href="https://www.w3.org/TR/SVGTiny12/">w3.org</a></dd>
- * </dl>
- *
- */
+/// Exports a JavaFX scene graph to SVG Tiny 1.2.
+///
+/// References:
+/// <dl>
+///     <dt>SVG Tiny 1.2</dt>
+///     <dd><a href="https://www.w3.org/TR/SVGTiny12/">w3.org</a></dd>
+/// </dl>
 public class FXSvgTinyWriter extends AbstractFXSvgWriter {
 
     private static final String SVG_VERSION = "1.2";
     private static final String SVG_BASE_PROFILE = "tiny";
     public static final String SVG_MIME_TYPE_WITH_VERSION = SVG_MIME_TYPE + ";version=\"" + SVG_VERSION + "\"";
 
-    /**
-     * @param imageUriKey this property is used to retrieve an URL from an
-     *                    ImageView
-     * @param skipKey     this property is used to retrieve a Boolean from a Node.
-     */
+    /// @param imageUriKey this property is used to retrieve an URL from an
+    ///                    ImageView
+    /// @param skipKey     this property is used to retrieve a Boolean from a Node.
     public FXSvgTinyWriter(Object imageUriKey, Object skipKey) {
         super(imageUriKey, skipKey);
     }

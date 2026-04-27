@@ -20,15 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * CssSymmetricCssPoint2DConverter.
- *
- */
+/// CssSymmetricCssPoint2DConverter.
 public class CssSymmetricPoint2DCssConverterTest {
 
-    /**
-     * Test of fromString method, of class CssPoint2DConverterTest.
-     */
+    /// Test of fromString method, of class CssPoint2DConverterTest.
     public static void doTestFromString(CssPoint2D expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -37,9 +32,7 @@ public class CssSymmetricPoint2DCssConverterTest {
         assertEquals(expected, actual);
     }
 
-    /**
-     * Test of fromString method, of class CssPoint2DConverterTest.
-     */
+    /// Test of fromString method, of class CssPoint2DConverterTest.
     public static void doTestFromIllegalString(String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;

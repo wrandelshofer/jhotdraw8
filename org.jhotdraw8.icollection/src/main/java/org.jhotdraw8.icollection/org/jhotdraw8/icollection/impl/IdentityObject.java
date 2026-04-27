@@ -8,9 +8,7 @@ package org.jhotdraw8.icollection.impl;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * An object with a unique identity within this VM.
- */
+/// An object with a unique identity within this VM.
 public class IdentityObject implements Serializable {
     @Serial
     private static final long serialVersionUID = 0L;

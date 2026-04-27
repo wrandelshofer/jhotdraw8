@@ -14,9 +14,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.base.event.Listener;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxbase.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.fxbase.styleable.StyleableBean;
@@ -34,14 +34,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- */
+///
 public class FigureTest {
 
 
-    /**
-     * Test of getDeclaredAndInheritedMapAccessors method, of class Figure.
-     */
+    /// Test of getDeclaredAndInheritedMapAccessors method, of class Figure.
     @Test
     public void testGetDeclaredAndInheritedKeys() {
         PersistentSet<MapAccessor<?>> figureKeys = Figure.getDeclaredAndInheritedMapAccessors(Figure.class);

@@ -110,10 +110,7 @@ import java.net.URL;
 import java.util.Set;
 import java.util.logging.Logger;
 
-/**
- * DefaultFigureFactory.
- *
- */
+/// DefaultFigureFactory.
 public class DefaultFigureFactory extends AbstractFigureFactory {
 
     public DefaultFigureFactory() {

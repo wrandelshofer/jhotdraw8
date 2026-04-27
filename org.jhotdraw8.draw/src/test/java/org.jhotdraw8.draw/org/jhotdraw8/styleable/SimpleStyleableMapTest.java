@@ -12,17 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- */
+///
 public class SimpleStyleableMapTest {
 
     public SimpleStyleableMapTest() {
     }
 
 
-    /**
-     * Test of getOrDefault method, of class SimpleStyleableMap.
-     */
+    /// Test of getOrDefault method, of class SimpleStyleableMap.
     @Test
     public void testGetOrDefault() {
         // GIVEN
@@ -51,9 +48,7 @@ public class SimpleStyleableMapTest {
         assertEquals(defaultValue, result);
     }
 
-    /**
-     * Test of containsKey method, of class SimpleStyleableMap.
-     */
+    /// Test of containsKey method, of class SimpleStyleableMap.
     @Test
     public void testContainsKey() {
         // GIVEN
@@ -81,9 +76,7 @@ public class SimpleStyleableMapTest {
         assertFalse(result);
     }
 
-    /**
-     * Test of containsKey method, of class SimpleStyleableMap.
-     */
+    /// Test of containsKey method, of class SimpleStyleableMap.
     @Test
     public void testContainsKeyAuthor() {
         // GIVEN

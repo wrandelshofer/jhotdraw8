@@ -8,19 +8,14 @@ import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.action.AbstractApplicationAction;
 
-/**
- * Displays a preferences dialog for the application.
- *
- */
+/// Displays a preferences dialog for the application.
 public abstract class AbstractPreferencesAction extends AbstractApplicationAction {
 
     public static final String ID = "application.preferences";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app the application
-     */
+    /// Creates a new instance.
+    ///
+    /// @param app the application
     @SuppressWarnings("this-escape")
     public AbstractPreferencesAction(Application app) {
         super(app);

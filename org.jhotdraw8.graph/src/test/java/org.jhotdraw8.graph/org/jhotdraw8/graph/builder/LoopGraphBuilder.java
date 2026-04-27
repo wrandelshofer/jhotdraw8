@@ -7,21 +7,17 @@ import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 
 import java.util.List;
 
-/**
- * Builds a graph with a loop.
- * <pre>
- * a ──1─→ b
- * ↑       │
- * 1       1
- * ↓       ↓
- * d ←─1─→ c
- * </pre>
- */
+/// Builds a graph with a loop.
+/// <pre>
+/// a ──1─→ b
+/// ↑       │
+/// 1       1
+/// ↓       ↓
+/// d ←─1─→ c
+/// </pre>
 public class LoopGraphBuilder {
 
-    /**
-     * Builds the graph.
-     */
+    /// Builds the graph.
     public DirectedGraph<String, Integer> build() {
         SimpleMutableDirectedGraph<String, Integer> builder = new SimpleMutableDirectedGraph<>();
         builder.addVertex("a");
@@ -36,9 +32,7 @@ public class LoopGraphBuilder {
         return builder;
     }
 
-    /**
-     * Builds the sets of strongly connected components in the graph.
-     */
+    /// Builds the sets of strongly connected components in the graph.
     public List<IntList> buildStronglyConnectedComponents() {
         return List.of(IntArrayList.of(0, 1, 2, 3));
     }

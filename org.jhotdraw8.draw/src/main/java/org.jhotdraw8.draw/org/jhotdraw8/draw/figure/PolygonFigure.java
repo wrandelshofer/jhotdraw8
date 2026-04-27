@@ -33,18 +33,13 @@ import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A figure which draws a closed polygon.
- *
- */
+/// A figure which draws a closed polygon.
 public class PolygonFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         ConnectableFigure, PathIterableFigure {
 
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Polygon";
 
     public static final Point2DListStyleableKey POINTS = PolylineFigure.POINTS;

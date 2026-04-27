@@ -11,35 +11,27 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Provides a set of parameters to a {@link Theme}.
- */
+/// Provides a set of parameters to a [Theme].
 public interface ThemeParameters {
-    /**
-     * The accent color.
-     * <p>
-     * A {@link Theme} integrates the accent color into its user agent stylesheet.
-     *
-     * @return accent color property
-     */
+    /// The accent color.
+    ///
+    /// A [Theme] integrates the accent color into its user agent stylesheet.
+    ///
+    /// @return accent color property
     ObjectProperty<Color> accentColorProperty();
 
-    /**
-     * Application specific CSS.
-     * <p>
-     * A {@link Theme} integrates this CSS into its user agent stylesheet.
-     *
-     * @return application specific CSS property
-     */
+    /// Application specific CSS.
+    ///
+    /// A [Theme] integrates this CSS into its user agent stylesheet.
+    ///
+    /// @return application specific CSS property
     StringProperty applicationSpecificCssProperty();
 
-    /**
-     * The base font size.
-     * <p>
-     * A {@link Theme} integrates the font size into its user agent stylesheet.
-     *
-     * @return font size property
-     */
+    /// The base font size.
+    ///
+    /// A [Theme] integrates the font size into its user agent stylesheet.
+    ///
+    /// @return font size property
     DoubleProperty fontSizeProperty();
 
     default @Nullable Color getAccentColor() {

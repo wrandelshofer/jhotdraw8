@@ -6,51 +6,39 @@ package org.jhotdraw8.geom.biarc;
 
 import java.awt.geom.Point2D;
 
-/**
- * Defines a line in point-slope form: y - y1 = m * (x - x1).
- * <p>
- * Vertical line: m = NaN
- * <p>
- * Horizontal line: m = 0
- */
+/// Defines a line in point-slope form: y - y1 = m * (x - x1).
+///
+/// Vertical line: m = NaN
+///
+/// Horizontal line: m = 0
 public class Line {
-    /**
-     * Slope.
-     */
+    /// Slope.
     public final double m;
-    /**
-     * Point.
-     */
+    /// Point.
     public final Point2D.Double p;
 
-    /**
-     * Define a line by two points.
-     *
-     * @param p1 first point
-     * @param p2 second point
-     */
+    /// Define a line by two points.
+    ///
+    /// @param p1 first point
+    /// @param p2 second point
     public Line(Point2D.Double p1, Point2D.Double p2) {
         this(p1, slope(p1, p2));
     }
 
 
-    /**
-     * Define a line by a point and slope.
-     *
-     * @param p point
-     * @param m slope
-     */
+    /// Define a line by a point and slope.
+    ///
+    /// @param p point
+    /// @param m slope
     public Line(Point2D.Double p, double m) {
         this.p = p;
         this.m = m;
     }
 
-    /**
-     * Calculate the intersection point of this line and another one.
-     *
-     * @param l another line
-     * @return the intersection point
-     */
+    /// Calculate the intersection point of this line and another one.
+    ///
+    /// @param l another line
+    /// @return the intersection point
     public Point2D.Double Intersection(Line l) {
         if (Double.isNaN(this.m)) {
             return verticalIntersection(this, l);
@@ -64,27 +52,23 @@ public class Line {
     }
 
 
-    /**
-     * Special case, the first one is vertical (we suppose that the other one is not,
-     * otherwise they do not cross).
-     *
-     * @param vl
-     * @param l
-     * @return
-     */
+    /// Special case, the first one is vertical (we suppose that the other one is not,
+    /// otherwise they do not cross).
+    ///
+    /// @param vl
+    /// @param l
+    /// @return
     private static Point2D.Double verticalIntersection(Line vl, Line l) {
         double x = vl.p.getX();
         double y = l.m * (x - l.p.getX()) + l.p.getY();
         return new Point2D.Double(x, y);
     }
 
-    /**
-     * Creates a a line which is perpendicular to the line defined by P and P1 and goes through P
-     *
-     * @param P
-     * @param P1
-     * @return
-     */
+    /// Creates a a line which is perpendicular to the line defined by P and P1 and goes through P
+    ///
+    /// @param P
+    /// @param P1
+    /// @return
     public static Line createPerpendicularAt(Point2D.Double P, Point2D.Double P1) {
         double m = slope(P, P1);
 

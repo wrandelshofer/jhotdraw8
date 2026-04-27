@@ -13,12 +13,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * A stylesheet is a list of rules.
- * <p>
- * A stylesheet is identified by a {@link URI}.
- *
- */
+/// A stylesheet is a list of rules.
+///
+/// A stylesheet is identified by a [URI].
 public class Stylesheet extends AbstractSyntaxTree {
 
 
@@ -37,29 +34,23 @@ public class Stylesheet extends AbstractSyntaxTree {
                         .collect(Collectors.toList()));
     }
 
-    /**
-     * Gets the URI that identifies this stylesheet.
-     *
-     * @return an URI
-     */
+    /// Gets the URI that identifies this stylesheet.
+    ///
+    /// @return an URI
     public @Nullable URI getUri() {
         return uri;
     }
 
-    /**
-     * Returns only the style rules in the stylesheet.
-     *
-     * @return the rules
-     */
+    /// Returns only the style rules in the stylesheet.
+    ///
+    /// @return the rules
     public ReadableList<StyleRule> getStyleRules() {
         return styleRules;
     }
 
-    /**
-     * Returns rules in the stylesheet.
-     *
-     * @return the rules
-     */
+    /// Returns rules in the stylesheet.
+    ///
+    /// @return the rules
     public ReadableList<Rule> getRules() {
         return rules;
     }

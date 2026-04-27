@@ -14,13 +14,10 @@ import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-/**
- * SvgPaintConverter.
- * <p>
- * SVG does not support an alpha channel in a color. The opacity must be
- * specified in a separate attribute.
- *
- */
+/// SvgPaintConverter.
+///
+/// SVG does not support an alpha channel in a color. The opacity must be
+/// specified in a separate attribute.
 public class SvgPaintCssConverter extends PaintCssConverter {
 
     public SvgPaintCssConverter(boolean nullable) {

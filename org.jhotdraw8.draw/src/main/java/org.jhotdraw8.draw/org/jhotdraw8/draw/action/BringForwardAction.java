@@ -16,19 +16,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * BringForwardAction.
- *
- */
+/// BringForwardAction.
 public class BringForwardAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.bringForward";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public BringForwardAction(DrawingEditor editor) {
         super(editor);
         Resources labels

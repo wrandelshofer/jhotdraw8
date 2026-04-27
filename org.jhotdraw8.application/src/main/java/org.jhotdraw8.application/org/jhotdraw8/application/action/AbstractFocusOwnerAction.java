@@ -13,10 +13,7 @@ import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.Application;
 import org.jspecify.annotations.Nullable;
 
-/**
- * AbstractFocusOwnerAction.
- *
- */
+/// AbstractFocusOwnerAction.
 public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction {
 
     private @Nullable Node target = null;
@@ -37,21 +34,17 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
         }
     };
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app the application
-     */
+    /// Creates a new instance.
+    ///
+    /// @param app the application
     public AbstractFocusOwnerAction(Application app) {
         this(app, null);
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app    the application
-     * @param target the target node
-     */
+    /// Creates a new instance.
+    ///
+    /// @param app    the application
+    /// @param target the target node
     public AbstractFocusOwnerAction(Application app, @Nullable Node target) {
         super(app);
         this.target = target;

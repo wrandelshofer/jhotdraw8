@@ -5,26 +5,19 @@
 package org.jhotdraw8.draw.figure;
 
 
-/**
- * Defines a <i>layer</i> of a {@link Drawing}.
- * <p>
- * The parent of a {@code Layer} must be a {@code Drawing} or a {@code Clipping} . Method
- * {@link #isSuitableParent(Figure)} must be
- * implementend accordingly.
- * <p>
- * A layer does not have handles and is not selectable.
- *
- */
+/// Defines a _layer_ of a [Drawing].
+///
+/// The parent of a `Layer` must be a `Drawing` or a `Clipping` . Method
+/// [#isSuitableParent(Figure)] must be
+/// implementend accordingly.
+///
+/// A layer does not have handles and is not selectable.
 public interface Layer extends Figure {
 
-    /**
-     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
     String TYPE_SELECTOR = "Layer";
 
-    /**
-     * Layer figures always return false for isSelectable.
-     */
+    /// Layer figures always return false for isSelectable.
     @Override
     default boolean isSelectable() {
         return false;

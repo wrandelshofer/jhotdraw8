@@ -8,10 +8,7 @@ import org.jhotdraw8.css.converter.BooleanCssConverter;
 import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
-/**
- * Nullable NonNullBooleanStyleableKey.
- *
- */
+/// Nullable NonNullBooleanStyleableKey.
 public class NulllableBooleanStyleableKey extends NullableObjectStyleableKey<Boolean> implements WritableStyleableMapAccessor<Boolean> {
 
 

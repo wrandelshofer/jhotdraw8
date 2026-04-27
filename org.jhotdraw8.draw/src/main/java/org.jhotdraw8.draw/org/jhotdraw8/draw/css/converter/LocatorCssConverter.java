@@ -18,12 +18,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * CssLocatorConverter.
- * <p>
- * Currently converts relative locators only.
- *
- */
+/// CssLocatorConverter.
+///
+/// Currently converts relative locators only.
 public class LocatorCssConverter extends AbstractCssConverter<Locator> {
     public static final String RELATIVE_FUNCTION = "relative";
 

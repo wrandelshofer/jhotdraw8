@@ -12,89 +12,80 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.function.Function;
 
-/**
- * Writes a graph into a graphviz "dot" file.
- * <p>
- * Writes the following productions. <b>Does not write subgraphs!</b>
- * <pre>{@literal
- * graph        : digrap [ ID ] '{' stmt_list '}'
- * stmt_list    : [ stmt [ ';' ] stmt_list ]
- * stmt         : node_stmt
- *              | edge_stmt
- *              | attr_stmt
- *              | ID '=' ID
- *              | subgraph
- * attr_stmt    : (graph | node | edge) attr_list
- * attr_list    : '[' [ a_list ] ']' [ attr_list ]
- * a_list       : ID '=' ID [ (';' | ',') ] [ a_list ]
- * edge_stmt    : (node_id | subgraph) edgeRHS [ attr_list ]
- * edgeRHS      : edgeop (node_id | subgraph) [ edgeRHS ]
- * node_stmt    : node_id [ attr_list ]  * node_id : ID [ port ]
- * port         : ':' ID [ ':' compass_pt ]  * | ':' compass_pt
- * subgraph     : [ subgraph [ ID ] ] '{' stmt_list '}'
- * compass_pt   : (n | ne | e | se | s | sw | w | nw | c | _)
- * edgeop       : -> | --
- * }</pre>
- * <p>
- * References:
- * <dl>
- *     <dt>Graphviz. DOT Language.</dt>
- *     <dd><a href="https://graphviz.org/doc/info/lang.html">graphviz.org</a></dd>
- * </dl>
- */
+/// Writes a graph into a graphviz "dot" file.
+///
+/// Writes the following productions. **Does not write subgraphs!**
+/// <pre>
+/// {@literal
+///  graph        : digrap [ ID ] '{' stmt_list '}'
+///  stmt_list    : [ stmt [ ';' ] stmt_list ]
+///  stmt         : node_stmt
+///               | edge_stmt
+///               | attr_stmt
+///               | ID '=' ID
+///               | subgraph
+///  attr_stmt    : (graph | node | edge) attr_list
+///  attr_list    : '[' [ a_list ] ']' [attr_list]
+///  a_list       : ID '=' ID [(';'|',')] [a_list]
+///  edge_stmt    : (node_id | subgraph) edgeRHS [attr_list]
+///  edgeRHS      : edgeop (node_id | subgraph) [edgeRHS]
+///  node_stmt    : node_id [attr_list]  * node_id : ID [port]
+///  port         : ':' ID [':'compass_pt]  * | ':' compass_pt
+///  subgraph     : [ subgraph [ ID ] ] '{' stmt_list '}'
+///  compass_pt   : (n | ne | e | se | s | sw | w | nw | c | _)
+///  edgeop       : -> | --
+///  }</pre>
+///
+/// References:
+/// <dl>
+///     <dt>Graphviz. DOT Language.</dt>
+///     <dd><a href="https://graphviz.org/doc/info/lang.html">graphviz.org</a></dd>
+/// </dl>
 public class GraphvizWriter {
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public GraphvizWriter() {
     }
 
-    /**
-     * Dumps a directed graph into a String which can be rendered with the
-     * graphviz "dot" tool.
-     *
-     * @param <V>   the vertex data type
-     * @param <A>   the arrow data type
-     * @param w     the writer
-     * @param graph the graph
-     * @throws IOException if writing fails
-     */
+    /// Dumps a directed graph into a String which can be rendered with the
+    /// graphviz "dot" tool.
+    ///
+    /// @param <V>   the vertex data type
+    /// @param <A>   the arrow data type
+    /// @param w     the writer
+    /// @param graph the graph
+    /// @throws IOException if writing fails
     public <V, A> void write(Appendable w, DirectedGraph<V, A> graph) throws IOException {
         write(w, graph, v -> "\"" + v + '"', null, null, null);
     }
 
-    /**
-     * Dumps a directed graph into a String which can be rendered with the
-     * graphviz "dot" tool.
-     *
-     * @param <V>            the vertex data type
-     * @param <A>            the arrow data type
-     * @param w              the writer
-     * @param graph          the graph
-     * @param vertexToString a function that converts a vertex to a String for
-     *                       use as vertex name
-     * @throws IOException if writing fails
-     */
+    /// Dumps a directed graph into a String which can be rendered with the
+    /// graphviz "dot" tool.
+    ///
+    /// @param <V>            the vertex data type
+    /// @param <A>            the arrow data type
+    /// @param w              the writer
+    /// @param graph          the graph
+    /// @param vertexToString a function that converts a vertex to a String for
+    ///                       use as vertex name
+    /// @throws IOException if writing fails
     public <V, A> void write(Appendable w, DirectedGraph<V, A> graph,
                              Function<V, String> vertexToString) throws IOException {
         write(w, graph, vertexToString, null, null, "G");
     }
 
-    /**
-     * Dumps a directed graph into a String which can be rendered with the
-     * graphviz "dot" tool.
-     *
-     * @param <V>              the vertex data type
-     * @param <A>              the arrow data type
-     * @param graph            the graph
-     * @param vertexToString   a function that converts a vertex to a String for
-     *                         use as vertex name
-     * @param vertexAttributes a function that converts a vertex to a String for
-     *                         use as vertex attributes
-     * @param arrowAttributes  a function that converts an arrow to a String for
-     *                         use as arrow attributes
-     * @return the "dot" string
-     */
+    /// Dumps a directed graph into a String which can be rendered with the
+    /// graphviz "dot" tool.
+    ///
+    /// @param <V>              the vertex data type
+    /// @param <A>              the arrow data type
+    /// @param graph            the graph
+    /// @param vertexToString   a function that converts a vertex to a String for
+    ///                         use as vertex name
+    /// @param vertexAttributes a function that converts a vertex to a String for
+    ///                         use as vertex attributes
+    /// @param arrowAttributes  a function that converts an arrow to a String for
+    ///                         use as arrow attributes
+    /// @return the "dot" string
     public <V, A> String write(DirectedGraph<V, A> graph,
                                Function<V, String> vertexToString,
                                Function<V, String> vertexAttributes,
@@ -108,23 +99,21 @@ public class GraphvizWriter {
         return w.toString();
     }
 
-    /**
-     * Dumps a directed graph into a String which can be rendered with the
-     * graphviz "dot" tool.
-     *
-     * @param <V>              the vertex data type
-     * @param <A>              the arrow data type
-     * @param w                the writer
-     * @param graph            the graph
-     * @param vertexToString   a function that converts a vertex to a String for
-     *                         use as vertex name
-     * @param vertexAttributes a function that converts a vertex to a String for
-     *                         use as vertex attributes
-     * @param arrowAttributes  a function that converts an arrow to a String for
-     *                         use as arrow attributes
-     * @param graphId          the id of the graph
-     * @throws IOException if writing fails
-     */
+    /// Dumps a directed graph into a String which can be rendered with the
+    /// graphviz "dot" tool.
+    ///
+    /// @param <V>              the vertex data type
+    /// @param <A>              the arrow data type
+    /// @param w                the writer
+    /// @param graph            the graph
+    /// @param vertexToString   a function that converts a vertex to a String for
+    ///                         use as vertex name
+    /// @param vertexAttributes a function that converts a vertex to a String for
+    ///                         use as vertex attributes
+    /// @param arrowAttributes  a function that converts an arrow to a String for
+    ///                         use as arrow attributes
+    /// @param graphId          the id of the graph
+    /// @throws IOException if writing fails
     public <V, A> void write(final Appendable w,
                              final DirectedGraph<V, A> graph,
                              final Function<V, String> vertexToString,
@@ -183,15 +172,13 @@ public class GraphvizWriter {
         w.append("}\n");
     }
 
-    /**
-     * Dumps the graph graph into a String which can be rendered with the
-     * graphviz "dot" tool.
-     *
-     * @param <V>   the vertex data type
-     * @param <A>   the arrow data type
-     * @param graph the graph to be dumped
-     * @return the dump
-     */
+    /// Dumps the graph graph into a String which can be rendered with the
+    /// graphviz "dot" tool.
+    ///
+    /// @param <V>   the vertex data type
+    /// @param <A>   the arrow data type
+    /// @param graph the graph to be dumped
+    /// @return the dump
     public <V, A> String write(DirectedGraph<V, A> graph) {
         StringWriter w = new StringWriter();
         try {

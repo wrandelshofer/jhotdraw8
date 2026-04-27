@@ -5,10 +5,7 @@
 
 package org.jhotdraw8.draw.figure;
 
-/**
- * Marker interface for group of figures.
- *
- */
+/// Marker interface for group of figures.
 public interface Grouping extends Figure {
 
 }

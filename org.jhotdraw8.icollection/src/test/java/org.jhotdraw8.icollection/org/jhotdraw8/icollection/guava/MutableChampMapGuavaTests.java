@@ -20,9 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-/**
- * Tests {@link MutableChampMap} with the Guava test suite.
- */
+/// Tests [MutableChampMap] with the Guava test suite.
 public class MutableChampMapGuavaTests {
 
     public static Test suite() {

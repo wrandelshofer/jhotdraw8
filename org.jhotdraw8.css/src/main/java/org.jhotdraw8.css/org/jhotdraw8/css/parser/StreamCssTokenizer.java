@@ -37,110 +37,106 @@ import static org.jhotdraw8.css.parser.CssTokenType.TT_SUBSTRING_MATCH;
 import static org.jhotdraw8.css.parser.CssTokenType.TT_SUFFIX_MATCH;
 import static org.jhotdraw8.css.parser.CssTokenType.TT_URL;
 
-/**
- * {@code StreamCssTokenizer} processes an input stream of characters into tokens for
- * the {@code CssParser}.
- * <p>
- * The tokenizer implements the ISO 14977 EBNF productions listed below. Only
- * productions with all caps names are returned as tokens. Productions with
- * lowercase names are used as internal macros.
- * <p>
- * The tokenizer uses {@code CssScanner} for preprocessing the input stream. The
- * preprocessed input stream does not contain the following characters: \000,
- * \r, \f.
- * <pre>
- * IDENT       = ident ;
- * AT_KEYWORD  = "@" , ident ;
- * STRING      = string ;
- * BAD_STRING  = badstring ;
- * BAD_URI     = baduri ;
- * BAD_COMMENT = badcomment ;
- * HASH        = '#' , name ;
- * NUMBER      = num
- * PERCENTAGE  = num , '%' ;
- * DIMENSION   = num , ident ;
- * URI         = ( "url(" , w , string , w , ')'
- *               | "url(" , w, { urichar | nonascii | escape }-, w, ')'
- *               )
- * UNICODE_RANGE = "u+", ( hexd, 5 * [ hexd ]
- *                       | hexd, 5 * [ hexd ] [ '-', hexd, 5 * [ hexd ] ]
- *                       | [ hexd, 4 * [ hexd ] ] , '?' , 5 * [ '?' ]
- *                       ) ;
- * CDO           = "&lt;!--" ;
- * CDC           = "--&gt;" ;
- * :             = ':' ;
- * ;             = ';' ;
- * {             = '{' ;
- * }             = '}' ;
- * (             = '(' ;
- * )             = ')' ;
- * [             = '[' ;
- * ]             = ']' ;
- * S             = { w }- ;
- * COMMENT       = '/', '*' , { ? anything but '*' followed by '/' ? } , '*', '/' ;
- * ROUND_BLOCK      = ident , '(' ;
- * INCLUDE_MATCH = '~', '=' ;
- * DASH_MATCH    = '|', '=' ;
- * PREFIX_MATCH  = '^', '=' ;
- * SUFFIX_MATCH  = '$', '=' ;
- * SUBSTRING_MATCH
- *               = '*', '=' ;
- * COLUMN        = '|', '|' ;
- * DELIM         = ? any other character not matched by the above rules,
- *                   and neither a single nor a double quote ? ;
- *
- * ident         = [ '-' ] , nmstart , { nmchar }
- *               | [ '--' ] , { nmchar } ;
- * name          = { nmchar }- ;
- * nmstart       = '_' | letter | nonascii | escape ;
- * nonascii      = ? U+00A0 through U+10FFFF ? ;
- * letter        = ? 'a' through 'z' or 'A' through 'Z' ?
- * unicode       = '\' , ( 6 * hexd
- *                       | hexd , 5 * [hexd] , w
- *                       );
- * escape        = ( unicode
- *                 | '\' , -( newline | hexd)
- *                 ) ;
- * nmchar        = '_' | letter | digit | '-' | nonascii | escape ;
- * num           = [ '+' | '-' ] ,
- *                 ( { digit }-
- *                 | { digit } , '.' , { digit }-
- *                 )
- *                 [ 'e'  , [ '+' | '-' ] , { digit }- ] ;
- * digit         = ? '0' through '9' ?
- * letter        = ? 'a' through 'z' ? | ? 'A' through 'Z' ? ;
- * string        = string1 | string2 ;
- * string1       = '"' , { -( newline | '"' ) | '\\' , newline |  escape } , '"' ;
- * string2       = "'" , { -( newline | "'" ) | '\\' , newline |  escape } , "'" ;
- * badstring     = badstring1 | badstring2 ;
- * badstring1    = '"' , { -( newline | '"' ) | '\\' , newline |  escape } ;
- * badstring2    = "'" , { -( newline | "'" ) | '\\' , newline |  escape } ;
- * badcomment    = badcomment1 | badcomment2 ;
- * badcomment1   = '/' , '*' , { ? anything but '*' followed by '/' ? } , '*' ;
- * badcomment2   = '/' , '*' , { ? anything but '*' followed by '/' ? } ;
- * baduri        = baduri1 | baduri2 | baduri3 ;
- * baduri1       = "url(" , w , { urichar | nonascii | escape } , w ;
- * baduri2       = "url(" , w , string, w ;
- * baduri3       = "url(" , w , badstring ;
- * newline       = '\n' ;
- * w             = { ' ' | '\t' | newline } ;
- * urichar       = '!' | '#' | '$' | '%' | '&amp;' | ? '*' through '[' ?
- *                 | ? ']' through '~' ? ;
- * hexd           = digit | ? 'a' through 'f' ? | ? 'A' through 'F' ? ;
- * </pre>
- *
- * <p>
- * References:
- * <dl>
- * <dt>CSS Syntax Module Level 3, Paragraph 4. Tokenization</dt>
- * <dd><a href="https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#tokenization">w3.org</a></dd>
- * </dl>
- * <dl>
- * <dt>CSS Values and Units Module Level 4, Paragraph 4.5 Resource Locators: the &lt;url&gt; type</dt>
- * <dd><a href="https://drafts.csswg.org/css-values/#urls">drafts.csswg.org</a></dd>
- * </dl>
- *
- */
+/// `StreamCssTokenizer` processes an input stream of characters into tokens for
+/// the `CssParser`.
+///
+/// The tokenizer implements the ISO 14977 EBNF productions listed below. Only
+/// productions with all caps names are returned as tokens. Productions with
+/// lowercase names are used as internal macros.
+///
+/// The tokenizer uses `CssScanner` for preprocessing the input stream. The
+/// preprocessed input stream does not contain the following characters: \000,
+/// \r, \f.
+/// <pre>
+/// IDENT       = ident ;
+/// AT_KEYWORD  = "@" , ident ;
+/// STRING      = string ;
+/// BAD_STRING  = badstring ;
+/// BAD_URI     = baduri ;
+/// BAD_COMMENT = badcomment ;
+/// HASH        = '#' , name ;
+/// NUMBER      = num
+/// PERCENTAGE  = num , '%' ;
+/// DIMENSION   = num , ident ;
+/// URI         = ( "url(" , w , string , w , ')'
+///               | "url(" , w, { urichar | nonascii | escape }-, w, ')'
+///               )
+/// UNICODE_RANGE = "u+", ( hexd, 5 * [hexd]
+///                       | hexd, 5 * [hexd] [ '-', hexd, 5 * [ hexd ] ]
+///                       | [ hexd, 4 * [ hexd ] ] , '?' , 5 * ['?']
+///                       ) ;
+/// CDO           = "&lt;!--" ;
+/// CDC           = "--&gt;" ;
+/// :             = ':' ;
+/// ;             = ';' ;
+/// {             = '{' ;
+/// }             = '}' ;
+/// (             = '(' ;
+/// )             = ')' ;
+/// [             = '[';
+///]             = ']' ;
+/// S             = { w }- ;
+/// COMMENT       = '/', '*' , { ? anything but '*' followed by '/' ? } , '*', '/' ;
+/// ROUND_BLOCK      = ident , '(' ;
+/// INCLUDE_MATCH = '~', '=' ;
+/// DASH_MATCH    = '|', '=' ;
+/// PREFIX_MATCH  = '^', '=' ;
+/// SUFFIX_MATCH  = '$', '=' ;
+/// SUBSTRING_MATCH
+///               = '*', '=' ;
+/// COLUMN        = '|', '|' ;
+/// DELIM         = ? any other character not matched by the above rules,
+///                   and neither a single nor a double quote ? ;
+///
+/// ident         = ['-'] , nmstart , { nmchar }
+///               | ['--'] , { nmchar } ;
+/// name          = { nmchar }- ;
+/// nmstart       = '_' | letter | nonascii | escape ;
+/// nonascii      = ? U+00A0 through U+10FFFF ? ;
+/// letter        = ? 'a' through 'z' or 'A' through 'Z' ?
+/// unicode       = '\' , ( 6 * hexd
+///                       | hexd , 5 * [hexd] , w
+///                       );
+/// escape        = ( unicode
+///                 | '\' , -( newline | hexd)
+///                 ) ;
+/// nmchar        = '_' | letter | digit | '-' | nonascii | escape ;
+/// num           = ['+'|'-'] ,
+///                 ( { digit }-
+///                 | { digit } , '.' , { digit }-
+///                 )
+///                 [ 'e'  , [ '+' | '-' ] , { digit }- ] ;
+/// digit         = ? '0' through '9' ?
+/// letter        = ? 'a' through 'z' ? | ? 'A' through 'Z' ? ;
+/// string        = string1 | string2 ;
+/// string1       = '"' , { -( newline | '"' ) | '\\' , newline |  escape } , '"' ;
+/// string2       = "'" , { -( newline | "'" ) | '\\' , newline |  escape } , "'" ;
+/// badstring     = badstring1 | badstring2 ;
+/// badstring1    = '"' , { -( newline | '"' ) | '\\' , newline |  escape } ;
+/// badstring2    = "'" , { -( newline | "'" ) | '\\' , newline |  escape } ;
+/// badcomment    = badcomment1 | badcomment2 ;
+/// badcomment1   = '/' , '*' , { ? anything but '*' followed by '/' ? } , '*' ;
+/// badcomment2   = '/' , '*' , { ? anything but '*' followed by '/' ? } ;
+/// baduri        = baduri1 | baduri2 | baduri3 ;
+/// baduri1       = "url(" , w , { urichar | nonascii | escape } , w ;
+/// baduri2       = "url(" , w , string, w ;
+/// baduri3       = "url(" , w , badstring ;
+/// newline       = '\n' ;
+/// w             = { ' ' | '\t' | newline } ;
+/// urichar       = '!' | '#' | '$' | '%' | '&amp;' | ? '*' through '['?
+///                 |?']' through '~' ? ;
+/// hexd           = digit | ? 'a' through 'f' ? | ? 'A' through 'F' ? ;
+/// </pre>
+///
+/// References:
+/// <dl>
+/// <dt>CSS Syntax Module Level 3, Paragraph 4. Tokenization</dt>
+/// <dd><a href="https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#tokenization">w3.org</a></dd>
+/// </dl>
+/// <dl>
+/// <dt>CSS Values and Units Module Level 4, Paragraph 4.5 Resource Locators: the &lt;url&gt; type</dt>
+/// <dd><a href="https://drafts.csswg.org/css-values/#urls">drafts.csswg.org</a></dd>
+/// </dl>
 public class StreamCssTokenizer implements CssTokenizer {
 
     private final CssScanner in;
@@ -529,9 +525,7 @@ public class StreamCssTokenizer implements CssTokenizer {
         return currentToken;
     }
 
-    /**
-     * Pushes the current token back.
-     */
+    /// Pushes the current token back.
     @Override
     public void pushBack() {
         pushBack = true;
@@ -547,13 +541,11 @@ public class StreamCssTokenizer implements CssTokenizer {
         return new SourceLocator(startPosition, lineNumber, uri);
     }
 
-    /**
-     * 'ident' macro.
-     *
-     * @param ch  current character
-     * @param buf the token that we are currently building
-     * @return true on success
-     */
+    /// 'ident' macro.
+    ///
+    /// @param ch  current character
+    /// @param buf the token that we are currently building
+    /// @return true on success
     private boolean identMacro(int ch, StringBuilder buf) throws IOException {
         boolean consumed = false;
         if (ch == '-') {
@@ -575,13 +567,11 @@ public class StreamCssTokenizer implements CssTokenizer {
         }
     }
 
-    /**
-     * 'name' macro.
-     *
-     * @param ch  current character
-     * @param buf the token that we are currently building
-     * @return true on success
-     */
+    /// 'name' macro.
+    ///
+    /// @param ch  current character
+    /// @param buf the token that we are currently building
+    /// @return true on success
     private boolean nameMacro(int ch, StringBuilder buf) throws IOException {
         if (nmcharMacro(ch, buf)) {
             while (nmcharMacro(ch = in.nextChar(), buf)) {
@@ -593,13 +583,11 @@ public class StreamCssTokenizer implements CssTokenizer {
         }
     }
 
-    /**
-     * 'num' macro.
-     *
-     * @param ch  current character
-     * @param buf the token that we are currently building
-     * @return true on success
-     */
+    /// 'num' macro.
+    ///
+    /// @param ch  current character
+    /// @param buf the token that we are currently building
+    /// @return true on success
     private boolean numMacro(int ch, StringBuilder buf) throws IOException {
         boolean hasSign = false;
         if (ch == '-') {
@@ -686,13 +674,11 @@ public class StreamCssTokenizer implements CssTokenizer {
         return true;
     }
 
-    /**
-     * 'nmstart' macro.
-     *
-     * @param ch  current character
-     * @param buf the token that we are currently building
-     * @return true on success
-     */
+    /// 'nmstart' macro.
+    ///
+    /// @param ch  current character
+    /// @param buf the token that we are currently building
+    /// @return true on success
     private boolean nmstartMacro(int ch, StringBuilder buf) throws IOException {
         if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z') {
             buf.append((char) ch);
@@ -707,13 +693,11 @@ public class StreamCssTokenizer implements CssTokenizer {
         return false;
     }
 
-    /**
-     * 'escape' macro.
-     *
-     * @param ch  current character must be a backslash
-     * @param buf the token that we are currently building
-     * @return true on success
-     */
+    /// 'escape' macro.
+    ///
+    /// @param ch  current character must be a backslash
+    /// @param buf the token that we are currently building
+    /// @return true on success
     private boolean escapeMacro(int ch, StringBuilder buf) throws IOException {
         if (ch == '\\') {
             ch = in.nextChar();
@@ -730,13 +714,11 @@ public class StreamCssTokenizer implements CssTokenizer {
         return false;
     }
 
-    /**
-     * Converts a hexadecimal character to an integer.
-     *
-     * @param ch a character
-     * @return A value between 0 and 15. Returns -1 if ch is not a hex digit
-     * character.
-     */
+    /// Converts a hexadecimal character to an integer.
+    ///
+    /// @param ch a character
+    /// @return A value between 0 and 15. Returns -1 if ch is not a hex digit
+    /// character.
     private int hexToInt(int ch) {
         if ('0' <= ch && ch <= '9') {
             return ch - '0';
@@ -748,14 +730,12 @@ public class StreamCssTokenizer implements CssTokenizer {
         return -1;
     }
 
-    /**
-     * 'unicode' macro.
-     *
-     * @param ch  current character must be the first character after the
-     *            backslash
-     * @param buf the token that we are currently building
-     * @return true on success
-     */
+    /// 'unicode' macro.
+    ///
+    /// @param ch  current character must be the first character after the
+    ///            backslash
+    /// @param buf the token that we are currently building
+    /// @return true on success
     private boolean unicodeAfterBackslashMacro(int ch, StringBuilder buf) throws IOException {
         int unicodeScalar = hexToInt(ch);
         if (unicodeScalar < 0) {
@@ -807,13 +787,11 @@ public class StreamCssTokenizer implements CssTokenizer {
         return true;
     }
 
-    /**
-     * 'nmchar' macro.
-     *
-     * @param ch  current character
-     * @param buf the token that we are currently building
-     * @return true on success
-     */
+    /// 'nmchar' macro.
+    ///
+    /// @param ch  current character
+    /// @param buf the token that we are currently building
+    /// @return true on success
     private boolean nmcharMacro(int ch, StringBuilder buf) throws IOException {
         if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z'//
                 || '0' <= ch && ch <= '9' || ch == '-') {
@@ -828,12 +806,10 @@ public class StreamCssTokenizer implements CssTokenizer {
         return false;
     }
 
-    /**
-     * 'comment' macro. SlashStar must have been consumed.
-     *
-     * @param buf the token that we are currently building
-     * @return true on success
-     */
+    /// 'comment' macro. SlashStar must have been consumed.
+    ///
+    /// @param buf the token that we are currently building
+    /// @return true on success
     private boolean commentAfterSlashStarMacro(StringBuilder buf) throws IOException {
         int ch = in.nextChar();
         while (ch != -1) {
@@ -851,12 +827,10 @@ public class StreamCssTokenizer implements CssTokenizer {
         return false;
     }
 
-    /**
-     * 'uri' macro.
-     *
-     * @param buf the token that we are currently building
-     * @return true on success
-     */
+    /// 'uri' macro.
+    ///
+    /// @param buf the token that we are currently building
+    /// @return true on success
     private boolean uriMacro(StringBuilder buf) throws IOException {
         int ch = in.nextChar();
         // skip whitespace
@@ -897,13 +871,11 @@ public class StreamCssTokenizer implements CssTokenizer {
         return false;
     }
 
-    /**
-     * 'string' macro.
-     *
-     * @param ch  current character, must be a quote character
-     * @param buf the token that we are currently building
-     * @return true on success
-     */
+    /// 'string' macro.
+    ///
+    /// @param ch  current character, must be a quote character
+    /// @param buf the token that we are currently building
+    /// @return true on success
     private boolean stringMacro(int ch, StringBuilder buf) throws IOException {
         int quote = ch;
         if (quote != '\'' && quote != '"') {
@@ -935,33 +907,31 @@ public class StreamCssTokenizer implements CssTokenizer {
         }
     }
 
-    /**
-     * 'string' macro for URI.
-     * <p>
-     * According to "CSS Values and Units Module Level 4" the String in the URI function
-     * does not need to be fully URL-encoded.
-     * <p>
-     * We encode all not yet encoded characters on the fly:
-     * <ul>
-     *     <li>The alphanumeric characters "a" through "z", "A" through "Z" and "0" through "9" remain the same.</li>
-     *     <li>The special characters ".", "-", "+", "*", "%", "'", '"', '/', ':', ',' , and "_" remain the same.</li>
-     *     <li>The space character " " is converted into a plus sign "+".</li>
-     *     <li>All other characters are unsafe and are first converted into one or more bytes using some encoding scheme.
-     *     Then each byte is represented by the 3-character string "%xy", where xy is the two-digit hexadecimal
-     *     representation of the byte. The recommended encoding scheme to use is UTF-8.
-     *     However, for compatibility reasons, if an encoding is not specified, then the default charset is used.</li>
-     * </ul>
-     * <p>
-     * References:
-     * <dl>
-     * <dt>CSS Values and Units Module Level 4, Paragraph 4.5 Resource Locators: the &lt;url&gt; type</dt>
-     * <dd><a href="https://drafts.csswg.org/css-values/#urls">drafts.csswg.org</a></dd>
-     * </dl>
-     *
-     * @param ch  current character, must be a quote character
-     * @param buf the token that we are currently building
-     * @return true on success
-     */
+    /// 'string' macro for URI.
+    ///
+    /// According to "CSS Values and Units Module Level 4" the String in the URI function
+    /// does not need to be fully URL-encoded.
+    ///
+    /// We encode all not yet encoded characters on the fly:
+    ///
+    ///   - The alphanumeric characters "a" through "z", "A" through "Z" and "0" through "9" remain the same.
+    ///   - The special characters ".", "-", "+", "*", "%", "'", '"', '/', ':', ',' , and "_" remain the same.
+    ///   - The space character " " is converted into a plus sign "+".
+    ///   - All other characters are unsafe and are first converted into one or more bytes using some encoding scheme.
+    ///     Then each byte is represented by the 3-character string "%xy", where xy is the two-digit hexadecimal
+    ///     representation of the byte. The recommended encoding scheme to use is UTF-8.
+    ///     However, for compatibility reasons, if an encoding is not specified, then the default charset is used.
+    ///
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>CSS Values and Units Module Level 4, Paragraph 4.5 Resource Locators: the &lt;url&gt; type</dt>
+    /// <dd><a href="https://drafts.csswg.org/css-values/#urls">drafts.csswg.org</a></dd>
+    /// </dl>
+    ///
+    /// @param ch  current character, must be a quote character
+    /// @param buf the token that we are currently building
+    /// @return true on success
     private boolean uriStringMacro(int ch, StringBuilder buf) throws IOException {
         int quote = ch;
         if (quote != '\'' && quote != '"') {
@@ -1042,12 +1012,10 @@ public class StreamCssTokenizer implements CssTokenizer {
         return endPosition;
     }
 
-    /**
-     * Gets the current position.
-     *
-     * @return the start position of the token if a token has been pushed back,
-     * the end position of the token otherwise
-     */
+    /// Gets the current position.
+    ///
+    /// @return the start position of the token if a token has been pushed back,
+    /// the end position of the token otherwise
     @Override
     public int getNextPosition() {
         return pushBack ? startPosition : endPosition;

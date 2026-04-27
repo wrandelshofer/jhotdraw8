@@ -9,10 +9,7 @@ import javafx.beans.Observable;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * ObservableMixin.
- *
- */
+/// ObservableMixin.
 public interface ObservableMixin extends Observable {
 
     CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners();
@@ -27,12 +24,10 @@ public interface ObservableMixin extends Observable {
         getInvalidationListeners().remove(listener);
     }
 
-    /**
-     * Notifies all registered invalidation listeners.
-     *
-     * @param o observable. Will not be used. Listeners are notified with "this"
-     *          as the observable.
-     */
+    /// Notifies all registered invalidation listeners.
+    ///
+    /// @param o observable. Will not be used. Listeners are notified with "this"
+    ///          as the observable.
     default void fireInvalidated(Observable o) {
         invalidated();
         final CopyOnWriteArrayList<InvalidationListener> listeners = getInvalidationListeners();
@@ -47,13 +42,11 @@ public interface ObservableMixin extends Observable {
         fireInvalidated(this);
     }
 
-    /**
-     * The method {@code invalidated()} can be overridden to receive
-     * invalidation notifications. This is the preferred option in
-     * {@code Objects} defining the property, because it requires less memory.
-     * <p>
-     * The default implementation is empty.
-     */
+    /// The method `invalidated()` can be overridden to receive
+    /// invalidation notifications. This is the preferred option in
+    /// `Objects` defining the property, because it requires less memory.
+    ///
+    /// The default implementation is empty.
     default void invalidated() {
     }
 }

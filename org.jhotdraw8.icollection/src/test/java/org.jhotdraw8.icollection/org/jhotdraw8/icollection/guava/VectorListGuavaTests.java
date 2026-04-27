@@ -22,10 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Tests {@link VectorList} with the Guava test suite.
- */
-
+/// Tests [VectorList] with the Guava test suite.
 public class VectorListGuavaTests {
 
     public static Test suite() {

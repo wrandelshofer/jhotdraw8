@@ -19,13 +19,10 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- */
+///
 public class DoubleXmlConverterTest {
 
-    /**
-     * Test of toString method, of class XmlNumberConverter.
-     */
+    /// Test of toString method, of class XmlNumberConverter.
     public static void testToString(Double inputValue, String expectedValue) {
         DoubleXmlConverter c = new DoubleXmlConverter();
 
@@ -34,9 +31,7 @@ public class DoubleXmlConverterTest {
         Assertions.assertEquals(expectedValue, actualValue);
     }
 
-    /**
-     * Test of toString method, of class XmlNumberConverter.
-     */
+    /// Test of toString method, of class XmlNumberConverter.
     public static void testFromString(Double expectedValue, String inputValue) throws ParseException, IOException {
         DoubleXmlConverter c = new DoubleXmlConverter();
 

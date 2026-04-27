@@ -16,10 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * IntersectionTest.
- *
- */
+/// IntersectionTest.
 public class IntersectLineQuadCurveTest {
 
     @TestFactory
@@ -29,9 +26,7 @@ public class IntersectLineQuadCurveTest {
         );
     }
 
-    /**
-     * Test of intersectLineBezier2 method, of class Intersection.
-     */
+    /// Test of intersectLineBezier2 method, of class Intersection.
     public static void testIntersectLineQuadCurve(Line a, QuadCurve b, double[] expected) {
         Point2D b1 = new Point2D.Double(b.getStartX(), b.getEndX());
         Point2D b2 = new Point2D.Double(b.getControlX(), b.getControlY());

@@ -9,11 +9,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Spliterator;
 
-/**
- * An enumerator over an empty sequence.
- *
- * @param <E> the element type
- */
+/// An enumerator over an empty sequence.
+///
+/// @param <E> the element type
 public class EmptyEnumerator<E> implements Enumerator<E> {
     private static final EmptyEnumerator<Object> singleton = new EmptyEnumerator<>();
 

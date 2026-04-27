@@ -12,20 +12,15 @@ import org.jhotdraw8.application.resources.Resources;
 
 import java.util.concurrent.CompletionStage;
 
-/**
- * Clears (empties) the contents of the active view.
- *
- */
+/// Clears (empties) the contents of the active view.
 public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
 
     public static final String ID = "file.clear";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app  the application
-     * @param view the view
-     */
+    /// Creates a new instance.
+    ///
+    /// @param app  the application
+    /// @param view the view
     @SuppressWarnings("this-escape")
     public ClearFileAction(Application app, FileBasedActivity view) {
         super(view);

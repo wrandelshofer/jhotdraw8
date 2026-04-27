@@ -13,28 +13,24 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
- * Interface for a vertex path search algorithm.
- *
- * @param <V> the vertex data type
- * @param <C> the cost number type
- */
+/// Interface for a vertex path search algorithm.
+///
+/// @param <V> the vertex data type
+/// @param <C> the cost number type
 public interface VertexPathSearchAlgo<V, C extends Number & Comparable<C>> {
 
-    /**
-     * Search engine method.
-     *
-     * @param startVertices        the set of start vertices
-     * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next vertices function
-     * @param maxDepth             the maximal depth (inclusive) of the search
-     *                             Must be {@literal >= 0}.
-     * @param zero                 the zero cost value
-     * @param costLimit            the algorithm-specific cost limit
-     * @param sumFunction          the sum function for adding two cost values
-     * @param visited              the visited function
-     * @return on success: a back link, otherwise: null
-     */
+    /// Search engine method.
+    ///
+    /// @param startVertices        the set of start vertices
+    /// @param goalPredicate        the goal predicate
+    /// @param nextVerticesFunction the next vertices function
+    /// @param maxDepth             the maximal depth (inclusive) of the search
+    ///                             Must be {@literal >= 0}.
+    /// @param zero                 the zero cost value
+    /// @param costLimit            the algorithm-specific cost limit
+    /// @param sumFunction          the sum function for adding two cost values
+    /// @param visited              the visited function
+    /// @return on success: a back link, otherwise: null
     @Nullable VertexBackLinkWithCost<V, C> search(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,

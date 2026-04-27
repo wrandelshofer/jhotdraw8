@@ -26,39 +26,38 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-/**
- * Reads a graph from a graphviz "dot" file.
- * <p>
- * Parses the following productions. <b>Does not support subgraphs!</b>
- * <pre>{@literal
- * graph        : [ strict ] (graph | digraph) [ ID ] '{' stmt_list '}'
- * stmt_list    : [ stmt [ ';' ] stmt_list ]
- * stmt         : node_stmt
- *              | edge_stmt
- *              | attr_stmt
- *              | ID '=' ID
- *              | subgraph
- * attr_stmt    : (graph | node | edge) attr_list
- * attr_list    : '[' [ a_list ] ']' [ attr_list ]
- * a_list       : ID '=' ID [ (';' | ',') ] [ a_list ]
- * edge_stmt    : (node_id | subgraph) edgeRHS [ attr_list ]
- * edgeRHS      : edgeop (node_id | subgraph) [ edgeRHS ]
- * node_stmt    : node_id [ attr_list ]  * node_id : ID [ port ]
- * port         : ':' ID [ ':' compass_pt ]  * | ':' compass_pt
- * subgraph     : [ subgraph [ ID ] ] '{' stmt_list '}'
- * compass_pt   : (n | ne | e | se | s | sw | w | nw | c | _)
- * edgeop       : -> | --
- * }</pre>
- * <p>
- * References:
- * <dl>
- *     <dt>Graphviz. DOT Language.</dt>
- *     <dd><a href="https://graphviz.org/doc/info/lang.html">graphviz.org</a></dd>
- * </dl>
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- */
+/// Reads a graph from a graphviz "dot" file.
+///
+/// Parses the following productions. **Does not support subgraphs!**
+/// <pre>
+/// {@literal
+///  graph        : [ strict ] (graph | digraph) [ ID ] '{' stmt_list '}'
+///  stmt_list    : [ stmt [ ';' ] stmt_list ]
+///  stmt         : node_stmt
+///               | edge_stmt
+///               | attr_stmt
+///               | ID '=' ID
+///               | subgraph
+///  attr_stmt    : (graph | node | edge) attr_list
+///  attr_list    : '[' [ a_list ] ']' [attr_list]
+///  a_list       : ID '=' ID [(';'|',')] [a_list]
+///  edge_stmt    : (node_id | subgraph) edgeRHS [attr_list]
+///  edgeRHS      : edgeop (node_id | subgraph) [edgeRHS]
+///  node_stmt    : node_id [attr_list]  * node_id : ID [port]
+///  port         : ':' ID [':'compass_pt]  * | ':' compass_pt
+///  subgraph     : [ subgraph [ ID ] ] '{' stmt_list '}'
+///  compass_pt   : (n | ne | e | se | s | sw | w | nw | c | _)
+///  edgeop       : -> | --
+///  }</pre>
+///
+/// References:
+/// <dl>
+///     <dt>Graphviz. DOT Language.</dt>
+///     <dd><a href="https://graphviz.org/doc/info/lang.html">graphviz.org</a></dd>
+/// </dl>
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
 public class GraphvizReader<V, A> {
     private final BiFunction<String, Map<String, String>, V> vertexFactory;
     private final Function<Map<String, String>, A> arrowFactory;
@@ -120,9 +119,7 @@ public class GraphvizReader<V, A> {
         }
     }
 
-    /**
-     * Parses the graph production.
-     */
+    /// Parses the graph production.
     private void parseGraph(StreamTokenizer tt, MutableDirectedGraph<V, A> g, Map<String, V> vertices) throws IOException {
         if (tt.nextToken() != StreamTokenizer.TT_WORD) {
             throwException(tt, "graph: `strict`, `graph` or expected `digraph`");
@@ -157,9 +154,7 @@ public class GraphvizReader<V, A> {
         }
     }
 
-    /**
-     * Parses the stmtList production.
-     */
+    /// Parses the stmtList production.
     private void parseStmtLst(StreamTokenizer tt, MutableDirectedGraph<V, A> g, Map<String, V> vertexMap) throws IOException {
         do {
             tt.pushBack();
@@ -171,9 +166,7 @@ public class GraphvizReader<V, A> {
         tt.pushBack();
     }
 
-    /**
-     * Parses the stmt production.
-     */
+    /// Parses the stmt production.
     private void parseStmt(StreamTokenizer tt, MutableDirectedGraph<V, A> g, Map<String, V> vertexMap) throws IOException {
         if (tt.nextToken() != '"' && tt.ttype != StreamTokenizer.TT_WORD) {
             throwException(tt, "stmt: expected `node_id`");

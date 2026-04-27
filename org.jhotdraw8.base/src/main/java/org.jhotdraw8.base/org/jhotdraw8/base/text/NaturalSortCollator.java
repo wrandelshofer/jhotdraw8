@@ -18,37 +18,32 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Collator for sorting numbers that are embedded in Strings as if they were
- * a single numeric character.
- * <p>
- * This collator strives to match the collation rules used by the Mac OS X
- * Finder and of Mac OS X file dialogs.
- * <p>
- * If we wanted to match the OS X collation rules exactly, we would have to
- * implement the rules for all languages supported by Mac OS X and Java. To
- * reduce the amount of work needed for implementing these rules, the
- * OSXCollator changes the collation rules returned by
- * java.text.Collator.getInstance() to do the following:
- * <ul>
- * <li>Space characters are treated as primary collation differences</li>
- * <li>Hyphen characters are treated as primary collation differences</li>
- * <li>Sequence of digits (characters '0' through '9') is treated as a single
- * collation object. The current implementation supports sequences of up to 999
- * characters length.</li>
- * </ul>
- * If java.text.Collator.getInstance() does not return an instance of
- * java.text.RuleBasedCollator, then the returned collator is used, and only
- * sequences of digits are changed to match the collation rules of Mac OS X.
- *
- */
+/// Collator for sorting numbers that are embedded in Strings as if they were
+/// a single numeric character.
+///
+/// This collator strives to match the collation rules used by the Mac OS X
+/// Finder and of Mac OS X file dialogs.
+///
+/// If we wanted to match the OS X collation rules exactly, we would have to
+/// implement the rules for all languages supported by Mac OS X and Java. To
+/// reduce the amount of work needed for implementing these rules, the
+/// OSXCollator changes the collation rules returned by
+/// java.text.Collator.getInstance() to do the following:
+///
+///   - Space characters are treated as primary collation differences
+///   - Hyphen characters are treated as primary collation differences
+///   - Sequence of digits (characters '0' through '9') is treated as a single
+///     collation object. The current implementation supports sequences of up to 999
+///     characters length.
+///
+/// If java.text.Collator.getInstance() does not return an instance of
+/// java.text.RuleBasedCollator, then the returned collator is used, and only
+/// sequences of digits are changed to match the collation rules of Mac OS X.
 public class NaturalSortCollator extends Collator {
 
     private final Collator collator;
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public NaturalSortCollator() {
         this(Locale.getDefault());
     }
@@ -107,15 +102,13 @@ public class NaturalSortCollator extends Collator {
                 (c1, c2) -> collator.compare(keyExtractor.apply(c1), keyExtractor.apply(c2));
     }
 
-    /**
-     * Prepends the specified group of digits with the number of digits - 1.
-     * The number of digits - 1 is always two digits long.
-     *
-     * @param out   output
-     * @param s     string
-     * @param start start index of digit group
-     * @param end   end index+ 1 of digit group
-     */
+    /// Prepends the specified group of digits with the number of digits - 1.
+    /// The number of digits - 1 is always two digits long.
+    ///
+    /// @param out   output
+    /// @param s     string
+    /// @param start start index of digit group
+    /// @param end   end index+ 1 of digit group
     private void appendDigitGroup(StringBuilder out, String s, int start, int end) {
         assert start < end : "start:" + start + " end:" + end;
         int num = Math.min(100, end - start) - 1;
@@ -146,13 +139,11 @@ public class NaturalSortCollator extends Collator {
         }
     }
 
-    /**
-     * Prepends each group of digits with the number of digits - 1.
-     * The number of digits - 1 is always two digits long.
-     * <pre>e.g.
-     * "a3b21" becomes "a003b0121".
-     * </pre>
-     */
+    /// Prepends each group of digits with the number of digits - 1.
+    /// The number of digits - 1 is always two digits long.
+    /// <pre>e.g.
+    /// "a3b21" becomes "a003b0121".
+    /// </pre>
     @Nullable
     String expandNumbers(@Nullable String s) {
         if (s == null) {

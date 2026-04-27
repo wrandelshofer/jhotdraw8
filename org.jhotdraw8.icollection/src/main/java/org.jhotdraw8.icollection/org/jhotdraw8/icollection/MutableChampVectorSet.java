@@ -31,81 +31,70 @@ import java.util.Spliterators;
 
 import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
 
-/**
- * Implements the {@link SequencedSet} interface using a Compressed
- * Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
- * <p>
- * Features:
- * <ul>
- *     <li>supports up to 2<sup>30</sup> elements</li>
- *     <li>allows null elements</li>
- *     <li>is mutable</li>
- *     <li>is not thread-safe</li>
- *     <li>iterates in the order, in which elements were inserted</li>
- * </ul>
- * <p>
- * Performance characteristics:
- * <ul>
- *     <li>add: O(1) amortized</li>
- *     <li>remove: O(1)</li>
- *     <li>contains: O(1)</li>
- *     <li>toPersistent: O(1) + O(log N) distributed across subsequent updates in
- *     this set</li>
- *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
- *     set and in the clone</li>
- *     <li>iterator creation: O(1)</li>
- *     <li>iterator.next: O(1)</li>
- *     <li>getFirst, getLast: O(1)</li>
- * </ul>
- * <p>
- * Implementation details:
- * <p>
- * See description at {@link ChampVectorSet}.
- * <p>
- * References:
- * <dl>
- *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Persistent Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
- *
- *      <dt>The Capsule Hash Trie Collections Library.
- *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
- *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
- * </dl>
- *
- * @param <E> the element type
- */
+/// Implements the [SequencedSet] interface using a Compressed
+/// Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
+///
+/// Features:
+///
+///   - supports up to 2<sup>30</sup> elements
+///   - allows null elements
+///   - is mutable
+///   - is not thread-safe
+///   - iterates in the order, in which elements were inserted
+///
+///
+/// Performance characteristics:
+///
+///   - add: O(1) amortized
+///   - remove: O(1)
+///   - contains: O(1)
+///   - toPersistent: O(1) + O(log N) distributed across subsequent updates in
+///     this set
+///   - clone: O(1) + O(log N) distributed across subsequent updates in this
+///     set and in the clone
+///   - iterator creation: O(1)
+///   - iterator.next: O(1)
+///   - getFirst, getLast: O(1)
+///
+///
+/// Implementation details:
+///
+/// See description at [ChampVectorSet].
+///
+/// References:
+/// <dl>
+///      <dt>Michael J. Steindorfer (2017).
+///      Efficient Persistent Collections.</dt>
+///      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
+///      <dt>The Capsule Hash Trie Collections Library.
+///
+/// Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+///      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+/// </dl>
+///
+/// @param <E> the element type
 @SuppressWarnings("exports")
 public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadableSequencedSet<E>,
         SequencedSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
 
-    /**
-     * Offset of sequence numbers to vector indices.
-     *
-     * <pre>vector index = sequence number + offset</pre>
-     */
+    /// Offset of sequence numbers to vector indices.
+    /// <pre>vector index = sequence number + offset</pre>
     private int offset = 0;
-    /**
-     * In this vector we store the elements in the order in which they were inserted.
-     */
+    /// In this vector we store the elements in the order in which they were inserted.
     private VectorList<Object> vector;
 
-    /**
-     * Constructs a new empty set.
-     */
+    /// Constructs a new empty set.
     public MutableChampVectorSet() {
         root = BitmapIndexedNode.emptyNode();
         vector = VectorList.of();
     }
 
-    /**
-     * Constructs a set containing the elements in the specified
-     * {@link Iterable}.
-     *
-     * @param c an iterable
-     */
+    /// Constructs a set containing the elements in the specified
+    /// [Iterable].
+    ///
+    /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableChampVectorSet(Iterable<? extends E> c) {
         if (c instanceof MutableChampVectorSet<?>) {
@@ -189,9 +178,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
         return modified;
     }
 
-    /**
-     * Removes all elements from this set.
-     */
+    /// Removes all elements from this set.
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
@@ -201,9 +188,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
         offset = -1;
     }
 
-    /**
-     * Returns a shallow copy of this set.
-     */
+    /// Returns a shallow copy of this set.
     @Override
     public MutableChampVectorSet<E> clone() {
         return (MutableChampVectorSet<E>) super.clone();
@@ -379,9 +364,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
         return e;
     }
 
-    /**
-     * Renumbers the sequence numbers if they have overflown.
-     */
+    /// Renumbers the sequence numbers if they have overflown.
     private void renumber() {
         if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
             var result = SequencedData.vecRenumber(makeOwner(), size, vector.size(), root, vector.trie,
@@ -399,11 +382,9 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
                 this::reverseSpliterator);
     }
 
-    /**
-     * Returns an persistent copy of this set.
-     *
-     * @return an persistent copy
-     */
+    /// Returns an persistent copy of this set.
+    ///
+    /// @return an persistent copy
     public ChampVectorSet<E> toPersistent() {
         owner = null;
         return size == 0

@@ -11,10 +11,7 @@ import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
-/**
- * Allows to use a {@code java.text.Format} with the {@code Converter} API.
- *
- */
+/// Allows to use a `java.text.Format` with the `Converter` API.
 public class ConverterFormatAdapter implements Converter<Object> {
 
     private final Format format;

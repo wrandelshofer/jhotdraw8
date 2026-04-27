@@ -13,60 +13,47 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.tool.HandleTracker;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Handle.
- *
- */
+/// Handle.
 public interface Handle {
     // ---
     // Behavior
     // ---
 
-    /**
-     * Returns the figure to which the handle is associated.
-     *
-     * @return a figure
-     */
+    /// Returns the figure to which the handle is associated.
+    ///
+    /// @return a figure
     Figure getOwner();
 
-    /**
-     * Returns the node which is used to visualize the handle. The node is
-     * rendered by {@code DrawingView} in a pane which uses view coordinates.
-     * The node should use {@code DrawingView.viewToDrawingProperty()} to
-     * transform its coordinates.
-     * <p>
-     * A {@code Handle} can only reside in one {@code DrawingView} at any given
-     * time. The JavaFX node returned by this method is use to render the handle
-     * in the {@code DrawingView}. This is why, unlike {@code Figure}, we only
-     * need this method instead of a {@code createNode} and an
-     * {@code updateNode} method.
-     * <p>
-     * A {@link HandleTracker} will use the {@link Node#accessibleTextProperty()}
-     * and {@link Node#accessibleHelpProperty()} to provide a help text to
-     * the user.
-     *
-     * @param view the drawing view
-     * @return the node
-     */
+    /// Returns the node which is used to visualize the handle. The node is
+    /// rendered by `DrawingView` in a pane which uses view coordinates.
+    /// The node should use `DrawingView.viewToDrawingProperty()` to
+    /// transform its coordinates.
+    ///
+    /// A `Handle` can only reside in one `DrawingView` at any given
+    /// time. The JavaFX node returned by this method is use to render the handle
+    /// in the `DrawingView`. This is why, unlike `Figure`, we only
+    /// need this method instead of a `createNode` and an
+    /// `updateNode` method.
+    ///
+    /// A [HandleTracker] will use the [Node#accessibleTextProperty()]
+    /// and [Node#accessibleHelpProperty()] to provide a help text to
+    /// the user.
+    ///
+    /// @param view the drawing view
+    /// @return the node
     Node getNode(DrawingView view);
 
-    /**
-     * Updates the node.
-     *
-     * @param drawingView the drawing view
-     */
+    /// Updates the node.
+    ///
+    /// @param drawingView the drawing view
     void updateNode(DrawingView drawingView);
 
-    /**
-     * Whether the handle is selectable.
-     *
-     * @return true if selectable
-     */
+    /// Whether the handle is selectable.
+    ///
+    /// @return true if selectable
     boolean isSelectable();
 
-    /**
-     * Disposes of all resources acquired by the handler.
-     */
+    /// Disposes of all resources acquired by the handler.
     void dispose();
 
     // ---
@@ -94,39 +81,31 @@ public interface Handle {
 
     }
 
-    /**
-     * Returns true if that handle is compatible with this handle.
-     *
-     * @param that the other handle
-     * @return true if compatible
-     */
+    /// Returns true if that handle is compatible with this handle.
+    ///
+    /// @param that the other handle
+    /// @return true if compatible
     boolean isCompatible(Handle that);
 
-    /**
-     * The cursor that should be shown when the mouse hovers over a selectable
-     * handle. Non-selectable handles should return null.
-     *
-     * @return the cursor
-     */
+    /// The cursor that should be shown when the mouse hovers over a selectable
+    /// handle. Non-selectable handles should return null.
+    ///
+    /// @return the cursor
     @Nullable Cursor getCursor();
 
-    /**
-     * Whether the user picked the handle.
-     *
-     * @param dv        the drawing view
-     * @param x         the point
-     * @param y         the point
-     * @param tolerance the tolerance (radius around the point)
-     * @return true if we picked the handle
-     */
+    /// Whether the user picked the handle.
+    ///
+    /// @param dv        the drawing view
+    /// @param x         the point
+    /// @param y         the point
+    /// @param tolerance the tolerance (radius around the point)
+    /// @return true if we picked the handle
     boolean contains(DrawingView dv, double x, double y, double tolerance);
 
 
-    /**
-     * Returns true if this handle is editable.
-     *
-     * @return the default implementation returns true if the owner is editable
-     */
+    /// Returns true if this handle is editable.
+    ///
+    /// @return the default implementation returns true if the owner is editable
     default boolean isEditable() {
         return getOwner().isEditable();
     }

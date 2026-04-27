@@ -4,13 +4,11 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Comparator;
 
-/**
- * Compares two objects using their natural order.
- * <p>
- * This class is similar to {@link Comparator#naturalOrder()} but it also supports null objects.
- *
- * @param <T> the object type
- */
+/// Compares two objects using their natural order.
+///
+/// This class is similar to [Comparator#naturalOrder()] but it also supports null objects.
+///
+/// @param <T> the object type
 class NaturalComparator<T> implements Comparator<T>, Serializable {
 
     @Serial
@@ -38,9 +36,7 @@ class NaturalComparator<T> implements Comparator<T>, Serializable {
         return ((Comparable<T>) a).compareTo(b);
     }
 
-    /**
-     * @see Comparator#equals(Object)
-     */
+    /// @see Comparator#equals(Object)
     @Override
     public boolean equals(Object obj) {
         return obj instanceof NaturalComparator;
@@ -51,12 +47,10 @@ class NaturalComparator<T> implements Comparator<T>, Serializable {
         return 1;
     }
 
-    /**
-     * Instance control for object serialization.
-     *
-     * @return The singleton instance of NaturalComparator.
-     * @see Serializable
-     */
+    /// Instance control for object serialization.
+    ///
+    /// @return The singleton instance of NaturalComparator.
+    /// @see Serializable
     @Serial
     private Object readResolve() {
         return INSTANCE;

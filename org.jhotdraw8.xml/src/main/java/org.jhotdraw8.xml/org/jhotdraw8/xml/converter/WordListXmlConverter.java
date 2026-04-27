@@ -18,26 +18,22 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.TreeSet;
 
-/**
- * WordListConverter converts an ImmutableObservableList of Strings into a
- * String.
- * <p>
- * The word list is actually a "set ofCollection space separated tokens", as specified in
- * HTML 5 and in XML Schema Part 2.
- * <p>
- * The word list converter coalesces duplicate entries if they have the same
- * Unicode NFD form. The tokens are sorted using their Unicode NFD form.
- * <p>
- * References:
- * <dl>
- * <dt>HTML 5, Common Microsyntaxes, Space-separated tokens</dt>
- * <dd><a href="https://dev.w3.org/html5/spec-preview/common-microsyntaxes.html#set-of-space-separated-tokens">w3.org</a></dd>
- *
- * <dt>XML Schema Part 2, Built-in datatypes, Derived datatypes, CssToken</dt>
- * <dd><a href="https://www.w3.org/TR/xmlschema-2/#token">w3.org</a></dd>
- * </dl>
- *
- */
+/// WordListConverter converts an ImmutableObservableList of Strings into a
+/// String.
+///
+/// The word list is actually a "set ofCollection space separated tokens", as specified in
+/// HTML 5 and in XML Schema Part 2.
+///
+/// The word list converter coalesces duplicate entries if they have the same
+/// Unicode NFD form. The tokens are sorted using their Unicode NFD form.
+///
+/// References:
+/// <dl>
+/// <dt>HTML 5, Common Microsyntaxes, Space-separated tokens</dt>
+/// <dd><a href="https://dev.w3.org/html5/spec-preview/common-microsyntaxes.html#set-of-space-separated-tokens">w3.org</a></dd>
+/// <dt>XML Schema Part 2, Built-in datatypes, Derived datatypes, CssToken</dt>
+/// <dd><a href="https://www.w3.org/TR/xmlschema-2/#token">w3.org</a></dd>
+/// </dl>
 public class WordListXmlConverter implements Converter<PersistentList<String>> {
 
     public static final Comparator<String> NFD_COMPARATOR

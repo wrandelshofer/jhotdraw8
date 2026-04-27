@@ -18,15 +18,13 @@ public class IntersectCircleCircle {
     private IntersectCircleCircle() {
     }
 
-    /**
-     * Computes the intersection between circle 1 and circle 2.
-     *
-     * @param c1 the center of circle 1
-     * @param r1 the radius of circle 1
-     * @param c2 the center of circle 2
-     * @param r2 the radius of circle 2
-     * @return computed intersection with parameters of circle 1 at the intersection point
-     */
+    /// Computes the intersection between circle 1 and circle 2.
+    ///
+    /// @param c1 the center of circle 1
+    /// @param r1 the radius of circle 1
+    /// @param c2 the center of circle 2
+    /// @param r2 the radius of circle 2
+    /// @return computed intersection with parameters of circle 1 at the intersection point
     public static IntersectionResultEx intersectCircleCircleEx(Point2D c1, double r1, Point2D c2, double r2) {
         return intersectCircleCircleEx(c1.getX(), c1.getY(), r1, c2.getX(), c2.getY(), r2, Intersections.EPSILON);
     }
@@ -39,17 +37,15 @@ public class IntersectCircleCircle {
         return intersectCircleCircleEx(c1x, c1y, r1, c2x, c2y, r2, Intersections.EPSILON);
     }
 
-    /**
-     * Computes the intersection between the given circles 1 and 2.
-     *
-     * @param c1x the center of circle 1
-     * @param c1y the center of circle 1
-     * @param r1  the radius of circle 1
-     * @param c2x the center of circle 2
-     * @param c2y the center of circle 2
-     * @param r2  the radius of circle 2
-     * @return computed intersection with parameters of circle 1 at the intersection point
-     */
+    /// Computes the intersection between the given circles 1 and 2.
+    ///
+    /// @param c1x the center of circle 1
+    /// @param c1y the center of circle 1
+    /// @param r1  the radius of circle 1
+    /// @param c2x the center of circle 2
+    /// @param c2y the center of circle 2
+    /// @param r2  the radius of circle 2
+    /// @return computed intersection with parameters of circle 1 at the intersection point
     public static IntersectionResultEx intersectCircleCircleEx(double c1x, double c1y, double r1, double c2x, double c2y, double r2, double epsilon) {
         List<IntersectionPointEx> result = new ArrayList<>();
 
@@ -98,34 +94,32 @@ public class IntersectCircleCircle {
         return new IntersectionResultEx(status, result);
     }
 
-    /**
-     * Computes the intersection between the given circles 1 and 2.
-     * <p>
-     * This method can produce the following {@link IntersectionStatus} codes:
-     * <dl>
-     *     <dt>{@link IntersectionStatus#INTERSECTION}</dt><dd>
-     *         The circles intersect at the {@link IntersectionPoint}s given
-     *         in the result.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_INSIDE}</dt><dd>
-     *         Circle 1 is inside circle 2.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_OUTSIDE}</dt><dd>
-     *         Circle 1 is outside circle 2.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_COINCIDENT}</dt><dd>
-     *         Circle 1 is same as circle 2 up to the given epsilon.
-     *     </dd>
-     * </dl>
-     *
-     * @param c1x the center of circle 1
-     * @param c1y the center of circle 1
-     * @param r1  the radius of circle 1
-     * @param c2x the center of circle 2
-     * @param c2y the center of circle 2
-     * @param r2  the radius of circle 2
-     * @return computed intersection with parameters of circle 1 at the intersection point
-     */
+    /// Computes the intersection between the given circles 1 and 2.
+    ///
+    /// This method can produce the following [IntersectionStatus] codes:
+    /// <dl>
+    ///     <dt>[IntersectionStatus#INTERSECTION]</dt><dd>
+    ///         The circles intersect at the [IntersectionPoint]s given
+    ///         in the result.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_INSIDE]</dt><dd>
+    ///         Circle 1 is inside circle 2.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_OUTSIDE]</dt><dd>
+    ///         Circle 1 is outside circle 2.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_COINCIDENT]</dt><dd>
+    ///         Circle 1 is same as circle 2 up to the given epsilon.
+    ///     </dd>
+    /// </dl>
+    ///
+    /// @param c1x the center of circle 1
+    /// @param c1y the center of circle 1
+    /// @param r1  the radius of circle 1
+    /// @param c2x the center of circle 2
+    /// @param c2y the center of circle 2
+    /// @param r2  the radius of circle 2
+    /// @return computed intersection with parameters of circle 1 at the intersection point
     public static IntersectionResult intersectCircleCircle(double c1x, double c1y, double r1, double c2x, double c2y, double r2, double epsilon) {
         List<IntersectionPoint> result = new ArrayList<>();
 

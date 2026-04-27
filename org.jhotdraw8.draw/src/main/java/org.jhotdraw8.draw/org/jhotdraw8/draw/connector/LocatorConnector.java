@@ -9,28 +9,21 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.geom.PointAndDerivative;
 
-/**
- * LocatorConnector uses a {@link Locator} to compute its position.
- *
- */
+/// LocatorConnector uses a [Locator] to compute its position.
 public class LocatorConnector extends AbstractConnector {
 
     private final Locator locator;
 
-    /**
-     * Creates a new instance
-     *
-     * @param locator the locator that should be used
-     */
+    /// Creates a new instance
+    ///
+    /// @param locator the locator that should be used
     public LocatorConnector(Locator locator) {
         this.locator = locator;
     }
 
-    /**
-     * Returns the locator used to compute the position of the connector.
-     *
-     * @return the locator
-     */
+    /// Returns the locator used to compute the position of the connector.
+    ///
+    /// @return the locator
     public Locator getLocator() {
         return locator;
     }

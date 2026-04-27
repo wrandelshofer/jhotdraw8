@@ -45,10 +45,7 @@ import java.awt.geom.AffineTransform;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
-/**
- * CardinalSplineSampleMain.
- *
- */
+/// CardinalSplineSampleMain.
 public class HitTestExampleMain extends Application {
     private final DoubleProperty width = new SimpleDoubleProperty(0.5);
     private final DoubleProperty miterLimit = new SimpleDoubleProperty(10);
@@ -208,9 +205,7 @@ public class HitTestExampleMain extends Application {
         };
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         launch(args);
     }

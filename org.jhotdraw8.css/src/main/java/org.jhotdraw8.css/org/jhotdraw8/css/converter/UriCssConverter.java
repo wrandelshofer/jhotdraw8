@@ -16,16 +16,13 @@ import java.net.URI;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * Converts an {@code URI} to a CSS {@code URI}.
- * <pre>
- * URI = uriFunction | none ;
- * none = "none" ;
- * uriFunction = "url(" , [ uri ] , ")" ;
- * uri =  (* css uri *) ;
- * </pre>
- *
- */
+/// Converts an `URI` to a CSS `URI`.
+/// <pre>
+/// URI = uriFunction | none ;
+/// none = "none" ;
+/// uriFunction = "url(" , [uri] , ")" ;
+/// uri =  (* css uri *) ;
+/// </pre>
 public class UriCssConverter extends AbstractCssConverter<URI> {
     private final @Nullable String helpText;
 

@@ -9,9 +9,7 @@ import javafx.scene.shape.CubicCurve;
 
 public class FXCubicCurves {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private FXCubicCurves() {
     }
 

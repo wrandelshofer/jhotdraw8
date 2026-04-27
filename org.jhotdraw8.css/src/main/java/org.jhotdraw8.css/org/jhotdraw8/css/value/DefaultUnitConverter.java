@@ -5,9 +5,7 @@
 package org.jhotdraw8.css.value;
 
 
-/**
- * DefaultUnitConverter.
- */
+/// DefaultUnitConverter.
 public class DefaultUnitConverter implements UnitConverter {
 
     static final DefaultUnitConverter instance = new DefaultUnitConverter(96);

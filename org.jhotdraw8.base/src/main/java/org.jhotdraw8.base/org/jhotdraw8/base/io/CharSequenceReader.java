@@ -7,10 +7,7 @@ package org.jhotdraw8.base.io;
 
 import java.io.Reader;
 
-/**
- * CharSequenceReader.
- *
- */
+/// CharSequenceReader.
 public class CharSequenceReader extends Reader {
 
     private final CharSequence buf;

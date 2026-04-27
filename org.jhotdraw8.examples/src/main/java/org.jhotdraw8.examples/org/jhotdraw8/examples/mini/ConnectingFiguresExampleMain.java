@@ -16,11 +16,8 @@ import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.tool.SelectionTool;
 import org.jhotdraw8.draw.tool.Tool;
 
-/**
- * ConnectingFiguresSample demonstrates how to connect two figures with a
- * LineConnectionFigure.
- *
- */
+/// ConnectingFiguresSample demonstrates how to connect two figures with a
+/// LineConnectionFigure.
 public class ConnectingFiguresExampleMain extends Application {
 
     @Override

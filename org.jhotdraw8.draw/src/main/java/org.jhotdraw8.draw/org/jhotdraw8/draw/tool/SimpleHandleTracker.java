@@ -12,28 +12,26 @@ import org.jhotdraw8.draw.handle.Handle;
 
 import java.util.Collection;
 
-/**
- * {@code SimpleHandleTracker} implements interactions with the handles of a
- * Figure.
- * <p>
- * The {@code SimpleHandleTracker} handles one of the three states of the
- * {@code SelectionTool}. Iz comes into action, when the user presses the mouse
- * button over a {@code Figure}.
- * <p>
- * Design pattern:<br>
- * Name: Chain of Responsibility.<br>
- * Role: Handler.<br>
- * Partners: {@link SelectionTool} as Handler, {@link SelectAreaTracker} as
- * Handler, {@link DragTracker} as Handler, {@link HandleTracker} as Handler.
- * <p>
- * Design pattern:<br>
- * Name: State.<br>
- * Role: State.<br>
- * Partners: {@link SelectAreaTracker} as State, {@link DragTracker} as State,
- * {@link SelectionTool} as Context.
- *
- * @see SelectionTool
- */
+/// `SimpleHandleTracker` implements interactions with the handles of a
+/// Figure.
+///
+/// The `SimpleHandleTracker` handles one of the three states of the
+/// `SelectionTool`. Iz comes into action, when the user presses the mouse
+/// button over a `Figure`.
+///
+/// Design pattern:
+/// Name: Chain of Responsibility.
+/// Role: Handler.
+/// Partners: [SelectionTool] as Handler, [SelectAreaTracker] as
+/// Handler, [DragTracker] as Handler, [HandleTracker] as Handler.
+///
+/// Design pattern:
+/// Name: State.
+/// Role: State.
+/// Partners: [SelectAreaTracker] as State, [DragTracker] as State,
+/// [SelectionTool] as Context.
+///
+/// @see SelectionTool
 public class SimpleHandleTracker extends AbstractTracker implements HandleTracker {
 
     private Handle handle;

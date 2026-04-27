@@ -10,18 +10,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * RegexTest.
- *
- */
+/// RegexTest.
 public class RegexTest {
 
     public RegexTest() {
     }
 
-    /**
-     * Test of toString method, of class RegexReplace.
-     */
+    /// Test of toString method, of class RegexReplace.
     @Test
     public void testToString() {
         RegexReplace instance = new RegexReplace();

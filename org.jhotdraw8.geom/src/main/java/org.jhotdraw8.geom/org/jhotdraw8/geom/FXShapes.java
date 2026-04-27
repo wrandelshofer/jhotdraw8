@@ -49,18 +49,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-/**
- * Provides conversion methods between AWT shapes and JavaFX shapes.
- *
- */
+/// Provides conversion methods between AWT shapes and JavaFX shapes.
 public class FXShapes {
 
 
     private static final Logger LOGGER = Logger.getLogger(FXShapes.class.getName());
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private FXShapes() {
     }
 
@@ -171,15 +166,13 @@ public class FXShapes {
         };
     }
 
-    /**
-     * Converts a JavaFX shape to a AWT shape.
-     * <p>
-     * If conversion fails, returns a Rectangle.Double with the layout bounds
-     * of the shape.
-     *
-     * @param fx A JavaFX shape
-     * @return AWT Shape or Rectangle
-     */
+    /// Converts a JavaFX shape to a AWT shape.
+    ///
+    /// If conversion fails, returns a Rectangle.Double with the layout bounds
+    /// of the shape.
+    ///
+    /// @param fx A JavaFX shape
+    /// @return AWT Shape or Rectangle
     public static Shape fxShapeToAwtShape(javafx.scene.shape.Shape fx) {
         switch (fx) {
             case Arc arc -> {
@@ -475,12 +468,10 @@ public class FXShapes {
         return fxPathToAwtShape(path);
     }
 
-    /**
-     * Converts a Java Path iterator to a JavaFX shape.
-     *
-     * @param fxT A JavaFX Transform.
-     * @return An AWT Transform.
-     */
+    /// Converts a Java Path iterator to a JavaFX shape.
+    ///
+    /// @param fxT A JavaFX Transform.
+    /// @return An AWT Transform.
     public static @Nullable AffineTransform fxTransformToAwtTransform(@Nullable Transform fxT) {
         if (fxT == null) {
             return null;
@@ -490,12 +481,10 @@ public class FXShapes {
         return new AffineTransform(m[0], m[3], m[1], m[4], m[2], m[5]);
     }
 
-    /**
-     * Converts a Java Path iterator to a JavaFX shape.
-     *
-     * @param iter AWT Path Iterator
-     * @return JavaFX Shape
-     */
+    /// Converts a Java Path iterator to a JavaFX shape.
+    ///
+    /// @param iter AWT Path Iterator
+    /// @return JavaFX Shape
     public static List<PathElement> awtPathIteratorToFXPathElements(PathIterator iter) {
         List<PathElement> fxelem = new ArrayList<>();
         double[] coords = new double[6];
@@ -521,44 +510,36 @@ public class FXShapes {
         return fxelem;
     }
 
-    /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @param fxT   Optional transformation which is applied to the shape
-     * @return JavaFX Shape
-     */
+    /// Converts a Java AWT Shape iterator to a JavaFX Shape.
+    ///
+    /// @param shape AWT Shape
+    /// @param fxT   Optional transformation which is applied to the shape
+    /// @return JavaFX Shape
     public static Path awtShapeToFXShape(Shape shape, Transform fxT) {
         return awtShapeToFXShape(shape.getPathIterator(fxTransformToAwtTransform(fxT)));
     }
 
-    /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @param at    Optional transformation which is applied to the shape
-     * @return JavaFX Shape
-     */
+    /// Converts a Java AWT Shape iterator to a JavaFX Shape.
+    ///
+    /// @param shape AWT Shape
+    /// @param at    Optional transformation which is applied to the shape
+    /// @return JavaFX Shape
     public static Path awtShapeToFXShape(Shape shape, AffineTransform at) {
         return awtShapeToFXShape(shape.getPathIterator(at));
     }
 
-    /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @return JavaFX Shape
-     */
+    /// Converts a Java AWT Shape iterator to a JavaFX Shape.
+    ///
+    /// @param shape AWT Shape
+    /// @return JavaFX Shape
     public static Path awtShapeToFXShape(Shape shape) {
         return awtShapeToFXShape(shape.getPathIterator(null));
     }
 
-    /**
-     * Converts a Java Path iterator to a JavaFX shape.
-     *
-     * @param iter AWT Path Iterator
-     * @return JavaFX Shape
-     */
+    /// Converts a Java Path iterator to a JavaFX shape.
+    ///
+    /// @param iter AWT Path Iterator
+    /// @return JavaFX Shape
     public static Path awtShapeToFXShape(PathIterator iter) {
         Path fxpath = new Path();
 

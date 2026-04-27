@@ -22,11 +22,9 @@ public class AlignTopAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.alignTop";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public AlignTopAction(DrawingEditor editor) {
         super(editor);
         Resources labels

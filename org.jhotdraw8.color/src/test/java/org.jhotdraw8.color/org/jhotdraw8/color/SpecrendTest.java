@@ -19,12 +19,10 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import java.awt.image.BufferedImage;
 
-/**
- * {@code SpecrendTest}.
- *
- * @author Werner Randelshofer
- * @version 1.0 2011-02-25 Created.
- */
+/// `SpecrendTest`.
+///
+/// @author Werner Randelshofer
+/// @version 1.0 2011-02-25 Created.
 public class SpecrendTest implements Runnable {
 
     @Override

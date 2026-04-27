@@ -13,39 +13,26 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.PrimitiveIterator;
 
-/**
- * A {@code int}-valued deque backed by a primitive array.
- *
- */
+/// A `int`-valued deque backed by a primitive array.
 public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeque {
-    /**
-     * The length of this array is always a power of 2.
-     */
+    /// The length of this array is always a power of 2.
     private int[] elements;
 
-    /**
-     * Index of the element at the head of the deque.
-     */
+    /// Index of the element at the head of the deque.
     private int head;
 
-    /**
-     * Index at which the next element would be added to the tail of the deque.
-     */
+    /// Index at which the next element would be added to the tail of the deque.
     private int tail;
 
-    /**
-     * Creates a new instance with an initial capacity for 8 elements.
-     */
+    /// Creates a new instance with an initial capacity for 8 elements.
     public IntArrayDeque() {
         this(8);
     }
 
-    /**
-     * Creates a new instance with the specified initial capacity rounded up
-     * to the next strictly positive power of two.
-     *
-     * @param capacity initial capacity
-     */
+    /// Creates a new instance with the specified initial capacity rounded up
+    /// to the next strictly positive power of two.
+    ///
+    /// @param capacity initial capacity
     public IntArrayDeque(int capacity) {
         if (capacity < 0) {
             throw new IllegalArgumentException("Capacity must be non-negative. capacity=" + capacity + ".");
@@ -64,13 +51,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         }
     }
 
-    /**
-     * Adds first using branch-less code that takes advantage of the out-of-order
-     * execution unit in the CPU.
-     *
-     * @param e         an element
-     * @param reallyAdd true if this element should really be added
-     */
+    /// Adds first using branch-less code that takes advantage of the out-of-order
+    /// execution unit in the CPU.
+    ///
+    /// @param e         an element
+    /// @param reallyAdd true if this element should really be added
     public void addFirstAsIntBranchless(final int e, final boolean reallyAdd) {
         //Note: elements.length is a power of two.
         final int index = (head - 1) & (elements.length - 1);
@@ -107,9 +92,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         tail = secondPart;
     }
 
-    /**
-     * Increases the capacity of this deque.
-     */
+    /// Increases the capacity of this deque.
     private void grow(int capacity) {
         if (elements.length > capacity) {
             return;
@@ -138,13 +121,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         }
     }
 
-    /**
-     * Adds last using branch-less code that takes advantage of the out-of-order
-     * execution unit in the CPU.
-     *
-     * @param e         an element
-     * @param reallyAdd true if this element should really be added
-     */
+    /// Adds last using branch-less code that takes advantage of the out-of-order
+    /// execution unit in the CPU.
+    ///
+    /// @param e         an element
+    /// @param reallyAdd true if this element should really be added
     public void addLastAsIntBranchless(int e, boolean reallyAdd) {
         elements[tail] = e;
         if (reallyAdd) {
@@ -155,9 +136,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         }
     }
 
-    /**
-     * Clears the deque in O(1).
-     */
+    /// Clears the deque in O(1).
     @Override
     public void clear() {
         // Performance: Do not fill the array with zeros.
@@ -191,13 +170,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return true;
     }
 
-    /**
-     * Returns the first index of the specified element
-     * or -1 if this deque does not contain the element.
-     *
-     * @param o the element
-     * @return the first index of the element
-     */
+    /// Returns the first index of the specified element
+    /// or -1 if this deque does not contain the element.
+    ///
+    /// @param o the element
+    /// @return the first index of the element
     public int firstIndexOfAsInt(int o) {
         if (tail < head) {
             for (int i = head; i < elements.length; i++) {
@@ -243,9 +220,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return elements[tail == 0 ? elements.length - 1 : tail - 1];
     }
 
-    /**
-     * Increases the capacity of this deque.
-     */
+    /// Increases the capacity of this deque.
     private void doubleCapacity() {
         assert head == tail;
         final int p = head;
@@ -270,11 +245,9 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return hash;
     }
 
-    /**
-     * Returns true if this deque is empty.
-     *
-     * @return {@code true} if this deque contains no elements
-     */
+    /// Returns true if this deque is empty.
+    ///
+    /// @return `true` if this deque contains no elements
     @Override
     public boolean isEmpty() {
         return head == tail;
@@ -290,13 +263,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return new DeqIterator();
     }
 
-    /**
-     * Returns the last index of the specified element
-     * or -1 if this deque does not contain the element.
-     *
-     * @param o the element
-     * @return the last index of the element
-     */
+    /// Returns the last index of the specified element
+    /// or -1 if this deque does not contain the element.
+    ///
+    /// @param o the element
+    /// @return the last index of the element
     public int lastIndexOfAsInt(int o) {
         if (tail < head) {
             for (int i = elements.length - 1; i >= head; i--) {
@@ -319,11 +290,9 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return -1;
     }
 
-    /**
-     * Removes an element at the given array index.
-     *
-     * @param i an array index
-     */
+    /// Removes an element at the given array index.
+    ///
+    /// @param i an array index
     public void removeAt(int i) {
         int size = size();
         Objects.checkIndex(i, size);
@@ -424,14 +393,10 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     private class DeqIterator implements PrimitiveIterator.OfInt {
-        /**
-         * Tail recorded at construction, to stop
-         * iterator and also to check for co-modification.
-         */
+        /// Tail recorded at construction, to stop
+        /// iterator and also to check for co-modification.
         private final int fence = tail;
-        /**
-         * Index of element to be returned by subsequent call to next.
-         */
+        /// Index of element to be returned by subsequent call to next.
         private int cursor = head;
 
         @Override
@@ -456,14 +421,10 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     private class ReverseDeqIterator implements PrimitiveIterator.OfInt {
-        /**
-         * Tail recorded at construction, to stop
-         * iterator and also to check for co-modification.
-         */
+        /// Tail recorded at construction, to stop
+        /// iterator and also to check for co-modification.
         private final int fence = head;
-        /**
-         * Index of element to be returned by subsequent call to next.
-         */
+        /// Index of element to be returned by subsequent call to next.
         private int cursor = tail;
 
         @Override

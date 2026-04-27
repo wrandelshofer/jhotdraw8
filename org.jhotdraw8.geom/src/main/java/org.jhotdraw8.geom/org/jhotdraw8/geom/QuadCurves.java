@@ -12,94 +12,79 @@ import org.jspecify.annotations.Nullable;
 import java.awt.geom.Point2D;
 import java.util.function.ToDoubleFunction;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.log;
 import static java.lang.Math.sqrt;
 import static org.jhotdraw8.geom.Lines.lerp;
 
-/**
- * Provides utility methods for quadratic Bézier curves.
- * <p>
- * Quadratic Bezier curves are defined by second order polynomial, and can be written as:
- * <pre>
- * B(t) = (1 − t)*P₀ + 2*(1 − t)*t*P₁ + t²*P₂
- * </pre>
- * where t is real parameter with values in range [0,1]. P’s are respectively curve starting point,
- * anchor point and the end point. Derivative of the quadratic Bézier curve can be written as
- * Quadratic Bézier Curve derivative:
- * <pre>
- * ∂B∂t(t) = 2*t*(P₀ − 2*P₁ + P₂) + 2*P₁ − 2*P₀
- * </pre>
- * <p>
- * References:
- * <dl>
- *     <dt>Quadratic Bezier curves, Copyright malczak</dt>
- *     <dd><a href="https://malczak.info/blog/quadratic-bezier-curve-length">malczak.info</a></dd>
- * </dl>
- *
- */
+/// Provides utility methods for quadratic Bézier curves.
+///
+/// Quadratic Bezier curves are defined by second order polynomial, and can be written as:
+/// <pre>
+/// B(t) = (1 − t)*P₀ + 2*(1 − t)*t*P₁ + t²*P₂
+/// </pre>
+/// where t is real parameter with values in range [0,1]. P’s are respectively curve starting point,
+/// anchor point and the end point. Derivative of the quadratic Bézier curve can be written as
+/// Quadratic Bézier Curve derivative:
+/// <pre>
+/// ∂B∂t(t) = 2*t*(P₀ − 2*P₁ + P₂) + 2*P₁ − 2*P₀
+/// </pre>
+///
+/// References:
+/// <dl>
+///     <dt>Quadratic Bezier curves, Copyright malczak</dt>
+///     <dd><a href="https://malczak.info/blog/quadratic-bezier-curve-length">malczak.info</a></dd>
+/// </dl>
 public class QuadCurves {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private QuadCurves() {
     }
 
 
-    /**
-     * Computes the arc length s.
-     *
-     * @param p       points of the curve
-     * @param offset  index of the first point in array {@code p}
-     * @param epsilon the error tolerance
-     * @return the arc length
-     */
+    /// Computes the arc length s.
+    ///
+    /// @param p       points of the curve
+    /// @param offset  index of the first point in array `p`
+    /// @param epsilon the error tolerance
+    /// @return the arc length
     public static double arcLength(double[] p, int offset, double epsilon) {
         return arcLength(p, offset, 1, epsilon);
     }
 
 
-    /**
-     * Computes the arc length s from time 0 to time t
-     * using an integration method.
-     *
-     * @param p       the coordinates of the control points of the bézier curve
-     * @param offset  the offset of the first control point in {@code b}
-     * @param t       the time value
-     * @param epsilon the error tolerance
-     * @return the arc length
-     */
+    /// Computes the arc length s from time 0 to time t
+    /// using an integration method.
+    ///
+    /// @param p       the coordinates of the control points of the bézier curve
+    /// @param offset  the offset of the first control point in `b`
+    /// @param t       the time value
+    /// @param epsilon the error tolerance
+    /// @return the arc length
     public static double arcLength(double[] p, int offset, double t, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Integrals.rombergQuadrature(f, 0, t, epsilon);
     }
 
-    /**
-     * Evaluates the given curve at the specified time.
-     *
-     * @param p0 point P0 of the curve
-     * @param p1 point P1 of the curve
-     * @param p2 point P2 of the curve
-     * @param t  the time
-     * @return the point at time t
-     */
+    /// Evaluates the given curve at the specified time.
+    ///
+    /// @param p0 point P0 of the curve
+    /// @param p1 point P1 of the curve
+    /// @param p2 point P2 of the curve
+    /// @param t  the time
+    /// @return the point at time t
     public static PointAndDerivative eval(Point2D p0, Point2D p1, Point2D p2, double t) {
         return eval(p0.getX(), p0.getY(), p1.getX(), p1.getY(), p2.getX(), p2.getY(), t);
     }
 
-    /**
-     * Evaluates the given curve at the specified time.
-     *
-     * @param x0 point P0 of the curve
-     * @param y0 point P0 of the curve
-     * @param x1 point P1 of the curve
-     * @param y1 point P1 of the curve
-     * @param x2 point P2 of the curve
-     * @param y2 point P2 of the curve
-     * @param t  the time
-     * @return the point at time t
-     */
+    /// Evaluates the given curve at the specified time.
+    ///
+    /// @param x0 point P0 of the curve
+    /// @param y0 point P0 of the curve
+    /// @param x1 point P1 of the curve
+    /// @param y1 point P1 of the curve
+    /// @param x2 point P2 of the curve
+    /// @param y2 point P2 of the curve
+    /// @param t  the time
+    /// @return the point at time t
     public static PointAndDerivative eval(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
         final double x01, y01, x12, y12, x012, y012;
         x01 = lerp(x0, x1, t);
@@ -129,28 +114,26 @@ public class QuadCurves {
         return new PointAndDerivative(x012, y012, x12 - x01, y12 - y01);
     }
 
-    /**
-     * Gets the integrand function for the arc-length of a quadratic bézier curve.
-     * <p>
-     * The arc-length {@code s} can be computed with the following equation:
-     * <pre>
-     *     s = integrate( √( A*t² + B*t +C ), d:t, from:0, to:t)
-     * </pre>
-     * The integrand function is therefore:
-     * <pre>
-     *     s = √( A*t² + B*t +C )
-     * </pre>
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Calculate the length of a segment of a quadratic bezier, Copyright Michael Anderson, CC BY-SA 4.0 license </dt>
-     *     <dd><a href="https://stackoverflow.com/questions/11854907/calculate-the-length-of-a-segment-of-a-quadratic-bezier">
-     *        stackoverflow.com</a></dd>
-     * </dl>
-     *
-     * @param p      the coordinates of the control points of the bézier curve
-     * @param offset the offset of the first control point in {@code p}
-     */
+    /// Gets the integrand function for the arc-length of a quadratic bézier curve.
+    ///
+    /// The arc-length `s` can be computed with the following equation:
+    /// <pre>
+    ///     s = integrate( √( A*t² + B*t +C ), d:t, from:0, to:t)
+    /// </pre>
+    /// The integrand function is therefore:
+    /// <pre>
+    ///     s = √( A*t² + B*t +C )
+    /// </pre>
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Calculate the length of a segment of a quadratic bezier, Copyright Michael Anderson, CC BY-SA 4.0 license </dt>
+    ///     <dd><a href="https://stackoverflow.com/questions/11854907/calculate-the-length-of-a-segment-of-a-quadratic-bezier">
+    ///        stackoverflow.com</a></dd>
+    /// </dl>
+    ///
+    /// @param p      the coordinates of the control points of the bézier curve
+    /// @param offset the offset of the first control point in `p`
     public static ToDoubleFunction<Double> getArcLengthIntegrand(double[] p, int offset) {
         // Instead of the code below, we could evaluate the magnitude of the derivative
         /*
@@ -181,15 +164,13 @@ public class QuadCurves {
     }
 
 
-    /**
-     * Calculates the time {@code t} at a given arc-length {@code s} of a
-     * quadratic bézier curve using an integration method.
-     *
-     * @param p       the coordinates of the control points of the bézier curve
-     * @param offset  the offset of the first control point in {@code b}
-     * @param s       the arc-length value where {@literal s >= 0}
-     * @param epsilon
-     */
+    /// Calculates the time `t` at a given arc-length `s` of a
+    /// quadratic bézier curve using an integration method.
+    ///
+    /// @param p       the coordinates of the control points of the bézier curve
+    /// @param offset  the offset of the first control point in `b`
+    /// @param s       the arc-length value where {@literal s >= 0}
+    /// @param epsilon
     public static double invArcLength(double[] p, int offset, double s, double epsilon) {
         return invArcLength(p, offset, s, arcLength(p, offset, 1, epsilon), epsilon);
     }
@@ -200,22 +181,20 @@ public class QuadCurves {
         return Solvers.hybridNewtonBisectionMethod(f, fd, s, 0, 1, s / totalArcLength, epsilon);
     }
 
-    /**
-     * Tries to join two bézier curves. Returns the new control point.
-     *
-     * @param x0        point P0 of the first curve
-     * @param y0        point P0 of the first curve
-     * @param x01       point P1 of the first curve
-     * @param y01       point P1 of the first curve
-     * @param x012      point P2 of the first curve or point p0 of the second curve respectively
-     * @param y012      point P2 of the first curve or point p0 of the second curve respectively
-     * @param x12       point P1 of the second curve
-     * @param y12       point P1 of the second curve
-     * @param x2        point P2 of the second curve
-     * @param y2        point P2 of the second curve
-     * @param tolerance distance (radius) at which the joined point may be off from x012,y012.
-     * @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2), null if joining failed
-     */
+    /// Tries to join two bézier curves. Returns the new control point.
+    ///
+    /// @param x0        point P0 of the first curve
+    /// @param y0        point P0 of the first curve
+    /// @param x01       point P1 of the first curve
+    /// @param y01       point P1 of the first curve
+    /// @param x012      point P2 of the first curve or point p0 of the second curve respectively
+    /// @param y012      point P2 of the first curve or point p0 of the second curve respectively
+    /// @param x12       point P1 of the second curve
+    /// @param y12       point P1 of the second curve
+    /// @param x2        point P2 of the second curve
+    /// @param y2        point P2 of the second curve
+    /// @param tolerance distance (radius) at which the joined point may be off from x012,y012.
+    /// @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2), null if joining failed
     public static double @Nullable [] merge(final double x0, final double y0, final double x01, final double y01,
                                             final double x012, final double y012, final double x12, final double y12, final double x2, final double y2,
                                             double tolerance) {
@@ -255,19 +234,17 @@ public class QuadCurves {
 
     }
 
-    /**
-     * Splits the provided Bézier curve into two parts.
-     *
-     * @param x0     point 1 of the curve
-     * @param y0     point 1 of the curve
-     * @param x1     point 2 of the curve
-     * @param y1     point 2 of the curve
-     * @param x2     point 3 of the curve
-     * @param y2     point 3 of the curve
-     * @param t      where to split
-     * @param first  if not null, accepts the curve from x1,y1 to t
-     * @param second if not null, accepts the curve from t to x3,y3
-     */
+    /// Splits the provided Bézier curve into two parts.
+    ///
+    /// @param x0     point 1 of the curve
+    /// @param y0     point 1 of the curve
+    /// @param x1     point 2 of the curve
+    /// @param y1     point 2 of the curve
+    /// @param x2     point 3 of the curve
+    /// @param y2     point 3 of the curve
+    /// @param t      where to split
+    /// @param first  if not null, accepts the curve from x1,y1 to t
+    /// @param second if not null, accepts the curve from t to x3,y3
     public static void split(double x0, double y0, double x1, double y1, double x2, double y2,
                              double t,
                              @Nullable DoubleConsumer4 first,
@@ -288,13 +265,11 @@ public class QuadCurves {
         }
     }
 
-    /**
-     * Splits the provided Bézier curve into two parts.
-     *
-     * @param t      where to split
-     * @param first  if not null, accepts the curve from x1,y1 to t
-     * @param second if not null, accepts the curve from t to x3,y3
-     */
+    /// Splits the provided Bézier curve into two parts.
+    ///
+    /// @param t      where to split
+    /// @param first  if not null, accepts the curve from x1,y1 to t
+    /// @param second if not null, accepts the curve from t to x3,y3
     public static void split(double[] p, int o, double t,
                              double @Nullable [] first, int offsetFirst,
                              double @Nullable [] second, int offsetSecond) {
@@ -325,12 +300,10 @@ public class QuadCurves {
         }
     }
 
-    /**
-     * Extracts the specified segment [ta,tb] from the given quad curve.
-     *
-     * @param ta where to split
-     * @param tb where to split
-     */
+    /// Extracts the specified segment [ta,tb] from the given quad curve.
+    ///
+    /// @param ta where to split
+    /// @param tb where to split
     public static void subCurve(double[] q, int offset,
                                 double ta, double tb,
                                 double[] first, int offsetFirst) {

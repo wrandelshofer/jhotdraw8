@@ -34,32 +34,26 @@ public interface ShapeableFigure extends Figure {
     CssSizeStyleableKey SHAPE_SLICE_LEFT = new CssSizeStyleableKey("shapeSliceLeft", CssSize.ZERO);
     CssSizeStyleableKey SHAPE_SLICE_RIGHT = new CssSizeStyleableKey("shapeSliceRight", CssSize.ZERO);
     CssSizeStyleableKey SHAPE_SLICE_TOP = new CssSizeStyleableKey("shapeSliceTop", CssSize.ZERO);
-    /**
-     * This property specifies inward offsets from the top, right, bottom, and
-     * left edges of the border image defined by the {@link #SHAPE_BOUNDS}
-     * property, dividing it into nine regions. Percentages are relative to the
-     * shape bounds: the width for the horizontal offsets, the height for the
-     * vertical offsets. Numbers represent pixel units in the image.
-     * <p>
-     * See
-     * <a href="https://www.w3.org/TR/css3-background/#border-image-slice">CSS3
-     * Background: border-image-slice</a>.
-     */
+    /// This property specifies inward offsets from the top, right, bottom, and
+    /// left edges of the border image defined by the [#SHAPE_BOUNDS]
+    /// property, dividing it into nine regions. Percentages are relative to the
+    /// shape bounds: the width for the horizontal offsets, the height for the
+    /// vertical offsets. Numbers represent pixel units in the image.
+    ///
+    /// See
+    /// <a href="https://www.w3.org/TR/css3-background/#border-image-slice">CSS3
+    /// Background: border-image-slice</a>.
     CssInsetsStyleableMapAccessor SHAPE_SLICE = new CssInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
-    /**
-     * This property specifies the bounds of a {@link #SHAPE} property. If the
-     * bounds are null or empty, then the bounds of the shape are used.
-     */
+    /// This property specifies the bounds of a [#SHAPE] property. If the
+    /// bounds are null or empty, then the bounds of the shape are used.
     DoubleStyleableKey SHAPE_BOUNDS_X = new DoubleStyleableKey("shapeBoundsX", 0.0);
     DoubleStyleableKey SHAPE_BOUNDS_Y = new DoubleStyleableKey("shapeBoundsY", 0.0);
     DoubleStyleableKey SHAPE_BOUNDS_WIDTH = new DoubleStyleableKey("shapeBoundsWidth", 0.0);
     DoubleStyleableKey SHAPE_BOUNDS_HEIGHT = new DoubleStyleableKey("shapeBoundsHeight", 0.0);
     Rectangle2DStyleableMapAccessor SHAPE_BOUNDS = new Rectangle2DStyleableMapAccessor("shapeBounds", SHAPE_BOUNDS_X, SHAPE_BOUNDS_Y, SHAPE_BOUNDS_WIDTH, SHAPE_BOUNDS_HEIGHT);
-    /**
-     * Defines the border image as an SVG path.
-     * <p>
-     * Performance: it would be nice if Shape was an already parsed representation. For example a JavaFX Path object.
-     */
+    /// Defines the border image as an SVG path.
+    ///
+    /// Performance: it would be nice if Shape was an already parsed representation. For example a JavaFX Path object.
     NullableFXPathElementsStyleableKey SHAPE = new NullableFXPathElementsStyleableKey("shape", null);
     PersistentList<PathElement> SVG_SQUARE = VectorList.of(new MoveTo(0, 0), new LineTo(1, 0), new LineTo(1, 1), new LineTo(0, 1), new ClosePath());
 

@@ -9,17 +9,12 @@ import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 
-/**
- * LabelConnectionFigure.
- *
- */
+/// LabelConnectionFigure.
 public class SimpleLabelConnectionFigure extends AbstractLabelConnectionFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure,
         TextableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
 
-    /**
-     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "LabelConnection";
 
     public SimpleLabelConnectionFigure(Point2D position, String text) {

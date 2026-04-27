@@ -16,10 +16,7 @@ import java.util.Map;
 
 import static java.lang.Double.max;
 
-/**
- * Rectangle2DStyleableMapAccessor.
- *
- */
+/// Rectangle2DStyleableMapAccessor.
 public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Rectangle2D>
         implements NonNullMapAccessor<Rectangle2D> {
 
@@ -30,15 +27,13 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccesso
     private final NonNullMapAccessor<Double> heightKey;
     private final Converter<Rectangle2D> converter = new Rectangle2DConverter(false);
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name      the name of the accessor
-     * @param xKey      the key for the x coordinate of the rectangle
-     * @param yKey      the key for the y coordinate of the rectangle
-     * @param widthKey  the key for the width of the rectangle
-     * @param heightKey the key for the height of the rectangle
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name      the name of the accessor
+    /// @param xKey      the key for the x coordinate of the rectangle
+    /// @param yKey      the key for the y coordinate of the rectangle
+    /// @param widthKey  the key for the width of the rectangle
+    /// @param heightKey the key for the height of the rectangle
     public Rectangle2DStyleableMapAccessor(String name,
                                            NonNullMapAccessor<Double> xKey,
                                            NonNullMapAccessor<Double> yKey,

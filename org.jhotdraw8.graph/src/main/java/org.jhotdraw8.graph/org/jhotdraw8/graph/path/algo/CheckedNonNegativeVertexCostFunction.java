@@ -8,15 +8,13 @@ package org.jhotdraw8.graph.path.algo;
 
 import java.util.function.BiFunction;
 
-/**
- * A cost function that checks if the provided cost function always returns
- * value greater zero.
- * <p>
- * This class is package private.
- *
- * @param <V> the vertex data type
- * @param <C> the cost number type
- */
+/// A cost function that checks if the provided cost function always returns
+/// value greater zero.
+///
+/// This class is package private.
+///
+/// @param <V> the vertex data type
+/// @param <C> the cost number type
 record CheckedNonNegativeVertexCostFunction<V, C extends Number & Comparable<C>>(C zero,
                                                                                  BiFunction<V, V, C> costFunction) implements BiFunction<V, V, C> {
     CheckedNonNegativeVertexCostFunction {

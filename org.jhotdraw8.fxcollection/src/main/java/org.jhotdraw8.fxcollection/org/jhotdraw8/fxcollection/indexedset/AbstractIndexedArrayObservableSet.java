@@ -28,40 +28,32 @@ import java.util.stream.Stream;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-/**
- * Abstract base class for {@link Set}s that provide precise control where each
- * element is inserted.
- * <p>
- * The set is backed by an array. Insertion and removal is in {@code O(n)}
- * and contains check is {@code O(n)}, where {@code n} is the number of elements.
- * <p>
- * This class is useful as a base class for sub-classes that can provide
- * a faster means of the contains check, typically in {@code O(1)}.
- *
- * @param <E> the element type
- */
+/// Abstract base class for [Set]s that provide precise control where each
+/// element is inserted.
+///
+/// The set is backed by an array. Insertion and removal is in `O(n)`
+/// and contains check is `O(n)`, where `n` is the number of elements.
+///
+/// This class is useful as a base class for sub-classes that can provide
+/// a faster means of the contains check, typically in `O(1)`.
+///
+/// @param <E> the element type
 public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableListBase<E>
         implements Set<E>, ReadableSequencedSet<E>, ReadableSet<E> {
 
     private static final Object[] EMPTY_ARRAY = new Object[0];
-    /**
-     * The underlying list.
-     */
+    /// The underlying list.
     private Object[] data = EMPTY_ARRAY;
     private int size;
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public AbstractIndexedArrayObservableSet() {
     }
 
-    /**
-     * Creates a new instance and adds all elements of the specified collection
-     * to it.
-     *
-     * @param col A collection.
-     */
+    /// Creates a new instance and adds all elements of the specified collection
+    /// to it.
+    ///
+    /// @param col A collection.
     public AbstractIndexedArrayObservableSet(Collection<? extends E> col) {
         setAll(col);
     }
@@ -136,14 +128,12 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         doAdd(index, element);
     }
 
-    /**
-     * Moves an element at {@code oldIndex} to {@code newIndex}.
-     * <p>
-     * So that {@code indexOf(element) == newIndex};
-     *
-     * @param oldIndex the current index of the element
-     * @param newIndex the desired new index of the element
-     */
+    /// Moves an element at `oldIndex` to `newIndex`.
+    ///
+    /// So that `indexOf(element) == newIndex`;
+    ///
+    /// @param oldIndex the current index of the element
+    /// @param newIndex the desired new index of the element
     public void move(int oldIndex, int newIndex) {
         if (oldIndex == newIndex) {
             return;
@@ -356,39 +346,33 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         return new ObservableListIterator(index);
     }
 
-    /**
-     * This method is invoked after an element has been removed.
-     * <p>
-     * Subclasses can implement this method to remove it from a data structure that
-     * can answer {@link #onContains}.
-     *
-     * @param e the removed element
-     */
+    /// This method is invoked after an element has been removed.
+    ///
+    /// Subclasses can implement this method to remove it from a data structure that
+    /// can answer [#onContains].
+    ///
+    /// @param e the removed element
     protected abstract void onRemoved(E e);
 
-    /**
-     * This method is invoked after an element has been added.
-     * <p>
-     * Subclasses can implement this method to add it from a data structure that
-     * can answer {@link #onContains}.
-     *
-     * @param e the added element
-     */
+    /// This method is invoked after an element has been added.
+    ///
+    /// Subclasses can implement this method to add it from a data structure that
+    /// can answer [#onContains].
+    ///
+    /// @param e the added element
     protected abstract void onAdded(E e);
 
-    /**
-     * This method is called, when a {@link #contains(Object)} check
-     * is needed.
-     * <p>
-     * Subclasses can implement this method to provide a fast contains
-     * check.
-     *
-     * @param e an object
-     * @return true if the object is a member of this set,
-     * false if the object is not a member of this set,
-     * null if it is not known whether the object is a member
-     * of the set or not
-     */
+    /// This method is called, when a [#contains(Object)] check
+    /// is needed.
+    ///
+    /// Subclasses can implement this method to provide a fast contains
+    /// check.
+    ///
+    /// @param e an object
+    /// @return true if the object is a member of this set,
+    /// false if the object is not a member of this set,
+    /// null if it is not known whether the object is a member
+    /// of the set or not
     protected abstract @Nullable Boolean onContains(E e);
 
     private class ObservableDescendingIterator implements ListIterator<E> {
@@ -769,16 +753,14 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         return super.hasListeners();
     }
 
-    /**
-     * Returns true if the specified element can be added to this
-     * set.
-     * <p>
-     * Subclasses can return false if they only want to include
-     * elements based on a predicate check.
-     *
-     * @param e an object
-     * @return true if the object may be added to this set
-     */
+    /// Returns true if the specified element can be added to this
+    /// set.
+    ///
+    /// Subclasses can return false if they only want to include
+    /// elements based on a predicate check.
+    ///
+    /// @param e an object
+    /// @return true if the object may be added to this set
     protected abstract boolean mayBeAdded(E e);
 
 

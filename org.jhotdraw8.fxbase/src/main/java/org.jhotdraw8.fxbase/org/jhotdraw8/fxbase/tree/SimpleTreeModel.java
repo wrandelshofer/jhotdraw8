@@ -12,11 +12,9 @@ import org.jhotdraw8.base.event.Listener;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * SimpleTreeModel.
- *
- * @param <N> the node type
- */
+/// SimpleTreeModel.
+///
+/// @param <N> the node type
 public class SimpleTreeModel<N> implements TreeModel<N> {
     public SimpleTreeModel() {
     }

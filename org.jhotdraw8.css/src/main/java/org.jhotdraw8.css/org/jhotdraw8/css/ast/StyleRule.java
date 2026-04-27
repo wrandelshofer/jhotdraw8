@@ -10,10 +10,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-/**
- * A style rule associates a selector list to a list of declarations.
- *
- */
+/// A style rule associates a selector list to a list of declarations.
 public class StyleRule extends Rule {
 
     private final SelectorGroup selectorList;

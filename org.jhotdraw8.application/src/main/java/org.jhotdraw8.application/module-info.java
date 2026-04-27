@@ -6,9 +6,7 @@
 import org.jhotdraw8.application.spi.ApplicationResourceBundleProvider;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Defines a framework for document-oriented applications.
- */
+/// Defines a framework for document-oriented applications.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.application {

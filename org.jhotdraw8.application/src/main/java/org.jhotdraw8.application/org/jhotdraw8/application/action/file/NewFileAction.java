@@ -10,19 +10,14 @@ import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.AbstractApplicationAction;
 
-/**
- * Creates a new view.
- *
- */
+/// Creates a new view.
 public class NewFileAction extends AbstractApplicationAction {
 
     public static final String ID = "file.new";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app the application
-     */
+    /// Creates a new instance.
+    ///
+    /// @param app the application
     public NewFileAction(Application app) {
         this(app, ID);
     }

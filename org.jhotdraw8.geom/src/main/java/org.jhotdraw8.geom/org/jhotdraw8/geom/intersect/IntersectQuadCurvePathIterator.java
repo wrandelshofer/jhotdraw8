@@ -15,32 +15,30 @@ public class IntersectQuadCurvePathIterator {
     }
 
 
-    /**
-     * Intersects the given quadratic Bézier curve with the given path iterator.
-     * <p>
-     * This method can produce the following {@link IntersectionStatus} codes:
-     * <dl>
-     *     <dt>{@link IntersectionStatus#INTERSECTION}</dt><dd>
-     *         The quadratic Bézier curve intersects with a segment of the path within the
-     *         given tolerance radius.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_INSIDE}</dt><dd>
-     *         The quadratic Bézier curve lies inside the path.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_OUTSIDE}</dt><dd>
-     *         The quadratic Bézier curve lies outside the path.
-     *     </dd>
-     * </dl>
-     *
-     * @param a0x the x-coordinate of control point 0
-     * @param a0y the y-coordinate of control point 0
-     * @param a1x the x-coordinate of control point 1
-     * @param a1y the y-coordinate of control point 1
-     * @param a2x the x-coordinate of control point 2
-     * @param a2y the y-coordinate of control point 2
-     * @param pit the path iterator
-     * @return the intersection result
-     */
+    /// Intersects the given quadratic Bézier curve with the given path iterator.
+    ///
+    /// This method can produce the following [IntersectionStatus] codes:
+    /// <dl>
+    ///     <dt>[IntersectionStatus#INTERSECTION]</dt><dd>
+    ///         The quadratic Bézier curve intersects with a segment of the path within the
+    ///         given tolerance radius.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_INSIDE]</dt><dd>
+    ///         The quadratic Bézier curve lies inside the path.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_OUTSIDE]</dt><dd>
+    ///         The quadratic Bézier curve lies outside the path.
+    ///     </dd>
+    /// </dl>
+    ///
+    /// @param a0x the x-coordinate of control point 0
+    /// @param a0y the y-coordinate of control point 0
+    /// @param a1x the x-coordinate of control point 1
+    /// @param a1y the y-coordinate of control point 1
+    /// @param a2x the x-coordinate of control point 2
+    /// @param a2y the y-coordinate of control point 2
+    /// @param pit the path iterator
+    /// @return the intersection result
     public static IntersectionResultEx intersectQuadCurvePathIteratorEx(double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, PathIterator pit) {
         List<IntersectionPointEx> lineIntersections = new ArrayList<>();
         List<IntersectionPointEx> insideIntersections = new ArrayList<>();

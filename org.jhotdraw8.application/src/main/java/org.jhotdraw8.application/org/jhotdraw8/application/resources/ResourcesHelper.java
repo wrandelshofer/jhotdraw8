@@ -27,11 +27,9 @@ import java.util.logging.Logger;
 
 class ResourcesHelper {
     static final Logger LOG = Logger.getLogger(Resources.class.getName());
-    /**
-     * The global map of property name modifiers. The key of this map is the
-     * name of the property name modifier, the value of this map is a fallback
-     * chain.
-     */
+    /// The global map of property name modifiers. The key of this map is the
+    /// name of the property name modifier, the value of this map is a fallback
+    /// chain.
     final static Map<String, String[]> propertyNameModifiers = Collections.synchronizedMap(new HashMap<>());
 
 
@@ -50,16 +48,12 @@ class ResourcesHelper {
 
     static final Set<String> acceleratorKeys = Collections.synchronizedSet(new HashSet<>(
             Arrays.asList("shift", "control", "ctrl", "meta", "alt", "altGraph")));
-    /**
-     * List of decoders. The first decoder which can decode a resource value is
-     * will be used to convert the resource value to an object.
-     */
+    /// List of decoders. The first decoder which can decode a resource value is
+    /// will be used to convert the resource value to an object.
     final static List<ResourceDecoder> decoders = Collections.synchronizedList(new ArrayList<>());
 
-    /**
-     * Generates fallback keys by processing all property name modifiers in the
-     * key.
-     */
+    /// Generates fallback keys by processing all property name modifiers in the
+    /// key.
     static void generateFallbackKeys(String key, ArrayList<String> fallbackKeys) {
         int p1 = key.indexOf("[$");
         if (p1 < 0) {

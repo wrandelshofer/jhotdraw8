@@ -6,11 +6,7 @@ package org.jhotdraw8.fxcollection.indexedset;
 
 import java.util.Collection;
 
-/**
- * Tests {@link IndexedHashObservableSet}.
- *
- */
-
+/// Tests [IndexedHashObservableSet].
 public class IndexedHashSetTest extends AbstractIndexedArrayObservableSetTest {
 
     @Override

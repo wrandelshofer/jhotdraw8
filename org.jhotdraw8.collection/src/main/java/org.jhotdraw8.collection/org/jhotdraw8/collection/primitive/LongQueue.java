@@ -12,13 +12,9 @@ import java.util.Queue;
 import java.util.Spliterator;
 import java.util.function.LongConsumer;
 
-/**
- * Interface for a {@link Queue} with primitive long data elements.
- */
+/// Interface for a [Queue] with primitive long data elements.
 public interface LongQueue extends Queue<Long> {
-    /**
-     * @see Queue#add
-     */
+    /// @see Queue#add
     boolean addAsLong(long e);
 
     @Override
@@ -62,9 +58,7 @@ public interface LongQueue extends Queue<Long> {
         return removed;
     }
 
-    /**
-     * @see Queue#offer
-     */
+    /// @see Queue#offer
     boolean offerAsLong(long e);
 
     @Override
@@ -72,9 +66,7 @@ public interface LongQueue extends Queue<Long> {
         return offerAsLong(e);
     }
 
-    /**
-     * @see Queue#remove
-     */
+    /// @see Queue#remove
     long removeAsLong();
 
     @Override
@@ -82,9 +74,7 @@ public interface LongQueue extends Queue<Long> {
         return removeAsLong();
     }
 
-    /**
-     * @see Queue#remove(Object)
-     */
+    /// @see Queue#remove(Object)
     boolean removeAsLong(long e);
 
     @Override
@@ -102,9 +92,7 @@ public interface LongQueue extends Queue<Long> {
         return elementAsLong();
     }
 
-    /**
-     * @see Queue#element
-     */
+    /// @see Queue#element
     long elementAsLong();
 
     @Override

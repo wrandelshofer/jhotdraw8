@@ -4,16 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.jhotdraw8.draw.css.converter.csscolormodule4.ComputeTestcommon.test_computed_value_to_rgb;
 
-/**
- * References:
- * <dl>
- *     <dt>CSS Color Module Level 4.</dt>
- *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101">w3.org</a></dd>
- *
- *     <dt>web-platform-tests / wpt / color-computed-hsl.html</dt>
- *     <dd><a href="https://github.com/web-platform-tests/wpt/blob/f69cc2c952a97e745446a6026559292a96340fd8/css/css-color/parsing/color-computed-hsl.html">github.com</a></dd>
- * </dl>
- */
+/// References:
+/// <dl>
+///     <dt>CSS Color Module Level 4.</dt>
+///     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101">w3.org</a></dd>
+///     <dt>web-platform-tests / wpt / color-computed-hsl.html</dt>
+///     <dd><a href="https://github.com/web-platform-tests/wpt/blob/f69cc2c952a97e745446a6026559292a96340fd8/css/css-color/parsing/color-computed-hsl.html">github.com</a></dd>
+/// </dl>
 public class ColorComputedHslFunction {
     @Test
     public void shouldComputeExpectedValuePart1() {

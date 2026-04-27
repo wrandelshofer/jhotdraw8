@@ -19,9 +19,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class Point2DCssConverterTest {
 
-    /**
-     * Test of fromString method, of class CssPoint2DConverter.
-     */
+    /// Test of fromString method, of class CssPoint2DConverter.
     public static void doTestFromString(CssPoint2D expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -30,18 +28,14 @@ public class Point2DCssConverterTest {
         assertEquals(actual, expected);
     }
 
-    /**
-     * Test of toString method, of class CssPoint2DConverter.
-     */
+    /// Test of toString method, of class CssPoint2DConverter.
     public static void doTestToString(CssPoint2D value, String expected) throws Exception {
         Point2DCssConverter instance = new Point2DCssConverter(false);
         String actual = instance.toString(value);
         assertEquals(expected, actual);
     }
 
-    /**
-     * Test of fromString and toString methods, of class CssPoint2DConverter.
-     */
+    /// Test of fromString and toString methods, of class CssPoint2DConverter.
     public static void doTest(CssPoint2D value, String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);

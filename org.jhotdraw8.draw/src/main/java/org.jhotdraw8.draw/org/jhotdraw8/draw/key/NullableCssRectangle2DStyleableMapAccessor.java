@@ -15,10 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * Rectangle2DStyleableMapAccessor.
- *
- */
+/// Rectangle2DStyleableMapAccessor.
 public class NullableCssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<@Nullable CssRectangle2D>
         implements MapAccessor<CssRectangle2D> {
 
@@ -28,15 +25,13 @@ public class NullableCssRectangle2DStyleableMapAccessor extends AbstractStyleabl
     private final MapAccessor<CssSize> widthKey;
     private final MapAccessor<CssSize> heightKey;
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name      the name of the accessor
-     * @param xKey      the key for the x coordinate of the rectangle
-     * @param yKey      the key for the y coordinate of the rectangle
-     * @param widthKey  the key for the width of the rectangle
-     * @param heightKey the key for the height of the rectangle
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name      the name of the accessor
+    /// @param xKey      the key for the x coordinate of the rectangle
+    /// @param yKey      the key for the y coordinate of the rectangle
+    /// @param widthKey  the key for the width of the rectangle
+    /// @param heightKey the key for the height of the rectangle
     public NullableCssRectangle2DStyleableMapAccessor(String name, MapAccessor<CssSize> xKey, MapAccessor<CssSize> yKey, MapAccessor<CssSize> widthKey, MapAccessor<CssSize> heightKey) {
         super(name, CssRectangle2D.class, new MapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, null);
 

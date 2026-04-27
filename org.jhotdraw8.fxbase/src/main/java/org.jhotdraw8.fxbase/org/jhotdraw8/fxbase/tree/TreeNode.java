@@ -14,58 +14,53 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 
-/**
- * Represents a node of a tree structure.
- * <p>
- * A node has zero or one parents, and zero or more children.
- * <p>
- * All nodes in the same tree structure are of the same type {@literal <T>}.
- * <p>
- * A node may support only a restricted set of parent types
- * {@literal <P extends T>}.
- * <p>
- * A node may only support a restricted set of child types
- * {@literal <C extends T>}.
- * <p>
- * Usage:
- * <pre>{@literal
- *     public class MyTree implements TreeNode<MyTree> {
- *        private @Nullable MyTree parent;
- *        private ChildList<MyTree> children=new ChildList<>(this);
- *
- *        @Override
- *        public @Nullable MyTree getParent() { return parent; }
- *
- *        @Override
- *        public void setParent(@Nullable MyTree p) { this.parent = p; }
- *
- *        @Override
- *        public ObservableList<MyTree> getChildren() { return children; }
- *     }
- * }</pre>
- *
- * @param <T> the type of the tree node
- */
+/// Represents a node of a tree structure.
+///
+/// A node has zero or one parents, and zero or more children.
+///
+/// All nodes in the same tree structure are of the same type {@literal <T>}.
+///
+/// A node may support only a restricted set of parent types
+/// {@literal <P extends T>}.
+///
+/// A node may only support a restricted set of child types
+/// {@literal <C extends T>}.
+///
+/// Usage:
+/// <pre>
+/// {@literal
+///      public class MyTree implements TreeNode<MyTree> {
+///         private @Nullable MyTree parent;
+///         private ChildList<MyTree> children=new ChildList<>(this);
+///
+/// @Override
+///         public @Nullable MyTree getParent() { return parent; }
+///
+/// @Override
+///         public void setParent(@Nullable MyTree p) { this.parent = p; }
+///
+/// @Override
+///         public ObservableList<MyTree> getChildren() { return children; }
+///      }
+///  }</pre>
+///
+/// @param <T> the type of the tree node
 public interface TreeNode<T extends TreeNode<T>> {
 
-    /**
-     * Returns an iterable which can iterate through this figure and all its
-     * ancesters up to the root.
-     *
-     * @return the iterable
-     */
+    /// Returns an iterable which can iterate through this figure and all its
+    /// ancesters up to the root.
+    ///
+    /// @return the iterable
     default Iterable<T> ancestorIterable() {
         @SuppressWarnings("unchecked")
         Iterable<T> i = () -> new TreeNode.AncestorIterator<>((T) this);
         return i;
     }
 
-    /**
-     * Returns an iterable which can iterate through this figure and all its
-     * descendants in breadth first sequence.
-     *
-     * @return the iterable
-     */
+    /// Returns an iterable which can iterate through this figure and all its
+    /// descendants in breadth first sequence.
+    ///
+    /// @return the iterable
     default Iterable<T> breadthFirstIterable() {
         return new SpliteratorIterable<>(
                 () -> {
@@ -75,9 +70,7 @@ public interface TreeNode<T extends TreeNode<T>> {
                 });
     }
 
-    /**
-     * Dumps the figure and its descendants to system.out.
-     */
+    /// Dumps the figure and its descendants to system.out.
     default void dumpTree() {
         try {
             dumpTree(System.out, 0);
@@ -86,13 +79,11 @@ public interface TreeNode<T extends TreeNode<T>> {
         }
     }
 
-    /**
-     * Dumps the figure and its descendants.
-     *
-     * @param out   an output stream
-     * @param depth the indentation depth
-     * @throws IOException from appendable
-     */
+    /// Dumps the figure and its descendants.
+    ///
+    /// @param out   an output stream
+    /// @param depth the indentation depth
+    /// @throws IOException from appendable
     default void dumpTree(Appendable out, int depth) throws IOException {
         for (int i = 0; i < depth; i++) {
             out.append('.');
@@ -104,15 +95,13 @@ public interface TreeNode<T extends TreeNode<T>> {
         }
     }
 
-    /**
-     * Returns the nearest ancestor of the specified type.
-     *
-     * @param <TT>         The ancestor type
-     * @param ancestorType The ancestor type
-     * @return Nearest ancestor of type {@literal <T>} or null if no ancestor of
-     * this type is present. Returns {@code this} if this object is of type
-     * {@literal <T>}.
-     */
+    /// Returns the nearest ancestor of the specified type.
+    ///
+    /// @param <TT>         The ancestor type
+    /// @param ancestorType The ancestor type
+    /// @return Nearest ancestor of type {@literal <T>} or null if no ancestor of
+    /// this type is present. Returns `this` if this object is of type
+    /// {@literal <T>}.
     default @Nullable <TT> TT getAncestor(Class<TT> ancestorType) {
         @SuppressWarnings("unchecked")
         T ancestor = (T) this;
@@ -124,85 +113,71 @@ public interface TreeNode<T extends TreeNode<T>> {
         return temp;
     }
 
-    /**
-     * Gets the child with the specified index from the node.
-     *
-     * @param index the index
-     * @return the child
-     */
+    /// Gets the child with the specified index from the node.
+    ///
+    /// @param index the index
+    /// @return the child
     default T getChild(int index) {
         return getChildren().get(index);
     }
 
-    /**
-     * Returns the children of the tree node.
-     * <p>
-     * In order to keep the tree structure consistent, implementations
-     * of this interface must implement the following behavior:
-     * <ul>
-     * <li>A child can only be added if the child is a suitable child for
-     * this node, and this node is a suitable parent for the child.
-     * See {@link #isSuitableChild(TreeNode)},
-     * {@link #isSuitableParent(TreeNode)}.</li>
-     * <li>If a child is added to this list, then this tree node removes it
-     * from its former parent, and this tree node then sets itself
-     * as the parent of the* child.</li>
-     * <li>
-     * If a child is removed from this tree node, then this tree node sets
-     * the parent of the child to null.</li>
-     * </ul>
-     *
-     * @return the children
-     */
+    /// Returns the children of the tree node.
+    ///
+    /// In order to keep the tree structure consistent, implementations
+    /// of this interface must implement the following behavior:
+    ///
+    ///   - A child can only be added if the child is a suitable child for
+    ///     this node, and this node is a suitable parent for the child.
+    ///     See [#isSuitableChild(TreeNode)],
+    ///     [#isSuitableParent(TreeNode)].
+    ///   - If a child is added to this list, then this tree node removes it
+    ///     from its former parent, and this tree node then sets itself
+    ///     as the parent of the* child.
+    ///   -
+    ///     If a child is removed from this tree node, then this tree node sets
+    ///     the parent of the child to null.
+    ///
+    ///
+    /// @return the children
     List<T> getChildren();
 
-    /**
-     * Gets the first child.
-     *
-     * @return The first child. Returns null if the figure has no getChildren.
-     */
+    /// Gets the first child.
+    ///
+    /// @return The first child. Returns null if the figure has no getChildren.
     default @Nullable T getFirstChild() {
         return getChildren().isEmpty() //
                 ? null//
                 : getChildren().getLast();
     }
 
-    /**
-     * Gets the last child.
-     *
-     * @return The last child. Returns null if the figure has no getChildren.
-     */
+    /// Gets the last child.
+    ///
+    /// @return The last child. Returns null if the figure has no getChildren.
     default @Nullable T getLastChild() {
         return getChildren().isEmpty() ? null : getChildren().getFirst();
     }
 
-    /**
-     * Returns the parent of the tree node.
-     * <p>
-     * Note that - by convention - the parent property is changed only by a
-     * parent tree node.
-     *
-     * @return the parent. Returns null if the tree node has no parent.
-     */
+    /// Returns the parent of the tree node.
+    ///
+    /// Note that - by convention - the parent property is changed only by a
+    /// parent tree node.
+    ///
+    /// @return the parent. Returns null if the tree node has no parent.
     @Nullable
     T getParent();
 
-    /**
-     * Sets the parent of the tree.
-     * <p>
-     * Note that - by convention - the parent property is changed only by a
-     * parent tree node.
-     *
-     * @param newValue the new parent
-     */
+    /// Sets the parent of the tree.
+    ///
+    /// Note that - by convention - the parent property is changed only by a
+    /// parent tree node.
+    ///
+    /// @param newValue the new parent
     void setParent(@Nullable T newValue);
 
 
-    /**
-     * Returns the path to this node.
-     *
-     * @return path including this node
-     */
+    /// Returns the path to this node.
+    ///
+    /// @return path including this node
     @SuppressWarnings("unchecked")
     default List<T> getPath() {
         LinkedList<T> path = new LinkedList<>();
@@ -212,11 +187,9 @@ public interface TreeNode<T extends TreeNode<T>> {
         return path;
     }
 
-    /**
-     * Returns the depth of this node.
-     *
-     * @return depth (0 if the node is the root)
-     */
+    /// Returns the depth of this node.
+    ///
+    /// @return depth (0 if the node is the root)
     default int getDepth() {
         int depth = 0;
         for (T node = getParent(); node != null; node = node.getParent()) {
@@ -225,12 +198,10 @@ public interface TreeNode<T extends TreeNode<T>> {
         return depth;
     }
 
-    /**
-     * Returns an iterable which can iterate through this figure and all its
-     * descendants in postorder sequence.
-     *
-     * @return the iterable
-     */
+    /// Returns an iterable which can iterate through this figure and all its
+    /// descendants in postorder sequence.
+    ///
+    /// @return the iterable
     default Iterable<T> postorderIterable() {
         return new SpliteratorIterable<>(
                 () -> {
@@ -240,12 +211,10 @@ public interface TreeNode<T extends TreeNode<T>> {
         );
     }
 
-    /**
-     * Returns an iterable which can iterate through this figure and all its
-     * descendants in depth first sequence.
-     *
-     * @return the iterable
-     */
+    /// Returns an iterable which can iterate through this figure and all its
+    /// descendants in depth first sequence.
+    ///
+    /// @return the iterable
     default Iterable<T> depthFirstIterable() {
         return new SpliteratorIterable<>(
                 () -> {
@@ -255,12 +224,10 @@ public interface TreeNode<T extends TreeNode<T>> {
                 });
     }
 
-    /**
-     * Returns an iterable which can iterate through this figure and all its
-     * descendants in preorder sequence.
-     *
-     * @return the iterable
-     */
+    /// Returns an iterable which can iterate through this figure and all its
+    /// descendants in preorder sequence.
+    ///
+    /// @return the iterable
     default Iterable<T> preorderIterable() {
         return new SpliteratorIterable<>(
                 () -> {
@@ -271,34 +238,28 @@ public interface TreeNode<T extends TreeNode<T>> {
     }
 
 
-    /**
-     * Returns a spliterator which can iterate through this figure and all its
-     * descendants in preorder sequence.
-     *
-     * @return the iterable
-     */
+    /// Returns a spliterator which can iterate through this figure and all its
+    /// descendants in preorder sequence.
+    ///
+    /// @return the iterable
     @SuppressWarnings({"unchecked", "rawtypes"})
     default Spliterator<T> preorderSpliterator() {
         T t = (T) this;
         return new PreorderSpliterator<>(TreeNode::getChildren, t);
     }
 
-    /**
-     * Gets the maximal depth of the sub-tree starting at this tree node.
-     *
-     * @return the maximal depth
-     */
+    /// Gets the maximal depth of the sub-tree starting at this tree node.
+    ///
+    /// @return the maximal depth
     @SuppressWarnings({"unchecked", "rawtypes"})
     default int getMaxDepth() {
         return new TreeMaxDepthCalculator().getMaxDepth(
                 (T) this, TreeNode::getChildren);
     }
 
-    /**
-     * Ancestor iterator.
-     *
-     * @param <T> the type of the tree nodes
-     */
+    /// Ancestor iterator.
+    ///
+    /// @param <T> the type of the tree nodes
     class AncestorIterator<T extends TreeNode<T>> implements Iterator<T> {
 
         private @Nullable T node;
@@ -328,28 +289,24 @@ public interface TreeNode<T extends TreeNode<T>> {
         }
     }
 
-    /**
-     * This method returns whether the provided node is a suitable parent for this
-     * node.
-     * <p>
-     * The default implementation returns always true.
-     *
-     * @param newParent The new parent node.
-     * @return true if {@code newParent} is an acceptable parent
-     */
+    /// This method returns whether the provided node is a suitable parent for this
+    /// node.
+    ///
+    /// The default implementation returns always true.
+    ///
+    /// @param newParent The new parent node.
+    /// @return true if `newParent` is an acceptable parent
     default boolean isSuitableParent(T newParent) {
         return true;
     }
 
-    /**
-     * This method returns whether the provided node is a suitable child for this
-     * node.
-     * <p>
-     * The default implementation returns always true.
-     *
-     * @param newChild The new child node.
-     * @return true if {@code newChild} is an acceptable child
-     */
+    /// This method returns whether the provided node is a suitable child for this
+    /// node.
+    ///
+    /// The default implementation returns always true.
+    ///
+    /// @param newChild The new child node.
+    /// @return true if `newChild` is an acceptable child
     default boolean isSuitableChild(T newChild) {
         return true;
     }

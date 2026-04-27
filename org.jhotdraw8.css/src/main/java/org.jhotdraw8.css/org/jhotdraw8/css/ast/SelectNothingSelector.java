@@ -7,13 +7,10 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jspecify.annotations.Nullable;
 
-/**
- * A "select nothing selector" matches nothing.
- * <p>
- * This selector is used, when the parser does not understand the
- * syntax of the selector.
- *
- */
+/// A "select nothing selector" matches nothing.
+///
+/// This selector is used, when the parser does not understand the
+/// syntax of the selector.
 public class SelectNothingSelector extends SimpleSelector {
 
     public SelectNothingSelector(@Nullable SourceLocator sourceLocator) {

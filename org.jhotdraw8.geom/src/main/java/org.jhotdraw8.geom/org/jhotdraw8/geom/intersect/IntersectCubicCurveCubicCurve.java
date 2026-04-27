@@ -40,45 +40,41 @@ public class IntersectCubicCurveCubicCurve {
     }
 
 
-    /**
-     * Computes the intersection between cubic bezier curve 'a' and cubic bezier
-     * curve 'b'.
-     * <p>
-     * The intersection will contain the parameters 't' of curve 'a' in range
-     * [0,1].
-     *
-     * @param a0 control point P0 of 'a'
-     * @param a1 control point P1 of 'a'
-     * @param a2 control point P2 of 'a'
-     * @param a3 control point P3 of 'a'
-     * @param b0 control point P0 of 'b'
-     * @param b1 control point P1 of 'b'
-     * @param b2 control point P2 of 'b'
-     * @param b3 control point P3 of 'b'
-     * @return the computed result
-     */
+    /// Computes the intersection between cubic bezier curve 'a' and cubic bezier
+    /// curve 'b'.
+    ///
+    /// The intersection will contain the parameters 't' of curve 'a' in range
+    /// [0,1].
+    ///
+    /// @param a0 control point P0 of 'a'
+    /// @param a1 control point P1 of 'a'
+    /// @param a2 control point P2 of 'a'
+    /// @param a3 control point P3 of 'a'
+    /// @param b0 control point P0 of 'b'
+    /// @param b1 control point P1 of 'b'
+    /// @param b2 control point P2 of 'b'
+    /// @param b3 control point P3 of 'b'
+    /// @return the computed result
     public static IntersectionResult intersectCubicCurveCubicCurve(Point2D a0, Point2D a1, Point2D a2, Point2D a3,
                                                                    Point2D b0, Point2D b1, Point2D b2, Point2D b3) {
         return intersectCubicCurveCubicCurve(a0, a1, a2, a3, b0, b1, b2, b3, Scalars.REAL_THRESHOLD);
     }
 
-    /**
-     * Computes the intersection between cubic bezier curve 'a' and cubic bezier
-     * curve 'b'.
-     * <p>
-     * The intersection will contain the parameters 't' of curve 'a' in range
-     * [tMin,tMax].
-     *
-     * @param a0 control point P0 of 'a'
-     * @param a1 control point P1 of 'a'
-     * @param a2 control point P2 of 'a'
-     * @param a3 control point P3 of 'a'
-     * @param b0 control point P0 of 'b'
-     * @param b1 control point P1 of 'b'
-     * @param b2 control point P2 of 'b'
-     * @param b3 control point P3 of 'b'
-     * @return the computed result
-     */
+    /// Computes the intersection between cubic bezier curve 'a' and cubic bezier
+    /// curve 'b'.
+    ///
+    /// The intersection will contain the parameters 't' of curve 'a' in range
+    /// [tMin,tMax].
+    ///
+    /// @param a0 control point P0 of 'a'
+    /// @param a1 control point P1 of 'a'
+    /// @param a2 control point P2 of 'a'
+    /// @param a3 control point P3 of 'a'
+    /// @param b0 control point P0 of 'b'
+    /// @param b1 control point P1 of 'b'
+    /// @param b2 control point P2 of 'b'
+    /// @param b3 control point P3 of 'b'
+    /// @return the computed result
     public static IntersectionResult intersectCubicCurveCubicCurve(Point2D a0, Point2D a1, Point2D a2, Point2D a3,
                                                                    Point2D b0, Point2D b1, Point2D b2, Point2D b3,
                                                                    double epsilon) {
@@ -378,26 +374,24 @@ public class IntersectCubicCurveCubicCurve {
 
     }
 
-    /**
-     * @param a0x
-     * @param a0y
-     * @param a1x
-     * @param a1y
-     * @param a2x
-     * @param a2y
-     * @param a3x
-     * @param a3y
-     * @param b0x
-     * @param b0y
-     * @param b1x
-     * @param b1y
-     * @param b2x
-     * @param b2y
-     * @param b3x
-     * @param b3y
-     * @param epsilon
-     * @return
-     */
+    /// @param a0x
+    /// @param a0y
+    /// @param a1x
+    /// @param a1y
+    /// @param a2x
+    /// @param a2y
+    /// @param a3x
+    /// @param a3y
+    /// @param b0x
+    /// @param b0y
+    /// @param b1x
+    /// @param b1y
+    /// @param b2x
+    /// @param b2y
+    /// @param b3x
+    /// @param b3y
+    /// @param epsilon
+    /// @return
     public static IntersectionResultEx intersectCubicCurveCubicCurveEx(double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
                                                                        double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y,
                                                                        double epsilon) {

@@ -3,8 +3,6 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-/**
- * Provides classes for iterating collections.
- */
+/// Provides classes for iterating collections.
 package org.jhotdraw8.icollection.impl.iteration;
 

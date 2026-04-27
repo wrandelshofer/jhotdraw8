@@ -15,19 +15,14 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import java.util.Collection;
 import java.util.LinkedList;
 
-/**
- * SendToBackAction.
- *
- */
+/// SendToBackAction.
 public class SendToBackAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.sendToBack";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public SendToBackAction(DrawingEditor editor) {
         super(editor);
         Resources labels

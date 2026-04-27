@@ -11,10 +11,7 @@ import org.jhotdraw8.application.action.AbstractActivityAction;
 import org.jhotdraw8.application.resources.Resources;
 import org.jspecify.annotations.Nullable;
 
-/**
- * This action toggles the state of its boolean property.
- *
- */
+/// This action toggles the state of its boolean property.
 public class ToggleBooleanAction extends AbstractActivityAction<Activity> {
     private final BooleanProperty value;
 

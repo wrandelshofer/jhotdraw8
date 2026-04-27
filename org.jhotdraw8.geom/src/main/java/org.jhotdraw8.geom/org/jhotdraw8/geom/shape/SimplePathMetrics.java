@@ -27,26 +27,24 @@ import java.util.NoSuchElementException;
 import static java.lang.Double.NEGATIVE_INFINITY;
 import static java.lang.Double.POSITIVE_INFINITY;
 
-/**
- * The {@code PathMetrics} class allows access to the
- * metrics needed to compute points along a path and to
- * create sub-paths of a path.
- * <p>
- * Requirements for the path:
- * <ul>
- *     <li>The path must start with a {@link PathIterator#SEG_MOVETO}</li>
- *     <li>A {@link PathIterator#SEG_MOVETO} must be followed by a
- *     {@link PathIterator#SEG_LINETO}, {@link PathIterator#SEG_QUADTO},
- *     {@link PathIterator#SEG_CUBICTO}.</li>
- *     <li>A {@link PathIterator#SEG_CLOSE} must be the last element,
- *     or it must be followed by a {@link PathIterator#SEG_MOVETO}.</li>
- *     <li>The length of a {@link PathIterator#SEG_LINETO}, {@link PathIterator#SEG_QUADTO},
- *     {@link PathIterator#SEG_CUBICTO} must be greater than 0.</li>
- *     <li>The {@code x, y} coordinates of the {@link PathIterator#SEG_MOVETO}
- *     at the beginning of a closed path must equal to the {@code x, y} coordinates
- *     of the last segment of the closed path.</li>
- * </ul>
- */
+/// The `PathMetrics` class allows access to the
+/// metrics needed to compute points along a path and to
+/// create sub-paths of a path.
+///
+/// Requirements for the path:
+///
+///   - The path must start with a [PathIterator#SEG_MOVETO]
+///   - A [PathIterator#SEG_MOVETO] must be followed by a
+///     [PathIterator#SEG_LINETO], [PathIterator#SEG_QUADTO],
+///     [PathIterator#SEG_CUBICTO].
+///   - A [PathIterator#SEG_CLOSE] must be the last element,
+///     or it must be followed by a [PathIterator#SEG_MOVETO].
+///   - The length of a [PathIterator#SEG_LINETO], [PathIterator#SEG_QUADTO],
+///     [PathIterator#SEG_CUBICTO] must be greater than 0.
+///   - The `x, y` coordinates of the [PathIterator#SEG_MOVETO]
+///     at the beginning of a closed path must equal to the `x, y` coordinates
+///     of the last segment of the closed path.
+///
 public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     // For code simplicity, copy these constants to our namespace
     // and cast them to byte constants for easy storage.
@@ -90,12 +88,10 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         this.epsilon = epsilon;
     }
 
-    /**
-     * Evaluates the path at the specified arc length
-     *
-     * @param s the arc length, the value will be clamped to [0,arcLength()]
-     * @return point and tangent at s
-     */
+    /// Evaluates the path at the specified arc length
+    ///
+    /// @param s the arc length, the value will be clamped to [0,arcLength()]
+    /// @return point and tangent at s
     public PointAndDerivative evalAtArcLength(double s) {
         if (commands.length == 0) {
             return new PointAndDerivative(0, 0, 1, 0);
@@ -133,11 +129,9 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         };
     }
 
-    /**
-     * Gets the length of the path.
-     *
-     * @return the length of the path in [0,Double.MAX_VALUE].
-     */
+    /// Gets the length of the path.
+    ///
+    /// @return the length of the path in [0,Double.MAX_VALUE].
     public double arcLength() {
         return lengths.length == 0 ? 0 : lengths[lengths.length - 1];
     }
@@ -237,43 +231,37 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     }
 
 
-    /**
-     * This implementation checks if the bounding box
-     * of this shape contains the specified rectangle.
-     *
-     * @param x the X coordinate of the upper-left corner
-     *          of the specified rectangular area
-     * @param y the Y coordinate of the upper-left corner
-     *          of the specified rectangular area
-     * @param w the width of the specified rectangular area
-     * @param h the height of the specified rectangular area
-     * @return true if the interior of the bounding box of this shape contains
-     * the interior of the specified rectangle.
-     */
+    /// This implementation checks if the bounding box
+    /// of this shape contains the specified rectangle.
+    ///
+    /// @param x the X coordinate of the upper-left corner
+    ///          of the specified rectangular area
+    /// @param y the Y coordinate of the upper-left corner
+    ///          of the specified rectangular area
+    /// @param w the width of the specified rectangular area
+    /// @param h the height of the specified rectangular area
+    /// @return true if the interior of the bounding box of this shape contains
+    /// the interior of the specified rectangle.
     @Override
     public boolean contains(double x, double y, double w, double h) {
         return getBounds2D().contains(x, y, w, h);
     }
 
-    /**
-     * See {@link #contains(double, double, double, double)}.
-     *
-     * @param r the specified {@code Rectangle2D}
-     * @return true if this shape contains r
-     */
+    /// See [#contains(double, double, double, double)].
+    ///
+    /// @param r the specified `Rectangle2D`
+    /// @return true if this shape contains r
     @Override
     public boolean contains(Rectangle2D r) {
         return contains(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
-    /**
-     * Gets an iterator over a segment of the path from arc length s0 to arc length s1.
-     *
-     * @param s0 the arc length at which the sub-path starts, the value will be clamped to [0,arcLength()].
-     * @param s1 the arc length at which the sub-path ends, the value will be clamped to [s0,arcLength()].
-     * @param tx an optional transformation for the path iterator
-     * @return the path iterator
-     */
+    /// Gets an iterator over a segment of the path from arc length s0 to arc length s1.
+    ///
+    /// @param s0 the arc length at which the sub-path starts, the value will be clamped to [0,arcLength()].
+    /// @param s1 the arc length at which the sub-path ends, the value will be clamped to [s0,arcLength()].
+    /// @param tx an optional transformation for the path iterator
+    /// @return the path iterator
     @Override
     public PathIterator getSubPathIteratorAtArcLength(double s0, double s1, @Nullable AffineTransform tx) {
         if (commands.length == 0) {
@@ -293,12 +281,10 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         return new SubPathIterator(s0, s1, this, tx);
     }
 
-    /**
-     * Returns a path iterator of the entire path.
-     *
-     * @param tx an optional transformation for the path iterator
-     * @return the path iterator
-     */
+    /// Returns a path iterator of the entire path.
+    ///
+    /// @param tx an optional transformation for the path iterator
+    /// @return the path iterator
     @Override
     public PathIterator getPathIterator(final @Nullable AffineTransform tx) {
         return new FullPathIterator(this, tx);
@@ -309,10 +295,8 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         return PathMetrics.pathMetricsToString(this);
     }
 
-    /**
-     * This {@link PathIterator} iterates over the entire path of the given {@link SimplePathMetrics}
-     * object.
-     */
+    /// This [PathIterator] iterates over the entire path of the given [SimplePathMetrics]
+    /// object.
     private static class FullPathIterator implements PathIterator {
         private final SimplePathMetrics m;
         private final AffineTransform tt;
@@ -369,22 +353,16 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         }
     }
 
-    /**
-     * This {@link PathIterator} iterates over the entire path of the given {@link SimplePathMetrics}
-     * object.
-     */
+    /// This [PathIterator] iterates over the entire path of the given [SimplePathMetrics]
+    /// object.
     private static class SubPathIterator implements PathIterator {
         private final double s0, s1;
         private final SimplePathMetrics m;
         private final AffineTransform tt;
         int current = 0;
-        /**
-         * The index of the first command that ends inside the sub-path.
-         */
+        /// The index of the first command that ends inside the sub-path.
         int i0;
-        /**
-         * The index of the first command that ends outside the sub-path.
-         */
+        /// The index of the first command that ends outside the sub-path.
         int i1;
         final double[] splitCoords = new double[8];
         private final double[] segCoords = new double[6];

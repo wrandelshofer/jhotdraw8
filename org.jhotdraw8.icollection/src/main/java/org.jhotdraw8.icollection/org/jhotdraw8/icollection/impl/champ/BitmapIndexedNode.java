@@ -18,25 +18,22 @@ import java.util.function.ToIntFunction;
 import static org.jhotdraw8.icollection.impl.champ.NodeFactory.newBitmapIndexedNode;
 
 
-/**
- * Represents a bitmap-indexed node in a CHAMP trie.
- * <p>
- * References:
- * <p>
- * This class has been derived from 'The Capsule Hash Trie Collections Library'.
- * <dl>
- *      <dt>The Capsule Hash Trie Collections Library.
- *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
- *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
- * </dl>
- *
- * @param <D> the data type
- */
+/// Represents a bitmap-indexed node in a CHAMP trie.
+///
+/// References:
+///
+/// This class has been derived from 'The Capsule Hash Trie Collections Library'.
+/// <dl>
+///      <dt>The Capsule Hash Trie Collections Library.
+///
+/// Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+///      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+/// </dl>
+///
+/// @param <D> the data type
 public class BitmapIndexedNode<D> extends Node<D> {
     static final BitmapIndexedNode<?> EMPTY_NODE = new BitmapIndexedNode<>(0, 0, new Object[]{});
-    /**
-     * True if data elements are stored at the beginning of the array, and node elements at the end.
-     */
+    /// True if data elements are stored at the beginning of the array, and node elements at the end.
     final static boolean DATA_FIRST = true;
 
 

@@ -41,10 +41,7 @@ import java.util.Set;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
-/**
- * Handle for moving (translating) a figure.
- *
- */
+/// Handle for moving (translating) a figure.
 public class BezierNodeMoveHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
@@ -205,15 +202,13 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         }
     }
 
-    /**
-     * Translates the specified figure, given the old and new position ofCollection a
-     * point.
-     *
-     * @param f        the figure to be translated
-     * @param oldPoint oldPoint in world coordinates
-     * @param newPoint newPoint in world coordinates
-     * @param model    the drawing model
-     */
+    /// Translates the specified figure, given the old and new position ofCollection a
+    /// point.
+    ///
+    /// @param f        the figure to be translated
+    /// @param oldPoint oldPoint in world coordinates
+    /// @param newPoint newPoint in world coordinates
+    /// @param model    the drawing model
     public static void translateFigure(Figure f, Point2D oldPoint, Point2D newPoint, @Nullable DrawingModel model) {
         Point2D npl = f.worldToParent(newPoint);
         Point2D opl = f.worldToParent(oldPoint);

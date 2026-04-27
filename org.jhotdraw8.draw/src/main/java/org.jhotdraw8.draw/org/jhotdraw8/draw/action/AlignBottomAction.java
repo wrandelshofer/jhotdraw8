@@ -22,11 +22,9 @@ public class AlignBottomAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.alignBottom";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     @SuppressWarnings("this-escape")
     public AlignBottomAction(DrawingEditor editor) {
         super(editor);

@@ -25,10 +25,7 @@ import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 
-/**
- * FXML Controller class
- *
- */
+/// FXML Controller class
 public class StyleAttributesInspector extends AbstractStyleAttributesInspector<Figure>
         implements Inspector<DrawingView> {
 
@@ -120,13 +117,11 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         return d == null ? null : d.getStyleManager();
     }
 
-    /**
-     * Can be overridden by subclasses. This implementation is empty.
-     *
-     * @param observable
-     * @param oldValue   the old drawing view
-     * @param newValue   the new drawing view
-     */
+    /// Can be overridden by subclasses. This implementation is empty.
+    ///
+    /// @param observable
+    /// @param oldValue   the old drawing view
+    /// @param newValue   the new drawing view
     protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         if (oldValue != null) {
             oldValue.modelProperty().removeListener(modelChangeHandler);

@@ -11,17 +11,15 @@ public class IntersectCircleQuadCurve {
     private IntersectCircleQuadCurve() {
     }
 
-    /**
-     * Computes the intersection between quadratic bezier curve 'p' and the
-     * given circle.
-     *
-     * @param p0 control point P0 of 'p'
-     * @param p1 control point P1 of 'p'
-     * @param p2 control point P3 of 'p'
-     * @param c  the center of the circle
-     * @param r  the radius of the circle
-     * @return the computed result
-     */
+    /// Computes the intersection between quadratic bezier curve 'p' and the
+    /// given circle.
+    ///
+    /// @param p0 control point P0 of 'p'
+    /// @param p1 control point P1 of 'p'
+    /// @param p2 control point P3 of 'p'
+    /// @param c  the center of the circle
+    /// @param r  the radius of the circle
+    /// @return the computed result
     public static IntersectionResult intersectQuadCurveCircle(Point2D p0, Point2D p1, Point2D p2, Point2D c, double r) {
         return IntersectEllipseQuadCurve.intersectQuadCurveEllipse(p0, p1, p2, c, r, r);
     }

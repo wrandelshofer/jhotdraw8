@@ -21,10 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Tests {@link MutableVectorList} with the Guava test suite.
- */
-
+/// Tests [MutableVectorList] with the Guava test suite.
 public class MutableVectorListGuavaTests {
 
     public static Test suite() {

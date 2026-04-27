@@ -12,14 +12,12 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.Locale;
 
-/**
- * Converts a XML float from/to String.
- * <p>
- * Reference:
- * <a href="https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#float">W3C: XML
- * Schema Part 2: Datatypes Second Edition: 3.2.4 float</a>
- * </p>
- */
+/// Converts a XML float from/to String.
+///
+/// Reference:
+/// <a href="https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#float">W3C: XML
+/// Schema Part 2: Datatypes Second Edition: 3.2.4 float</a>
+///
 public class FloatXmlConverter implements Converter<Float> {
 
     private final boolean usesScientificNotation = true;

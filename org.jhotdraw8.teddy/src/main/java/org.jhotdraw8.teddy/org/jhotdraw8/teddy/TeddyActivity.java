@@ -39,10 +39,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executors;
 
-/**
- * TeddyActivityController.
- *
- */
+/// TeddyActivityController.
 public class TeddyActivity extends AbstractFileBasedActivity implements FileBasedActivity, Initializable, FontableActivity {
 
     @FXML
@@ -75,9 +72,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
 
     }
 
-    /**
-     * Initializes the controller class.
-     */
+    /// Initializes the controller class.
     @FXML
     @Override
     public void initialize(URL location, ResourceBundle resources) {

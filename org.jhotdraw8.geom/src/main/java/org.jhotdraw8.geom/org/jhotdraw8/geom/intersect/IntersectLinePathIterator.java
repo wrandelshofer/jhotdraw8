@@ -23,31 +23,29 @@ public class IntersectLinePathIterator {
         return intersectLinePathIteratorEx(a0.getX(), a0.getY(), a1.getX(), a1.getY(), pit, maxT);
     }
 
-    /**
-     * Intersects the given line with the given path iterator.
-     * <p>
-     * This method can produce the following {@link IntersectionStatus} codes:
-     * <dl>
-     *     <dt>{@link IntersectionStatus#INTERSECTION}</dt><dd>
-     *         The line intersects with a segment of the path within the
-     *         given tolerance radius.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_INSIDE}</dt><dd>
-     *         The line lies inside the path.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_OUTSIDE}</dt><dd>
-     *         The line lies outside the path.
-     *     </dd>
-     * </dl>
-     *
-     * @param a0x  the x-coordinate of the start point of the line
-     * @param a0y  the y-coordinate of the start point of the line
-     * @param a1x  the x-coordinate of the end point of the line
-     * @param a1y  the y-coordinate of the end point of the line
-     * @param pit  the path iterator
-     * @param maxT the maximal time of the line (1 = entire line)
-     * @return the intersection result
-     */
+    /// Intersects the given line with the given path iterator.
+    ///
+    /// This method can produce the following [IntersectionStatus] codes:
+    /// <dl>
+    ///     <dt>[IntersectionStatus#INTERSECTION]</dt><dd>
+    ///         The line intersects with a segment of the path within the
+    ///         given tolerance radius.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_INSIDE]</dt><dd>
+    ///         The line lies inside the path.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION_OUTSIDE]</dt><dd>
+    ///         The line lies outside the path.
+    ///     </dd>
+    /// </dl>
+    ///
+    /// @param a0x  the x-coordinate of the start point of the line
+    /// @param a0y  the y-coordinate of the start point of the line
+    /// @param a1x  the x-coordinate of the end point of the line
+    /// @param a1y  the y-coordinate of the end point of the line
+    /// @param pit  the path iterator
+    /// @param maxT the maximal time of the line (1 = entire line)
+    /// @return the intersection result
     public static IntersectionResultEx intersectLinePathIteratorEx(double a0x, double a0y, double a1x, double a1y, PathIterator pit, double maxT) {
         List<IntersectionPointEx> lineIntersections = new ArrayList<>();
         List<IntersectionPointEx> insideIntersections = new ArrayList<>();

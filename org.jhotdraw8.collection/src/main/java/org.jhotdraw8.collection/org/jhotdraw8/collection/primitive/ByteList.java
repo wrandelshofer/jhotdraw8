@@ -7,9 +7,7 @@ package org.jhotdraw8.collection.primitive;
 
 import java.util.List;
 
-/**
- * Interface for a {@link List} with a primitive integer data elements.
- */
+/// Interface for a [List] with a primitive integer data elements.
 public interface ByteList extends List<Byte>, ByteSequencedCollection {
     @Override
     default boolean add(Byte e) {
@@ -27,29 +25,19 @@ public interface ByteList extends List<Byte>, ByteSequencedCollection {
         return lastIndexOfAsByte((Byte) o);
     }
 
-    /**
-     * @see List#lastIndexOf(Object)
-     */
+    /// @see List#lastIndexOf(Object)
     int lastIndexOfAsByte(byte o);
 
-    /**
-     * @see List#indexOf(Object)
-     */
+    /// @see List#indexOf(Object)
     int indexOfAsByte(byte o);
 
-    /**
-     * @see List#add(Object)
-     */
+    /// @see List#add(Object)
     void addAsByte(byte e);
 
-    /**
-     * @see List#add(int, Object)
-     */
+    /// @see List#add(int, Object)
     void addAsByte(int index, byte e);
 
-    /**
-     * @see List#get(int)
-     */
+    /// @see List#get(int)
     byte getAsByte(int index);
 
     @Override
@@ -62,12 +50,10 @@ public interface ByteList extends List<Byte>, ByteSequencedCollection {
         addAsByte(size(), e);
     }
 
-    /**
-     * Removes the item at the specified index from this list.
-     *
-     * @param index an index
-     * @return the removed item
-     */
+    /// Removes the item at the specified index from this list.
+    ///
+    /// @param index an index
+    /// @return the removed item
     byte removeAtAsByte(int index);
 
     @Override

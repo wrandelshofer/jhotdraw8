@@ -12,10 +12,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Find - ReplaceAll regular expression.
- *
- */
+/// Find - ReplaceAll regular expression.
 public class RegexReplace {
 
     private final @Nullable String find;
@@ -48,12 +45,10 @@ public class RegexReplace {
         return str == null ? "" : str.replace("/", "\\/");
     }
 
-    /**
-     * Applies the regular expression to the string.
-     *
-     * @param str the string
-     * @return the replaced string
-     */
+    /// Applies the regular expression to the string.
+    ///
+    /// @param str the string
+    /// @return the replaced string
     public @Nullable String apply(@Nullable String str) {
         if (str == null) {
             return null;

@@ -11,23 +11,18 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
-/**
- * This figure draws a straight line or an elbow line from a start point to an end point.
- * <p>
- * The start/end point can be located at an absolute position on the drawing,
- * or it can be connected to a point inside another figure.
- * <p>
- * The figure can have an optional marker shape at the start point, and at
- * the end point.
- *
- */
+/// This figure draws a straight line or an elbow line from a start point to an end point.
+///
+/// The start/end point can be located at an absolute position on the drawing,
+/// or it can be connected to a point inside another figure.
+///
+/// The figure can have an optional marker shape at the start point, and at
+/// the end point.
 public class ElbowConnectionWithMarkersFigure extends AbstractElbowLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, MarkerFillableFigure, StrokableFigure, MarkerStartableFigure,
         MarkerEndableFigure, StrokeCuttableFigure, ElbowableLineFigure {
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "ElbowConnectionWithMarkers";
 
     public ElbowConnectionWithMarkersFigure() {

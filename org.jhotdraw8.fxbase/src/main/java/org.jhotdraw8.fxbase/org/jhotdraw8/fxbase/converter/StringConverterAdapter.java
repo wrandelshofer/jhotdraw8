@@ -10,12 +10,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.text.ParseException;
 
-/**
- * Allows to use a {@code Converter} with the
- * {@code javafx.util.StringConverter} API.
- *
- * @param <T> the value type
- */
+/// Allows to use a `Converter` with the
+/// `javafx.util.StringConverter` API.
+///
+/// @param <T> the value type
 public class StringConverterAdapter<T> extends StringConverter<T> {
 
     private final Converter<T> converter;

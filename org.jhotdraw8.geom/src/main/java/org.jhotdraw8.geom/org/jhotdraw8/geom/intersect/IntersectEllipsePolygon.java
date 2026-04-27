@@ -13,15 +13,13 @@ public class IntersectEllipsePolygon {
     private IntersectEllipsePolygon() {
     }
 
-    /**
-     * Computes the intersection between a circle and a polygon.
-     *
-     * @param c      the center of the ellipse
-     * @param rx     the x-radius of the ellipse
-     * @param ry     the y-radius of the ellipse
-     * @param points the points of the polygon
-     * @return computed intersection
-     */
+    /// Computes the intersection between a circle and a polygon.
+    ///
+    /// @param c      the center of the ellipse
+    /// @param rx     the x-radius of the ellipse
+    /// @param ry     the y-radius of the ellipse
+    /// @param points the points of the polygon
+    /// @return computed intersection
     public static IntersectionResult intersectEllipsePolygon(Point2D c, double rx, double ry, List<Point2D.Double> points) {
         List<IntersectionPoint> result = new ArrayList<>();
         int length = points.size();

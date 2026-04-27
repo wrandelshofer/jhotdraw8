@@ -7,20 +7,16 @@ package org.jhotdraw8.fxbase.tree;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jspecify.annotations.Nullable;
 
-/**
- * The {@code TreePresentationModel} can be used to present a {@code TreeModel}
- * in a {@code TreeView} or a {@code TreeTableView}.
- * <p>
- * Maps {@code TreeModel} to a {@code TreeItem&lt;E&gt;} hierarchy.
- * <p>
- * Note: for performance reasons we do not expand the tree nodes by default.
- *
- * @param <N> the node type
- */
+/// The `TreePresentationModel` can be used to present a `TreeModel`
+/// in a `TreeView` or a `TreeTableView`.
+///
+/// Maps `TreeModel` to a `TreeItem&lt;E&gt;` hierarchy.
+///
+/// Note: for performance reasons we do not expand the tree nodes by default.
+///
+/// @param <N> the node type
 public abstract class AbstractTreePresentationModel<N> implements TreePresentationModel<N> {
-    /**
-     * Holds the underlying model.
-     */
+    /// Holds the underlying model.
     private final NonNullObjectProperty<TreeModel<N>> treeModel //
             = new NonNullObjectProperty<>(this, MODEL_PROPERTY, new SimpleTreeModel<>()) {
         private @Nullable TreeModel<N> oldValue = null;

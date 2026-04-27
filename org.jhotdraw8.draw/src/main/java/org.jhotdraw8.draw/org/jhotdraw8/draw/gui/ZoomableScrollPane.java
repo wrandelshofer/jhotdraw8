@@ -62,58 +62,46 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-/**
- * A ScrollPane that also supports zooming.
- * <p>
- * The ZoomScrollPane can zoom and scroll its content.
- * <p>
- * It also supports a background and a foreground that
- * scroll with the content, but that do not zoom on their own.
- * <p>
- * You can not set the background, foreground and content objects,
- * you can only access their children list.
- * <p>
- * The ZoomScrollPane has the following scene structure:
- * <ul>
- *   <li>{@value #ZOOMABLE_SCROLL_PANE_STYLE_CLASS} – {@link GridPane}<ul>
- *     <li>"scroll-bar:vertical" – {@link ScrollBar}</li>
- *     <li>"scroll-bar:horizontal" – {@link ScrollBar}</li>
- *     <li>{@value #ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS} – {@link StackPane}<ul>
- *         <li>{@value #ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS} – {@link StackPane}<ul>
- *            <li>background - getBackgroundChildren().add(...)</li>
- *         </ul></li>
- *         <li>{@value #ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS} – {@link SubScene}<ul>
- *           <li>{@link StackPane}<ul>
- *              <li>content - getContentChildren().add(...)</li>
- *           </ul></li>
- *         </ul></li>
- *         <li>{@value #ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS} – {@link StackPane}<ul>
- *            <li>foreground - getForegroundChildren().add(...)</li>
- *         </ul></li>
- *     </ul></li>
- *   </ul></li>
- * </ul>
- */
+/// A ScrollPane that also supports zooming.
+///
+/// The ZoomScrollPane can zoom and scroll its content.
+///
+/// It also supports a background and a foreground that
+/// scroll with the content, but that do not zoom on their own.
+///
+/// You can not set the background, foreground and content objects,
+/// you can only access their children list.
+///
+/// The ZoomScrollPane has the following scene structure:
+///
+///     - {@value #ZOOMABLE_SCROLL_PANE_STYLE_CLASS} – [GridPane]
+///   - "scroll-bar:vertical" – [ScrollBar]
+///   - "scroll-bar:horizontal" – [ScrollBar]
+///   - {@value #ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS} – [StackPane]
+///   - {@value #ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS} – [StackPane]
+///   - background - getBackgroundChildren().add(...)
+///
+///       - {@value #ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS} – [SubScene]
+///   - [StackPane]
+///   - content - getContentChildren().add(...)
+///
+///
+///       - {@value #ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS} – [StackPane]
+///   - foreground - getForegroundChildren().add(...)
+///
+///
+///
+///
 public class ZoomableScrollPane extends GridPane {
-    /**
-     * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_STYLE_CLASS}.
-     */
+    /// The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_STYLE_CLASS}.
     public static final String ZOOMABLE_SCROLL_PANE_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane";
-    /**
-     * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS}.
-     */
+    /// The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS}.
     public static final String ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-viewport";
-    /**
-     * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS}.
-     */
+    /// The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS}.
     public static final String ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-background";
-    /**
-     * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS}.
-     */
+    /// The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS}.
     public static final String ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-subscene";
-    /**
-     * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS}.
-     */
+    /// The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS}.
     public static final String ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-foreground";
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
     private final ObjectProperty<Bounds> visibleContentRect = new SimpleObjectProperty<>(this, "contentRect");
@@ -520,12 +508,10 @@ public class ZoomableScrollPane extends GridPane {
     }
 
 
-    /**
-     * Returns the rectangle of the content which is currently visible in the
-     * viewport in content coordinates.
-     *
-     * @return visible content rectangle in content coordinates
-     */
+    /// Returns the rectangle of the content which is currently visible in the
+    /// viewport in content coordinates.
+    ///
+    /// @return visible content rectangle in content coordinates
     public Bounds getVisibleContentRect() {
         return visibleContentRect.get();
     }
@@ -534,12 +520,10 @@ public class ZoomableScrollPane extends GridPane {
         return getContentToView().transform(getVisibleContentRect());
     }
 
-    /**
-     * Gets the position of the scrollbar.
-     *
-     * @param sb a scrollbar
-     * @return the position of the scrollbar
-     */
+    /// Gets the position of the scrollbar.
+    ///
+    /// @param sb a scrollbar
+    /// @return the position of the scrollbar
     private static double getScrollBarPosition(ScrollBar sb) {
         double value = sb.getValue(),
                 min = sb.getMin(),
@@ -735,9 +719,7 @@ public class ZoomableScrollPane extends GridPane {
         return hbarPolicy;
     }
 
-    /**
-     * Specifies the policy for showing the vertical scroll bar.
-     */
+    /// Specifies the policy for showing the vertical scroll bar.
     private @Nullable ObjectProperty<ScrollPane.ScrollBarPolicy> vbarPolicy;
 
     public final void setVbarPolicy(ScrollPane.ScrollBarPolicy value) {
@@ -771,13 +753,11 @@ public class ZoomableScrollPane extends GridPane {
         return vbarPolicy;
     }
 
-    /**
-     * Specifies whether the user should be able to pan the viewport by using
-     * the mouse. If mouse events reach the ZoomableScrollPane (that is, if mouse
-     * events are not blocked by the contained node or one of its children)
-     * then {@link #pannableProperty pannable} is consulted to determine if the events should be
-     * used for panning.
-     */
+    /// Specifies whether the user should be able to pan the viewport by using
+    /// the mouse. If mouse events reach the ZoomableScrollPane (that is, if mouse
+    /// events are not blocked by the contained node or one of its children)
+    /// then [pannable][#pannableProperty] is consulted to determine if the events should be
+    /// used for panning.
     private @Nullable StyleableBooleanProperty pannable;
 
     public final void setPannable(boolean value) {

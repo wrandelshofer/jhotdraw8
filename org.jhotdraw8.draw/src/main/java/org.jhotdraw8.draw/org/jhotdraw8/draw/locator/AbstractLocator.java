@@ -7,16 +7,11 @@ package org.jhotdraw8.draw.locator;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.figure.Figure;
 
-/**
- * This abstract class can be extended to implement a {@link Locator}.
- *
- */
+/// This abstract class can be extended to implement a [Locator].
 public abstract class AbstractLocator implements Locator {
 
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public AbstractLocator() {
     }
 

@@ -5,10 +5,8 @@
 
 package org.jhotdraw8.svg.text;
 
-/**
- * Display.
- * <a href="https://www.w3.org/TR/SVGTiny12/painting.html#DisplayProperty">link</a>
- */
+/// Display.
+/// <a href="https://www.w3.org/TR/SVGTiny12/painting.html#DisplayProperty">link</a>
 public enum SvgDisplay {
     INLINE, BLOCK, LIST_ITEM,
     RUN_IN, COMPACT, MARKER,

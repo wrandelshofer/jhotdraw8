@@ -21,9 +21,7 @@ import javafx.scene.layout.Region;
 import java.util.List;
 
 
-/**
- * Abstract base class for implementations of {@link DockParent}.
- */
+/// Abstract base class for implementations of [DockParent].
 public abstract class AbstractDockParent
         extends Region
         implements DockParent {

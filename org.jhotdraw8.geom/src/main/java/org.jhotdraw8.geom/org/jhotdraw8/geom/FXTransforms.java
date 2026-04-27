@@ -30,27 +30,19 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.sqrt;
 
-/**
- * FXTransforms.
- */
+/// FXTransforms.
 public class FXTransforms {
-    /**
-     * 'Immutable' identity transform.
-     * <p>
-     * JavaFX Transforms are not actually immutable.
-     * Do not change the value of this transform!
-     */
+    /// 'Immutable' identity transform.
+    ///
+    /// JavaFX Transforms are not actually immutable.
+    /// Do not change the value of this transform!
     public static final Transform IDENTITY = new Translate();
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private FXTransforms() {
     }
 
-    /**
-     * Returns the concatenation of the provided transforms.
-     */
+    /// Returns the concatenation of the provided transforms.
     public static Transform concat(@Nullable Transform... transforms) {
         Transform a = null;
         for (Transform b : transforms) {
@@ -94,14 +86,12 @@ public class FXTransforms {
         return t;
     }
 
-    /**
-     * Decomposes the given transformation matrix into rotation, followed by
-     * scale and then translation. Returns the matrix if the decomposition
-     * fails. Returns an empty list if the transform is the identity matrix.
-     *
-     * @param transform a transformation
-     * @return decomposed transformation
-     */
+    /// Decomposes the given transformation matrix into rotation, followed by
+    /// scale and then translation. Returns the matrix if the decomposition
+    /// fails. Returns an empty list if the transform is the identity matrix.
+    ///
+    /// @param transform a transformation
+    /// @return decomposed transformation
     public static List<Transform> decompose(Transform transform) {
         List<Transform> list = new ArrayList<>();
         if (transform.isIdentity()) {
@@ -282,67 +272,59 @@ public class FXTransforms {
         return new Point2D(p.getX(), p.getY());
     }
 
-    /**
-     * Rotates from tangent vector.
-     * <p>
-     * A tangent vector pointing to (1,0) results in an identity matrix.
-     *
-     * @param tangent a tangent vector
-     * @param pivot   the pivot of the rotation
-     * @return a rotation transform
-     */
+    /// Rotates from tangent vector.
+    ///
+    /// A tangent vector pointing to (1,0) results in an identity matrix.
+    ///
+    /// @param tangent a tangent vector
+    /// @param pivot   the pivot of the rotation
+    /// @return a rotation transform
     public static Transform rotate(Point2D tangent, Point2D pivot) {
         double theta = Angles.atan2(tangent.getY(), tangent.getX());
         return rotateRadians(theta, pivot.getX(), pivot.getY());
     }
 
-    /**
-     * Creates a transform from an angle given in radians and the pivot point
-     * of the rotation.
-     *
-     * @param theta  the angle of the rotation in radians
-     * @param pivotX the X coordinate of the rotation pivot point
-     * @param pivotY the Y coordinate of the rotation pivot point
-     * @return a rotation matrix
-     */
+    /// Creates a transform from an angle given in radians and the pivot point
+    /// of the rotation.
+    ///
+    /// @param theta  the angle of the rotation in radians
+    /// @param pivotX the X coordinate of the rotation pivot point
+    /// @param pivotY the Y coordinate of the rotation pivot point
+    /// @return a rotation matrix
     private static Transform rotateRadians(double theta, double pivotX, double pivotY) {
         return new FXPreciseRotate(Math.toDegrees(theta), pivotX, pivotY);
     }
 
-    /**
-     * Rotates from tangent vector.
-     * <p>
-     * A tangent vector pointing to (1,0) results in an identity matrix.
-     *
-     * @param tangentX a tangent vector
-     * @param tangentY a tangent vector
-     * @param pivotX   the pivot of the rotation
-     * @param pivotY   the pivot of the rotation
-     * @return a rotation transform
-     */
+    /// Rotates from tangent vector.
+    ///
+    /// A tangent vector pointing to (1,0) results in an identity matrix.
+    ///
+    /// @param tangentX a tangent vector
+    /// @param tangentY a tangent vector
+    /// @param pivotX   the pivot of the rotation
+    /// @param pivotY   the pivot of the rotation
+    /// @return a rotation transform
     public static Transform rotate(double tangentX, double tangentY, double pivotX, double pivotY) {
         double theta = Angles.atan2(tangentY, tangentX);
         return rotateRadians(theta, pivotX, pivotY);
     }
 
-    /**
-     * Creates a transformation matrix, which projects a point onto the given line.
-     * The projection is orthogonal to the line.
-     * The point will not be clipped off by the line.
-     * <p>
-     * Formula: b = project(a, p1,p2)
-     * <pre>
-     *  v = p2 - p1;
-     *  b = vvT / vTv * (a - p1) + p1;
-     *  b = [ vvT / vTv | vvT / vTv * p1 ] * a; // 2 by 3 matrix
-     * </pre>
-     *
-     * @param x1 x-coordinate of p1 of the line
-     * @param y1 y-coordinate of p1 of the line
-     * @param x2 x-coordinate of p2 of the line
-     * @param y2 y-coordinate of p2 of the line
-     * @return the transformation matrix
-     */
+    /// Creates a transformation matrix, which projects a point onto the given line.
+    /// The projection is orthogonal to the line.
+    /// The point will not be clipped off by the line.
+    ///
+    /// Formula: b = project(a, p1,p2)
+    /// <pre>
+    ///  v = p2 - p1;
+    ///  b = vvT / vTv * (a - p1) + p1;
+    ///  b = [vvT/vTv|vvT/vTv*p1] * a; // 2 by 3 matrix
+    /// </pre>
+    ///
+    /// @param x1 x-coordinate of p1 of the line
+    /// @param y1 y-coordinate of p1 of the line
+    /// @param x2 x-coordinate of p2 of the line
+    /// @param y2 y-coordinate of p2 of the line
+    /// @return the transformation matrix
     public static Transform createProjectPointOnLineTransform(double x1, double y1, double x2, double y2) {
         double vx = x2 - x1;
         double vy = y2 - y1;
@@ -407,12 +389,10 @@ public class FXTransforms {
 
     }
 
-    /**
-     * Computes the bounding box in parent coordinates
-     *
-     * @param b a box in local coordinates
-     * @return bounding box in parent coordinates
-     */
+    /// Computes the bounding box in parent coordinates
+    ///
+    /// @param b a box in local coordinates
+    /// @return bounding box in parent coordinates
     public static Bounds transformedBoundingBox(@Nullable Transform t, Bounds b) {
         if (t == null) {
             return b;

@@ -10,189 +10,135 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.concurrent.Worker;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Work state can be used to report the current state
- * of work, and provides an ability to cancel work in progress.
- *
- * @param <V> the type of the result value
- */
+/// Work state can be used to report the current state
+/// of work, and provides an ability to cancel work in progress.
+///
+/// @param <V> the type of the result value
 public interface WorkState<V> extends Worker<V> {
-    /**
-     * The name of the {@link #titleProperty()}.
-     */
+    /// The name of the [#titleProperty()].
     String TITLE_PROPERTY = "title";
-    /**
-     * The name of the {@link #messageProperty()}.
-     */
+    /// The name of the [#messageProperty()].
     String MESSAGE_PROPERTY = "message";
     String RUNNING_PROPERTY = "running";
-    /**
-     * The name of the {@link #valueProperty()}.
-     */
+    /// The name of the [#valueProperty()].
     String VALUE_PROPERTY = "value";
     String STATE_PROPERTY = "state";
     String EXCEPTION_PROPERTY = "exception";
-    /**
-     * The name of the {@link #workDoneProperty()}.
-     */
+    /// The name of the [#workDoneProperty()].
     String WORK_DONE_PROPERTY = "workDone";
-    /**
-     * The name of the {@link #totalWorkProperty()}.
-     */
+    /// The name of the [#totalWorkProperty()].
     String TOTAL_WORK_PROPERTY = "totalWork";
-    /**
-     * The name of the {@link #progressProperty()}.
-     */
+    /// The name of the [#progressProperty()].
     String PROGRESS_PROPERTY = "progress";
 
-    /**
-     * Asynchronously updates the current message of the work state.
-     * <p>
-     * Calls to this method
-     * are coalesced and run later on the FX application thread, so calls
-     * to this method, even from the FX Application thread, may not
-     * necessarily result in immediate updates to the property, and
-     * intermediate values may be coalesced to save on event
-     * notifications.
-     *
-     * @param value the new value
-     */
+    /// Asynchronously updates the current message of the work state.
+    ///
+    /// Calls to this method
+    /// are coalesced and run later on the FX application thread, so calls
+    /// to this method, even from the FX Application thread, may not
+    /// necessarily result in immediate updates to the property, and
+    /// intermediate values may be coalesced to save on event
+    /// notifications.
+    ///
+    /// @param value the new value
     void updateMessage(@Nullable String value);
 
-    /**
-     * Asynchronously updates the current state of the work state.
-     * <p>
-     * Calls to this method are coalesced as described in {@link #updateMessage(String)}.
-     *
-     * @param value the new value
-     */
+    /// Asynchronously updates the current state of the work state.
+    ///
+    /// Calls to this method are coalesced as described in [#updateMessage(String)].
+    ///
+    /// @param value the new value
     void updateState(State value);
 
-    /**
-     * Asynchronously updates the current exception of the work state.
-     * <p>
-     * Calls to this method are coalesced as described in {@link #updateMessage(String)}.
-     *
-     * @param value the new value
-     */
+    /// Asynchronously updates the current exception of the work state.
+    ///
+    /// Calls to this method are coalesced as described in [#updateMessage(String)].
+    ///
+    /// @param value the new value
     void updateException(Throwable value);
 
-    /**
-     * Asynchronously updates the current running state of the work state.
-     * <p>
-     * Calls to this method are coalesced as described in {@link #updateMessage(String)}.
-     *
-     * @param value the new value
-     */
+    /// Asynchronously updates the current running state of the work state.
+    ///
+    /// Calls to this method are coalesced as described in [#updateMessage(String)].
+    ///
+    /// @param value the new value
     void updateRunning(boolean value);
 
-    /**
-     * Asynchronously updates the current title of the work state.
-     * <p>
-     * Calls to this method are coalesced as described in {@link #updateMessage(String)}.
-     *
-     * @param value the new value
-     */
+    /// Asynchronously updates the current title of the work state.
+    ///
+    /// Calls to this method are coalesced as described in [#updateMessage(String)].
+    ///
+    /// @param value the new value
     void updateTitle(@Nullable String value);
 
-    /**
-     * Asynchronously updates the current value of the work state.
-     * <p>
-     * Calls to this method are coalesced as described in {@link #updateMessage(String)}.
-     *
-     * @param value the new value
-     */
+    /// Asynchronously updates the current value of the work state.
+    ///
+    /// Calls to this method are coalesced as described in [#updateMessage(String)].
+    ///
+    /// @param value the new value
     void updateValue(@Nullable V value);
 
-    /**
-     * Asynchronously updates the progress of the work state.
-     * <p>
-     * Calls to this method are coalesced as described in {@link #updateMessage(String)}.
-     *
-     * @param value the new value
-     */
+    /// Asynchronously updates the progress of the work state.
+    ///
+    /// Calls to this method are coalesced as described in [#updateMessage(String)].
+    ///
+    /// @param value the new value
     void updateProgress(double value);
 
-    /**
-     * Returns true if the worker associated to this work state should cancel.
-     *
-     * @return true if cancelled
-     */
+    /// Returns true if the worker associated to this work state should cancel.
+    ///
+    /// @return true if cancelled
     boolean isCancelled();
 
-    /**
-     * @see Worker#getValue()
-     */
+    /// @see Worker#getValue()
     @Override
     @Nullable V getValue();
 
-    /**
-     * @see Worker#valueProperty()
-     */
+    /// @see Worker#valueProperty()
     @Override
     ReadOnlyObjectProperty<V> valueProperty();
 
 
-    /**
-     * @see Worker#getWorkDone()
-     */
+    /// @see Worker#getWorkDone()
     @Override
     double getWorkDone();
 
-    /**
-     * @see Worker#workDoneProperty()
-     */
+    /// @see Worker#workDoneProperty()
     @Override
     ReadOnlyDoubleProperty workDoneProperty();
 
 
-    /**
-     * @see Worker#getTotalWork()
-     */
+    /// @see Worker#getTotalWork()
     @Override
     double getTotalWork();
 
 
-    /**
-     * @see Worker#totalWorkProperty()
-     */
+    /// @see Worker#totalWorkProperty()
     @Override
     ReadOnlyDoubleProperty totalWorkProperty();
 
 
-    /**
-     * @see Worker#getProgress()
-     */
+    /// @see Worker#getProgress()
     @Override
     double getProgress();
 
-    /**
-     * @see Worker#progressProperty()
-     */
+    /// @see Worker#progressProperty()
     @Override
     ReadOnlyDoubleProperty progressProperty();
 
-    /**
-     * @see Worker#getMessage()
-     */
+    /// @see Worker#getMessage()
     @Override
     @Nullable String getMessage();
 
-    /**
-     * @see Worker#messageProperty()
-     */
+    /// @see Worker#messageProperty()
     @Override
     ReadOnlyStringProperty messageProperty();
 
-    /**
-     * @see Worker#getTitle()
-     */
+    /// @see Worker#getTitle()
     @Override
     @Nullable String getTitle();
 
-    /**
-     * @see Worker#titleProperty()
-     */
+    /// @see Worker#titleProperty()
     @Override
     ReadOnlyStringProperty titleProperty();
 

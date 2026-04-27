@@ -17,44 +17,34 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
-/**
- * A readable interface to a map. A map is an object that maps keys to values.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// A readable interface to a map. A map is an object that maps keys to values.
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
-    /**
-     * Returns {@code true} if this map contains no entries.
-     *
-     * @return {@code true} if empty
-     */
+    /// Returns `true` if this map contains no entries.
+    ///
+    /// @return `true` if empty
     boolean isEmpty();
 
-    /**
-     * Returns the number of entries contained in this map..
-     *
-     * @return the number of entries
-     */
+    /// Returns the number of entries contained in this map..
+    ///
+    /// @return the number of entries
     int size();
 
-    /**
-     * Returns the value to which the key is mapped, or {@code null} if this map
-     * contains no entry for the key.
-     *
-     * @param key a key
-     * @return the mapped value or {@code null}
-     */
+    /// Returns the value to which the key is mapped, or `null` if this map
+    /// contains no entry for the key.
+    ///
+    /// @param key a key
+    /// @return the mapped value or `null`
     @Nullable V get(Object key);
 
-    /**
-     * Returns the value to which the key is mapped, or the specified default
-     * value if this map contains no entry for the key.
-     *
-     * @param key          a key
-     * @param defaultValue a default value
-     * @return the mapped value or the specified default value
-     */
+    /// Returns the value to which the key is mapped, or the specified default
+    /// value if this map contains no entry for the key.
+    ///
+    /// @param key          a key
+    /// @param defaultValue a default value
+    /// @return the mapped value or the specified default value
     @SuppressWarnings("unchecked")
     default @Nullable V getOrDefault(Object key, @Nullable V defaultValue) {
         V v;
@@ -63,24 +53,20 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
                 : defaultValue;
     }
 
-    /**
-     * Returns {@code true} if this map contains a entry for the specified
-     * key.
-     *
-     * @param key a key
-     * @return {@code true} if this map contains a entry for the specified
-     * key
-     */
+    /// Returns `true` if this map contains a entry for the specified
+    /// key.
+    ///
+    /// @param key a key
+    /// @return `true` if this map contains a entry for the specified
+    /// key
     boolean containsKey(@Nullable Object key);
 
-    /**
-     * Returns {@code true} if this map contains one or more keys to the
-     * specified value.
-     *
-     * @param value a value
-     * @return {@code true} if this map maps one or more keys to the
-     * specified value
-     */
+    /// Returns `true` if this map contains one or more keys to the
+    /// specified value.
+    ///
+    /// @param value a value
+    /// @return `true` if this map maps one or more keys to the
+    /// specified value
     default boolean containsValue(@Nullable Object value) {
         for (Map.Entry<K, V> entry : this) {
             if (Objects.equals(value, entry.getValue())) {
@@ -90,12 +76,10 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
         return false;
     }
 
-    /**
-     * Returns true if this map contains the specified entry.
-     *
-     * @param o an entry (should be a {@link Map.Entry}).
-     * @return true if this map contains the entry
-     */
+    /// Returns true if this map contains the specified entry.
+    ///
+    /// @param o an entry (should be a [Map.Entry]).
+    /// @return true if this map contains the entry
     default boolean containsEntry(Object o) {
         if (o instanceof Map.Entry) {
             @SuppressWarnings("unchecked") Map.Entry<K, V> entry = (Map.Entry<K, V>) o;
@@ -105,12 +89,10 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
         return false;
     }
 
-    /**
-     * Returns a {@link ReadableSet} view to the entries contained
-     * in this map.
-     *
-     * @return a readable view
-     */
+    /// Returns a [ReadableSet] view to the entries contained
+    /// in this map.
+    ///
+    /// @return a readable view
     default ReadableSet<Map.Entry<K, V>> readableEntrySet() {
         return new ReadableSetFacade<>(
                 this::iterator,
@@ -119,12 +101,10 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
                 Spliterator.NONNULL);
     }
 
-    /**
-     * Returns a {@link ReadableSet} view to the keys contained
-     * in this map.
-     *
-     * @return a readable view
-     */
+    /// Returns a [ReadableSet] view to the keys contained
+    /// in this map.
+    ///
+    /// @return a readable view
     default ReadableSet<K> readableKeySet() {
         return new ReadableSetFacade<>(
                 () -> new MappedIterator<>(ReadableMap.this.iterator(), Map.Entry::getKey),
@@ -133,12 +113,10 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
                 0);
     }
 
-    /**
-     * Returns a {@link ReadableCollection} view to the values contained
-     * in this map.
-     *
-     * @return a readable view
-     */
+    /// Returns a [ReadableCollection] view to the values contained
+    /// in this map.
+    ///
+    /// @return a readable view
     default ReadableCollection<V> readableValues() {
         return new ReadableCollectionFacade<>(
                 () -> new MappedIterator<>(ReadableMap.this.iterator(), Map.Entry::getValue),
@@ -147,26 +125,22 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
         );
     }
 
-    /**
-     * Wraps this map in the {@link Map} interface - without copying.
-     *
-     * @return the wrapped map
-     */
+    /// Wraps this map in the [Map] interface - without copying.
+    ///
+    /// @return the wrapped map
     default Map<K, V> asMap() {
         return new MapFacade<>(this);
     }
 
-    /**
-     * Returns a string representation of the specified map.
-     * <p>
-     * The string representation is consistent with the one produced
-     * by {@link AbstractMap#toString()}.
-     *
-     * @param map a map
-     * @param <K> the key type
-     * @param <V> the value type
-     * @return a string representation
-     */
+    /// Returns a string representation of the specified map.
+    ///
+    /// The string representation is consistent with the one produced
+    /// by [AbstractMap#toString()].
+    ///
+    /// @param map a map
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return a string representation
     static <K, V> String mapToString(final ReadableMap<K, V> map) {
         Iterator<Map.Entry<K, V>> i = map.iterator();
         if (!i.hasNext()) {
@@ -189,17 +163,15 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
         }
     }
 
-    /**
-     * Compares a readable map with an object for equality.  Returns
-     * {@code true} if the given object is also a readable map and the two maps
-     * represent the same entries.
-     *
-     * @param map a map
-     * @param o   an object
-     * @param <K> the key type
-     * @param <V> the value type
-     * @return {@code true} if the object is equal to the map
-     */
+    /// Compares a readable map with an object for equality.  Returns
+    /// `true` if the given object is also a readable map and the two maps
+    /// represent the same entries.
+    ///
+    /// @param map a map
+    /// @param o   an object
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return `true` if the object is equal to the map
     static <K, V> boolean mapEquals(ReadableMap<K, V> map, Object o) {
         if (o == map) {
             return true;
@@ -235,68 +207,56 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
         return true;
     }
 
-    /**
-     * Returns the hash code of the provided iterable. The hash code
-     * is the sum of the hash code of the entries.
-     *
-     * @param entries an iterable that is an entry set
-     * @param <K>     the key type
-     * @param <V>     the value type
-     * @return the sum of the hash codes of the elements in the set
-     * @see Map#hashCode()
-     */
+    /// Returns the hash code of the provided iterable. The hash code
+    /// is the sum of the hash code of the entries.
+    ///
+    /// @param entries an iterable that is an entry set
+    /// @param <K>     the key type
+    /// @param <V>     the value type
+    /// @return the sum of the hash codes of the elements in the set
+    /// @see Map#hashCode()
     static <K, V> int iteratorToHashCode(Iterator<Map.Entry<K, V>> entries) {
         return ReadableSet.iteratorToHashCode(entries);
     }
 
-    /**
-     * Compares the specified object with this map for equality.
-     * <p>
-     * Returns {@code true} if the given object is also a readable map and the
-     * two maps represent the same entries, ignorig the sequence of the
-     * map entries.
-     *
-     * @param o an object
-     * @return {@code true} if the object is equal to this map
-     */
+    /// Compares the specified object with this map for equality.
+    ///
+    /// Returns `true` if the given object is also a readable map and the
+    /// two maps represent the same entries, ignorig the sequence of the
+    /// map entries.
+    ///
+    /// @param o an object
+    /// @return `true` if the object is equal to this map
     boolean equals(Object o);
 
-    /**
-     * Returns the hash code value for this map. The hash code
-     * is the sum of the hash code of its entries.
-     *
-     * @return the hash code value for this map
-     * @see Map#hashCode()
-     */
+    /// Returns the hash code value for this map. The hash code
+    /// is the sum of the hash code of its entries.
+    ///
+    /// @return the hash code value for this map
+    /// @see Map#hashCode()
     int hashCode();
 
-    /**
-     * Returns an iterator over the entries contained in this map.
-     *
-     * @return an iterator
-     */
+    /// Returns an iterator over the entries contained in this map.
+    ///
+    /// @return an iterator
     @Override
     Iterator<Map.Entry<K, V>> iterator();
 
-    /**
-     * Returns a spliterator over the entries contained in this map.
-     *
-     * @return a spliterator
-     */
+    /// Returns a spliterator over the entries contained in this map.
+    ///
+    /// @return a spliterator
     @Override
     default Spliterator<Map.Entry<K, V>> spliterator() {
         //noinspection MagicConstant
         return Spliterators.spliterator(iterator(), size(), characteristics());
     }
 
-    /**
-     * Returns the spliterator characteristics of the key set.
-     * <p>
-     * The default implementation in this interface
-     * returns {@link Spliterator#SIZED}|{@link Spliterator#DISTINCT}.
-     *
-     * @return characteristics.
-     */
+    /// Returns the spliterator characteristics of the key set.
+    ///
+    /// The default implementation in this interface
+    /// returns [Spliterator#SIZED]|[Spliterator#DISTINCT].
+    ///
+    /// @return characteristics.
     default int characteristics() {
         return Spliterator.SIZED | Spliterator.DISTINCT;
     }

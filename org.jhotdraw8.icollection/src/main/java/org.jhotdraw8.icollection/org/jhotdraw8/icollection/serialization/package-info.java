@@ -3,8 +3,6 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-/**
- * Provides serialization proxies for collections.
- */
+/// Provides serialization proxies for collections.
 package org.jhotdraw8.icollection.serialization;
 

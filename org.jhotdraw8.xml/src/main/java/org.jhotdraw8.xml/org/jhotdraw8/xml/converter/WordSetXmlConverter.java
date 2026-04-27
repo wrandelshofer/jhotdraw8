@@ -19,30 +19,26 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Locale;
 
-/**
- * WordSetConverter converts a set of Strings from/to a
- * String.
- * <p>
- * The word set is actually a "set of space separated tokens", as specified in
- * HTML 5.
- * <p>
- * (Do not use this converter for tokens specified in XML Schema Part 2. A token
- * in XML Schema Part 2 can have internal spaces, but no consecutive sequences
- * of two or more spaces.)
- * <p>
- * The word set converter coalesces duplicate entries if they have the same
- * Unicode NFC form. The tokens are sorted case-insensitively using their Unicode NFD form.
- * <p>
- * References:
- * <dl>
- * <dt>HTML 5, Common Microsyntaxes, Space-separated tokens</dt>
- * <dd><a href="https://dev.w3.org/html5/spec-preview/common-microsyntaxes.html#set-of-space-separated-tokens">w3.org</a></dd>
- *
- * <dt>XML Schema Part 2, Built-in datatypes, Derived datatypes, Token</dt>
- * <dd><a href="https://www.w3.org/TR/xmlschema-2/#token">w3.org</a></dd>
- * </dl>
- *
- */
+/// WordSetConverter converts a set of Strings from/to a
+/// String.
+///
+/// The word set is actually a "set of space separated tokens", as specified in
+/// HTML 5.
+///
+/// (Do not use this converter for tokens specified in XML Schema Part 2. A token
+/// in XML Schema Part 2 can have internal spaces, but no consecutive sequences
+/// of two or more spaces.)
+///
+/// The word set converter coalesces duplicate entries if they have the same
+/// Unicode NFC form. The tokens are sorted case-insensitively using their Unicode NFD form.
+///
+/// References:
+/// <dl>
+/// <dt>HTML 5, Common Microsyntaxes, Space-separated tokens</dt>
+/// <dd><a href="https://dev.w3.org/html5/spec-preview/common-microsyntaxes.html#set-of-space-separated-tokens">w3.org</a></dd>
+/// <dt>XML Schema Part 2, Built-in datatypes, Derived datatypes, Token</dt>
+/// <dd><a href="https://www.w3.org/TR/xmlschema-2/#token">w3.org</a></dd>
+/// </dl>
 public class WordSetXmlConverter implements Converter<PersistentSet<String>> {
 
     private final @Nullable Comparator<String> comparator;

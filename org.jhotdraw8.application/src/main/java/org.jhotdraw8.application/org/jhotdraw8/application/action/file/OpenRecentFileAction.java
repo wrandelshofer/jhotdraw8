@@ -29,33 +29,29 @@ import java.util.concurrent.CancellationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Loads the specified URI into an empty view. If no empty view is available, a
- * new view is created.
- * <p>
- * This action is called when the user selects an item in the Recent Files
- * submenu of the File menu. The action and the menu item is automatically
- * created by the application, when the {@code ApplicationModel} provides a
- * {@code OpenFileAction}.
- * <hr>
- * <b>Features</b>
- *
- * <p>
- * <em>Allow multiple views per URI</em><br>
- * When the feature is disabled, {@code OpenRecentFileAction} prevents opening
- * an URI which is opened in another view.<br>
- * See {@link org.jhotdraw8.application} for a description of the feature.
- * </p>
- *
- * <p>
- * <em>Open last URI on launch</em><br> {@code OpenRecentFileAction} supplies
- * data for this feature by calling
- * {@link Application#getRecentUris()}{@code .add()} when it
- * successfully opened a file. See {@link org.jhotdraw8.application} for a description
- * of the feature.
- * </p>
- *
- */
+/// Loads the specified URI into an empty view. If no empty view is available, a
+/// new view is created.
+///
+/// This action is called when the user selects an item in the Recent Files
+/// submenu of the File menu. The action and the menu item is automatically
+/// created by the application, when the `ApplicationModel` provides a
+/// `OpenFileAction`.
+/// ---
+/// **Features**
+///
+/// _Allow multiple views per URI_
+/// When the feature is disabled, `OpenRecentFileAction` prevents opening
+/// an URI which is opened in another view.
+/// See [org.jhotdraw8.application] for a description of the feature.
+///
+///
+/// _Open last URI on launch_
+/// `OpenRecentFileAction` supplies
+/// data for this feature by calling
+/// [Application#getRecentUris()]`.add()` when it
+/// successfully opened a file. See [org.jhotdraw8.application] for a description
+/// of the feature.
+///
 public class OpenRecentFileAction extends AbstractApplicationAction {
 
     public static final String ID = "file.openRecent";
@@ -63,13 +59,11 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     private final @Nullable DataFormat format;
     private final boolean reuseEmptyViews = true;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app    the application
-     * @param uri    the uri
-     * @param format the data format that should be used to access the URI
-     */
+    /// Creates a new instance.
+    ///
+    /// @param app    the application
+    /// @param uri    the uri
+    /// @param format the data format that should be used to access the URI
     @SuppressWarnings("this-escape")
     public OpenRecentFileAction(Application app, URI uri, @Nullable DataFormat format) {
         super(app);

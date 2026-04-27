@@ -15,11 +15,9 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 
-/**
- * Provides a {@link Set} facade to a set of {@code PersistentSet} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [Set] facade to a set of `PersistentSet` functions.
+///
+/// @param <E> the element type
 public class MutableSetFacade<E> extends AbstractSet<E> implements ReadableSet<E> {
     private PersistentSet<E> backingSet;
     private int modCount;

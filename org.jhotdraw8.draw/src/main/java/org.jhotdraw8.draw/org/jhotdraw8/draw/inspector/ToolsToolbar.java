@@ -16,10 +16,7 @@ import javafx.scene.layout.GridPane;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.tool.Tool;
 
-/**
- * FXML Controller class
- *
- */
+/// FXML Controller class
 public class ToolsToolbar extends GridPane {
 
     private final ToggleGroup group = new ToggleGroup();

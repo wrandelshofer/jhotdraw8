@@ -12,18 +12,16 @@ import java.util.Objects;
 
 import static java.lang.Math.min;
 
-/**
- * Dumps a CHAMP trie in the Graphviz DOT language.
- * <p>
- * References:
- * <dl>
- *     <dt>Graphviz. DOT Language.</dt>
- *     <dd><a href="https://graphviz.org/doc/info/lang.html">graphviz.org</a></dd>
- * </dl>
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Dumps a CHAMP trie in the Graphviz DOT language.
+///
+/// References:
+/// <dl>
+///     <dt>Graphviz. DOT Language.</dt>
+///     <dd><a href="https://graphviz.org/doc/info/lang.html">graphviz.org</a></dd>
+/// </dl>
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public class ChampTrieGraphviz<K, V> {
 
     private void dumpBitmapIndexedNodeSubTree(Appendable a, BitmapIndexedNode<K, V> node, int entryLength, boolean printValue, boolean printSequenceNumber, int shift, int keyHash) throws IOException {
@@ -133,15 +131,13 @@ public class ChampTrieGraphviz<K, V> {
 
     }
 
-    /**
-     * Dumps a CHAMP Trie in the Graphviz DOT language.
-     *
-     * @param a                   an {@link Appendable}
-     * @param root                the root node of the trie
-     * @param entryLength         the entry length
-     * @param printValue          whether to print the value of an entry
-     * @param printSequenceNumber whether to print the sequence number of an entry
-     */
+    /// Dumps a CHAMP Trie in the Graphviz DOT language.
+    ///
+    /// @param a                   an [Appendable]
+    /// @param root                the root node of the trie
+    /// @param entryLength         the entry length
+    /// @param printValue          whether to print the value of an entry
+    /// @param printSequenceNumber whether to print the sequence number of an entry
     public void dumpTrie(Appendable a, Node<K, V> root, int entryLength, boolean printValue, boolean printSequenceNumber) throws IOException {
         a.append("digraph ChampTrie {\n");
         a.append("node [shape=record];\n");
@@ -149,15 +145,13 @@ public class ChampTrieGraphviz<K, V> {
         a.append("}\n");
     }
 
-    /**
-     * Dumps a CHAMP Trie in the Graphviz DOT language.
-     *
-     * @param root                the root node of the trie
-     * @param entryLength         the entry length
-     * @param printValue          whether to print the value of an entry
-     * @param printSequenceNumber whether to print the sequence number of an entry
-     * @return the dumped trie
-     */
+    /// Dumps a CHAMP Trie in the Graphviz DOT language.
+    ///
+    /// @param root                the root node of the trie
+    /// @param entryLength         the entry length
+    /// @param printValue          whether to print the value of an entry
+    /// @param printSequenceNumber whether to print the sequence number of an entry
+    /// @return the dumped trie
     public String dumpTrie(Node<K, V> root, int entryLength, boolean printValue, boolean printSequenceNumber) {
         StringBuilder a = new StringBuilder();
         try {

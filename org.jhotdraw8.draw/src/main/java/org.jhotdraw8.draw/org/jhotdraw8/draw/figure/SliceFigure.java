@@ -28,19 +28,14 @@ import org.jhotdraw8.draw.render.RenderingIntent;
 
 import java.util.List;
 
-/**
- * This is a special figure which is used to segment a drawing into tiles, when
- * exporting it using the {@link BitmapExportOutputFormat}.
- * <p>
- * This figure renders only with rendering intent
- * {@link RenderingIntent#EDITOR}.
- *
- */
+/// This is a special figure which is used to segment a drawing into tiles, when
+/// exporting it using the [BitmapExportOutputFormat].
+///
+/// This figure renders only with rendering intent
+/// [RenderingIntent#EDITOR].
 public class SliceFigure extends AbstractLeafFigure implements Slice, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
 
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Slice";
 
     public static final CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);

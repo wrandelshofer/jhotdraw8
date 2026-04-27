@@ -34,24 +34,15 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * AbstractAction.
- *
- */
+/// AbstractAction.
 @SuppressWarnings("this-escape")
 public abstract class AbstractTool extends AbstractDisableable implements Tool {
 
-    /**
-     * The getProperties.
-     */
+    /// The getProperties.
     private ObservableMap<Key<?>, Object> properties;
-    /**
-     * The active view.
-     */
+    /// The active view.
     private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
-    /**
-     * The active editor.
-     */
+    /// The active editor.
     private final ObjectProperty<DrawingEditor> drawingEditor = new SimpleObjectProperty<>(this, DRAWING_EDITOR_PROPERTY);
 
     {
@@ -208,9 +199,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
 
     }
 
-    /**
-     * Listeners.
-     */
+    /// Listeners.
     private final LinkedList<Listener<ToolEvent>> toolListeners = new LinkedList<>();
 
     // ---
@@ -218,12 +207,10 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param name the id of the tool
-     * @param rsrc iff nonnull, the resource is applied to the tool
-     */
+    /// Creates a new instance.
+    ///
+    /// @param name the id of the tool
+    /// @param rsrc iff nonnull, the resource is applied to the tool
     public AbstractTool(String name, @Nullable Resources rsrc) {
         set(NAME, name);
         if (rsrc != null) {
@@ -272,10 +259,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     protected void stopEditing() {
     }
 
-    /**
-     * Deletes the selection. Depending on the tool, this could be selected
-     * figures, selected points or selected text.
-     */
+    /// Deletes the selection. Depending on the tool, this could be selected
+    /// figures, selected points or selected text.
     @Override
     public void editDelete() {
         if (getDrawingView() != null) {
@@ -284,34 +269,26 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         }
     }
 
-    /**
-     * Cuts the selection into the clipboard. Depending on the tool, this could
-     * be selected figures, selected points or selected text.
-     */
+    /// Cuts the selection into the clipboard. Depending on the tool, this could
+    /// be selected figures, selected points or selected text.
     @Override
     public void editCut() {
     }
 
-    /**
-     * Copies the selection into the clipboard. Depending on the tool, this
-     * could be selected figures, selected points or selected text.
-     */
+    /// Copies the selection into the clipboard. Depending on the tool, this
+    /// could be selected figures, selected points or selected text.
     @Override
     public void editCopy() {
     }
 
-    /**
-     * Duplicates the selection. Depending on the tool, this could be selected
-     * figures, selected points or selected text.
-     */
+    /// Duplicates the selection. Depending on the tool, this could be selected
+    /// figures, selected points or selected text.
     @Override
     public void editDuplicate() {
     }
 
-    /**
-     * Pastes the contents of the clipboard. Depending on the tool, this could
-     * be selected figures, selected points or selected text.
-     */
+    /// Pastes the contents of the clipboard. Depending on the tool, this could
+    /// be selected figures, selected points or selected text.
     @Override
     public void editPaste() {
     }
@@ -354,17 +331,13 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     protected void onKeyTyped(KeyEvent event, DrawingView view) {
     }
 
-    /**
-     * This implementation sets the help text on the drawing view.
-     */
+    /// This implementation sets the help text on the drawing view.
     @Override
     public void activate(DrawingEditor editor) {
         editor.setHelpText(getHelpText());
     }
 
-    /**
-     * This implementation is empty.
-     */
+    /// This implementation is empty.
     @Override
     public void deactivate(DrawingEditor editor) {
     }

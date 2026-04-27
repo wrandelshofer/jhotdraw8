@@ -7,8 +7,8 @@ package org.jhotdraw8.draw.css.converter;
 
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
-import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.CssRectangle2D;
+import org.jhotdraw8.css.value.CssSize;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -19,19 +19,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * CssRectangle2DConverterTest.
- *
- */
+/// CssRectangle2DConverterTest.
 public class CssSizeRectangle2DConverterTest {
 
     public CssSizeRectangle2DConverterTest() {
     }
 
 
-    /**
-     * Test of fromString method, of class CssDoubleConverter.
-     */
+    /// Test of fromString method, of class CssDoubleConverter.
     public static void testFromString(CssRectangle2D expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();

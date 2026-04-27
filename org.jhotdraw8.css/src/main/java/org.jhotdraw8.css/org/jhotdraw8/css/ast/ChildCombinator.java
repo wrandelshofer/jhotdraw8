@@ -11,12 +11,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-/**
- * A "child combinator" matches an element if its first selector matches on the
- * parent of the element and if its second selector matches on the element
- * itself.
- *
- */
+/// A "child combinator" matches an element if its first selector matches on the
+/// parent of the element and if its second selector matches on the element
+/// itself.
 public class ChildCombinator extends Combinator {
 
     public ChildCombinator(@Nullable SourceLocator sourceLocator, SimpleSelector first, Selector second) {
@@ -49,12 +46,10 @@ public class ChildCombinator extends Combinator {
         second.produceTokens(consumer);
     }
 
-    /**
-     * This selector matches only on a specific type, if its second
-     * selector matches only on a specific type.
-     *
-     * @return {@code second.matchesOnlyOnASpecificType()}
-     */
+    /// This selector matches only on a specific type, if its second
+    /// selector matches only on a specific type.
+    ///
+    /// @return `second.matchesOnlyOnASpecificType()`
     @Override
     public @Nullable TypeSelector matchesOnlyOnASpecificType() {
         return second.matchesOnlyOnASpecificType();

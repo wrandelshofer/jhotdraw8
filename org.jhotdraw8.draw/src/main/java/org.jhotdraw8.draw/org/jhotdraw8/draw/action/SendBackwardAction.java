@@ -16,19 +16,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * MoveUpAction.
- *
- */
+/// MoveUpAction.
 public class SendBackwardAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.sendBackward";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public SendBackwardAction(DrawingEditor editor) {
         super(editor);
         Resources labels

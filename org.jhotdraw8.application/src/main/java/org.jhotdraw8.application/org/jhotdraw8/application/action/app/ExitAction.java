@@ -34,22 +34,17 @@ import java.util.function.Supplier;
 import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_CHOOSER_FACTORY_KEY;
 import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_CHOOSER_KEY;
 
-/**
- * Exits the application after letting the user review and possibly save all
- * unsaved views.
- *
- */
+/// Exits the application after letting the user review and possibly save all
+/// unsaved views.
 public class ExitAction extends AbstractApplicationAction {
 
     public static final String ID = "application.exit";
     private Node oldFocusOwner;
     private @Nullable FileBasedActivity unsavedView;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app the application
-     */
+    /// Creates a new instance.
+    ///
+    /// @param app the application
     @SuppressWarnings("this-escape")
     public ExitAction(Application app) {
         super(app);

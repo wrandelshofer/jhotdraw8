@@ -11,12 +11,10 @@ import java.io.Serial;
 import java.util.AbstractMap;
 import java.util.Objects;
 
-/**
- * A {@code SequencedEntry} stores an entry of a map and a sequence number.
- * <p>
- * {@code hashCode} and {@code equals} are based on the key and the value
- * of the entry - the sequence number is not included.
- */
+/// A `SequencedEntry` stores an entry of a map and a sequence number.
+///
+/// `hashCode` and `equals` are based on the key and the value
+/// of the entry - the sequence number is not included.
 public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
         implements SequencedData {
     @Serial

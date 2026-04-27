@@ -17,11 +17,9 @@ public class DescendingNavigableSetView<E> extends AbstractSet<E> implements Nav
 
     private final Comparator<? super E> reverseComparator;
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param src the source set
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param src the source set
     public DescendingNavigableSetView(NavigableSet<E> src, IntSupplier modCount) {
         this.src = src;
         this.modCount = modCount;

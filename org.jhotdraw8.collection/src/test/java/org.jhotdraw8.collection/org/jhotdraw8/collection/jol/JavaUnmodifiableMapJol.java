@@ -6,22 +6,20 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-/**
- * <pre>
- * class java.util.ImmutableCollections$MapN with 1000000 elements.
- * total size              : 64000048
- * element size            : 48
- * data size               : 48000000 74%
- * data structure size     : 16000048 25%
- * ----footprint---
- * java.util.ImmutableCollections$MapN@51a9ad5ed footprint:
- *      COUNT       AVG       SUM   DESCRIPTION
- *          1  16000016  16000016   [Ljava.lang.Object;
- *          1        32        32   java.util.ImmutableCollections$MapN
- *    2000000        24  48000000   org.jhotdraw8.collection.jmh.Key
- *    2000002            64000048   (total)
- * </pre>
- */
+/// <pre>
+/// class java.util.ImmutableCollections$MapN with 1000000 elements.
+/// total size              : 64000048
+/// element size            : 48
+/// data size               : 48000000 74%
+/// data structure size     : 16000048 25%
+/// ----footprint---
+/// java.util.ImmutableCollections$MapN@51a9ad5ed footprint:
+///      COUNT       AVG       SUM   DESCRIPTION
+///          1  16000016  16000016   [Ljava.lang.Object;
+///          1        32        32   java.util.ImmutableCollections$MapN
+///    2000000        24  48000000   org.jhotdraw8.collection.jmh.Key
+///    2000002            64000048   (total)
+/// </pre>
 public class JavaUnmodifiableMapJol extends AbstractJol {
 
     @Test

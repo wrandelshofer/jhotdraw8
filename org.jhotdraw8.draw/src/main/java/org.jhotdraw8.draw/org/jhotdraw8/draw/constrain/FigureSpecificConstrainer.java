@@ -17,15 +17,12 @@ import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 
 import java.util.Map;
 
-/**
- * Allows to use different constrainers for different figure types.
- * <p>
- * XXX This could be an abstract class with abstract method getConstrainer. The
- * constrainerMap and the defaultConstrainer could be moved into a concrete
- * subclass.
- * </p>
- *
- */
+/// Allows to use different constrainers for different figure types.
+///
+/// XXX This could be an abstract class with abstract method getConstrainer. The
+/// constrainerMap and the defaultConstrainer could be moved into a concrete
+/// subclass.
+///
 public class FigureSpecificConstrainer extends AbstractConstrainer implements Constrainer {
 
     private final Path node = new Path();
@@ -33,27 +30,19 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     // property names
     // ----
 
-    /**
-     * The name of the "constrainerMap" property.
-     */
+    /// The name of the "constrainerMap" property.
     public final String CONSTRAINER_MAP_PROPERTY = "constrainerMap";
-    /**
-     * The name of the "defaultConstrainer" property.
-     */
+    /// The name of the "defaultConstrainer" property.
     public final String DEFAULT_CONSTRAINER_PROPERTY = "defaultConstrainer";
 
     // ----
     // property fields
     // ----
-    /**
-     * Maps figure classes to constrainers.
-     */
+    /// Maps figure classes to constrainers.
     private final ReadOnlyMapWrapper<Class<?>, Constrainer> constrainerMap
             = new ReadOnlyMapWrapper<>(this, CONSTRAINER_MAP_PROPERTY, FXCollections.observableHashMap());
 
-    /**
-     * All figures which are not in the map use the default constrainer.
-     */
+    /// All figures which are not in the map use the default constrainer.
     private final NonNullObjectProperty<Constrainer> defaultConstrainer = new NonNullObjectProperty<>(this, DEFAULT_CONSTRAINER_PROPERTY, new NullConstrainer());
 
     public FigureSpecificConstrainer() {
@@ -85,9 +74,7 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     // behavior methods
     // ----
 
-    /**
-     * Retrieves the constrainer for the specified figure.
-     */
+    /// Retrieves the constrainer for the specified figure.
     private Constrainer getConstrainer(Figure f) {
         Constrainer c = constrainerMap.get(f.getClass());
         return c != null ? c : defaultConstrainer.get();

@@ -16,18 +16,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * StreamCssTokenizerTest.
- *
- */
+/// StreamCssTokenizerTest.
 public class StreamCssTokenizerTest {
 
     public StreamCssTokenizerTest() {
     }
 
-    /**
-     * Test of nextChar method, of class CssScanner.
-     */
+    /// Test of nextChar method, of class CssScanner.
     public static void testTokenizer(String inputData, String expectedValue) throws Exception {
         StreamCssTokenizer tt = new StreamCssTokenizer(new StringReader(inputData));
         //

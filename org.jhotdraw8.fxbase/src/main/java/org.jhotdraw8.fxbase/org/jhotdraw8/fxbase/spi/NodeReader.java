@@ -12,9 +12,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Path;
 
-/**
- * Interface for a reader that can read a JavaFX Node from a stream.
- */
+/// Interface for a reader that can read a JavaFX Node from a stream.
 public interface NodeReader {
     Node read(URL url) throws IOException;
 

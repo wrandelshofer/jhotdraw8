@@ -6,11 +6,8 @@ package org.jhotdraw8.draw.xml.converter;
 
 import org.jhotdraw8.draw.css.converter.Rectangle2DConverter;
 
-/**
- * Converts a {@code javafx.geometry.Rectangle2D} into a {@code String} and vice
- * versa.
- *
- */
+/// Converts a `javafx.geometry.Rectangle2D` into a `String` and vice
+/// versa.
 public class Rectangle2DXmlConverter extends Rectangle2DConverter {
 
     public Rectangle2DXmlConverter() {

@@ -16,23 +16,18 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-/**
- * This abstract class can be extended to implement an {@code Action} that acts
- * on an {@link Application}.
- * <p>
- * An AbstractApplicationAction is disabled when it has disablers
- * {@link Disableable} or when its application is disabled.
- *
- */
+/// This abstract class can be extended to implement an `Action` that acts
+/// on an [Application].
+///
+/// An AbstractApplicationAction is disabled when it has disablers
+/// [Disableable] or when its application is disabled.
 public abstract class AbstractApplicationAction extends AbstractAction {
 
     protected final Application app;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app the application
-     */
+    /// Creates a new instance.
+    ///
+    /// @param app the application
     public AbstractApplicationAction(Application app) {
         Objects.requireNonNull(app, "app");
         this.app = app;
@@ -68,13 +63,11 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         onActionPerformed(event, app);
     }
 
-    /**
-     * This method is invoked when the action is not disabled and the event is
-     * not consumed.
-     *
-     * @param event the action event
-     * @param app   the applicatoin
-     */
+    /// This method is invoked when the action is not disabled and the event is
+    /// not consumed.
+    ///
+    /// @param event the action event
+    /// @param app   the applicatoin
     protected abstract void onActionPerformed(ActionEvent event, Application app);
 
     protected Alert createAlert(Alert.AlertType alertType, String message, String headerText) {

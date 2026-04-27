@@ -13,21 +13,17 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.function.IntSupplier;
 
-/**
- * Provides a descending view on a {@link NavigableMap}.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Provides a descending view on a [NavigableMap].
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public class DescendingNavigableMapView<K, V> extends AbstractMap<K, V> implements NavigableMap<K, V> {
     private final NavigableMap<K, V> src;
     private final IntSupplier modCount;
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param src the source map
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param src the source map
     public DescendingNavigableMapView(NavigableMap<K, V> src, IntSupplier modCount) {
         this.src = src;
         this.modCount = modCount;

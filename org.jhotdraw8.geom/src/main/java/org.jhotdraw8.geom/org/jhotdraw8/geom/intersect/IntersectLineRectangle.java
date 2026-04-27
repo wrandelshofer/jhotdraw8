@@ -12,18 +12,16 @@ public class IntersectLineRectangle {
     private IntersectLineRectangle() {
     }
 
-    /**
-     * Computes the intersection between a line and a rectangle.
-     * <p>
-     * The intersection will contain the parameters 't1' of the line in range
-     * [0,1].
-     *
-     * @param a0 point 0 of the line
-     * @param a1 point 1 of the line
-     * @param r0 corner point 0 of the rectangle
-     * @param r1 corner point 1 of the rectangle
-     * @return computed intersection
-     */
+    /// Computes the intersection between a line and a rectangle.
+    ///
+    /// The intersection will contain the parameters 't1' of the line in range
+    /// [0,1].
+    ///
+    /// @param a0 point 0 of the line
+    /// @param a1 point 1 of the line
+    /// @param r0 corner point 0 of the rectangle
+    /// @param r1 corner point 1 of the rectangle
+    /// @return computed intersection
     public static IntersectionResultEx intersectLineRectangleEx(Point2D a0, Point2D a1, Point2D r0, Point2D r1) {
         return IntersectAABBLine.intersectLineAABBEx(a0, a1,
                 Math.min(r0.getX(), r1.getX()),

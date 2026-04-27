@@ -16,11 +16,9 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Provides a {@link ReadableNavigableSet} facade to a set of {@code NavigableSet} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [ReadableNavigableSet] facade to a set of `NavigableSet` functions.
+///
+/// @param <E> the element type
 public class ReadableNavigableSetFacade<E> extends ReadableSetFacade<E>
         implements ReadableNavigableSet<E> {
 

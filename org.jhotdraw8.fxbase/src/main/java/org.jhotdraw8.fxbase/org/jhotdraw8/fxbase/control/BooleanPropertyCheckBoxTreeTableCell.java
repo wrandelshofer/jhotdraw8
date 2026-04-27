@@ -12,11 +12,9 @@ import javafx.scene.control.TreeTableColumn;
 import javafx.util.Callback;
 import org.jspecify.annotations.Nullable;
 
-/**
- * BooleanPropertyCheckBoxTreeTableCell.
- *
- * @param <S> the row type
- */
+/// BooleanPropertyCheckBoxTreeTableCell.
+///
+/// @param <S> the row type
 public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Boolean> {
 
     private final CheckBox checkBox = new CheckBox();

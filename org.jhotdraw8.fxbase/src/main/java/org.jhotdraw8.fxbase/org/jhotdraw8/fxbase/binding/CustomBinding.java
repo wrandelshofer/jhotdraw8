@@ -27,38 +27,32 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-/**
- * Provides bindings with conversion functions.
- * <p>
- * Slightly adapted code from example shown at stackoverflow.com.
- * <p>
- * Reference:
- * <dl>
- *     <dt>Stackoverflow. Custom Bidirectional Bindings in JavaFX,
- *     Copyright BlackLabrador, CC BY-SA 4.0 license</dt>
- *     <dd><a href="http://stackoverflow.com/questions/27052927/custom-bidirectional-bindings-in-javafx">
- *   stackoverflow.com</a></dd>
- * </dl>
- */
+/// Provides bindings with conversion functions.
+///
+/// Slightly adapted code from example shown at stackoverflow.com.
+///
+/// Reference:
+/// <dl>
+///     <dt>Stackoverflow. Custom Bidirectional Bindings in JavaFX,
+///     Copyright BlackLabrador, CC BY-SA 4.0 license</dt>
+///     <dd><a href="http://stackoverflow.com/questions/27052927/custom-bidirectional-bindings-in-javafx">
+///   stackoverflow.com</a></dd>
+/// </dl>
 public class CustomBinding {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private CustomBinding() {
     }
 
-    /**
-     * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
-     * <p>
-     * This method keeps a strong reference to {@code propertyB}.
-     *
-     * @param <T>       the type of properties 'a' and 'b'
-     * @param <M>       the type of the mediator property
-     * @param propertyA property 'a'
-     * @param mediator  the mediator property 'm'
-     * @param propertyB property 'b', this can be a new instance on each call
-     */
+    /// Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
+    ///
+    /// This method keeps a strong reference to `propertyB`.
+    ///
+    /// @param <T>       the type of properties 'a' and 'b'
+    /// @param <M>       the type of the mediator property
+    /// @param propertyA property 'a'
+    /// @param mediator  the mediator property 'm'
+    /// @param propertyB property 'b', this can be a new instance on each call
     public static <T, M> void bindBidirectionalStrongly(
             Property<T> propertyA, Property<M> mediator, Function<M, Property<T>> propertyB) {
 
@@ -103,16 +97,14 @@ public class CustomBinding {
         mediator.addListener(changeListener);
     }
 
-    /**
-     * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
-     *
-     * @param <T>       the type of properties 'a' and 'b'
-     * @param <M>       the type of the mediator property
-     * @param propertyA property 'a'
-     * @param mediator  the mediator property 'm'
-     * @param propertyB property 'b', must return the same instance each time
-     *                  when called for the same object 'm'.
-     */
+    /// Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
+    ///
+    /// @param <T>       the type of properties 'a' and 'b'
+    /// @param <M>       the type of the mediator property
+    /// @param propertyA property 'a'
+    /// @param mediator  the mediator property 'm'
+    /// @param propertyB property 'b', must return the same instance each time
+    ///                  when called for the same object 'm'.
     public static <T, M> void bindBidirectional(
             Property<T> propertyA, Property<M> mediator, Function<M, Property<T>> propertyB) {
 
@@ -128,35 +120,31 @@ public class CustomBinding {
         mediator.addListener(changeListener);
     }
 
-    /**
-     * Binds property 'a' to property 'b'. Property 'b' is provided by 'mediatorB'.
-     * <p>
-     * When 'a' is unbound from 'b', its value is set to the value that
-     * 'a' had, when this method was invoked.
-     *
-     * @param <T>       the type of properties 'a' and 'b'
-     * @param <M>       the type of the mediator property
-     * @param propertyA property 'a'
-     * @param mediatorB the mediator property
-     * @param propertyB property 'b'
-     */
+    /// Binds property 'a' to property 'b'. Property 'b' is provided by 'mediatorB'.
+    ///
+    /// When 'a' is unbound from 'b', its value is set to the value that
+    /// 'a' had, when this method was invoked.
+    ///
+    /// @param <T>       the type of properties 'a' and 'b'
+    /// @param <M>       the type of the mediator property
+    /// @param propertyA property 'a'
+    /// @param mediatorB the mediator property
+    /// @param propertyB property 'b'
     public static <T, M> void bind(
             Property<T> propertyA, Property<M> mediatorB, Function<M, ObservableValue<T>> propertyB) {
         bind(propertyA, mediatorB, propertyB, propertyA.getValue());
     }
 
-    /**
-     * Binds property 'a' to property 'b'. Property 'b' is provided by 'mediatorB'.
-     * <p>
-     * When 'a' is unbound from 'b', its value is set to 'unboundValue'.
-     *
-     * @param <T>          the type of properties 'a' and 'b'
-     * @param <M>          the type of the mediator property
-     * @param propertyA    property 'a'
-     * @param mediatorB    the mediator property
-     * @param propertyB    property 'b'
-     * @param unboundValue the value to be set on 'a' when 'a' is unbound from 'b'.
-     */
+    /// Binds property 'a' to property 'b'. Property 'b' is provided by 'mediatorB'.
+    ///
+    /// When 'a' is unbound from 'b', its value is set to 'unboundValue'.
+    ///
+    /// @param <T>          the type of properties 'a' and 'b'
+    /// @param <M>          the type of the mediator property
+    /// @param propertyA    property 'a'
+    /// @param mediatorB    the mediator property
+    /// @param propertyB    property 'b'
+    /// @param unboundValue the value to be set on 'a' when 'a' is unbound from 'b'.
     public static <T, M> void bind(
             Property<T> propertyA, Property<M> mediatorB, Function<M, ObservableValue<T>> propertyB, T unboundValue) {
 
@@ -174,18 +162,16 @@ public class CustomBinding {
     }
 
 
-    /**
-     * Binds property 'a' to property 'b'. Property 'a' is provided by 'mediatorA'.
-     * <p>
-     * When 'a' is unbound from 'b', its value is set to 'unboundValue'.
-     *
-     * @param <T>          the type of properties 'a' and 'b'
-     * @param <M>          the type of the mediator property
-     * @param propertyA    property 'a'
-     * @param mediatorA    the mediator property
-     * @param propertyB    property 'b'
-     * @param unboundValue the value to be set on 'a' when 'a' is unbound from 'b'.
-     */
+    /// Binds property 'a' to property 'b'. Property 'a' is provided by 'mediatorA'.
+    ///
+    /// When 'a' is unbound from 'b', its value is set to 'unboundValue'.
+    ///
+    /// @param <T>          the type of properties 'a' and 'b'
+    /// @param <M>          the type of the mediator property
+    /// @param propertyA    property 'a'
+    /// @param mediatorA    the mediator property
+    /// @param propertyB    property 'b'
+    /// @param unboundValue the value to be set on 'a' when 'a' is unbound from 'b'.
     public static <T, M> void bind(ObservableValue<M> mediatorA,
                                    Function<M, Property<T>> propertyA, ObservableValue<T> propertyB, T unboundValue) {
 
@@ -203,16 +189,14 @@ public class CustomBinding {
         mediatorA.addListener(changeListener);
     }
 
-    /**
-     * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
-     *
-     * @param <T>             the value type of property 'b'
-     * @param <S>             the value type of the mediator property
-     * @param propertyA       property 'a'
-     * @param mediator        the mediator property
-     * @param propertyB       property 'b'
-     * @param stringConverter the converter
-     */
+    /// Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
+    ///
+    /// @param <T>             the value type of property 'b'
+    /// @param <S>             the value type of the mediator property
+    /// @param propertyA       property 'a'
+    /// @param mediator        the mediator property
+    /// @param propertyB       property 'b'
+    /// @param stringConverter the converter
     public static <T, S> void bindBidirectional(StringProperty propertyA, Property<S> mediator, Function<S, Property<T>> propertyB,
                                                 StringConverter<T> stringConverter) {
         final ChangeListener<S> changeListener = (o, oldv, newv) -> {
@@ -228,19 +212,17 @@ public class CustomBinding {
     }
 
 
-    /**
-     * Creates a bidirectional binding for properties A and B using the
-     * provided conversion functions.
-     *
-     * @param <A>          the type of value A
-     * @param <B>          the type of value B
-     * @param <PROPERTY_A> the type of property A
-     * @param <PROPERTY_B> the type of property B
-     * @param propertyA    property A
-     * @param propertyB    property B
-     * @param convertAtoB  converts a value from A to B
-     * @param convertBtoA  converts a value from B to A
-     */
+    /// Creates a bidirectional binding for properties A and B using the
+    /// provided conversion functions.
+    ///
+    /// @param <A>          the type of value A
+    /// @param <B>          the type of value B
+    /// @param <PROPERTY_A> the type of property A
+    /// @param <PROPERTY_B> the type of property B
+    /// @param propertyA    property A
+    /// @param propertyB    property B
+    /// @param convertAtoB  converts a value from A to B
+    /// @param convertBtoA  converts a value from B to A
     public static <A, B, PROPERTY_A extends WritableValue<A> & ObservableValue<A>, PROPERTY_B extends WritableValue<B> & ObservableValue<B>>
     void bindBidirectionalAndConvert(PROPERTY_A propertyA, PROPERTY_B propertyB, Function<A, B> convertAtoB, Function<B, A> convertBtoA) {
         boolean[] alreadyCalled = new boolean[1];
@@ -265,57 +247,49 @@ public class CustomBinding {
         );
     }
 
-    /**
-     * Returns a string expression which uses {@code java.test.MessageFormat} to
-     * format the text. See {@link MessageStringFormatter} for special treatment
-     * of boolean values.
-     *
-     * @param format The format string.
-     * @param args   The arguments.
-     * @return The string expression
-     */
+    /// Returns a string expression which uses `java.test.MessageFormat` to
+    /// format the text. See [MessageStringFormatter] for special treatment
+    /// of boolean values.
+    ///
+    /// @param format The format string.
+    /// @param args   The arguments.
+    /// @return The string expression
     public static StringExpression formatted(String format, Object... args) {
         return MessageStringFormatter.format(format, args);
     }
 
-    /**
-     * Binds list dest to list source.
-     *
-     * @param dest   list dest
-     * @param src    list source
-     * @param toDest mapping function to dest
-     * @param <D>    the type of list dest
-     * @param <S>    the type of list source
-     */
+    /// Binds list dest to list source.
+    ///
+    /// @param dest   list dest
+    /// @param src    list source
+    /// @param toDest mapping function to dest
+    /// @param <D>    the type of list dest
+    /// @param <S>    the type of list source
     public static <D, S> void bindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest) {
         bindContent(dest, src, toDest, null);
     }
 
-    /**
-     * Binds list dest to list source.
-     *
-     * @param dest         list dest
-     * @param src          list source
-     * @param toDest       mapping function to dest
-     * @param destOnRemove this consumer is called when an element is removed from the dest list
-     * @param <D>          the type of list dest
-     * @param <S>          the type of list source
-     */
+    /// Binds list dest to list source.
+    ///
+    /// @param dest         list dest
+    /// @param src          list source
+    /// @param toDest       mapping function to dest
+    /// @param destOnRemove this consumer is called when an element is removed from the dest list
+    /// @param <D>          the type of list dest
+    /// @param <S>          the type of list source
     public static <D, S> void bindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest, @Nullable Consumer<D> destOnRemove) {
         ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, toDest, null, destOnRemove, null);
         src.addListener(binding.getSourceChangeListener());
     }
 
-    /**
-     * Binds list dest to list source bidirectionally.
-     *
-     * @param dest         list dest
-     * @param src          list source
-     * @param toDest       mapping function to dest
-     * @param destOnRemove this consumer is called when an element is removed from the dest list
-     * @param <D>          the type of list dest
-     * @param <S>          the type of list source
-     */
+    /// Binds list dest to list source bidirectionally.
+    ///
+    /// @param dest         list dest
+    /// @param src          list source
+    /// @param toDest       mapping function to dest
+    /// @param destOnRemove this consumer is called when an element is removed from the dest list
+    /// @param <D>          the type of list dest
+    /// @param <S>          the type of list source
     public static <D, S> void bindContentBidirectional(
             ObservableList<D> dest, ObservableList<S> src,
             Function<S, D> toDest, @Nullable Consumer<D> destOnRemove,
@@ -325,15 +299,13 @@ public class CustomBinding {
         dest.addListener(binding.getDestChangeListener());
     }
 
-    /**
-     * Binds list dest to set source.
-     *
-     * @param dest   list dest
-     * @param src    list source
-     * @param toDest mapping function to dest
-     * @param <D>    the type of list dest
-     * @param <S>    the type of list source
-     */
+    /// Binds list dest to set source.
+    ///
+    /// @param dest   list dest
+    /// @param src    list source
+    /// @param toDest mapping function to dest
+    /// @param <D>    the type of list dest
+    /// @param <S>    the type of list source
     public static <D, S> void bindListContentToSet(ObservableList<D> dest, ObservableSet<S> src, Function<S, D> toDest) {
         ListToSetTransformContentBinding<D, S> binding = new ListToSetTransformContentBinding<>(dest, src, toDest);
         src.addListener(binding);
@@ -344,52 +316,46 @@ public class CustomBinding {
         src.addListener(binding);
     }
 
-    /**
-     * Unbinds list dest from set source.
-     *
-     * @param dest   list dest
-     * @param src    list source
-     * @param <D>    the type of list dest
-     * @param <S>    the type of list source
-     */
+    /// Unbinds list dest from set source.
+    ///
+    /// @param dest list dest
+    /// @param src  list source
+    /// @param <D>  the type of list dest
+    /// @param <S>  the type of list source
     public static <D, S> void unbindListContentToSet(ObservableList<D> dest, ObservableSet<S> src) {
         ListToSetTransformContentBinding<D, S> binding = new ListToSetTransformContentBinding<>(dest, src, null);
         src.removeListener(binding);
     }
 
-    /**
-     * Binds the specified property of all list elements to the given property.
-     * <p>
-     * If an element is added, its property is bound.
-     * <p>
-     * If an element is removed, its property is unbound and the property value
-     * is set to null.
-     *
-     * @param list     the list
-     * @param getter   the getter for the element property
-     * @param property the property to which the element properties shall be bound
-     * @param <E>      the element type
-     * @param <T>      the property type
-     */
+    /// Binds the specified property of all list elements to the given property.
+    ///
+    /// If an element is added, its property is bound.
+    ///
+    /// If an element is removed, its property is unbound and the property value
+    /// is set to null.
+    ///
+    /// @param list     the list
+    /// @param getter   the getter for the element property
+    /// @param property the property to which the element properties shall be bound
+    /// @param <E>      the element type
+    /// @param <T>      the property type
     public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Property<T> property) {
         bindElements(list, getter, property, null);
     }
 
-    /**
-     * Binds the specified property of all list elements to the given property.
-     * <p>
-     * If an element is added, its property is bound.
-     * <p>
-     * If an element is removed, its property is unbound and the property value
-     * is set to {@code unboundValue}.
-     *
-     * @param list         the list
-     * @param getter       the getter for the element property
-     * @param property     the property to which the element properties shall be bound
-     * @param unboundValue the value to that is set when the property is unbound.
-     * @param <E>          the element type
-     * @param <T>          the property type
-     */
+    /// Binds the specified property of all list elements to the given property.
+    ///
+    /// If an element is added, its property is bound.
+    ///
+    /// If an element is removed, its property is unbound and the property value
+    /// is set to `unboundValue`.
+    ///
+    /// @param list         the list
+    /// @param getter       the getter for the element property
+    /// @param property     the property to which the element properties shall be bound
+    /// @param unboundValue the value to that is set when the property is unbound.
+    /// @param <E>          the element type
+    /// @param <T>          the property type
     public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Property<T> property, @Nullable T unboundValue) {
         for (E elem : list) {
             Property<T> p = getter.apply(elem);
@@ -412,38 +378,34 @@ public class CustomBinding {
         });
     }
 
-    /**
-     * Binds the specified property of all list elements to the given binding.
-     * <p>
-     * If an element is added, its property is bound.
-     * <p>
-     * If an element is removed, its property is unbound and the property value
-     * is set to null.
-     *
-     * @param list    the list
-     * @param getter  the getter for the element property
-     * @param binding the binding to which the element properties shall be bound
-     * @param <E>     the element type
-     * @param <T>     the property type
-     */
+    /// Binds the specified property of all list elements to the given binding.
+    ///
+    /// If an element is added, its property is bound.
+    ///
+    /// If an element is removed, its property is unbound and the property value
+    /// is set to null.
+    ///
+    /// @param list    the list
+    /// @param getter  the getter for the element property
+    /// @param binding the binding to which the element properties shall be bound
+    /// @param <E>     the element type
+    /// @param <T>     the property type
     public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Binding<T> binding) {
         bindElements(list, getter, binding, null);
     }
 
-    /**
-     * Binds the specified property of all list elements to the given binding.
-     * <p>
-     * If an element is added, its property is bound.
-     * <p>
-     * If an element is removed, its property is unbound and the property value
-     * is set to {@code unboundValue}.
-     *
-     * @param list    the list
-     * @param getter  the getter for the element property
-     * @param binding the binding to which the element properties shall be bound
-     * @param <E>     the element type
-     * @param <T>     the property type
-     */
+    /// Binds the specified property of all list elements to the given binding.
+    ///
+    /// If an element is added, its property is bound.
+    ///
+    /// If an element is removed, its property is unbound and the property value
+    /// is set to `unboundValue`.
+    ///
+    /// @param list    the list
+    /// @param getter  the getter for the element property
+    /// @param binding the binding to which the element properties shall be bound
+    /// @param <E>     the element type
+    /// @param <T>     the property type
     public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Binding<T> binding, @Nullable T unboundValue) {
         for (E elem : list) {
             Property<T> p = getter.apply(elem);
@@ -466,19 +428,17 @@ public class CustomBinding {
         });
     }
 
-    /**
-     * Sets the specified value to all elements of the list.
-     * <p>
-     * If an element is added, the specified value is set.
-     * <p>
-     * If an element is removed, the null value is set.
-     *
-     * @param list   the list
-     * @param setter the setter for the value on the element
-     * @param value  the value
-     * @param <E>    the element type
-     * @param <T>    the value type
-     */
+    /// Sets the specified value to all elements of the list.
+    ///
+    /// If an element is added, the specified value is set.
+    ///
+    /// If an element is removed, the null value is set.
+    ///
+    /// @param list   the list
+    /// @param setter the setter for the value on the element
+    /// @param value  the value
+    /// @param <E>    the element type
+    /// @param <T>    the value type
     public static <E, T> void bindElements(ObservableList<E> list, BiConsumer<E, T> setter, T value) {
         for (E elem : list) {
             setter.accept(elem, value);
@@ -495,14 +455,12 @@ public class CustomBinding {
         });
     }
 
-    /**
-     * Adds or removes an element from a set depending on the bound boolean value.
-     *
-     * @param set     a set
-     * @param element an element that is added on true and removed on false
-     * @param value   the boolean value
-     * @param <E>     the element type
-     */
+    /// Adds or removes an element from a set depending on the bound boolean value.
+    ///
+    /// @param set     a set
+    /// @param element an element that is added on true and removed on false
+    /// @param value   the boolean value
+    /// @param <E>     the element type
     public static <E> void bindMembershipToBoolean(ObservableSet<E> set, E element, ObservableValue<Boolean> value) {
         ChangeListener<Boolean> changeListener = (o, oldv, newv) -> {
             if (newv) {
@@ -515,16 +473,14 @@ public class CustomBinding {
         changeListener.changed(value, !value.getValue(), value.getValue());
     }
 
-    /**
-     * Creates a binding with a computed value.
-     * <p>
-     * If the value of one of the dependencies changes, the binding is marked as
-     * invalid.
-     *
-     * @param op           the operation that computes the value
-     * @param dependendies the depencies that invalidate the computed value
-     * @return a new binding
-     */
+    /// Creates a binding with a computed value.
+    ///
+    /// If the value of one of the dependencies changes, the binding is marked as
+    /// invalid.
+    ///
+    /// @param op           the operation that computes the value
+    /// @param dependendies the depencies that invalidate the computed value
+    /// @return a new binding
     public static DoubleBinding computeDouble(DoubleSupplier op, ObservableValue<?>... dependendies) {
         return new DoubleBinding() {
             {
@@ -545,17 +501,15 @@ public class CustomBinding {
 
     }
 
-    /**
-     * Creates a binding with a computed value.
-     * <p>
-     * If the value of one of the dependencies changes, the binding is marked as
-     * invalid.
-     *
-     * @param op           the operation that computes the value
-     * @param dependencies the depencies that invalidate the computed value
-     * @param <T>          the type of the value
-     * @return a new binding
-     */
+    /// Creates a binding with a computed value.
+    ///
+    /// If the value of one of the dependencies changes, the binding is marked as
+    /// invalid.
+    ///
+    /// @param op           the operation that computes the value
+    /// @param dependencies the depencies that invalidate the computed value
+    /// @param <T>          the type of the value
+    /// @return a new binding
     public static <T> ObjectBinding<T> compute(Supplier<T> op, ObservableValue<?>... dependencies) {
         return new ObjectBinding<>() {
             {
@@ -576,18 +530,16 @@ public class CustomBinding {
 
     }
 
-    /**
-     * Creates a binding with a converted value.
-     * <p>
-     * If the value of one of the dependencies changes, the binding is marked as
-     * invalid.
-     *
-     * @param a       the property A
-     * @param convert the conversion function from A to B
-     * @param <A>     the type of the value
-     * @param <B>     the type of the converted binding
-     * @return a new binding
-     */
+    /// Creates a binding with a converted value.
+    ///
+    /// If the value of one of the dependencies changes, the binding is marked as
+    /// invalid.
+    ///
+    /// @param a       the property A
+    /// @param convert the conversion function from A to B
+    /// @param <A>     the type of the value
+    /// @param <B>     the type of the converted binding
+    /// @return a new binding
     public static <A, B> ObjectBinding<B> convert(ObservableValue<A> a, Function<A, B> convert) {
         return new ObjectBinding<>() {
             {
@@ -636,15 +588,13 @@ public class CustomBinding {
         }
     }
 
-    /**
-     * Creates a binding to get a property {@code a.b}.
-     *
-     * @param root observable value {@code a}
-     * @param step the function that gets {@code a.b}
-     * @param <A>  the type of {@code a}
-     * @param <B>  the type of {@code b}
-     * @return the binding {@code a.b}.
-     */
+    /// Creates a binding to get a property `a.b`.
+    ///
+    /// @param root observable value `a`
+    /// @param step the function that gets `a.b`
+    /// @param <A>  the type of `a`
+    /// @param <B>  the type of `b`
+    /// @return the binding `a.b`.
     public static <A, B> ObservableValue<B> via(ObservableValue<A> root, Function<A, ObservableValue<B>> step) {
         ViaProperty<A, B> viaProperty = new ViaProperty<>(step);
         root.addListener(viaProperty);
@@ -652,35 +602,31 @@ public class CustomBinding {
         return viaProperty;
     }
 
-    /**
-     * Creates a binding to get an observable value {@code a.b.c}.
-     *
-     * @param root  observable value {@code a}
-     * @param stepB the function that gets {@code a.b}
-     * @param stepC the function that gets {@code b.c}
-     * @param <A>   the type of {@code a}
-     * @param <B>   the type of {@code b}
-     * @param <C>   the type of {@code c}
-     * @return the binding {@code a.b.c}.
-     */
+    /// Creates a binding to get an observable value `a.b.c`.
+    ///
+    /// @param root  observable value `a`
+    /// @param stepB the function that gets `a.b`
+    /// @param stepC the function that gets `b.c`
+    /// @param <A>   the type of `a`
+    /// @param <B>   the type of `b`
+    /// @param <C>   the type of `c`
+    /// @return the binding `a.b.c`.
     public static <A, B, C> ObservableValue<C> via(ObservableValue<A> root, Function<A, ObservableValue<B>> stepB,
                                                    Function<B, ObservableValue<C>> stepC) {
         return via(via(root, stepB), stepC);
     }
 
-    /**
-     * Creates a binding to get an observable value {@code a.b.c.d}.
-     *
-     * @param root  observable value {@code a}
-     * @param stepB the function that gets {@code a.b}
-     * @param stepC the function that gets {@code b.c}
-     * @param stepD the function that gets {@code c.d}
-     * @param <A>   the type of {@code a}
-     * @param <B>   the type of {@code b}
-     * @param <C>   the type of {@code c}
-     * @param <D>   the type of {@code d}
-     * @return the binding {@code a.b.c}.
-     */
+    /// Creates a binding to get an observable value `a.b.c.d`.
+    ///
+    /// @param root  observable value `a`
+    /// @param stepB the function that gets `a.b`
+    /// @param stepC the function that gets `b.c`
+    /// @param stepD the function that gets `c.d`
+    /// @param <A>   the type of `a`
+    /// @param <B>   the type of `b`
+    /// @param <C>   the type of `c`
+    /// @param <D>   the type of `d`
+    /// @return the binding `a.b.c`.
     public static <A, B, C, D> ObservableValue<D> via(ObservableValue<A> root, Function<A, ObservableValue<B>> stepB,
                                                       Function<B, ObservableValue<C>> stepC,
                                                       Function<C, ObservableValue<D>> stepD) {
@@ -688,15 +634,13 @@ public class CustomBinding {
     }
 
 
-    /**
-     * Creates a binding to get a property {@code a.b}.
-     *
-     * @param root observable value {@code a}
-     * @param step the function that gets {@code a.b}
-     * @param <A>  the type of {@code a}
-     * @param <B>  the type of {@code b}
-     * @return the binding {@code a.b}.
-     */
+    /// Creates a binding to get a property `a.b`.
+    ///
+    /// @param root observable value `a`
+    /// @param step the function that gets `a.b`
+    /// @param <A>  the type of `a`
+    /// @param <B>  the type of `b`
+    /// @return the binding `a.b`.
     public static <A, B> Property<B> viaBidirectional(ObservableValue<A> root, Function<A, Property<B>> step) {
         SimpleObjectProperty<B> viaProperty = new SimpleObjectProperty<>();
         ChangeListener<A> changeListener = (o, oldValue, newValue) -> {
@@ -712,35 +656,31 @@ public class CustomBinding {
         return viaProperty;
     }
 
-    /**
-     * Creates a binding to get a property {@code a.b.c}.
-     *
-     * @param root  observable value {@code a}
-     * @param stepB the function that gets {@code a.b}
-     * @param stepC the function that gets {@code b.c}
-     * @param <A>   the type of {@code a}
-     * @param <B>   the type of {@code b}
-     * @param <C>   the type of {@code c}
-     * @return the binding {@code a.b.c}.
-     */
+    /// Creates a binding to get a property `a.b.c`.
+    ///
+    /// @param root  observable value `a`
+    /// @param stepB the function that gets `a.b`
+    /// @param stepC the function that gets `b.c`
+    /// @param <A>   the type of `a`
+    /// @param <B>   the type of `b`
+    /// @param <C>   the type of `c`
+    /// @return the binding `a.b.c`.
     public static <A, B, C> Property<C> viaBidirectional(ObservableValue<A> root, Function<A, ObservableValue<B>> stepB,
                                                          Function<B, Property<C>> stepC) {
         return viaBidirectional(via(root, stepB), stepC);
     }
 
-    /**
-     * Creates a binding to get a property {@code a.b.c.d}.
-     *
-     * @param root  observable value {@code a}
-     * @param stepB the function that gets {@code a.b}
-     * @param stepC the function that gets {@code b.c}
-     * @param stepD the function that gets {@code c.d}
-     * @param <A>   the type of {@code a}
-     * @param <B>   the type of {@code b}
-     * @param <C>   the type of {@code c}
-     * @param <D>   the type of {@code d}
-     * @return the binding {@code a.b.c}.
-     */
+    /// Creates a binding to get a property `a.b.c.d`.
+    ///
+    /// @param root  observable value `a`
+    /// @param stepB the function that gets `a.b`
+    /// @param stepC the function that gets `b.c`
+    /// @param stepD the function that gets `c.d`
+    /// @param <A>   the type of `a`
+    /// @param <B>   the type of `b`
+    /// @param <C>   the type of `c`
+    /// @param <D>   the type of `d`
+    /// @return the binding `a.b.c`.
     public static <A, B, C, D> Property<D> viaBidirectional(ObservableValue<A> root, Function<A, ObservableValue<B>> stepB,
                                                             Function<B, ObservableValue<C>> stepC,
                                                             Function<C, Property<D>> stepD) {

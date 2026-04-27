@@ -18,10 +18,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * AbstractStyleablePropertyBean.
- *
- */
+/// AbstractStyleablePropertyBean.
 public abstract class AbstractStyleablePropertyBean
         implements StyleablePropertyBean {
     protected static final Map<Class<?>, Map<Key<?>, Integer>> keyMaps = new ConcurrentHashMap<>();
@@ -54,15 +51,13 @@ public abstract class AbstractStyleablePropertyBean
         };
     }
 
-    /**
-     * Creates a key map for the {@link SimpleStyleableMap} that
-     * is used to store the properties of this object.
-     * <p>
-     * This implementation creates one key map for this class, and shares
-     * it with all instances of this class.
-     *
-     * @return a new map
-     */
+    /// Creates a key map for the [SimpleStyleableMap] that
+    /// is used to store the properties of this object.
+    ///
+    /// This implementation creates one key map for this class, and shares
+    /// it with all instances of this class.
+    ///
+    /// @return a new map
     protected Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
             IdentityHashMap<Key<?>, Integer> m = new IdentityHashMap<>() {
@@ -87,9 +82,7 @@ public abstract class AbstractStyleablePropertyBean
         });
     }
 
-    /**
-     * Returns the user properties.
-     */
+    /// Returns the user properties.
     @Override
     public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;
@@ -99,9 +92,7 @@ public abstract class AbstractStyleablePropertyBean
         return properties;
     }
 
-    /**
-     * Returns the style value.
-     */
+    /// Returns the style value.
     @Override
     public @Nullable <T> T getStyled(MapAccessor<T> key) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
@@ -124,9 +115,7 @@ public abstract class AbstractStyleablePropertyBean
         return key.containsKey(getStyleableMap().getMap(origin));
     }
 
-    /**
-     * Sets the style value.
-     */
+    /// Sets the style value.
     @Override
     public @Nullable <T> T setStyled(StyleOrigin origin, MapAccessor<T> key, T newValue) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
@@ -147,29 +136,25 @@ public abstract class AbstractStyleablePropertyBean
         getStyleableMap().removeAll(origin);
     }
 
-    /**
-     * This method is invoked just before listeners are notified. This
-     * implementation is empty.
-     *
-     * @param <T>        the type
-     * @param key        the changed key
-     * @param oldValue   the old value
-     * @param newValue   the new value
-     * @param wasAdded
-     * @param wasRemoved
-     */
+    /// This method is invoked just before listeners are notified. This
+    /// implementation is empty.
+    ///
+    /// @param <T>        the type
+    /// @param key        the changed key
+    /// @param oldValue   the old value
+    /// @param newValue   the new value
+    /// @param wasAdded
+    /// @param wasRemoved
     protected <T> void onPropertyChanged(Key<T> key, T oldValue, T newValue, boolean wasAdded, boolean wasRemoved) {
     }
 
-    /**
-     * This method is invoked just before listeners are notified. This
-     * implementation is empty.
-     *
-     * @param origin     the style origin
-     * @param willChange true if the change is about to be performed, false if
-     *                   the change happened
-     * @param change     the change
-     */
+    /// This method is invoked just before listeners are notified. This
+    /// implementation is empty.
+    ///
+    /// @param origin     the style origin
+    /// @param willChange true if the change is about to be performed, false if
+    ///                   the change happened
+    /// @param change     the change
     protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
 
     }

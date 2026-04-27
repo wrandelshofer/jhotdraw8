@@ -52,30 +52,27 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_X;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
 
-/**
- * A Handle to rotate a TransformableFigure around the center of its bounds in
- * local.
- * <p>
- * This handle consists of a pick node, a pivot node and a line.
- * <p>
- * The pick node is displayed as a circle above the top of the figure.
- * <p>
- * The pivot node is displayed as a cross located at the center of the figure.
- * The pivot node is only visible when the mouse is pressed.
- * <p>
- * The line extends from the pick node to the top of the figure.
- * <p>
- *
- * <pre>
- *              ○             pick node
- *              |             line
- *     +-----------------+
- *     |                 |
- *     |        +        |    pivot node
- *     |                 |
- *     +-----------------+
- * </pre>
- */
+/// A Handle to rotate a TransformableFigure around the center of its bounds in
+/// local.
+///
+/// This handle consists of a pick node, a pivot node and a line.
+///
+/// The pick node is displayed as a circle above the top of the figure.
+///
+/// The pivot node is displayed as a cross located at the center of the figure.
+/// The pivot node is only visible when the mouse is pressed.
+///
+/// The line extends from the pick node to the top of the figure.
+///
+/// <pre>
+///              ○             pick node
+///              |             line
+///     +-----------------+
+///     |                 |
+///     |        +        |    pivot node
+///     |                 |
+///     +-----------------+
+/// </pre>
 public class RotateHandle extends AbstractHandle {
     public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 

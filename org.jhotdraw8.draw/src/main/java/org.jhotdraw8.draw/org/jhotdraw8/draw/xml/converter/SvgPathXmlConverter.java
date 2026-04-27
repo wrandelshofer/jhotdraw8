@@ -13,10 +13,7 @@ import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.nio.CharBuffer;
 
-/**
- * Converts an {@code SVGPath} from/to an XML attribute text.
- *
- */
+/// Converts an `SVGPath` from/to an XML attribute text.
 public class SvgPathXmlConverter implements Converter<SVGPath> {
 
     public SvgPathXmlConverter() {

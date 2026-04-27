@@ -13,14 +13,12 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * Maps a {@link Set} to a different element type.
- * <p>
- * The underlying Set is referenced - not copied.
- *
- * @param <E> the mapped element type
- * @param <F> the original element type
- */
+/// Maps a [Set] to a different element type.
+///
+/// The underlying Set is referenced - not copied.
+///
+/// @param <E> the mapped element type
+/// @param <F> the original element type
 public final class MappedSet<E, F> extends AbstractSet<E> {
 
     private final Set<F> backingSet;

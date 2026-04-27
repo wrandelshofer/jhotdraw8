@@ -16,21 +16,17 @@ import java.util.Deque;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
-/**
- * Processes the replace() function.
- * <pre>
- * replace     = "replace(", string, [","], regex, [","], replacement, ")" ;
- * string      = string-token ;
- * regex       = string-token ;
- * replacement = string-token ;
- * </pre>
- *
- * @param <T> the element type of the DOM
- */
+/// Processes the replace() function.
+/// <pre>
+/// replace     = "replace(", string, [","], regex, [","], replacement, ")" ;
+/// string      = string-token ;
+/// regex       = string-token ;
+/// replacement = string-token ;
+/// </pre>
+///
+/// @param <T> the element type of the DOM
 public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
-    /**
-     * Function name.
-     */
+    /// Function name.
     public static final String NAME = "replace";
 
     public ReplaceCssFunction() {

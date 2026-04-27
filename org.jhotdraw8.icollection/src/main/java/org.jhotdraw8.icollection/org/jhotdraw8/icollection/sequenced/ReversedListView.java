@@ -15,11 +15,9 @@ public class ReversedListView<E> extends AbstractList<E> implements List<E> {
     private final List<E> src;
     private final IntSupplier modCount;
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param src the source set
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param src the source set
     public ReversedListView(List<E> src, IntSupplier modCount) {
         this.src = src;
         this.modCount = modCount;

@@ -17,18 +17,16 @@ public class IntersectCircleCubicCurve {
     private IntersectCircleCubicCurve() {
     }
 
-    /**
-     * Computes the intersection between cubic bezier curve 'p' and the given
-     * circle.
-     *
-     * @param p0 control point P0 of 'p'
-     * @param p1 control point P1 of 'p'
-     * @param p2 control point P2 of 'p'
-     * @param p3 control point P3 of 'p'
-     * @param c  the center of the circle
-     * @param r  the radius of the circle
-     * @return the computed result
-     */
+    /// Computes the intersection between cubic bezier curve 'p' and the given
+    /// circle.
+    ///
+    /// @param p0 control point P0 of 'p'
+    /// @param p1 control point P1 of 'p'
+    /// @param p2 control point P2 of 'p'
+    /// @param p3 control point P3 of 'p'
+    /// @param c  the center of the circle
+    /// @param r  the radius of the circle
+    /// @return the computed result
     public static IntersectionResult intersectCubicCurveCircle(
             Point2D p0, Point2D p1, Point2D p2, Point2D p3,
             Point2D c, double r) {

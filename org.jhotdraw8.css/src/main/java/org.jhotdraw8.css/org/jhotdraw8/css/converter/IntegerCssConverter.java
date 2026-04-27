@@ -15,12 +15,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * CssIntegerConverter.
- * <p>
- * Parses an attribute value of type integer.
- *
- */
+/// CssIntegerConverter.
+///
+/// Parses an attribute value of type integer.
 public class IntegerCssConverter extends AbstractCssConverter<Integer> {
 
     public IntegerCssConverter(boolean nullable) {

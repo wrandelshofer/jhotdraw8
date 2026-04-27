@@ -12,15 +12,13 @@ import org.jhotdraw8.icollection.persistent.PersistentMap;
 import java.util.LinkedHashMap;
 import java.util.SequencedMap;
 
-/**
- * Represents a system color in a cascading stylesheet.
- * <p>
- * References:
- * <dl>
- *     <dt>CSS Color Module Level 4, System Colors</dt>
- *     <dd><a href="https://www.w3.org/TR/css-color-4/#css-system-colors">w3.org/<a></a></a></dd>
- * </dl>
- */
+/// Represents a system color in a cascading stylesheet.
+///
+/// References:
+/// <dl>
+///     <dt>CSS Color Module Level 4, System Colors</dt>
+///     <dd><a href="https://www.w3.org/TR/css-color-4/#css-system-colors">w3.org/<a></a></a></dd>
+/// </dl>
 public class SystemCssColor extends CssColor {
 
     public static final SystemCssColor CANVAS = new SystemCssColor(SystemColorName.CANVAS, Color.rgb(255, 255, 255));
@@ -127,28 +125,24 @@ public class SystemCssColor extends CssColor {
         SYSTEM_COLORS = ChampMap.copyOf(m);
     }
 
-    /**
-     * Creates a system color for the given name.
-     * <p>
-     * The name is not case sensitive.
-     * <p>
-     * If the name is unknown, then null is returned.
-     *
-     * @param name the name of the system color
-     * @return the system color or null
-     */
+    /// Creates a system color for the given name.
+    ///
+    /// The name is not case sensitive.
+    ///
+    /// If the name is unknown, then null is returned.
+    ///
+    /// @param name the name of the system color
+    /// @return the system color or null
     public static SystemCssColor of(String name) {
         return SYSTEM_COLORS.get(name.toLowerCase());
     }
 
-    /**
-     * Returns true if the given name is a known system color.
-     * <p>
-     * The name is not case sensitive.
-     *
-     * @param name a name
-     * @return true if known
-     */
+    /// Returns true if the given name is a known system color.
+    ///
+    /// The name is not case sensitive.
+    ///
+    /// @param name a name
+    /// @return true if known
     public static boolean isSystemColor(String name) {
         return SYSTEM_COLORS.containsKey(name.toLowerCase());
     }

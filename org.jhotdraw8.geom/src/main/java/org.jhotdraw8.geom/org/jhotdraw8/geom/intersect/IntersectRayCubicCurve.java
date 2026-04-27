@@ -22,24 +22,22 @@ public class IntersectRayCubicCurve {
     }
 
 
-    /**
-     * Computes the intersection between cubic bezier curve 'p' and the line
-     * 'a'.
-     *
-     * @param p0x control point P0 of 'p'
-     * @param p1x control point P1 of 'p'
-     * @param p2x control point P2 of 'p'
-     * @param p3x control point P3 of 'p'
-     * @param a0x point 1 of 'a'
-     * @param a1x point 2 of 'a'
-     * @param p0y control point P0 of 'p'
-     * @param p1y control point P1 of 'p'
-     * @param p2y control point P2 of 'p'
-     * @param p3y control point P3 of 'p'
-     * @param a0y point 1 of 'a'
-     * @param a1y point 2 of 'a'
-     * @return the computed intersection
-     */
+    /// Computes the intersection between cubic bezier curve 'p' and the line
+    /// 'a'.
+    ///
+    /// @param p0x control point P0 of 'p'
+    /// @param p1x control point P1 of 'p'
+    /// @param p2x control point P2 of 'p'
+    /// @param p3x control point P3 of 'p'
+    /// @param a0x point 1 of 'a'
+    /// @param a1x point 2 of 'a'
+    /// @param p0y control point P0 of 'p'
+    /// @param p1y control point P1 of 'p'
+    /// @param p2y control point P2 of 'p'
+    /// @param p3y control point P3 of 'p'
+    /// @param a0y point 1 of 'a'
+    /// @param a1y point 2 of 'a'
+    /// @return the computed intersection
     public static IntersectionResult intersectRayCubicCurve(
             double a0x, double a0y, double a1x, double a1y, double maxT,
             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y, double p3x, double p3y,
@@ -54,19 +52,17 @@ public class IntersectRayCubicCurve {
         return intersectRayCubicCurve(a0, a1, maxT, p0, p1, p2, p3, Scalars.REAL_THRESHOLD);
     }
 
-    /**
-     * Computes the intersection between cubic bezier curve 'p' and the line
-     * 'a'.
-     *
-     * @param ao      origin of ray 'a'
-     * @param ad      direction of ray 'a'
-     * @param p0      control point P0 of 'p'
-     * @param p1      control point P1 of 'p'
-     * @param p2      control point P2 of 'p'
-     * @param p3      control point P3 of 'p'
-     * @param epsilon
-     * @return the computed intersection
-     */
+    /// Computes the intersection between cubic bezier curve 'p' and the line
+    /// 'a'.
+    ///
+    /// @param ao      origin of ray 'a'
+    /// @param ad      direction of ray 'a'
+    /// @param p0      control point P0 of 'p'
+    /// @param p1      control point P1 of 'p'
+    /// @param p2      control point P2 of 'p'
+    /// @param p3      control point P3 of 'p'
+    /// @param epsilon
+    /// @return the computed intersection
     public static IntersectionResult intersectRayCubicCurve(Point2D ao, Point2D ad, double maxT, Point2D p0, Point2D p1, Point2D p2, Point2D p3, double epsilon) {
         final double a0x, a0y, a1x, a1y;
         a0x = ao.getX();

@@ -17,63 +17,49 @@ import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
-/**
- * {@code StyleableFigure} provides user-editable "id", "style class" and "style" properties,
- * and a non-user-editable "pseudo-class" property.
- */
+/// `StyleableFigure` provides user-editable "id", "style class" and "style" properties,
+/// and a non-user-editable "pseudo-class" property.
 public interface StyleableFigure extends Figure {
 
-    /**
-     * Defines the id for styling the figure with CSS.
-     * <p>
-     * Default value: {@code null}.
-     */
+    /// Defines the id for styling the figure with CSS.
+    ///
+    /// Default value: `null`.
     NullableObjectStyleableKey<String> ID = new NullableObjectStyleableKey<String>("id", String.class, new StringOrIdentCssConverter());
-    /**
-     * Defines the style class of the figure. The style class is used for
-     * styling a figure with CSS.
-     * <p>
-     * Default value: empty set.
-     */
+    /// Defines the style class of the figure. The style class is used for
+    /// styling a figure with CSS.
+    ///
+    /// Default value: empty set.
     WordSetKey STYLE_CLASS = new WordSetKey("class", ChampSet.of());
-    /**
-     * Defines the pseudo class states of the figure. The pseudo class states
-     * are used for styling a figure with CSS.
-     * This property should not be made persistent because it is a computed value.
-     * <p>
-     * Default value: empty set.
-     */
+    /// Defines the pseudo class states of the figure. The pseudo class states
+    /// are used for styling a figure with CSS.
+    /// This property should not be made persistent because it is a computed value.
+    ///
+    /// Default value: empty set.
     WordSetKey PSEUDO_CLASS = new WordSetKey("pseudoClass", ChampSet.of());
-    /**
-     * Defines the style of the figure. The style is used for styling a figure
-     * with CSS.
-     * <p>
-     * Default value: {@code null}.
-     */
+    /// Defines the style of the figure. The style is used for styling a figure
+    /// with CSS.
+    ///
+    /// Default value: `null`.
     StringReadableStyleableKey STYLE = new StringReadableStyleableKey("style");
 
-    /**
-     * We store the type selector of the figure on the node that is used
-     * to render the figure. This allows to pass this information through
-     * to classes that export a rendered scene graph.
-     * <p>
-     * This key is a String, because it is set as a property
-     * on the JavaFX node that is used to render the figure.
-     * The value type of the property is a String.
-     */
+    /// We store the type selector of the figure on the node that is used
+    /// to render the figure. This allows to pass this information through
+    /// to classes that export a rendered scene graph.
+    ///
+    /// This key is a String, because it is set as a property
+    /// on the JavaFX node that is used to render the figure.
+    /// The value type of the property is a String.
     String TYPE_SELECTOR_NODE_KEY = "figureTypeSelector";
 
-    /**
-     * Updates a figure node with all style and effect properties defined in
-     * this interface.
-     * <p>
-     * Applies the following properties: {@code ID}, {@code VISIBLE}.
-     * <p>
-     * This method is intended to be used by {@link #updateNode}.
-     *
-     * @param ctx  the render context
-     * @param node a node which was created with method {@link #createNode}.
-     */
+    /// Updates a figure node with all style and effect properties defined in
+    /// this interface.
+    ///
+    /// Applies the following properties: `ID`, `VISIBLE`.
+    ///
+    /// This method is intended to be used by [#updateNode].
+    ///
+    /// @param ctx  the render context
+    /// @param node a node which was created with method [#createNode].
     default void applyStyleableFigureProperties(RenderContext ctx, Node node) {
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EXPORT) {
             String styleId = getId();

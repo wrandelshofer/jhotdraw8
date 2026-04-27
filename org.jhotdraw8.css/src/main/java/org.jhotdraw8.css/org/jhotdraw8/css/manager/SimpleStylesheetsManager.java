@@ -49,31 +49,23 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/**
- * SimpleStylesheetsManager.
- *
- * @param <E> the element type that can be styled by this style manager
- */
+/// SimpleStylesheetsManager.
+///
+/// @param <E> the element type that can be styled by this style manager
 public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     private @Nullable String defaultNamespace;
 
     private Supplier<CssParser> parserFactory = CssParser::new;
     private UriResolver uriResolver = new SimpleUriResolver();
     private SelectorModel<E> selectorModel;
-    /**
-     * Cache for parsed user agent stylesheets.
-     * <p>
-     * The key is either an URI or a literal CSS String for which we cache the
-     * data. The value contains the parsed stylesheet entry.
-     */
+    /// Cache for parsed user agent stylesheets.
+    ///
+    /// The key is either an URI or a literal CSS String for which we cache the
+    /// data. The value contains the parsed stylesheet entry.
     private LinkedHashMap<Object, StylesheetEntry> userAgentList = new LinkedHashMap<>();
-    /**
-     * @see #userAgentList
-     */
+    /// @see #userAgentList
     private LinkedHashMap<Object, StylesheetEntry> authorList = new LinkedHashMap<>();
-    /**
-     * @see #userAgentList
-     */
+    /// @see #userAgentList
     private LinkedHashMap<Object, StylesheetEntry> inlineList = new LinkedHashMap<>();
     private final Executor executor = ForkJoinPool.commonPool();
     private @Nullable Map<String, PersistentList<CssToken>> cachedAuthorCustomProperties;
@@ -344,14 +336,12 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return cachedUserAgentCustomProperties;
     }
 
-    /**
-     * Collects all declarations in all specified stylesheets which are
-     * applicable to the specified element.
-     *
-     * @param elem        an element
-     * @param stylesheets the stylesheets
-     * @return list of applicable declarations
-     */
+    /// Collects all declarations in all specified stylesheets which are
+    /// applicable to the specified element.
+    ///
+    /// @param elem        an element
+    /// @param stylesheets the stylesheets
+    /// @return list of applicable declarations
     private List<ApplicableDeclaration> collectApplicableDeclarations(
             E elem,
             Collection<StylesheetEntry> stylesheets) {

@@ -22,20 +22,17 @@ import java.util.function.Consumer;
 
 import static org.jhotdraw8.css.converter.SizeCssConverter.parseSize;
 
-/**
- * Converts a {@link CssInsets} object into a {@code String} and vice
- * versa.
- * <p>
- * List of four sizes in the sequence top, right, bottom, left. If left is
- * omitted, it is the same as right. If bottom is omitted, it is the same as
- * top. If right is omitted it is the same as top.
- * <pre>
- * insets       = top-right-bottom-left ;
- * insets       = top-bottom, right-left ;
- * insets       = top , right , bottom, left ;
- * </pre> *
- *
- */
+/// Converts a [CssInsets] object into a `String` and vice
+/// versa.
+///
+/// List of four sizes in the sequence top, right, bottom, left. If left is
+/// omitted, it is the same as right. If bottom is omitted, it is the same as
+/// top. If right is omitted it is the same as top.
+/// <pre>
+/// insets       = top-right-bottom-left ;
+/// insets       = top-bottom, right-left ;
+/// insets       = top , right , bottom, left ;
+/// </pre> *
 public class InsetsCssConverter extends AbstractCssConverter<CssInsets> {
     public InsetsCssConverter(boolean nullable) {
         super(nullable);

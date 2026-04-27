@@ -12,13 +12,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * A {@link Comparator} that compares {@link String}s using a provided
- * {@link Collator}.
- * <p>
- * This comparator caches the collation keys.
- *
- */
+/// A [Comparator] that compares [String]s using a provided
+/// [Collator].
+///
+/// This comparator caches the collation keys.
 public class CachingCollator implements Comparator<String> {
 
     private final Collator collator;

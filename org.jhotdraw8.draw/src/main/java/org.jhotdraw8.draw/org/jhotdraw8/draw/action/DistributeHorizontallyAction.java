@@ -25,11 +25,9 @@ public class DistributeHorizontallyAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.distributeHorizontally";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public DistributeHorizontallyAction(DrawingEditor editor) {
         super(editor);
         Resources labels
@@ -43,12 +41,10 @@ public class DistributeHorizontallyAction extends AbstractDrawingViewAction {
         distributeHorizontally(drawingView, figures);
     }
 
-    /**
-     * Distributes the given figure horizontally by their centers on the x-axis.
-     *
-     * @param view    the drawing view
-     * @param figures the figures to be distributed horizontally
-     */
+    /// Distributes the given figure horizontally by their centers on the x-axis.
+    ///
+    /// @param view    the drawing view
+    /// @param figures the figures to be distributed horizontally
     private void distributeHorizontally(DrawingView view, Set<Figure> figures) {
         if (figures.size() < 3) {
             return;

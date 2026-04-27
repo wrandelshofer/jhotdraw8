@@ -12,11 +12,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * A "class selector" matches an element if the element has a style class with
- * the specified value.
- *
- */
+/// A "class selector" matches an element if the element has a style class with
+/// the specified value.
 public class ClassSelector extends SimpleSelector {
 
     private final String clazz;

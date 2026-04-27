@@ -12,24 +12,19 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-/**
- * An "at-rule" consists of an "at-keyword", a list of header tokens and a
- * list of body tokens.
- *
- */
+/// An "at-rule" consists of an "at-keyword", a list of header tokens and a
+/// list of body tokens.
 public class AtRule extends Rule {
     private final String atKeyword;
     private final PersistentList<CssToken> header;
     private final PersistentList<CssToken> body;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param sourceLocator
-     * @param atKeyword     the "at-keyword"
-     * @param header        the list of header tokens
-     * @param body          the list of body tokens
-     */
+    /// Creates a new instance.
+    ///
+    /// @param sourceLocator
+    /// @param atKeyword     the "at-keyword"
+    /// @param header        the list of header tokens
+    /// @param body          the list of body tokens
     public AtRule(@Nullable SourceLocator sourceLocator, String atKeyword,
                   List<? extends CssToken> header, List<? extends CssToken> body) {
         super(sourceLocator);
@@ -61,29 +56,23 @@ public class AtRule extends Rule {
         return buf.toString();
     }
 
-    /**
-     * Gets the "at-keyword".
-     *
-     * @return the "at-keyword".
-     */
+    /// Gets the "at-keyword".
+    ///
+    /// @return the "at-keyword".
     public String getAtKeyword() {
         return atKeyword;
     }
 
-    /**
-     * Gets the list of header tokens.
-     *
-     * @return the header tokens
-     */
+    /// Gets the list of header tokens.
+    ///
+    /// @return the header tokens
     public ReadableList<CssToken> getHeader() {
         return header;
     }
 
-    /**
-     * Gets the list of body tokens.
-     *
-     * @return the body tokens
-     */
+    /// Gets the list of body tokens.
+    ///
+    /// @return the body tokens
     public ReadableList<CssToken> getBody() {
         return body;
     }

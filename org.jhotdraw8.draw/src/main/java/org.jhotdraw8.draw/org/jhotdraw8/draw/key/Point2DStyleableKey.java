@@ -10,34 +10,27 @@ import org.jhotdraw8.draw.css.converter.Point2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
-/**
- * Point2DStyleableKey.
- *
- */
+/// Point2DStyleableKey.
 public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implements WritableStyleableMapAccessor<Point2D>,
         NonNullKey<Point2D> {
 
 
     private final Converter<Point2D> converter = new Point2DConverter(false);
 
-    /**
-     * Creates a new instance with the specified name and with null as the
-     * default value.
-     *
-     * @param name The name of the key.
-     */
+    /// Creates a new instance with the specified name and with null as the
+    /// default value.
+    ///
+    /// @param name The name of the key.
     public Point2DStyleableKey(String name) {
         this(name, Point2D.ZERO);
     }
 
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise
-     *                     specify them in arrow brackets.
-     * @param defaultValue The default value.
-     */
+    /// Creates a new instance with the specified name, type token class, default
+    /// value, and allowing or disallowing null values.
+    ///
+    /// @param key          The name of the name. type parameters are given. Otherwise
+    ///                     specify them in arrow brackets.
+    /// @param defaultValue The default value.
     public Point2DStyleableKey(String key, Point2D defaultValue) {
         super(key, Point2D.class, defaultValue);
     }

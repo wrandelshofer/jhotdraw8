@@ -4,18 +4,13 @@
  */
 package org.jhotdraw8.collection.primitive;
 
-/**
- * ByteConsumer.
- *
- */
+/// ByteConsumer.
 @FunctionalInterface
 public interface ByteConsumer {
 
-    /**
-     * Performs this operation on the given argument.
-     *
-     * @param v the input argument
-     */
+    /// Performs this operation on the given argument.
+    ///
+    /// @param v the input argument
     void accept(byte v);
 
 }

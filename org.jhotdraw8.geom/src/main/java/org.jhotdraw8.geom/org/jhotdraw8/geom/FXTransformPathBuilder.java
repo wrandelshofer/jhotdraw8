@@ -7,11 +7,9 @@ package org.jhotdraw8.geom;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
 
-/**
- * TransformPathBuilder.
- *
- * @param <T> the product type
- */
+/// TransformPathBuilder.
+///
+/// @param <T> the product type
 public class FXTransformPathBuilder<T> extends AbstractPathBuilder<T> {
 
     private final PathBuilder<T> target;

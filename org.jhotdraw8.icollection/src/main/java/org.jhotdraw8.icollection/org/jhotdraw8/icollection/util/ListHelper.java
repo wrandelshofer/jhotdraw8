@@ -9,30 +9,23 @@ package org.jhotdraw8.icollection.util;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-/**
- * Provides static methods for lists that are based on arrays.
- *
- */
+/// Provides static methods for lists that are based on arrays.
 public class ListHelper {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private ListHelper() {
 
     }
 
 
-    /**
-     * Copies 'src' and inserts 'numComponents' at position 'index'.
-     * <p>
-     * The new components will have a null value.
-     *
-     * @param src           an array
-     * @param index         an index
-     * @param numComponents the number of array components to be added
-     * @param <T>           the array type
-     * @return a new array
-     */
+    /// Copies 'src' and inserts 'numComponents' at position 'index'.
+    ///
+    /// The new components will have a null value.
+    ///
+    /// @param src           an array
+    /// @param index         an index
+    /// @param numComponents the number of array components to be added
+    /// @param <T>           the array type
+    /// @return a new array
     public static <T> T[] copyComponentAdd(T[] src, int index, int numComponents) {
         if (index == src.length) {
             return Arrays.copyOf(src, src.length + numComponents);
@@ -43,15 +36,13 @@ public class ListHelper {
         return dst;
     }
 
-    /**
-     * Copies 'src' and removes 'numComponents' at position 'index'.
-     *
-     * @param src           an array
-     * @param index         an index
-     * @param numComponents the number of array components to be removed
-     * @param <T>           the array type
-     * @return a new array
-     */
+    /// Copies 'src' and removes 'numComponents' at position 'index'.
+    ///
+    /// @param src           an array
+    /// @param index         an index
+    /// @param numComponents the number of array components to be removed
+    /// @param <T>           the array type
+    /// @return a new array
     public static <T> T[] copyComponentRemove(T[] src, int index, int numComponents) {
         if (index == src.length - numComponents) {
             return Arrays.copyOf(src, src.length - numComponents);
@@ -62,15 +53,13 @@ public class ListHelper {
         return dst;
     }
 
-    /**
-     * Copies 'src' and sets 'value' at position 'index'.
-     *
-     * @param src   an array
-     * @param index an index
-     * @param value a value
-     * @param <T>   the array type
-     * @return a new array
-     */
+    /// Copies 'src' and sets 'value' at position 'index'.
+    ///
+    /// @param src   an array
+    /// @param index an index
+    /// @param value a value
+    /// @param <T>   the array type
+    /// @return a new array
     public static <T> T[] copySet(T[] src, int index, T value) {
         final T[] dst = Arrays.copyOf(src, src.length);
         dst[index] = value;

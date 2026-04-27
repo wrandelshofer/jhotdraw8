@@ -38,30 +38,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * A label that can be attached to another figure by setting {@link #LABEL_CONNECTOR} and
- * {@link #LABEL_TARGET}.
- * <p>
- * When the label is attached it computes the {@link #LABELED_LOCATION} using the
- * {@link #LABEL_CONNECTOR} on the target figure. Then it computes the {@link #ORIGIN}
- * and rotation of the label using the properties {@link #LABEL_OFFSET}
- * and {@link #LABEL_AUTOROTATE}.
- * <pre>
- * LABELED_LOCATION:    x,y (has a derivative that can be rotated)
- *                       |
- *                       | + LABEL_OFFSET (perpendicular to
- *                       |                 LABELED_LOCATION)
- *                       ↓
- *                   +--------------------+
- * ORIGIN:           |  x,y               |
- * LABEL_AUTOROTATE: |   ↺                |
- *                   |                    |
- *                   |    layout bounds   |
- *                   +--------------------+
- *
- * </pre>
- *
- */
+/// A label that can be attached to another figure by setting [#LABEL_CONNECTOR] and
+/// [#LABEL_TARGET].
+///
+/// When the label is attached it computes the [#LABELED_LOCATION] using the
+/// [#LABEL_CONNECTOR] on the target figure. Then it computes the [#ORIGIN]
+/// and rotation of the label using the properties [#LABEL_OFFSET]
+/// and [#LABEL_AUTOROTATE].
+/// <pre>
+/// LABELED_LOCATION:    x,y (has a derivative that can be rotated)
+///                       |
+///                       | + LABEL_OFFSET (perpendicular to
+///                       |                 LABELED_LOCATION)
+///                       ↓
+///                   +--------------------+
+/// ORIGIN:           |  x,y               |
+/// LABEL_AUTOROTATE: |   ↺                |
+///                   |                    |
+///                   |    layout bounds   |
+///                   +--------------------+
+///
+/// </pre>
 public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         implements ConnectingFigure, TransformableFigure, LabelConnectionFigure {
 
@@ -69,28 +66,20 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     public static final CssSizeStyleableKey LABELED_LOCATION_Y = new CssSizeStyleableKey("labeledLocationY", CssSize.ZERO);
     public static final CssPoint2DStyleableMapAccessor LABELED_LOCATION = new CssPoint2DStyleableMapAccessor("labeledLocation", LABELED_LOCATION_X, LABELED_LOCATION_Y);
 
-    /**
-     * The perpendicular offset of the label.
-     * <p>
-     * The offset is perpendicular to the tangent line of the figure.
-     */
+    /// The perpendicular offset of the label.
+    ///
+    /// The offset is perpendicular to the tangent line of the figure.
     public static final CssSizeStyleableKey LABEL_OFFSET_Y = new CssSizeStyleableKey("labelOffsetY", CssSize.ZERO);
-    /**
-     * The tangential offset of the label.
-     * <p>
-     * The offset is on tangent line of the figure.
-     */
+    /// The tangential offset of the label.
+    ///
+    /// The offset is on tangent line of the figure.
     public static final CssSizeStyleableKey LABEL_OFFSET_X = new CssSizeStyleableKey("labelOffsetX", CssSize.ZERO);
     public static final CssPoint2DStyleableMapAccessor LABEL_OFFSET = new CssPoint2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
-    /**
-     * Whether the label should be rotated with the target.
-     */
+    /// Whether the label should be rotated with the target.
     public static final NonNullEnumStyleableKey<LabelAutorotate> LABEL_AUTOROTATE = new NonNullEnumStyleableKey<>("labelAutorotate", LabelAutorotate.class, LabelAutorotate.OFF);
     public static final CssSizeStyleableKey LABEL_TRANSLATE_Y = new CssSizeStyleableKey("labelTranslationY", CssSize.ZERO);
     public static final CssSizeStyleableKey LABEL_TRANSLATE_X = new CssSizeStyleableKey("labelTranslationX", CssSize.ZERO);
-    /**
-     * The position relative to the parent (respectively the offset).
-     */
+    /// The position relative to the parent (respectively the offset).
     public static final CssPoint2DStyleableMapAccessor LABEL_TRANSLATE = new CssPoint2DStyleableMapAccessor("labelTranslation", LABEL_TRANSLATE_X, LABEL_TRANSLATE_Y);
     private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
 
@@ -136,11 +125,9 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
                 && get(LABEL_TARGET) != null);
     }
 
-    /**
-     * This property is true when the figure is connected.
-     *
-     * @return the connected property
-     */
+    /// This property is true when the figure is connected.
+    ///
+    /// @return the connected property
     public ReadOnlyBooleanProperty connectedProperty() {
         return connected.getReadOnlyProperty();
     }
@@ -166,12 +153,10 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         }
     }
 
-    /**
-     * Returns all figures which are connected by this figure - they provide to
-     * the layout of this figure.
-     *
-     * @return a list of connected figures
-     */
+    /// Returns all figures which are connected by this figure - they provide to
+    /// the layout of this figure.
+    ///
+    /// @return a list of connected figures
     @Override
     public ReadableSet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
@@ -203,18 +188,16 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         super.layout(ctx);
     }
 
-    /**
-     * If the label has a {@link #LABEL_TARGET} and a {@link #LABEL_CONNECTOR},
-     * computes the {@link #LABELED_LOCATION}, {@link #ORIGIN} and
-     * {@link #TRANSFORMS} of the label.
-     * <p>
-     * Else leaves the {@link #ORIGIN} and the {@link #TRANSFORMS} unchanged.
-     * <p>
-     * The following properties affect the result:
-     * {@link #LABEL_OFFSET}, {@link #LABEL_AUTOROTATE}.
-     *
-     * @param ctx
-     */
+    /// If the label has a [#LABEL_TARGET] and a [#LABEL_CONNECTOR],
+    /// computes the [#LABELED_LOCATION], [#ORIGIN] and
+    /// [#TRANSFORMS] of the label.
+    ///
+    /// Else leaves the [#ORIGIN] and the [#TRANSFORMS] unchanged.
+    ///
+    /// The following properties affect the result:
+    /// [#LABEL_OFFSET], [#LABEL_AUTOROTATE].
+    ///
+    /// @param ctx
     protected void layoutOrigin(final RenderContext ctx) {
         final Figure labelTarget = get(LABEL_TARGET);
         final Connector labelConnector = get(LABEL_CONNECTOR);

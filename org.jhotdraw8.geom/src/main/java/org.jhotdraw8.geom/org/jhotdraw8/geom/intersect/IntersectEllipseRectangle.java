@@ -13,16 +13,14 @@ public class IntersectEllipseRectangle {
     private IntersectEllipseRectangle() {
     }
 
-    /**
-     * Computes the intersection between an ellipse and a rectangle.
-     *
-     * @param c  the center of the ellipse
-     * @param rx the x-radius of the ellipse
-     * @param ry the y-radius of the ellipse
-     * @param r1 corner point 1 of the rectangle
-     * @param r2 corner point 2 of the rectangle
-     * @return computed intersection
-     */
+    /// Computes the intersection between an ellipse and a rectangle.
+    ///
+    /// @param c  the center of the ellipse
+    /// @param rx the x-radius of the ellipse
+    /// @param ry the y-radius of the ellipse
+    /// @param r1 corner point 1 of the rectangle
+    /// @param r2 corner point 2 of the rectangle
+    /// @return computed intersection
     public static IntersectionResult intersectEllipseRectangle(Point2D c, double rx, double ry, Point2D r1, Point2D r2) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(r1, r2);

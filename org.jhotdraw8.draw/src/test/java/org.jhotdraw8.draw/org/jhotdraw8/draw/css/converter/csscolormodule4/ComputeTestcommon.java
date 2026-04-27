@@ -1,10 +1,10 @@
 package org.jhotdraw8.draw.css.converter.csscolormodule4;
 
 import javafx.scene.paint.Color;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.css.converter.ColorCssConverter;
 import org.jhotdraw8.css.value.CssColor;
+import org.jspecify.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -20,19 +20,17 @@ public class ComputeTestcommon {
         test_computed_value(property, specified, computed, null);
     }
 
-    /**
-     * <dl>
-     *     <dt>web-platform-tests / wpt</dt>
-     *     <dd><a href="https://github.com/web-platform-tests/wpt/blob/f69cc2c952a97e745446a6026559292a96340fd8/css/support/computed-testcommon.js">github.com</a></dd>
-     * </dl>
-     *
-     * @param property   The name of the CSS property being tested.
-     * @param specified  @param {string} specified A specified value for the property.
-     * @param computed   The expected computed value,
-     *                   or an array of permitted computed value.
-     *                   If omitted, defaults to {@code specified}.
-     * @param titleExtra Optional extra title.
-     */
+    /// <dl>
+    ///     <dt>web-platform-tests / wpt</dt>
+    ///     <dd><a href="https://github.com/web-platform-tests/wpt/blob/f69cc2c952a97e745446a6026559292a96340fd8/css/support/computed-testcommon.js">github.com</a></dd>
+    /// </dl>
+    ///
+    /// @param property   The name of the CSS property being tested.
+    /// @param specified  @param {string} specified A specified value for the property.
+    /// @param computed   The expected computed value,
+    ///                   or an array of permitted computed value.
+    ///                   If omitted, defaults to `specified`.
+    /// @param titleExtra Optional extra title.
     public static void test_computed_value(String property, String specified, String computed, @Nullable String titleExtra) {
         String message = "specified=\"" + specified + (titleExtra == null ? "\"" : "\" " + titleExtra);
         try {
@@ -48,19 +46,17 @@ public class ComputeTestcommon {
             new DecimalFormat("#################0.###", new DecimalFormatSymbols(Locale.ENGLISH)),
             new DecimalFormat("0.0###E0", new DecimalFormatSymbols(Locale.ENGLISH)));
 
-    /**
-     * <dl>
-     *     <dt>web-platform-tests / wpt</dt>
-     *     <dd><a href="https://github.com/web-platform-tests/wpt/blob/f69cc2c952a97e745446a6026559292a96340fd8/css/support/computed-testcommon.js">github.com</a></dd>
-     * </dl>
-     *
-     * @param property   The name of the CSS property being tested.
-     * @param specified  @param {string} specified A specified value for the property.
-     * @param computed   The expected computed value,
-     *                   or an array of permitted computed value.
-     *                   If omitted, defaults to {@code specified}.
-     * @param titleExtra Optional extra title.
-     */
+    /// <dl>
+    ///     <dt>web-platform-tests / wpt</dt>
+    ///     <dd><a href="https://github.com/web-platform-tests/wpt/blob/f69cc2c952a97e745446a6026559292a96340fd8/css/support/computed-testcommon.js">github.com</a></dd>
+    /// </dl>
+    ///
+    /// @param property   The name of the CSS property being tested.
+    /// @param specified  @param {string} specified A specified value for the property.
+    /// @param computed   The expected computed value,
+    ///                   or an array of permitted computed value.
+    ///                   If omitted, defaults to `specified`.
+    /// @param titleExtra Optional extra title.
     public static void test_computed_value_to_rgb(String property, String specified, String computed, @Nullable String titleExtra) {
         String message = "specified=\"" + specified + (titleExtra == null ? "\"" : "\" " + titleExtra);
         try {

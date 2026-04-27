@@ -23,35 +23,31 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-/**
- * Parses a list with items separated by configurable optional delimiters.
- * <p>
- * If the delimiter consists of multiple character tokens, then the parser accepts each
- * of the character tokens and any combination of them.
- * <p>
- * The delimiters are optional when the list is parsed from a String.
- * When the list is converted into a String, then the specified delimiters are used to
- * separate the items.
- * <p>
- * Stops parsing at EOF, semicolon and closing bracket.
- * <p>
- * This parser is intentionally forgiving, so that lists can be output with nice
- * delimiters, but the user does not need to type the delimiter.
- * <p>
- * In CSS list elements are separated by a comma character.
- * <p>
- * References:
- * <dl>
- *     <dt>CSS Syntax Module Level 3, 5.3.11. Parse a comma-separated list of component values</dt>
- *     <dd><a href="https://www.w3.org/TR/css-syntax-3/#parse-comma-separated-list-of-component-values">w3.org</a></dd>
- * </dl>
- *
- * @param <T> the element type
- */
+/// Parses a list with items separated by configurable optional delimiters.
+///
+/// If the delimiter consists of multiple character tokens, then the parser accepts each
+/// of the character tokens and any combination of them.
+///
+/// The delimiters are optional when the list is parsed from a String.
+/// When the list is converted into a String, then the specified delimiters are used to
+/// separate the items.
+///
+/// Stops parsing at EOF, semicolon and closing bracket.
+///
+/// This parser is intentionally forgiving, so that lists can be output with nice
+/// delimiters, but the user does not need to type the delimiter.
+///
+/// In CSS list elements are separated by a comma character.
+///
+/// References:
+/// <dl>
+///     <dt>CSS Syntax Module Level 3, 5.3.11. Parse a comma-separated list of component values</dt>
+///     <dd><a href="https://www.w3.org/TR/css-syntax-3/#parse-comma-separated-list-of-component-values">w3.org</a></dd>
+/// </dl>
+///
+/// @param <T> the element type
 public class ListCssConverter<T> implements CssConverter<PersistentList<T>> {
-    /**
-     * When nonnull this comparator is used to sort the list.
-     */
+    /// When nonnull this comparator is used to sort the list.
     private final @Nullable Comparator<T> comparatorForSorting;
 
     private final CssConverter<T> elementConverter;
@@ -73,14 +69,12 @@ public class ListCssConverter<T> implements CssConverter<PersistentList<T>> {
         this(elementConverter, parseDelim(delimiter == null ? " " : delimiter), parseDelim(prefix), parseDelim(suffix));
     }
 
-    /**
-     * @param elementConverter     the convert for a single element
-     * @param delimiter            a String which must be parsable into character tokens, each token and any combination of them
-     *                             is accepted as an optional delimiter
-     * @param prefix               the prefix of the list, for example a left bracket
-     * @param suffix               the suffix of the list, for example a right bracket
-     * @param comparatorForSorting if this value is non-null, then it is used to sort the list
-     */
+    /// @param elementConverter     the convert for a single element
+    /// @param delimiter            a String which must be parsable into character tokens, each token and any combination of them
+    ///                             is accepted as an optional delimiter
+    /// @param prefix               the prefix of the list, for example a left bracket
+    /// @param suffix               the suffix of the list, for example a right bracket
+    /// @param comparatorForSorting if this value is non-null, then it is used to sort the list
     public ListCssConverter(CssConverter<T> elementConverter, @Nullable String delimiter, @Nullable String prefix, @Nullable String suffix, @Nullable Comparator<T> comparatorForSorting) {
         this(elementConverter, parseDelim(delimiter), parseDelim(prefix), parseDelim(suffix), comparatorForSorting);
     }
@@ -94,14 +88,12 @@ public class ListCssConverter<T> implements CssConverter<PersistentList<T>> {
     }
 
 
-    /**
-     * Creates a new instance that does not sort the elements.
-     *
-     * @param elementConverter converter for elements
-     * @param delimiter        optional delimiter for parsing; the delimiter is used for pretty printing
-     * @param prefix           white-space tokens for pretty printing that are used when producing tokens or a String
-     * @param suffix           white-space tokens for pretty printing that are used when producing tokens or a String
-     */
+    /// Creates a new instance that does not sort the elements.
+    ///
+    /// @param elementConverter converter for elements
+    /// @param delimiter        optional delimiter for parsing; the delimiter is used for pretty printing
+    /// @param prefix           white-space tokens for pretty printing that are used when producing tokens or a String
+    /// @param suffix           white-space tokens for pretty printing that are used when producing tokens or a String
     public ListCssConverter(CssConverter<T> elementConverter,
                             Iterable<CssToken> delimiter,
                             Iterable<CssToken> prefix,
@@ -110,15 +102,13 @@ public class ListCssConverter<T> implements CssConverter<PersistentList<T>> {
         this(elementConverter, delimiter, prefix, suffix, null);
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param elementConverter     converter for elements
-     * @param delimiter            optional delimiter for parsing; the delimiter is used for pretty printing
-     * @param prefix               white-space tokens for pretty printing that are used when producing tokens or a String
-     * @param suffix               white-space tokens for pretty printing that are used when producing tokens or a String
-     * @param comparatorForSorting optional comparator for sorting; null means no sorting
-     */
+    /// Creates a new instance.
+    ///
+    /// @param elementConverter     converter for elements
+    /// @param delimiter            optional delimiter for parsing; the delimiter is used for pretty printing
+    /// @param prefix               white-space tokens for pretty printing that are used when producing tokens or a String
+    /// @param suffix               white-space tokens for pretty printing that are used when producing tokens or a String
+    /// @param comparatorForSorting optional comparator for sorting; null means no sorting
     public ListCssConverter(CssConverter<T> elementConverter,
                             Iterable<CssToken> delimiter,
                             Iterable<CssToken> prefix,

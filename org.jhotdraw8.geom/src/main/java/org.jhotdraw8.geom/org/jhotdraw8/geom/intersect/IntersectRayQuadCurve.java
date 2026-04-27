@@ -21,21 +21,19 @@ public class IntersectRayQuadCurve {
     private IntersectRayQuadCurve() {
     }
 
-    /**
-     * Computes the intersection between quadratic bezier curve 'p' and the line
-     * 'a'.
-     * <p>
-     * The intersection will contain the parameters 't' of curve 'a' in range
-     * [0,1].
-     *
-     * @param p0   control point P0 of 'p'
-     * @param p1   control point P1 of 'p'
-     * @param p2   control point P2 of 'p'
-     * @param ao   origin of ray 'a'
-     * @param ad   direction of ray 'a'
-     * @param maxT maximal parameter value for ray 'a'
-     * @return the computed intersection
-     */
+    /// Computes the intersection between quadratic bezier curve 'p' and the line
+    /// 'a'.
+    ///
+    /// The intersection will contain the parameters 't' of curve 'a' in range
+    /// [0,1].
+    ///
+    /// @param p0   control point P0 of 'p'
+    /// @param p1   control point P1 of 'p'
+    /// @param p2   control point P2 of 'p'
+    /// @param ao   origin of ray 'a'
+    /// @param ad   direction of ray 'a'
+    /// @param maxT maximal parameter value for ray 'a'
+    /// @return the computed intersection
     public static IntersectionResult intersectRayQuadCurve(Point2D ao, Point2D ad, double maxT, Point2D p0, Point2D p1, Point2D p2) {
         return intersectRayQuadCurve(
                 ao.getX(), ao.getY(),

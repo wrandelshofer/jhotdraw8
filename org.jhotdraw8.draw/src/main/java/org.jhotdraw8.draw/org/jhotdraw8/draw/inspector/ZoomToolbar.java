@@ -20,10 +20,7 @@ import java.net.URL;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
 
-/**
- * FXML Controller class
- *
- */
+/// FXML Controller class
 public class ZoomToolbar extends BorderPane {
 
     private final double LOG2 = log(2.0);
@@ -86,11 +83,9 @@ public class ZoomToolbar extends BorderPane {
 
     }
 
-    /**
-     * Defines the factor by which the drawing view should be zoomed.
-     *
-     * @return zoom factor
-     */
+    /// Defines the factor by which the drawing view should be zoomed.
+    ///
+    /// @return zoom factor
     public DoubleProperty zoomFactorProperty() {
         return zoomFactor;
     }

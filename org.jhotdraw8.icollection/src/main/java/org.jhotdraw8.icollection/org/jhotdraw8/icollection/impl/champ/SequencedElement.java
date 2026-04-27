@@ -9,12 +9,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * A {@code SequencedElement} stores an element of a set and a sequence number.
- * <p>
- * {@code hashCode} and {@code equals} are based on the element - the sequence
- * number is not included.
- */
+/// A `SequencedElement` stores an element of a set and a sequence number.
+///
+/// `hashCode` and `equals` are based on the element - the sequence
+/// number is not included.
 public class SequencedElement<E> implements SequencedData {
 
     private final @Nullable E element;

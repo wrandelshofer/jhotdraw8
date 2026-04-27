@@ -3,7 +3,7 @@ package org.jhotdraw8.geom;
 import org.jhotdraw8.geom.intersect.IntersectLinePoint;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.PathIterator;
@@ -37,14 +37,12 @@ public class AwtShapes {
         return builder;
     }
 
-    /**
-     * Returns true, if the outline of this shape contains the specified point.
-     *
-     * @param shape     The shape.
-     * @param p         The point to be tested.
-     * @param tolerance The tolerance for the test.
-     * @return true if contained within tolerance
-     */
+    /// Returns true, if the outline of this shape contains the specified point.
+    ///
+    /// @param shape     The shape.
+    /// @param p         The point to be tested.
+    /// @param tolerance The tolerance for the test.
+    /// @return true if contained within tolerance
     public static boolean outlineContains(Shape shape, Point2D.Double p, double tolerance) {
         AwtPathBuilder b = new AwtPathBuilder();
 
@@ -178,9 +176,7 @@ public class AwtShapes {
         };
     }
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private AwtShapes() {
     }
 }

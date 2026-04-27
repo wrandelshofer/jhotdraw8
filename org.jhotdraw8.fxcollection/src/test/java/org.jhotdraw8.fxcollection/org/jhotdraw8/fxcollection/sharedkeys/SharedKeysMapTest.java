@@ -21,17 +21,14 @@ import java.util.SequencedMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- */
+///
 public class SharedKeysMapTest {
 
     public SharedKeysMapTest() {
     }
 
 
-    /**
-     * Test of getOrDefault method, of class SharedKeysMap.
-     */
+    /// Test of getOrDefault method, of class SharedKeysMap.
     @Test
     public void testGetOrDefault() {
         // GIVEN

@@ -9,9 +9,7 @@ import java.util.function.LongFunction;
 import static java.util.Objects.checkFromToIndex;
 import static java.util.Objects.checkIndex;
 
-/**
- * A read-only list over values that are computed from the indices of the list.
- */
+/// A read-only list over values that are computed from the indices of the list.
 public class ComputedList<E> extends AbstractReadableList<E> {
     private final boolean descending;
     private final long size;
@@ -19,46 +17,38 @@ public class ComputedList<E> extends AbstractReadableList<E> {
     private final long to;
     private final LongFunction<E> function;
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param size     the size of the list
-     * @param function the function that computes an element for a given index
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param size     the size of the list
+    /// @param function the function that computes an element for a given index
     public ComputedList(long size, LongFunction<E> function) {
         this(size, function, false);
     }
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param size       the size of the list
-     * @param function   the function that computes an element for a given index
-     * @param descending whether to list should contain the elements in descending order
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param size       the size of the list
+    /// @param function   the function that computes an element for a given index
+    /// @param descending whether to list should contain the elements in descending order
     public ComputedList(long size, LongFunction<E> function, boolean descending) {
         this(0, size, function, descending);
     }
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param from     the start of the range
-     * @param to       the end of the range (exclusive)
-     * @param function the function that computes an element for a given index
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param from     the start of the range
+    /// @param to       the end of the range (exclusive)
+    /// @param function the function that computes an element for a given index
     public ComputedList(long from, long to, LongFunction<E> function) {
         this(from, to, function, false);
     }
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param from       the start of the range
-     * @param to         the end of the range (exclusive)
-     * @param function   the function that computes an element for a given index
-     * @param descending whether to list should contain the elements in descending order
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param from       the start of the range
+    /// @param to         the end of the range (exclusive)
+    /// @param function   the function that computes an element for a given index
+    /// @param descending whether to list should contain the elements in descending order
     public ComputedList(long from, long to, LongFunction<E> function, boolean descending) {
         this.function = function;
         this.descending = descending;

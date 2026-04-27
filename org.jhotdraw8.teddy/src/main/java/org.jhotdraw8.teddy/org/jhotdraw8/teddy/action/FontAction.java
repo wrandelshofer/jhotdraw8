@@ -20,15 +20,13 @@ public class FontAction extends AbstractActivityAction<FontableActivity> {
     private FontDialog fontDialog;
     public static final String ID = "format.font";
 
-    /**
-     * Creates a new instance which acts on the specified activity of the
-     * application.
-     *
-     * @param app      The application.
-     * @param activity The activity. If activity is null then the action acts on
-     *                 the active activity of the application. Otherwise it will act on the
-     *                 specified activity.
-     */
+    /// Creates a new instance which acts on the specified activity of the
+    /// application.
+    ///
+    /// @param app      The application.
+    /// @param activity The activity. If activity is null then the action acts on
+    ///                 the active activity of the application. Otherwise it will act on the
+    ///                 specified activity.
     public FontAction(Application app, @Nullable FontableActivity activity) {
         super(activity);
         TeddyLabels.getResources().configureAction(this, ID);

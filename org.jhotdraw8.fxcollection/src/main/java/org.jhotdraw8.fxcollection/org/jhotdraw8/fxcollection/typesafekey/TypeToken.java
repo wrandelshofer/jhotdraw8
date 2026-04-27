@@ -9,18 +9,16 @@ package org.jhotdraw8.fxcollection.typesafekey;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-/**
- * TypeToken captures the type of a generic class
- * including its type parameters.
- * <p>
- * Usage:
- * <pre>
- * {@literal TypeToken<List<Double>> tt = new TypeToken<List<Double>>{};}
- * {@literal Type type = tt.getType();}
- * </pre>
- *
- * @param <T> The type that this type token captures
- */
+/// TypeToken captures the type of a generic class
+/// including its type parameters.
+///
+/// Usage:
+/// <pre>
+/// {@literal TypeToken<List<Double>> tt = new TypeToken<List<Double>>{};}
+/// {@literal Type type = tt.getType();}
+/// </pre>
+///
+/// @param <T> The type that this type token captures
 public class TypeToken<T> {
     private final Type runtimeType;
 
@@ -28,9 +26,7 @@ public class TypeToken<T> {
         this.runtimeType = capture();
     }
 
-    /**
-     * Returns the captured type.
-     */
+    /// Returns the captured type.
     final Type capture() {
         Type superclass = getClass().getGenericSuperclass();
         boolean expression = superclass instanceof ParameterizedType;
@@ -40,9 +36,7 @@ public class TypeToken<T> {
         return ((ParameterizedType) superclass).getActualTypeArguments()[0];
     }
 
-    /**
-     * Returns the represented type.
-     */
+    /// Returns the represented type.
     public final Type getType() {
         return runtimeType;
     }

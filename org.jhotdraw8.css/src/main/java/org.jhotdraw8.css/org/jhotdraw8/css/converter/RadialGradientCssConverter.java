@@ -23,27 +23,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * CssRadialGradientConverter.
- * <p>
- * Parses the following EBNF from the
- * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
- * CSS Reference Guide</a>.
- * </p>
- * <pre>
- * RadialGradient := "radial-gradient(", RadialGradientParameters,  Cycle, ColorStop,{"," ColorStop}")"
- * RadialGradientParameters := [ FocusAngle "," ], [ FocusDistance "," ], [ Center "," ], Radius ;
- * FocusAngle = "focus-angle", CssSize"deg";
- * FocusDistance = "focus-distance", Percentage ;
- * Center = "center", Point ;
- * Cycle = ( "repeat" | "reflect" )
- * Radius = "radius", ( Length | Percentage ) ;
- * ColorStop = Color, [" ", Offset] ;
- * Point = (Number|CssSize|Percentage), (Number|CssSize|Percentage) ;
- *
- * </pre>
- *
- */
+/// CssRadialGradientConverter.
+///
+/// Parses the following EBNF from the
+/// <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
+/// CSS Reference Guide</a>.
+///
+/// <pre>
+/// RadialGradient := "radial-gradient(", RadialGradientParameters,  Cycle, ColorStop,{"," ColorStop}")"
+/// RadialGradientParameters := [FocusAngle","], [FocusDistance","], [Center","], Radius ;
+/// FocusAngle = "focus-angle", CssSize"deg";
+/// FocusDistance = "focus-distance", Percentage ;
+/// Center = "center", Point ;
+/// Cycle = ( "repeat" | "reflect" )
+/// Radius = "radius", ( Length | Percentage ) ;
+/// ColorStop = Color, ["",Offset] ;
+/// Point = (Number|CssSize|Percentage), (Number|CssSize|Percentage) ;
+///
+/// </pre>
 public class RadialGradientCssConverter extends AbstractCssConverter<CssRadialGradient> {
 
     private static final ColorCssConverter colorConverter = new ColorCssConverter(false);

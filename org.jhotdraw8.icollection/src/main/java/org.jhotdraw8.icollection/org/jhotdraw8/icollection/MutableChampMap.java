@@ -22,67 +22,62 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Spliterator;
 
-/**
- * Implements the {@link Map} interface using a Compressed Hash-Array Mapped
- * Prefix-tree (CHAMP).
- * <p>
- * Features:
- * <ul>
- *     <li>supports up to 2<sup>31</sup> - 1 entries</li>
- *     <li>allows null keys and null values</li>
- *     <li>is mutable</li>
- *     <li>is not thread-safe</li>
- *     <li>does not guarantee a specific iteration order</li>
- * </ul>
- * <p>
- * Performance characteristics:
- * <ul>
- *     <li>put: O(log₃₂ N)</li>
- *     <li>remove: O(log₃₂ N)</li>
- *     <li>containsKey: O(log₃₂ N)</li>
- *     <li>toPersistent: O(1) + O(log₃₂ N) distributed across subsequent updates in
- *     this map</li>
- *     <li>clone: O(1) + O(log₃₂ N) distributed across subsequent updates in this
- *     map and in the clone</li>
- *     <li>iterator.next: O(1)</li>
- * </ul>
- * <p>
- * Implementation details:
- * <p>
- * See description at {@link ChampMap}.
- * <p>
- * References:
- * <p>
- * Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
- * <dl>
- *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Persistent Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
- *      <dt>The Capsule Hash Trie Collections Library.
- *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
- *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
- * </dl>
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Implements the [Map] interface using a Compressed Hash-Array Mapped
+/// Prefix-tree (CHAMP).
+///
+/// Features:
+///
+///   - supports up to 2<sup>31</sup> - 1 entries
+///   - allows null keys and null values
+///   - is mutable
+///   - is not thread-safe
+///   - does not guarantee a specific iteration order
+///
+///
+/// Performance characteristics:
+///
+///   - put: O(log₃₂ N)
+///   - remove: O(log₃₂ N)
+///   - containsKey: O(log₃₂ N)
+///   - toPersistent: O(1) + O(log₃₂ N) distributed across subsequent updates in
+///     this map
+///   - clone: O(1) + O(log₃₂ N) distributed across subsequent updates in this
+///     map and in the clone
+///   - iterator.next: O(1)
+///
+///
+/// Implementation details:
+///
+/// See description at [ChampMap].
+///
+/// References:
+///
+/// Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
+/// <dl>
+///      <dt>Michael J. Steindorfer (2017).
+///      Efficient Persistent Collections.</dt>
+///      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
+///      <dt>The Capsule Hash Trie Collections Library.
+///
+/// Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+///      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+/// </dl>
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
 
-    /**
-     * Constructs a new empty map.
-     */
+    /// Constructs a new empty map.
     public MutableChampMap() {
         root = BitmapIndexedNode.emptyNode();
     }
 
-    /**
-     * Constructs a map containing the same entries as in the specified
-     * {@link Map}.
-     *
-     * @param m a map
-     */
+    /// Constructs a map containing the same entries as in the specified
+    /// [Map].
+    ///
+    /// @param m a map
     @SuppressWarnings("this-escape")
     public MutableChampMap(Map<? extends K, ? extends V> m) {
         if (m instanceof MutableChampMap) {
@@ -97,12 +92,10 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
         }
     }
 
-    /**
-     * Constructs a map containing the same entries as in the specified
-     * {@link Iterable}.
-     *
-     * @param m an iterable
-     */
+    /// Constructs a map containing the same entries as in the specified
+    /// [Iterable].
+    ///
+    /// @param m an iterable
     @SuppressWarnings("this-escape")
     public MutableChampMap(Iterable<? extends Entry<? extends K, ? extends V>> m) {
         if (m instanceof ChampMap) {
@@ -118,9 +111,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
         }
     }
 
-    /**
-     * Removes all entries from this map.
-     */
+    /// Removes all entries from this map.
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
@@ -128,9 +119,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
         modCount++;
     }
 
-    /**
-     * Returns a shallow copy of this map.
-     */
+    /// Returns a shallow copy of this map.
     @Override
     public MutableChampMap<K, V> clone() {
         return (MutableChampMap<K, V>) super.clone();
@@ -157,11 +146,9 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
         return new IteratorSpliterator<>(iterator(), size(), Spliterator.NONNULL | characteristics(), null);
     }
 
-    /**
-     * Returns a {@link Set} view of the entries contained in this map.
-     *
-     * @return a view of the entries contained in this map
-     */
+    /// Returns a [Set] view of the entries contained in this map.
+    ///
+    /// @return a view of the entries contained in this map
     @Override
     public Set<Entry<K, V>> entrySet() {
         return new SetFacade<>(
@@ -175,13 +162,11 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
         );
     }
 
-    /**
-     * Returns the value to which the specified key is mapped,
-     * or {@code null} if this map contains no entry for the key.
-     *
-     * @param o the key whose associated value is to be returned
-     * @return the associated value or null
-     */
+    /// Returns the value to which the specified key is mapped,
+    /// or `null` if this map contains no entry for the key.
+    ///
+    /// @param o the key whose associated value is to be returned
+    /// @return the associated value or null
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable V get(Object o) {
@@ -322,11 +307,9 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
         return false;
     }
 
-    /**
-     * Returns an persistent copy of this map.
-     *
-     * @return an persistent copy
-     */
+    /// Returns an persistent copy of this map.
+    ///
+    /// @return an persistent copy
     public ChampMap<K, V> toPersistent() {
         owner = null;
         return isEmpty() ? ChampMap.of()

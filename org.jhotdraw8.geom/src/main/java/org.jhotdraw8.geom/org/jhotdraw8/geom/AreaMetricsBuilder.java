@@ -8,13 +8,11 @@ package org.jhotdraw8.geom;
 
 import java.util.DoubleSummaryStatistics;
 
-/**
- * Computes the area of a path. This only makes sense for closed paths.
- * <p>
- * FIXME implement doCurveTo and doQuadTo
- * <p>
- * XXX Only works with consolidated inputs, for example from a {@link java.awt.geom.Area} object
- */
+/// Computes the area of a path. This only makes sense for closed paths.
+///
+/// FIXME implement doCurveTo and doQuadTo
+///
+/// XXX Only works with consolidated inputs, for example from a [java.awt.geom.Area] object
 public class AreaMetricsBuilder extends AbstractPathBuilder<Double> {
     private final DoubleSummaryStatistics areaTimesTwo = new DoubleSummaryStatistics();
     double lastMoveToX, lastMoveToY;

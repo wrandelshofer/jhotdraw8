@@ -16,19 +16,15 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Provides a {@link ReadableSet} facade to a set of {@code Set} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [ReadableSet] facade to a set of `Set` functions.
+///
+/// @param <E> the element type
 public class ReadableSetFacade<E> extends AbstractReadableSet<E> {
 
     protected final Supplier<Iterator<E>> iteratorFunction;
     protected final IntSupplier sizeFunction;
     protected final Predicate<Object> containsFunction;
-    /**
-     * Characteristics of the spliterator.
-     */
+    /// Characteristics of the spliterator.
     protected final int characteristics;
 
     public ReadableSetFacade(ReadableCollection<E> backingSet) {

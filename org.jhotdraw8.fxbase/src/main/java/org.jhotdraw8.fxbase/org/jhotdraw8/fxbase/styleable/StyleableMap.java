@@ -11,15 +11,13 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * A map which stores its values in an array, and which can share its keys with
- * other maps.
- * <p>
- * This map can store multiple values for each key.
- *
- * @param <K> key type
- * @param <V> value type
- */
+/// A map which stores its values in an array, and which can share its keys with
+/// other maps.
+///
+/// This map can store multiple values for each key.
+///
+/// @param <K> key type
+/// @param <V> value type
 public interface StyleableMap<K, V> extends ObservableMap<K, V> {
     <T extends K> boolean containsKey(StyleOrigin origin, T key);
 
@@ -31,13 +29,11 @@ public interface StyleableMap<K, V> extends ObservableMap<K, V> {
     @Nullable
     StyleOrigin getStyleOrigin(K key);
 
-    /**
-     * Removes the specified key from the specified style origin
-     * and puts the provided defaulting method for the key in place.
-     *
-     * @param origin the style origin
-     * @param key    the key
-     */
+    /// Removes the specified key from the specified style origin
+    /// and puts the provided defaulting method for the key in place.
+    ///
+    /// @param origin the style origin
+    /// @param key    the key
     V removeKey(StyleOrigin origin, K key);
 
     Map<K, V> getStyledMap();

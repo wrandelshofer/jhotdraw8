@@ -5,9 +5,7 @@
 
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Provides JavaFX-specific utility classes used by the JHotDraw framework.
- */
+/// Provides JavaFX-specific utility classes used by the JHotDraw framework.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.fxbase {

@@ -26,13 +26,9 @@ import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
-/**
- * Abstract base class for color slider examples.
- */
+/// Abstract base class for color slider examples.
 public abstract class AbstractColorSlidersMain extends Application {
-    /**
-     * Constructs a new instance.
-     */
+    /// Constructs a new instance.
     public AbstractColorSlidersMain() {
     }
 
@@ -70,12 +66,10 @@ public abstract class AbstractColorSlidersMain extends Application {
         return comboBox;
     }
 
-    /**
-     * Creates a combo box for choosing a color space from the provided set.
-     *
-     * @param colorSpaces a set of color spaces
-     * @return a combo box
-     */
+    /// Creates a combo box for choosing a color space from the provided set.
+    ///
+    /// @param colorSpaces a set of color spaces
+    /// @return a combo box
     protected ComboBox<NamedColorSpace> createColorSpaceComboBox(NamedColorSpace... colorSpaces) {
         Map<String, NamedColorSpace> map =
                 Arrays.stream(colorSpaces)
@@ -99,12 +93,10 @@ public abstract class AbstractColorSlidersMain extends Application {
         return comboBox;
     }
 
-    /**
-     * Creates text fields for the specified component properties.
-     *
-     * @param components properties holding component values
-     * @return text fields
-     */
+    /// Creates text fields for the specified component properties.
+    ///
+    /// @param components properties holding component values
+    /// @return text fields
     protected List<TextField> createTextFields(FloatProperty... components) {
         List<TextField> fields = new ArrayList<>(components.length);
         for (FloatProperty c : components) {

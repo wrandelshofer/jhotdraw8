@@ -14,32 +14,28 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 public class Lines {
-    /**
-     * Evaluates the given curve at the specified time.
-     *
-     * @param x0 point P0 of the curve
-     * @param y0 point P0 of the curve
-     * @param x1 point P1 of the curve
-     * @param y1 point P1 of the curve
-     * @param t  the time
-     * @return the point at time t
-     */
+    /// Evaluates the given curve at the specified time.
+    ///
+    /// @param x0 point P0 of the curve
+    /// @param y0 point P0 of the curve
+    /// @param x1 point P1 of the curve
+    /// @param y1 point P1 of the curve
+    /// @param t  the time
+    /// @return the point at time t
     public static PointAndDerivative eval(double x0, double y0, double x1, double y1, double t) {
         return new PointAndDerivative(lerp(x0, x1, t), lerp(y0, y1, t), x1 - x0, y1 - y0);
     }
 
 
-    /**
-     * Returns true if the three points are collinear.
-     *
-     * @param a x-coordinate of point 0
-     * @param b y-coordinate of point 0
-     * @param m x-coordinate of point 1
-     * @param n y-coordinate of point 1
-     * @param x x-coordinate of point 2
-     * @param y y-coordinate of point 2
-     * @return true if collinear
-     */
+    /// Returns true if the three points are collinear.
+    ///
+    /// @param a x-coordinate of point 0
+    /// @param b y-coordinate of point 0
+    /// @param m x-coordinate of point 1
+    /// @param n y-coordinate of point 1
+    /// @param x x-coordinate of point 2
+    /// @param y y-coordinate of point 2
+    /// @return true if collinear
     public static boolean isCollinear(double a, double b, double m, double n, double x, double y) {
         return isCollinear(a, b, m, n, x, y, 1e-6);
     }
@@ -48,19 +44,17 @@ public class Lines {
         return abs(a * (n - y) + m * (y - b) + x * (b - n)) < tolerance;
     }
 
-    /**
-     * compute distance of point from line segment, or Double.MAX_VALUE if
-     * perpendicular projection is outside segment; or If pts on line are same,
-     * return distance from point
-     *
-     * @param xa the x-coordinate of point a on the line
-     * @param ya the y-coordinate of point a on the line
-     * @param xb the x-coordinate of point b on the line
-     * @param yb the y-coordinate of point b on the line
-     * @param xc the x-coordinate of the point c
-     * @param yc the y-coordinate of the point c
-     * @return the distance from the line
-     */
+    /// compute distance of point from line segment, or Double.MAX_VALUE if
+    /// perpendicular projection is outside segment; or If pts on line are same,
+    /// return distance from point
+    ///
+    /// @param xa the x-coordinate of point a on the line
+    /// @param ya the y-coordinate of point a on the line
+    /// @param xb the x-coordinate of point b on the line
+    /// @param yb the y-coordinate of point b on the line
+    /// @param xc the x-coordinate of the point c
+    /// @param yc the y-coordinate of the point c
+    /// @return the distance from the line
     public static double distanceFromLine(double xa, double ya,
                                           double xb, double yb,
                                           double xc, double yc) {
@@ -139,27 +133,23 @@ public class Lines {
          */
     }
 
-    /**
-     * Linear interpolation from {@code a} to {@code b} at {@code t}.
-     *
-     * @param a a
-     * @param b b
-     * @param t a value in the range [0, 1]
-     * @return the interpolated value
-     */
+    /// Linear interpolation from `a` to `b` at `t`.
+    ///
+    /// @param a a
+    /// @param b b
+    /// @param t a value in the range [0,1]
+    /// @return the interpolated value
     public static double lerp(double a, double b, double t) {
         return (b - a) * t + a;
     }
 
-    /**
-     * Gets the distance between to points
-     *
-     * @param x1 the x coordinate of point 1
-     * @param y1 the y coordinate of point 1
-     * @param x2 the x coordinate of point 2
-     * @param y2 the y coordinate of point 2
-     * @return the distance between the two points
-     */
+    /// Gets the distance between to points
+    ///
+    /// @param x1 the x coordinate of point 1
+    /// @param y1 the y coordinate of point 1
+    /// @param x2 the x coordinate of point 2
+    /// @param y2 the y coordinate of point 2
+    /// @return the distance between the two points
     public static double arcLength(double x1, double y1, double x2, double y2) {
         return sqrt(Points.squaredDistance(x1, y1, x2, y2));
     }
@@ -169,57 +159,49 @@ public class Lines {
     }
 
 
-    /**
-     * Gets the arc length s at the given time t.
-     *
-     * @param x1 the x coordinate of point 1
-     * @param y1 the y coordinate of point 1
-     * @param x2 the x coordinate of point 2
-     * @param y2 the y coordinate of point 2
-     * @param t  the time
-     * @return arc length s at time t
-     */
+    /// Gets the arc length s at the given time t.
+    ///
+    /// @param x1 the x coordinate of point 1
+    /// @param y1 the y coordinate of point 1
+    /// @param x2 the x coordinate of point 2
+    /// @param y2 the y coordinate of point 2
+    /// @param t  the time
+    /// @return arc length s at time t
     public static double arcLength(double x1, double y1, double x2, double y2, double t) {
         return t * arcLength(x1, y1, x2, y2);
     }
 
-    /**
-     * Computes time t at the given arc length s.
-     *
-     * @param x1 the x coordinate of point 1
-     * @param y1 the y coordinate of point 1
-     * @param x2 the x coordinate of point 2
-     * @param y2 the y coordinate of point 2
-     * @param s  arc length
-     * @return t at s
-     */
+    /// Computes time t at the given arc length s.
+    ///
+    /// @param x1 the x coordinate of point 1
+    /// @param y1 the y coordinate of point 1
+    /// @param x2 the x coordinate of point 2
+    /// @param y2 the y coordinate of point 2
+    /// @param s  arc length
+    /// @return t at s
     public static double invArcLength(double x1, double y1, double x2, double y2, double s) {
         return s / arcLength(x1, y1, x2, y2);
     }
 
-    /**
-     * Computes time t at the given arc length s.
-     *
-     * @param p      points of the line
-     * @param offset index of the first point in array {@code a}
-     * @param s      arc length
-     * @return t at s
-     */
+    /// Computes time t at the given arc length s.
+    ///
+    /// @param p      points of the line
+    /// @param offset index of the first point in array `a`
+    /// @param s      arc length
+    /// @return t at s
     public static double invArcLength(double[] p, int offset, double s) {
         return s / arcLength(p[offset], p[offset + 1], p[offset + 2], p[offset + 3]);
     }
 
-    /**
-     * Splits the provided line into two parts.
-     *
-     * @param x0     point 1 of the line
-     * @param y0     point 1 of the line
-     * @param x1     point 2 of the line
-     * @param y1     point 2 of the line
-     * @param t      where to split
-     * @param first  if not null, accepts the curve from x1,y1 to t1
-     * @param second if not null, accepts the curve from t1 to x2,y2
-     */
+    /// Splits the provided line into two parts.
+    ///
+    /// @param x0     point 1 of the line
+    /// @param y0     point 1 of the line
+    /// @param x1     point 2 of the line
+    /// @param y1     point 2 of the line
+    /// @param t      where to split
+    /// @param first  if not null, accepts the curve from x1,y1 to t1
+    /// @param second if not null, accepts the curve from t1 to x2,y2
     public static void split(double x0, double y0, double x1, double y1, double t,
                              @Nullable DoubleConsumer2 first,
                              @Nullable DoubleConsumer2 second) {
@@ -234,9 +216,7 @@ public class Lines {
         }
     }
 
-    /**
-     * Splits the provided line into two parts.
-     */
+    /// Splits the provided line into two parts.
     public static void split(double[] p, int o,
                              double t,
                              double @Nullable [] first, int offsetFirst,
@@ -259,9 +239,7 @@ public class Lines {
         }
     }
 
-    /**
-     * Extracts a sub-line.
-     */
+    /// Extracts a sub-line.
     public static void subLine(double[] p, int o,
                                double t0, double t1,
                                double[] first, int offsetFirst) {
@@ -292,15 +270,13 @@ public class Lines {
                 x1 - x0, y1 - y0);
     }
 
-    /**
-     * Computes the linear interpolation/extrapolation between two points.
-     *
-     * @param start point a
-     * @param end   point b
-     * @param t     a value between [0, 1] defines the interpolation between a and
-     *              b. Values outside this range yield an extrapolation.
-     * @return the interpolated or extrapolated value
-     */
+    /// Computes the linear interpolation/extrapolation between two points.
+    ///
+    /// @param start point a
+    /// @param end   point b
+    /// @param t     a value between [0,1] defines the interpolation between a and
+    ///              b. Values outside this range yield an extrapolation.
+    /// @return the interpolated or extrapolated value
     public static Point2D.Double lerp(Point2D start, Point2D end, double t) {
         return lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
     }

@@ -8,16 +8,16 @@ package org.jhotdraw8.svg.io;
 import org.jhotdraw8.base.concurrent.CheckedRunnable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
-import org.jhotdraw8.css.converter.SizeCssConverter;
-import org.jhotdraw8.css.value.CssDefaultableValue;
-import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.css.converter.ColorCssConverter;
-import org.jhotdraw8.draw.css.converter.DefaultableValueCssConverter;
+import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssColor;
+import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssRectangle2D;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.NamedCssColor;
 import org.jhotdraw8.css.value.Paintable;
+import org.jhotdraw8.css.value.UnitConverter;
+import org.jhotdraw8.draw.css.converter.DefaultableValueCssConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -79,47 +79,34 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-/**
- * Reads an SVG "Tiny" 1.2 file and creates Figure objects from it.
- * <p>
- * References:
- * <dl>
- *     <dt>SVG 1.2 Tiny</dt>
- *     <dd><a href="https://www.w3.org/TR/SVGTiny12/index.html">w3.org</a></dd>
- *
- *     <dt>SVG Strokes</dt>
- *     <dd><a href="https://www.w3.org/TR/svg-strokes/">w3.org</a></dd>
- * </dl>
- */
+/// Reads an SVG "Tiny" 1.2 file and creates Figure objects from it.
+///
+/// References:
+/// <dl>
+///     <dt>SVG 1.2 Tiny</dt>
+///     <dd><a href="https://www.w3.org/TR/SVGTiny12/index.html">w3.org</a></dd>
+///     <dt>SVG Strokes</dt>
+///     <dd><a href="https://www.w3.org/TR/svg-strokes/">w3.org</a></dd>
+/// </dl>
 public class FigureSvgTinyReader {
     public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
     public static final String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
-    /**
-     * Maps from an attribute name to an accessor.
-     */
+    /// Maps from an attribute name to an accessor.
     private static final Map<String, Map<String, MapAccessor<?>>> accessorMap;
-    /**
-     * Maps from an element name to a figure factory.
-     */
+    /// Maps from an element name to a figure factory.
     private static final Map<QName, Supplier<Figure>> figureMap;
 
-    /**
-     * Converts a CSS size string into a CssSize value.
-     * <p>
-     * FIXME we must use XmlSizeConverter and not CssSizeConverter!
-     */
+    /// Converts a CSS size string into a CssSize value.
+    ///
+    /// FIXME we must use XmlSizeConverter and not CssSizeConverter!
     private final SizeCssConverter sizeConverter = new SizeCssConverter(true);
     private final DefaultableValueCssConverter<CssSize> defaultableSizeConverter = new DefaultableValueCssConverter<>(new SizeCssConverter(false));
 
-    /**
-     * Converts a CSS color string into a CssColor value.
-     * <p>
-     * FIXME we must use XmlColorConverter and not CssColorConverter!
-     */
+    /// Converts a CSS color string into a CssColor value.
+    ///
+    /// FIXME we must use XmlColorConverter and not CssColorConverter!
     private final SvgDefaultablePaintConverter<CssColor> colorConverter = new SvgDefaultablePaintConverter<>(new ColorCssConverter(true));
-    /**
-     * Maps from a type to a converter.
-     */
+    /// Maps from a type to a converter.
     private static final Map<Type, Converter<?>> converterMap;
 
     static {
@@ -183,31 +170,27 @@ public class FigureSvgTinyReader {
 
     private final Key<String> textKey = SvgTextFigure.TEXT;
 
-    /**
-     * @see #isBestEffort()
-     */
+    /// @see #isBestEffort()
     private boolean bestEffort;
 
     public FigureSvgTinyReader() {
     }
 
 
-    /**
-     * Returns true if the reader runs in best effort mode.
-     * <p>
-     * If best effort mode is true, the reader attempts to perform
-     * error processing as specified in
-     * <a href="https://www.w3.org/TR/2008/WD-SVGMobile12-20080915/implnote.html#ErrorProcessing">
-     * SVG 1.2 Error processing
-     * </a>.
-     * <p>
-     * If best effort mode is false, the reader throws an exception
-     * at every element or value that it does not understand.
-     * <p>
-     * The default value is false.
-     *
-     * @return whether the reader runs in best effort mode.
-     */
+    /// Returns true if the reader runs in best effort mode.
+    ///
+    /// If best effort mode is true, the reader attempts to perform
+    /// error processing as specified in
+    /// <a href="https://www.w3.org/TR/2008/WD-SVGMobile12-20080915/implnote.html#ErrorProcessing">
+    /// SVG 1.2 Error processing
+    /// </a>.
+    ///
+    /// If best effort mode is false, the reader throws an exception
+    /// at every element or value that it does not understand.
+    ///
+    /// The default value is false.
+    ///
+    /// @return whether the reader runs in best effort mode.
     public boolean isBestEffort() {
         return bestEffort;
     }
@@ -223,36 +206,30 @@ public class FigureSvgTinyReader {
                         + " at [row,col]:[" + location.getLineNumber() + "," + location.getColumnNumber() + "]";
     }
 
-    /**
-     * Performs error processing.
-     *
-     * @param r       the reader
-     * @param message the error message
-     * @see #isBestEffort()
-     */
+    /// Performs error processing.
+    ///
+    /// @param r       the reader
+    /// @param message the error message
+    /// @see #isBestEffort()
     private void handleError(XMLStreamReader r, String message) throws XMLStreamException {
         handleError(r.getLocation(), message);
     }
 
-    /**
-     * Performs error processing.
-     *
-     * @param r       the reader
-     * @param message the error message
-     * @see #isBestEffort()
-     */
+    /// Performs error processing.
+    ///
+    /// @param r       the reader
+    /// @param message the error message
+    /// @see #isBestEffort()
     private void handleError(@Nullable Location r, String message) throws XMLStreamException {
         handleError(r, message, null);
     }
 
-    /**
-     * Performs error processing.
-     *
-     * @param r       the reader
-     * @param message the error message
-     * @param cause   the cause of the error
-     * @see #isBestEffort()
-     */
+    /// Performs error processing.
+    ///
+    /// @param r       the reader
+    /// @param message the error message
+    /// @param cause   the cause of the error
+    /// @see #isBestEffort()
     private void handleError(@Nullable Location r, String message, @Nullable Throwable cause) throws XMLStreamException {
         if (bestEffort) {
             errors.add(message + " " + toLocationString(r));
@@ -277,9 +254,7 @@ public class FigureSvgTinyReader {
         }
     }
 
-    /**
-     * Warning: this method does not close the input source.
-     */
+    /// Warning: this method does not close the input source.
     public Figure read(Source in) throws IOException {
         try {
 
@@ -397,18 +372,16 @@ public class FigureSvgTinyReader {
         }
     }
 
-    /**
-     * Reads the children of the current element.
-     * <p>
-     * Precondition: the current event is START_ELEMENT.
-     * <p>
-     * Postcondition: the current event is the corresponding END_ELEMENT.
-     *
-     * @param r      the reader
-     * @param parent the parent element
-     * @param ctx    the context
-     * @throws XMLStreamException
-     */
+    /// Reads the children of the current element.
+    ///
+    /// Precondition: the current event is START_ELEMENT.
+    ///
+    /// Postcondition: the current event is the corresponding END_ELEMENT.
+    ///
+    /// @param r      the reader
+    /// @param parent the parent element
+    /// @param ctx    the context
+    /// @throws XMLStreamException
     private void readChildElements(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         ctx.stringBuilder.setLength(0);
         boolean collectTextForTextFigure = SVG_NAMESPACE.equals(r.getNamespaceURI()) && "text".equals(r.getLocalName());
@@ -555,9 +528,7 @@ public class FigureSvgTinyReader {
         ctx.stylesheets.add(readTextContent(r, parent, ctx));
     }
 
-    /**
-     * Reads all text content until ELEMENT_END is encountered.
-     */
+    /// Reads all text content until ELEMENT_END is encountered.
     private String readTextContent(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         StringBuilder buf = new StringBuilder();
         int depth = 1;
@@ -610,13 +581,11 @@ public class FigureSvgTinyReader {
         }
     }
 
-    /**
-     * Skips the current element and all its child elements.
-     *
-     * @param r   the reader
-     * @param ctx the context
-     * @throws XMLStreamException if a skipped element is in SVG namespace
-     */
+    /// Skips the current element and all its child elements.
+    ///
+    /// @param r   the reader
+    /// @param ctx the context
+    /// @throws XMLStreamException if a skipped element is in SVG namespace
     private void skipElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
         int depth = 1;// we are currently inside START_ELEMENT
         Loop:
@@ -640,32 +609,24 @@ public class FigureSvgTinyReader {
         }
     }
 
-    /**
-     * This list contains all collected error messages.
-     * The list must be synchronized, because we do some processing in
-     * a parallel stream.
-     */
+    /// This list contains all collected error messages.
+    /// The list must be synchronized, because we do some processing in
+    /// a parallel stream.
     private final List<String> errors = Collections.synchronizedList(new ArrayList<>());
 
-    /**
-     * Clears the errors list.
-     */
+    /// Clears the errors list.
     public void clearErrors() {
         errors.clear();
     }
 
-    /**
-     * Gets a copy of the errors list.
-     *
-     * @return a copy of the errors list
-     */
+    /// Gets a copy of the errors list.
+    ///
+    /// @return a copy of the errors list
     public List<String> getCopyOfErrors() {
         return new ArrayList<>(errors);
     }
 
-    /**
-     * Holds the current reading context.
-     */
+    /// Holds the current reading context.
     private static class Context {
         final SimpleIdFactory idFactory = new SimpleIdFactory();
         final List<CheckedRunnable> secondPass = new ArrayList<>();

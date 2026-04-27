@@ -4,9 +4,8 @@
  */
 
 import org.jspecify.annotations.NullMarked;
-/**
- * Provides basic utility classes used by the JHotDraw framework.
- */
+
+/// Provides basic utility classes used by the JHotDraw framework.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.base {

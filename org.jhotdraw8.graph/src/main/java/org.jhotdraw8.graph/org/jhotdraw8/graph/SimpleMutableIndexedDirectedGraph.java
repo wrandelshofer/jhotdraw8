@@ -12,83 +12,83 @@ import java.util.Arrays;
 
 import static java.lang.Math.max;
 
-/**
- * Simple implementation of the {@link MutableIndexedDirectedGraph} interface.
- * <p>
- * <b>Implementation:</b>
- * <p>
- * Example graph:
- * <pre>
- *     0 ──→ 1 ──→ 2
- *     │     │
- *     ↓     ↓
- *     3 ←── 4
- * </pre>
- * If the graph is inserted in the following sequence
- * into the builder:
- * <pre>
- *     buildAddVertex();
- *     buildAddVertex();
- *     buildAddVertex();
- *     buildAddVertex();
- *     buildAddVertex();
- *     buildAddVertex();
- *     build.addArrow(0, 1);
- *     build.addArrow(0, 3);
- *     build.addArrow(1, 2);
- *     build.addArrow(1, 4);
- *     build.addArrow(4, 3);
- * </pre>
- * Then the internal representation is as follows:
- * <ul>
- *     <li>For each vertex, there is an entry in table {@code lastArrows}.</li>
- *     <li>For each arrow, there is an entry in table {@code arrowHeads}.</li>
- *     <li>{@code arrowHeads} is a linked list. The linked list is ordered
- *     from the last arrow to the first. So we have to read it backwards!</li>
- *     <li>Each entry in {@code lastArrows} contains two fields:
- *     <ol>
- *         <li>A pointer to an entry in {@code arrowHeads}.</li>
- *         <li>The arrow count for this vertex.</li>
- *     </ol>
- *     <li>Each entry in {@code arrowHeads} contains two fields:
- *     <ol>
- *         <li>A vertex.
- *         <br>A tombstone={@value #TOMBSTONE} marks a deleted arrow head.</li>
- *         <li>A pointer to the next entry in {@code arrowHeads}.
- *         <br>A sentinel={@value #SENTINEL} marks the end of a linked list.</li>
- *     </ol>
- * </ul>
- * <pre>
- * vertexCount: 5
- * arrowCountInclusiveDeleted: 5
- * deletedArrowCount: 0
- * lastDeletedArrow: SENT
- *
- *  vertex#    lastArrow             arrow#    arrowHeads
- *           pointer,count                    vertex, next
- *    0     [  1  ][  2  ] ─────┐       0    [  1  ][SENT ] ←┐
- *    1     [  2  ][  2  ] ───┐ └─────→ 1    [  3  ][  0  ] ─┘
- *    2     [  0  ][  0  ] X  │         2    [  2  ][SENT ] ←┐
- *    3     [  0  ][  0  ] X  └───────→ 3    [  4  ][  2  ] ─┘
- *    4     [  4  ][  1  ] ───────────→ 4    [  3  ][SENT ] X
- * </pre>
- * If the arrow 1 → 3 is deleted, it is removed from the linked
- * list of vertex 1. The arrow head is marked with a tombstone.
- * <pre>
- * vertexCount: 5
- * arrowCountInclusiveDeleted: 5
- * deletedArrowCount: 1
- * lastDeletedArrow: 1
- *
- *  vertex#    lastArrow             arrow#    arrowHeads
- *           pointer,count                    vertex, next
- *    0     [  1  ][  2  ] ───────────→ 0    [  1  ][SENT ]
- *    1     [  2  ][  2  ] ───┐         1    [TOMB ][SENT ]
- *    2     [  0  ][  0  ] X  │         2    [  2  ][SENT ] ←┐
- *    3     [  0  ][  0  ] X  └───────→ 3    [  4  ][  2 ] ─┘
- *    4     [  4  ][  1  ] ───────────→ 4    [  3  ][SENT ] X
- * </pre>
- */
+/// Simple implementation of the [MutableIndexedDirectedGraph] interface.
+///
+/// **Implementation:**
+///
+/// Example graph:
+/// <pre>
+///     0 ──→ 1 ──→ 2
+///     │     │
+///     ↓     ↓
+///     3 ←── 4
+/// </pre>
+/// If the graph is inserted in the following sequence
+/// into the builder:
+/// <pre>
+///     buildAddVertex();
+///     buildAddVertex();
+///     buildAddVertex();
+///     buildAddVertex();
+///     buildAddVertex();
+///     buildAddVertex();
+///     build.addArrow(0, 1);
+///     build.addArrow(0, 3);
+///     build.addArrow(1, 2);
+///     build.addArrow(1, 4);
+///     build.addArrow(4, 3);
+/// </pre>
+/// Then the internal representation is as follows:
+///
+///   - For each vertex, there is an entry in table `lastArrows`.
+///   - For each arrow, there is an entry in table `arrowHeads`.
+///   - `arrowHeads` is a linked list. The linked list is ordered
+///     from the last arrow to the first. So we have to read it backwards!
+///   - Each entry in `lastArrows` contains two fields:
+///     <ol>
+///   - A pointer to an entry in `arrowHeads`.
+///       - The arrow count for this vertex.
+///     </ol>
+///   - Each entry in `arrowHeads` contains two fields:
+///     <ol>
+///   - A vertex.
+///
+/// A tombstone={@value #TOMBSTONE} marks a deleted arrow head.
+///       - A pointer to the next entry in `arrowHeads`.
+///
+/// A sentinel={@value #SENTINEL} marks the end of a linked list.
+///     </ol>
+///
+/// <pre>
+/// vertexCount: 5
+/// arrowCountInclusiveDeleted: 5
+/// deletedArrowCount: 0
+/// lastDeletedArrow: SENT
+///
+///  vertex#    lastArrow             arrow#    arrowHeads
+///           pointer,count                    vertex, next
+///    0     [1  ][2] ─────┐       0    [1  ][SENT] ←┐
+///    1     [2  ][2] ───┐ └─────→ 1    [3  ][0] ─┘
+///    2     [0  ][0] X  │         2    [2  ][SENT] ←┐
+///    3     [0  ][0] X  └───────→ 3    [4  ][2] ─┘
+///    4     [4  ][1] ───────────→ 4    [3  ][SENT] X
+/// </pre>
+/// If the arrow 1 → 3 is deleted, it is removed from the linked
+/// list of vertex 1. The arrow head is marked with a tombstone.
+/// <pre>
+/// vertexCount: 5
+/// arrowCountInclusiveDeleted: 5
+/// deletedArrowCount: 1
+/// lastDeletedArrow: 1
+///
+///  vertex#    lastArrow             arrow#    arrowHeads
+///           pointer,count                    vertex, next
+///    0     [1  ][2] ───────────→ 0    [1  ][SENT]
+///    1     [2  ][2] ───┐         1    [TOMB ][SENT]
+///    2     [0  ][0] X  │         2    [2  ][SENT] ←┐
+///    3     [0  ][0] X  └───────→ 3    [4  ][2] ─┘
+///    4     [4  ][1] ───────────→ 4    [3  ][SENT] X
+/// </pre>
 public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirectedGraph {
 
     protected static final int ARROWS_NEXT_FIELD = 1;
@@ -100,44 +100,32 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
     protected static final int SENTINEL = -1;
     private static final int TOMBSTONE = -2;
 
-    /**
-     * This is a linked list of deleted arrowHeads.
-     * The pointer points to the first deleted element in arrowHeads.
-     */
+    /// This is a linked list of deleted arrowHeads.
+    /// The pointer points to the first deleted element in arrowHeads.
     private int pointerToLastDeletedArrow = -1;
-    /**
-     * The number of deleted arrowHeads.
-     */
+    /// The number of deleted arrowHeads.
     private int deletedArrowCount;
-    /**
-     * The number of used arrowHeads.
-     */
+    /// The number of used arrowHeads.
     protected int arrowCountIncludingDeletedArrows;
-    /**
-     * Table of arrow heads.
-     * <p>
-     * {@code arrows[i * ARROWS_NUM_FIELDS+ARROWS_VERTEX_FIELD} contains the
-     * index of the vertex of the i-th arrow.
-     * <p>
-     * {@code arrows[i * ARROWS_NUM_FIELDS+ARROWS_NEXT_FIELD} contains the index
-     * of the next arrow.
-     */
+    /// Table of arrow heads.
+    ///
+    /// `arrows[i * ARROWS_NUM_FIELDS+ARROWS_VERTEX_FIELD` contains the
+    /// index of the vertex of the i-th arrow.
+    ///
+    /// `arrows[i * ARROWS_NUM_FIELDS+ARROWS_NEXT_FIELD` contains the index
+    /// of the next arrow.
     private int[] nextArrowHeads;
 
-    /**
-     * Table of last arrows.
-     * <p>
-     * {@code lastArrow[i * ARROWS_NUM_FIELDS+LASTARROW_POINTER_FIELD} contains
-     * the index of the last arrow of the i-th vertex in table {@link #nextArrowHeads}.
-     * <p>
-     * {@code lastArrow[i * ARROWS_NUM_FIELDS+LASTARROW_COUNT_FIELD} contains
-     * the number of arrows of the i-th vertex.
-     */
+    /// Table of last arrows.
+    ///
+    /// `lastArrow[i * ARROWS_NUM_FIELDS+LASTARROW_POINTER_FIELD` contains
+    /// the index of the last arrow of the i-th vertex in table [#nextArrowHeads].
+    ///
+    /// `lastArrow[i * ARROWS_NUM_FIELDS+LASTARROW_COUNT_FIELD` contains
+    /// the number of arrows of the i-th vertex.
     private int[] nextLastArrow;
 
-    /**
-     * The vertex count.
-     */
+    /// The vertex count.
     private int vertexCount;
 
     public SimpleMutableIndexedDirectedGraph() {
@@ -162,14 +150,12 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
         return doAddArrow(a, b, nextArrowHeads, nextLastArrow);
     }
 
-    /**
-     * Builder-method: adds a directed arrow from 'a' to 'b'.
-     *
-     * @param a          vertex a
-     * @param b          vertex b
-     * @param lastArrow  the array of last arrows
-     * @param arrowHeads the array of arrow heads
-     */
+    /// Builder-method: adds a directed arrow from 'a' to 'b'.
+    ///
+    /// @param a          vertex a
+    /// @param b          vertex b
+    /// @param lastArrow  the array of last arrows
+    /// @param arrowHeads the array of arrow heads
     protected int doAddArrow(int a, int b, int[] arrowHeads, int[] lastArrow) {
         int arrowCountOfA = lastArrow_getCount(lastArrow, a);
         int lastArrowPointer = arrowCountOfA == 0 ? SENTINEL : lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
@@ -208,9 +194,7 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
         lastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD] = count;
     }
 
-    /**
-     * Builder-method: adds a vertex.
-     */
+    /// Builder-method: adds a vertex.
     public void addVertexAsInt() {
         vertexCount++;
         if (nextLastArrow.length < vertexCount * LASTARROW_NUM_FIELDS) {
@@ -223,25 +207,21 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
         return arrowCountIncludingDeletedArrows - deletedArrowCount;
     }
 
-    /**
-     * Removes the i-th arrow of vertex vi.
-     *
-     * @param a a vertex
-     * @param i the i-th arrow of vertex vi
-     */
+    /// Removes the i-th arrow of vertex vi.
+    ///
+    /// @param a a vertex
+    /// @param i the i-th arrow of vertex vi
     public int removeNextAsInt(int a, int i) {
         return removeArrowAt(a, i, nextLastArrow, nextArrowHeads, arrowCountIncludingDeletedArrows);
     }
 
-    /**
-     * Removes the i-th arrow of vertex v.
-     *
-     * @param vidx       the index of the vertex v
-     * @param i          the i-th arrow of vertex v
-     * @param lastArrow  the array of last arrows
-     * @param arrowHeads the array of arrow heads
-     * @param arrowCount the number of arrows
-     */
+    /// Removes the i-th arrow of vertex v.
+    ///
+    /// @param vidx       the index of the vertex v
+    /// @param i          the i-th arrow of vertex v
+    /// @param lastArrow  the array of last arrows
+    /// @param arrowHeads the array of arrow heads
+    /// @param arrowCount the number of arrows
     protected int removeArrowAt(int vidx, int i, int[] lastArrow, int[] arrowHeads, int arrowCount) {
         if (vidx < 0 || vidx >= getVertexCount()) {
             throw new IllegalArgumentException("vidx:" + i);

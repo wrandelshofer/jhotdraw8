@@ -18,35 +18,25 @@ import static org.jhotdraw8.geom.Scalars.almostZero;
 public class CubicCurveCharacteristics {
 
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private CubicCurveCharacteristics() {
     }
 
     public enum Characteristics {
         PLAIN_CURVE,
-        /**
-         * The curve has 1 inflection point.
-         */
+        /// The curve has 1 inflection point.
         SINGLE_INFLECTION,
-        /** The curve has 2 inflection points. */
+        /// The curve has 2 inflection points.
         DOUBLE_INFLECTION,
-        /** The curve has 1 cusp at the singular point. */
+        /// The curve has 1 cusp at the singular point.
         CUSP,
-        /** The curve has a loop that intersects neither at t0 nor at t1 with the curve. */
+        /// The curve has a loop that intersects neither at t0 nor at t1 with the curve.
         LOOP,
-        /**
-         * The curve has a loop that intersects at t0 with the curve.
-         */
+        /// The curve has a loop that intersects at t0 with the curve.
         LOOP_AT_T_0,
-        /**
-         * The curve has a loop that intersects at t1 with the curve.
-         */
+        /// The curve has a loop that intersects at t1 with the curve.
         LOOP_AT_T_1,
-        /**
-         * The curve is (almost) a line.
-         */
+        /// The curve is (almost) a line.
         COLLINEAR
     }
 
@@ -111,29 +101,27 @@ public class CubicCurveCharacteristics {
     }
 
 
-    /**
-     * Transforms the given cubic curve into canonical form.
-     * <p>
-     * Where:
-     * <pre>
-     *   B0: x0 = 0, y0 = 0
-     *   B1: x1 = 0, y1 = 1
-     *   B2: x2 = 1, y2 = 1
-     *   B3: x3 = ..., y3 = ...
-     * </pre>
-     * References:
-     * <dl>
-     *     <dt>Calculating the Extremal Points of a Cubic Bezier Curve</dt>
-     *     <dd><a href="https://pomax.github.io/bezierinfo/#canonical">pomax.github.io</a></dd>
-     * </dl>
-     * <dl>
-     *     <dt>Pomax. A Primer on Bézier Curves. The canonical form (for cubic curves).</dt>
-     *     <dd><a href="https://pomax.github.io/bezierinfo/#canonical">pomax.github.io</a></dd>
-     * </dl>
-     *
-     * @return returns the coordinates of x3,y3 or null if the mapping
-     * failed
-     */
+    /// Transforms the given cubic curve into canonical form.
+    ///
+    /// Where:
+    /// <pre>
+    ///   B0: x0 = 0, y0 = 0
+    ///   B1: x1 = 0, y1 = 1
+    ///   B2: x2 = 1, y2 = 1
+    ///   B3: x3 = ..., y3 = ...
+    /// </pre>
+    /// References:
+    /// <dl>
+    ///     <dt>Calculating the Extremal Points of a Cubic Bezier Curve</dt>
+    ///     <dd><a href="https://pomax.github.io/bezierinfo/#canonical">pomax.github.io</a></dd>
+    /// </dl>
+    /// <dl>
+    ///     <dt>Pomax. A Primer on Bézier Curves. The canonical form (for cubic curves).</dt>
+    ///     <dd><a href="https://pomax.github.io/bezierinfo/#canonical">pomax.github.io</a></dd>
+    /// </dl>
+    ///
+    /// @return returns the coordinates of x3,y3 or null if the mapping
+    /// failed
     public static Point2D.@Nullable Double canonicalForm(double x0, double y0,
                                                double x1, double y1,
                                                double x2, double y2,
@@ -174,10 +162,8 @@ public class CubicCurveCharacteristics {
         return new Point2D.Double(np4x, np4y);
     }
 
-    /**
-     * Rotates and translates the provided bezier curve so that 3 coordinates
-     * are approximately zero: x0, y0 and y3.
-     */
+    /// Rotates and translates the provided bezier curve so that 3 coordinates
+    /// are approximately zero: x0, y0 and y3.
     public static double[] align(double x0, double y0,
                                  double x1, double y1,
                                  double x2, double y2,
@@ -196,9 +182,7 @@ public class CubicCurveCharacteristics {
         return n;
     }
 
-    /**
-     * Computes the inflection points of the given cubic curve.
-     */
+    /// Computes the inflection points of the given cubic curve.
     public static DoubleArrayList inflectionPoints(CubicCurve2D.Double c) {
         return inflectionPoints(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2);
     }
@@ -217,25 +201,23 @@ public class CubicCurveCharacteristics {
                 b[o + 6], b[o + 7]);
     }
 
-    /**
-     * Computes the inflection points of the given cubic curve.
-     * <p>
-     * If the curve has two inflection points:
-     * <ul>
-     *     <li>The point in the middle of the two inflection points
-     *     {@code (t₀+t₁)/2} has maximal curvature. This point is
-     *     called a 'singular point' by Zhiyi Zhang et al.</li>
-     *     <li>If the inflection points are the same {@code almostEqual(t₀,t₁)}
-     *     value, we have a cusp.</li>
-     * </ul>
-     * <p>
-     * References:
-     * <dl>
-     *    <dt>Zhiyi Zhang, Min Chen , Xian Zhang, Zepeng Wang.
-     *    Analysis of Inflection Points for Planar Cubic Bé́zier Curve</dt>
-     *    <dd><a href="https://cie.nwsuaf.edu.cn/docs/20170614173651207557.pdf">cie.nwsuaf.edu.cn</a></dd>
-     * </dl>
-     */
+    /// Computes the inflection points of the given cubic curve.
+    ///
+    /// If the curve has two inflection points:
+    ///
+    ///   - The point in the middle of the two inflection points
+    ///     `(t₀+t₁)/2` has maximal curvature. This point is
+    ///     called a 'singular point' by Zhiyi Zhang et al.
+    ///   - If the inflection points are the same `almostEqual(t₀,t₁)`
+    ///     value, we have a cusp.
+    ///
+    ///
+    /// References:
+    /// <dl>
+    ///    <dt>Zhiyi Zhang, Min Chen , Xian Zhang, Zepeng Wang.
+    ///    Analysis of Inflection Points for Planar Cubic Bé́zier Curve</dt>
+    ///    <dd><a href="https://cie.nwsuaf.edu.cn/docs/20170614173651207557.pdf">cie.nwsuaf.edu.cn</a></dd>
+    /// </dl>
     public static DoubleArrayList inflectionPoints(double x0, double y0,
                                                             double x1, double y1,
                                                             double x2, double y2,
@@ -313,22 +295,18 @@ public class CubicCurveCharacteristics {
         return null;
     }
 
-    /**
-     * Computes the extreme points of the given cubic curve.
-     */
+    /// Computes the extreme points of the given cubic curve.
     public static DoubleArrayList extremePoints(CubicCurve2D.Double c) {
         return extremePoints(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2);
     }
 
-    /**
-     * Computes the extreme points of the given cubic curve.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Extremes for Bézier curves</dt>
-     *     <dd><a href="https://github.polettix.it/ETOOBUSY/2020/07/09/bezier-extremes/">github.polettix.it</a></dd>
-     * </dl>
-     */
+    /// Computes the extreme points of the given cubic curve.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Extremes for Bézier curves</dt>
+    ///     <dd><a href="https://github.polettix.it/ETOOBUSY/2020/07/09/bezier-extremes/">github.polettix.it</a></dd>
+    /// </dl>
     public static DoubleArrayList extremePoints(double x0, double y0,
                                                          double x1, double y1,
                                                          double x2, double y2,

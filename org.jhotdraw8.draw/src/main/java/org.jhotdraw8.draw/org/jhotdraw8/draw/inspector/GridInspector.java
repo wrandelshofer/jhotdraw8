@@ -34,10 +34,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.prefs.Preferences;
 
-/**
- * FXML Controller class
- *
- */
+/// FXML Controller class
 public class GridInspector extends AbstractDrawingViewInspector {
 
     @FXML

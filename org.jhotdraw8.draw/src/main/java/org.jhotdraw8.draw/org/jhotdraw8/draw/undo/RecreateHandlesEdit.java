@@ -5,10 +5,8 @@ import org.jhotdraw8.draw.DrawingView;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoableEdit;
 
-/**
- * This undoable edit can be used to recreate handles of a drawing view
- * as part of an undo/redo operation.
- */
+/// This undoable edit can be used to recreate handles of a drawing view
+/// as part of an undo/redo operation.
 public class RecreateHandlesEdit extends AbstractUndoableEdit {
     private final DrawingView drawingView;
 

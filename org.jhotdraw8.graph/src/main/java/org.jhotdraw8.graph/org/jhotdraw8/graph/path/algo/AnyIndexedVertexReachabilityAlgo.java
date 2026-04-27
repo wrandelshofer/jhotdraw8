@@ -16,65 +16,55 @@ import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 
 
-/**
- * See {@link AnyArcPathSearchAlgo} for a description of this
- * algorithm.
- * <p>
- * This implementation is optimized for {@link org.jhotdraw8.graph.IndexedDirectedGraph}.
- *
- * @param <C> the numeric type of cost values
- */
+/// See [AnyArcPathSearchAlgo] for a description of this
+/// algorithm.
+///
+/// This implementation is optimized for [org.jhotdraw8.graph.IndexedDirectedGraph].
+///
+/// @param <C> the numeric type of cost values
 public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> implements IndexedVertexReachabilityAlgo<C> {
     public AnyIndexedVertexReachabilityAlgo() {
     }
 
-    /**
-     * A SearchNode stores for a given vertex, how long the remaining
-     * path to gaol may be until we abort the search.
-     *
-     * @param vertex a vertex
-     * @param depth  number of remaining path elements until abort
-     * @return a SearchNode
-     */
+    /// A SearchNode stores for a given vertex, how long the remaining
+    /// path to gaol may be until we abort the search.
+    ///
+    /// @param vertex a vertex
+    /// @param depth  number of remaining path elements until abort
+    /// @return a SearchNode
     private static long newSearchNode(int vertex, int depth) {
         return (long) vertex << 32 | (long) depth;
     }
 
-    /**
-     * Gets the cost from a SearchNode.
-     *
-     * @param searchNode a SearchNode
-     * @return the cost
-     */
+    /// Gets the cost from a SearchNode.
+    ///
+    /// @param searchNode a SearchNode
+    /// @return the cost
     private static int searchNodeGetDepth(long searchNode) {
         return (int) searchNode;
     }
 
-    /**
-     * Gets the vertex index from a SearchNode.
-     *
-     * @param searchNode a SearchNode
-     * @return the vertex index
-     */
+    /// Gets the vertex index from a SearchNode.
+    ///
+    /// @param searchNode a SearchNode
+    /// @return the vertex index
     private static int searchNodeGetVertex(long searchNode) {
         return (int) (searchNode >> 32);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param startVertices        the set of start vertices
-     * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next vertices function
-     * @param maxDepth             the maximal depth (inclusive) of the search
-     *                             Must be {@literal >= 0}.
-     * @param zero                 the zero cost value
-     * @param costLimit            the cost limit is <b>ignored</b>
-     * @param costFunction         the cost function
-     * @param sumFunction          the sum function for adding two cost values
-     * @param visited
-     * @return
-     */
+    /// {@inheritDoc}
+    ///
+    /// @param startVertices        the set of start vertices
+    /// @param goalPredicate        the goal predicate
+    /// @param nextVerticesFunction the next vertices function
+    /// @param maxDepth             the maximal depth (inclusive) of the search
+    ///                             Must be {@literal >= 0}.
+    /// @param zero                 the zero cost value
+    /// @param costLimit            the cost limit is **ignored**
+    /// @param costFunction         the cost function
+    /// @param sumFunction          the sum function for adding two cost values
+    /// @param visited
+    /// @return
     @Override
     public boolean tryToReach(Iterable<Integer> startVertices,
                               IntPredicate goalPredicate,
@@ -90,19 +80,17 @@ public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> 
                 maxDepth);
     }
 
-    /**
-     * Searches breadth-first whether a path from root to goal exists.
-     *
-     * @param startVertices the starting points of the search
-     *                      Must be {@literal >= 0}.
-     * @param goalPredicate the goal of the search
-     *                      Must be {@literal >= 0}.
-     * @param visited       a predicate with side effect. The predicate returns true
-     *                      if the specified vertex has been visited, and marks the specified vertex
-     *                      as visited.
-     * @param maxDepth      the maximal depth (inclusive) of the search.
-     * @return true on success, false on failure
-     */
+    /// Searches breadth-first whether a path from root to goal exists.
+    ///
+    /// @param startVertices the starting points of the search
+    ///                      Must be {@literal >= 0}.
+    /// @param goalPredicate the goal of the search
+    ///                      Must be {@literal >= 0}.
+    /// @param visited       a predicate with side effect. The predicate returns true
+    ///                      if the specified vertex has been visited, and marks the specified vertex
+    ///                      as visited.
+    /// @param maxDepth      the maximal depth (inclusive) of the search.
+    /// @return true on success, false on failure
     public boolean tryToReach(Iterable<Integer> startVertices,
                               IntPredicate goalPredicate,
                               Function<Integer, Spliterator.OfInt> nextVerticesFunction,
@@ -139,10 +127,8 @@ public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> 
         return false;
     }
 
-    /**
-     * Internal helper class, so that we can use a {@link Spliterator}
-     * like an {@link Enumerator}.
-     */
+    /// Internal helper class, so that we can use a [Spliterator]
+    /// like an [Enumerator].
     private static class MyIntConsumer implements IntConsumer {
         int value;
 

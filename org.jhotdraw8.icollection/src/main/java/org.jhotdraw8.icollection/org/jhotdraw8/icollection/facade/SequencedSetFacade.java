@@ -19,11 +19,9 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Provides a {@link SequencedSet} facade to a set of {@code Set} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [SequencedSet] facade to a set of `Set` functions.
+///
+/// @param <E> the element type
 public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<E> {
 
     private final Supplier<E> getFirstFunction;

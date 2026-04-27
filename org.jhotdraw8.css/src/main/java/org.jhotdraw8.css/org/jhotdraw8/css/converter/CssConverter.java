@@ -23,35 +23,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Converts a data value of type {@code T} from or to a CSS Tokenizer.
- *
- * @param <T> the type of the data that can be converted from/to CSS
- */
+/// Converts a data value of type `T` from or to a CSS Tokenizer.
+///
+/// @param <T> the type of the data that can be converted from/to CSS
 public interface CssConverter<T> extends Converter<T> {
-    /**
-     * Parses from the given tokenizer and moves the tokenizer
-     * to the next token past the value.
-     *
-     * @param tt         tokenizer positioned on the token
-     * @param idResolver the id factory
-     * @return the parsed value
-     * @throws ParseException on parse exception
-     * @throws IOException    on io exception
-     */
+    /// Parses from the given tokenizer and moves the tokenizer
+    /// to the next token past the value.
+    ///
+    /// @param tt         tokenizer positioned on the token
+    /// @param idResolver the id factory
+    /// @return the parsed value
+    /// @throws ParseException on parse exception
+    /// @throws IOException    on io exception
     @Nullable
     T parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException;
 
-    /**
-     * Parses from the given tokenizer and moves the tokenizer
-     * to the next token past the value.
-     *
-     * @param tt         tokenizer positioned on the token
-     * @param idResolver the id factory
-     * @return the parsed value
-     * @throws ParseException on parse exception
-     * @throws IOException    on io exception
-     */
+    /// Parses from the given tokenizer and moves the tokenizer
+    /// to the next token past the value.
+    ///
+    /// @param tt         tokenizer positioned on the token
+    /// @param idResolver the id factory
+    /// @return the parsed value
+    /// @throws ParseException on parse exception
+    /// @throws IOException    on io exception
     default T parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         T value = parse(tt, idResolver);
         if (value == null) {
@@ -60,15 +54,13 @@ public interface CssConverter<T> extends Converter<T> {
         return value;
     }
 
-    /**
-     * Produces tokens for the specified value.
-     *
-     * @param <TT>       the value type
-     * @param value      the value
-     * @param idSupplier the id factory
-     * @param out        the consumer for the tokens
-     * @throws IOException on IO exception
-     */
+    /// Produces tokens for the specified value.
+    ///
+    /// @param <TT>       the value type
+    /// @param value      the value
+    /// @param idSupplier the id factory
+    /// @param out        the consumer for the tokens
+    /// @throws IOException on IO exception
     <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException;
 
     default <TT extends T> List<CssToken> toTokens(@Nullable TT value, @Nullable IdSupplier idSupplier) throws IOException {
@@ -77,26 +69,22 @@ public interface CssConverter<T> extends Converter<T> {
         return list;
     }
 
-    /**
-     * Converts the value to String.
-     *
-     * @param value the value
-     * @param <TT>  the value type
-     * @return a String
-     */
+    /// Converts the value to String.
+    ///
+    /// @param value the value
+    /// @param <TT>  the value type
+    /// @return a String
     @Override
     default <TT extends T> String toString(@Nullable TT value) {
         return toString(value, null);
     }
 
-    /**
-     * Converts the value to String.
-     *
-     * @param value     the value
-     * @param idFactory the id factory
-     * @param <TT>      the value type
-     * @return a String
-     */
+    /// Converts the value to String.
+    ///
+    /// @param value     the value
+    /// @param idFactory the id factory
+    /// @param <TT>      the value type
+    /// @return a String
     default <TT extends T> String toString(@Nullable TT value, @Nullable IdFactory idFactory) {
         StringBuilder buf = new StringBuilder();
         try {
@@ -148,11 +136,9 @@ public interface CssConverter<T> extends Converter<T> {
     }
 
 
-    /**
-     * Gets a help text.
-     *
-     * @return a help text.
-     */
+    /// Gets a help text.
+    ///
+    /// @return a help text.
     @Override
     @Nullable String getHelpText();
 

@@ -11,18 +11,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * PropertyBeanTest.
- *
- */
+/// PropertyBeanTest.
 public class PropertyBeanTest {
 
     public PropertyBeanTest() {
     }
 
-    /**
-     * Test of valueAt method, of class PropertyBean.
-     */
+    /// Test of valueAt method, of class PropertyBean.
     @Test
     public void testGetObservableValue() {
         Key<String> key = new SimpleNullableKey<String>("key", String.class);

@@ -12,56 +12,47 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Pattern;
 
-/**
- * FontIconDecoder decodes a property value if it starts with the specified
- * prefix.
- * <p>
- * The property value must have the following format:
- * <pre>
- * format = prefix, "U+", codePoint ;
- * prefix = "fonticon:" ;
- * </pre>
- *
- */
+/// FontIconDecoder decodes a property value if it starts with the specified
+/// prefix.
+///
+/// The property value must have the following format:
+/// <pre>
+/// format = prefix, "U+", codePoint ;
+/// prefix = "fonticon:" ;
+/// </pre>
 public class FontIconDecoder implements ResourceDecoder {
 
     private final Pattern keyPattern;
     private final String valuePrefix;
     private final Font font;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param keyRegex the regex used on the property key
-     * @param font     The font
-     */
+    /// Creates a new instance.
+    ///
+    /// @param keyRegex the regex used on the property key
+    /// @param font     The font
     public FontIconDecoder(String keyRegex, Font font) {
         this(keyRegex, "fonticon:", font);
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param keyRegex    the regex used on the property key
-     * @param valuePrefix the prefix for the value.
-     * @param font        The font
-     */
+    /// Creates a new instance.
+    ///
+    /// @param keyRegex    the regex used on the property key
+    /// @param valuePrefix the prefix for the value.
+    /// @param font        The font
     public FontIconDecoder(String keyRegex, String valuePrefix, Font font) {
         this.keyPattern = Pattern.compile(keyRegex);
         this.valuePrefix = valuePrefix;
         this.font = font;
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param keyRegex         the regex used on the property key
-     * @param valuePrefix      the prefix for the value.
-     * @param fontResourceName The resource name of the font
-     * @param fontSize         The size of the font
-     * @param baseClass        The base class for loading the font
-     * @throws IOException if the font resource can not be read
-     */
+    /// Creates a new instance.
+    ///
+    /// @param keyRegex         the regex used on the property key
+    /// @param valuePrefix      the prefix for the value.
+    /// @param fontResourceName The resource name of the font
+    /// @param fontSize         The size of the font
+    /// @param baseClass        The base class for loading the font
+    /// @throws IOException if the font resource can not be read
     public FontIconDecoder(String keyRegex, String valuePrefix, String fontResourceName, float fontSize, Class<?> baseClass) throws IOException {
         keyPattern = Pattern.compile(keyRegex);
         this.valuePrefix = valuePrefix;

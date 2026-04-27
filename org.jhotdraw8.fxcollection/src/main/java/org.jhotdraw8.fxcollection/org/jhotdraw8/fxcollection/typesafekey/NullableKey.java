@@ -9,11 +9,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * NullableKey.
- *
- * @param <T> the value type
- */
+/// NullableKey.
+///
+/// @param <T> the value type
 public interface NullableKey<T> extends Key<T> {
     @Override
     default @Nullable T get(Map<? super Key<?>, Object> a) {
@@ -24,12 +22,10 @@ public interface NullableKey<T> extends Key<T> {
         return result;
     }
 
-    /**
-     * Gets the value of the attribute denoted by this Key from a Map.
-     *
-     * @param a A Map.
-     * @return The value of the attribute.
-     */
+    /// Gets the value of the attribute denoted by this Key from a Map.
+    ///
+    /// @param a A Map.
+    /// @return The value of the attribute.
     @Override
     default @Nullable T get(ReadableMap<? super Key<?>, Object> a) {
         // Performance: explicit cast is nice, but is very slow

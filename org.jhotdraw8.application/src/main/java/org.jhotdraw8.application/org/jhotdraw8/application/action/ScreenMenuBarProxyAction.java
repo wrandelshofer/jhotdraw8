@@ -11,10 +11,7 @@ import org.jhotdraw8.application.Application;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jspecify.annotations.Nullable;
 
-/**
- * ScreenMenuBarProxyAction.
- *
- */
+/// ScreenMenuBarProxyAction.
 public class ScreenMenuBarProxyAction extends AbstractAction implements MapChangeListener<Key<?>, Object> {
 
     private final Application app;

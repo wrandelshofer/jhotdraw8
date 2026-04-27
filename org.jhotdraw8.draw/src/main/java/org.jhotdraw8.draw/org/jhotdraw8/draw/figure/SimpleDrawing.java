@@ -8,9 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.render.RenderContext;
 
-/**
- * A simple implementation of {@link Drawing}.
- */
+/// A simple implementation of [Drawing].
 public class SimpleDrawing extends AbstractViewBoxDrawing
         implements StyleableFigure, LockableFigure {
     public SimpleDrawing(double width, double height) {

@@ -4,10 +4,7 @@
  */
 package org.jhotdraw8.draw.render;
 
-/**
- * RenderingIntent.
- *
- */
+/// RenderingIntent.
 public enum RenderingIntent {
     EDITOR,
     EXPORT,

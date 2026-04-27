@@ -19,12 +19,10 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Function;
 
-/**
- * Provides a {@link PersistentMap} facade to a set of {@code PersistentMap} functions.
- *
- * @param <K> the key type
- * @param <V> the element type
- */
+/// Provides a [PersistentMap] facade to a set of `PersistentMap` functions.
+///
+/// @param <K> the key type
+/// @param <V> the element type
 public class PersistentMapFacade<K, V> extends AbstractReadableMap<K, V> implements PersistentMap<K, V> {
 
     private final Map<K, V> target;

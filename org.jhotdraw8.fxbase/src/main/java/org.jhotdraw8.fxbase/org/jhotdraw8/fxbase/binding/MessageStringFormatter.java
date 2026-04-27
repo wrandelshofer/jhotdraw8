@@ -16,18 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * MessageStringFormatter.
- * <p>
- * Boolean values are converted to 0 and 1. This allows to format the boolean
- * value using a choice: {@code {0,choice,0#false|1#true} }
- *
- */
+/// MessageStringFormatter.
+///
+/// Boolean values are converted to 0 and 1. This allows to format the boolean
+/// value using a choice: `{0,choice,0#false|1#true}`
 public abstract class MessageStringFormatter extends StringBinding {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private MessageStringFormatter() {
     }
 

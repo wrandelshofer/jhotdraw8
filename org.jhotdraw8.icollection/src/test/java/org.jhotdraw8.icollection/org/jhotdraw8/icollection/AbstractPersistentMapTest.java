@@ -38,15 +38,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractPersistentMapTest {
 
-    /**
-     * Creates a new empty instance.
-     */
+    /// Creates a new empty instance.
     protected abstract <K, V> PersistentMap<K, V> newInstance();
 
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <K, V> PersistentMap<K, V> newInstance(Map<K, V> m);
 
     protected abstract <K, V> PersistentMap<K, V> newInstance(ReadableMap<K, V> m);
@@ -54,9 +50,7 @@ public abstract class AbstractPersistentMapTest {
 
     protected abstract <K, V> PersistentMap<K, V> toClonedInstance(PersistentMap<K, V> m);
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <K, V> PersistentMap<K, V> newInstance(Iterable<Map.Entry<K, V>> m);
 
     protected abstract boolean supportsNullKeys();

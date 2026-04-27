@@ -9,19 +9,17 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * Implements the negation pseudo-class selector.
- * <p>
- * The negation pseudo-class, {@code :not(X)}, is a functional notation taking a
- * simple selector (excluding the negation pseudo-class itself) as an argument.
- * It represents an element that is not represented by its argument.
- * <p>
- * Negations may not be nested; {@code :not(:not(...))} is invalid.
- * Note also that since pseudo-elements are not simple selectors,
- * they are not a valid argument to {@code :not()}.
- * <p>
- * See <a href="https://www.w3.org/TR/2018/REC-selectors-3-20181106/#negation">negation pseudo-class</a>.
- */
+/// Implements the negation pseudo-class selector.
+///
+/// The negation pseudo-class, `:not(X)`, is a functional notation taking a
+/// simple selector (excluding the negation pseudo-class itself) as an argument.
+/// It represents an element that is not represented by its argument.
+///
+/// Negations may not be nested; `:not(:not(...))` is invalid.
+/// Note also that since pseudo-elements are not simple selectors,
+/// they are not a valid argument to `:not()`.
+///
+/// See <a href="https://www.w3.org/TR/2018/REC-selectors-3-20181106/#negation">negation pseudo-class</a>.
 public class NegationPseudoClassSelector extends FunctionPseudoClassSelector {
 
     private final SimpleSelector selector;

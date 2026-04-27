@@ -8,10 +8,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.geom.FXTransforms;
 
-/**
- * Provides default implementations for figures which can not be transformed.
- *
- */
+/// Provides default implementations for figures which can not be transformed.
 public interface NonTransformableFigure extends TransformCachingFigure {
 
     @Override

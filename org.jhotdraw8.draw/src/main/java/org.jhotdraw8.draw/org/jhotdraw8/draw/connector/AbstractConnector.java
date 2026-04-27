@@ -4,10 +4,7 @@
  */
 package org.jhotdraw8.draw.connector;
 
-/**
- * AbstractConnector.
- *
- */
+/// AbstractConnector.
 public abstract class AbstractConnector implements Connector {
 
     public AbstractConnector() {

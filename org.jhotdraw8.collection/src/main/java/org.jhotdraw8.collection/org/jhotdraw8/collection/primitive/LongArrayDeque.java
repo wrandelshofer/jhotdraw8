@@ -11,39 +11,26 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-/**
- * A {@code long}-valued deque backed by a primitive array.
- *
- */
+/// A `long`-valued deque backed by a primitive array.
 public class LongArrayDeque extends AbstractCollection<Long> implements LongDeque {
-    /**
-     * The length of this array is always a power of 2.
-     */
+    /// The length of this array is always a power of 2.
     private long[] elements;
 
-    /**
-     * Index of the element at the head of the deque.
-     */
+    /// Index of the element at the head of the deque.
     private int head;
 
-    /**
-     * Index at which the next element would be added to the tail of the deque.
-     */
+    /// Index at which the next element would be added to the tail of the deque.
     private int tail;
 
-    /**
-     * Creates a new instance with an initial capacity for 8 elements.
-     */
+    /// Creates a new instance with an initial capacity for 8 elements.
     public LongArrayDeque() {
         this(8);
     }
 
-    /**
-     * Creates a new instance with the specified initial capacity rounded up
-     * to the next strictly positive power of two.
-     *
-     * @param capacity initial capacity
-     */
+    /// Creates a new instance with the specified initial capacity rounded up
+    /// to the next strictly positive power of two.
+    ///
+    /// @param capacity initial capacity
     public LongArrayDeque(int capacity) {
         if (capacity < 0) {
             throw new IllegalArgumentException("Capacity must be non-negative. capacity=" + capacity + ".");
@@ -62,13 +49,11 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         }
     }
 
-    /**
-     * Adds first using branch-less code that takes advantage of the out-of-order
-     * execution unit in the CPU.
-     *
-     * @param e         an element
-     * @param reallyAdd true if this element should really be added
-     */
+    /// Adds first using branch-less code that takes advantage of the out-of-order
+    /// execution unit in the CPU.
+    ///
+    /// @param e         an element
+    /// @param reallyAdd true if this element should really be added
     public void addFirstAsLongBranchless(long e, boolean reallyAdd) {
         //Note: elements.length is a power of two.
         head = (head - 1) & (elements.length - 1);
@@ -109,13 +94,11 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         }
     }
 
-    /**
-     * Adds last using branch-less code that takes advantage of the out-of-order
-     * execution unit in the CPU.
-     *
-     * @param e         an element
-     * @param reallyAdd true if this element should really be added
-     */
+    /// Adds last using branch-less code that takes advantage of the out-of-order
+    /// execution unit in the CPU.
+    ///
+    /// @param e         an element
+    /// @param reallyAdd true if this element should really be added
     public void addLastAsLongBranchless(long e, boolean reallyAdd) {
         //Note: elements.length is a power of two.
         elements[tail] = e;
@@ -127,9 +110,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         }
     }
 
-    /**
-     * Clears the deque in O(1).
-     */
+    /// Clears the deque in O(1).
     @Override
     public void clear() {
         // Performance: Do not fill list with zeros.
@@ -193,9 +174,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         return -1;
     }
 
-    /**
-     * @throws NoSuchElementException if the queue is empty
-     */
+    /// @throws NoSuchElementException if the queue is empty
     @Override
     public long getFirstAsLong() {
         if (head == tail) {
@@ -204,9 +183,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         return elements[head];
     }
 
-    /**
-     * @throws NoSuchElementException if the queue is empty
-     */
+    /// @throws NoSuchElementException if the queue is empty
     @Override
     public long getLastAsLong() {
         if (head == tail) {
@@ -215,9 +192,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         return elements[tail == 0 ? elements.length - 1 : tail - 1];
     }
 
-    /**
-     * Increases the capacity of this deque when the elements array is full.
-     */
+    /// Increases the capacity of this deque when the elements array is full.
     private void doubleCapacity() {
         assert head == tail;
         final int size = elements.length;
@@ -230,9 +205,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         tail = size;
     }
 
-    /**
-     * Increases the capacity of this deque when the elements array is not full.
-     */
+    /// Increases the capacity of this deque when the elements array is not full.
     private void grow(int capacity) {
         if (elements.length > capacity) {
             return;
@@ -262,11 +235,9 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         return hash;
     }
 
-    /**
-     * Returns true if this deque is empty.
-     *
-     * @return {@code true} if this deque contains no elements
-     */
+    /// Returns true if this deque is empty.
+    ///
+    /// @return `true` if this deque contains no elements
     @Override
     public boolean isEmpty() {
         return head == tail;
@@ -300,9 +271,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         return -1;
     }
 
-    /**
-     * Removes an element at the given array index.
-     */
+    /// Removes an element at the given array index.
     public void removeAt(int i) {
         int size = size();
         Objects.checkIndex(i, size);
@@ -329,11 +298,9 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         }
     }
 
-    /**
-     * Removes the element at the head of the deque.
-     *
-     * @throws NoSuchElementException if the queue is empty
-     */
+    /// Removes the element at the head of the deque.
+    ///
+    /// @throws NoSuchElementException if the queue is empty
     @Override
     public long removeFirstAsLong() {
         if (head == tail) {
@@ -400,14 +367,10 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
     }
 
     private class DeqIterator implements Iterator<Long> {
-        /**
-         * Tail recorded at construction, to stop
-         * iterator and also to check for co-modification.
-         */
+        /// Tail recorded at construction, to stop
+        /// iterator and also to check for co-modification.
         private final int fence = tail;
-        /**
-         * Index of element to be returned by subsequent call to next.
-         */
+        /// Index of element to be returned by subsequent call to next.
         private int cursor = head;
 
         @Override

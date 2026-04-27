@@ -45,10 +45,7 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import static org.jhotdraw8.geom.shape.BezierNode.CLOSE_MASK;
 import static org.jhotdraw8.geom.shape.BezierNode.MOVE_MASK;
 
-/**
- * Handle for the point ofCollection a figure.
- *
- */
+/// Handle for the point ofCollection a figure.
 public class BezierNodeEditHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
@@ -150,11 +147,9 @@ public class BezierNodeEditHandle extends AbstractHandle {
         }
     }
 
-    /**
-     * Insert a new node before the node at pointIndex.
-     *
-     * @param view
-     */
+    /// Insert a new node before the node at pointIndex.
+    ///
+    /// @param view
     private void addPoint(DrawingView view) {
         BezierPath path = owner.get(pathKey);
         if (path == null) {

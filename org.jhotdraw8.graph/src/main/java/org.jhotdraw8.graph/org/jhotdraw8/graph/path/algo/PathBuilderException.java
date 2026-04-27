@@ -6,10 +6,7 @@ package org.jhotdraw8.graph.path.algo;
 
 import java.io.Serial;
 
-/**
- * PathBuilderException.
- *
- */
+/// PathBuilderException.
 public class PathBuilderException extends Exception {
 
     @Serial

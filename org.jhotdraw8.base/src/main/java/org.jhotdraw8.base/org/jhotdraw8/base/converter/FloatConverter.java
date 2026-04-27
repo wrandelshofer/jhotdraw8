@@ -9,9 +9,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.Locale;
 
-/**
- * Converts a Java float from/to String.
- */
+/// Converts a Java float from/to String.
 public class FloatConverter implements Converter<Float> {
     private final boolean nullable;
     private final boolean usesScientificNotation = true;

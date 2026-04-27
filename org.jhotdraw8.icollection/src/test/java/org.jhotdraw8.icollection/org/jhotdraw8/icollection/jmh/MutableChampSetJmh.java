@@ -18,17 +18,15 @@ import org.openjdk.jmh.annotations.Warmup;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-/**
- * <pre>
- * # JMH version: 1.37
- * # VM version: JDK 21.0.1, OpenJDK 64-Bit Server VM, 21.0.1+12-LTS
- * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
- * Benchmark                (size)  Mode  Cnt           Score   Error  Units
- * mAddImmutableOneByOne  16777216  avgt       9474719088.500          ns/op
- * mAddMutableOneByOne    16777216  avgt       7219866077.000          ns/op
- * mKotlinXAddOneByOne    16777216  avgt       8008086475.000          ns/op
- * </pre>
- */
+/// <pre>
+/// # JMH version: 1.37
+/// # VM version: JDK 21.0.1, OpenJDK 64-Bit Server VM, 21.0.1+12-LTS
+/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+/// Benchmark                (size)  Mode  Cnt           Score   Error  Units
+/// mAddImmutableOneByOne  16777216  avgt       9474719088.500          ns/op
+/// mAddMutableOneByOne    16777216  avgt       7219866077.000          ns/op
+/// mKotlinXAddOneByOne    16777216  avgt       8008086475.000          ns/op
+/// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)

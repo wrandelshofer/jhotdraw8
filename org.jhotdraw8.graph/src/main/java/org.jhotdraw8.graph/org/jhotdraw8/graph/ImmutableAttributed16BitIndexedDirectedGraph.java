@@ -12,101 +12,87 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * ImmutableDirectedGraph. Uses short-arrays for storage.
- * <p>
- * Supports up to {@code 2^16 - 1} vertices.
- * <p>
- * Uses a representation that is similar to a compressed row storage for
- * matrices (CRS). A directed graph is represented with 4 arrays:
- * {@code nextOffset}, {@code next}, {@code nextArrows}, {@code vertices}
- * <dl>
- *     <dt>{@code nextOffset}</dt>
- *     <dd>Holds for each vertex  {@code v}, the offset into the arrays
- *     {@code next}, and {@code nextArrows}.
- *     The data for vertex {@code v} can be found in these arrays in the
- *     elements from {@code nextOffset[v]}(inclusive) to
- *     {@code nextOffset[v + 1]} (exclusive).</dd>
- *     <dt>{@code next}</dt>
- *     <dd>Holds for each arrow from a vertex {@code v} to a vertex {@code u}
- *     the index of {@code u}.</dd>
- *     <dt>{@code nextArrows}</dt>
- *     <dd>Holds for each arrow from a vertex {@code v} to a vertex {@code u}
- *     the data associated to the arrow.</dd>
- *     <dt>{@code vertices}</dt>
- *     <dd>Holds for each vertex {@code v} the data associated to the vertex.</dd>
- * </dl>
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- */
+/// ImmutableDirectedGraph. Uses short-arrays for storage.
+///
+/// Supports up to `2^16 - 1` vertices.
+///
+/// Uses a representation that is similar to a compressed row storage for
+/// matrices (CRS). A directed graph is represented with 4 arrays:
+/// `nextOffset`, `next`, `nextArrows`, `vertices`
+/// <dl>
+///     <dt>`nextOffset`</dt>
+///     <dd>Holds for each vertex  `v`, the offset into the arrays
+///     `next`, and `nextArrows`.
+///     The data for vertex `v` can be found in these arrays in the
+///     elements from `nextOffset[v]`(inclusive) to
+///     `nextOffset[v + 1]` (exclusive).</dd>
+///     <dt>`next`</dt>
+///     <dd>Holds for each arrow from a vertex `v` to a vertex `u`
+///     the index of `u`.</dd>
+///     <dt>`nextArrows`</dt>
+///     <dd>Holds for each arrow from a vertex `v` to a vertex `u`
+///     the data associated to the arrow.</dd>
+///     <dt>`vertices`</dt>
+///     <dd>Holds for each vertex `v` the data associated to the vertex.</dd>
+/// </dl>
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
 public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
 
-    /**
-     * Holds the indices to the next vertices.
-     * <p>
-     * The indices are stored in consecutive runs for each vertex,
-     * starting at the offset given by {@code nextOffset}.
-     * <p>
-     * Given vertex index {@code vi < nextOffset.length - 1}<br>
-     * then<br>
-     * {@code offset = nextOffset[vi]}
-     * {@code count = nextOffset[vi+1] - offset}
-     * <p>
-     * Given vertex index {@code vi == nextOffset.length - 1}<br>
-     * then<br>
-     * {@code offset = nextOffset[vi]}
-     * {@code count = nextOffset.length - offset}
-     */
+    /// Holds the indices to the next vertices.
+    ///
+    /// The indices are stored in consecutive runs for each vertex,
+    /// starting at the offset given by `nextOffset`.
+    ///
+    /// Given vertex index `vi < nextOffset.length - 1`
+    /// then
+    /// `offset = nextOffset[vi]`
+    /// `count = nextOffset[vi+1] - offset`
+    ///
+    /// Given vertex index `vi == nextOffset.length - 1`
+    /// then
+    /// `offset = nextOffset[vi]`
+    /// `count = nextOffset.length - offset`
     protected final short[] next;
 
-    /**
-     * Holds offsets into the {@link #next} table and the
-     * {@link #nextArrows} table.
-     * <p>
-     * Given vertex index {@code vi},<br>
-     * {@code nextOffset[vi]} yields the offset {@code ai}
-     * in the tables {@link #next} table and the {@link #nextArrows}.
-     * <p>
-     * Given vertex index {@code vi < nextOffset.length - 1},<br>
-     * {@code nextOffset[vi+1]) - nextOffset[vi]} yields the
-     * number of outgoing arrows of that vertex.
-     * <p>
-     * Given vertex index {@code vi == nextOffset.length - 1},<br>
-     * {@code nextOffset.length - nextOffset[vi]} yields the
-     * number of outgoing arrows of that vertex.
-     */
+    /// Holds offsets into the [#next] table and the
+    /// [#nextArrows] table.
+    ///
+    /// Given vertex index `vi`,
+    /// `nextOffset[vi]` yields the offset `ai`
+    /// in the tables [#next] table and the [#nextArrows].
+    ///
+    /// Given vertex index `vi < nextOffset.length - 1`,
+    /// `nextOffset[vi+1]) - nextOffset[vi]` yields the
+    /// number of outgoing arrows of that vertex.
+    ///
+    /// Given vertex index `vi == nextOffset.length - 1`,
+    /// `nextOffset.length - nextOffset[vi]` yields the
+    /// number of outgoing arrows of that vertex.
     protected final short[] nextOffset;
 
-    /**
-     * Holds the arrow objects.
-     * <p>
-     * The arrows are stored in consecutive runs for each vertex,
-     * starting at the offset given by {@code nextOffset}.
-     * <p>
-     * See {@link #next}.
-     */
+    /// Holds the arrow objects.
+    ///
+    /// The arrows are stored in consecutive runs for each vertex,
+    /// starting at the offset given by `nextOffset`.
+    ///
+    /// See [#next].
     protected final A[] nextArrows;
-    /**
-     * Holds the vertex objects.
-     * <p>
-     * Given vertex index {@code vi},<br>
-     * {@code vertices[vi|} yields the vertex {@code v}.
-     */
+    /// Holds the vertex objects.
+    ///
+    /// Given vertex index `vi`,
+    /// `vertices[vi|` yields the vertex `v`.
     protected final V[] vertices;
-    /**
-     * Maps vertices the vertex indices.
-     * <p>
-     * Given vertex {@code v},<br>
-     * {@code vertexToIndexMap.get(v)} yields the vertex index {@code vi}.
-     */
+    /// Maps vertices the vertex indices.
+    ///
+    /// Given vertex `v`,
+    /// `vertexToIndexMap.get(v)` yields the vertex index `vi`.
     protected final Map<V, Short> vertexToIndexMap;
 
-    /**
-     * Creates a new instance from the specified graph.
-     *
-     * @param graph a graph
-     */
+    /// Creates a new instance from the specified graph.
+    ///
+    /// @param graph a graph
     public ImmutableAttributed16BitIndexedDirectedGraph(AttributedIndexedDirectedGraph<V, A> graph) {
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
@@ -140,11 +126,9 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
         }
     }
 
-    /**
-     * Creates a new instance from the specified graph.
-     *
-     * @param graph a graph
-     */
+    /// Creates a new instance from the specified graph.
+    ///
+    /// @param graph a graph
     public ImmutableAttributed16BitIndexedDirectedGraph(DirectedGraph<V, A> graph) {
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();

@@ -8,14 +8,12 @@ import javafx.collections.ObservableMap;
 import org.jhotdraw8.fxcollection.MapEntryProperty;
 import org.jspecify.annotations.Nullable;
 
-/**
- * KeyMapEntryProperty.
- * <p>
- * FIXME currently only works fully if the provided MapAccessor is an instance
- * of Key.
- *
- * @param <V> the value type
- */
+/// KeyMapEntryProperty.
+///
+/// FIXME currently only works fully if the provided MapAccessor is an instance
+/// of Key.
+///
+/// @param <V> the value type
 public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> {
     private final MapAccessor<V> accessor;
 

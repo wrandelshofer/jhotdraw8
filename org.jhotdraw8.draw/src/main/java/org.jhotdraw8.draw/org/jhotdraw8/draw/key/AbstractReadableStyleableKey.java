@@ -11,39 +11,33 @@ import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
-/**
- * AbstractReadableStyleableKey.
- *
- * @param <T> the value type
- */
+/// AbstractReadableStyleableKey.
+///
+/// @param <T> the value type
 public abstract class AbstractReadableStyleableKey<T> extends AbstractKey<T> implements ReadableStyleableMapAccessor<T> {
     private final String cssName;
 
 
     protected final Converter<T> converter;
 
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value null, and allowing null values.
-     *
-     * @param key       The name of the name.
-     * @param clazz     The type of the value.
-     * @param converter the converter
-     */
+    /// Creates a new instance with the specified name, type token class, default
+    /// value null, and allowing null values.
+    ///
+    /// @param key       The name of the name.
+    /// @param clazz     The type of the value.
+    /// @param converter the converter
     public AbstractReadableStyleableKey(String key, Type clazz, Converter<T> converter) {
         this(key, clazz, converter, null);
     }
 
 
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name.
-     * @param clazz        The type of the value.
-     * @param converter    the converter
-     * @param defaultValue The default value.
-     */
+    /// Creates a new instance with the specified name, type token class, default
+    /// value, and allowing or disallowing null values.
+    ///
+    /// @param key          The name of the name.
+    /// @param clazz        The type of the value.
+    /// @param converter    the converter
+    /// @param defaultValue The default value.
     public AbstractReadableStyleableKey(String key, Type clazz,
                                         Converter<T> converter,
                                         @Nullable T defaultValue) {
@@ -51,15 +45,13 @@ public abstract class AbstractReadableStyleableKey<T> extends AbstractKey<T> imp
 
     }
 
-    /**
-     * Creates a new key.
-     *
-     * @param name         the model name of the key
-     * @param cssName      the CSS name of the key
-     * @param clazz        the type of the value
-     * @param converter    the CSS converter for the value
-     * @param defaultValue the default value
-     */
+    /// Creates a new key.
+    ///
+    /// @param name         the model name of the key
+    /// @param cssName      the CSS name of the key
+    /// @param clazz        the type of the value
+    /// @param converter    the CSS converter for the value
+    /// @param defaultValue the default value
     public AbstractReadableStyleableKey(String name, String cssName, Type clazz,
                                         Converter<T> converter,
                                         @Nullable T defaultValue) {

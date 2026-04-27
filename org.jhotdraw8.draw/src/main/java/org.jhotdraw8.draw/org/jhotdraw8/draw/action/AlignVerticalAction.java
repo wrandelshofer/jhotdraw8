@@ -23,11 +23,9 @@ public class AlignVerticalAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.alignVertical";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     @SuppressWarnings("this-escape")
     public AlignVerticalAction(DrawingEditor editor) {
         super(editor);

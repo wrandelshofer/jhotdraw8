@@ -24,17 +24,12 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.List;
 
-/**
- * A figure which draws a line connection between two figures.
- *
- */
+/// A figure which draws a line connection between two figures.
 public class LineConnectionFigure extends AbstractLineConnectionFigure
         implements StrokableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         PathIterableFigure {
 
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "LineConnection";
 
     public LineConnectionFigure() {

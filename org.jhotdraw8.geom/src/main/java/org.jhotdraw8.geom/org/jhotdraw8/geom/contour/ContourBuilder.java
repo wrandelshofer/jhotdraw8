@@ -55,18 +55,17 @@ import static org.jhotdraw8.geom.contour.Utils.realPrecision;
 import static org.jhotdraw8.geom.contour.Utils.sliceJoinThreshold;
 import static org.jhotdraw8.geom.contour.Utils.unitPerp;
 
-/**
- * ContourBuilder.
- * <p>
- * References:
- * <p>
- * This code has been derived from CavalierContours.
- * <dl>
- *     <dt>CavalierContours. Copyright (c) 2019 Jedidiah Buck McCready.
- *     <br><a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
- *     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
- * </dl>
- */
+/// ContourBuilder.
+///
+/// References:
+///
+/// This code has been derived from CavalierContours.
+/// <dl>
+///     <dt>CavalierContours. Copyright (c) 2019 Jedidiah Buck McCready.
+///
+/// <a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
+///     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
+/// </dl>
 public class ContourBuilder {
 
 
@@ -283,10 +282,8 @@ public class ContourBuilder {
         }
     }
 
-    /**
-     * Gets the bulge to describe the arc going from start point to end point with the given arc center
-     * and curve orientation, if orientation is negative then bulge is negative otherwise it is positive
-     */
+    /// Gets the bulge to describe the arc going from start point to end point with the given arc center
+    /// and curve orientation, if orientation is negative then bulge is negative otherwise it is positive
     double bulgeForConnection(final Point2D.Double arcCenter, final Point2D.Double sp,
                               final Point2D.Double ep, boolean isCCW) {
         double a1 = angle(arcCenter, sp);
@@ -300,9 +297,7 @@ public class ContourBuilder {
         return -absBulge;
     }
 
-    /**
-     * Creates the raw offset polyline.
-     */
+    /// Creates the raw offset polyline.
     public PlinePath createRawOffsetPline(PlinePath pline, double offset) {
         //final Polyline pline = removeCoincidentPoints(pline0);
         PlinePath result = new PlinePath();
@@ -416,9 +411,7 @@ public class ContourBuilder {
         return result;
     }
 
-    /**
-     * Creates all the raw polyline offset segments.
-     */
+    /// Creates all the raw polyline offset segments.
     List<PlineOffsetSegment> createUntrimmedOffsetSegments(PlinePath pline,
                                                            double offset) {
         int size = pline.size();
@@ -1005,25 +998,21 @@ public class ContourBuilder {
 
     /// Slices a raw offset polyline at all of its self intersects and intersects with its dual.
 
-    /**
-     * Creates the parallel offset polylines to the polyline given.
-     *
-     * @param pline  input polyline
-     * @param offset offset
-     * @return offset polyline
-     */
+    /// Creates the parallel offset polylines to the polyline given.
+    ///
+    /// @param pline  input polyline
+    /// @param offset offset
+    /// @return offset polyline
     public List<PlinePath> parallelOffset(PlinePath pline, double offset) {
         return parallelOffset(pline, offset, true);
     }
 
-    /**
-     * Creates the parallel offset polylines to the polyline given.
-     *
-     * @param pline                 input polyline
-     * @param offset                offset
-     * @param mayHaveSelfIntersects true if the polyline may have self-intersects
-     * @return list of offset polylines
-     */
+    /// Creates the parallel offset polylines to the polyline given.
+    ///
+    /// @param pline                 input polyline
+    /// @param offset                offset
+    /// @param mayHaveSelfIntersects true if the polyline may have self-intersects
+    /// @return list of offset polylines
     private List<PlinePath> parallelOffset(PlinePath pline, double offset,
                                            boolean mayHaveSelfIntersects) {
 

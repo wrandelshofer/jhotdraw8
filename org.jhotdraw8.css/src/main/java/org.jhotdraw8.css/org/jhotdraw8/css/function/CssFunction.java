@@ -14,25 +14,21 @@ import java.text.ParseException;
 import java.util.Deque;
 import java.util.function.Consumer;
 
-/**
- * Interface for CSS macro functions. A CSS macro function processes
- * CssTokens.
- *
- * @param <T> the element type of the DOM
- */
+/// Interface for CSS macro functions. A CSS macro function processes
+/// CssTokens.
+///
+/// @param <T> the element type of the DOM
 public interface CssFunction<T> {
-    /**
-     * Processes the function.
-     *
-     * @param element           the DOM element
-     * @param tt                the tokenizer providing the unprocessed tokens
-     * @param model             the selector model
-     * @param functionProcessor the function processor
-     * @param out               the consumer for the processed tokens
-     * @param recursionStack    the recursion stack
-     * @throws IOException    on IO failure
-     * @throws ParseException on parsing failure
-     */
+    /// Processes the function.
+    ///
+    /// @param element           the DOM element
+    /// @param tt                the tokenizer providing the unprocessed tokens
+    /// @param model             the selector model
+    /// @param functionProcessor the function processor
+    /// @param out               the consumer for the processed tokens
+    /// @param recursionStack    the recursion stack
+    /// @throws IOException    on IO failure
+    /// @throws ParseException on parsing failure
     void process(T element,
                  CssTokenizer tt,
                  SelectorModel<T> model,
@@ -40,18 +36,14 @@ public interface CssFunction<T> {
                  Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException;
 
 
-    /**
-     * Gets localized help text about this function.
-     *
-     * @return localized help text
-     */
+    /// Gets localized help text about this function.
+    ///
+    /// @return localized help text
     String getHelpText();
 
-    /**
-     * Returns the function name.
-     *
-     * @return the function name
-     */
+    /// Returns the function name.
+    ///
+    /// @return the function name
     String getName();
 
 }

@@ -25,13 +25,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Provides methods for parsing and generating SVG path strings from JavaFX paths.
- */
+/// Provides methods for parsing and generating SVG path strings from JavaFX paths.
 public class FXSvgPaths {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private FXSvgPaths() {
 
     }
@@ -230,11 +226,9 @@ public class FXSvgPaths {
         return buf.toString();
     }
 
-    /**
-     * This parser preserves more of the semantics than {@link SvgPaths#buildSvgString(PathBuilder, String)},
-     * because {@link PathBuilder} does not understand relative path commands
-     * and horizontal and vertical lineto commands.
-     */
+    /// This parser preserves more of the semantics than [SvgPaths#buildSvgString(PathBuilder, String)],
+    /// because [PathBuilder] does not understand relative path commands
+    /// and horizontal and vertical lineto commands.
     public static List<PathElement> svgStringToPathElements(String str) throws ParseException {
         List<PathElement> builder = new ArrayList<>();
         try {

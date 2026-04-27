@@ -7,9 +7,7 @@ package org.jhotdraw8.graph;
 
 import org.jspecify.annotations.Nullable;
 
-/**
- * Tests {@link SimpleMutableDirectedGraph}.
- */
+/// Tests [SimpleMutableDirectedGraph].
 public class SimpleMutableDirectedGraphTest extends AbstractMutableDirectedGraphTest<Integer, Character> {
     @Override
     protected MutableDirectedGraph<Integer, Character> newInstance() {

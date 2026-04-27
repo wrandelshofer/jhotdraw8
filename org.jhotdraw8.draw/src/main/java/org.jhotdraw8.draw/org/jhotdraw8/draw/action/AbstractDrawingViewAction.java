@@ -15,27 +15,22 @@ import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 
-/**
- * This abstract class can be extended to implement an {@code Action} that acts
- * on behalf of the selected figures of a
- * {@link DrawingView}.
- * <p>
- * By default the disabled state of this action reflects the disabled state of
- * the active {@code DrawingView}. If no drawing view is active, this action is
- * disabled.
- *
- */
+/// This abstract class can be extended to implement an `Action` that acts
+/// on behalf of the selected figures of a
+/// [DrawingView].
+///
+/// By default the disabled state of this action reflects the disabled state of
+/// the active `DrawingView`. If no drawing view is active, this action is
+/// disabled.
 public abstract class AbstractDrawingViewAction extends AbstractAction {
 
     private final DrawingEditor editor;
     protected final UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
 
-    /**
-     * Creates an action which acts on the selected figures on the current view
-     * of the specified editor.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates an action which acts on the selected figures on the current view
+    /// of the specified editor.
+    ///
+    /// @param editor the drawing editor
     public AbstractDrawingViewAction(DrawingEditor editor) {
         this.editor = editor;
 
@@ -50,21 +45,17 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
         editor.getUndoManager().undoableEditHappened(event);
     }
 
-    /**
-     * Gets the drawing editor.
-     *
-     * @return the drawing editor
-     */
+    /// Gets the drawing editor.
+    ///
+    /// @return the drawing editor
     public DrawingEditor getEditor() {
         return editor;
     }
 
-    /**
-     * Gets the active drawing view of the drawing editor.
-     *
-     * @return the active drawing view. Returns null if the editor is null no
-     * drawing view is active.
-     */
+    /// Gets the active drawing view of the drawing editor.
+    ///
+    /// @return the active drawing view. Returns null if the editor is null no
+    /// drawing view is active.
     protected @Nullable DrawingView getView() {
         return editor.getActiveDrawingView();
     }

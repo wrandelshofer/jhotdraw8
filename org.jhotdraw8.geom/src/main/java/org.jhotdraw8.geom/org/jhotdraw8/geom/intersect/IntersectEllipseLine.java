@@ -20,16 +20,14 @@ public class IntersectEllipseLine {
     private IntersectEllipseLine() {
     }
 
-    /**
-     * Computes the intersection between an ellipse and a line.
-     *
-     * @param ac  the center of the ellipse
-     * @param arx the x-radius of the ellipse
-     * @param ary the y-radius of the ellipse
-     * @param b0  point 0 of the line
-     * @param b1  point 1 of the line
-     * @return computed intersection
-     */
+    /// Computes the intersection between an ellipse and a line.
+    ///
+    /// @param ac  the center of the ellipse
+    /// @param arx the x-radius of the ellipse
+    /// @param ary the y-radius of the ellipse
+    /// @param b0  point 0 of the line
+    /// @param b1  point 1 of the line
+    /// @return computed intersection
     public static IntersectionResult intersectEllipseLine(Point2D ac, double arx, double ary,
                                                           Point2D b0, Point2D b1) {
         IntersectionResult result = intersectLineEllipse(b0, b1, ac, arx, ary);
@@ -85,54 +83,48 @@ public class IntersectEllipseLine {
         return result;
     }
 
-    /**
-     * Computes the intersection between a line and an ellipse.
-     * <p>
-     * The intersection will contain the parameters 't1' of the line in range
-     * [0,1].
-     *
-     * @param e  the bounds of the ellipse
-     * @param a0 point 0 of the line
-     * @param a1 point 1 of the line
-     * @return computed intersection
-     */
+    /// Computes the intersection between a line and an ellipse.
+    ///
+    /// The intersection will contain the parameters 't1' of the line in range
+    /// [0,1].
+    ///
+    /// @param e  the bounds of the ellipse
+    /// @param a0 point 0 of the line
+    /// @param a1 point 1 of the line
+    /// @return computed intersection
     public static IntersectionResult intersectLineEllipse(Point2D a0, Point2D a1, AABB e) {
         double rx = e.width() * 0.5;
         double ry = e.height() * 0.5;
         return intersectLineEllipse(a0, a1, new Point2D.Double(e.minX() + rx, e.minY() + ry), rx, ry);
     }
 
-    /**
-     * Computes the intersection between a line and an ellipse.
-     * <p>
-     * The intersection will contain the parameters 't1' of the line in range
-     * [0,1].
-     *
-     * @param ec the center of the ellipse
-     * @param rx the x-radius of the ellipse
-     * @param ry the y-radius of the ellipse
-     * @param a0 point 0 of the line
-     * @param a1 point 1 of the line
-     * @return computed intersection
-     */
+    /// Computes the intersection between a line and an ellipse.
+    ///
+    /// The intersection will contain the parameters 't1' of the line in range
+    /// [0,1].
+    ///
+    /// @param ec the center of the ellipse
+    /// @param rx the x-radius of the ellipse
+    /// @param ry the y-radius of the ellipse
+    /// @param a0 point 0 of the line
+    /// @param a1 point 1 of the line
+    /// @return computed intersection
     public static IntersectionResult intersectLineEllipse(Point2D a0, Point2D a1, Point2D ec, double rx, double ry) {
         return intersectLineEllipse(a0.getX(), a0.getY(), a1.getX(), a1.getY(), ec.getX(), ec.getY(), rx, ry, Scalars.REAL_THRESHOLD);
     }
 
-    /**
-     * Intersects a line with an ellipse.
-     *
-     * @param x0      the x-coordinate of the start point of the line
-     * @param y0      the y-coordinate of the start point of the line
-     * @param x1      the x-coordinate of the end point of the line
-     * @param y1      the y-coordinate of the end point of the line
-     * @param cx      the x-coordinate of the center of the ellipse
-     * @param cy      the y-coordinate of the center of the ellipse
-     * @param rx      the x-radius of the ellipse
-     * @param ry      the y-radius ellipse
-     * @param epsilon the precision threshold
-     * @return the intersection result
-     */
+    /// Intersects a line with an ellipse.
+    ///
+    /// @param x0      the x-coordinate of the start point of the line
+    /// @param y0      the y-coordinate of the start point of the line
+    /// @param x1      the x-coordinate of the end point of the line
+    /// @param y1      the y-coordinate of the end point of the line
+    /// @param cx      the x-coordinate of the center of the ellipse
+    /// @param cy      the y-coordinate of the center of the ellipse
+    /// @param rx      the x-radius of the ellipse
+    /// @param ry      the y-radius ellipse
+    /// @param epsilon the precision threshold
+    /// @return the intersection result
     public static IntersectionResult intersectLineEllipse(double x0, double y0, double x1, double y1,
                                                           double cx, double cy, double rx, double ry,
                                                           double epsilon) {

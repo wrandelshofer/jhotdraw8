@@ -16,10 +16,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Tests classes that implement the interface {@link SequencedCollection< Key >}.
- */
-
+/// Tests classes that implement the interface [SequencedCollection<Key>].
 public abstract class AbstractSequencedCollectionTest {
     private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
     private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);

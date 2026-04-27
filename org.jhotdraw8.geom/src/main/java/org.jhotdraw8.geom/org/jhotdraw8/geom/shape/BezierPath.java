@@ -28,21 +28,14 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-/**
- * A BezierPath is defined by its nodes. Each node has three control points:
- * C0, C1, C2. A mask defines which control points are in use. At a node, the path
- * passes through C0. C1 controls the curve going towards C0. C2 controls the
- * curve going away from C0.
- *
- */
+/// A BezierPath is defined by its nodes. Each node has three control points:
+/// C0, C1, C2. A mask defines which control points are in use. At a node, the path
+/// passes through C0. C1 controls the curve going towards C0. C2 controls the
+/// curve going away from C0.
 public class BezierPath extends VectorList<BezierNode> implements Shape {
-    /**
-     * This field is used for memoizing PathMetrics that have been built fom this instance.
-     */
+    /// This field is used for memoizing PathMetrics that have been built fom this instance.
     private transient @Nullable PathMetrics pathMetrics;
-    /**
-     * This field is used for memoizing Bounds that have been built fom this instance.
-     */
+    /// This field is used for memoizing Bounds that have been built fom this instance.
     private transient Rectangle2D.@Nullable Double bounds;
     private final int windingRule;
 
@@ -241,13 +234,11 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
         return (BezierPath) result[0];
     }
 
-    /**
-     * Gets the outgoing tangent point for the bezier node
-     * at the specified index.
-     *
-     * @param index point of a bezier node
-     * @return outgoing tangent point
-     */
+    /// Gets the outgoing tangent point for the bezier node
+    /// at the specified index.
+    ///
+    /// @param index point of a bezier node
+    /// @return outgoing tangent point
     public @Nullable Point2D getOutgoingTangentPoint(int index) {
         BezierNode node = get(index);
         if (node.hasOut()) {
@@ -264,9 +255,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
         return setWindingRule(newValue == FillRule.EVEN_ODD ? PathIterator.WIND_EVEN_ODD : PathIterator.WIND_NON_ZERO);
     }
 
-    /**
-     * Reverses the direction of the path.
-     */
+    /// Reverses the direction of the path.
     @Override
     public BezierPath reverse() {
         return AwtShapes.buildPathIterator(new BezierPathBuilder(), new ReversePathIterator(getPathIterator(null), windingRule)).build();
@@ -383,12 +372,10 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
         return super.size();
     }
 
-    /**
-     * Evaluates the first point of the bezier path.
-     *
-     * @return the point and derivative of the first point in the path
-     * @throws java.util.NoSuchElementException if the path is empty
-     */
+    /// Evaluates the first point of the bezier path.
+    ///
+    /// @return the point and derivative of the first point in the path
+    /// @throws java.util.NoSuchElementException if the path is empty
     public PointAndDerivative evalFirst() {
         BezierNode first = getFirst();
         double y0 = first.pointY();
@@ -408,15 +395,13 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
         return new PointAndDerivative(x0, y0, second.pointX() - x0, second.pointY() - y0);
     }
 
-    /**
-     * Evaluates the reverse derivative of the last point.
-     * <p>
-     * The result is the same as reversing the path, and then
-     * evaluating its first point.
-     *
-     * @return the reverse derivative
-     * @throws java.util.NoSuchElementException if the path is empty
-     */
+    /// Evaluates the reverse derivative of the last point.
+    ///
+    /// The result is the same as reversing the path, and then
+    /// evaluating its first point.
+    ///
+    /// @return the reverse derivative
+    /// @throws java.util.NoSuchElementException if the path is empty
     public PointAndDerivative evalLastInReverse() {
         BezierNode last = getLast();
         BezierNode secondLast = size() > 1 ? get(size() - 2) : null;

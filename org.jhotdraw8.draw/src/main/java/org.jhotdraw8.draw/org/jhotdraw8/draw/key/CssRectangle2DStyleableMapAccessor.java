@@ -15,10 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * Rectangle2DStyleableMapAccessor.
- *
- */
+/// Rectangle2DStyleableMapAccessor.
 public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<CssRectangle2D>
         implements NonNullMapAccessor<CssRectangle2D> {
 
@@ -28,15 +25,13 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
     private final NonNullMapAccessor<CssSize> widthKey;
     private final NonNullMapAccessor<CssSize> heightKey;
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name      the name of the accessor
-     * @param xKey      the key for the x coordinate of the rectangle
-     * @param yKey      the key for the y coordinate of the rectangle
-     * @param widthKey  the key for the width of the rectangle
-     * @param heightKey the key for the height of the rectangle
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name      the name of the accessor
+    /// @param xKey      the key for the x coordinate of the rectangle
+    /// @param yKey      the key for the y coordinate of the rectangle
+    /// @param widthKey  the key for the width of the rectangle
+    /// @param heightKey the key for the height of the rectangle
     public CssRectangle2DStyleableMapAccessor(String name, NonNullMapAccessor<CssSize> xKey, NonNullMapAccessor<CssSize> yKey, NonNullMapAccessor<CssSize> widthKey, NonNullMapAccessor<CssSize> heightKey) {
         super(name, CssRectangle2D.class, new NonNullMapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new CssRectangle2D(
                 xKey.getDefaultValueNonNull(),

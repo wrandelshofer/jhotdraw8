@@ -63,10 +63,7 @@ import java.util.SequencedSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
-/**
- * FXML Controller class
- *
- */
+/// FXML Controller class
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     private final Comparator<String> collator = new CachingCollator(new NaturalSortCollator(Locale.ENGLISH));

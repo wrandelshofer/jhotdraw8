@@ -8,9 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
 
-/**
- * The test data.
- */
+/// The test data.
 public final class SetData {
     private final String name;
     public final ReadableSet<Key> a;
@@ -18,14 +16,12 @@ public final class SetData {
     public final ReadableSet<Key> someAPlusSomeB;
     public final ReadableSet<Key> c;
 
-    /**
-     * Creates a new instance with 3 maps of the same non-empty size.
-     *
-     * @param name the name of the data
-     * @param a    a non-empty set that is disjoint from the other sets
-     * @param b    a non-empty set that is disjoint from the other sets
-     * @param c    a non-empty set that is disjoint from the other sets
-     */
+    /// Creates a new instance with 3 maps of the same non-empty size.
+    ///
+    /// @param name the name of the data
+    /// @param a    a non-empty set that is disjoint from the other sets
+    /// @param b    a non-empty set that is disjoint from the other sets
+    /// @param c    a non-empty set that is disjoint from the other sets
     SetData(String name, ReadableSet<Key> a,
             ReadableSet<Key> b,
             ReadableSet<Key> c) {

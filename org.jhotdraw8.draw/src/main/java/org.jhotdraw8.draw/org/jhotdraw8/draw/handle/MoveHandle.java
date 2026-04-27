@@ -34,10 +34,7 @@ import java.util.function.Function;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
-/**
- * Handle for moving (translating) a figure.
- *
- */
+/// Handle for moving (translating) a figure.
 public class MoveHandle extends LocatorHandle {
 
     private Point2D pickLocation;
@@ -148,15 +145,13 @@ public class MoveHandle extends LocatorHandle {
         translateFigure(f, oldPoint, newPoint, model);
     }
 
-    /**
-     * Translates the specified figure, given the old and new position of a
-     * point.
-     *
-     * @param f        the figure to be translated
-     * @param oldPoint oldPoint in world coordinates
-     * @param newPoint newPoint in world coordinates
-     * @param model    the drawing model
-     */
+    /// Translates the specified figure, given the old and new position of a
+    /// point.
+    ///
+    /// @param f        the figure to be translated
+    /// @param oldPoint oldPoint in world coordinates
+    /// @param newPoint newPoint in world coordinates
+    /// @param model    the drawing model
     public static void translateFigure(Figure f, Point2D oldPoint, Point2D newPoint, @Nullable DrawingModel model) {
         Point2D delta = newPoint.subtract(oldPoint);
         if (model != null) {
@@ -166,15 +161,13 @@ public class MoveHandle extends LocatorHandle {
         }
     }
 
-    /**
-     * Translates the specified figure, given the old and new position of a
-     * point.
-     *
-     * @param f        the figure to be translated
-     * @param oldPoint oldPoint in world coordinates
-     * @param newPoint newPoint in world coordinates
-     * @param model    the drawing model
-     */
+    /// Translates the specified figure, given the old and new position of a
+    /// point.
+    ///
+    /// @param f        the figure to be translated
+    /// @param oldPoint oldPoint in world coordinates
+    /// @param newPoint newPoint in world coordinates
+    /// @param model    the drawing model
     public static void translateFigure(Figure f, CssPoint2D oldPoint, CssPoint2D newPoint, @Nullable DrawingModel model) {
         CssPoint2D delta = newPoint.subtract(oldPoint);
 

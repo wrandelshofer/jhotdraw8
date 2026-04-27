@@ -5,9 +5,7 @@
 
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Defines primitive collections, and various utility classes for collections and iterators.
- */
+/// Defines primitive collections, and various utility classes for collections and iterators.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.collection {

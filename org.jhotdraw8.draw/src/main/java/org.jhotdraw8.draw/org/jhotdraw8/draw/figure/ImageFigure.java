@@ -27,17 +27,12 @@ import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * ImageFigure presents a bitmap image on a drawing.
- *
- */
+/// ImageFigure presents a bitmap image on a drawing.
 public class ImageFigure extends AbstractLeafFigure
         implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure, ConnectableFigure,
         HideableFigure, ImageableFigure {
 
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Image";
 
 

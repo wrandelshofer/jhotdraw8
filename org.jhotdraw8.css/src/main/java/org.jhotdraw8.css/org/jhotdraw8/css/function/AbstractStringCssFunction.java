@@ -15,11 +15,9 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Abstract base class for CSS functions that process a {@link CssTokenType#TT_STRING}.
- *
- * @param <T> the element type of the DOM
- */
+/// Abstract base class for CSS functions that process a [CssTokenType#TT_STRING].
+///
+/// @param <T> the element type of the DOM
 public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T> {
     public AbstractStringCssFunction(String name) {
         super(name);

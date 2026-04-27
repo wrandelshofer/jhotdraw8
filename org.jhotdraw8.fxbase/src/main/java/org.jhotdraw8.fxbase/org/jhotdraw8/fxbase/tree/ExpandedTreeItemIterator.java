@@ -12,11 +12,9 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/**
- * Iterates in preorder sequence over all expanded tree items.
- *
- * @param <T> The type of the value property within TreeItem.
- */
+/// Iterates in preorder sequence over all expanded tree items.
+///
+/// @param <T> The type of the value property within TreeItem.
 public class ExpandedTreeItemIterator<T> implements Iterator<TreeItem<T>> {
 
     private final Deque<Iterator<TreeItem<T>>> stack = new ArrayDeque<>(16);

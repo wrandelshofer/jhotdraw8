@@ -13,14 +13,12 @@ public class IntersectPolygonRectangle {
     private IntersectPolygonRectangle() {
     }
 
-    /**
-     * Computes the intersection between a polygon and a rectangle.
-     *
-     * @param points the points of the polygon
-     * @param r0     corner point 0 of the rectangle
-     * @param r1     corner point 1 of the rectangle
-     * @return computed intersection
-     */
+    /// Computes the intersection between a polygon and a rectangle.
+    ///
+    /// @param points the points of the polygon
+    /// @param r0     corner point 0 of the rectangle
+    /// @param r1     corner point 1 of the rectangle
+    /// @return computed intersection
     public static IntersectionResultEx intersectPolygonRectangleEx(List<Point2D.Double> points, Point2D r0, Point2D r1) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(r0, r1);

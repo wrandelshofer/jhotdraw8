@@ -13,33 +13,26 @@ import org.jspecify.annotations.Nullable;
 import java.util.LinkedHashMap;
 import java.util.SequencedMap;
 
-/**
- * Represents a named color in a cascading stylesheet.
- * <p>
- * References:
- * <dl>
- *     <dt>CSS Color Module Level 4, Named Colors</dt>
- *     <dd><a href="https://www.w3.org/TR/css-color-4/#named-colors">w3.org/<a></a></a></dd>
- * </dl>
- */
-
+/// Represents a named color in a cascading stylesheet.
+///
+/// References:
+/// <dl>
+///     <dt>CSS Color Module Level 4, Named Colors</dt>
+///     <dd><a href="https://www.w3.org/TR/css-color-4/#named-colors">w3.org/<a></a></a></dd>
+/// </dl>
 public class NamedCssColor extends CssColor {
-    /**
-     * Creates a new named color with the specified name.
-     *
-     * @param name  the name
-     * @param color the color
-     */
+    /// Creates a new named color with the specified name.
+    ///
+    /// @param name  the name
+    /// @param color the color
     public NamedCssColor(String name, Color color) {
         super(name, color);
     }
 
-    /**
-     * Creates a new named color with the specified name.
-     *
-     * @param name the name
-     * @param rgb  the color
-     */
+    /// Creates a new named color with the specified name.
+    ///
+    /// @param name the name
+    /// @param rgb  the color
     public NamedCssColor(String name, int rgb) {
         super(name,
                 Color.rgb((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff));
@@ -358,17 +351,15 @@ public class NamedCssColor extends CssColor {
         //NAMED_COLORS = new ImmutableHashMap<>(m, Map::copyOf);
     }
 
-    /**
-     * Returns a named color for the given name.
-     * <p>
-     * The name is not case sensitive.
-     * <p>
-     * If the name is unknown, then an illegal argument exception is thrown.
-     *
-     * @param name the name of the color
-     * @return a named color
-     * @throws IllegalArgumentException if the name is unknown
-     */
+    /// Returns a named color for the given name.
+    ///
+    /// The name is not case sensitive.
+    ///
+    /// If the name is unknown, then an illegal argument exception is thrown.
+    ///
+    /// @param name the name of the color
+    /// @return a named color
+    /// @throws IllegalArgumentException if the name is unknown
     public static NamedCssColor ofNonNull(String name) {
         NamedCssColor color = NAMED_COLORS.get(name.toLowerCase());
         if (color == null) {
@@ -377,28 +368,24 @@ public class NamedCssColor extends CssColor {
         return color;
     }
 
-    /**
-     * Returns a named color for the given name.
-     * <p>
-     * The name is not case-sensitive.
-     * <p>
-     * If the name is unknown, then null is returned.
-     *
-     * @param name the name of the color
-     * @return a named color or null
-     */
+    /// Returns a named color for the given name.
+    ///
+    /// The name is not case-sensitive.
+    ///
+    /// If the name is unknown, then null is returned.
+    ///
+    /// @param name the name of the color
+    /// @return a named color or null
     public static @Nullable NamedCssColor of(String name) {
         return NAMED_COLORS.get(name.toLowerCase());
     }
 
-    /**
-     * Returns true if the given name is a known system color.
-     * <p>
-     * The name is not case-sensitive.
-     *
-     * @param name a name
-     * @return true if known
-     */
+    /// Returns true if the given name is a known system color.
+    ///
+    /// The name is not case-sensitive.
+    ///
+    /// @param name a name
+    /// @return true if known
     public static boolean isNamedColor(String name) {
         return NAMED_COLORS.containsKey(name.toLowerCase());
     }

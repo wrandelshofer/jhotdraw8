@@ -18,11 +18,9 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Provides a {@link SequencedCollection} facade to a set of {@code Collection} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [SequencedCollection] facade to a set of `Collection` functions.
+///
+/// @param <E> the element type
 public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements SequencedCollection<E> {
     private final Supplier<E> getFirstFunction;
     private final Supplier<E> getLastFunction;

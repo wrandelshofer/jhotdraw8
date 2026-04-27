@@ -7,20 +7,16 @@ package org.jhotdraw8.fxbase.styleable;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 
-/**
- * Interface for keys which support styled values from CSS.
- *
- * @param <T> The value type.
- */
+/// Interface for keys which support styled values from CSS.
+///
+/// @param <T> The value type.
 public interface WritableStyleableMapAccessor<T> extends ReadableStyleableMapAccessor<T> {
 
     long serialVersionUID = 1L;
 
-    /**
-     * Gets example values.
-     *
-     * @return a help text.
-     */
+    /// Gets example values.
+    ///
+    /// @return a help text.
     default PersistentList<String> getExamples() {
         return VectorList.of();
     }

@@ -7,9 +7,7 @@ package org.jhotdraw8.collection.enumerator;
 
 import org.jspecify.annotations.Nullable;
 
-/**
- * An {@link Enumerator.OfInt} over an unsigned short array.
- */
+/// An [Enumerator.OfInt] over an unsigned short array.
 public class IntUShortArrayEnumerator extends AbstractIntEnumerator {
     private final int limit;
     private final short[] arrows;

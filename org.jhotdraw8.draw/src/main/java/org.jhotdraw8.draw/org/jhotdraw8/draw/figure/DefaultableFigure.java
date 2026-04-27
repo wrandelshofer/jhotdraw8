@@ -14,13 +14,11 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 public interface DefaultableFigure extends Figure {
-    /**
-     * Returns the styled value.
-     *
-     * @param <T> The value type
-     * @param key The property key
-     * @return The styled value.
-     */
+    /// Returns the styled value.
+    ///
+    /// @param <T> The value type
+    /// @param key The property key
+    /// @return The styled value.
     default @Nullable <T> T getDefaultableStyled(DefaultableStyleableMapAccessor<T> key) {
         return getDefaultableStyled(StyleOrigin.INLINE, key);
     }
@@ -63,13 +61,11 @@ public interface DefaultableFigure extends Figure {
         }
     }
 
-    /**
-     * Returns the styled value.
-     *
-     * @param <T> The value type
-     * @param key The property key
-     * @return The styled value.
-     */
+    /// Returns the styled value.
+    ///
+    /// @param <T> The value type
+    /// @param key The property key
+    /// @return The styled value.
     default <T> T getDefaultableStyledNonNull(DefaultableStyleableMapAccessor<T> key) {
         return Objects.requireNonNull(getDefaultableStyled(key));
     }

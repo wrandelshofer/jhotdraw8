@@ -19,10 +19,7 @@ import javax.swing.event.UndoableEditEvent;
 import java.util.Collections;
 import java.util.Set;
 
-/**
- * AbstractSelectionInspector.
- *
- */
+/// AbstractSelectionInspector.
 @SuppressWarnings("this-escape")
 public abstract class AbstractSelectionInspector extends AbstractInspector<DrawingView> {
 
@@ -64,11 +61,9 @@ public abstract class AbstractSelectionInspector extends AbstractInspector<Drawi
         return drawingView == null ? Collections.emptySet() : drawingView.getSelectedFigures();
     }
 
-    /**
-     * Must be implemented by subclasses.
-     *
-     * @param newValue the new selection
-     */
+    /// Must be implemented by subclasses.
+    ///
+    /// @param newValue the new selection
     protected abstract void onSelectionChanged(Set<Figure> newValue);
 
     protected final UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);

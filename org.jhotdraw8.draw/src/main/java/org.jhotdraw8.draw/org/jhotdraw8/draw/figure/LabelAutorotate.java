@@ -5,23 +5,14 @@
 
 package org.jhotdraw8.draw.figure;
 
-/**
- * LabelAutorotate.
- *
- */
+/// LabelAutorotate.
 public enum LabelAutorotate {
-    /**
-     * Does not automatically rotate the label.
-     */
+    /// Does not automatically rotate the label.
     OFF,
 
-    /**
-     * Fully rotates the label from 0 to 360 degrees.
-     */
+    /// Fully rotates the label from 0 to 360 degrees.
     FULL,
 
-    /**
-     * Rotates the label from -90 to +90 degrees.
-     */
+    /// Rotates the label from -90 to +90 degrees.
     HALF
 }

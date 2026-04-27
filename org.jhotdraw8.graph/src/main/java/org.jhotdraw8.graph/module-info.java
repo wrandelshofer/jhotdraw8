@@ -5,9 +5,7 @@
 
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Defines data structures and algorithms for graphs.
- */
+/// Defines data structures and algorithms for graphs.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.graph {

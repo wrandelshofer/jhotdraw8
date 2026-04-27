@@ -8,8 +8,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.css.value.CssPoint2D;
+import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -24,28 +24,26 @@ import java.util.stream.StreamSupport;
 
 import static org.jhotdraw8.draw.handle.MoveHandle.translateFigure;
 
-/**
- * |@code SimpleDragTracker} implements interactions with the content area of a
- * {@code Figure}.
- * <p>
- * The {@code DefaultDragTracker} handles one of the three states of the
- * {@code SelectionTool}. It comes into action, when the user presses the mouse
- * button over the content area of a {@code Figure}.
- * <p>
- * Design pattern:<br>
- * Name: Chain of Responsibility.<br>
- * Role: Handler.<br>
- * Partners: {@link SelectionTool} as Handler, {@link SelectAreaTracker} as
- * Handler, {@link HandleTracker} as Handler.
- * <p>
- * Design pattern:<br>
- * Name: State.<br>
- * Role: State.<br>
- * Partners: {@link SelectAreaTracker} as State, {@link SelectionTool} as
- * Context, {@link HandleTracker} as State.
- *
- * @see SelectionTool
- */
+/// |@code SimpleDragTracker} implements interactions with the content area of a
+/// `Figure`.
+///
+/// The `DefaultDragTracker` handles one of the three states of the
+/// `SelectionTool`. It comes into action, when the user presses the mouse
+/// button over the content area of a `Figure`.
+///
+/// Design pattern:
+/// Name: Chain of Responsibility.
+/// Role: Handler.
+/// Partners: [SelectionTool] as Handler, [SelectAreaTracker] as
+/// Handler, [HandleTracker] as Handler.
+///
+/// Design pattern:
+/// Name: State.
+/// Role: State.
+/// Partners: [SelectAreaTracker] as State, [SelectionTool] as
+/// Context, [HandleTracker] as State.
+///
+/// @see SelectionTool
 public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
 

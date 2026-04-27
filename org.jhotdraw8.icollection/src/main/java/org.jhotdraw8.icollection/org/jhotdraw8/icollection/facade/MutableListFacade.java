@@ -21,11 +21,9 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 
-/**
- * Provides a {@link List} facade to a set of {@code PersistentList} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [List] facade to a set of `PersistentList` functions.
+///
+/// @param <E> the element type
 public class MutableListFacade<E> extends AbstractList<E> implements ReadableList<E>, List<E> {
     private PersistentList<E> backingList;
     private int modCount;

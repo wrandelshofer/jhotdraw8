@@ -6,71 +6,43 @@ package org.jhotdraw8.css.value;
 
 import javafx.scene.paint.Color;
 
-/**
- * The CssColorConverter converts system colors into color values.
- * <p>
- * References:
- * <dl>
- *     <dt>CSS System colors</dt>
- *     <dd><a href="https://www.w3.org/TR/2020/WD-css-color-4-20201112/">w3.org</a></dd>
- * </dl>
- */
+/// The CssColorConverter converts system colors into color values.
+///
+/// References:
+/// <dl>
+///     <dt>CSS System colors</dt>
+///     <dd><a href="https://www.w3.org/TR/2020/WD-css-color-4-20201112/">w3.org</a></dd>
+/// </dl>
 public interface SystemColorConverter {
-    /**
-     * Background of application content or documents.
-     */
+    /// Background of application content or documents.
     String CANVAS = "canvas";
-    /**
-     * Text in application content or documents.
-     */
+    /// Text in application content or documents.
     String CANVAS_TEXT = "canvastext";
-    /**
-     * Text in non-active, non-visited links.
-     */
+    /// Text in non-active, non-visited links.
     String LINK_TEXT = "linktext";
-    /**
-     * Text in visited links.
-     */
+    /// Text in visited links.
     String VISITED_TEXT = "visitedtext";
-    /**
-     * Text in active links.
-     */
+    /// Text in active links.
     String ACTIVE_TEXT = "activetext";
-    /**
-     * The face background color for push buttons.
-     */
+    /// The face background color for push buttons.
     String BUTTON_FACE = "buttonface";
-    /**
-     * Text on push buttons.
-     */
+    /// Text on push buttons.
     String BUTTON_TEXT = "Buttontext";
-    /**
-     * Background of input fields.
-     */
+    /// Background of input fields.
     String FIELD = "field";
-    /**
-     * Text in input fields.
-     */
+    /// Text in input fields.
     String FIELD_TEXT = "fieldtext";
-    /**
-     * Background of item(s) selected in a control.
-     */
+    /// Background of item(s) selected in a control.
     String HIGHLIGHT = "highlight";
-    /**
-     * Text of item(s) selected in a control.
-     */
+    /// Text of item(s) selected in a control.
     String HIGHLIGHT_TEXT = "HighlightText";
-    /**
-     * Disabled text. (Often, but not necessarily, gray.)
-     */
+    /// Disabled text. (Often, but not necessarily, gray.)
     String GRAY_TEXT = "graytext";
 
-    /**
-     * Converts the specified value from input unit to a Color value.
-     *
-     * @param value a value
-     * @return converted value
-     */
+    /// Converts the specified value from input unit to a Color value.
+    ///
+    /// @param value a value
+    /// @return converted value
     default Color convert(CssColor value) {
         return value.getColor();
     }

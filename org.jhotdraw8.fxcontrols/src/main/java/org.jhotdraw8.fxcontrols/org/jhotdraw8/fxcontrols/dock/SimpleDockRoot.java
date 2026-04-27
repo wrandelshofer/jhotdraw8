@@ -24,13 +24,11 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayDeque;
 import java.util.function.Supplier;
 
-/**
- * A simple implementation of the {@link DockRoot} interface.
- * <p>
- * This DockPane only shows the first child dock.
- * <p>
- * FIXME DockPane should allow to select which child that it shows, like a card pane.
- */
+/// A simple implementation of the [DockRoot] interface.
+///
+/// This DockPane only shows the first child dock.
+///
+/// FIXME DockPane should allow to select which child that it shows, like a card pane.
 public class SimpleDockRoot
         extends AbstractDockRoot {
 

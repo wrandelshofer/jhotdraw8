@@ -13,11 +13,8 @@ import org.jhotdraw8.graph.algo.AddToIntSet;
 import java.util.Objects;
 import java.util.function.Function;
 
-/**
- * Enumerates vertices in a graph with indexed vertices starting from a root vertex in
- * breadth-first-order or in depth-first-order.
- *
- */
+/// Enumerates vertices in a graph with indexed vertices starting from a root vertex in
+/// breadth-first-order or in depth-first-order.
 public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumerator {
 
     private final Function<Integer, Enumerator.OfInt> nextFunction;
@@ -25,27 +22,23 @@ public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumerator {
     private final AddToIntSet visited;
     private final boolean dfs;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param nextFunction the nextFunction
-     * @param root         the root vertex
-     * @param vertexCount  the vertex count
-     * @param dfs          whether to perform depth-first-search instead of breadth-first-search
-     */
+    /// Creates a new instance.
+    ///
+    /// @param nextFunction the nextFunction
+    /// @param root         the root vertex
+    /// @param vertexCount  the vertex count
+    /// @param dfs          whether to perform depth-first-search instead of breadth-first-search
     public BfsDfsIndexedVertexSpliterator(Function<Integer, Enumerator.OfInt> nextFunction,
                                           int root,
                                           int vertexCount, boolean dfs) {
         this(nextFunction, root, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param nextFunction the nextFunction
-     * @param root         the root vertex
-     * @param dfs          whether to perform depth-first-search instead of breadth-first-search
-     */
+    /// Creates a new instance.
+    ///
+    /// @param nextFunction the nextFunction
+    /// @param root         the root vertex
+    /// @param dfs          whether to perform depth-first-search instead of breadth-first-search
     public BfsDfsIndexedVertexSpliterator(Function<Integer, Enumerator.OfInt> nextFunction, int root, AddToIntSet visited, boolean dfs) {
         super(Long.MAX_VALUE, NONNULL | ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;

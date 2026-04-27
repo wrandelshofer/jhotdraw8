@@ -9,23 +9,20 @@ import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.nio.CharBuffer;
 
-/**
- * Converts an {@code Object} to a {@code String} but can not a {@code String}
- * back to an {@code Object}.
- * <p>
- * This converter is not bijective, and thus only useful for one-way conversions
- * to a String. For example for generating a message text.
- * <ul>
- * <li>The conversion to string is performed by invoking the {@code toString}
- * method on the value object.</li>
- * <li>The {@code fromString} method always returns a String object regardless
- * of the type that was converted {@code toString}.</li>
- * <li>If a null value is converted to string, the string contains the text
- * {@code "null"}. On the conversion from string, a String object with the value
- * {@code "null"} is returned.</li>
- * </ul>
- *
- */
+/// Converts an `Object` to a `String` but can not a `String`
+/// back to an `Object`.
+///
+/// This converter is not bijective, and thus only useful for one-way conversions
+/// to a String. For example for generating a message text.
+///
+///   - The conversion to string is performed by invoking the `toString`
+///     method on the value object.
+///   - The `fromString` method always returns a String object regardless
+///     of the type that was converted `toString`.
+///   - If a null value is converted to string, the string contains the text
+///     `"null"`. On the conversion from string, a String object with the value
+///     `"null"` is returned.
+///
 public class DefaultConverter implements Converter<Object> {
 
     public DefaultConverter() {

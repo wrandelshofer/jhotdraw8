@@ -10,10 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jspecify.annotations.Nullable;
 
-/**
- * FontChooserModel.
- *
- */
+/// FontChooserModel.
 public class FontChooserModel {
 
     private final ListProperty<FontCollection> fontCollections = new SimpleListProperty<>(FXCollections.observableArrayList());

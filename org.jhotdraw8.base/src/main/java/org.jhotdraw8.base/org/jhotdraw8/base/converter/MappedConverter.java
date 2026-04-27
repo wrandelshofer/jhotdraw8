@@ -12,11 +12,9 @@ import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * This converter uses a map to convert a data type from/to String.
- *
- * @param <E> the data type
- */
+/// This converter uses a map to convert a data type from/to String.
+///
+/// @param <E> the data type
 public class MappedConverter<E> implements Converter<E> {
     private final Map<String, E> fromStringMap;
     private final Map<E, String> toStringMap;

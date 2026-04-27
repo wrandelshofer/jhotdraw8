@@ -7,9 +7,7 @@ package org.jhotdraw8.collection.primitive;
 
 import java.util.List;
 
-/**
- * Interface for a {@link List} with a primitive integer data elements.
- */
+/// Interface for a [List] with a primitive integer data elements.
 public interface DoubleList extends List<Double>, DoubleSequencedCollection {
     @Override
     default boolean add(Double e) {
@@ -27,29 +25,19 @@ public interface DoubleList extends List<Double>, DoubleSequencedCollection {
         return lastIndexOfAsDouble((Double) o);
     }
 
-    /**
-     * @see List#lastIndexOf(Object)
-     */
+    /// @see List#lastIndexOf(Object)
     int lastIndexOfAsDouble(double o);
 
-    /**
-     * @see List#indexOf(Object)
-     */
+    /// @see List#indexOf(Object)
     int indexOfAsDouble(double o);
 
-    /**
-     * @see List#add(Object)
-     */
+    /// @see List#add(Object)
     void addAsDouble(double e);
 
-    /**
-     * @see List#add(int, Object)
-     */
+    /// @see List#add(int, Object)
     void addAsDouble(int index, double e);
 
-    /**
-     * @see List#get(int)
-     */
+    /// @see List#get(int)
     double getAsDouble(int index);
 
     @Override
@@ -62,12 +50,10 @@ public interface DoubleList extends List<Double>, DoubleSequencedCollection {
         addAsDouble(size(), e);
     }
 
-    /**
-     * Removes the item at the specified index from this list.
-     *
-     * @param index an index
-     * @return the removed item
-     */
+    /// Removes the item at the specified index from this list.
+    ///
+    /// @param index an index
+    /// @return the removed item
     double removeAtAsDouble(int index);
 
     @Override

@@ -19,19 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * SelectSameAction.
- *
- */
+/// SelectSameAction.
 public class SelectSameAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.selectSame";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public SelectSameAction(DrawingEditor editor) {
         super(editor);
         Resources labels = DrawLabels.getResources();

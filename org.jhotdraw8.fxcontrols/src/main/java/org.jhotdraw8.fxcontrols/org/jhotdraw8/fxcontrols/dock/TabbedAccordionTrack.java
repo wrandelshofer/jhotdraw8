@@ -29,13 +29,11 @@ import java.util.List;
 
 import static java.lang.Double.max;
 
-/**
- * This track stacks {@link Dockable}s on the Z-axis into a tab pane inside
- * an accordion.
- * <p>
- * If this track has only one {@link Dockable}, it is added directly to
- * the accordion without a tab pane in between.
- */
+/// This track stacks [Dockable]s on the Z-axis into a tab pane inside
+/// an accordion.
+///
+/// If this track has only one [Dockable], it is added directly to
+/// the accordion without a tab pane in between.
 public class TabbedAccordionTrack extends AbstractDockParent implements Track {
 
     private final BooleanProperty rotated = new SimpleBooleanProperty(false);

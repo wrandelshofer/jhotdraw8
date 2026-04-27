@@ -14,11 +14,9 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.KeyMapEntryProperty;
 import org.jspecify.annotations.Nullable;
 
-/**
- * KeyMapEntryStyleableProperty.
- *
- * @param <T> the type of the value
- */
+/// KeyMapEntryStyleableProperty.
+///
+/// @param <T> the type of the value
 public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
     private final WritableStyleableMapAccessor<T> key;
@@ -60,12 +58,10 @@ public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> imple
         return metaData;
     }
 
-    /**
-     * This method is called from CSS code to set the value of the property.
-     *
-     * @param origin the style origin
-     * @param value  the value null removes the key from the style origin
-     */
+    /// This method is called from CSS code to set the value of the property.
+    ///
+    /// @param origin the style origin
+    /// @param value  the value null removes the key from the style origin
     @Override
     public void applyStyle(StyleOrigin origin, T value) {
         key.put(map.getMap(origin), value);

@@ -12,26 +12,21 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * A "substring match selector" {@code *=} matches an element if the element has
- * an attribute with the specified name and its value contains the specified
- * substring.
- *
- */
+/// A "substring match selector" `*=` matches an element if the element has
+/// an attribute with the specified name and its value contains the specified
+/// substring.
 public class SubstringMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;
     private final String attributeName;
     private final String substring;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param sourceLocator source locator for debugging
-     * @param namespacePattern an optional namespace ("*" means any namespace,
-     *                         null means no namespace)
-     * @param attributeName the attribute name
-     * @param substring the substring in the attribute value
-     */
+    /// Creates a new instance.
+    ///
+    /// @param sourceLocator    source locator for debugging
+    /// @param namespacePattern an optional namespace ("*" means any namespace,
+    ///                         null means no namespace)
+    /// @param attributeName    the attribute name
+    /// @param substring        the substring in the attribute value
     public SubstringMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, String attributeName, String substring) {
         super(sourceLocator);
         this.namespacePattern = namespacePattern;

@@ -22,49 +22,45 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 
-/**
- * Implements the {@link List} interface using a bit-mapped trie (Vector).
- * <p>
- * Features:
- * <ul>
- *     <li>supports up to 2<sup>31</sup> - 1 elements</li>
- *     <li>allows null elements</li>
- *     <li>is persistent</li>
- *     <li>is thread-safe</li>
- *     <li>iterates in the order of the list</li>
- * </ul>
- * <p>
- * Performance characteristics:
- * <ul>
- *     <li>addLast: O(log N)</li>
- *     <li>set: O(log N)</li>
- *     <li>removeAt: O(N)</li>
- *     <li>removeFirst,removeLast: O(log N)</li>
- *     <li>contains: O(N)</li>
- *     <li>toPersistent: O(1)</li>
- *     <li>clone: O(1)</li>
- *     <li>iterator.next(): O(1)</li>
- * </ul>
- * <p>
- * References:
- * <p>
- * This class has been derived from Vavr Vector.java.
- * <dl>
- *     <dt>Vector.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
- *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Vector.java">github.com</a></dd>
- * </dl>
- *
- * @param <E> the element type
- */
+/// Implements the [List] interface using a bit-mapped trie (Vector).
+///
+/// Features:
+///
+///   - supports up to 2<sup>31</sup> - 1 elements
+///   - allows null elements
+///   - is persistent
+///   - is thread-safe
+///   - iterates in the order of the list
+///
+///
+/// Performance characteristics:
+///
+///   - addLast: O(log N)
+///   - set: O(log N)
+///   - removeAt: O(N)
+///   - removeFirst,removeLast: O(log N)
+///   - contains: O(N)
+///   - toPersistent: O(1)
+///   - clone: O(1)
+///   - iterator.next(): O(1)
+///
+///
+/// References:
+///
+/// This class has been derived from Vavr Vector.java.
+/// <dl>
+///     <dt>Vector.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
+///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Vector.java">github.com</a></dd>
+/// </dl>
+///
+/// @param <E> the element type
 public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadableList<E>, List<E>, Cloneable {
     @Serial
     private static final long serialVersionUID = 0L;
 
     private transient BitMappedTrie<E> root;
 
-    /**
-     * Constructs a new empty list.
-     */
+    /// Constructs a new empty list.
     public MutableVectorList() {
         root = BitMappedTrie.empty();
     }
@@ -138,13 +134,11 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         return false;
     }
 
-    /**
-     * Adds all elements in the specified collection at the specified position.
-     *
-     * @param index the insertion position
-     * @param c     the collection to be added to ths list
-     * @return {@code true} if this list changed as a result of the call
-     */
+    /// Adds all elements in the specified collection at the specified position.
+    ///
+    /// @param index the insertion position
+    /// @param c     the collection to be added to ths list
+    /// @return `true` if this list changed as a result of the call
     public boolean addAll(int index, Iterable<? extends E> c) {
         Objects.checkIndex(index, root.length + 1);
         int oldSize = root.length;
@@ -157,12 +151,10 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         return false;
     }
 
-    /**
-     * Adds all elements in the specified collection at the end of this list.
-     *
-     * @param c the collection to be added to ths list
-     * @return {@code true} if this list changed as a result of the call
-     */
+    /// Adds all elements in the specified collection at the end of this list.
+    ///
+    /// @param c the collection to be added to ths list
+    /// @return `true` if this list changed as a result of the call
     public boolean addAll(Iterable<? extends E> c) {
         return addAll(size(), c);
     }
@@ -191,11 +183,9 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         return false;
     }
 
-    /**
-     * Constructs a list containing the elements in the specified iterable.
-     *
-     * @param c an iterable
-     */
+    /// Constructs a list containing the elements in the specified iterable.
+    ///
+    /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableVectorList(Iterable<? extends E> c) {
         if (c instanceof MutableVectorList<?>) {

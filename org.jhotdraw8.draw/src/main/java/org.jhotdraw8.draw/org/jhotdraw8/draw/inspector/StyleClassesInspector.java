@@ -41,10 +41,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-/**
- * FXML Controller class
- *
- */
+/// FXML Controller class
 public class StyleClassesInspector extends AbstractSelectionInspector {
 
     @FXML

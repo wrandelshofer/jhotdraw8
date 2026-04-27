@@ -15,11 +15,9 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Provides a {@link ReadableSequencedSet} facade to a set of {@code Set} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [ReadableSequencedSet] facade to a set of `Set` functions.
+///
+/// @param <E> the element type
 public class ReadableSequencedCollectionFacade<E> extends ReadableCollectionFacade<E>
         implements ReadableSequencedCollection<E> {
 

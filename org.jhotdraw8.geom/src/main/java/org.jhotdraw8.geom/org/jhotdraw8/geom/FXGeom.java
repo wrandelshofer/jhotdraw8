@@ -25,25 +25,21 @@ import static java.lang.Math.signum;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
-/**
- * This class provides utility functions for two dimensional geometry
- * based on the javafx.graphics module (FX), as well as translation
- * functions from/to geometric objects of the java.desktop module (AWT).
- * .
- */
+/// This class provides utility functions for two dimensional geometry
+/// based on the javafx.graphics module (FX), as well as translation
+/// functions from/to geometric objects of the java.desktop module (AWT).
+/// .
 public class FXGeom {
     private FXGeom() {
     }
 
-    /**
-     * Computes the linear interpolation/extrapolation between two points.
-     *
-     * @param start point a
-     * @param end   point b
-     * @param t     a value between [0, 1] defines the interpolation between a and
-     *              b. Values outside this range yield an extrapolation.
-     * @return the interpolated or extrapolated value
-     */
+    /// Computes the linear interpolation/extrapolation between two points.
+    ///
+    /// @param start point a
+    /// @param end   point b
+    /// @param t     a value between [0,1] defines the interpolation between a and
+    ///              b. Values outside this range yield an extrapolation.
+    /// @return the interpolated or extrapolated value
     public static Point2D lerp(Point2D start, Point2D end, double t) {
         return lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
     }
@@ -52,18 +48,15 @@ public class FXGeom {
         return new Point2D(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
 
-    /**
-     * Homogenizes the vector (x1,y1,z1) to (x1,y1,1).
-     *
-     * <pre>
-     *   ( y1 / z1,
-     *     z1 / z1,
-     *     1  )
-     * </pre> With z1=1 and z2=1;
-     *
-     * @param p the vector
-     * @return the normalized vector
-     */
+    /// Homogenizes the vector (x1,y1,z1) to (x1,y1,1).
+    /// <pre>
+    ///   ( y1 / z1,
+    ///     z1 / z1,
+    ///     1  )
+    /// </pre> With z1=1 and z2=1;
+    ///
+    /// @param p the vector
+    /// @return the normalized vector
     public static Point3D homogenize(Point3D p) {
         return new Point3D(//
                 p.getX() / p.getZ(),//
@@ -72,18 +65,15 @@ public class FXGeom {
         );
     }
 
-    /**
-     * Homogenizes the vector (x1,y1,z1) to (x1,y1,1).
-     *
-     * <pre>
-     *   ( y1 / z1,
-     *     z1 / z1,
-     *     1  )
-     * </pre> With z1=1 and z2=1;
-     *
-     * @param p the vector
-     * @return the normalized vector
-     */
+    /// Homogenizes the vector (x1,y1,z1) to (x1,y1,1).
+    /// <pre>
+    ///   ( y1 / z1,
+    ///     z1 / z1,
+    ///     1  )
+    /// </pre> With z1=1 and z2=1;
+    ///
+    /// @param p the vector
+    /// @return the normalized vector
     public static Point2D homogenize2D(Point3D p) {
         double z = p.getZ();
         return new Point2D(//
@@ -92,26 +82,22 @@ public class FXGeom {
         );
     }
 
-    /**
-     * Gets the angle of the specified line.
-     *
-     * @param a the start point
-     * @param b the end point
-     * @return the angle in radians
-     */
+    /// Gets the angle of the specified line.
+    ///
+    /// @param a the start point
+    /// @param b the end point
+    /// @return the angle in radians
     public static double angle(Point2D a, Point2D b) {
         double dy = b.getY() - a.getY();
         double dx = b.getX() - a.getX();
         return Angles.atan2(dy, dx);
     }
 
-    /**
-     * Gets the point on a rectangle that corresponds to the given angle.
-     *
-     * @param r     the rectangle
-     * @param angle the angle of the ray starting at the center of the rectangle
-     * @return a point on the rectangle
-     */
+    /// Gets the point on a rectangle that corresponds to the given angle.
+    ///
+    /// @param r     the rectangle
+    /// @param angle the angle of the ray starting at the center of the rectangle
+    /// @return a point on the rectangle
     public static Point2D angleToPoint(Rectangle2D r, double angle) {
         double si = sin(angle);
         double co = cos(angle);
@@ -135,35 +121,29 @@ public class FXGeom {
         return new Point2D(r.getMinX() + x, r.getMinY() + y);
     }
 
-    /**
-     * Returns true if the three points are collinear.
-     *
-     * @param p0 a point
-     * @param p1 a point
-     * @param p2 a point
-     * @return true if the area is 0
-     */
+    /// Returns true if the three points are collinear.
+    ///
+    /// @param p0 a point
+    /// @param p1 a point
+    /// @param p2 a point
+    /// @return true if the area is 0
     public static boolean isCollinear(Point2D p0, Point2D p1, Point2D p2) {
         return Lines.isCollinear(p0.getX(), p0.getY(), p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
-    /**
-     * Returns true if the two vectors point roughly in the same direction.
-     *
-     * @param p0 a vector
-     * @param p1 a vector
-     * @return true if the two vectors have a cosine greater than zero
-     */
+    /// Returns true if the two vectors point roughly in the same direction.
+    ///
+    /// @param p0 a vector
+    /// @param p1 a vector
+    /// @return true if the two vectors have a cosine greater than zero
     public static boolean isSameDirection(Point2D p0, Point2D p1) {
         return p0.dotProduct(p1) > 0;
     }
 
-    /**
-     * Rounds the vector to 90 degrees and normalizes it.
-     *
-     * @param p a vector
-     * @return rounded to 90 degrees
-     */
+    /// Rounds the vector to 90 degrees and normalizes it.
+    ///
+    /// @param p a vector
+    /// @return rounded to 90 degrees
     public static Point2D normalizeTo90Degrees(Point2D p) {
         if (abs(p.getX()) > abs(p.getY())) {
             return new Point2D(signum(p.getX()), 0);
@@ -171,16 +151,14 @@ public class FXGeom {
         return new Point2D(0, signum(p.getY()));
     }
 
-    /**
-     * Returns a point on the edge of the shape which crosses the line from the
-     * center of the shape to the specified point. If no edge crosses of the
-     * shape crosses the line, the nearest control point of the shape is
-     * returned.
-     *
-     * @param shape the shape
-     * @param p     the point
-     * @return a point on the shape
-     */
+    /// Returns a point on the edge of the shape which crosses the line from the
+    /// center of the shape to the specified point. If no edge crosses of the
+    /// shape crosses the line, the nearest control point of the shape is
+    /// returned.
+    ///
+    /// @param shape the shape
+    /// @param p     the point
+    /// @return a point on the shape
     public static Point2D chop(Shape shape, Point2D p) {
         java.awt.geom.Rectangle2D bounds = shape.getBounds2D();
         java.awt.geom.Point2D.Double ctr = new java.awt.geom.Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
@@ -267,39 +245,33 @@ public class FXGeom {
         return new Point2D(cx, cy);
     }
 
-    /**
-     * Gets the distance between to points
-     *
-     * @param p1 point 1
-     * @param p2 point 2
-     * @return the distance between the two points
-     */
+    /// Gets the distance between to points
+    ///
+    /// @param p1 point 1
+    /// @param p2 point 2
+    /// @return the distance between the two points
     public static double length(Point2D p1, Point2D p2) {
         return sqrt(Points.squaredDistance(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
     }
 
-    /**
-     * Gets the point on an oval that corresponds to the given angle.
-     *
-     * @param r     the bounds of the oval
-     * @param angle the angle
-     * @return a point on the oval
-     */
+    /// Gets the point on an oval that corresponds to the given angle.
+    ///
+    /// @param r     the bounds of the oval
+    /// @param angle the angle
+    /// @return a point on the oval
     public static Point2D ovalAngleToPoint(Rectangle2D r, double angle) {
         Point2D center = FXRectangles.center(r);
         Point2D p = polarToPoint(angle, r.getWidth() / 2.0, r.getHeight() / 2.0);
         return new Point2D(center.getX() + p.getX(), center.getY() + p.getY());
     }
 
-    /**
-     * Gets a unit vector which is perpendicular to the given line.
-     *
-     * @param l1x point 1 on the line
-     * @param l1y point 1 on the line
-     * @param l2x point 2 on the line
-     * @param l2y point 2 on the line
-     * @return the perpendicular vector of length {@code 1}
-     */
+    /// Gets a unit vector which is perpendicular to the given line.
+    ///
+    /// @param l1x point 1 on the line
+    /// @param l1y point 1 on the line
+    /// @param l2x point 2 on the line
+    /// @param l2y point 2 on the line
+    /// @return the perpendicular vector of length `1`
     public static Point2D perp(double l1x, double l1y, double l2x, double l2y) {
         // matlab: v    = p2 - p1
         //         cv    = cross([v 1] * [0 0 1])
@@ -316,95 +288,81 @@ public class FXGeom {
         return new Point2D(cvx * m, cvy * m);
     }
 
-    /**
-     * Gets the angle of a point relative to the center of a rectangle.
-     *
-     * @param r the rectangle
-     * @param p the point
-     * @return the angle
-     */
+    /// Gets the angle of a point relative to the center of a rectangle.
+    ///
+    /// @param r the rectangle
+    /// @param p the point
+    /// @return the angle
     public static double pointToAngle(Rectangle2D r, Point2D p) {
         double px = p.getX() - (r.getMinX() + r.getWidth() * 0.5);
         double py = p.getY() - (r.getMinY() + r.getHeight() * 0.5);
         return Angles.atan2(py * r.getWidth(), px * r.getHeight());
     }
 
-    /**
-     * Converts a polar to a point
-     *
-     * @param angle the angle of the point in polar coordinates
-     * @param fx    the x coordinate of the point in polar coordinates
-     * @param fy    the y coordinate of the point in polar coordinates
-     * @return the point in Cartesian coordinates
-     */
+    /// Converts a polar to a point
+    ///
+    /// @param angle the angle of the point in polar coordinates
+    /// @param fx    the x coordinate of the point in polar coordinates
+    /// @param fy    the y coordinate of the point in polar coordinates
+    /// @return the point in Cartesian coordinates
     public static Point2D polarToPoint(double angle, double fx, double fy) {
         double si = sin(angle);
         double co = cos(angle);
         return new Point2D((int) (fx * co), (int) (fy * si));
     }
 
-    /**
-     * Shifts the point perpendicular to the line by the given distance
-     *
-     * @param l1       point 1 on the line
-     * @param l2       point 2 on the line
-     * @param p        the point to be shifted
-     * @param distance the shifting distance
-     * @return the shifted point
-     */
+    /// Shifts the point perpendicular to the line by the given distance
+    ///
+    /// @param l1       point 1 on the line
+    /// @param l2       point 2 on the line
+    /// @param p        the point to be shifted
+    /// @param distance the shifting distance
+    /// @return the shifted point
     public static Point2D shiftPerp(Point2D l1, Point2D l2, Point2D p, double distance) {
 
         return shiftPerp(l1.getX(), l1.getY(), l2.getX(), l2.getY(), p.getX(), p.getY(), distance);
     }
 
-    /**
-     * Gets the squared magnitude of the given point.
-     *
-     * @param p a point
-     * @return the squared distance of the point to (0,0)
-     */
+    /// Gets the squared magnitude of the given point.
+    ///
+    /// @param p a point
+    /// @return the squared distance of the point to (0,0)
     public static double squaredMagnitude(Point2D p) {
         double x = p.getX();
         double y = p.getY();
         return x * x + y * y;
     }
 
-    /**
-     * Gets the perpendicular vector to the given vector.
-     *
-     * @param vector a vector
-     * @return the perpendicular vector
-     */
+    /// Gets the perpendicular vector to the given vector.
+    ///
+    /// @param vector a vector
+    /// @return the perpendicular vector
     public static Point2D perp(Point2D vector) {
         return new Point2D(vector.getY(), -vector.getX());
     }
 
-    /**
-     * Gets a vector which is perpendicular to the given line.
-     *
-     * @param l1x    point 1 on the line
-     * @param l1y    point 1 on the line
-     * @param l2x    point 2 on the line
-     * @param l2y    point 2 on the line
-     * @param length the desired length of the vector
-     * @return the perpendicular vector of length {@code vectorLength}
-     */
+    /// Gets a vector which is perpendicular to the given line.
+    ///
+    /// @param l1x    point 1 on the line
+    /// @param l1y    point 1 on the line
+    /// @param l2x    point 2 on the line
+    /// @param l2y    point 2 on the line
+    /// @param length the desired length of the vector
+    /// @return the perpendicular vector of length `vectorLength`
     public static Point2D perp(double l1x, double l1y, double l2x, double l2y, double length) {
         return perp(l1x, l1y, l2x, l2y).multiply(length);
     }
 
-    /**
-     * Shifts the point perpendicular to the line by the given distance
-     *
-     * @param l1x      point 1 on the line
-     * @param l1y      point 1 on the line
-     * @param l2x      point 2 on the line
-     * @param l2y      point 2 on the line
-     * @param px       the point to be shifted
-     * @param py       the point to be shifted
-     * @param distance the shifting distance
-     * @return the shifted point
-     */
+    /// Shifts the point perpendicular to the line by the given distance
+    ///
+    /// @param l1x      point 1 on the line
+    /// @param l1y      point 1 on the line
+    /// @param l2x      point 2 on the line
+    /// @param l2y      point 2 on the line
+    /// @param px       the point to be shifted
+    /// @param py       the point to be shifted
+    /// @param distance the shifting distance
+    /// @return the shifted point
     public static Point2D shiftPerp(double l1x, double l1y, double l2x, double l2y, double px, double py, double distance) {
         // matlab: v    = p2 - p1
         //         line = cross([v 1] * [0 0 1])
@@ -439,22 +397,20 @@ public class FXGeom {
     }
 
 
-    /**
-     * Standard line intersection algorithm Return the point of intersection if
-     * it exists, else null
-     * <p>
-     * from Doug Lea's PolygonFigure
-     *
-     * @param xa the x-coordinate of point a on line 1
-     * @param ya the y-coordinate of point a on line 1
-     * @param xb the x-coordinate of point b on line 1
-     * @param yb the y-coordinate of point b on line 1
-     * @param xc the x-coordinate of point c on line 2
-     * @param yc the y-coordinate of point c on line 2
-     * @param xd the x-coordinate of point d on line 2
-     * @param yd the y-coordinate of point d on line 2
-     * @return the intersection point or null
-     */
+    /// Standard line intersection algorithm Return the point of intersection if
+    /// it exists, else null
+    ///
+    /// from Doug Lea's PolygonFigure
+    ///
+    /// @param xa the x-coordinate of point a on line 1
+    /// @param ya the y-coordinate of point a on line 1
+    /// @param xb the x-coordinate of point b on line 1
+    /// @param yb the y-coordinate of point b on line 1
+    /// @param xc the x-coordinate of point c on line 2
+    /// @param yc the y-coordinate of point c on line 2
+    /// @param xd the x-coordinate of point d on line 2
+    /// @param yd the y-coordinate of point d on line 2
+    /// @return the intersection point or null
     public static @Nullable Point2D intersect(double xa, // line 1 point 1 x
                                               double ya, // line 1 point 1 y
                                               double xb, // line 1 point 2 x
@@ -505,22 +461,20 @@ public class FXGeom {
         }
     }
 
-    /**
-     * Line intersection algorithm Return the point of intersection if it
-     * exists, else null.
-     *
-     * @param xa    the x-coordinate of point a on line 1
-     * @param ya    the y-coordinate of point a on line 1
-     * @param xb    the x-coordinate of point b on line 1
-     * @param yb    the y-coordinate of point b on line 1
-     * @param xc    the x-coordinate of point c on line 2
-     * @param yc    the y-coordinate of point c on line 2
-     * @param xd    the x-coordinate of point d on line 2
-     * @param yd    the y-coordinate of point d on line 2
-     * @param limit the lines are extend by up to limit units in order to meet
-     *              at the intersection point
-     * @return the intersection point or null
-     */
+    /// Line intersection algorithm Return the point of intersection if it
+    /// exists, else null.
+    ///
+    /// @param xa    the x-coordinate of point a on line 1
+    /// @param ya    the y-coordinate of point a on line 1
+    /// @param xb    the x-coordinate of point b on line 1
+    /// @param yb    the y-coordinate of point b on line 1
+    /// @param xc    the x-coordinate of point c on line 2
+    /// @param yc    the y-coordinate of point c on line 2
+    /// @param xd    the x-coordinate of point d on line 2
+    /// @param yd    the y-coordinate of point d on line 2
+    /// @param limit the lines are extend by up to limit units in order to meet
+    ///              at the intersection point
+    /// @return the intersection point or null
     public static @Nullable Point2D intersect(
             double xa, // line 1 point 1 x
             double ya, // line 1 point 1 y
@@ -596,40 +550,34 @@ public class FXGeom {
     }
 
 
-    /**
-     * Computes the cross product of the homogenous vectors (x1,y1,1) x
-     * (x2,y2,1).
-     *
-     * <pre>
-     *   ( y1 * z2 - z1 * y2,
-     *     z1 * x2 - x1 * z2,
-     *     x1 * y2 - y1 * x2  )
-     * </pre> With z1=1 and z2=1;
-     *
-     * @param p1 point 1
-     * @param p2 point 2
-     * @return the cross product
-     */
+    /// Computes the cross product of the homogenous vectors (x1,y1,1) x
+    /// (x2,y2,1).
+    /// <pre>
+    ///   ( y1 * z2 - z1 * y2,
+    ///     z1 * x2 - x1 * z2,
+    ///     x1 * y2 - y1 * x2  )
+    /// </pre> With z1=1 and z2=1;
+    ///
+    /// @param p1 point 1
+    /// @param p2 point 2
+    /// @return the cross product
     public static Point3D hcross(Point2D p1, Point2D p2) {
         return hcross(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
-    /**
-     * Computes the cross product of the homogenous vectors (x1,y1,1) x
-     * (x2,y2,1).
-     *
-     * <pre>
-     *   ( y1 * z2 - z1 * y2,
-     *     z1 * x2 - x1 * z2,
-     *     x1 * y2 - y1 * x2  )
-     * </pre> With z1=1 and z2=1;
-     *
-     * @param x1 x1
-     * @param y1 y1
-     * @param x2 x2
-     * @param y2 y2
-     * @return the cross product
-     */
+    /// Computes the cross product of the homogenous vectors (x1,y1,1) x
+    /// (x2,y2,1).
+    /// <pre>
+    ///   ( y1 * z2 - z1 * y2,
+    ///     z1 * x2 - x1 * z2,
+    ///     x1 * y2 - y1 * x2  )
+    /// </pre> With z1=1 and z2=1;
+    ///
+    /// @param x1 x1
+    /// @param y1 y1
+    /// @param x2 x2
+    /// @param y2 y2
+    /// @return the cross product
     public static Point3D hcross(double x1, double y1, double x2, double y2) {
         return new Point3D(//
                 y1 * 1 - 1 * y2,//

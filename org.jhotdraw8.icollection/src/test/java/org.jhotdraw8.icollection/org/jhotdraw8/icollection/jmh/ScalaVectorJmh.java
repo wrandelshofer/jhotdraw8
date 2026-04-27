@@ -20,39 +20,37 @@ import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
-/**
- * <pre>
- * # JMH version: 1.36
- * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
- * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
- * # org.scala-lang:scala-library:2.13.8
- *
- * Benchmark           (size)  Mode  Cnt         Score   Error  Units
- * mAddFirst               10  avgt             27.796          ns/op
- * mAddFirst          1000000  avgt            320.989          ns/op
- * mAddLast                10  avgt             24.118          ns/op
- * mAddLast           1000000  avgt            207.482          ns/op
- * mContainsNotFound       10  avgt             14.826          ns/op
- * mContainsNotFound  1000000  avgt       20864102.835          ns/op
- * mGet                    10  avgt              4.311          ns/op
- * mGet               1000000  avgt            198.885          ns/op
- * mHead                   10  avgt              1.082          ns/op
- * mHead              1000000  avgt              1.082          ns/op
- * mIterate                10  avgt             11.180          ns/op
- * mIterate           1000000  avgt       32438888.398          ns/op
- * mRemoveAtIndex          10  avgt    2        51.895          ns/op
- * mRemoveAtIndex        1000  avgt    2       287.529          ns/op
- * mRemoveAtIndex     1000000  avgt    2       936.376          ns/op
- * mRemoveLast             10  avgt    2        12.412          ns/op
- * mRemoveLast           1000  avgt    2        41.881          ns/op
- * mRemoveLast        1000000  avgt    2        80.044          ns/op
- * mReversedIterate        10  avgt             10.555          ns/op
- * mReversedIterate   1000000  avgt       43129266.738          ns/op
- * mTail                   10  avgt             18.878          ns/op
- * mTail              1000000  avgt             46.531          ns/op
- * mSet                    10  avgt             33.717          ns/op
- * mSet               1000000  avgt            847.992          ns/op
- */
+/// <pre>
+/// # JMH version: 1.36
+/// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
+/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+/// # org.scala-lang:scala-library:2.13.8
+///
+/// Benchmark           (size)  Mode  Cnt         Score   Error  Units
+/// mAddFirst               10  avgt             27.796          ns/op
+/// mAddFirst          1000000  avgt            320.989          ns/op
+/// mAddLast                10  avgt             24.118          ns/op
+/// mAddLast           1000000  avgt            207.482          ns/op
+/// mContainsNotFound       10  avgt             14.826          ns/op
+/// mContainsNotFound  1000000  avgt       20864102.835          ns/op
+/// mGet                    10  avgt              4.311          ns/op
+/// mGet               1000000  avgt            198.885          ns/op
+/// mHead                   10  avgt              1.082          ns/op
+/// mHead              1000000  avgt              1.082          ns/op
+/// mIterate                10  avgt             11.180          ns/op
+/// mIterate           1000000  avgt       32438888.398          ns/op
+/// mRemoveAtIndex          10  avgt    2        51.895          ns/op
+/// mRemoveAtIndex        1000  avgt    2       287.529          ns/op
+/// mRemoveAtIndex     1000000  avgt    2       936.376          ns/op
+/// mRemoveLast             10  avgt    2        12.412          ns/op
+/// mRemoveLast           1000  avgt    2        41.881          ns/op
+/// mRemoveLast        1000000  avgt    2        80.044          ns/op
+/// mReversedIterate        10  avgt             10.555          ns/op
+/// mReversedIterate   1000000  avgt       43129266.738          ns/op
+/// mTail                   10  avgt             18.878          ns/op
+/// mTail              1000000  avgt             46.531          ns/op
+/// mSet                    10  avgt             33.717          ns/op
+/// mSet               1000000  avgt            847.992          ns/op
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)

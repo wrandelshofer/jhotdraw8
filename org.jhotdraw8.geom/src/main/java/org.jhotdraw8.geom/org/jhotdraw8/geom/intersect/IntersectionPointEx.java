@@ -11,25 +11,17 @@ public class IntersectionPointEx extends IntersectionPoint {
     @Serial
     private static final long serialVersionUID = 0L;
 
-    /**
-     * @see #getArgumentB()
-     */
+    /// @see #getArgumentB()
     private final double argumentB;
 
 
-    /**
-     * @see #getDerivativeA()
-     */
+    /// @see #getDerivativeA()
     private final Point2D.Double derivativeA;
 
-    /**
-     * @see #getDerivativeB()
-     */
+    /// @see #getDerivativeB()
     private final Point2D.Double derivativeB;
 
-    /**
-     * @see #getSegmentB()
-     */
+    /// @see #getSegmentB()
     private final int segmentB;
 
     public IntersectionPointEx(Point2D.Double point, double argumentA, Point2D.Double derivativeA, double argumentB, Point2D.Double derivativeB) {
@@ -61,37 +53,29 @@ public class IntersectionPointEx extends IntersectionPoint {
     }
 
 
-    /**
-     * If parametric function 'b' is a segment of a segmented function,
-     * then this field is used to indicate to which segment the parametric
-     * function belongs.
-     * <p>
-     * The index of the segment.
-     */
+    /// If parametric function 'b' is a segment of a segmented function,
+    /// then this field is used to indicate to which segment the parametric
+    /// function belongs.
+    ///
+    /// The index of the segment.
     public int getSegmentB() {
         return segmentB;
     }
 
 
-    /**
-     * The derivative vector at the intersection of the parametric function 'a'.
-     * This vector is not normalized.
-     */
+    /// The derivative vector at the intersection of the parametric function 'a'.
+    /// This vector is not normalized.
     public Point2D.Double getDerivativeA() {
         return derivativeA;
     }
 
-    /**
-     * The value of the argument of the parametric function 'b' at the intersection.
-     */
+    /// The value of the argument of the parametric function 'b' at the intersection.
     public double getArgumentB() {
         return argumentB;
     }
 
-    /**
-     * The derivative vector at the intersection of the second parametric function.
-     * This vector is not normalized.
-     */
+    /// The derivative vector at the intersection of the second parametric function.
+    /// This vector is not normalized.
     public Point2D.Double getDerivativeB() {
         return derivativeB;
     }

@@ -6,68 +6,56 @@ package org.jhotdraw8.graph;
 
 import java.util.Arrays;
 
-/**
- * Stores a chunk of a graph using a "Compressed Sparse Row" representation.
- * <p>
- * Uses one shared gap between the list of sibling vertices/arrows.
- * Moves the gap at each insertion/deletion operation. This may make it
- * slow for updates.
- * <p>
- * The vertex data, the siblings list and arrows list are stored in
- * a single array.
- */
+/// Stores a chunk of a graph using a "Compressed Sparse Row" representation.
+///
+/// Uses one shared gap between the list of sibling vertices/arrows.
+/// Moves the gap at each insertion/deletion operation. This may make it
+/// slow for updates.
+///
+/// The vertex data, the siblings list and arrows list are stored in
+/// a single array.
 public class SingleArrayCsrGraphChunk implements GraphChunk {
     private static final boolean CLEAR_UNUSED_ELEMENTS = false;
     private static final int CLEAR_VALUE = 99;
 
     private final int vertexCount;
-    /**
-     * The total capacity for arrows in this chunk.
-     */
+    /// The total capacity for arrows in this chunk.
     private int capacity;
-    /**
-     * The free capacity for arrows in this chunk.
-     */
+    /// The free capacity for arrows in this chunk.
     private int free;
-    /**
-     * The local index of the vertex, that contains the gap.
-     */
+    /// The local index of the vertex, that contains the gap.
     private int gapIndex;
-    /**
-     * The size of the gap.
-     */
+    /// The size of the gap.
     private int gapSize;
 
-    /**
-     * Chunk array layout:
-     * <pre>
-     * vertices: [ data ... ] // Stores the vertex data for each vertex.
-     *                        // There are {@link #vertexCount} vertices in this array.
-     *
-     * sizes: [ ⌈cumulated⌉, ... ]
-     *                        // Stores the number of siblings for each vertex.
-     *                        // There are {@link #vertexCount} vertices in this array
-     *                        // Sizes are cumulated. size[i] = sizes[i] - sizes[i - 1]
-     *
-     *
-     * siblings: [ siblingsOfVertex0, siblingsOfVertex1, gap, siblingsOfVertex2, ... ]
-     *                         // Stores the siblings of the vertices.
-     *                         // There are {@link #capacity} vertices in this array.
-     *                         //
-     *                         // The siblings of a vertex are stored in a consecutive sequence.
-     *                         // The siblings of a vertex are sorted by index, so that a
-     *                         // binary search can be used to find a specific sibling.
-     *                         // There is one gap of size {@link #gapSize} after the vertex with
-     *                         // index{@link #gapIndex}.
-     *
-     * arrows: [ data, ... ] // Stores the arrow data of the vertices.
-     *                       // There are {@link #capacity} vertices in this array.
-     *                       // The structure is the same as for the siblings.
-     * </pre>
-     *
-     * @param free the initial free space for arrows
-     * @return a new chunk
-     */
+    /// Chunk array layout:
+    /// <pre>
+    /// vertices: [data...] // Stores the vertex data for each vertex.
+    ///                        // There are [#vertexCount] vertices in this array.
+    ///
+    /// sizes: [⌈cumulated⌉,...]
+    ///                        // Stores the number of siblings for each vertex.
+    ///                        // There are [#vertexCount] vertices in this array
+    ///                        // Sizes are cumulated. size[i] = sizes[i] - sizes[i-1]
+    ///
+    ///
+    /// siblings: [siblingsOfVertex0,siblingsOfVertex1,gap,siblingsOfVertex2,...]
+    ///                         // Stores the siblings of the vertices.
+    ///                         // There are [#capacity] vertices in this array.
+    ///                         //
+    ///                         // The siblings of a vertex are stored in a consecutive sequence.
+    ///                         // The siblings of a vertex are sorted by index, so that a
+    ///                         // binary search can be used to find a specific sibling.
+    ///                         // There is one gap of size [#gapSize] after the vertex with
+    ///                         // index[#gapIndex].
+    ///
+    /// arrows: [data,...] // Stores the arrow data of the vertices.
+    ///                       // There are [#capacity] vertices in this array.
+    ///                       // The structure is the same as for the siblings.
+    /// </pre>
+    ///
+    /// @param free the initial free space for arrows
+    /// @return a new chunk
     private int[] chunk;
 
     public SingleArrayCsrGraphChunk(final int vertexCount, final int initialArrowCapacity) {
@@ -81,13 +69,11 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         }
     }
 
-    /**
-     * Finds the index of vertex u in the sibling list of vertex v.
-     *
-     * @param v index of vertex v
-     * @param u index of vertex u
-     * @return the index of u or (-index -1) if u is not in the index list.
-     */
+    /// Finds the index of vertex u in the sibling list of vertex v.
+    ///
+    /// @param v index of vertex v
+    /// @param u index of vertex u
+    /// @return the index of u or (-index -1) if u is not in the index list.
     @Override
     public int indexOf(final int v, final int u) {
         final int from = getSiblingsFromOffset(v);
@@ -182,16 +168,14 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
                 + (vIndex <= gapIndex ? 0 : gapSize);
     }
 
-    /**
-     * Adds an arrow from vertex v to vertex u with the provided arrow data.
-     * Optionally updates the arrow data if the arrow is present.
-     *
-     * @param v               index of vertex v
-     * @param u               index of vertex u
-     * @param data            the arrow data
-     * @param updateIfPresent sets the data if the arrow is present
-     * @return true if a new arrow was added
-     */
+    /// Adds an arrow from vertex v to vertex u with the provided arrow data.
+    /// Optionally updates the arrow data if the arrow is present.
+    ///
+    /// @param v               index of vertex v
+    /// @param u               index of vertex u
+    /// @param data            the arrow data
+    /// @param updateIfPresent sets the data if the arrow is present
+    /// @return true if a new arrow was added
     @Override
     public boolean tryAddArrow(final int v, final int u, final int data, final boolean updateIfPresent) {
         final int result = indexOf(v, u);
@@ -234,13 +218,11 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         chunk[getArrowsFromOffset(v) + index] = data;
     }
 
-    /**
-     * Removes an arrow from vertex v to vertex u, if it is present.
-     *
-     * @param v index of vertex v
-     * @param u index of vertex u
-     * @return true on success
-     */
+    /// Removes an arrow from vertex v to vertex u, if it is present.
+    ///
+    /// @param v index of vertex v
+    /// @param u index of vertex u
+    /// @return true on success
     @Override
     public boolean tryRemoveArrow(final int v, final int u) {
         final int result = indexOf(v, u);
@@ -251,11 +233,9 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         return true;
     }
 
-    /**
-     * Removes all arrows starting at vertex v.
-     *
-     * @param v index of vertex v
-     */
+    /// Removes all arrows starting at vertex v.
+    ///
+    /// @param v index of vertex v
     @Override
     public void removeAllArrows(final int v) {
         final int vIndex = v & (vertexCount - 1);
@@ -314,14 +294,12 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         free += size;
     }
 
-    /**
-     * Removes an arrow from vertex v to the a vertex u at the specified
-     * index.
-     *
-     * @param v            index of vertex v
-     * @param removalIndex index of vertex u
-     * @return returns the removed arrow u
-     */
+    /// Removes an arrow from vertex v to the a vertex u at the specified
+    /// index.
+    ///
+    /// @param v            index of vertex v
+    /// @param removalIndex index of vertex u
+    /// @return returns the removed arrow u
     @Override
     public int removeArrowAt(final int v, final int removalIndex) {
         final int siblingsFrom = getSiblingsFromOffset(v);
@@ -407,17 +385,15 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         this.gapSize = gapSize + deltaCapacity;
     }
 
-    /**
-     * Inserts vertex 'u' in the siblings list of vertex 'v'.
-     * <p>
-     * The gap is located at the end of the siblings list of vertex 'v'.
-     *
-     * @param u
-     * @param data
-     * @param from
-     * @param to
-     * @param insertionIndex
-     */
+    /// Inserts vertex 'u' in the siblings list of vertex 'v'.
+    ///
+    /// The gap is located at the end of the siblings list of vertex 'v'.
+    ///
+    /// @param u
+    /// @param data
+    /// @param from
+    /// @param to
+    /// @param insertionIndex
     void insertAtGap(final int u, final int data, final int from, final int to, final int insertionIndex) {
         // BEFORE:
         // ÷ = insertionIndex of 'u' in the siblings list of vertex 'v'
@@ -446,18 +422,16 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         chunk[arrowDataFrom + insertionIndex] = data;
     }
 
-    /**
-     * Inserts vertex 'u' in the siblings list of vertex 'v'.
-     * <p>
-     * The siblings list of vertex 'v' is located somewhere
-     * before the siblings list that contains the gap.
-     *
-     * @param u
-     * @param data
-     * @param from
-     * @param to
-     * @param insertionIndex
-     */
+    /// Inserts vertex 'u' in the siblings list of vertex 'v'.
+    ///
+    /// The siblings list of vertex 'v' is located somewhere
+    /// before the siblings list that contains the gap.
+    ///
+    /// @param u
+    /// @param data
+    /// @param from
+    /// @param to
+    /// @param insertionIndex
     void insertBeforeGap(final int u, final int data, final int from, final int to, final int insertionIndex) {
         // BEFORE:
         // ÷ = insertionIndex of 'u' in the siblings list of vertex 'v'
@@ -494,18 +468,16 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         }
     }
 
-    /**
-     * Inserts vertex 'u' in the siblings list of vertex 'v'.
-     * <p>
-     * The siblings list of vertex 'v' is located somewhere after
-     * the siblings list that contains the gap.
-     *
-     * @param u
-     * @param data
-     * @param from
-     * @param to
-     * @param insertionIndex
-     */
+    /// Inserts vertex 'u' in the siblings list of vertex 'v'.
+    ///
+    /// The siblings list of vertex 'v' is located somewhere after
+    /// the siblings list that contains the gap.
+    ///
+    /// @param u
+    /// @param data
+    /// @param from
+    /// @param to
+    /// @param insertionIndex
     void insertAfterGap(final int u, final int data,
                         final int from, final int to,
                         final int insertionIndex) {
@@ -548,15 +520,13 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         }
     }
 
-    /**
-     * Removes vertex 'u' in the siblings list of vertex 'v'.
-     * <p>
-     * The gap is located at the end of the siblings list of vertex 'v'.
-     *
-     * @param from
-     * @param to
-     * @param removalIndex
-     */
+    /// Removes vertex 'u' in the siblings list of vertex 'v'.
+    ///
+    /// The gap is located at the end of the siblings list of vertex 'v'.
+    ///
+    /// @param from
+    /// @param to
+    /// @param removalIndex
     void removeAtGap(final int from, final int to, final int removalIndex) {
         // ÷ = index after removal index, u = element to be removed
         // ...,,,,::::;;;; = siblings list of different vertices
@@ -583,16 +553,14 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         }
     }
 
-    /**
-     * Removes vertex 'u' from the siblings list of vertex 'v'.
-     * <p>
-     * The siblings list of vertex 'v' is located somewhere
-     * before the siblings list that contains the gap.
-     *
-     * @param from
-     * @param to
-     * @param removalIndex
-     */
+    /// Removes vertex 'u' from the siblings list of vertex 'v'.
+    ///
+    /// The siblings list of vertex 'v' is located somewhere
+    /// before the siblings list that contains the gap.
+    ///
+    /// @param from
+    /// @param to
+    /// @param removalIndex
     void removeBeforeGap(final int from, final int to, final int removalIndex) {
         // ÷ = index after removal index, u = element to be removed
         // ...,,,,::::;;;; = siblings list of different vertices
@@ -624,16 +592,14 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         }
     }
 
-    /**
-     * Removes vertex 'u' from the siblings list of vertex 'v'.
-     * <p>
-     * The siblings list of vertex 'v' is located somewhere after
-     * the siblings list that contains the gap.
-     *
-     * @param from
-     * @param to
-     * @param removalIndex
-     */
+    /// Removes vertex 'u' from the siblings list of vertex 'v'.
+    ///
+    /// The siblings list of vertex 'v' is located somewhere after
+    /// the siblings list that contains the gap.
+    ///
+    /// @param from
+    /// @param to
+    /// @param removalIndex
     void removeAfterGap(final int from, final int to, final int removalIndex) {
         // ....|,,,,|::::|;;;;| = siblings list of different vertices
         //                        the list with the colons ':' is the sibling list of 'v'.

@@ -7,10 +7,10 @@ package org.jhotdraw8.draw.render;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import org.jhotdraw8.css.render.BasicRenderContext;
-import org.jhotdraw8.css.value.DefaultUnitConverter;
-import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.css.value.DefaultSystemColorConverter;
+import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.SystemColorConverter;
+import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
@@ -21,10 +21,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
 
-/**
- * RenderContext.
- *
- */
+/// RenderContext.
 public interface RenderContext extends BasicRenderContext {
 
     // ---
@@ -32,17 +29,11 @@ public interface RenderContext extends BasicRenderContext {
     // ---
     NonNullKey<RenderingIntent> RENDERING_INTENT = new SimpleNonNullKey<>("renderingIntent", RenderingIntent.class, RenderingIntent.EDITOR);
 
-    /**
-     * The dots per inch of the rendering device.
-     */
+    /// The dots per inch of the rendering device.
     NonNullKey<Double> DPI = new SimpleNonNullKey<>("dpi", Double.class, 96.0);
-    /**
-     * Contains a non-null value if the rendering is clipped. The clip bounds are given in world coordinates.
-     */
+    /// Contains a non-null value if the rendering is clipped. The clip bounds are given in world coordinates.
     Key<Bounds> CLIP_BOUNDS = new SimpleNullableKey<>("clipBounds", Bounds.class, null);
-    /**
-     * Number of nodes that can be rendered per layer in the drawing editor..
-     */
+    /// Number of nodes that can be rendered per layer in the drawing editor..
     SimpleNonNullKey<Integer> MAX_NODES_PER_LAYER = new SimpleNonNullKey<>("maxNodesPerLayer", Integer.class, 10_000);
 
     Key<Page> RENDER_PAGE = new SimpleNullableKey<>("renderPage", Page.class, null);
@@ -57,13 +48,11 @@ public interface RenderContext extends BasicRenderContext {
     // behavior
     // ---
 
-    /**
-     * Gets the JavaFX node which is used to render the specified figure by this
-     * {@code RenderContext}.
-     *
-     * @param f The figure
-     * @return The JavaFX node associated to the figure
-     */
+    /// Gets the JavaFX node which is used to render the specified figure by this
+    /// `RenderContext`.
+    ///
+    /// @param f The figure
+    /// @return The JavaFX node associated to the figure
     @Nullable Node getNode(Figure f);
 
 }

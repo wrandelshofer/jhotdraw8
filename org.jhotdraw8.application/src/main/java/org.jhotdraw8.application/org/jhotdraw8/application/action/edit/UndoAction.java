@@ -12,21 +12,16 @@ import org.jhotdraw8.application.action.AbstractActivityAction;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.fxbase.undo.FXUndoManager;
 
-/**
- * Undoes the last user action.
- *
- */
+/// Undoes the last user action.
 public class UndoAction extends AbstractActivityAction<Activity> {
 
     public static final String ID = "edit.undo";
     private final FXUndoManager manager;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param view    the view
-     * @param manager
-     */
+    /// Creates a new instance.
+    ///
+    /// @param view    the view
+    /// @param manager
     @SuppressWarnings("this-escape")
     public UndoAction(Activity view, FXUndoManager manager) {
         super(view);

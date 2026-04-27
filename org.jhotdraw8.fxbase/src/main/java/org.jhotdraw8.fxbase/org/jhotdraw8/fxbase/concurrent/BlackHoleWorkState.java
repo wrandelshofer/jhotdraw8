@@ -15,12 +15,10 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import org.jspecify.annotations.Nullable;
 
-/**
- * This work state does not update its properties, except for {@link #isCancelled()}.
- * This allows to use this work state, when the FX Application Thread is not running.
- *
- * @param <V> the result type of the work
- */
+/// This work state does not update its properties, except for [#isCancelled()].
+/// This allows to use this work state, when the FX Application Thread is not running.
+///
+/// @param <V> the result type of the work
 public class BlackHoleWorkState<V> implements WorkState<V> {
     @SuppressWarnings("this-escape")
     private final ReadOnlyStringWrapper title = new ReadOnlyStringWrapper(this, TITLE_PROPERTY, null);
@@ -41,12 +39,10 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     public BlackHoleWorkState() {
     }
 
-    /**
-     * Does nothing, because this implementation does not require that the
-     * FX Application Thread is running.
-     *
-     * @param value the new value
-     */
+    /// Does nothing, because this implementation does not require that the
+    /// FX Application Thread is running.
+    ///
+    /// @param value the new value
     @Override
     public void updateMessage(@Nullable String value) {
 
@@ -67,34 +63,28 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
 
     }
 
-    /**
-     * Does nothing, because this implementation does not require that the
-     * FX Application Thread is running.
-     *
-     * @param value the new value
-     */
+    /// Does nothing, because this implementation does not require that the
+    /// FX Application Thread is running.
+    ///
+    /// @param value the new value
     @Override
     public void updateTitle(@Nullable String value) {
 
     }
 
-    /**
-     * Does nothing, because this implementation does not require that the
-     * FX Application Thread is running.
-     *
-     * @param value the new value
-     */
+    /// Does nothing, because this implementation does not require that the
+    /// FX Application Thread is running.
+    ///
+    /// @param value the new value
     @Override
     public void updateValue(@Nullable Object value) {
 
     }
 
-    /**
-     * Does nothing, because this implementation does not require that the
-     * FX Application Thread is running.
-     *
-     * @param value the new value
-     */
+    /// Does nothing, because this implementation does not require that the
+    /// FX Application Thread is running.
+    ///
+    /// @param value the new value
     @Override
     public void updateProgress(double value) {
 

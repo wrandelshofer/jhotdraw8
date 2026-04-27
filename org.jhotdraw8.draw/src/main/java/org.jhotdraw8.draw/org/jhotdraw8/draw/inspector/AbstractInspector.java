@@ -9,11 +9,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-/**
- * AbstractInspector.
- *
- * @param <S> the subject type
- */
+/// AbstractInspector.
+///
+/// @param <S> the subject type
 public abstract class AbstractInspector<S> implements Inspector<S> {
 
     protected final ObjectProperty<S> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);

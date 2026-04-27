@@ -13,16 +13,14 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * # JMH version: 1.37
- * # VM version: JDK 21.0.1, OpenJDK 64-Bit Server VM, 21.0.1+12-LTS
- * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
- * <pre>
- * Benchmark              Mode  Cnt  Score   Error  Units
- * LinesJmh.arcLength     avgt    4  1.554 ± 0.030  ns/op
- * LinesJmh.invArcLength  avgt    4  2.447 ± 0.016  ns/op
- * </pre>
- */
+/// # JMH version: 1.37
+/// # VM version: JDK 21.0.1, OpenJDK 64-Bit Server VM, 21.0.1+12-LTS
+/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+/// <pre>
+/// Benchmark              Mode  Cnt  Score   Error  Units
+/// LinesJmh.arcLength     avgt    4  1.554 ± 0.030  ns/op
+/// LinesJmh.invArcLength  avgt    4  2.447 ± 0.016  ns/op
+/// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 4)
 @Warmup(iterations = 4)

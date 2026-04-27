@@ -32,10 +32,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
-/**
- * ImageCreationTool.
- *
- */
+/// ImageCreationTool.
 public class ImageCreationTool extends CreationTool {
 
     private final MapAccessor<URI> uriKey = ImageFigure.IMAGE_URI;

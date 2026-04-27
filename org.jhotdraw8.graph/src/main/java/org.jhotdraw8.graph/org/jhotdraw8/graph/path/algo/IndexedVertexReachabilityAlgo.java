@@ -12,27 +12,23 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntPredicate;
 
-/**
- * Interface for a reachability checker algorithm over a directed graph.
- *
- * @param <C> the cost number type
- */
+/// Interface for a reachability checker algorithm over a directed graph.
+///
+/// @param <C> the cost number type
 public interface IndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> {
-    /**
-     * Search engine method.
-     *
-     * @param startVertices        the set of start vertices
-     * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next vertices function
-     * @param maxDepth             the maximal depth (inclusive) of the search
-     *                             Must be {@literal >= 0}.
-     * @param zero                 the zero cost value
-     * @param costLimit            the algorithm-specific cost limit
-     * @param costFunction         the cost function
-     * @param sumFunction          the sum function for adding two cost values
-     * @param visited              the visited function
-     * @return true on success
-     */
+    /// Search engine method.
+    ///
+    /// @param startVertices        the set of start vertices
+    /// @param goalPredicate        the goal predicate
+    /// @param nextVerticesFunction the next vertices function
+    /// @param maxDepth             the maximal depth (inclusive) of the search
+    ///                             Must be {@literal >= 0}.
+    /// @param zero                 the zero cost value
+    /// @param costLimit            the algorithm-specific cost limit
+    /// @param costFunction         the cost function
+    /// @param sumFunction          the sum function for adding two cost values
+    /// @param visited              the visited function
+    /// @return true on success
     boolean tryToReach(Iterable<Integer> startVertices,
                        IntPredicate goalPredicate,
                        Function<Integer, Spliterator.OfInt> nextVerticesFunction,

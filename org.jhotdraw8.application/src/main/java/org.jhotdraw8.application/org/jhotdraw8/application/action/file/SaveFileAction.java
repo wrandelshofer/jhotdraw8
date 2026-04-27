@@ -9,42 +9,33 @@ import org.jhotdraw8.application.FileBasedActivity;
 
 import java.net.URI;
 
-/**
- * Saves the changes in the active view. If the active view has not an URI, an
- * {@code URIChooser} is presented.
- *
- */
+/// Saves the changes in the active view. If the active view has not an URI, an
+/// `URIChooser` is presented.
 public class SaveFileAction extends AbstractSaveFileAction {
 
 
     public static final String ID = "file.save";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param view the view
-     */
+    /// Creates a new instance.
+    ///
+    /// @param view the view
     public SaveFileAction(FileBasedActivity view) {
         this(view, false);
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param view   the view
-     * @param saveAs whether to force a file dialog
-     */
+    /// Creates a new instance.
+    ///
+    /// @param view   the view
+    /// @param saveAs whether to force a file dialog
     public SaveFileAction(FileBasedActivity view, boolean saveAs) {
         this(view, ID, saveAs);
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param view   the view
-     * @param id     the id
-     * @param saveAs whether to force a file dialog
-     */
+    /// Creates a new instance.
+    ///
+    /// @param view   the view
+    /// @param id     the id
+    /// @param saveAs whether to force a file dialog
     public SaveFileAction(FileBasedActivity view, String id, boolean saveAs) {
         super(view, id, saveAs);
     }

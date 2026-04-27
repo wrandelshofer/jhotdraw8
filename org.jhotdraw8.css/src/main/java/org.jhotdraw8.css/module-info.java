@@ -5,9 +5,7 @@
 
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Defines an interpreter for CSS stylesheets.
- */
+/// Defines an interpreter for CSS stylesheets.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.css {

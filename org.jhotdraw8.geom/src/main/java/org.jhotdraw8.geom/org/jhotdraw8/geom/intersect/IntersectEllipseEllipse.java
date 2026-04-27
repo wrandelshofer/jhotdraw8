@@ -15,50 +15,44 @@ public class IntersectEllipseEllipse {
     private IntersectEllipseEllipse() {
     }
 
-    /**
-     * Computes the intersection between two ellipses.
-     *
-     * @param c1  the center of ellipse 1
-     * @param rx1 the x-radius of ellipse 1
-     * @param ry1 the y-radius of ellipse 1
-     * @param c2  the center of ellipse 2
-     * @param rx2 the x-radius of ellipse 2
-     * @param ry2 the y-radius of ellipse 2
-     * @return computed intersection
-     */
+    /// Computes the intersection between two ellipses.
+    ///
+    /// @param c1  the center of ellipse 1
+    /// @param rx1 the x-radius of ellipse 1
+    /// @param ry1 the y-radius of ellipse 1
+    /// @param c2  the center of ellipse 2
+    /// @param rx2 the x-radius of ellipse 2
+    /// @param ry2 the y-radius of ellipse 2
+    /// @return computed intersection
     public static IntersectionResult intersectEllipseEllipse(Point2D c1, double rx1, double ry1, Point2D c2, double rx2, double ry2) {
         return intersectEllipseEllipse(c1.getX(), c1.getY(), rx1, ry1, c2.getX(), c2.getY(), rx2, ry2);
     }
 
-    /**
-     * Computes the intersection between two ellipses.
-     *
-     * @param cx1 the center of ellipse 1
-     * @param cy1 the center of ellipse 1
-     * @param rx1 the x-radius of ellipse 1
-     * @param ry1 the y-radius of ellipse 1
-     * @param cx2 the center of ellipse 2
-     * @param cy2 the center of ellipse 2
-     * @param rx2 the x-radius of ellipse 2
-     * @param ry2 the y-radius of ellipse 2
-     * @return computed intersection
-     */
+    /// Computes the intersection between two ellipses.
+    ///
+    /// @param cx1 the center of ellipse 1
+    /// @param cy1 the center of ellipse 1
+    /// @param rx1 the x-radius of ellipse 1
+    /// @param ry1 the y-radius of ellipse 1
+    /// @param cx2 the center of ellipse 2
+    /// @param cy2 the center of ellipse 2
+    /// @param rx2 the x-radius of ellipse 2
+    /// @param ry2 the y-radius of ellipse 2
+    /// @return computed intersection
     public static IntersectionResult intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2) {
         return intersectEllipseEllipse(cx1, cy1, rx1, ry1, cx2, cy2, rx2, ry2, Scalars.REAL_THRESHOLD);
     }
 
-    /**
-     * @param cx1
-     * @param cy1
-     * @param rx1
-     * @param ry1
-     * @param cx2
-     * @param cy2
-     * @param rx2
-     * @param ry2
-     * @param epsilon
-     * @return
-     */
+    /// @param cx1
+    /// @param cy1
+    /// @param rx1
+    /// @param ry1
+    /// @param cx2
+    /// @param cy2
+    /// @param rx2
+    /// @param ry2
+    /// @param epsilon
+    /// @return
     public static IntersectionResult intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2, double epsilon) {
         double[] a = {
                 ry1 * ry1,

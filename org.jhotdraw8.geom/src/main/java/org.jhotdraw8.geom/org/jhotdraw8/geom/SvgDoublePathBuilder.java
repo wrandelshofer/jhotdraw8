@@ -5,10 +5,7 @@
 package org.jhotdraw8.geom;
 
 
-/**
- * SvgDoublePathBuilder.
- *
- */
+/// SvgDoublePathBuilder.
 public class SvgDoublePathBuilder implements PathBuilder<String> {
 
     private final StringBuilder buf = new StringBuilder();

@@ -13,22 +13,18 @@ import org.jspecify.annotations.Nullable;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-/**
- * This property is weakly bound to an entry in a map.
- *
- * @param <K> key type
- * @param <V> map value type
- * @param <T> entry value type
- */
+/// This property is weakly bound to an entry in a map.
+///
+/// @param <K> key type
+/// @param <V> map value type
+/// @param <T> entry value type
 public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         implements MapChangeListener<K, V> {
 
     protected K key;
     protected ObservableMap<K, V> map;
     private @Nullable WeakMapChangeListener<K, V> weakListener;
-    /**
-     * Here char is used as an uint16.
-     */
+    /// Here char is used as an uint16.
     private char changing;
 
     public MapEntryProperty(ObservableMap<K, V> map, K key, Type tClazz) {

@@ -13,19 +13,17 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * An Option is a read-only collection of one element or of zero elements.
- * <p>
- * Instances of Option are either an instance of {@link Some} or of {@link None}.
- * <p>
- * This class has been derived from 'vavr' Option.java.
- * <dl>
- *     <dt>Option.java. Copyright 2023 (c) vavr. MIT License.</dt>
- *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/control/Option.java">github.com</a></dd>
- * </dl>
- *
- * @param <T> The type of the optional value.
- */
+/// An Option is a read-only collection of one element or of zero elements.
+///
+/// Instances of Option are either an instance of [Some] or of [None].
+///
+/// This class has been derived from 'vavr' Option.java.
+/// <dl>
+///     <dt>Option.java. Copyright 2023 (c) vavr. MIT License.</dt>
+///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/control/Option.java">github.com</a></dd>
+/// </dl>
+///
+/// @param <T> The type of the optional value.
 public interface Option<T> extends ReadableCollection<T> {
     @SuppressWarnings("unchecked")
     static <T> Option<T> none() {
@@ -37,21 +35,13 @@ public interface Option<T> extends ReadableCollection<T> {
     }
 
 
-    /**
-     * Creates a new {@code Option} of a given value.
-     *
-     * <pre>{@code
-     * // = Some(3), an Option which contains the value 3
-     * Option<Integer> option = Option.of(3);
-     *
-     * // = None, the empty Option
-     * Option<Integer> none = Option.of(null);
-     * }</pre>
-     *
-     * @param value A value
-     * @param <T>   type of the value
-     * @return {@code Some(value)} if value is not {@code null}, {@code None} otherwise
-     */
+    /// Creates a new `Option` of a given value.
+    /// <pre>
+    /// `// = Some(3), an Option which contains the value 3Option<Integer> option = Option.of(3);// = None, the empty OptionOption<Integer> none = Option.of(null);`</pre>
+    ///
+    /// @param value A value
+    /// @param <T>   type of the value
+    /// @return `Some(value)` if value is not `null`, `None` otherwise
     static <T> Option<T> of(T value) {
         return (value == null) ? none() : some(value);
     }
@@ -99,9 +89,7 @@ public interface Option<T> extends ReadableCollection<T> {
     }
 
     record None<T>() implements Option<T> {
-        /**
-         * The singleton instance of None.
-         */
+        /// The singleton instance of None.
         private static final None<?> INSTANCE = new None<>();
 
         @Override
@@ -146,104 +134,54 @@ public interface Option<T> extends ReadableCollection<T> {
         }
     }
 
-    /**
-     * Returns true, if this is {@code None}, otherwise false, if this is {@code Some}.
-     *
-     * <pre>{@code
-     * // Prints "false"
-     * System.out.println(Option.of(10).isEmpty());
-     *
-     * // Prints "true"
-     * System.out.println(Option.none().isEmpty());
-     * }</pre>
-     *
-     * @return true, if this {@code Option} is empty, false otherwise
-     */
+    /// Returns true, if this is `None`, otherwise false, if this is `Some`.
+    /// <pre>
+    /// `// Prints "false"System.out.println(Option.of(10).isEmpty());// Prints "true"System.out.println(Option.none().isEmpty());`</pre>
+    ///
+    /// @return true, if this `Option` is empty, false otherwise
     boolean isEmpty();
 
-    /**
-     * Returns this {@code Option} if it is nonempty, otherwise return the alternative.
-     *
-     * <pre>{@code
-     * Option<String> other = Option.of("Other");
-     *
-     * // = Some("Hello World")
-     * Option.of("Hello World").orElse(other);
-     *
-     * // = Some("Other")
-     * Option.none().orElse(other);
-     * }</pre>
-     *
-     * @param other An alternative {@code Option}
-     * @return this {@code Option} if it is nonempty, otherwise return the alternative.
-     */
+    /// Returns this `Option` if it is nonempty, otherwise return the alternative.
+    /// <pre>
+    /// `Option<String> other = Option.of("Other");// = Some("Hello World")Option.of("Hello World").orElse(other);// = Some("Other")Option.none().orElse(other);`</pre>
+    ///
+    /// @param other An alternative `Option`
+    /// @return this `Option` if it is nonempty, otherwise return the alternative.
     @SuppressWarnings("unchecked")
     Option<T> orElse(Option<? extends T> other);
 
-    /**
-     * Returns the value if this is a {@code Some} or the {@code other} value if this is a {@code None}.
-     * <p>
-     * Please note, that the other value is eagerly evaluated.
-     *
-     * <pre>{@code
-     * // Prints "Hello"
-     * System.out.println(Option.of("Hello").getOrElse("World"));
-     *
-     * // Prints "World"
-     * Option.none().getOrElse("World");
-     * }</pre>
-     *
-     * @param other An alternative value
-     * @return This value, if this Option is defined or the {@code other} value, if this Option is empty.
-     */
+    /// Returns the value if this is a `Some` or the `other` value if this is a `None`.
+    ///
+    /// Please note, that the other value is eagerly evaluated.
+    /// <pre>
+    /// `// Prints "Hello"System.out.println(Option.of("Hello").getOrElse("World"));// Prints "World"Option.none().getOrElse("World");`</pre>
+    ///
+    /// @param other An alternative value
+    /// @return This value, if this Option is defined or the `other` value, if this Option is empty.
     default @Nullable T getOrElse(@Nullable T other) {
         return isEmpty() ? other : get();
     }
 
-    /**
-     * Gets the value if this is a {@code Some} or throws if this is a {@code None}.
-     *
-     * <pre>{@code
-     * // Prints "57"
-     * System.out.println(Option.of(57).get());
-     *
-     * // Throws a NoSuchElementException
-     * Option.none().get();
-     * }</pre>
-     *
-     * @return the value
-     * @throws NoSuchElementException if this is a {@code None}.
-     */
-
+    /// Gets the value if this is a `Some` or throws if this is a `None`.
+    /// <pre>
+    /// `// Prints "57"System.out.println(Option.of(57).get());// Throws a NoSuchElementExceptionOption.none().get();`</pre>
+    ///
+    /// @return the value
+    /// @throws NoSuchElementException if this is a `None`.
     @Nullable T get();
-    /**
-     * Returns this {@code Option} if this is defined, or {@code null} if it is empty.
-     *
-     * <pre>{@code
-     * // = Some("Hello World")
-     * Option.of("Hello World").orNull();
-     *
-     * // = null
-     * Option.none().orNull();
-     * }</pre>
-     *
-     * @return this value if it is defined, or {@code null} if it is empty.
-     */
+
+    /// Returns this `Option` if this is defined, or `null` if it is empty.
+    /// <pre>
+    /// `// = Some("Hello World")Option.of("Hello World").orNull();// = nullOption.none().orNull();`</pre>
+    ///
+    /// @return this value if it is defined, or `null` if it is empty.
     @Nullable T orNull();
 
-    /**
-     * Returns this {@code Option} if this is defined, or throws a {@code NoSuchElementException} if it is empty.
-     *
-     * <pre>{@code
-     * // = Some("Hello World")
-     * Option.of("Hello World").orThrow();
-     *
-     * // = null
-     * Option.none().orThrow();
-     * }</pre>
-     *
-     * @return this value if it is defined, or {@code null} if it is empty.
-     */
+    /// Returns this `Option` if this is defined, or throws a `NoSuchElementException` if it is empty.
+    /// <pre>
+    /// `// = Some("Hello World")Option.of("Hello World").orThrow();// = nullOption.none().orThrow();`</pre>
+    ///
+    /// @return this value if it is defined, or `null` if it is empty.
     @Nullable T orThrow();
 
 }

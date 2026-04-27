@@ -14,10 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * TreeTraversalTest.
- *
-  */
+/// TreeTraversalTest.
 public class TreeTraversalTest {
 
     private static SimpleTreeNode<String> createTree() {

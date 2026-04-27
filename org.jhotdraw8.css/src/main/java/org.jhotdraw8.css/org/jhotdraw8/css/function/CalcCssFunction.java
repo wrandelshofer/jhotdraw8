@@ -17,37 +17,33 @@ import java.text.ParseException;
 import java.util.Deque;
 import java.util.function.Consumer;
 
-/**
- * Processes the {@code calc()} function.
- * <pre>
- * calc               = "calc(", calc-sum, ")" ;
- * calc-sum            = calc-product ,  { [ '+' | '-' ] , calc-product } ;
- * calc-product        = calc-value , { '*' , calc-value | '/' , calc-number-value } ;
- * calc-value          = number | dimension | percentage | '(' , calc-sum , ')' ;
- * calc-number-sum     = calc-number-product , { [ '+' | '-' ] calc-number-product } ;
- * calc-number-product = calc-number-value> , { '*' , calc-number-value | '/' , calc-number-value } ;
- * calc-number-value   = number | calc-number-sum ;
- * </pre>
- * In addition, white space is required on both sides of the '+' and '-' operators.
- * (The '*' and '/' operaters can be used without white space around them.)
- * References:
- * <dl>
- *     <dt>CSS Values and Units Module Level 4.
- *     Paragraph 10.1. Basic Arithmetic: calc()</dt>
- *     <dd><a href="https://drafts.csswg.org/css-values/#calc-func">csswg.org</a></dd>
- * </dl>
- * <dl>
- *     <dt>CSS Values and Units Module Level 4.
- *     Paragraph 10.8. Syntax</dt>
- *     <dd><a href="https://drafts.csswg.org/css-values/#calc-syntax">csswg.org</a></dd>
- * </dl>
- *
- * @param <T> the element type of the DOM
- */
+/// Processes the `calc()` function.
+/// <pre>
+/// calc               = "calc(", calc-sum, ")" ;
+/// calc-sum            = calc-product ,  { ['+'|'-'] , calc-product } ;
+/// calc-product        = calc-value , { '*' , calc-value | '/' , calc-number-value } ;
+/// calc-value          = number | dimension | percentage | '(' , calc-sum , ')' ;
+/// calc-number-sum     = calc-number-product , { ['+'|'-'] calc-number-product } ;
+/// calc-number-product = calc-number-value> , { '*' , calc-number-value | '/' , calc-number-value } ;
+/// calc-number-value   = number | calc-number-sum ;
+/// </pre>
+/// In addition, white space is required on both sides of the '+' and '-' operators.
+/// (The '*' and '/' operaters can be used without white space around them.)
+/// References:
+/// <dl>
+///     <dt>CSS Values and Units Module Level 4.
+///     Paragraph 10.1. Basic Arithmetic: calc()</dt>
+///     <dd><a href="https://drafts.csswg.org/css-values/#calc-func">csswg.org</a></dd>
+/// </dl>
+/// <dl>
+///     <dt>CSS Values and Units Module Level 4.
+///     Paragraph 10.8. Syntax</dt>
+///     <dd><a href="https://drafts.csswg.org/css-values/#calc-syntax">csswg.org</a></dd>
+/// </dl>
+///
+/// @param <T> the element type of the DOM
 public class CalcCssFunction<T> extends AbstractMathCssFunction<T> {
-    /**
-     * Function name.
-     */
+    /// Function name.
     public static final String NAME = "calc";
 
     public CalcCssFunction() {

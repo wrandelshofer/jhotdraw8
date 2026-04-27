@@ -11,21 +11,20 @@ import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * Data iterator over a CHAMP trie.
- * <p>
- * References:
- * <p>
- * This class has been derived from 'The Capsule Hash Trie Collections Library'.
- * <dl>
- *      <dt>The Capsule Hash Trie Collections Library.
- *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
- *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
- * </dl> *
- *
- * @param <K> the data type of the trie node
- * @param <E> the element type of the iterator
- */
+/// Data iterator over a CHAMP trie.
+///
+/// References:
+///
+/// This class has been derived from 'The Capsule Hash Trie Collections Library'.
+/// <dl>
+///      <dt>The Capsule Hash Trie Collections Library.
+///
+/// Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+///      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+/// </dl> *
+///
+/// @param <K> the data type of the trie node
+/// @param <E> the element type of the iterator
 public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> {
     private final Function<K, E> mappingFunction;
     private static final int MAX_DEPTH = 7;
@@ -36,10 +35,8 @@ public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> 
 
     private int currentStackLevel = -1;
 
-    /**
-     * Even indexes: node index
-     * Odd indexes: node length
-     */
+    /// Even indexes: node index
+    /// Odd indexes: node length
     private final int[] indexAndArity = new int[MAX_DEPTH * 2];
 
     @SuppressWarnings({"unchecked", "rawtypes", "RedundantSuppression"})

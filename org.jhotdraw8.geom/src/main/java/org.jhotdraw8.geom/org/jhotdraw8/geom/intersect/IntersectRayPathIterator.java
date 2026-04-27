@@ -24,28 +24,26 @@ public class IntersectRayPathIterator {
         return intersectRayPathIteratorEx(ao.getX(), ao.getY(), ad.getX(), ad.getY(), pit, maxT);
     }
 
-    /**
-     * Intersects the given ray with the given path iterator.
-     * <p>
-     * This method can produce the following {@link IntersectionStatus} codes:
-     * <dl>
-     *     <dt>{@link IntersectionStatus#INTERSECTION}</dt><dd>
-     *         The ray intersects with a segment of the path within the
-     *         given tolerance radius.
-     *     </dd>
-     *     <dt>{@link IntersectionStatus#NO_INTERSECTION}</dt><dd>
-     *         The ray does not intersect with a segment of the path.
-     *     </dd>
-     * </dl>
-     *
-     * @param aox  the x-coordinate of the origin of the ray
-     * @param aoy  the y-coordinate of the origin of the ray
-     * @param adx  the x-coordinate of the direction of the ray
-     * @param ady  the y-coordinate of the direction of the ray
-     * @param pit  the path iterator
-     * @param maxT the maximal time of the line (1 = entire line)
-     * @return the intersection result
-     */
+    /// Intersects the given ray with the given path iterator.
+    ///
+    /// This method can produce the following [IntersectionStatus] codes:
+    /// <dl>
+    ///     <dt>[IntersectionStatus#INTERSECTION]</dt><dd>
+    ///         The ray intersects with a segment of the path within the
+    ///         given tolerance radius.
+    ///     </dd>
+    ///     <dt>[IntersectionStatus#NO_INTERSECTION]</dt><dd>
+    ///         The ray does not intersect with a segment of the path.
+    ///     </dd>
+    /// </dl>
+    ///
+    /// @param aox  the x-coordinate of the origin of the ray
+    /// @param aoy  the y-coordinate of the origin of the ray
+    /// @param adx  the x-coordinate of the direction of the ray
+    /// @param ady  the y-coordinate of the direction of the ray
+    /// @param pit  the path iterator
+    /// @param maxT the maximal time of the line (1 = entire line)
+    /// @return the intersection result
     public static IntersectionResultEx intersectRayPathIteratorEx(double aox, double aoy, double adx, double ady, PathIterator pit, double maxT) {
         PersistentList<IntersectionPointEx> lineIntersections = VectorList.of();
         final double[] coords = new double[6];

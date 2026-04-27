@@ -21,19 +21,14 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
-/**
- * UngroupAction.
- *
- */
+/// UngroupAction.
 public class UngroupAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.ungroup";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public UngroupAction(DrawingEditor editor) {
         super(editor);
         Resources labels

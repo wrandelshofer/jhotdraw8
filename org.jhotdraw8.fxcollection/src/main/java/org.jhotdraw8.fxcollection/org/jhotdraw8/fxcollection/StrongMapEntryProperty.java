@@ -11,21 +11,17 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * This property is strongly bound to an entry in a map.
- *
- * @param <K> key type
- * @param <V> map value type
- * @param <T> entry value type
- */
+/// This property is strongly bound to an entry in a map.
+///
+/// @param <K> key type
+/// @param <V> map value type
+/// @param <T> entry value type
 public class StrongMapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         implements MapChangeListener<K, V> {
 
     private @Nullable K key;
     private @Nullable ObservableMap<K, V> map;
-    /**
-     * Here char is used as an uint16.
-     */
+    /// Here char is used as an uint16.
     private char changing;
 
     public StrongMapEntryProperty(ObservableMap<K, V> map, K key, Class<T> tClazz) {

@@ -5,9 +5,7 @@
 
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Defines color spaces and color conversion utilities.
- */
+/// Defines color spaces and color conversion utilities.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.color {

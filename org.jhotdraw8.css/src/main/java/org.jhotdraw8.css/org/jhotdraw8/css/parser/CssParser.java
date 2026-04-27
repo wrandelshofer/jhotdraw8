@@ -56,118 +56,113 @@ import java.util.function.Function;
 
 import static org.jhotdraw8.css.ast.TypeSelector.WITHOUT_NAMESPACE;
 
-/**
- * The {@code CssParser} processes a stream of characters into a
- * {@code Stylesheet} object.
- * <p>
- * The CSS Syntax Module Level 3 defines a grammar which is equivalent to the
- * following EBNF ISO/IEC 14977 productions:
- * <pre>
- * stylesheet_core = { S | CDO | CDC | qualified_rule | at_rule } ;
- *
- * rule_list    = { S | qualified_rule | at_rule} ;
- *
- * at_rule      = AT_KEYWORD , { component_value } , ( curly_block | ';' ) ;
- *
- * qualified_rule
- *              = { component_value } , curly_block ;
- *
- * declaration_list_core
- *              = { S } , ( [ declaration_core ] , [ ';' , declaration_list_core ]
- *                        | at_rule , declaration_list_core ,
- *                        ) ;
- *
- * declaration_core  = IDENT , { S } ,  ":", { component_value } , [ !important ] ;
- *
- * !important   = '!' , { S } , "important" , { S } ;
- *
- * component_value
- *              = ( preserved_token | curly_block | round_block | square_block
- *                | function_block ) ;
- *
- * curly_block  = '{' , { component_value } , '}' ;
- * round_block  = '(' , { component_value } , ')' ;
- * square_block = '[' , { component_value } , ']' ;
- * function_block
- *              = ROUND_BLOCK , { component_value } , ')' ;
- *
- * </pre> This parser parses the following syntax:
- * <pre>
- * stylesheet   = { S | CDO | CDC | qualified_rule | style_rule } ;
- *
- * operator     = ( '/' | ',' ) , { S } ;
- *
- * combinator   = ( '+' | '&gt;' | '~' ) , { S } ;
- *
- * unary_operator
- *              = ( '-' | '+' ) ;
- *
- * property     = IDENT , { S } ;
- *
- * style_rule   = [ selector_group ] , "{" , declaration_list , "}" ;
- *
- * selector_group
- *              = selector , { "," , { S }, selector } ;
- *
- * selector     = simple_selector ,
- *                { ( combinator , selector
- *                  | { S }, [ [ combinator ] , selector ]
- *                  )
- *                } ;
- *
- * simple_selector
- *              = universal_selector | type_selector | id_selector
- *                | class_selector | pseudoclass_selector | attribute_selector ;
- * universal_selector   = '*' ;
- * type_selector        = ns_aware_ident ;
- * id_selector          = HASH ;
- * class_selector       = "." , IDENT ;
- * pseudoclass_selector = ":" , IDENT ;
- * attribute_selector   = "[" , ns_aware_ident
- *                            , [ ( "=" | "~=" | "|=" ) , ( IDENT | STRING ) ],
- *                        "]" ;
- * ns_aware_ident      = IDENT
- *                      | '*' , '|', IDENT
- *                      | IDENT , '|', IDENT
- *                      ;
- *
- * declaration_list
- *              = { S } , [ declaration ] , [ ';' , declaration_list ] ;
- *
- * declaration  = IDENT , { S } ,  ":", { terms } ;
- *
- * terms        = { { S } , ( term | bracketedTerms ) } ;
- *
- * term         = any token - ( "]" | "}" | ";" | S ) ;
- *
- * bracketedTerms = "{", { { S } , term } , { S } , "}"
- *                | "[", { { S } , term } , { S } , "]";
- *
- *
- * function     = ROUND_BLOCK , { S } , expr , ')' , { S } ;
- * expr         = term , { [ operator ] , term } ;
- * </pre>
- * The parser interprets the following at rules:
- * <pre>
- * namespace_rule = "@namespace" , [ namespace_prefix ] , ( STRING | URI ) ;
- * namespace_prefix = IDENT ;
- * </pre>
- * <p>
- * References:
- * <dl>
- * <dt>CSS Syntax Module Level 3, Paragraph 5. Parsing</dt>
- * <dd><a href="https://drafts.csswg.org/css-namespaces/#declaration">w3.org</a></dd>
- *
- * <dt>CSS Namespaces Module Level 3, Paragraph 2 Declaring namespaces: the @namespace rulex</dt>
- * <dd><a href="https://drafts.csswg.org/css-namespaces/#declaration">w3.org</a></dd>
- *
- * <dt>W3C CSS2.2, Appendix G.1 Grammar of CSS 2.2</dt>
- * <dd><a href="https://www.w3.org/TR/2016/WD-CSS22-20160412/">w3.org</a></dd>
- * </dl>
- * <p>
- * FIXME The parser does not support the !important declaration.
- *
- */
+/// The `CssParser` processes a stream of characters into a
+/// `Stylesheet` object.
+///
+/// The CSS Syntax Module Level 3 defines a grammar which is equivalent to the
+/// following EBNF ISO/IEC 14977 productions:
+/// <pre>
+/// stylesheet_core = { S | CDO | CDC | qualified_rule | at_rule } ;
+///
+/// rule_list    = { S | qualified_rule | at_rule} ;
+///
+/// at_rule      = AT_KEYWORD , { component_value } , ( curly_block | ';' ) ;
+///
+/// qualified_rule
+///              = { component_value } , curly_block ;
+///
+/// declaration_list_core
+///              = { S } , ( [declaration_core] , [';',declaration_list_core]
+///                        | at_rule , declaration_list_core ,
+///                        ) ;
+///
+/// declaration_core  = IDENT , { S } ,  ":", { component_value } , [!important] ;
+///
+/// !important   = '!' , { S } , "important" , { S } ;
+///
+/// component_value
+///              = ( preserved_token | curly_block | round_block | square_block
+///                | function_block ) ;
+///
+/// curly_block  = '{' , { component_value } , '}' ;
+/// round_block  = '(' , { component_value } , ')' ;
+/// square_block = '[',{component_value},']' ;
+/// function_block
+///              = ROUND_BLOCK , { component_value } , ')' ;
+///
+/// </pre> This parser parses the following syntax:
+/// <pre>
+/// stylesheet   = { S | CDO | CDC | qualified_rule | style_rule } ;
+///
+/// operator     = ( '/' | ',' ) , { S } ;
+///
+/// combinator   = ( '+' | '&gt;' | '~' ) , { S } ;
+///
+/// unary_operator
+///              = ( '-' | '+' ) ;
+///
+/// property     = IDENT , { S } ;
+///
+/// style_rule   = [selector_group] , "{" , declaration_list , "}" ;
+///
+/// selector_group
+///              = selector , { "," , { S }, selector } ;
+///
+/// selector     = simple_selector ,
+///                { ( combinator , selector
+///                  | { S }, [ [combinator] , selector ]
+///                  )
+///                } ;
+///
+/// simple_selector
+///              = universal_selector | type_selector | id_selector
+///                | class_selector | pseudoclass_selector | attribute_selector ;
+/// universal_selector   = '*' ;
+/// type_selector        = ns_aware_ident ;
+/// id_selector          = HASH ;
+/// class_selector       = "." , IDENT ;
+/// pseudoclass_selector = ":" , IDENT ;
+/// attribute_selector   = "[" , ns_aware_ident
+///                            , [ ( "=" | "~=" | "|=" ) , ( IDENT | STRING ) ],
+///                        "]" ;
+/// ns_aware_ident      = IDENT
+///                      | '*' , '|', IDENT
+///                      | IDENT , '|', IDENT
+///                      ;
+///
+/// declaration_list
+///              = { S } , [declaration] , [';',declaration_list] ;
+///
+/// declaration  = IDENT , { S } ,  ":", { terms } ;
+///
+/// terms        = { { S } , ( term | bracketedTerms ) } ;
+///
+/// term         = any token - ( "]" | "}" | ";" | S ) ;
+///
+/// bracketedTerms = "{", { { S } , term } , { S } , "}"
+///                | "[",{{S},term},{S},"]";
+///
+///
+/// function     = ROUND_BLOCK , { S } , expr , ')' , { S } ;
+/// expr         = term , { [operator] , term } ;
+/// </pre>
+/// The parser interprets the following at rules:
+/// <pre>
+/// namespace_rule = "@namespace" , [namespace_prefix] , ( STRING | URI ) ;
+/// namespace_prefix = IDENT ;
+/// </pre>
+///
+/// References:
+/// <dl>
+/// <dt>CSS Syntax Module Level 3, Paragraph 5. Parsing</dt>
+/// <dd><a href="https://drafts.csswg.org/css-namespaces/#declaration">w3.org</a></dd>
+/// <dt>CSS Namespaces Module Level 3, Paragraph 2 Declaring namespaces: the @namespace rulex</dt>
+/// <dd><a href="https://drafts.csswg.org/css-namespaces/#declaration">w3.org</a></dd>
+/// <dt>W3C CSS2.2, Appendix G.1 Grammar of CSS 2.2</dt>
+/// <dd><a href="https://www.w3.org/TR/2016/WD-CSS22-20160412/">w3.org</a></dd>
+/// </dl>
+///
+/// FIXME The parser does not support the !important declaration.
 public class CssParser {
 
     public static final String ANY_NAMESPACE_PREFIX = "*";
@@ -183,9 +178,7 @@ public class CssParser {
 
     private boolean strict = false;
 
-    /**
-     * To reduce memory pressure, we deduplicate selectors.
-     */
+    /// To reduce memory pressure, we deduplicate selectors.
     private final SequencedMap<Selector, Selector> deduplicatedSelectors = new LinkedHashMap<>();
 
 
@@ -225,9 +218,7 @@ public class CssParser {
         return exceptions;
     }
 
-    /**
-     * Some special at-rules contain information for the parser.
-     */
+    /// Some special at-rules contain information for the parser.
     private void interpretAtRule(AtRule atRule, int position) {
         if (NAMESPACE_AT_RULE.equals(atRule.getAtKeyword())) {
             ListCssTokenizer tt = new ListCssTokenizer(atRule.getHeader());
@@ -461,24 +452,20 @@ public class CssParser {
 
     }
 
-    /**
-     * Parses a declaration list.
-     *
-     * @param css A stylesheet
-     * @return the declaration list
-     * @throws IOException if parsing fails
-     */
+    /// Parses a declaration list.
+    ///
+    /// @param css A stylesheet
+    /// @return the declaration list
+    /// @throws IOException if parsing fails
     public List<Declaration> parseDeclarationList(String css) throws IOException {
         return CssParser.this.parseDeclarationList(new StringReader(css));
     }
 
-    /**
-     * Parses a declaration list.
-     *
-     * @param css A stylesheet
-     * @return the declaration list
-     * @throws IOException if parsing fails
-     */
+    /// Parses a declaration list.
+    ///
+    /// @param css A stylesheet
+    /// @return the declaration list
+    /// @throws IOException if parsing fails
     public List<Declaration> parseDeclarationList(Reader css) throws IOException {
         exceptions = new ArrayList<>();
         CssTokenizer tt = new StreamCssTokenizer(css, null);
@@ -736,40 +723,34 @@ public class CssParser {
         return new StyleRule(sourceLocator, selectorGroup, declarations);
     }
 
-    /**
-     * Parses a given stylesheet from the specified URI.
-     *
-     * @param stylesheetUri  the URI of the stylesheet (must be known)
-     * @param stylesheetHome base URI (if it exists)
-     * @return the parsed stylesheet
-     * @throws IOException on failure
-     */
+    /// Parses a given stylesheet from the specified URI.
+    ///
+    /// @param stylesheetUri  the URI of the stylesheet (must be known)
+    /// @param stylesheetHome base URI (if it exists)
+    /// @return the parsed stylesheet
+    /// @throws IOException on failure
     public Stylesheet parseStylesheet(URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         try (Reader in = new BufferedReader(new InputStreamReader(stylesheetUri.toURL().openConnection().getInputStream(), StandardCharsets.UTF_8))) {
             return parseStylesheet(in, stylesheetUri, stylesheetHome);
         }
     }
 
-    /**
-     * Parses a given stylesheet from the specified String and document home.
-     *
-     * @param css            the uri of the stylesheet file
-     * @param stylesheetUri  the URI of the stylesheet (if known)
-     * @param stylesheetHome base URI (if it exists)
-     * @return the parsed stylesheet
-     * @throws IOException on failure
-     */
+    /// Parses a given stylesheet from the specified String and document home.
+    ///
+    /// @param css            the uri of the stylesheet file
+    /// @param stylesheetUri  the URI of the stylesheet (if known)
+    /// @param stylesheetHome base URI (if it exists)
+    /// @return the parsed stylesheet
+    /// @throws IOException on failure
     public Stylesheet parseStylesheet(String css, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         return parseStylesheet(new StringReader(css), stylesheetUri, stylesheetHome);
     }
 
-    /**
-     * Parses a given selector from the specified String and document home.
-     *
-     * @param css a literal selector String
-     * @return the parsed selector
-     * @throws ParseException on failure
-     */
+    /// Parses a given selector from the specified String and document home.
+    ///
+    /// @param css a literal selector String
+    /// @return the parsed selector
+    /// @throws ParseException on failure
     public Selector parseSelector(String css) throws ParseException {
         try {
             return parseSelector(new StreamCssTokenizer(new StringReader(css)));
@@ -778,30 +759,26 @@ public class CssParser {
         }
     }
 
-    /**
-     * Parses a given stylesheet from the specified String and document home.
-     *
-     * @param css            the uri of the stylesheet file
-     * @param stylesheetUri  the URI of the stylesheet (if known)
-     * @param stylesheetHome base URI (if it exists)
-     * @return the parsed stylesheet
-     * @throws IOException on failure
-     */
+    /// Parses a given stylesheet from the specified String and document home.
+    ///
+    /// @param css            the uri of the stylesheet file
+    /// @param stylesheetUri  the URI of the stylesheet (if known)
+    /// @param stylesheetHome base URI (if it exists)
+    /// @return the parsed stylesheet
+    /// @throws IOException on failure
     public Stylesheet parseStylesheet(Reader css, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         exceptions = new ArrayList<>();
         CssTokenizer tt = new StreamCssTokenizer(css, stylesheetUri);
         return parseStylesheet(tt, stylesheetUri, stylesheetHome);
     }
 
-    /**
-     * Parses a given stylesheet from the specified String and document home.
-     *
-     * @param tt             the tokenier
-     * @param stylesheetUri  the URI of the stylesheet (if known)
-     * @param stylesheetHome base URI (if it exists)
-     * @return the parsed stylesheet
-     * @throws IOException on failure
-     */
+    /// Parses a given stylesheet from the specified String and document home.
+    ///
+    /// @param tt             the tokenier
+    /// @param stylesheetUri  the URI of the stylesheet (if known)
+    /// @param stylesheetHome base URI (if it exists)
+    /// @return the parsed stylesheet
+    /// @throws IOException on failure
     public Stylesheet parseStylesheet(CssTokenizer tt, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         setStylesheetUri(stylesheetUri);
         setStylesheetHome(stylesheetHome);
@@ -878,12 +855,10 @@ public class CssParser {
         return terms;
     }
 
-    /**
-     * Resolves an URL with the DocumentHome URL of this parser.
-     *
-     * @param relativeUri an URL string
-     * @return the resolved URL
-     */
+    /// Resolves an URL with the DocumentHome URL of this parser.
+    ///
+    /// @param relativeUri an URL string
+    /// @return the resolved URL
     private String absolutizeUri(String relativeUri) {
         if (stylesheetHome == null) {
             return relativeUri;
@@ -895,19 +870,17 @@ public class CssParser {
         }
     }
 
-    /**
-     * Resolves the namespace prefix.
-     * <p>
-     * If no default namespace is declared, then names without a namespace
-     * prefix match all namespaces.
-     * <p>
-     * See <a href="https://drafts.csswg.org/selectors/#type-nmsp">drafts.csswg.org</a>
-     *
-     * @param namespacePrefix a namespace prefix
-     * @param tt              the tokenizer
-     * @return a namespace URL or null
-     * @throws ParseException if the namespace prefix is not declared.
-     */
+    /// Resolves the namespace prefix.
+    ///
+    /// If no default namespace is declared, then names without a namespace
+    /// prefix match all namespaces.
+    ///
+    /// See <a href="https://drafts.csswg.org/selectors/#type-nmsp">drafts.csswg.org</a>
+    ///
+    /// @param namespacePrefix a namespace prefix
+    /// @param tt              the tokenizer
+    /// @return a namespace URL or null
+    /// @throws ParseException if the namespace prefix is not declared.
     private @Nullable String resolveNamespacePrefix(@Nullable String namespacePrefix, CssTokenizer tt) throws ParseException {
         return switch (namespacePrefix) {
             case null -> TypeSelector.ANY_NAMESPACE;// null means without a namespace, but we match it to any namespace
@@ -959,20 +932,16 @@ public class CssParser {
         this.uriResolver = uriResolver;
     }
 
-    /**
-     * Return strict parsing mode.
-     *
-     * @return true if the parser is in strict mode.
-     */
+    /// Return strict parsing mode.
+    ///
+    /// @return true if the parser is in strict mode.
     public boolean isStrict() {
         return strict;
     }
 
-    /**
-     * Sets strict parsing mode.
-     *
-     * @param strict true to parse in strict mode, the default value is false.
-     */
+    /// Sets strict parsing mode.
+    ///
+    /// @param strict true to parse in strict mode, the default value is false.
     public void setStrict(boolean strict) {
         this.strict = strict;
     }

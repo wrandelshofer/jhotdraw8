@@ -29,10 +29,7 @@ import javafx.scene.transform.Translate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TransformFlattener.
- *
- */
+/// TransformFlattener.
 public class TransformFlattener {
 
     public TransformFlattener() {
@@ -53,16 +50,13 @@ public class TransformFlattener {
 
     }
 
-    /**
-     * Removes the translate transforms of a node and clears the translateX,
-     * translateY properties.
-     * <p>
-     * If the node has a clip - flattens the transforms of the clip.
-     *
-     * @param node
-     * @return Returns the summed up translate of the node.
-     */
-
+    /// Removes the translate transforms of a node and clears the translateX,
+    /// translateY properties.
+    ///
+    /// If the node has a clip - flattens the transforms of the clip.
+    ///
+    /// @param node
+    /// @return Returns the summed up translate of the node.
     private Translate flattenTranslateTransforms(Node node) {
         Translate translate = new Translate(node.getTranslateX(), node.getTranslateY());
         for (Transform t : node.getTransforms()) {
@@ -84,12 +78,10 @@ public class TransformFlattener {
         return translate;
     }
 
-    /**
-     * Tries to get rid of Translation transforms on a Node, by applying it to
-     * descendants of the node or by adjusting the coordinates of the node.
-     *
-     * @param node a node
-     */
+    /// Tries to get rid of Translation transforms on a Node, by applying it to
+    /// descendants of the node or by adjusting the coordinates of the node.
+    ///
+    /// @param node a node
     public void flattenTranslates(Node node) {
         if (node instanceof Parent) {
             flattenTranslatesInParent((Parent) node);

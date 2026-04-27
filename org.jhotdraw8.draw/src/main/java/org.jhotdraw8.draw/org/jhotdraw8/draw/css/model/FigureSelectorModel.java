@@ -43,16 +43,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-/**
- * FigureSelectorModel.
- */
+/// FigureSelectorModel.
 public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     public static final String JAVA_CLASS_NAMESPACE = "http://java.net";
     private final ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadableStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
-    /**
-     * Maps an attribute name to a key.
-     */
+    /// Maps an attribute name to a key.
     private final Map<Class<?>, Map<QualifiedName, WritableStyleableMapAccessor<?>>> nameToKeyMap = new ConcurrentHashMap<>();
     private final Map<Class<?>, Map<QualifiedName, ReadableStyleableMapAccessor<?>>> nameToReadableKeyMap = new ConcurrentHashMap<>();
 
@@ -433,12 +429,10 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return false;
     }
 
-    /**
-     * FIXME All selector models must support the keywords "initial","inherit","revert","unset".
-     *
-     * @param value the token
-     * @return true if the value is "initial".
-     */
+    /// FIXME All selector models must support the keywords "initial","inherit","revert","unset".
+    ///
+    /// @param value the token
+    /// @return true if the value is "initial".
     protected boolean isInitialRevertOrUnset(@Nullable ReadableList<CssToken> value) {
         if (value != null) {
             boolean isInitial = false;

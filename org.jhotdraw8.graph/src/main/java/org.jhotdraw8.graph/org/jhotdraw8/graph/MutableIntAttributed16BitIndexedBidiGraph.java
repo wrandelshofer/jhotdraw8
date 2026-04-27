@@ -19,69 +19,55 @@ import java.util.Objects;
 
 import static java.lang.Math.max;
 
-/**
- * A mutable indexed bi-directional graph.
- * <p>
- * Supports up to {@code 2^16 - 1} vertices.
- * <p>
- * This implementation uses large contiguous arrays. Each row occupies
- * {@code maxArity + 1} elements in the array for the arrows.
- * <p>
- * If the arity of the vertices is unevenly distributed, a dfs- or
- * bfs-search is likely to encounter a different cash line or page for
- * every vertex.
- * <p>
- * XXX delete me, this representation is inefficient
- */
+/// A mutable indexed bi-directional graph.
+///
+/// Supports up to `2^16 - 1` vertices.
+///
+/// This implementation uses large contiguous arrays. Each row occupies
+/// `maxArity + 1` elements in the array for the arrows.
+///
+/// If the arity of the vertices is unevenly distributed, a dfs- or
+/// bfs-search is likely to encounter a different cash line or page for
+/// every vertex.
+///
+/// XXX delete me, this representation is inefficient
 public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexedBidiGraph
         , IntAttributedIndexedBidiGraph {
 
     private final int maxArity;
     private final int stride;
-    /**
-     * The array contains {@code stride} elements for each vertex.
-     * <pre>
-     * [ vertexData0, vertexData1, arrowCount, vertexIndex... ]
-     * </pre>
-     */
+    /// The array contains `stride` elements for each vertex.
+    /// <pre>
+    /// [vertexData0,vertexData1,arrowCount,vertexIndex...]
+    /// </pre>
     private short[] prev;
-    /**
-     * The array contains {@code stride} elements for each vertex.
-     * <pre>
-     * [ vertexData0, vertexData1, arrowCount, vertexIndex... ]
-     * </pre>
-     */
+    /// The array contains `stride` elements for each vertex.
+    /// <pre>
+    /// [vertexData0,vertexData1,arrowCount,vertexIndex...]
+    /// </pre>
     private short[] next;
 
-    /**
-     * The array contains {@code maxArity} elements for each vertex.
-     * <pre>
-     * [ arrowData... ]
-     * </pre>
-     */
+    /// The array contains `maxArity` elements for each vertex.
+    /// <pre>
+    /// [arrowData...]
+    /// </pre>
     private int[] nextArrow;
-    /**
-     * The array contains {@code maxArity} elements for each vertex.
-     * <pre>
-     * [ arrowData... ]
-     * </pre>
-     */
+    /// The array contains `maxArity` elements for each vertex.
+    /// <pre>
+    /// [arrowData...]
+    /// </pre>
     private int[] prevArrow;
 
     private int vertexCount;
     private int arrowCount;
-    /**
-     * Number of array elements used to store the vertex data
-     * in the {@link #prev} and {@link #next} arrays.
-     */
+    /// Number of array elements used to store the vertex data
+    /// in the [#prev] and [#next] arrays.
     private static final int VERTEX_DATA_SIZE = 2;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param vertexCapacity the initial vertex capacity
-     * @param maxArity       the maximal number of arrows per vertex
-     */
+    /// Creates a new instance.
+    ///
+    /// @param vertexCapacity the initial vertex capacity
+    /// @param maxArity       the maximal number of arrows per vertex
     public MutableIntAttributed16BitIndexedBidiGraph(final int vertexCapacity, final int maxArity) {
         if (vertexCapacity < 0) {
             throw new IllegalArgumentException("vertexCount=" + vertexCapacity);
@@ -98,9 +84,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         this.prevArrow = new int[vertexCapacity * maxArity];
     }
 
-    /**
-     * Removes all vertices and all arrows.
-     */
+    /// Removes all vertices and all arrows.
     public void clear() {
         vertexCount = 0;
         arrowCount = 0;
@@ -137,18 +121,16 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         arrowCount++;
     }
 
-    /**
-     * Adds {@code addend} to every vertex index that is greater or
-     * equal {@code vidx}.
-     *
-     * @param src    the source arrow array
-     * @param vsrc   the vertex index in the source
-     * @param dest   the destination source arrow
-     * @param vdst   the vertex index in the destination
-     * @param length the number of vertices to change
-     * @param vidx   the vertex index
-     * @param addend the number to add
-     */
+    /// Adds `addend` to every vertex index that is greater or
+    /// equal `vidx`.
+    ///
+    /// @param src    the source arrow array
+    /// @param vsrc   the vertex index in the source
+    /// @param dest   the destination source arrow
+    /// @param vdst   the vertex index in the destination
+    /// @param length the number of vertices to change
+    /// @param vidx   the vertex index
+    /// @param addend the number to add
     private void addToVectorIndices(final short[] src, final int vsrc, final short[] dest, final int vdst, final int length, final int vidx, final int addend) {
         int srcOffset = vsrc * stride + VERTEX_DATA_SIZE;
         int dstOffset = vdst * stride + VERTEX_DATA_SIZE;
@@ -390,12 +372,10 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         private final AddToIntSet visited;
         private final boolean dfs;
 
-        /**
-         * @param array  the array
-         * @param stride the stride
-         * @param offset
-         * @param dfs
-         */
+        /// @param array  the array
+        /// @param stride the stride
+        /// @param offset
+        /// @param dfs
         protected VertexOfShortSpliterator(final int root, final short[] array, final int stride,
                                            final int offset, final AddToIntSet visited, boolean dfs) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
@@ -437,12 +417,10 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         private final AddToIntSet visited;
         private final boolean dfs;
 
-        /**
-         * @param array  the array
-         * @param stride the stride
-         * @param offset the offset
-         * @param dfs
-         */
+        /// @param array  the array
+        /// @param stride the stride
+        /// @param offset the offset
+        /// @param dfs
         protected VertexEnumeratorOfLongShortSpliterator(final int root, final short[] array, final int stride,
                                                          final int offset, final AddToIntSet visited, boolean dfs) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
@@ -477,12 +455,10 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
     }
 
 
-    /**
-     * Sets the vertex data for the specified vertex.
-     *
-     * @param vidx the index of the vertex
-     * @param data the vertex data
-     */
+    /// Sets the vertex data for the specified vertex.
+    ///
+    /// @param vidx the index of the vertex
+    /// @param data the vertex data
     public void setVertexAsInt(final int vidx, final int data) {
         final int offset = vidx * stride;
         prev[offset] = next[offset] = (short) (data >>> 16);
@@ -514,13 +490,11 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         return (prev[offset] << 16) | prev[offset + 1];
     }
 
-    /**
-     * Returns a breadth first spliterator that starts at the specified vertex.
-     *
-     * @param vidx the index of the vertex
-     * @param dfs  whether to search depth-first instead of breadth-first
-     * @return the spliterator
-     */
+    /// Returns a breadth first spliterator that starts at the specified vertex.
+    ///
+    /// @param vidx the index of the vertex
+    /// @param dfs  whether to search depth-first instead of breadth-first
+    /// @return the spliterator
     public Enumerator.OfInt seachNextVerticesAsInt(final int vidx, boolean dfs) {
         return seachNextVerticesAsInt(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
@@ -530,14 +504,12 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
                 VERTEX_DATA_SIZE, visited, dfs);
     }
 
-    /**
-     * Returns a backward breadth first spliterator that starts at the specified
-     * vertex.
-     *
-     * @param vidx the index of the vertex
-     * @param dfs
-     * @return the spliterator
-     */
+    /// Returns a backward breadth first spliterator that starts at the specified
+    /// vertex.
+    ///
+    /// @param vidx the index of the vertex
+    /// @param dfs
+    /// @return the spliterator
     public Enumerator.OfInt searchPrevVerticesAsInt(final int vidx, boolean dfs) {
         return searchPrevVerticesAsInt(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
@@ -547,14 +519,12 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
                 VERTEX_DATA_SIZE, visited, dfs);
     }
 
-    /**
-     * Returns a breadth first spliterator that starts at the specified vertex.
-     *
-     * @param vidx the index of the vertex
-     * @param dfs
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
+    /// Returns a breadth first spliterator that starts at the specified vertex.
+    ///
+    /// @param vidx the index of the vertex
+    /// @param dfs
+    /// @return the spliterator contains the vertex data in the 32 high-bits
+    /// and the vertex index in the 32 low-bits of the long.
     public Enumerator.OfLong searchNextVerticesWithVertexData(final int vidx, boolean dfs) {
         return searchNextVerticesWithVertexData(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
@@ -564,15 +534,13 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
                 0, visited, dfs);
     }
 
-    /**
-     * Returns a backward breadth first spliterator that starts at the specified
-     * vertex.
-     *
-     * @param vidx the index of the vertex
-     * @param dfs
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
+    /// Returns a backward breadth first spliterator that starts at the specified
+    /// vertex.
+    ///
+    /// @param vidx the index of the vertex
+    /// @param dfs
+    /// @return the spliterator contains the vertex data in the 32 high-bits
+    /// and the vertex index in the 32 low-bits of the long.
     public Enumerator.OfLong searchPrevVerticesWithVertexData(final int vidx, boolean dfs) {
         return searchPrevVerticesWithVertexData(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }

@@ -11,35 +11,28 @@ import org.jhotdraw8.draw.css.converter.Dimension2DCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
-/**
- * Non-null CssDimension2DStyleableKey.
- *
- */
+/// Non-null CssDimension2DStyleableKey.
 public class CssDimension2DStyleableKey extends AbstractStyleableKey<CssDimension2D>
         implements WritableStyleableMapAccessor<CssDimension2D>, NonNullKey<CssDimension2D> {
 
 
     private final Converter<CssDimension2D> converter;
 
-    /**
-     * Creates a new instance with the specified name and with 0,0 as the
-     * default value.
-     *
-     * @param name The name of the key.
-     */
+    /// Creates a new instance with the specified name and with 0,0 as the
+    /// default value.
+    ///
+    /// @param name The name of the key.
     public CssDimension2DStyleableKey(String name) {
         this(name, CssDimension2D.ZERO);
     }
 
 
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise
-     *                     specify them in arrow brackets.
-     * @param defaultValue The default value.
-     */
+    /// Creates a new instance with the specified name, type token class, default
+    /// value, and allowing or disallowing null values.
+    ///
+    /// @param key          The name of the name. type parameters are given. Otherwise
+    ///                     specify them in arrow brackets.
+    /// @param defaultValue The default value.
     public CssDimension2DStyleableKey(String key, CssDimension2D defaultValue) {
         this(key, defaultValue, new Dimension2DCssConverter(false));
     }

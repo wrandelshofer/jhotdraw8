@@ -10,9 +10,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Deque;
 import java.util.NoSuchElementException;
 
-/**
- * Interface for a {@link Deque} with a primitive integer data elements.
- */
+/// Interface for a [Deque] with a primitive integer data elements.
 public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     @Override
     default boolean add(Integer integer) {
@@ -25,9 +23,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
         addFirstAsInt(integer);
     }
 
-    /**
-     * @see Deque#addFirst(Object)
-     */
+    /// @see Deque#addFirst(Object)
     @Override
     void addFirstAsInt(int e);
 
@@ -36,9 +32,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
         addLastAsInt(integer);
     }
 
-    /**
-     * @see Deque#addLast(Object)
-     */
+    /// @see Deque#addLast(Object)
     @Override
     void addLastAsInt(int e);
 
@@ -56,9 +50,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
         return getFirstAsInt();
     }
 
-    /**
-     * @see Deque#getFirst()
-     */
+    /// @see Deque#getFirst()
     @Override
     int getFirstAsInt();
 
@@ -67,9 +59,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
         return getLastAsInt();
     }
 
-    /**
-     * @see Deque#getLast()
-     */
+    /// @see Deque#getLast()
     @Override
     int getLastAsInt();
 
@@ -144,9 +134,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
         return removeFirstAsInt();
     }
 
-    /**
-     * @see Deque#pop()
-     */
+    /// @see Deque#pop()
     default int popAsInt() {
         return removeFirstAsInt();
     }
@@ -156,9 +144,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
         addFirstAsInt(integer);
     }
 
-    /**
-     * @see Deque#push(Object)
-     */
+    /// @see Deque#push(Object)
     default void pushAsInt(int e) {
         addFirstAsInt(e);
     }
@@ -181,9 +167,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
         return removeFirstAsInt();
     }
 
-    /**
-     * @see Deque#removeFirst()
-     */
+    /// @see Deque#removeFirst()
     @Override
     int removeFirstAsInt();
 
@@ -195,9 +179,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
         return false;
     }
 
-    /**
-     * @see Deque#removeFirstOccurrence(Object)
-     */
+    /// @see Deque#removeFirstOccurrence(Object)
     boolean removeFirstOccurrenceAsInt(int o);
 
     @Override
@@ -205,9 +187,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
         return removeLastAsInt();
     }
 
-    /**
-     * @see Deque#removeLast()
-     */
+    /// @see Deque#removeLast()
     @Override
     int removeLastAsInt();
 
@@ -219,8 +199,6 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
         return false;
     }
 
-    /**
-     * @see Deque#removeLastOccurrence(Object)
-     */
+    /// @see Deque#removeLastOccurrence(Object)
     boolean removeLastOccurrenceAsInt(int o);
 }

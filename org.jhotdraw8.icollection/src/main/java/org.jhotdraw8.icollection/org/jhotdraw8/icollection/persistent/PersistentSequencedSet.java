@@ -11,15 +11,13 @@ import org.jspecify.annotations.Nullable;
 import java.util.NoSuchElementException;
 import java.util.SequencedSet;
 
-/**
- * An interface to an persistent set with a well-defined iteration order; the
- * implementation guarantees that the state of the collection does not change.
- * <p>
- * An interface to an persistent sequenced set provides methods for creating a new persistent sequenced set with
- * added or removed elements, without changing the original persistent sequenced set.
- *
- * @param <E> the element type
- */
+/// An interface to an persistent set with a well-defined iteration order; the
+/// implementation guarantees that the state of the collection does not change.
+///
+/// An interface to an persistent sequenced set provides methods for creating a new persistent sequenced set with
+/// added or removed elements, without changing the original persistent sequenced set.
+///
+/// @param <E> the element type
 public interface PersistentSequencedSet<E> extends PersistentSet<E>, ReadableSequencedSet<E>, PersistentSequencedCollection<E> {
     @Override
     PersistentSequencedSet<E> add(E element);
@@ -46,25 +44,21 @@ public interface PersistentSequencedSet<E> extends PersistentSet<E>, ReadableSeq
         return (PersistentSequencedSet<E>) PersistentSet.super.removeAll(c);
     }
 
-    /**
-     * Returns a copy of this set that contains all elements
-     * of this set except the first.
-     *
-     * @return a new set instance with the first element removed
-     * @throws NoSuchElementException if this set is empty
-     */
+    /// Returns a copy of this set that contains all elements
+    /// of this set except the first.
+    ///
+    /// @return a new set instance with the first element removed
+    /// @throws NoSuchElementException if this set is empty
     @Override
     default PersistentSequencedSet<E> removeFirst() {
         return remove(getFirst());
     }
 
-    /**
-     * Returns a copy of this set that contains all elements
-     * of this set except the last.
-     *
-     * @return a new set instance with the last element removed
-     * @throws NoSuchElementException if this set is empty
-     */
+    /// Returns a copy of this set that contains all elements
+    /// of this set except the last.
+    ///
+    /// @return a new set instance with the last element removed
+    /// @throws NoSuchElementException if this set is empty
     @Override
     default PersistentSequencedSet<E> removeLast() {
         return remove(getLast());
@@ -78,16 +72,14 @@ public interface PersistentSequencedSet<E> extends PersistentSet<E>, ReadableSeq
     @Override
     SequencedSet<E> toMutable();
 
-    /**
-     * Returns a reversed copy of this set.
-     * <p>
-     * This operation may be implemented in O(N).
-     * <p>
-     * Use {@link #readableReversed()} if you only
-     * need to iterate in the reversed sequence over this set.
-     *
-     * @return a reversed copy of this set.
-     */
+    /// Returns a reversed copy of this set.
+    ///
+    /// This operation may be implemented in O(N).
+    ///
+    /// Use [#readableReversed()] if you only
+    /// need to iterate in the reversed sequence over this set.
+    ///
+    /// @return a reversed copy of this set.
     default PersistentSequencedSet<E> reverse() {
         if (size() < 2) {
             return this;

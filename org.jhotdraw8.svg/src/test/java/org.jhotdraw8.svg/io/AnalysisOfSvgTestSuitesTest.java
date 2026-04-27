@@ -53,26 +53,20 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * The tests in this class are disabled. They are used for analysing tests
- * from the tests suites. The tests refer to external folders which are
- * not shipped with JHotDraw 8.
- */
+/// The tests in this class are disabled. They are used for analysing tests
+/// from the tests suites. The tests refer to external folders which are
+/// not shipped with JHotDraw 8.
 public class AnalysisOfSvgTestSuitesTest {
 
-    /**
-     * Set this constant to the path of the folder into which you checked
-     * out the web-platform-tests/wpt repository from github.
-     * <p>
-     * <a href="https://github.com/web-platform-tests/wpt">github</a>
-     */
+    /// Set this constant to the path of the folder into which you checked
+    /// out the web-platform-tests/wpt repository from github.
+    ///
+    /// <a href="https://github.com/web-platform-tests/wpt">github</a>
     private static final String WPT_PATH = "/Users/Shared/Developer/SVG/web-platform-tests/github/wpt";
-    /**
-     * Set this constant to the path of the folder into which you checked
-     * out the SVG Tiny 1.2 test suite.
-     * <p>
-     * <a href="https://dev.w3.org/cvsweb/SVG/profiles/1.2T/test/archives/W3C_SVG_12_TinyTestSuite.tar.gz">dev.w3.org</a>
-     */
+    /// Set this constant to the path of the folder into which you checked
+    /// out the SVG Tiny 1.2 test suite.
+    ///
+    /// <a href="https://dev.w3.org/cvsweb/SVG/profiles/1.2T/test/archives/W3C_SVG_12_TinyTestSuite.tar.gz">dev.w3.org</a>
     private static final String W3C_SVG_12_TINY_TEST_SUITE = "/Users/Shared/Developer/SVG/W3C_SVG_12_TinyTestSuite";
 
     private static final boolean INTERACTIVE = true;
@@ -91,23 +85,19 @@ public class AnalysisOfSvgTestSuitesTest {
         }
     }
 
-    /**
-     * Tests the {@link FigureSvgTinyReader} against the {@code W3C SVG Tiny 1.2
-     * } test suite.
-     * <p>
-     * The test suite contains of test files and rendered reference files.
-     * A rendering of a test file must match the rendered reference file.
-     * <p>
-     * The test files are contained in the folder "svggen" and their filename
-     * ends with ".svg".
-     * <p>
-     * The corresponding reference files are contained in the folder "png"
-     * and their filename is the same as the test file but ends with ".png".
-     * <p>
-     *
-     * @return
-     * @throws IOException
-     */
+    /// Tests the [FigureSvgTinyReader] against the `W3C SVG Tiny 1.2` test suite.
+    ///
+    /// The test suite contains of test files and rendered reference files.
+    /// A rendering of a test file must match the rendered reference file.
+    ///
+    /// The test files are contained in the folder "svggen" and their filename
+    /// ends with ".svg".
+    ///
+    /// The corresponding reference files are contained in the folder "png"
+    /// and their filename is the same as the test file but ends with ".png".
+    ///
+    /// @return
+    /// @throws IOException
     @TestFactory
     @Disabled
     public Stream<DynamicTest> dynamicTestsW3cSvgTiny12TestSuite() throws IOException {
@@ -147,16 +137,14 @@ public class AnalysisOfSvgTestSuitesTest {
     }
 
 
-    /**
-     * Tests the {@link FigureSvgTinyReader} against the {@code web-platform}
-     * test suite.
-     * <p>
-     * The test suite contains of test files and reference files.
-     * A rendering of a test file must match the rendering of a golden file.
-     * <p>
-     * If a file name ends with "-ref.svg" then it is a reference file.
-     * The corresponding test file has the same file name without "-ref".
-     */
+    /// Tests the [FigureSvgTinyReader] against the `web-platform`
+    /// test suite.
+    ///
+    /// The test suite contains of test files and reference files.
+    /// A rendering of a test file must match the rendering of a golden file.
+    ///
+    /// If a file name ends with "-ref.svg" then it is a reference file.
+    /// The corresponding test file has the same file name without "-ref".
     @Disabled
     @TestFactory
     public Stream<DynamicTest> dynamicTestsWebPlatformTests() throws IOException {

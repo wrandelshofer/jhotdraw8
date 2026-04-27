@@ -16,10 +16,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * CssSize2DStyleableMapAccessor.
- *
- */
+/// CssSize2DStyleableMapAccessor.
 public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssDimension2D> {
 
 
@@ -28,13 +25,11 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
     private final NonNullMapAccessor<CssSize> widthKey;
     private final NonNullMapAccessor<CssSize> heightKey;
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name      the name of the accessor
-     * @param widthKey  the key for the x coordinate of the point
-     * @param heightKey the key for the y coordinate of the point
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name      the name of the accessor
+    /// @param widthKey  the key for the x coordinate of the point
+    /// @param heightKey the key for the y coordinate of the point
     public PaperSizeStyleableMapAccessor(String name, NonNullMapAccessor<CssSize> widthKey, NonNullMapAccessor<CssSize> heightKey) {
         super(name, CssDimension2D.class, new MapAccessor<?>[]{widthKey, heightKey}, new CssDimension2D(widthKey.getDefaultValue(), heightKey.getDefaultValue()));
 

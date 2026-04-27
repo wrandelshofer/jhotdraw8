@@ -17,11 +17,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-/**
- * Provides a {@link Set} facade to a set of {@code Set} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [Set] facade to a set of `Set` functions.
+///
+/// @param <E> the element type
 public class SetFacade<E> extends AbstractSet<E> implements ReadableSet<E> {
     protected final Supplier<Iterator<E>> iteratorFunction;
     protected final Supplier<Spliterator<E>> spliteratorFunction;

@@ -10,10 +10,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountedCompleter;
 import java.util.function.Consumer;
 
-/**
- * A fork-join task that processes a range of integers from {@code lo} to {@code hi} (exclusive)
- * in chunks of up to {@code chunkSize}.
- */
+/// A fork-join task that processes a range of integers from `lo` to `hi` (exclusive)
+/// in chunks of up to `chunkSize`.
 @SuppressWarnings({"serial", "RedundantSuppression"})
 public class TileTask extends CountedCompleter<Void> {
     private final Tile tile;

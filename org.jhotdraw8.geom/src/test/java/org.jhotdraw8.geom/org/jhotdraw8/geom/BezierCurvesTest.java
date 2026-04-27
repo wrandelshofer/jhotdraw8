@@ -58,14 +58,12 @@ public class BezierCurvesTest {
         );
     }
 
-    /**
-     * References:
-     * <dl>
-     *    <dt>Zhiyi Zhang, Min Chen , Xian Zhang, Zepeng Wang.
-     *    Analysis of Inflection Points for Planar Cubic Bé́zier Curve</dt>
-     *    <dd><a href="https://cie.nwsuaf.edu.cn/docs/20170614173651207557.pdf">cie.nwsuaf.edu.cn</a></dd>
-     * </dl>
-     */
+    /// References:
+    /// <dl>
+    ///    <dt>Zhiyi Zhang, Min Chen , Xian Zhang, Zepeng Wang.
+    ///    Analysis of Inflection Points for Planar Cubic Bé́zier Curve</dt>
+    ///    <dd><a href="https://cie.nwsuaf.edu.cn/docs/20170614173651207557.pdf">cie.nwsuaf.edu.cn</a></dd>
+    /// </dl>
     @TestFactory
     public List<DynamicTest> dynamicTestsInflectionsPaper() {
         return Arrays.asList(

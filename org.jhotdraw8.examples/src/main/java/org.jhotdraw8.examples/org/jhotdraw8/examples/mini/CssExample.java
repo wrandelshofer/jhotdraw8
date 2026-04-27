@@ -8,13 +8,13 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
-import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
@@ -30,10 +30,7 @@ import org.jhotdraw8.icollection.VectorList;
 import java.net.URI;
 import java.util.ArrayList;
 
-/**
- * CssExample..
- *
- */
+/// CssExample..
 public class CssExample extends Application {
 
     @Override

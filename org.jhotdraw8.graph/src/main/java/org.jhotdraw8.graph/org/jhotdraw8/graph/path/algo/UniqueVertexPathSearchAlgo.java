@@ -22,34 +22,30 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/**
- * See {@link UniqueArcPathSearchAlgo} for a description of this
- * algorithm.
- *
- * @param <V> the vertex data type
- * @param <C> the cost number type
- */
+/// See [UniqueArcPathSearchAlgo] for a description of this
+/// algorithm.
+///
+/// @param <V> the vertex data type
+/// @param <C> the cost number type
 public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
     private enum SearchResultType {SUCCESS_UNIQUE_PATH, FAILURE_NO_PATH, FAILURE_NOT_UNIQUE}
 
     public UniqueVertexPathSearchAlgo() {
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param startVertices        the set of start vertices
-     * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next vertices function
-     * @param maxDepth             the maximal depth (inclusive) of the search
-     *                             Must be {@literal >= 0}.
-     * @param zero                 the zero cost value
-     * @param costLimit            the cost limit is <b>ignored</b>
-     * @param costFunction         the cost function
-     * @param sumFunction          the sum function for adding two cost values
-     * @param visited
-     * @return on success: a back link, otherwise: null
-     */
+    /// {@inheritDoc}
+    ///
+    /// @param startVertices        the set of start vertices
+    /// @param goalPredicate        the goal predicate
+    /// @param nextVerticesFunction the next vertices function
+    /// @param maxDepth             the maximal depth (inclusive) of the search
+    ///                             Must be {@literal >= 0}.
+    /// @param zero                 the zero cost value
+    /// @param costLimit            the cost limit is **ignored**
+    /// @param costFunction         the cost function
+    /// @param sumFunction          the sum function for adding two cost values
+    /// @param visited
+    /// @return on success: a back link, otherwise: null
     @Override
     public @Nullable VertexBackLinkWithCost<V, C> search(
             Iterable<V> startVertices,
@@ -66,15 +62,13 @@ public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> imp
                 zero, costFunction, sumFunction);
     }
 
-    /**
-     * Search engine method.
-     *
-     * @param startVertices        the set of start vertices
-     * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next vertices function
-     * @param maxDepth             the maximal depth (inclusive) of the search.
-     * @return on success: a back link, otherwise: null
-     */
+    /// Search engine method.
+    ///
+    /// @param startVertices        the set of start vertices
+    /// @param goalPredicate        the goal predicate
+    /// @param nextVerticesFunction the next vertices function
+    /// @param maxDepth             the maximal depth (inclusive) of the search.
+    /// @return on success: a back link, otherwise: null
     public @Nullable VertexBackLinkWithAncestorSet<V> search(
             final Iterable<V> startVertices,
             final Predicate<V> goalPredicate,
@@ -102,16 +96,14 @@ public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> imp
         return result;
     }
 
-    /**
-     * Search engine method with a single start vertex.
-     * <p>
-     * This algorithm does not work with start sets with
-     * multiple vertices because the used visited set
-     * cannot distinguish from where a vertex is visited
-     * and whether it is visited on a path or a walk
-     * (the latter is ignored when determining whether
-     * the result is unique).
-     */
+    /// Search engine method with a single start vertex.
+    ///
+    /// This algorithm does not work with start sets with
+    /// multiple vertices because the used visited set
+    /// cannot distinguish from where a vertex is visited
+    /// and whether it is visited on a path or a walk
+    /// (the latter is ignored when determining whether
+    /// the result is unique).
     private SimpleOrderedPair<SearchResultType, @Nullable VertexBackLinkWithAncestorSet<V>>
     searchSingleStartVertex(final V startVertex,
                             final Predicate<V> goalPredicate,

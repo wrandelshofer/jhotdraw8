@@ -55,10 +55,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-/**
- * FXML Controller class
- *
- */
+/// FXML Controller class
 public class LayersInspector extends AbstractDrawingInspector {
 
     @FXML
@@ -336,10 +333,8 @@ public class LayersInspector extends AbstractDrawingInspector {
         return value == null ? 0 : value;
     }
 
-    /**
-     * Implements DnD support for the selectionLabel. Dragging the
-     * selectionLabel to a layer will move the selected items to another layer.
-     */
+    /// Implements DnD support for the selectionLabel. Dragging the
+    /// selectionLabel to a layer will move the selected items to another layer.
     private class SelectionLabelDnDSupport {
 
         private final ListView<Figure> listView;

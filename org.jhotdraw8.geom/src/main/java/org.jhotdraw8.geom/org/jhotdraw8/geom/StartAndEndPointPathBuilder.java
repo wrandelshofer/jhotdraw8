@@ -7,11 +7,8 @@ package org.jhotdraw8.geom;
 
 import org.jspecify.annotations.Nullable;
 
-/**
- * StartAndEndPointPathBuilder gets the first start point and last end point of a path,
- * and the derivatives of these points.
- *
- */
+/// StartAndEndPointPathBuilder gets the first start point and last end point of a path,
+/// and the derivatives of these points.
 public class StartAndEndPointPathBuilder extends AbstractPathBuilder<Void> {
     private double startX;
     private double startY;

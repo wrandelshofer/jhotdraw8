@@ -17,10 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-/**
- * The help inspector displays the current help text of the drawing view.
- *
- */
+/// The help inspector displays the current help text of the drawing view.
 public class HelpTextInspector extends AbstractDrawingViewInspector {
 
     @FXML

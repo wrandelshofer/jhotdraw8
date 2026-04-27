@@ -8,10 +8,7 @@ import javafx.scene.paint.Paint;
 import org.jhotdraw8.css.render.BasicRenderContext;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Paintable.
- *
- */
+/// Paintable.
 public interface Paintable {
 
     @Nullable Paint getPaint();

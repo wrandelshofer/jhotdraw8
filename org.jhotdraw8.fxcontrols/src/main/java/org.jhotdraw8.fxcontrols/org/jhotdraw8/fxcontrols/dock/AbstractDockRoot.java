@@ -9,9 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.function.Predicate;
 
-/**
- * Abstract base class for implementations of {@link DockRoot}.
- */
+/// Abstract base class for implementations of [DockRoot].
 public abstract class AbstractDockRoot
         extends AbstractDockParent
         implements DockRoot {

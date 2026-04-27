@@ -10,32 +10,26 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.geom.Points;
 
-/**
- * A LocatorHandle implements a Handle by delegating the location requests to a
- * Locator object.
- *
- * @see Locator
- */
+/// A LocatorHandle implements a Handle by delegating the location requests to a
+/// Locator object.
+///
+/// @see Locator
 public abstract class LocatorHandle extends AbstractHandle {
 
     private final Locator locator;
 
-    /**
-     * Initializes the LocatorHandle with the given Locator.
-     *
-     * @param owner the figure which owns the handle
-     * @param l     the location
-     */
+    /// Initializes the LocatorHandle with the given Locator.
+    ///
+    /// @param owner the figure which owns the handle
+    /// @param l     the location
     public LocatorHandle(Figure owner, Locator l) {
         super(owner);
         locator = l;
     }
 
-    /**
-     * Returns the location in local figure coordinates.
-     *
-     * @return the location
-     */
+    /// Returns the location in local figure coordinates.
+    ///
+    /// @return the location
     protected Point2D getLocation() {
         return locator.locate(owner);
     }

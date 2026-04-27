@@ -27,67 +27,63 @@ import java.util.Set;
 import java.util.Spliterator;
 
 
-/**
- * Implements the {@link PersistentSet} interface using a Compressed Hash-Array
- * Mapped Prefix-tree (CHAMP).
- * <p>
- * Features:
- * <ul>
- *     <li>supports up to 2<sup>31</sup> - 1 elements</li>
- *     <li>allows null elements</li>
- *     <li>is persistent</li>
- *     <li>is thread-safe</li>
- *     <li>does not guarantee a specific iteration order</li>
- * </ul>
- * <p>
- * Performance characteristics:
- * <ul>
- *     <li>add: O(log₃₂ N)</li>
- *     <li>remove: O(log₃₂ N</li>
- *     <li>contains: O(log₃₂ N)</li>
- *     <li>toMutable: O(1) + O(log₃₂ N) distributed across subsequent updates in the mutable copy</li>
- *     <li>clone: O(1)</li>
- *     <li>iterator.next(): O(1)</li>
- * </ul>
- * <p>
- * Implementation details:
- * <p>
- * This set performs read and write operations of single elements in O(log₃₂ N) time,
- * and in O(log₃₂ N) space.
- * <p>
- * The CHAMP trie contains nodes that may be shared with other sets.
- * <p>
- * If a write operation is performed on a node, then this set creates a
- * copy of the node and of all parent nodes up to the root (copy-path-on-write).
- * <p>
- * This set can create a mutable copy of itself in O(1) time and O(1) space
- * using method {@link #toMutable()}. The mutable copy shares its nodes
- * with this set, until it has gradually replaced the nodes with exclusively
- * owned nodes.
- * <p>
- * All operations on this set can be performed concurrently, without a need for
- * synchronisation.
- * <p>
- * References:
- * <p>
- * Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
- * <dl>
- *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Persistent Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a></dd>
- *
- *      <dt>The Capsule Hash Trie Collections Library.
- *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
- *      <dd><a href="https://github.com/usethesource/capsule">github.com</a></dd>
- * </dl>
- *
- * @param <E> the element type
- */
+/// Implements the [PersistentSet] interface using a Compressed Hash-Array
+/// Mapped Prefix-tree (CHAMP).
+///
+/// Features:
+///
+///   - supports up to 2<sup>31</sup> - 1 elements
+///   - allows null elements
+///   - is persistent
+///   - is thread-safe
+///   - does not guarantee a specific iteration order
+///
+///
+/// Performance characteristics:
+///
+///   - add: O(log₃₂ N)
+///   - remove: O(log₃₂ N
+///   - contains: O(log₃₂ N)
+///   - toMutable: O(1) + O(log₃₂ N) distributed across subsequent updates in the mutable copy
+///   - clone: O(1)
+///   - iterator.next(): O(1)
+///
+///
+/// Implementation details:
+///
+/// This set performs read and write operations of single elements in O(log₃₂ N) time,
+/// and in O(log₃₂ N) space.
+///
+/// The CHAMP trie contains nodes that may be shared with other sets.
+///
+/// If a write operation is performed on a node, then this set creates a
+/// copy of the node and of all parent nodes up to the root (copy-path-on-write).
+///
+/// This set can create a mutable copy of itself in O(1) time and O(1) space
+/// using method [#toMutable()]. The mutable copy shares its nodes
+/// with this set, until it has gradually replaced the nodes with exclusively
+/// owned nodes.
+///
+/// All operations on this set can be performed concurrently, without a need for
+/// synchronisation.
+///
+/// References:
+///
+/// Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
+/// <dl>
+///      <dt>Michael J. Steindorfer (2017).
+///      Efficient Persistent Collections.</dt>
+///      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a></dd>
+///      <dt>The Capsule Hash Trie Collections Library.
+///
+/// Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+///      <dd><a href="https://github.com/usethesource/capsule">github.com</a></dd>
+/// </dl>
+///
+/// @param <E> the element type
 @SuppressWarnings("exports")
 public class ChampSet<E> implements PersistentSet<E>, Serializable {
-    /**
-     * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
-     */
+    /// We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
     static final int SALT = new Random().nextInt();
     private static final ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
@@ -95,27 +91,23 @@ public class ChampSet<E> implements PersistentSet<E>, Serializable {
     final transient BitmapIndexedNode<E> root;
     final int size;
 
-    /**
-     * Creates a new instance with the provided privateData data object.
-     * <p>
-     * This constructor is intended to be called from a constructor
-     * of the subclass, that is called from method {@link #newInstance(PrivateData)}.
-     *
-     * @param privateData an privateData data object
-     */
+    /// Creates a new instance with the provided privateData data object.
+    ///
+    /// This constructor is intended to be called from a constructor
+    /// of the subclass, that is called from method [#newInstance(PrivateData)].
+    ///
+    /// @param privateData an privateData data object
     @SuppressWarnings("unchecked")
     protected ChampSet(PrivateData privateData) {
         this(((Map.Entry<BitmapIndexedNode<E>, ?>) privateData.get()).getKey(), ((Map.Entry<?, Integer>) privateData.get()).getValue());
     }
 
-    /**
-     * Creates a new instance with the provided privateData object as its internal data structure.
-     * <p>
-     * Subclasses must override this method, and return a new instance of their subclass!
-     *
-     * @param privateData the internal data structure needed by this class for creating the instance.
-     * @return a new instance of the subclass
-     */
+    /// Creates a new instance with the provided privateData object as its internal data structure.
+    ///
+    /// Subclasses must override this method, and return a new instance of their subclass!
+    ///
+    /// @param privateData the internal data structure needed by this class for creating the instance.
+    /// @return a new instance of the subclass
     protected ChampSet<E> newInstance(PrivateData privateData) {
         return new ChampSet<>(privateData);
     }
@@ -130,24 +122,20 @@ public class ChampSet<E> implements PersistentSet<E>, Serializable {
     }
 
 
-    /**
-     * Returns an persistent set that contains the provided elements.
-     *
-     * @param c   an iterable
-     * @param <E> the element type
-     * @return an persistent set of the provided elements
-     */
+    /// Returns an persistent set that contains the provided elements.
+    ///
+    /// @param c   an iterable
+    /// @param <E> the element type
+    /// @return an persistent set of the provided elements
     @SuppressWarnings("unchecked")
     public static <E> ChampSet<E> copyOf(Iterable<? extends E> c) {
         return ChampSet.<E>of().addAll(c);
     }
 
-    /**
-     * Returns an empty persistent set.
-     *
-     * @param <E> the element type
-     * @return an empty persistent set
-     */
+    /// Returns an empty persistent set.
+    ///
+    /// @param <E> the element type
+    /// @return an empty persistent set
     @SuppressWarnings("unchecked")
     public static <E> ChampSet<E> of() {
         return ((ChampSet<E>) ChampSet.EMPTY);
@@ -158,13 +146,11 @@ public class ChampSet<E> implements PersistentSet<E>, Serializable {
         return ChampSet.<T>of().addAll(() -> iterator);
     }
 
-    /**
-     * Returns an persistent set that contains the provided elements.
-     *
-     * @param elements elements
-     * @param <E>      the element type
-     * @return an persistent set of the provided elements
-     */
+    /// Returns an persistent set that contains the provided elements.
+    ///
+    /// @param elements elements
+    /// @param <E>      the element type
+    /// @return an persistent set of the provided elements
     @SuppressWarnings({"varargs"})
     @SafeVarargs
     public static <E> ChampSet<E> of(E @Nullable ... elements) {
@@ -172,14 +158,12 @@ public class ChampSet<E> implements PersistentSet<E>, Serializable {
         return ChampSet.<E>of().addAll(Arrays.asList(elements));
     }
 
-    /**
-     * Update function for a set: we always keep the old element.
-     *
-     * @param oldElement the old element
-     * @param newElement the new element
-     * @param <E>        the element type
-     * @return always returns the old element
-     */
+    /// Update function for a set: we always keep the old element.
+    ///
+    /// @param oldElement the old element
+    /// @param newElement the new element
+    /// @param <E>        the element type
+    /// @return always returns the old element
     static <E> E updateElement(E oldElement, E newElement) {
         return oldElement;
     }
@@ -209,9 +193,7 @@ public class ChampSet<E> implements PersistentSet<E>, Serializable {
         return m.addAll(c) ? m.toPersistent() : this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /// {@inheritDoc}
     @Override
     public <T> ChampSet<T> empty() {
         return of();

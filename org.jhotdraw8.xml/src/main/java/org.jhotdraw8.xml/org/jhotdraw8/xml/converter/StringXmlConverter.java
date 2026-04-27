@@ -12,29 +12,22 @@ import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.nio.CharBuffer;
 
-/**
- * Converts a {@code String} into the XML String representation.
- * <p>
- * Reference:
- * <a href="https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#string">W3C: XML
- * Schema Part 2: Datatypes Second Edition: 3.2.5 string</a>
- * </p>
- *
- */
+/// Converts a `String` into the XML String representation.
+///
+/// Reference:
+/// <a href="https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#string">W3C: XML
+/// Schema Part 2: Datatypes Second Edition: 3.2.5 string</a>
+///
 public class StringXmlConverter implements Converter<String> {
 
     private final boolean nullable;
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public StringXmlConverter() {
         this(false);
     }
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public StringXmlConverter(boolean nullable) {
         this.nullable = nullable;
     }

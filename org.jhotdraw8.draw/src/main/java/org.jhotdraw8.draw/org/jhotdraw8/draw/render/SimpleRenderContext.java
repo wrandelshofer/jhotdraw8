@@ -7,11 +7,11 @@ package org.jhotdraw8.draw.render;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,25 +38,21 @@ public class SimpleRenderContext implements WritableRenderContext {
         key.set(properties, value);
     }
 
-    /**
-     * Gets a property value.
-     *
-     * @param <T> the value type
-     * @param key the key
-     * @return the value
-     */
+    /// Gets a property value.
+    ///
+    /// @param <T> the value type
+    /// @param key the key
+    /// @return the value
     @Override
     public @Nullable <T> T get(MapAccessor<T> key) {
         return key.get(getProperties());
     }
 
-    /**
-     * Gets a nonnull property value.
-     *
-     * @param <T> the value type
-     * @param key the key
-     * @return the value
-     */
+    /// Gets a nonnull property value.
+    ///
+    /// @param <T> the value type
+    /// @param key the key
+    /// @return the value
     @Override
     public <T> T getNonNull(NonNullMapAccessor<T> key) {
         T value = key.get(getProperties());

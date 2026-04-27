@@ -13,64 +13,52 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Adds convenience methods to the interface defined in {@link BareBidiGraph}.
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- */
+/// Adds convenience methods to the interface defined in [BareBidiGraph].
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
 public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A> {
 
-    /**
-     * Returns the list of previous (incoming) arrows of vertex {@code v}.
-     *
-     * @param v a vertex
-     * @return a collection view on the previous arrows
-     */
+    /// Returns the list of previous (incoming) arrows of vertex `v`.
+    ///
+    /// @param v a vertex
+    /// @return a collection view on the previous arrows
     default Collection<A> getPrevArrows(V v) {
         return new ListFacade<>(() -> this.getPrevCount(v), i -> getPrevArrow(v, i));
     }
 
-    /**
-     * Returns the list of next vertices of vertex {@code v}.
-     *
-     * @param v a vertex
-     * @return a collection view on the direct successor vertices of vertex
-     */
+    /// Returns the list of next vertices of vertex `v`.
+    ///
+    /// @param v a vertex
+    /// @return a collection view on the direct successor vertices of vertex
     default Collection<V> getPrevVertices(V v) {
         return new ListFacade<>(() -> this.getPrevCount(v), i -> getPrev(v, i));
     }
 
-    /**
-     * Returns the arc data for the {@code i}-th previous (incoming)
-     * arrow from vertex {@code v}.
-     *
-     * @param v a vertex
-     * @param i the index into the list of outgoing arrows
-     * @return the arc data
-     */
+    /// Returns the arc data for the `i`-th previous (incoming)
+    /// arrow from vertex `v`.
+    ///
+    /// @param v a vertex
+    /// @param i the index into the list of outgoing arrows
+    /// @return the arc data
     default Arc<V, A> getPrevArc(V v, int i) {
         return new Arc<>(getPrev(v, i), v, getPrevArrow(v, i));
     }
 
-    /**
-     * Returns the list of previous arc data of vertex {@code v}.
-     *
-     * @param v a vertex
-     * @return a collection view on the arc data
-     */
+    /// Returns the list of previous arc data of vertex `v`.
+    ///
+    /// @param v a vertex
+    /// @return a collection view on the arc data
     default Collection<Arc<V, A>> getPrevArcs(V v) {
         return new ListFacade<>(() -> this.getPrevCount(v), i -> getPrevArc(v, i));
     }
 
-    /**
-     * Returns the index of vertex {@code u} in the list of previous vertices
-     * of {@code v} if an arrow from {@code u} to {@code v} exists.
-     *
-     * @param v a vertex
-     * @param u a vertex
-     * @return index of vertex {@code u} or a value {@literal < 0}
-     */
+    /// Returns the index of vertex `u` in the list of previous vertices
+    /// of `v` if an arrow from `u` to `v` exists.
+    ///
+    /// @param v a vertex
+    /// @param u a vertex
+    /// @return index of vertex `u` or a value {@literal < 0}
     default int findIndexOfPrev(final V v, final V u) {
         for (int i = 0, n = getPrevCount(v); i < n; i++) {
             if (u.equals(getPrev(v, i))) {
@@ -80,38 +68,32 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
         return -1;
     }
 
-    /**
-     * Returns whether there is an arrow from vertex {@code u}
-     * to vertex {@code v}.
-     *
-     * @param v a vertex
-     * @param u a vertex
-     * @return true if {@code u} is previous of {@code v}
-     */
+    /// Returns whether there is an arrow from vertex `u`
+    /// to vertex `v`.
+    ///
+    /// @param v a vertex
+    /// @param u a vertex
+    /// @return true if `u` is previous of `v`
     default boolean isPrev(final V v, final V u) {
         return findIndexOfPrev(v, u) >= 0;
     }
 
-    /**
-     * Searches for vertices starting at the provided vertex.
-     *
-     * @param start the start vertex
-     * @param dfs   whether to search depth-first instead of breadth-first
-     * @return breadth first search
-     */
+    /// Searches for vertices starting at the provided vertex.
+    ///
+    /// @param start the start vertex
+    /// @param dfs   whether to search depth-first instead of breadth-first
+    /// @return breadth first search
     default Enumerator<V> searchPrevVertices(final V start, final boolean dfs) {
         final Set<V> visited = new HashSet<>();
         return searchPrevVertices(start, visited::add, dfs);
     }
 
-    /**
-     * Searches for vertices starting at the provided vertex.
-     *
-     * @param start   the start vertex
-     * @param visited the add method of the visited set, see {@link Set#add}.
-     * @param dfs     whether to search depth-first instead of breadth-first
-     * @return breadth first search
-     */
+    /// Searches for vertices starting at the provided vertex.
+    ///
+    /// @param start   the start vertex
+    /// @param visited the add method of the visited set, see [Set#add].
+    /// @param dfs     whether to search depth-first instead of breadth-first
+    /// @return breadth first search
     default Enumerator<V> searchPrevVertices(final V start, final AddToSet<V> visited, final boolean dfs) {
         return new BfsDfsVertexSpliterator<>(this::getPrevVertices, start, visited, dfs);
     }

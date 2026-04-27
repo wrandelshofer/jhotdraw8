@@ -6,11 +6,8 @@ package org.jhotdraw8.draw.xml.converter;
 
 import org.jhotdraw8.draw.css.converter.Point2DConverter;
 
-/**
- * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
- * versa.
- *
- */
+/// Converts a `javafx.geometry.Point2D` into a `String` and vice
+/// versa.
 public class Point2DXmlConverter extends Point2DConverter {
 
 

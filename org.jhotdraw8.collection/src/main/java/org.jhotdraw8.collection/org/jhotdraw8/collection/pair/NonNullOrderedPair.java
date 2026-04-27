@@ -6,21 +6,17 @@ package org.jhotdraw8.collection.pair;
 
 import org.jspecify.annotations.Nullable;
 
-/**
- * An implementation of the {@link OrderedPair} interface, which has non-null
- * values.
- * <p>
- * This is a value-type.
- *
- * @param <U> the type of the first element of the pair
- * @param <V> the type of the second element of the pair
- */
+/// An implementation of the [OrderedPair] interface, which has non-null
+/// values.
+///
+/// This is a value-type.
+///
+/// @param <U> the type of the first element of the pair
+/// @param <V> the type of the second element of the pair
 public class NonNullOrderedPair<U, V> implements OrderedPair<U, V> {
     private final U a;
     private final V b;
-    /**
-     * Cached hash-value for faster hashing.
-     */
+    /// Cached hash-value for faster hashing.
     private int hash;
 
     public NonNullOrderedPair(U a, V b) {

@@ -8,11 +8,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
-/**
- * TransientKey can be used to store temporary data in an object.
- *
- * @param <T> the value type
- */
+/// TransientKey can be used to store temporary data in an object.
+///
+/// @param <T> the value type
 public class TransientKey<T> extends AbstractKey<T> implements NullableKey<T> {
 
 

@@ -6,8 +6,6 @@ package org.jhotdraw8.css.value;
 
 import org.jspecify.annotations.Nullable;
 
-/**
- * CssStop.
- */
+/// CssStop.
 public record CssStop(@Nullable CssSize offset, CssColor color) {
 }

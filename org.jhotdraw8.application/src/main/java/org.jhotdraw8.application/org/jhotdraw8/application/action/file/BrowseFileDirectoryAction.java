@@ -9,7 +9,7 @@ import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.AbstractActivityAction;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
@@ -23,11 +23,9 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedA
 
     public static final String ID = "file.browseFileDirectory";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param activity the view
-     */
+    /// Creates a new instance.
+    ///
+    /// @param activity the view
     @SuppressWarnings("this-escape")
     public BrowseFileDirectoryAction(FileBasedActivity activity) {
         super(activity);

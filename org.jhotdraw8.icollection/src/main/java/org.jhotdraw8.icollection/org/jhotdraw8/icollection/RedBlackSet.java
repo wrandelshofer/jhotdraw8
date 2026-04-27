@@ -25,20 +25,18 @@ import java.util.Spliterators;
 import java.util.function.Consumer;
 
 
-/**
- * Implements the {@link PersistentNavigableSet} interface using a Red-Black tree.
- * <p>
- * References:
- * <p>
- * For a similar design, see 'TreeSet.java' in vavr. The internal data structure of
- * this class is licensed from vavr.
- * <dl>
- *     <dt>TreeSet.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
- *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/TreeSet.java">github.com</a></dd>
- * </dl>
- *
- * @param <E> the element type
- */
+/// Implements the [PersistentNavigableSet] interface using a Red-Black tree.
+///
+/// References:
+///
+/// For a similar design, see 'TreeSet.java' in vavr. The internal data structure of
+/// this class is licensed from vavr.
+/// <dl>
+///     <dt>TreeSet.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
+///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/TreeSet.java">github.com</a></dd>
+/// </dl>
+///
+/// @param <E> the element type
 public class RedBlackSet<E> implements PersistentNavigableSet<E>, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -46,27 +44,23 @@ public class RedBlackSet<E> implements PersistentNavigableSet<E>, Serializable {
     @SuppressWarnings({"serial", "RedundantSuppression"})//Conditionally serializable
     final Comparator<E> comparator;
 
-    /**
-     * Creates a new instance with the provided privateData data object.
-     * <p>
-     * This constructor is intended to be called from a constructor
-     * of the subclass, that is called from method {@link #newInstance(PrivateData)}.
-     *
-     * @param privateData an privateData data object
-     */
+    /// Creates a new instance with the provided privateData data object.
+    ///
+    /// This constructor is intended to be called from a constructor
+    /// of the subclass, that is called from method [#newInstance(PrivateData)].
+    ///
+    /// @param privateData an privateData data object
     @SuppressWarnings("unchecked")
     protected RedBlackSet(PrivateData privateData) {
         this(((Map.Entry<Comparator<E>, ?>) privateData.get()).getKey(), ((Map.Entry<?, RedBlackTree<E, Void>>) privateData.get()).getValue());
     }
 
-    /**
-     * Creates a new instance with the provided privateData object as its internal data structure.
-     * <p>
-     * Subclasses must override this method, and return a new instance of their subclass!
-     *
-     * @param privateData the internal data structure needed by this class for creating the instance.
-     * @return a new instance of the subclass
-     */
+    /// Creates a new instance with the provided privateData object as its internal data structure.
+    ///
+    /// Subclasses must override this method, and return a new instance of their subclass!
+    ///
+    /// @param privateData the internal data structure needed by this class for creating the instance.
+    /// @return a new instance of the subclass
     protected RedBlackSet<E> newInstance(PrivateData privateData) {
         return new RedBlackSet<>(privateData);
     }
@@ -80,15 +74,13 @@ public class RedBlackSet<E> implements PersistentNavigableSet<E>, Serializable {
         this.comparator = comparator;
     }
 
-    /**
-     * Returns an persistent set that contains the provided elements, sorted according to the
-     * specified comparator.
-     *
-     * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
-     * @param c          an iterable
-     * @param <E>        the element type
-     * @return an persistent set of the provided elements
-     */
+    /// Returns an persistent set that contains the provided elements, sorted according to the
+    /// specified comparator.
+    ///
+    /// @param comparator a comparator, if `null` the natural ordering of the elements is used
+    /// @param c          an iterable
+    /// @param <E>        the element type
+    /// @return an persistent set of the provided elements
     @SuppressWarnings("unchecked")
     public static <E> RedBlackSet<E> copyOf(@Nullable Comparator<E> comparator, Iterable<? extends E> c) {
         if (comparator == null) {
@@ -103,26 +95,22 @@ public class RedBlackSet<E> implements PersistentNavigableSet<E>, Serializable {
         return RedBlackSet.sortedOf(comparator).addAll(c);
     }
 
-    /**
-     * Returns an persistent set that contains the provided elements sorted according to the
-     * <i>natural ordering</i> of its elements.
-     *
-     * @param c   an iterable
-     * @param <E> the element type
-     * @return an persistent set of the provided elements
-     */
+    /// Returns an persistent set that contains the provided elements sorted according to the
+    /// _natural ordering_ of its elements.
+    ///
+    /// @param c   an iterable
+    /// @param <E> the element type
+    /// @return an persistent set of the provided elements
     public static <E> RedBlackSet<E> copyOf(Iterable<? extends E> c) {
         return RedBlackSet.copyOf(NaturalComparator.instance(), c);
     }
 
-    /**
-     * Returns an empty persistent set, sorted according to the
-     * specified comparator.
-     *
-     * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
-     * @param <E>        the element type
-     * @return an empty persistent set
-     */
+    /// Returns an empty persistent set, sorted according to the
+    /// specified comparator.
+    ///
+    /// @param comparator a comparator, if `null` the natural ordering of the elements is used
+    /// @param <E>        the element type
+    /// @return an empty persistent set
     public static <E> RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator) {
         if (comparator == null) {
             comparator = NaturalComparator.instance();
@@ -130,15 +118,13 @@ public class RedBlackSet<E> implements PersistentNavigableSet<E>, Serializable {
         return new RedBlackSet<>(comparator, RedBlackTree.of(comparator));
     }
 
-    /**
-     * Returns an persistent set that contains the provided elements, sorted according to the
-     * specified comparator.
-     *
-     * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
-     * @param elements   elements
-     * @param <E>        the element type
-     * @return an persistent set of the provided elements
-     */
+    /// Returns an persistent set that contains the provided elements, sorted according to the
+    /// specified comparator.
+    ///
+    /// @param comparator a comparator, if `null` the natural ordering of the elements is used
+    /// @param elements   elements
+    /// @param <E>        the element type
+    /// @return an persistent set of the provided elements
     @SuppressWarnings({"varargs"})
     @SafeVarargs
     public static <E> RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator, E @Nullable ... elements) {
@@ -149,25 +135,21 @@ public class RedBlackSet<E> implements PersistentNavigableSet<E>, Serializable {
         return RedBlackSet.sortedOf(comparator).addAll(Arrays.asList(elements));
     }
 
-    /**
-     * Returns an empty persistent set, sorted according to the
-     * <i>natural ordering</i> of its elements.
-     *
-     * @param <E> the element type
-     * @return an empty persistent set
-     */
+    /// Returns an empty persistent set, sorted according to the
+    /// _natural ordering_ of its elements.
+    ///
+    /// @param <E> the element type
+    /// @return an empty persistent set
     public static <E> RedBlackSet<E> of() {
         return new RedBlackSet<>(NaturalComparator.instance(), RedBlackTree.of(NaturalComparator.instance()));
     }
 
-    /**
-     * Returns an persistent set that contains the provided elements, sorted according to the
-     * <i>natural ordering</i> of its elements.
-     *
-     * @param elements elements
-     * @param <E>      the element type
-     * @return an iterable of elements
-     */
+    /// Returns an persistent set that contains the provided elements, sorted according to the
+    /// _natural ordering_ of its elements.
+    ///
+    /// @param elements elements
+    /// @param <E>      the element type
+    /// @return an iterable of elements
     @SuppressWarnings({"varargs"})
     @SafeVarargs
     public static <E> RedBlackSet<E> of(E @Nullable ... elements) {

@@ -19,48 +19,44 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
- * Searches an arbitrary shortest path from a set of start vertices to a set of goal
- * vertices using Dijkstra's algorithm.
- * <p>
- * The provided cost function must return values {@literal >= 0} for all arrows.
- * <p>
- * Performance characteristics:
- * <dl>
- *     <dt>When the algorithm returns a back link</dt><dd>less or equal {@literal O( (|A| + |V|)*log|V| )} within max cost</dd>
- *     <dt>When the algorithm returns null</dt><dd>exactly {@literal O( (|A| + |V|)*log|V| )} within max cost</dd>
- * </dl>
- * References:
- * <dl>
- *   <dt> Edsger W. Dijkstra (1959)</dt>
- *   <dd>A note on two problems in connexion with graphs, Problem 2.
- *    <a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
- * </dl>
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- * @param <C> the cost number type
- */
+/// Searches an arbitrary shortest path from a set of start vertices to a set of goal
+/// vertices using Dijkstra's algorithm.
+///
+/// The provided cost function must return values {@literal >= 0} for all arrows.
+///
+/// Performance characteristics:
+/// <dl>
+///     <dt>When the algorithm returns a back link</dt><dd>less or equal {@literal O( (|A| + |V|)*log|V| )} within max cost</dd>
+///     <dt>When the algorithm returns null</dt><dd>exactly {@literal O( (|A| + |V|)*log|V| )} within max cost</dd>
+/// </dl>
+/// References:
+/// <dl>
+///   <dt> Edsger W. Dijkstra (1959)</dt>
+///   <dd>A note on two problems in connexion with graphs, Problem 2.
+///    <a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
+/// </dl>
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
+/// @param <C> the cost number type
 public class AnyShortestArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
     public AnyShortestArcPathSearchAlgo() {
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param startVertices    the set of start vertices
-     * @param goalPredicate    the goal predicate
-     * @param nextArcsFunction the next arcs function
-     * @param maxDepth         the maximal depth (inclusive) of the search
-     *                         Must be {@literal >= 0}.
-     * @param zero             the zero cost value
-     * @param costLimit        the maximal cost (inclusive) of a path.
-     *                         Must be {@literal >= zero}.
-     * @param costFunction     the cost function
-     * @param sumFunction      the sum function for adding two cost values
-     * @param visited
-     * @return on success: a back link, otherwise: null
-     */
+    /// {@inheritDoc}
+    ///
+    /// @param startVertices    the set of start vertices
+    /// @param goalPredicate    the goal predicate
+    /// @param nextArcsFunction the next arcs function
+    /// @param maxDepth         the maximal depth (inclusive) of the search
+    ///                         Must be {@literal >= 0}.
+    /// @param zero             the zero cost value
+    /// @param costLimit        the maximal cost (inclusive) of a path.
+    ///                         Must be {@literal >= zero}.
+    /// @param costFunction     the cost function
+    /// @param sumFunction      the sum function for adding two cost values
+    /// @param visited
+    /// @return on success: a back link, otherwise: null
     @Override
     public @Nullable ArcBackLinkWithCost<V, A, C> search(
             final Iterable<V> startVertices,

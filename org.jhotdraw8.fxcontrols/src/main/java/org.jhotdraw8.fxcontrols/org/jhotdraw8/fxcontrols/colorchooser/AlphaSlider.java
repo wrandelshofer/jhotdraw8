@@ -26,28 +26,20 @@ import java.util.Objects;
 import java.util.function.ToIntFunction;
 
 
-/**
- * This slider shows one component dimension of an {@link NamedColorSpace}
- * in a rectangular shape.
- */
+/// This slider shows one component dimension of an [NamedColorSpace]
+/// in a rectangular shape.
 public class AlphaSlider extends AbstractColorSlider {
 
 
     private final ObjectProperty<Orientation> orientation = new SimpleObjectProperty<>(this, "orientation", Orientation.HORIZONTAL);
-    /**
-     * The value of the alpha component.
-     */
+    /// The value of the alpha component.
     private final FloatProperty alpha = new SimpleFloatProperty(this, "alpha", 1.0f);
     private final FloatProperty alphaMaxValue = new SimpleFloatProperty(this, "alphaMaxValue", 1.0f);
     private final FloatProperty alphaMinValue = new SimpleFloatProperty(this, "alphaMinValue", 0.0f);
 
-    /**
-     * The minor unit distance between tick marks.
-     */
+    /// The minor unit distance between tick marks.
     private final DoubleProperty minorTickUnit = new SimpleDoubleProperty(this, "minorTickUnit", 0.001);
-    /**
-     * The major unit distance between tick marks.
-     */
+    /// The major unit distance between tick marks.
     private final DoubleProperty majorTickUnit = new SimpleDoubleProperty(this, "majorTickUnit", 0.01);
 
 

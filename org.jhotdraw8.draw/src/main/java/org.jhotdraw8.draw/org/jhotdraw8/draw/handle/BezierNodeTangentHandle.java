@@ -26,10 +26,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-/**
- * Handle for the point ofCollection a figure.
- *
- */
+/// Handle for the point ofCollection a figure.
 public class BezierNodeTangentHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));

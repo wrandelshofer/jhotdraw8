@@ -7,11 +7,9 @@ package org.jhotdraw8.geom;
 
 import java.awt.geom.Point2D;
 
-/**
- * AbstractPathBuilder.
- *
- * @param <T> the product type
- */
+/// AbstractPathBuilder.
+///
+/// @param <T> the product type
 public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
 
     private double lastX, lastY;

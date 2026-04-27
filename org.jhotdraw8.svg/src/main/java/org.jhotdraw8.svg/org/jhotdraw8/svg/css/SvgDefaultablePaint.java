@@ -10,12 +10,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * Wraps a value that supports CSS defaulting.
- *
- * @param <T> the value type
- * @see SvgPaintDefaulting
- */
+/// Wraps a value that supports CSS defaulting.
+///
+/// @param <T> the value type
+/// @see SvgPaintDefaulting
 public class SvgDefaultablePaint<T extends Paintable> {
     private final @Nullable SvgPaintDefaulting defaulting;
     private final @Nullable T value;

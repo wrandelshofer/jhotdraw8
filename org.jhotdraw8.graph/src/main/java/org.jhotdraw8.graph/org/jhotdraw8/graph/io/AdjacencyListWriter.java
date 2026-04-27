@@ -10,24 +10,18 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.function.Function;
 
-/**
- * Writes a graph as an adjacency list.
- */
+/// Writes a graph as an adjacency list.
 public class AdjacencyListWriter {
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public AdjacencyListWriter() {
     }
 
-    /**
-     * Dumps the graph for debugging purposes.
-     *
-     * @param <V>   the vertex data type
-     * @param <A>   the arrow data type
-     * @param graph the graph to be dumped
-     * @return the dump
-     */
+    /// Dumps the graph for debugging purposes.
+    ///
+    /// @param <V>   the vertex data type
+    /// @param <A>   the arrow data type
+    /// @param graph the graph to be dumped
+    /// @return the dump
     public <V, A> String write(DirectedGraph<V, A> graph) {
         StringWriter w = new StringWriter();
         try {
@@ -38,29 +32,25 @@ public class AdjacencyListWriter {
         return w.toString();
     }
 
-    /**
-     * Dumps the graph for debugging purposes.
-     *
-     * @param <V>   the vertex data type
-     * @param <A>   the arrow data type
-     * @param w     the writer
-     * @param graph the graph to be dumped
-     * @throws IOException if writing fails
-     */
+    /// Dumps the graph for debugging purposes.
+    ///
+    /// @param <V>   the vertex data type
+    /// @param <A>   the arrow data type
+    /// @param w     the writer
+    /// @param graph the graph to be dumped
+    /// @throws IOException if writing fails
     public <V, A> void write(Appendable w, DirectedGraph<V, A> graph) throws IOException {
         write(w, graph, Object::toString);
     }
 
-    /**
-     * Dumps the graph for debugging purposes.
-     *
-     * @param <V>              the vertex data type
-     * @param <A>              the arrow data type
-     * @param w                the writer
-     * @param graph            the graph to be dumped
-     * @param toStringFunction a function which converts a vertex to a string
-     * @throws IOException if writing fails
-     */
+    /// Dumps the graph for debugging purposes.
+    ///
+    /// @param <V>              the vertex data type
+    /// @param <A>              the arrow data type
+    /// @param w                the writer
+    /// @param graph            the graph to be dumped
+    /// @param toStringFunction a function which converts a vertex to a string
+    /// @throws IOException if writing fails
     public <V, A> void write(Appendable w, DirectedGraph<V, A> graph, Function<V, String> toStringFunction) throws IOException {
         {
             int i = 0;

@@ -21,43 +21,36 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/**
- * InputFormat.
- *
- */
+/// InputFormat.
 public interface InputFormat {
     void setOptions(PersistentMap<Key<?>, Object> newValue);
 
     PersistentMap<Key<?>, Object> getOptions();
 
-    /**
-     * Reads a figure from an URI
-     *
-     * @param uri       The uri.
-     * @param drawing   If you provide a non-null value, the ids of the returned
-     *                  figure are coerced so that they do not clash with ids in the drawing.
-     *                  Also all URIs in the figure are made relative to DOCUMENT_HOME of the
-     *                  drawing.
-     * @param workState for progress monitoring and cancelling the operation
-     * @return the figure
-     * @throws IOException if an IO error occurs
-     */
+    /// Reads a figure from an URI
+    ///
+    /// @param uri       The uri.
+    /// @param drawing   If you provide a non-null value, the ids of the returned
+    ///                  figure are coerced so that they do not clash with ids in the drawing.
+    ///                  Also all URIs in the figure are made relative to DOCUMENT_HOME of the
+    ///                  drawing.
+    /// @param workState for progress monitoring and cancelling the operation
+    /// @return the figure
+    /// @throws IOException if an IO error occurs
     default Figure read(URI uri, @Nullable Drawing drawing, WorkState<Void> workState) throws IOException {
         return read(Paths.get(uri), drawing, workState);
     }
 
-    /**
-     * Reads a figure from a file.
-     *
-     * @param file      the file
-     * @param drawing   If you provide a non-null value, the ids of the returned
-     *                  figure are coerced so that they do not clash with ids in the drawing.
-     *                  Also all URIs in the figure are made relative to DOCUMENT_HOME of the
-     *                  drawing.
-     * @param workState for progress monitoring and cancelling the operation
-     * @return the figure
-     * @throws IOException if an IO error occurs
-     */
+    /// Reads a figure from a file.
+    ///
+    /// @param file      the file
+    /// @param drawing   If you provide a non-null value, the ids of the returned
+    ///                  figure are coerced so that they do not clash with ids in the drawing.
+    ///                  Also all URIs in the figure are made relative to DOCUMENT_HOME of the
+    ///                  drawing.
+    /// @param workState for progress monitoring and cancelling the operation
+    /// @return the figure
+    /// @throws IOException if an IO error occurs
     default Figure read(Path file, @Nullable Drawing drawing, WorkState<Void> workState) throws IOException {
         URI documentHome = file.getParent() == null ? FileSystems.getDefault().getPath(System.getProperty("user.home")).toUri() : file.getParent().toUri();
         try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(file))) {
@@ -71,18 +64,16 @@ public interface InputFormat {
         }
     }
 
-    /**
-     * Reads figures from an input stream and adds them to the specified
-     * drawing.
-     *
-     * @param in           The input stream.
-     * @param drawing      If you provide a non-null value, the contents of the file
-     *                     is added to the drawing. Otherwise a new drawing is created.
-     * @param documentHome the URI used to resolve external references from the document
-     * @param workState    for progress monitoring and cancelling the operation
-     * @return the drawing
-     * @throws IOException if an IO error occurs
-     */
+    /// Reads figures from an input stream and adds them to the specified
+    /// drawing.
+    ///
+    /// @param in           The input stream.
+    /// @param drawing      If you provide a non-null value, the contents of the file
+    ///                     is added to the drawing. Otherwise a new drawing is created.
+    /// @param documentHome the URI used to resolve external references from the document
+    /// @param workState    for progress monitoring and cancelling the operation
+    /// @return the drawing
+    /// @throws IOException if an IO error occurs
     Figure read(InputStream in, Drawing drawing, URI documentHome, WorkState<Void> workState) throws IOException;
 
 }

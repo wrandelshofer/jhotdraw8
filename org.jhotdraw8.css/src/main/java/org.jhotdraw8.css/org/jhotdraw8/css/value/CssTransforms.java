@@ -13,9 +13,7 @@ import javafx.scene.transform.Translate;
 import org.jspecify.annotations.Nullable;
 
 public class CssTransforms {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private CssTransforms() {
     }
 

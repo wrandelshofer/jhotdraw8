@@ -18,9 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class Point3DConverterTest {
-    /**
-     * Test of fromString method, of class Point3DConverter.
-     */
+    /// Test of fromString method, of class Point3DConverter.
     public static void doTestFromString(Point3D expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -29,18 +27,14 @@ public class Point3DConverterTest {
         assertEquals(actual, expected);
     }
 
-    /**
-     * Test of toString method, of class Point3DConverter.
-     */
+    /// Test of toString method, of class Point3DConverter.
     public static void doTestToString(Point3D value, String expected) throws Exception {
         Point3DConverter instance = new Point3DConverter(false);
         String actual = instance.toString(value);
         assertEquals(expected, actual);
     }
 
-    /**
-     * Test of fromString and toString methods, of class Point3DConverter.
-     */
+    /// Test of fromString and toString methods, of class Point3DConverter.
     public static void doTest(Point3D value, String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);

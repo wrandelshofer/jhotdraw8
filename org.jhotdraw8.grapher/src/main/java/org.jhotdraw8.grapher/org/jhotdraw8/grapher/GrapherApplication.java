@@ -27,14 +27,9 @@ import java.util.logging.Logger;
 import static org.jhotdraw8.application.action.file.ExportFileAction.EXPORT_CHOOSER_FACTORY_KEY;
 import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 
-/**
- * GrapherApplication.
- *
- */
+/// GrapherApplication.
 public class GrapherApplication extends AbstractFileBasedApplication {
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logger.getLogger(GrapherApplication.class.getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e));
 

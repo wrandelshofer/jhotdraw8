@@ -37,9 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractImmutableSetTest {
 
-    /**
-     * Creates a new empty instance.
-     */
+    /// Creates a new empty instance.
     protected abstract <E> PersistentSet<E> newInstance();
 
 
@@ -52,9 +50,7 @@ public abstract class AbstractImmutableSetTest {
     protected abstract boolean supportsNullKeys();
 
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <E> PersistentSet<E> newInstance(Iterable<E> m);
 
     public static Stream<SetData> dataProvider() {

@@ -12,11 +12,9 @@ import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-/**
- * Wraps an {@link Spliterator} into an {@link Iterator} interface.
- *
- * @param <E> the element type
- */
+/// Wraps an [Spliterator] into an [Iterator] interface.
+///
+/// @param <E> the element type
 public class IteratorFacade<E> implements Iterator<E>, Consumer<E> {
     private final Spliterator<E> e;
     private final @Nullable Consumer<E> removeFunction;

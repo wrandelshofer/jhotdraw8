@@ -19,12 +19,9 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-/**
- * Converts an BezierNodeList path to an XML attribute value.
- * <p>
- * The null value will be converted to the CSS identifier "none".
- *
- */
+/// Converts an BezierNodeList path to an XML attribute value.
+///
+/// The null value will be converted to the CSS identifier "none".
 public class BezierPathXmlConverter implements Converter<BezierPath> {
 
     private final boolean nullable;

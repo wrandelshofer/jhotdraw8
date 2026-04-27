@@ -17,9 +17,7 @@ import org.jhotdraw8.os.macos.MacOSPreferencesUtil;
 
 
 public class UnifiedStageApplication extends Application {
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         // See
         // https://bugs.openjdk.java.net/browse/JDK-8091497

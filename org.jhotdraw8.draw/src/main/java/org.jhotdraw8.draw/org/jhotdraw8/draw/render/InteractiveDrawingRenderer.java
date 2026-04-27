@@ -60,22 +60,18 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, MODEL_PROPERTY, new SimpleDrawingModel());
 
-    /**
-     * This is the root node of the interactive drawing renderer.
-     * <p>
-     * This node must have its {@code managed} property set to false, for performance.
-     */
+    /// This is the root node of the interactive drawing renderer.
+    ///
+    /// This node must have its `managed` property set to false, for performance.
     private final Group drawingPane = new Group();
     private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
 
-    /**
-     * This must be a linked set, so that figures are updated in first-come
-     * first-serve fashion.
-     * <p>
-     * If many figures change constantly, and {@link #updateLimit} is a small
-     * value, then the linked set ensures that all figures are updated eventually.
-     */
+    /// This must be a linked set, so that figures are updated in first-come
+    /// first-serve fashion.
+    ///
+    /// If many figures change constantly, and [#updateLimit] is a small
+    /// value, then the linked set ensures that all figures are updated eventually.
     private final SequencedSet<Figure> dirtyFigureNodes = new LinkedHashSet<>();
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
     private final IntegerProperty updateLimit = new SimpleIntegerProperty(this, "updateLimit", 10_000);
@@ -129,15 +125,13 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
 
-    /**
-     * Given a figure and a point in view coordinates, finds the front-most
-     * JavaFX Node of the figure that intersects with the point.
-     *
-     * @param figure a figure
-     * @param vx     x coordinate of a point in view coordinates
-     * @param vy     y coordinate of a point in view coordinates
-     * @return the front-most JavaFX Node of the figure that intersects with the point
-     */
+    /// Given a figure and a point in view coordinates, finds the front-most
+    /// JavaFX Node of the figure that intersects with the point.
+    ///
+    /// @param figure a figure
+    /// @param vx     x coordinate of a point in view coordinates
+    /// @param vy     y coordinate of a point in view coordinates
+    /// @return the front-most JavaFX Node of the figure that intersects with the point
     public @Nullable Node findFigureNode(Figure figure, double vx, double vy) {
         Node n = figureToNodeMap.get(figure);
         if (n == null) {
@@ -162,18 +156,16 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
 
-    /**
-     * Finds figures that intersect with the specified point in view
-     * coordinates, or that have a distance that is less than
-     * the tolerance of the editor.
-     *
-     * @param vx        x-coordinate of the point in view coordinates
-     * @param vy        y-coordinate of the point in view coordinates
-     * @param decompose If true, a figure is decomposed in sub-figures and
-     *                  the sub-figure is returned instead of the figure.
-     * @param predicate a predicate for selecting figures
-     * @return a mutable list of figures with their distance to the point
-     */
+    /// Finds figures that intersect with the specified point in view
+    /// coordinates, or that have a distance that is less than
+    /// the tolerance of the editor.
+    ///
+    /// @param vx        x-coordinate of the point in view coordinates
+    /// @param vy        y-coordinate of the point in view coordinates
+    /// @param decompose If true, a figure is decomposed in sub-figures and
+    ///                  the sub-figure is returned instead of the figure.
+    /// @param predicate a predicate for selecting figures
+    /// @return a mutable list of figures with their distance to the point
     public List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, Predicate<Figure> predicate) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pp = vt.transform(vx, vy);
@@ -190,13 +182,11 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return list;
     }
 
-    /**
-     * Gets the children of this node in front-to-back order.
-     *
-     * @param parent a parent node
-     * @return the children of the node in front-to-back-order in a new
-     * mutable array
-     */
+    /// Gets the children of this node in front-to-back order.
+    ///
+    /// @param parent a parent node
+    /// @return the children of the node in front-to-back-order in a new
+    /// mutable array
     private Node[] frontToBack(@Nullable Parent parent) {
         if (parent == null) {
             return new Node[0];
@@ -251,17 +241,15 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return list;
     }
 
-    /**
-     * Adds all descendant figures that lie inside the specified bounds to the provided
-     * list of found figures.
-     *
-     * @param node      the node
-     * @param pp        the bounds in node coordinates
-     * @param found     the list of found figures
-     * @param decompose whether to decompose figures
-     * @param predicate a predicate for adding figures
-     * @return true if one or more figures were found
-     */
+    /// Adds all descendant figures that lie inside the specified bounds to the provided
+    /// list of found figures.
+    ///
+    /// @param node      the node
+    /// @param pp        the bounds in node coordinates
+    /// @param found     the list of found figures
+    /// @param decompose whether to decompose figures
+    /// @param predicate a predicate for adding figures
+    /// @return true if one or more figures were found
     private boolean findFiguresInsideRecursive(Node node, Bounds pp, List<Map.Entry<Figure, Double>> found, boolean decompose, Predicate<Figure> predicate) {
         // base case
         // ---------
@@ -355,18 +343,16 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return true;
     }
 
-    /**
-     * Finds figures within the given node that intersect with the circle
-     * around the given point.
-     *
-     * @param node            a node
-     * @param center          the center of the circle in local coordinates of the node
-     * @param found           found figures are added to this list
-     * @param decompose       whether figures should be decomposed
-     * @param figurePredicate only figures which satisfy this predicate are added
-     * @param radius          the radius of the circle around the point
-     * @return whether figures were found
-     */
+    /// Finds figures within the given node that intersect with the circle
+    /// around the given point.
+    ///
+    /// @param node            a node
+    /// @param center          the center of the circle in local coordinates of the node
+    /// @param found           found figures are added to this list
+    /// @param decompose       whether figures should be decomposed
+    /// @param figurePredicate only figures which satisfy this predicate are added
+    /// @param radius          the radius of the circle around the point
+    /// @return whether figures were found
     private boolean findFiguresRecursive(Node node, Point2D center,
                                          List<Map.Entry<Figure, Double>> found, boolean decompose,
                                          Predicate<Figure> figurePredicate, double radius) {
@@ -618,9 +604,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         }
     }
 
-    /**
-     * For testing: paints the drawing immediately.
-     */
+    /// For testing: paints the drawing immediately.
     public void paintImmediately() {
         paint();
     }
@@ -645,12 +629,10 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         Platform.requestNextPulse();
     }
 
-    /**
-     * Updates the nodes of the figures.
-     *
-     * @param limit Determines how many nodes we will update in this batch
-     * @return returns the number of updated nodes
-     */
+    /// Updates the nodes of the figures.
+    ///
+    /// @param limit Determines how many nodes we will update in this batch
+    /// @return returns the number of updated nodes
     private int updateNodes(final int limit) {
         final Bounds visibleRectInWorld = getClipBounds();
 
@@ -704,22 +686,20 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return updateLimit.get();
     }
 
-    /**
-     * The maximal number of figures which are updated in one repaint.
-     * <p>
-     * The value should be sufficiently large, because a repaint is only
-     * done once per frame. If the value is low, it will take many frames
-     * until the drawing is completed.
-     * <p>
-     * If the value is set too high, then the editor may be become unresponsive
-     * if lots of figures change. (For example, when new stylesheets are applied
-     * to all figures).
-     * <p>
-     * If this is set to a value smaller or equal to zero, then no figures
-     * are updated.
-     *
-     * @return the update limit
-     */
+    /// The maximal number of figures which are updated in one repaint.
+    ///
+    /// The value should be sufficiently large, because a repaint is only
+    /// done once per frame. If the value is low, it will take many frames
+    /// until the drawing is completed.
+    ///
+    /// If the value is set too high, then the editor may be become unresponsive
+    /// if lots of figures change. (For example, when new stylesheets are applied
+    /// to all figures).
+    ///
+    /// If this is set to a value smaller or equal to zero, then no figures
+    /// are updated.
+    ///
+    /// @return the update limit
     public IntegerProperty updateLimitProperty() {
         return updateLimit;
     }

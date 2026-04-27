@@ -20,11 +20,8 @@ import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
- * interactions.
- *
- */
+/// Draws the `boundsInLocal` of a `Figure`, but does not provide any
+/// interactions.
 public class AnchorOutlineHandle extends AbstractHandle {
 
     private static final double invsqrt2 = 1 / Math.sqrt(2);

@@ -19,11 +19,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.jhotdraw8.fxbase.concurrent.PlatformUtil.update;
 
-/**
- * Simple implementation of {@code CompletableWorker}.
- *
- * @param <V> the result type
- */
+/// Simple implementation of `CompletableWorker`.
+///
+/// @param <V> the result type
 public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
     private static final Object NO_UPDATE_IS_IN_PROGRESS = new Object();
     private final WorkState<V> workState;
@@ -57,11 +55,9 @@ public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
         return state.getReadOnlyProperty();
     }
 
-    /**
-     * This method may be called on any thread.
-     *
-     * @param newValue the new value
-     */
+    /// This method may be called on any thread.
+    ///
+    /// @param newValue the new value
     public void updateState(Worker.State newValue) {
         update(newValue, state, stateUpdate);
     }

@@ -6,10 +6,7 @@ package org.jhotdraw8.draw.xml.converter;
 
 import org.jhotdraw8.draw.css.converter.EffectCssConverter;
 
-/**
- * XmlEffectConverter.
- *
- */
+/// XmlEffectConverter.
 public class EffectXmlCssConverter extends EffectCssConverter {
 
     public EffectXmlCssConverter() {

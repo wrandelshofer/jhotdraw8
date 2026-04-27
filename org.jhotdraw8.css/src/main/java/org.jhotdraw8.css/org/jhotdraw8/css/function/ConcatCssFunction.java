@@ -15,20 +15,16 @@ import java.text.ParseException;
 import java.util.Deque;
 import java.util.function.Consumer;
 
-/**
- * Processes the concat() function.
- * <pre>
- * concat              = "concat(", string-list, ")" ;
- * string-list         = value ,  { [ ',' ] , value } ;
- * value               = string | number | dimension | percentage | url ;
- * </pre>
- *
- * @param <T> the element type of the DOM
- */
+/// Processes the concat() function.
+/// <pre>
+/// concat              = "concat(", string-list, ")" ;
+/// string-list         = value ,  { [','] , value } ;
+/// value               = string | number | dimension | percentage | url ;
+/// </pre>
+///
+/// @param <T> the element type of the DOM
 public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
-    /**
-     * Function name.
-     */
+    /// Function name.
     public static final String NAME = "concat";
 
     public ConcatCssFunction() {

@@ -13,14 +13,12 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * Maps a {@link List} to a different element type.
- * <p>
- * The underlying list is referenced - not copied.
- *
- * @param <E> the mapped element type
- * @param <F> the original element type
- */
+/// Maps a [List] to a different element type.
+///
+/// The underlying list is referenced - not copied.
+///
+/// @param <E> the mapped element type
+/// @param <F> the original element type
 public final class MappedList<E, F> extends AbstractList<E> {
 
     private final List<F> backingList;

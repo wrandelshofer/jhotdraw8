@@ -12,26 +12,21 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * An "include match selector" {@code ~=} matches an element if the element has
- * an attribute with the specified name and the attribute value contains a word
- * list with the specified word.
- *
- */
+/// An "include match selector" `~=` matches an element if the element has
+/// an attribute with the specified name and the attribute value contains a word
+/// list with the specified word.
 public class IncludeMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;
     private final String attributeName;
     private final String word;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param sourceLocator source locator for debugging
-     * @param namespacePattern an optional namespace ("*" means any namespace,
-     *                         null means no namespace)
-     * @param attributeName the attribute name
-     * @param word the word in the attribute value
-     */
+    /// Creates a new instance.
+    ///
+    /// @param sourceLocator    source locator for debugging
+    /// @param namespacePattern an optional namespace ("*" means any namespace,
+    ///                         null means no namespace)
+    /// @param attributeName    the attribute name
+    /// @param word             the word in the attribute value
     public IncludeMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, String attributeName, String word) {
         super(sourceLocator);
         this.namespacePattern = namespacePattern;

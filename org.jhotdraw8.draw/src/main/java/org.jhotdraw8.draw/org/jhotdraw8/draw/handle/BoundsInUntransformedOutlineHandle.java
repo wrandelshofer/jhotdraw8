@@ -20,10 +20,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Draws the {@code boundsInLocal} with applied translation of a {@code Figure},
- * but does not provide any interactions.
- */
+/// Draws the `boundsInLocal` with applied translation of a `Figure`,
+/// but does not provide any interactions.
 public class BoundsInUntransformedOutlineHandle extends AbstractHandle {
     private final Group node;
     private final Polygon poly1;

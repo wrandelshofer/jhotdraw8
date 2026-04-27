@@ -27,22 +27,16 @@ import java.util.Objects;
 import java.util.function.ToIntFunction;
 
 
-/**
- * This slider shows one component dimension of an {@link NamedColorSpace}
- * in a rectangular shape.
- */
+/// This slider shows one component dimension of an [NamedColorSpace]
+/// in a rectangular shape.
 public class ColorSlider extends AbstractColorSlider {
-    /**
-     * The index of the color space component that is displayed along the extent of the rectangle.
-     * <p>
-     * Alpha has index 4.
-     */
+    /// The index of the color space component that is displayed along the extent of the rectangle.
+    ///
+    /// Alpha has index 4.
     @SuppressWarnings("this-escape")
     private final IntegerProperty componentIndex = new SimpleIntegerProperty(this, "componentIndex", 0);
 
-    /**
-     * The slider value.
-     */
+    /// The slider value.
     @SuppressWarnings("this-escape")
     private final FloatProperty value = new SimpleFloatProperty(this, "value", 0);
 
@@ -50,11 +44,9 @@ public class ColorSlider extends AbstractColorSlider {
     @SuppressWarnings("this-escape")
     private final ObjectProperty<Orientation> orientation = new SimpleObjectProperty<>(this, "orientation", Orientation.HORIZONTAL);
 
-    /**
-     * The unit distance between tick marks.
-     * <p>
-     * This must be a double property (and not float) so that we do not run into rounding issues.
-     */
+    /// The unit distance between tick marks.
+    ///
+    /// This must be a double property (and not float) so that we do not run into rounding issues.
     @SuppressWarnings("this-escape")
     private final DoubleProperty minorTickUnit = new SimpleDoubleProperty(this, "minorTickUnit", 1d / 255);
     @SuppressWarnings("this-escape")

@@ -5,9 +5,7 @@
 
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Provides support for JavaFX themes.
- */
+/// Provides support for JavaFX themes.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.theme {

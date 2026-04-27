@@ -19,14 +19,12 @@ import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 
 
-/**
- * See {@link AnyArcPathSearchAlgo} for a description of this
- * algorithm.
- * <p>
- * This implementation is optimized for {@link org.jhotdraw8.graph.IndexedDirectedGraph}.
- *
- * @param <C> the cost number type
- */
+/// See [AnyArcPathSearchAlgo] for a description of this
+/// algorithm.
+///
+/// This implementation is optimized for [org.jhotdraw8.graph.IndexedDirectedGraph].
+///
+/// @param <C> the cost number type
 public class AnyIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
         implements IndexedVertexPathSearchAlgo<C> {
     public AnyIndexedVertexPathSearchAlgo() {
@@ -57,16 +55,14 @@ public class AnyIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
         );
     }
 
-    /**
-     * Search engine method.
-     *
-     * @param startVertices        the set of start vertices
-     * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next vertices function
-     * @param visited              the set of visited vertices (see {@link AddToIntSet})
-     * @param maxDepth             the maximal depth (inclusive) of the search.
-     * @return on success: a back link, otherwise: null
-     */
+    /// Search engine method.
+    ///
+    /// @param startVertices        the set of start vertices
+    /// @param goalPredicate        the goal predicate
+    /// @param nextVerticesFunction the next vertices function
+    /// @param visited              the set of visited vertices (see [AddToIntSet])
+    /// @param maxDepth             the maximal depth (inclusive) of the search.
+    /// @return on success: a back link, otherwise: null
     public @Nullable IndexedVertexBackLink search(Iterable<Integer> startVertices,
                                                   IntPredicate goalPredicate,
                                                   Function<Integer, Spliterator.OfInt> nextVerticesFunction,

@@ -6,10 +6,7 @@ package org.jhotdraw8.fxcollection.indexedset;
 
 import java.util.Collection;
 
-/**
- * Tests {@link IndexedArrayObservableSet}.
- *
- */
+/// Tests [IndexedArrayObservableSet].
 public class IndexedArraySetTest extends AbstractIndexedArrayObservableSetTest {
 
 

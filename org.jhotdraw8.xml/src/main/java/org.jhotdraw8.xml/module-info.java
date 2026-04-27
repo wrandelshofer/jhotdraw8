@@ -5,9 +5,7 @@
 
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Provides XML interoperability for drawing editors.
- */
+/// Provides XML interoperability for drawing editors.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.xml {

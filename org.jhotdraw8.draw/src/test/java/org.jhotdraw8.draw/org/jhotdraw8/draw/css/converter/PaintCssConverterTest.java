@@ -22,18 +22,13 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * CssPaintConverterTest.
- *
- */
+/// CssPaintConverterTest.
 public class PaintCssConverterTest {
 
     public PaintCssConverterTest() {
     }
 
-    /**
-     * Test of fromString method, of class CssPaintConverter.
-     */
+    /// Test of fromString method, of class CssPaintConverter.
     public static void testFromString(@Nullable Paintable expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;

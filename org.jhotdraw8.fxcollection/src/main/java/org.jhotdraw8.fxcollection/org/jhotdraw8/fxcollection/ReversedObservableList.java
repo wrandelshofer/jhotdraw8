@@ -13,12 +13,10 @@ import java.util.List;
 
 import static java.lang.Math.min;
 
-/**
- * Reversed list provides a view on an underlying list with items ordered in
- * reverse.
- *
- * @param <E> the element type
- */
+/// Reversed list provides a view on an underlying list with items ordered in
+/// reverse.
+///
+/// @param <E> the element type
 public class ReversedObservableList<E> extends TransformationList<E, E> {
 
     private int size;
@@ -110,12 +108,10 @@ public class ReversedObservableList<E> extends TransformationList<E, E> {
         src.add(size - min(size, index), element);
     }
 
-    /**
-     * Notifies all listeners of a change
-     *
-     * @param from start of range
-     * @param to   end of range + 1
-     */
+    /// Notifies all listeners of a change
+    ///
+    /// @param from start of range
+    /// @param to   end of range + 1
     public void fireUpdated(int from, int to) {
         beginChange();
         for (int i = from; i < to; i++) {

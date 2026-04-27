@@ -21,10 +21,7 @@ import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 import java.net.URI;
 
-/**
- * AbstractFileBasedActivity.
- *
- */
+/// AbstractFileBasedActivity.
 public abstract class AbstractFileBasedActivity extends AbstractActivity implements FileBasedActivity {
 
     protected final BooleanProperty modified = new SimpleBooleanProperty(this, MODIFIED_PROPERTY) {

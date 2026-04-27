@@ -22,46 +22,39 @@ import java.util.Deque;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Processes the {@code attr()} function.
- * <pre>
- *     attr = "attr(" ,  s* , attr-name, s* , [ type-or-unit ] ,  s* , [ "," ,  s* , attr-fallback ] ,  s* , ")" ;
- *     attr-name = qualified-name;
- *     type-or-unit = "string" | "color" | "url" | "integer" | "number"
- *                   | "%" ( "length" | "angle" | "time" | "frequency" )
- *                   ;
- *     attr-fallback = ident-token;
- *
- *     qualified-name = [ [ ident-token ], "|" ] , ident-token ;
- * </pre>
- * If attr-fallback is not given, then ident "none" is assumed.
- * <p>
- * References:
- * <dl>
- *     <dt>CSS Values and Units Module Level 5.
- *     Paragraph 5.4. Attribute References: the attr() function</dt>
- *     <dd><a href="https://drafts.csswg.org/css-values-5/#attr-notation">csswg.org</a></dd>
- * </dl>
- * @param <T> the element type of the DOM
- */
+/// Processes the `attr()` function.
+/// <pre>
+///     attr = "attr(" ,  s* , attr-name, s* , [type-or-unit] ,  s* , [",",s*,attr-fallback] ,  s* , ")" ;
+///     attr-name = qualified-name;
+///     type-or-unit = "string" | "color" | "url" | "integer" | "number"
+///                   | "%" ( "length" | "angle" | "time" | "frequency" )
+///                   ;
+///     attr-fallback = ident-token;
+///
+///     qualified-name = [ [ident-token], "|" ] , ident-token ;
+/// </pre>
+/// If attr-fallback is not given, then ident "none" is assumed.
+///
+/// References:
+/// <dl>
+///     <dt>CSS Values and Units Module Level 5.
+///     Paragraph 5.4. Attribute References: the attr() function</dt>
+///     <dd><a href="https://drafts.csswg.org/css-values-5/#attr-notation">csswg.org</a></dd>
+/// </dl>
+///
+/// @param <T> the element type of the DOM
 public class AttrCssFunction<T> extends AbstractCssFunction<T> {
-    /**
-     * Function name.
-     */
+    /// Function name.
     public static final String NAME = "attr";
 
-    /**
-     * Creates a new instance with the function name {@value #NAME}.
-     */
+    /// Creates a new instance with the function name {@value #NAME}.
     public AttrCssFunction() {
         super(NAME);
     }
 
-    /**
-     * Creates a new instance with the specified function name.
-     *
-     * @param name the name of the function
-     */
+    /// Creates a new instance with the specified function name.
+    ///
+    /// @param name the name of the function
     public AttrCssFunction(String name) {
         super(name);
     }
@@ -196,25 +189,23 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         recursionStack.pop();
     }
 
-    /**
-     * The attribute value is parsed as a CSS {@code number}, that is without the unit
-     * (e.g. 12.5), and interpreted as a {@code percentage}.
-     * If it is not valid, that is not a number or out of the range accepted by
-     * the CSS property, the default value is used.
-     * If the given value is used as a length, attr() computes it to an absolute length.
-     * Leading and trailing spaces are stripped.
-     * <p>
-     * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
-     * MDN web docs, attr()</a>
-     *
-     * @param out the consumer of the output tokens
-     * @param line the line number to be stated in the location info of the output tokens
-     * @param start the start position to be stated in the location info of the output tokens
-     * @param typeOrUnit the target type or unit of the output tokens
-     * @param end the end position to be stated in the location info of the output tokens
-     * @param tokenizedValue the input tokens
-     * @return true on success
-     */
+    /// The attribute value is parsed as a CSS `number`, that is without the unit
+    /// (e.g. 12.5), and interpreted as a `percentage`.
+    /// If it is not valid, that is not a number or out of the range accepted by
+    /// the CSS property, the default value is used.
+    /// If the given value is used as a length, attr() computes it to an absolute length.
+    /// Leading and trailing spaces are stripped.
+    ///
+    /// <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
+    /// MDN web docs, attr()</a>
+    ///
+    /// @param out the consumer of the output tokens
+    /// @param line the line number to be stated in the location info of the output tokens
+    /// @param start the start position to be stated in the location info of the output tokens
+    /// @param typeOrUnit the target type or unit of the output tokens
+    /// @param end the end position to be stated in the location info of the output tokens
+    /// @param tokenizedValue the input tokens
+    /// @return true on success
     private boolean applyAsPercentage(Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, List<CssToken> tokenizedValue) {
         final ListCssTokenizer t2 = new ListCssTokenizer(tokenizedValue);
         while (t2.next() != CssTokenType.TT_EOF) {
@@ -239,16 +230,14 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         return false;
     }
 
-    /**
-     * The attribute value is parsed as a CSS {@code length} dimension,
-     * that is including the unit (e.g. 12.5em). If it is not valid, that is
-     * not a length or out of the range accepted by the CSS property, the default value is used.
-     * If the given unit is a relative length, attr() computes it to an absolute length.
-     * Leading and trailing spaces are stripped.
-     * <p>
-     * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
-     * MDN web docs, attr()</a>
-     */
+    /// The attribute value is parsed as a CSS `length` dimension,
+    /// that is including the unit (e.g. 12.5em). If it is not valid, that is
+    /// not a length or out of the range accepted by the CSS property, the default value is used.
+    /// If the given unit is a relative length, attr() computes it to an absolute length.
+    /// Leading and trailing spaces are stripped.
+    ///
+    /// <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
+    /// MDN web docs, attr()</a>
     private boolean applyAsLength(Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, List<CssToken> tokenizedValue) {
         final ListCssTokenizer t2 = new ListCssTokenizer(tokenizedValue);
         if (t2.next() == CssTokenType.TT_EOF) {
@@ -280,15 +269,13 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         return false; // use fallback
     }
 
-    /**
-     * The attribute value is parsed as a CSS {@code number}.
-     * If it is not valid, that is not a number or out of the range accepted
-     * by the CSS property, the default value is used.
-     * Leading and trailing spaces are stripped.
-     * <p>
-     * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
-     * MDN web docs, attr()</a>
-     */
+    /// The attribute value is parsed as a CSS `number`.
+    /// If it is not valid, that is not a number or out of the range accepted
+    /// by the CSS property, the default value is used.
+    /// Leading and trailing spaces are stripped.
+    ///
+    /// <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
+    /// MDN web docs, attr()</a>
     private boolean applyAsNumber(Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, List<CssToken> tokenizedValue) {
         final ListCssTokenizer t2 = new ListCssTokenizer(tokenizedValue);
         if (t2.next() == CssTokenType.TT_EOF) {
@@ -317,25 +304,23 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         return false;
     }
 
-    /**
-     * The attribute value is parsed as a CSS {@code length} dimension, that is
-     * including the unit (e.g. 12.5em). If it is not valid, that is not a
-     * length or out of the range accepted by the CSS property, the default
-     * value is used.
-     * If the given unit is a relative length, attr() computes it to an
-     * absolute length. Leading and trailing spaces are stripped.
-     * <p>
-     * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
-     * MDN web docs, attr()</a>
-     *
-     * @param out            the consumer of the output tokens
-     * @param line           the line number to be stated in the location info of the output tokens
-     * @param start          the start position to be stated in the location info of the output tokens
-     * @param typeOrUnit     the target type or unit of the output tokens
-     * @param end            the end position to be stated in the location info of the output tokens
-     * @param tokenizedValue the input tokens
-     * @return true on success
-     */
+    /// The attribute value is parsed as a CSS `length` dimension, that is
+    /// including the unit (e.g. 12.5em). If it is not valid, that is not a
+    /// length or out of the range accepted by the CSS property, the default
+    /// value is used.
+    /// If the given unit is a relative length, attr() computes it to an
+    /// absolute length. Leading and trailing spaces are stripped.
+    ///
+    /// <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
+    /// MDN web docs, attr()</a>
+    ///
+    /// @param out            the consumer of the output tokens
+    /// @param line           the line number to be stated in the location info of the output tokens
+    /// @param start          the start position to be stated in the location info of the output tokens
+    /// @param typeOrUnit     the target type or unit of the output tokens
+    /// @param end            the end position to be stated in the location info of the output tokens
+    /// @param tokenizedValue the input tokens
+    /// @return true on success
     private boolean applyAsLengthInTheGivenUnits(Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, List<CssToken> tokenizedValue) {
         final ListCssTokenizer t2 = new ListCssTokenizer(tokenizedValue);
         if (t2.next() == CssTokenType.TT_EOF) {
@@ -366,23 +351,21 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         return false;
     }
 
-    /**
-     * The attribute value is treated as a CSS {@code string}.
-     * It is NOT parsed again, and in particular the characters are used as-is
-     * instead of CSS escapes being turned into different characters.
-     * <p>
-     * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
-     * MDN web docs, attr()</a>
-     *
-     * @param element  the element that provides the attribute value
-     * @param model    the selector model for the element
-     * @param out      the consumer of the output tokens
-     * @param line     the line number to be stated in the location info of the output tokens
-     * @param start    the start position to be stated in the location info of the output tokens
-     * @param attrName the name of the attribute
-     * @param end      the end position to be stated in the location info of the output tokens
-     * @return true on success
-     */
+    /// The attribute value is treated as a CSS `string`.
+    /// It is NOT parsed again, and in particular the characters are used as-is
+    /// instead of CSS escapes being turned into different characters.
+    ///
+    /// <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
+    /// MDN web docs, attr()</a>
+    ///
+    /// @param element  the element that provides the attribute value
+    /// @param model    the selector model for the element
+    /// @param out      the consumer of the output tokens
+    /// @param line     the line number to be stated in the location info of the output tokens
+    /// @param start    the start position to be stated in the location info of the output tokens
+    /// @param attrName the name of the attribute
+    /// @param end      the end position to be stated in the location info of the output tokens
+    /// @return true on success
     private boolean applyAsString(T element, SelectorModel<T> model, Consumer<CssToken> out, int line, int start, QualifiedName attrName, int end) {
         String attributeAsString = model.getAttributeAsString(element, null, attrName.namespace(), attrName.name());
         if (attributeAsString == null) {

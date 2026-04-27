@@ -12,9 +12,7 @@ import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Path builder for {@link PlinePath}.
- */
+/// Path builder for [PlinePath].
 public class PlinePathBuilder extends AbstractPathBuilder<List<PlinePath>> {
     private final List<PlinePath> paths = new ArrayList<>();
     private PlinePath current;

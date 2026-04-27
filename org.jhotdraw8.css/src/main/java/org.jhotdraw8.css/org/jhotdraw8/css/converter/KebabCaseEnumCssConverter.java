@@ -16,14 +16,12 @@ import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * CssKebabCaseEnumConverter. Converts all enum names to kebab-case.
- * <p>
- * If you need a different mapping use {@link MappedCssConverter} or
- * {@link LiteralEnumCssConverter}.
- *
- * @param <E> the type of the enum that can be converted from/to CSS
- */
+/// CssKebabCaseEnumConverter. Converts all enum names to kebab-case.
+///
+/// If you need a different mapping use [MappedCssConverter] or
+/// [LiteralEnumCssConverter].
+///
+/// @param <E> the type of the enum that can be converted from/to CSS
 public class KebabCaseEnumCssConverter<E extends Enum<E>> implements CssConverter<E> {
 
     private final Class<E> enumClass;

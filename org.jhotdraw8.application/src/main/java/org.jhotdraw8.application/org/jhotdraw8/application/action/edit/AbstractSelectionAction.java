@@ -15,31 +15,24 @@ import org.jhotdraw8.application.EditableComponent;
 import org.jhotdraw8.application.action.AbstractApplicationAction;
 import org.jspecify.annotations.Nullable;
 
-/**
- * {@code AbstractSelectionAction} acts on the selection of a target component
- * or of the currently focused component in the application.
- *
- */
+/// `AbstractSelectionAction` acts on the selection of a target component
+/// or of the currently focused component in the application.
 public abstract class AbstractSelectionAction extends AbstractApplicationAction {
 
     private final @Nullable Node target;
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param application the application
-     */
+    /// Creates a new instance.
+    ///
+    /// @param application the application
     public AbstractSelectionAction(Application application) {
         this(application, null);
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param application the application
-     * @param target      the target node
-     */
+    /// Creates a new instance.
+    ///
+    /// @param application the application
+    /// @param target      the target node
     public AbstractSelectionAction(Application application, @Nullable Node target) {
         super(application);
         this.target = target;

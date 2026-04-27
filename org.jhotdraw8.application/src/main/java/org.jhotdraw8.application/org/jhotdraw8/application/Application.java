@@ -32,11 +32,8 @@ import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 
-/**
- * An {@code Application} handles the life-cycle of {@link Activity} objects and
- * provides windows to present them on screen.
- *
- */
+/// An `Application` handles the life-cycle of [Activity] objects and
+/// provides windows to present them on screen.
 public interface Application extends Disableable, PropertyBean {
     String ACTIONS_PROPERTY = "actions";
     String ACTIVITIES_PROPERTY = "activities";
@@ -53,12 +50,10 @@ public interface Application extends Disableable, PropertyBean {
     Key<String> COPYRIGHT_KEY = new SimpleNullableKey<>("copyright", String.class);
     Key<String> LICENSE_KEY = new SimpleNullableKey<>("license", String.class);
 
-    /**
-     * Contains all {@link Activity} objects that are managed by this
-     * {@link Application}.
-     *
-     * @return the activities
-     */
+    /// Contains all [Activity] objects that are managed by this
+    /// [Application].
+    ///
+    /// @return the activities
     ReadOnlySetProperty<Activity> activitiesProperty();
 
     Executor getExecutor();
@@ -66,12 +61,10 @@ public interface Application extends Disableable, PropertyBean {
     NonNullObjectProperty<Preferences> preferencesProperty();
 
 
-    /**
-     * Contains all {@link Action} objects that are managed by this
-     * {@link Application}.
-     *
-     * @return the activities
-     */
+    /// Contains all [Action] objects that are managed by this
+    /// [Application].
+    ///
+    /// @return the activities
     ReadOnlyMapProperty<String, Action> actionsProperty();
 
 
@@ -87,27 +80,23 @@ public interface Application extends Disableable, PropertyBean {
         preferencesProperty().set(preferences);
     }
 
-    /**
-     * The set of recent URIs. The set must be ordered by most recently used
-     * first. Only the first items as specified in
-     * {@link #maxNumberOfRecentUrisProperty} of the set are used and persisted
-     * in user preferences.
-     *
-     * @return the recent Uris
-     */
+    /// The set of recent URIs. The set must be ordered by most recently used
+    /// first. Only the first items as specified in
+    /// [#maxNumberOfRecentUrisProperty] of the set are used and persisted
+    /// in user preferences.
+    ///
+    /// @return the recent Uris
     ReadOnlyMapProperty<URI, DataFormat> recentUrisProperty();
 
     default ObservableMap<URI, DataFormat> getRecentUris() {
         return recentUrisProperty().get();
     }
 
-    /**
-     * The maximal number of recent URIs. Specifies how many items of
-     * {@link #recentUrisProperty} are used and persisted in user preferences.
-     * This number is also persisted in user preferences.
-     *
-     * @return the number of recent Uris
-     */
+    /// The maximal number of recent URIs. Specifies how many items of
+    /// [#recentUrisProperty] are used and persisted in user preferences.
+    /// This number is also persisted in user preferences.
+    ///
+    /// @return the number of recent Uris
     IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
@@ -115,12 +104,10 @@ public interface Application extends Disableable, PropertyBean {
         return activitiesProperty().get();
     }
 
-    /**
-     * Provides the currently active activities. This is the last activities which was
-     * focus owner. Returns null, if the application has no views.
-     *
-     * @return The active activities.
-     */
+    /// Provides the currently active activities. This is the last activities which was
+    /// focus owner. Returns null, if the application has no views.
+    ///
+    /// @return The active activities.
     ReadOnlyObjectProperty<Activity> activeActivityProperty();
 
     // Convenience method
@@ -129,25 +116,19 @@ public interface Application extends Disableable, PropertyBean {
     }
 
 
-    /**
-     * Exits the application.
-     */
+    /// Exits the application.
     void exit();
 
-    /**
-     * Returns the application node.
-     *
-     * @return the node
-     */
+    /// Returns the application node.
+    ///
+    /// @return the node
     default @Nullable Node getNode() {
         return null;
     }
 
-    /**
-     * Creates a new activity, initializes it, then invokes the callback.
-     *
-     * @return A callback.
-     */
+    /// Creates a new activity, initializes it, then invokes the callback.
+    ///
+    /// @return A callback.
     default CompletionStage<Activity> createActivity() {
         return FXWorker.supply(() -> {
             Supplier<Activity> factory = getActivityFactory();

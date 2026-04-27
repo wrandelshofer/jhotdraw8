@@ -28,21 +28,14 @@ import static org.jhotdraw8.application.Application.LICENSE_KEY;
 import static org.jhotdraw8.application.Application.NAME_KEY;
 import static org.jhotdraw8.application.Application.VERSION_KEY;
 
-/**
- * Displays a dialog showing information about the application.
- *
- */
+/// Displays a dialog showing information about the application.
 public class AboutAction extends AbstractApplicationAction {
-    /**
-     * The id of this action.
-     */
+    /// The id of this action.
     public static final String ID = "application.about";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app the application
-     */
+    /// Creates a new instance.
+    ///
+    /// @param app the application
     @SuppressWarnings("this-escape")
     public AboutAction(Application app) {
         super(app);

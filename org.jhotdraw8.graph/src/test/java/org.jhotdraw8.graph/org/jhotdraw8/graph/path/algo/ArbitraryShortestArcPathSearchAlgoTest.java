@@ -25,28 +25,23 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * Tests {@link CombinedSequenceFinder}.
- *
- */
+/// Tests [CombinedSequenceFinder].
 public class ArbitraryShortestArcPathSearchAlgoTest {
 
     public ArbitraryShortestArcPathSearchAlgoTest() {
     }
 
-    /**
-     * <pre>
-     * __|  1  |  2  |  3  |  4  |  5  |   6
-     * 1 |       7.0   9.0               14.0
-     * 2 | 7.0        10.0  15.0
-     * 3 |                  11.0          2.0
-     * 4 |                         6.0
-     * 5 |                                9.0
-     * 6 |14.0                     9.0
-     * </pre>
-     *
-     * @return
-     */
+    /// <pre>
+    /// __|  1  |  2  |  3  |  4  |  5  |   6
+    /// 1 |       7.0   9.0               14.0
+    /// 2 | 7.0        10.0  15.0
+    /// 3 |                  11.0          2.0
+    /// 4 |                         6.0
+    /// 5 |                                9.0
+    /// 6 |14.0                     9.0
+    /// </pre>
+    ///
+    /// @return
     private DirectedGraph<Integer, Double> createGraph() {
         SimpleMutableDirectedGraph<Integer, Double> builder = new SimpleMutableDirectedGraph<>();
 
@@ -98,9 +93,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyPath method, of class AnyShortestPathBuilder.
-     */
+    /// Test of findAnyPath method, of class AnyShortestPathBuilder.
     public void doFindShortestVertexPath(Integer start, Integer goal, PersistentList<Integer> expPath, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
@@ -135,9 +128,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyPath method, of class AnyShortestPathBuilder.
-     */
+    /// Test of findAnyPath method, of class AnyShortestPathBuilder.
     public void doFindShortestEdgeMultiGoalPath(Integer start, List<Integer> multiGoal, PersistentList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
@@ -177,9 +168,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyPath method, of class AnyShortestPathBuilder.
-     */
+    /// Test of findAnyPath method, of class AnyShortestPathBuilder.
     private void doFindShortestArrowPath(Integer start, Integer goal, PersistentList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
@@ -216,9 +205,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyVertexPath method, of class AnyPathBuilder.
-     */
+    /// Test of findAnyVertexPath method, of class AnyPathBuilder.
     private void doFindShortestVertexPathOverWaypoints(List<Integer> waypoints, PersistentList<Integer> expResult, double expCost) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
@@ -238,9 +225,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyVertexPath method, of class AnyPathBuilder.
-     */
+    /// Test of findAnyVertexPath method, of class AnyPathBuilder.
     private void doFindArrowPathOverWaypoints(List<Integer> waypoints, PersistentList<Double> expResult, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);

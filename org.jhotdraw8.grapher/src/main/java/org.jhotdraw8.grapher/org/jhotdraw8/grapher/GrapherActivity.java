@@ -159,16 +159,12 @@ import java.util.logging.Logger;
 
 import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 
-/**
- * GrapherActivityController.
- */
+/// GrapherActivityController.
 public class GrapherActivity extends AbstractFileBasedActivity implements FileBasedActivity, EditorActivity {
 
     private static final String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
-    /**
-     * Counter for incrementing layer names.
-     */
+    /// Counter for incrementing layer names.
     private final Map<String, Integer> counters = new HashMap<>();
     @FXML
     private ScrollPane detailsScrollPane;
@@ -213,13 +209,11 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         return CompletableFuture.completedFuture(null);
     }
 
-    /**
-     * Creates a figure with a unique id.
-     *
-     * @param <T>      the figure type
-     * @param supplier the supplier
-     * @return the created figure
-     */
+    /// Creates a figure with a unique id.
+    ///
+    /// @param <T>      the figure type
+    /// @param supplier the supplier
+    /// @return the created figure
     public <T extends Figure> T createFigure(Supplier<T> supplier) {
         T created = supplier.get();
         String prefix = created.getTypeSelector().toLowerCase();

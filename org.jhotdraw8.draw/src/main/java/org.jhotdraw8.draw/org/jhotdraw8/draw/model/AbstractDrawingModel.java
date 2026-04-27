@@ -10,10 +10,7 @@ import org.jhotdraw8.fxbase.tree.AbstractTreeModel;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * AbstractDrawingModel.
- *
- */
+/// AbstractDrawingModel.
 public abstract class AbstractDrawingModel extends AbstractTreeModel<Figure> implements DrawingModel {
 
     private final CopyOnWriteArrayList<Listener<DrawingModelEvent>> drawingModelListeners = new CopyOnWriteArrayList<>();

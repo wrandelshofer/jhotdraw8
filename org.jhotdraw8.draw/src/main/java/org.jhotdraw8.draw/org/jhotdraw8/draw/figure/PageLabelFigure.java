@@ -16,19 +16,14 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
-/**
- * PageLabelFigure.
- *
- */
+/// PageLabelFigure.
 public class PageLabelFigure extends AbstractLabelFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
     public static final String TYPE_SELECTOR = "PageLabel";
     public static final String NUM_PAGES_PLACEHOLDER = "${numPages}";
     public static final String PAGE_PLACEHOLDER = "${page}";
     public static final String DATE_PLACEHOLDER = "${date}";
-    /**
-     * The text. Default value: {@code ""}.
-     */
+    /// The text. Default value: `""`.
     public static final StringStyleableKey TEXT_WITH_PLACEHOLDERS = new StringStyleableKey("text", "",
             "Supported placeholders:  " + PAGE_PLACEHOLDER + ", " + NUM_PAGES_PLACEHOLDER + ", " + DATE_PLACEHOLDER);
 
@@ -36,24 +31,20 @@ public class PageLabelFigure extends AbstractLabelFigure
         this(0, 0, "");
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param position of the label
-     * @param text     text of the label
-     */
+    /// Creates a new instance.
+    ///
+    /// @param position of the label
+    /// @param text     text of the label
     public PageLabelFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param x         x-coordinate of the label
-     * @param y         y-coordinate of the label
-     * @param text      text of the label
-     * @param keyValues properties to set
-     */
+    /// Creates a new instance.
+    ///
+    /// @param x         x-coordinate of the label
+    /// @param y         y-coordinate of the label
+    /// @param text      text of the label
+    /// @param keyValues properties to set
     @SuppressWarnings("this-escape")
     public PageLabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT_WITH_PLACEHOLDERS, text);

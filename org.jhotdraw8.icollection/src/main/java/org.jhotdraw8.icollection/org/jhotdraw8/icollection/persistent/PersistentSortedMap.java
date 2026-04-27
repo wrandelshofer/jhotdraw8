@@ -6,12 +6,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * An interface to an persistent sorted map; the implementation guarantees that the state of the collection does not change.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// An interface to an persistent sorted map; the implementation guarantees that the state of the collection does not change.
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public interface PersistentSortedMap<K, V> extends ReadableSortedMap<K, V>, PersistentMap<K, V> {
     @Override
     PersistentSortedMap<K, V> clear();

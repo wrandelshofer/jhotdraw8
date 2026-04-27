@@ -14,33 +14,29 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Shape;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
+import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.BasicStroke;
 
-/**
- * Provides methods for finding JavaFX nodes within a radius around a point.
- */
+/// Provides methods for finding JavaFX nodes within a radius around a point.
 public class NodeFinder {
     private static final double LINE45DEG = Math.sqrt(0.5);
 
     public NodeFinder() {
     }
 
-    /**
-     * Returns the distance to the node, if the node contains the specified point within a
-     * tolerance.
-     *
-     * @param node          The node
-     * @param pointInLocal  The point in local coordinates
-     * @param radiusInLocal The maximal distance the point is allowed to be away
-     *                      from the node, in local coordinates
-     * @return a distance if the node contains the point, null otherwise
-     */
+    /// Returns the distance to the node, if the node contains the specified point within a
+    /// tolerance.
+    ///
+    /// @param node          The node
+    /// @param pointInLocal  The point in local coordinates
+    /// @param radiusInLocal The maximal distance the point is allowed to be away
+    ///                      from the node, in local coordinates
+    /// @return a distance if the node contains the point, null otherwise
     public @Nullable Double contains(Node node, Point2D pointInLocal, double radiusInLocal) {
         double toleranceInLocal = radiusInLocal / FXTransforms.deltaTransform(node.getLocalToSceneTransform(), LINE45DEG, LINE45DEG).magnitude();
 

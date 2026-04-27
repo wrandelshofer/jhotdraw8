@@ -11,29 +11,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import org.jhotdraw8.fxbase.control.Disableable;
 
-/**
- * AbstractDisableable.
- * <p>
- * Binds {@code disabled} to {@code disablers.emptyProperty().not()}.
- * <p>
- * If a subclass wants to bind {@code disabled} to additional reasons, it must
- * unbind {@code disabled} first.
- *
- */
+/// AbstractDisableable.
+///
+/// Binds `disabled` to `disablers.emptyProperty().not()`.
+///
+/// If a subclass wants to bind `disabled` to additional reasons, it must
+/// unbind `disabled` first.
 public class AbstractDisableable implements Disableable {
 
-    /**
-     * Holds the disablers.
-     * <p>
-     * This field is protected, so that it can be accessed by subclasses.
-     */
+    /// Holds the disablers.
+    ///
+    /// This field is protected, so that it can be accessed by subclasses.
     protected final ObservableSet<Object> disablers = FXCollections.observableSet();
-    /**
-     * Holds the disabled state.
-     * <p>
-     * This field is protected, so that it can be bound to or-combinations of
-     * disablers.
-     */
+    /// Holds the disabled state.
+    ///
+    /// This field is protected, so that it can be bound to or-combinations of
+    /// disablers.
     protected final ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
 
     {

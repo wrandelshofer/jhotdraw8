@@ -21,10 +21,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.LinkedHashSet;
 import java.util.SequencedSet;
 
-/**
- * Base class for line connection figure.
- *
- */
+/// Base class for line connection figure.
 public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         implements NonTransformableFigure, LineConnectingFigure {
 
@@ -124,12 +121,10 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         );
     }
 
-    /**
-     * Returns all figures which are connected by this figure - they provide to
-     * the layout of this figure.
-     *
-     * @return an unmodifiable set of connected figures
-     */
+    /// Returns all figures which are connected by this figure - they provide to
+    /// the layout of this figure.
+    ///
+    /// @return an unmodifiable set of connected figures
     @Override
     public ReadableSet<Figure> getLayoutSubjects() {
         final Figure startTarget = get(START_TARGET);

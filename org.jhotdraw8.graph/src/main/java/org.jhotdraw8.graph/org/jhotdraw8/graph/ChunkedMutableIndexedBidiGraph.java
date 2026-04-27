@@ -18,57 +18,37 @@ import java.util.function.BiFunction;
 import java.util.function.LongConsumer;
 
 
-/**
- * A mutable indexed bi-directional graph. The data structure of the graph
- * is split up into {@link GraphChunk}s.
- */
+/// A mutable indexed bi-directional graph. The data structure of the graph
+/// is split up into [GraphChunk]s.
 public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         IntAttributedIndexedBidiGraph {
 
 
-    /**
-     * Number of vertices per chunk.
-     * Must be a power of 2.
-     */
+    /// Number of vertices per chunk.
+    /// Must be a power of 2.
     private final int chunkSize;
-    /**
-     * Number of bits that we need to shift a vertex index to the right to get
-     * the chunk that contains it.
-     * This is log2(chunkSize).
-     */
+    /// Number of bits that we need to shift a vertex index to the right to get
+    /// the chunk that contains it.
+    /// This is log2(chunkSize).
     private final int chunkShift;
-    /**
-     * If a new chunk is created, then we reserve for each vertex this amount
-     * of space for arrows.
-     */
+    /// If a new chunk is created, then we reserve for each vertex this amount
+    /// of space for arrows.
     private final int initialArityCapacity;
-    /**
-     * Number of vertices in the graph.
-     */
+    /// Number of vertices in the graph.
     int vertexCount = 0;
 
-    /**
-     * Number of arrows in the graph.
-     */
+    /// Number of arrows in the graph.
     int arrowCount = 0;
 
-    /**
-     * Array of chunks for arrows to next vertices.
-     */
+    /// Array of chunks for arrows to next vertices.
     private GraphChunk[] nextChunks = new GraphChunk[0];
-    /**
-     * Array of chunks for arrows to previous vertices.
-     */
+    /// Array of chunks for arrows to previous vertices.
     private GraphChunk[] prevChunks = new GraphChunk[0];
 
-    /**
-     * Factory for creating new chunks.
-     */
+    /// Factory for creating new chunks.
     private BiFunction<Integer, Integer, GraphChunk> chunkFactory;
 
-    /**
-     * Creates a new ins
-     */
+    /// Creates a new ins
     public ChunkedMutableIndexedBidiGraph() {
         this(256, 4);
     }
@@ -88,37 +68,31 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         this.chunkFactory = chunkFactory;
     }
 
-    /**
-     * Adds the arrow if it is absent.
-     *
-     * @param v index of vertex 'v'
-     * @param u index of vertex 'u'
-     */
+    /// Adds the arrow if it is absent.
+    ///
+    /// @param v index of vertex 'v'
+    /// @param u index of vertex 'u'
     @Override
     public void addArrowAsInt(final int v, final int u) {
         addArrowAsInt(v, u, 0);
     }
 
-    /**
-     * Adds the arrow if it is absent.
-     *
-     * @param v index of vertex 'v'
-     * @param u index of vertex 'u'
-     */
+    /// Adds the arrow if it is absent.
+    ///
+    /// @param v index of vertex 'v'
+    /// @param u index of vertex 'u'
     @Override
     public void addArrowAsInt(final int v, final int u, final int data) {
         addArrowIfAbsentAsInt(v, u, data);
     }
 
-    /**
-     * Adds the arrow if it is absent, updates the arrow data if the arrow is
-     * present.
-     *
-     * @param v    index of vertex 'v'
-     * @param u    index of vertex 'u'
-     * @param data the arrow data
-     * @return true if the arrow was absent
-     */
+    /// Adds the arrow if it is absent, updates the arrow data if the arrow is
+    /// present.
+    ///
+    /// @param v    index of vertex 'v'
+    /// @param u    index of vertex 'u'
+    /// @param data the arrow data
+    /// @return true if the arrow was absent
     public boolean addArrowIfAbsentAsInt(final int v, final int u, final int data) {
         final GraphChunk uChunk = getPrevChunk(u);
         boolean added = uChunk.tryAddArrow(u, v, data, false);
@@ -130,15 +104,13 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         return added;
     }
 
-    /**
-     * Adds the arrow if its absent, updates the arrow data if the arrow is
-     * present.
-     *
-     * @param v    index of vertex 'v'
-     * @param u    index of vertex 'u'
-     * @param data the arrow data
-     * @return true if the arrow was absent
-     */
+    /// Adds the arrow if its absent, updates the arrow data if the arrow is
+    /// present.
+    ///
+    /// @param v    index of vertex 'v'
+    /// @param u    index of vertex 'u'
+    /// @param data the arrow data
+    /// @return true if the arrow was absent
     public boolean addOrUpdateArrowAsInt(final int v, final int u, final int data) {
         final GraphChunk uChunk = getPrevChunk(u);
         final boolean added = uChunk.tryAddArrow(u, v, data, true);
@@ -165,59 +137,49 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         vertexCount = v + 1;
     }
 
-    /**
-     * Searches for predecessor vertices of the specified vertex.
-     *
-     * @param vidx    the index of the vertex
-     * @param dfs     whether depth-first-search should be used instead of breadth-first-search
-     * @param visited the set of visited vertices
-     * @return the enumerator provides the vertex index
-     */
+    /// Searches for predecessor vertices of the specified vertex.
+    ///
+    /// @param vidx    the index of the vertex
+    /// @param dfs     whether depth-first-search should be used instead of breadth-first-search
+    /// @param visited the set of visited vertices
+    /// @return the enumerator provides the vertex index
     public Enumerator.OfInt searchPrevVertices(final int vidx, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexSpliterator(vidx, prevChunks, dfs, visited);
     }
 
-    /**
-     * Searches for predecessor vertex data of the specified vertex.
-     *
-     * @param v       a vertex
-     * @param dfs     whether depth-first-search should be used instead of breadth-first-search
-     * @param visited the set of visited vertices
-     * @return the enumerator provides the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
+    /// Searches for predecessor vertex data of the specified vertex.
+    ///
+    /// @param v       a vertex
+    /// @param dfs     whether depth-first-search should be used instead of breadth-first-search
+    /// @param visited the set of visited vertices
+    /// @return the enumerator provides the vertex data in the 32 high-bits
+    /// and the vertex index in the 32 low-bits of the long.
     public Spliterator.OfLong searchPrevVertexData(final int v, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexDataSpliterator(v, prevChunks, dfs, visited);
     }
 
-    /**
-     * Searches for successor vertices of the specified vertex.
-     *
-     * @param v       a vertex
-     * @param dfs     whether depth-first-search should be used instead of breadth-first-search
-     * @param visited the set of visited vertices
-     * @return the enumerator provides the vertex index
-     */
+    /// Searches for successor vertices of the specified vertex.
+    ///
+    /// @param v       a vertex
+    /// @param dfs     whether depth-first-search should be used instead of breadth-first-search
+    /// @param visited the set of visited vertices
+    /// @return the enumerator provides the vertex index
     public Enumerator.OfInt searchNextVertices(final int v, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexSpliterator(v, nextChunks, dfs, visited);
     }
 
-    /**
-     * Searches for successor vertex data of the specified vertex.
-     *
-     * @param v       a vertex
-     * @param dfs     whether depth-first-search should be used instead of breadth-first-search
-     * @param visited the set of visited vertices
-     * @return the enumerator provides the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
+    /// Searches for successor vertex data of the specified vertex.
+    ///
+    /// @param v       a vertex
+    /// @param dfs     whether depth-first-search should be used instead of breadth-first-search
+    /// @param visited the set of visited vertices
+    /// @return the enumerator provides the vertex data in the 32 high-bits
+    /// and the vertex index in the 32 low-bits of the long.
     public Spliterator.OfLong searchNextVertexData(final int v, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexDataSpliterator(v, nextChunks, dfs, visited);
     }
 
-    /**
-     * Removes all vertices and arrows from the graph.
-     */
+    /// Removes all vertices and arrows from the graph.
     public void clear() {
         Arrays.fill(nextChunks, null);
         Arrays.fill(prevChunks, null);

@@ -10,12 +10,10 @@ import java.util.ConcurrentModificationException;
 import java.util.ListIterator;
 import java.util.function.IntSupplier;
 
-/**
- * An iterator that fails when a provided modification counter does not have an
- * expected value.
- *
- * @param <E> the element type
- */
+/// An iterator that fails when a provided modification counter does not have an
+/// expected value.
+///
+/// @param <E> the element type
 public class FailFastListIterator<E> implements ListIterator<E> {
     private final ListIterator<E> i;
     private int expectedModCount;

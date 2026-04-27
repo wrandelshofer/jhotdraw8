@@ -17,16 +17,14 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
- * Builder for creating unique paths from a directed graph.
- * <p>
- * The builder searches for unique paths using a breadth-first search.<br>
- * Returns only a path if it is unique or if there is only one hop
- * from start to goal.
- *
- * @param <V> the vertex data type
- * @param <C> the cost number type
- */
+/// Builder for creating unique paths from a directed graph.
+///
+/// The builder searches for unique paths using a breadth-first search.
+/// Returns only a path if it is unique or if there is only one hop
+/// from start to goal.
+///
+/// @param <V> the vertex data type
+/// @param <C> the cost number type
 public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
     public UniqueOrOneHopVertexPathSearchAlgo() {
     }
@@ -37,18 +35,16 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
     }
 
 
-    /**
-     * Search engine method.
-     *
-     * @param startVertices        the set of start vertices
-     * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next arcs function
-     * @param visited              the set of visited vertices (see {@link AddToSet})
-     * @param zero                 the zero cost value
-     * @param costFunction         the cost function
-     * @param sumFunction          the sum function for adding two cost values
-     * @return on success: a back link, otherwise: null
-     */
+    /// Search engine method.
+    ///
+    /// @param startVertices        the set of start vertices
+    /// @param goalPredicate        the goal predicate
+    /// @param nextVerticesFunction the next arcs function
+    /// @param visited              the set of visited vertices (see [AddToSet])
+    /// @param zero                 the zero cost value
+    /// @param costFunction         the cost function
+    /// @param sumFunction          the sum function for adding two cost values
+    /// @return on success: a back link, otherwise: null
     public @Nullable VertexBackLinkWithCost<V, C> search(Iterable<V> startVertices,
                                                          Predicate<V> goalPredicate,
                                                          Function<V, Iterable<V>> nextVerticesFunction,

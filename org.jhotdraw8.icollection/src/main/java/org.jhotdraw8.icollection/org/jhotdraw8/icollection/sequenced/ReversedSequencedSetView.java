@@ -8,23 +8,19 @@ import java.util.SequencedSet;
 import java.util.Spliterator;
 import java.util.function.Supplier;
 
-/**
- * Provides a reversed view on a {@link SequencedSet}.
- *
- * @param <E> the element type
- */
+/// Provides a reversed view on a [SequencedSet].
+///
+/// @param <E> the element type
 public class ReversedSequencedSetView<E> extends AbstractSet<E> implements SequencedSet<E> {
     private final SequencedSet<E> src;
     private final Supplier<Iterator<E>> reverseIterator;
     private final Supplier<Spliterator<E>> reverseSpliterator;
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param src                the source set
-     * @param reverseIterator    the reverse iterator
-     * @param reverseSpliterator the reverse spliterator
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param src                the source set
+    /// @param reverseIterator    the reverse iterator
+    /// @param reverseSpliterator the reverse spliterator
     public ReversedSequencedSetView(SequencedSet<E> src,
                                     Supplier<Iterator<E>> reverseIterator,
                                     Supplier<Spliterator<E>> reverseSpliterator) {

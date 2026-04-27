@@ -15,23 +15,21 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * <pre>
- * # JMH version: 1.28
- * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
- * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
- *
- *                    (size)  Mode  Cnt     _     Score   Error  Units
- * ContainsFound     1000000  avgt          _   223.119          ns/op
- * ContainsNotFound  1000000  avgt          _   221.303          ns/op
- * CopyOf            1000000  avgt       330_674279.000          ns/op
- * Head              1000000  avgt          _    29.213          ns/op
- * Iterate           1000000  avgt        71_110298.376          ns/op
- * Put               1000000  avgt          _   399.898          ns/op
- * RemoveThenAdd     1000000  avgt          _   543.379          ns/op
- * Tail              1000000  avgt          _   145.562          ns/op
- * </pre>
- */
+/// <pre>
+/// # JMH version: 1.28
+/// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
+/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+///
+///                    (size)  Mode  Cnt     _     Score   Error  Units
+/// ContainsFound     1000000  avgt          _   223.119          ns/op
+/// ContainsNotFound  1000000  avgt          _   221.303          ns/op
+/// CopyOf            1000000  avgt       330_674279.000          ns/op
+/// Head              1000000  avgt          _    29.213          ns/op
+/// Iterate           1000000  avgt        71_110298.376          ns/op
+/// Put               1000000  avgt          _   399.898          ns/op
+/// RemoveThenAdd     1000000  avgt          _   543.379          ns/op
+/// Tail              1000000  avgt          _   145.562          ns/op
+/// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)

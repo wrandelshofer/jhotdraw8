@@ -14,24 +14,20 @@ import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 
 import java.lang.reflect.Type;
 
-/**
- * NonNullSetStyleableKey.
- *
- * @param <T> the element type of the set
- */
+/// NonNullSetStyleableKey.
+///
+/// @param <T> the element type of the set
 public class NullableSetStyleableKey<T> extends AbstractReadableStyleableKey<PersistentSequencedSet<T>>
         implements WritableStyleableMapAccessor<PersistentSequencedSet<T>>,
         NullableKey<PersistentSequencedSet<T>> {
 
 
-    /**
-     * Creates a new instance with the specified name and with an empty list as the
-     * default value.
-     *
-     * @param name             The name of the key.
-     * @param elementType      the class of the type
-     * @param elementConverter String converter for a list element
-     */
+    /// Creates a new instance with the specified name and with an empty list as the
+    /// default value.
+    ///
+    /// @param name             The name of the key.
+    /// @param elementType      the class of the type
+    /// @param elementConverter String converter for a list element
     public NullableSetStyleableKey(String name, Type elementType, CssConverter<T> elementConverter) {
         super(name, new SimpleParameterizedType(PersistentSequencedSet.class, elementType), new SetCssConverter<>(elementConverter), ChampVectorSet.of());
     }

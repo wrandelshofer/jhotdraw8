@@ -18,10 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * Test for {@link RegexCssConverter}.
- *
- */
+/// Test for [RegexCssConverter].
 public class RegexCssConverterTest {
 
     public static void testFromStringApply(String inputCssRegex, String inputValue, String expectedValue) throws Exception {

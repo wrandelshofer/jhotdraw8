@@ -11,11 +11,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-/**
- * A "declaration" associates a "propertyName" with a list of preserved tokens. If
- * the list of preserved tokens is empty, the declaration must be ignored.
- *
- */
+/// A "declaration" associates a "propertyName" with a list of preserved tokens. If
+/// the list of preserved tokens is empty, the declaration must be ignored.
 public class Declaration extends AbstractSyntaxTree {
     private final @Nullable String namespace;
     private final String propertyName;

@@ -8,33 +8,25 @@ package org.jhotdraw8.fxbase.spi;
 
 import java.net.URL;
 
-/**
- * Interface for service providers that provide a {@link NodeReader}.
- */
+/// Interface for service providers that provide a [NodeReader].
 public interface NodeReaderProvider {
-    /**
-     * Returns true if readers of this service provider can read inputs from
-     * the given URL.
-     *
-     * @param source the source URL
-     * @return true if readers can read from this source
-     */
+    /// Returns true if readers of this service provider can read inputs from
+    /// the given URL.
+    ///
+    /// @param source the source URL
+    /// @return true if readers can read from this source
     boolean canDecodeInput(URL source);
 
-    /**
-     * Returns true if readers of this service provider can read inputs from
-     * the given URL.
-     *
-     * @param path the source path
-     * @return true if readers can read from this source
-     */
+    /// Returns true if readers of this service provider can read inputs from
+    /// the given URL.
+    ///
+    /// @param path the source path
+    /// @return true if readers can read from this source
     boolean canDecodeInput(String path);
 
-    /**
-     * Creates a reader.
-     *
-     * @return a new reader
-     */
+    /// Creates a reader.
+    ///
+    /// @return a new reader
     NodeReader createReader();
 }
 

@@ -41,20 +41,13 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.round;
 
-/**
- * GridConstrainer.
- *
- */
+/// GridConstrainer.
 public class GridConstrainer extends AbstractConstrainer {
 
-    /**
-     * Up-Vector.
-     */
+    /// Up-Vector.
     private final Point2D UP = new Point2D(0, 1);
-    /**
-     * The angle for constrained rotations on the grid (in degrees). The value 0
-     * turns the constrainer off for rotations.
-     */
+    /// The angle for constrained rotations on the grid (in degrees). The value 0
+    /// turns the constrainer off for rotations.
     private final DoubleProperty angle = new SimpleDoubleProperty(this, "angle") {
 
         @Override
@@ -62,9 +55,7 @@ public class GridConstrainer extends AbstractConstrainer {
             fireInvalidated(this);
         }
     };
-    /**
-     * Whether to draw the grid.
-     */
+    /// Whether to draw the grid.
     private final BooleanProperty drawGrid = new SimpleBooleanProperty(this, "drawGrid") {
 
         @Override
@@ -72,10 +63,8 @@ public class GridConstrainer extends AbstractConstrainer {
             fireInvalidated();
         }
     };
-    /**
-     * Height of a grid cell. The value 0 turns the constrainer off for the
-     * vertical axis.
-     */
+    /// Height of a grid cell. The value 0 turns the constrainer off for the
+    /// vertical axis.
     private final ObjectProperty<CssSize> height = new SimpleObjectProperty<>(this, "height") {
 
         @Override
@@ -92,9 +81,7 @@ public class GridConstrainer extends AbstractConstrainer {
     };
 
     private final Path majorNode = new Path();
-    /**
-     * The x-factor for the major grid of the grid.
-     */
+    /// The x-factor for the major grid of the grid.
     private final IntegerProperty majorX = new SimpleIntegerProperty(this, "major-x", 5) {
 
         @Override
@@ -102,9 +89,7 @@ public class GridConstrainer extends AbstractConstrainer {
             fireInvalidated();
         }
     };
-    /**
-     * The x-factor for the major grid of the grid.
-     */
+    /// The x-factor for the major grid of the grid.
     private final IntegerProperty majorY = new SimpleIntegerProperty(this, "major-y", 5) {
 
         @Override
@@ -115,9 +100,7 @@ public class GridConstrainer extends AbstractConstrainer {
 
     private final Path minorNode = new Path();
     private final Group node = new Group();
-    /**
-     * Whether to snap to the grid.
-     */
+    /// Whether to snap to the grid.
     private final BooleanProperty snapToGrid = new SimpleBooleanProperty(this, "snapToGrid", true) {
 
         @Override
@@ -125,10 +108,8 @@ public class GridConstrainer extends AbstractConstrainer {
             fireInvalidated();
         }
     };
-    /**
-     * Width of a grid cell. The value 0 turns the constrainer off for the
-     * horizontal axis.
-     */
+    /// Width of a grid cell. The value 0 turns the constrainer off for the
+    /// horizontal axis.
     private final ObjectProperty<CssSize> width = new SimpleObjectProperty<>(this, "width") {
 
         @Override
@@ -136,9 +117,7 @@ public class GridConstrainer extends AbstractConstrainer {
             fireInvalidated();
         }
     };
-    /**
-     * The x-origin of the grid.
-     */
+    /// The x-origin of the grid.
     private final ObjectProperty<CssSize> x = new SimpleObjectProperty<>(this, "x") {
 
         @Override
@@ -146,9 +125,7 @@ public class GridConstrainer extends AbstractConstrainer {
             fireInvalidated();
         }
     };
-    /**
-     * The y-origin of the grid.
-     */
+    /// The y-origin of the grid.
     private final ObjectProperty<CssSize> y = new SimpleObjectProperty<>(this, "y") {
 
         @Override
@@ -157,36 +134,30 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     };
 
-    /**
-     * Creates a grid of 10x10 pixels at origin 0,0 and 22.5 degree rotations.
-     */
+    /// Creates a grid of 10x10 pixels at origin 0,0 and 22.5 degree rotations.
     public GridConstrainer() {
         this(0, 0, 10, 10, 22.5, 5, 5);
     }
 
-    /**
-     * Creates a grid of width x height pixels at origin 0,0 and 22.5 degree
-     * rotations.
-     *
-     * @param width  The width of the grid. 0 turns the grid of for the x-axis.
-     * @param height The width of the grid. 0 turns the grid of for the y-axis.
-     */
+    /// Creates a grid of width x height pixels at origin 0,0 and 22.5 degree
+    /// rotations.
+    ///
+    /// @param width  The width of the grid. 0 turns the grid of for the x-axis.
+    /// @param height The width of the grid. 0 turns the grid of for the y-axis.
     public GridConstrainer(double width, double height) {
         this(0, 0, width, height, 22.5, 5, 5);
     }
 
-    /**
-     * Creates a grid with the specified constraints.
-     *
-     * @param x      The x-origin of the grid
-     * @param y      The y-origin of the grid
-     * @param width  The width of the grid. 0 turns the grid of for the x-axis.
-     * @param height The width of the grid. 0 turns the grid of for the y-axis.
-     * @param angle  The angular grid (in degrees). 0 turns the grid off for
-     *               rotations.
-     * @param majorx the interval for major grid lines on the x-axis
-     * @param majory the interval for major grid lines on the y-axis
-     */
+    /// Creates a grid with the specified constraints.
+    ///
+    /// @param x      The x-origin of the grid
+    /// @param y      The y-origin of the grid
+    /// @param width  The width of the grid. 0 turns the grid of for the x-axis.
+    /// @param height The width of the grid. 0 turns the grid of for the y-axis.
+    /// @param angle  The angular grid (in degrees). 0 turns the grid off for
+    ///               rotations.
+    /// @param majorx the interval for major grid lines on the x-axis
+    /// @param majory the interval for major grid lines on the y-axis
     public GridConstrainer(double x, double y, double width, double height, double angle, int majorx, int majory) {
         this(CssSize.of(x), CssSize.of(y), CssSize.of(width), CssSize.of(height), angle, majorx, majory);
     }

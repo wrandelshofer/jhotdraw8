@@ -11,10 +11,7 @@ import org.jspecify.annotations.Nullable;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-/**
- * PathIterableFigure.
- *
- */
+/// PathIterableFigure.
 public interface PathIterableFigure extends Figure {
     PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx);
 }

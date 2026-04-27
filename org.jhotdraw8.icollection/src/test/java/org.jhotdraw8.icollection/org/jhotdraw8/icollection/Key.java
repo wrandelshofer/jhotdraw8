@@ -8,10 +8,8 @@ package org.jhotdraw8.icollection;
 
 import java.io.Serializable;
 
-/**
- * Elem has a configurable bit mask for its hash code.
- * Allowing to run the same test with many or few hash collisions.
- */
+/// Elem has a configurable bit mask for its hash code.
+/// Allowing to run the same test with many or few hash collisions.
 public class Key implements Serializable, Cloneable, Comparable<Key> {
     private static final long serialVersionUID = 0L;
     private final int value;

@@ -33,82 +33,72 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
-/**
- * Implements the {@link SequencedMap} interface using a Compressed
- * Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
- * <p>
- * Features:
- * <ul>
- *     <li>supports up to 2<sup>30</sup> entries</li>
- *     <li>allows null keys and null values</li>
- *     <li>is mutable</li>
- *     <li>is not thread-safe</li>
- *     <li>iterates in the order, in which keys were inserted</li>
- * </ul>
- * <p>
- * Performance characteristics:
- * <ul>
- *     <li>put, putFirst, putLast: O(1) in an amortized sense, because we sometimes have to
- *     renumber the elements.</li>
- *     <li>remove: O(1) in an amortized sense, because we sometimes have to renumber the elements.</li>
- *     <li>containsKey: O(1)</li>
- *     <li>toPersistent: O(1) + O(log N) distributed across subsequent updates in
- *     this mutable map</li>
- *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
- *     mutable map and in the clone</li>
- *     <li>iterator creation: O(1)</li>
- *     <li>iterator.next: O(1)</li>
- *     <li>getFirst, getLast: O(1)</li>
- * </ul>
- * <p>
- * Implementation details:
- * <p>
- * See description at {@link ChampVectorMap}.
- * <p>
- * References:
- * <dl>
- *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Persistent Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
- *      <dt>The Capsule Hash Trie Collections Library.
- *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
- *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
- * </dl>
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Implements the [SequencedMap] interface using a Compressed
+/// Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
+///
+/// Features:
+///
+///   - supports up to 2<sup>30</sup> entries
+///   - allows null keys and null values
+///   - is mutable
+///   - is not thread-safe
+///   - iterates in the order, in which keys were inserted
+///
+///
+/// Performance characteristics:
+///
+///   - put, putFirst, putLast: O(1) in an amortized sense, because we sometimes have to
+///     renumber the elements.
+///   - remove: O(1) in an amortized sense, because we sometimes have to renumber the elements.
+///   - containsKey: O(1)
+///   - toPersistent: O(1) + O(log N) distributed across subsequent updates in
+///     this mutable map
+///   - clone: O(1) + O(log N) distributed across subsequent updates in this
+///     mutable map and in the clone
+///   - iterator creation: O(1)
+///   - iterator.next: O(1)
+///   - getFirst, getLast: O(1)
+///
+///
+/// Implementation details:
+///
+/// See description at [ChampVectorMap].
+///
+/// References:
+/// <dl>
+///      <dt>Michael J. Steindorfer (2017).
+///      Efficient Persistent Collections.</dt>
+///      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
+///      <dt>The Capsule Hash Trie Collections Library.
+///
+/// Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+///      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+/// </dl>
+///
+/// @param <K> the key type
+/// @param <V> the value type
 @SuppressWarnings("exports")
 public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, SequencedEntry<K, V>>
         implements SequencedMap<K, V>, ReadableSequencedMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
-    /**
-     * Offset of sequence numbers to vector indices.
-     *
-     * <pre>vector index = sequence number + offset</pre>
-     */
+    /// Offset of sequence numbers to vector indices.
+    /// <pre>vector index = sequence number + offset</pre>
     private int offset = 0;
-    /**
-     * In this vector we store the elements in the order in which they were inserted.
-     */
+    /// In this vector we store the elements in the order in which they were inserted.
     private VectorList<Object> vector;
 
 
-    /**
-     * Constructs a new empty map.
-     */
+    /// Constructs a new empty map.
     public MutableChampVectorMap() {
         root = BitmapIndexedNode.emptyNode();
         vector = VectorList.of();
     }
 
-    /**
-     * Constructs a map containing the same entries as in the specified
-     * {@link Map}.
-     *
-     * @param c a map
-     */
+    /// Constructs a map containing the same entries as in the specified
+    /// [Map].
+    ///
+    /// @param c a map
     @SuppressWarnings("unchecked")
     public MutableChampVectorMap(Map<? extends K, ? extends V> c) {
         this((c instanceof MutableChampVectorMap<?, ?> mvm)
@@ -116,12 +106,10 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
                 : c.entrySet());
     }
 
-    /**
-     * Constructs a map containing the same entries as in the specified
-     * {@link Iterable}.
-     *
-     * @param c an iterable
-     */
+    /// Constructs a map containing the same entries as in the specified
+    /// [Iterable].
+    ///
+    /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableChampVectorMap(Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c instanceof ChampVectorMap<?, ?>) {
@@ -139,9 +127,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
 
-    /**
-     * Removes all entries from this map.
-     */
+    /// Removes all entries from this map.
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
@@ -151,9 +137,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
         offset = -1;
     }
 
-    /**
-     * Returns a shallow copy of this map.
-     */
+    /// Returns a shallow copy of this map.
     @Override
     public MutableChampVectorMap<K, V> clone() {
         return (MutableChampVectorMap<K, V>) super.clone();
@@ -211,11 +195,9 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
         return sequencedValues();
     }
 
-    /**
-     * Returns a {@link SequencedSet} view of the entries contained in this map.
-     *
-     * @return a view of the entries contained in this map
-     */
+    /// Returns a [SequencedSet] view of the entries contained in this map.
+    ///
+    /// @return a view of the entries contained in this map
     @Override
     public SequencedSet<Entry<K, V>> sequencedEntrySet() {
         return new SequencedSetFacade<>(
@@ -238,13 +220,11 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
         return isEmpty() ? null : (SequencedEntry<K, V>) vector.getFirst();
     }
 
-    /**
-     * Returns the value to which the specified key is mapped,
-     * or {@code null} if this map contains no entry for the key.
-     *
-     * @param o the key whose associated value is to be returned
-     * @return the associated value or null
-     */
+    /// Returns the value to which the specified key is mapped,
+    /// or `null` if this map contains no entry for the key.
+    ///
+    /// @param o the key whose associated value is to be returned
+    /// @return the associated value or null
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable V get(Object o) {
@@ -433,11 +413,9 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
         return details;
     }
 
-    /**
-     * Renumbers the sequence numbers if they have overflown,
-     * or if the extent of the sequence numbers is more than
-     * 4 times the size of the set.
-     */
+    /// Renumbers the sequence numbers if they have overflown,
+    /// or if the extent of the sequence numbers is more than
+    /// 4 times the size of the set.
     private void renumber() {
         if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
             var result = SequencedData.vecRenumber(getOrCreateOwner(), size, vector.size(), root, vector.trie,
@@ -454,11 +432,9 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
         return new ReversedSequencedMapView<>(this);
     }
 
-    /**
-     * Returns an persistent copy of this map.
-     *
-     * @return an persistent copy
-     */
+    /// Returns an persistent copy of this map.
+    ///
+    /// @return an persistent copy
     public ChampVectorMap<K, V> toPersistent() {
         owner = null;
         return size == 0 ? ChampVectorMap.of()

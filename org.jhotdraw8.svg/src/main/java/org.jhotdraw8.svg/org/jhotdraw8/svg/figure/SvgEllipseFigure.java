@@ -25,17 +25,12 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.PathIterator;
 
-/**
- * Represents an SVG 'ellipse' element.
- *
- */
+/// Represents an SVG 'ellipse' element.
 public class SvgEllipseFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure,
         PathIterableFigure, HideableFigure, SvgPathLengthFigure,
         SvgElementFigure, SvgDefaultableFigure {
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "ellipse";
     public static final CssSizeStyleableKey CX = SvgCircleFigure.CX;
     public static final CssSizeStyleableKey CY = SvgCircleFigure.CY;

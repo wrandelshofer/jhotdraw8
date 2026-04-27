@@ -10,10 +10,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 
-/**
- * FigurePropertyChangeEvent.
- *
- */
+/// FigurePropertyChangeEvent.
 public class FigurePropertyChangeEvent extends Event<Figure> {
 
     @Serial
@@ -33,11 +30,9 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
         this.wasRemoved = wasRemoved;
     }
 
-    /**
-     * Returns the key of the property that has changed.
-     *
-     * @return the key or null
-     */
+    /// Returns the key of the property that has changed.
+    ///
+    /// @return the key or null
     public Key<?> getKey() {
         return key;
     }
@@ -52,20 +47,16 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
         return newValue;
     }
 
-    /**
-     * If the change is the result of an add operation.
-     *
-     * @return true if a new key-value entry was added to the map.
-     */
+    /// If the change is the result of an add operation.
+    ///
+    /// @return true if a new key-value entry was added to the map.
     public boolean wasAdded() {
         return wasAdded;
     }
 
-    /**
-     * If the change is the result of a remove operation.
-     *
-     * @return true if an existing key-value entry was removed from the map.
-     */
+    /// If the change is the result of a remove operation.
+    ///
+    /// @return true if an existing key-value entry was removed from the map.
     public boolean wasRemoved() {
         return wasRemoved;
     }

@@ -21,11 +21,8 @@ import java.util.function.Consumer;
 import static org.jhotdraw8.css.converter.SizeCssConverter.parseSize;
 
 
-/**
- * Converts a {@code javafx.geometry.CssRectangle2D} into a {@code String} and vice
- * versa.
- *
- */
+/// Converts a `javafx.geometry.CssRectangle2D` into a `String` and vice
+/// versa.
 public class Rectangle2DCssConverter extends AbstractCssConverter<CssRectangle2D> {
     private final boolean withSpace;
     private final boolean withComma;

@@ -18,10 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * ClippingFigure.
- *
- */
+/// ClippingFigure.
 public class ClippingFigure extends AbstractCompositeFigure
         implements Clipping, StyleableFigure, LockedFigure, NonTransformableFigure {
 
@@ -67,41 +64,33 @@ public class ClippingFigure extends AbstractCompositeFigure
         return n;
     }
 
-    /**
-     * Layer figures always return false for isSelectable.
-     *
-     * @return false
-     */
+    /// Layer figures always return false for isSelectable.
+    ///
+    /// @return false
     @Override
     public boolean isSelectable() {
         return false;
     }
 
-    /**
-     * This method returns false for all new parents.
-     *
-     * @param newParent The new parent figure.
-     * @return false
-     */
+    /// This method returns false for all new parents.
+    ///
+    /// @param newParent The new parent figure.
+    /// @return false
     @Override
     public boolean isSuitableParent(Figure newParent) {
         return false;
     }
 
-    /**
-     * This method returns true for all children.
-     *
-     * @param newChild The new child figure.
-     * @return true
-     */
+    /// This method returns true for all children.
+    ///
+    /// @param newChild The new child figure.
+    /// @return true
     @Override
     public boolean isSuitableChild(Figure newChild) {
         return true;
     }
 
-    /**
-     * Layers never create handles.
-     */
+    /// Layers never create handles.
     @Override
     public void createHandles(HandleType handleType, List<Handle> list) {
         // empty

@@ -15,10 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * IntersectionTest.
- *
- */
+/// IntersectionTest.
 public class IntersectCubicCurvePointTest {
 
 
@@ -32,9 +29,7 @@ public class IntersectCubicCurvePointTest {
     }
 
 
-    /**
-     * Test of intersectLineBezier2 method, of class Intersection.
-     */
+    /// Test of intersectLineBezier2 method, of class Intersection.
     public static void testIntersectCubicCurvePoint_11args(CubicCurve a, Circle b, double[] expected) {
         IntersectionResult isec = IntersectCubicCurvePoint.intersectCubicCurvePoint(
                 a.getStartX(), a.getStartY(), a.getControlX1(), a.getControlY1(),

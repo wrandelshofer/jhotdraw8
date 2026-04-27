@@ -17,18 +17,14 @@ public record PointAndDerivative(double x, double y, double dx, double dy) {
         return factory.apply(dx, dy);
     }
 
-    /**
-     * Returns the angle of the point in radians.
-     *
-     * @return angle in radians
-     */
+    /// Returns the angle of the point in radians.
+    ///
+    /// @return angle in radians
     public double getAngle() {
         return Angles.atan2(dy, dx);
     }
 
-    /**
-     * Returns a new point with reversed derivative.
-     */
+    /// Returns a new point with reversed derivative.
     public PointAndDerivative reverse() {
         return new PointAndDerivative(x, y, -dx, -dy);
     }

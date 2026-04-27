@@ -6,18 +6,13 @@ package org.jhotdraw8.application;
 
 import org.jhotdraw8.application.resources.Resources;
 
-/**
- * ApplicationLabels.
- *
-  */
+/// ApplicationLabels.
 public class ApplicationLabels {
 
     private static Resources labels;
     private static Resources guilabels;
 
-    /**
-     * Prevent instanced creation.
-     */
+    /// Prevent instanced creation.
     private ApplicationLabels() {
     }
 

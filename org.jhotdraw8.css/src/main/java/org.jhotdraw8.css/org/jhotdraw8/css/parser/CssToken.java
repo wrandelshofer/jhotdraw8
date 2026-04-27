@@ -12,23 +12,14 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Objects;
 
-/**
- * CssToken.
- *
- */
+/// CssToken.
 public class CssToken {
 
-    /**
-     * The token type.
-     */
+    /// The token type.
     private final int ttype;
-    /**
-     * The string value.
-     */
+    /// The string value.
     private final @Nullable String stringValue;
-    /**
-     * The numeric value.
-     */
+    /// The numeric value.
     private final @Nullable Number numericValue;
 
     private final int startPos;

@@ -14,49 +14,43 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * An Algorithm for Automatically Fitting Digitized Curves.
- * <p>
- * References:
- * <dl>
- *     <dt>gems/FitCurves.c</dt>
- *     <dd>An Algorithm for Automatically Fitting Digitized Curves. Graphics Gems, Academic Press.
- *     Copyright (c) 1990 Philip J. Schneider.
- *     <br><a href="https://github.com/erich666/GraphicsGems/blob/7ef8b6990e125fa908dfaeb80bc42f4b4fae65b8/gems/FitCurves.c">github.com</a>
- *     <br><a href="https://github.com/erich666/GraphicsGems/blob/7ef8b6990e125fa908dfaeb80bc42f4b4fae65b8/LICENSE.md">Graphics Gems License</a>
- *     </dd>
- * </dl>
- */
+/// An Algorithm for Automatically Fitting Digitized Curves.
+///
+/// References:
+/// <dl>
+///     <dt>gems/FitCurves.c</dt>
+///     <dd>An Algorithm for Automatically Fitting Digitized Curves. Graphics Gems, Academic Press.
+///     Copyright (c) 1990 Philip J. Schneider.
+///
+/// <a href="https://github.com/erich666/GraphicsGems/blob/7ef8b6990e125fa908dfaeb80bc42f4b4fae65b8/gems/FitCurves.c">github.com</a>
+///
+/// <a href="https://github.com/erich666/GraphicsGems/blob/7ef8b6990e125fa908dfaeb80bc42f4b4fae65b8/LICENSE.md">Graphics Gems License</a>
+///     </dd>
+/// </dl>
 public class PolylineToCubicCurve {
 
-    /**
-     * Prevent instance creation.
-     */
+    /// Prevent instance creation.
     private PolylineToCubicCurve() {
     }
 
-    /**
-     * Fits a bezier path to the specified list of digitized points.
-     * <p>
-     * This is a convenience method for calling {@link #fitBezierPath}
-     *
-     * @param builder         the builder for the bezier path
-     * @param digitizedPoints digited points.
-     * @param error           the maximal allowed error between the bezier path and the
-     *                        digitized points.
-     */
+    /// Fits a bezier path to the specified list of digitized points.
+    ///
+    /// This is a convenience method for calling [#fitBezierPath]
+    ///
+    /// @param builder         the builder for the bezier path
+    /// @param digitizedPoints digited points.
+    /// @param error           the maximal allowed error between the bezier path and the
+    ///                        digitized points.
     public static void fitBezierPath(PathBuilder<?> builder, Point2D[] digitizedPoints, double error) {
         fitBezierPath(builder, Arrays.asList(digitizedPoints), error);
     }
 
-    /**
-     * Fits a bezier path to the specified list of digitized points.
-     *
-     * @param builder         the builder for the bezier path
-     * @param digitizedPoints digitized points.
-     * @param error           the maximal allowed error between the bezier path and the
-     *                        digitized points.
-     */
+    /// Fits a bezier path to the specified list of digitized points.
+    ///
+    /// @param builder         the builder for the bezier path
+    /// @param digitizedPoints digitized points.
+    /// @param error           the maximal allowed error between the bezier path and the
+    ///                        digitized points.
     public static void fitBezierPath(PathBuilder<?> builder, List<Point2D> digitizedPoints, double error) {
         // Split into segments at corners
         ArrayList<ArrayList<Point2D>> segments;
@@ -120,16 +114,14 @@ public class PolylineToCubicCurve {
         }
     }
 
-    /**
-     * Fits a bezier path to the specified list of digitized points.
-     * <p>
-     * This is a convenience method for calling {@link #fitBezierPath}.
-     *
-     * @param builder         the builder for the bezier path
-     * @param digitizedPoints digited points.
-     * @param error           the maximal allowed error between the bezier path and the
-     *                        digitized points.
-     */
+    /// Fits a bezier path to the specified list of digitized points.
+    ///
+    /// This is a convenience method for calling [#fitBezierPath].
+    ///
+    /// @param builder         the builder for the bezier path
+    /// @param digitizedPoints digited points.
+    /// @param error           the maximal allowed error between the bezier path and the
+    ///                        digitized points.
     public static void fitBezierPath(PathBuilder<?> builder, BezierPath digitizedPoints, double error) {
         List<Point2D> d = new ArrayList<>();
         for (BezierNode n : digitizedPoints) {
@@ -138,26 +130,24 @@ public class PolylineToCubicCurve {
         fitBezierPath(builder, d, error);
     }
 
-    /**
-     * Removes points which are closer together than the specified minimal
-     * distance.
-     * <p>
-     * The minimal distance should be chosen dependent on the size and
-     * resolution of the display device, and on the sampling rate. A good value
-     * for mouse input on a display with 100% Zoom factor is 2.
-     * <p>
-     * The purpose of this method, is to remove points, which add no additional
-     * information about the shape of the curve from the list of digitized
-     * points.
-     * <p>
-     * The cleaned up set of digitized points gives better results, when used as
-     * input for method {@link #splitAtCorners}.
-     *
-     * @param digitizedPoints Digitized points
-     * @param minDistance     minimal distance between two points. If minDistance is
-     *                        0, this method only removes sequences of coincident points.
-     * @return Digitized points with a minimal distance.
-     */
+    /// Removes points which are closer together than the specified minimal
+    /// distance.
+    ///
+    /// The minimal distance should be chosen dependent on the size and
+    /// resolution of the display device, and on the sampling rate. A good value
+    /// for mouse input on a display with 100% Zoom factor is 2.
+    ///
+    /// The purpose of this method, is to remove points, which add no additional
+    /// information about the shape of the curve from the list of digitized
+    /// points.
+    ///
+    /// The cleaned up set of digitized points gives better results, when used as
+    /// input for method [#splitAtCorners].
+    ///
+    /// @param digitizedPoints Digitized points
+    /// @param minDistance     minimal distance between two points. If minDistance is
+    ///                        0, this method only removes sequences of coincident points.
+    /// @return Digitized points with a minimal distance.
     public static ArrayList<Point2D> removeClosePoints(List<Point2D> digitizedPoints, double minDistance) {
         if (minDistance == 0) {
             return removeCoincidentPoints(digitizedPoints);
@@ -182,19 +172,17 @@ public class PolylineToCubicCurve {
         }
     }
 
-    /**
-     * Removes sequences of coincident points.
-     * <p>
-     * The purpose of this method, is to clean up a list of digitized points for
-     * later processing using method {@link #splitAtCorners}.
-     * <p>
-     * Use this method only, if you know that the digitized points contain no
-     * quantization errors - which is never the case, unless you want to debug
-     * the curve fitting algorithm of this class.
-     *
-     * @param digitizedPoints Digitized points
-     * @return Digitized points without subsequent duplicates.
-     */
+    /// Removes sequences of coincident points.
+    ///
+    /// The purpose of this method, is to clean up a list of digitized points for
+    /// later processing using method [#splitAtCorners].
+    ///
+    /// Use this method only, if you know that the digitized points contain no
+    /// quantization errors - which is never the case, unless you want to debug
+    /// the curve fitting algorithm of this class.
+    ///
+    /// @param digitizedPoints Digitized points
+    /// @return Digitized points without subsequent duplicates.
     private static ArrayList<Point2D> removeCoincidentPoints(List<Point2D> digitizedPoints) {
         ArrayList<Point2D> cleaned = new ArrayList<>();
         if (!digitizedPoints.isEmpty()) {
@@ -210,20 +198,18 @@ public class PolylineToCubicCurve {
         return cleaned;
     }
 
-    /**
-     * Splits the digitized points into multiple segments at each corner point.
-     * <p>
-     * Corner points are both contained as the last point of a segment and the
-     * first point of a subsequent segment.
-     *
-     * @param digitizedPoints Digitized points
-     * @param maxAngle        maximal angle in radians between the current point and
-     *                        its predecessor and successor up to which the point does not break the
-     *                        digitized list into segments. Recommended value 44° = 44 * 180d / Math.PI
-     * @param minDistance     the minimal distance
-     * @return Segments of digitized points, each segment having less than
-     * maximal angle between points.
-     */
+    /// Splits the digitized points into multiple segments at each corner point.
+    ///
+    /// Corner points are both contained as the last point of a segment and the
+    /// first point of a subsequent segment.
+    ///
+    /// @param digitizedPoints Digitized points
+    /// @param maxAngle        maximal angle in radians between the current point and
+    ///                        its predecessor and successor up to which the point does not break the
+    ///                        digitized list into segments. Recommended value 44° = 44 * 180d / Math.PI
+    /// @param minDistance     the minimal distance
+    /// @return Segments of digitized points, each segment having less than
+    /// maximal angle between points.
     public static ArrayList<ArrayList<Point2D>> splitAtCorners(List<Point2D> digitizedPoints, double maxAngle, double minDistance) {
         IntArrayList cornerIndices = findCorners(digitizedPoints, maxAngle, minDistance);
         ArrayList<ArrayList<Point2D>> segments = new ArrayList<>(cornerIndices.size() + 1);
@@ -241,15 +227,13 @@ public class PolylineToCubicCurve {
         return segments;
     }
 
-    /**
-     * Finds corners in the provided point list, and returns their indices.
-     *
-     * @param digitizedPoints List of digitized points.
-     * @param minAngle        Minimal angle for corner points
-     * @param minDistance     Minimal distance between a point and adjacent points
-     *                        for corner detection
-     * @return list of corner indices.
-     */
+    /// Finds corners in the provided point list, and returns their indices.
+    ///
+    /// @param digitizedPoints List of digitized points.
+    /// @param minAngle        Minimal angle for corner points
+    /// @param minDistance     Minimal distance between a point and adjacent points
+    ///                        for corner detection
+    /// @return list of corner indices.
     public static IntArrayList findCorners(List<Point2D> digitizedPoints, double minAngle, double minDistance) {
         IntArrayList cornerIndices = new IntArrayList();
 
@@ -303,19 +287,17 @@ public class PolylineToCubicCurve {
         return cornerIndices;
     }
 
-    /**
-     * Reduces noise from the digitized points, by applying an approximation of
-     * a gaussian filter to the data.
-     * <p>
-     * The filter does the following for each point P, with weight 0.5:
-     * <p>
-     * x[i] = 0.5*x[i] + 0.25*x[i-1] + 0.25*x[i+1]; y[i] = 0.5*y[i] +
-     * 0.25*y[i-1] + 0.25*y[i+1];
-     *
-     * @param digitizedPoints Digitized points
-     * @param weight          Weight of the current point
-     * @return Digitized points with reduced noise.
-     */
+    /// Reduces noise from the digitized points, by applying an approximation of
+    /// a gaussian filter to the data.
+    ///
+    /// The filter does the following for each point P, with weight 0.5:
+    ///
+    /// x[i] = 0.5*x[i] + 0.25*x[i-1] + 0.25*x[i+1]; y[i] = 0.5*y[i] +
+    /// 0.25*y[i-1] + 0.25*y[i+1];
+    ///
+    /// @param digitizedPoints Digitized points
+    /// @param weight          Weight of the current point
+    /// @return Digitized points with reduced noise.
     public static ArrayList<Point2D> reduceNoise(List<Point2D> digitizedPoints, double weight) {
         ArrayList<Point2D> cleaned = new ArrayList<>();
         if (!digitizedPoints.isEmpty()) {
@@ -337,20 +319,18 @@ public class PolylineToCubicCurve {
         return cleaned;
     }
 
-    /**
-     * Fit one or multiple subsequent cubic bezier curves to a (sub)set of
-     * digitized points. The digitized points represent a smooth curve without
-     * corners.
-     *
-     * @param d            Array of digitized points. Must not contain subsequent
-     *                     coincident points.
-     * @param first        Indice of first point in d.
-     * @param last         Indice of last point in d.
-     * @param tHat1        Unit tangent vectors at start point.
-     * @param tHat2        Unit tangent vector at end point.
-     * @param errorSquared User-defined errorSquared squared.
-     * @param builder      Path to which the bezier curve segments are added.
-     */
+    /// Fit one or multiple subsequent cubic bezier curves to a (sub)set of
+    /// digitized points. The digitized points represent a smooth curve without
+    /// corners.
+    ///
+    /// @param d            Array of digitized points. Must not contain subsequent
+    ///                     coincident points.
+    /// @param first        Indice of first point in d.
+    /// @param last         Indice of last point in d.
+    /// @param tHat1        Unit tangent vectors at start point.
+    /// @param tHat2        Unit tangent vector at end point.
+    /// @param errorSquared User-defined errorSquared squared.
+    /// @param builder      Path to which the bezier curve segments are added.
     private static void fitCubic(PathBuilder<?> builder, ArrayList<Point2D> d, int first, int last,
                                  Point2D tHat1, Point2D tHat2,
                                  double errorSquared) {
@@ -444,12 +424,10 @@ public class PolylineToCubicCurve {
         }
     }
 
-    /**
-     * Adds the curve to the bezier path.
-     *
-     * @param bezCurve
-     * @param builder
-     */
+    /// Adds the curve to the bezier path.
+    ///
+    /// @param bezCurve
+    /// @param builder
     private static void addCurveTo(PathBuilder<?> builder, Point2D[] bezCurve, double errorSquared, boolean connectsCorners) {
         java.awt.geom.Point2D.Double lastNode = builder.getLastPoint();
         double error = Math.sqrt(errorSquared);
@@ -466,12 +444,10 @@ public class PolylineToCubicCurve {
         }
     }
 
-    /**
-     * Approximate unit tangents at "left" endpoint of digitized curve.
-     *
-     * @param d   Digitized points.
-     * @param end Index to "left" end of region.
-     */
+    /// Approximate unit tangents at "left" endpoint of digitized curve.
+    ///
+    /// @param d   Digitized points.
+    /// @param end Index to "left" end of region.
     private static Point2D computeLeftTangent(ArrayList<Point2D> d, int end) {
         Point2D tHat1;
         tHat1 = v2SubII(d.get(end + 1), d.get(end));
@@ -479,12 +455,10 @@ public class PolylineToCubicCurve {
         return tHat1;
     }
 
-    /**
-     * Approximate unit tangents at "right" endpoint of digitized curve.
-     *
-     * @param d   Digitized points.
-     * @param end Index to "right" end of region.
-     */
+    /// Approximate unit tangents at "right" endpoint of digitized curve.
+    ///
+    /// @param d   Digitized points.
+    /// @param end Index to "right" end of region.
     private static Point2D computeRightTangent(ArrayList<Point2D> d, int end) {
         Point2D tHat2;
         tHat2 = v2SubII(d.get(end - 1), d.get(end));
@@ -492,12 +466,10 @@ public class PolylineToCubicCurve {
         return tHat2;
     }
 
-    /**
-     * Approximate unit tangents at "center" of digitized curve.
-     *
-     * @param d      Digitized points.
-     * @param center Index to "center" end of region.
-     */
+    /// Approximate unit tangents at "center" of digitized curve.
+    ///
+    /// @param d      Digitized points.
+    /// @param center Index to "center" end of region.
     private static Point2D computeCenterTangent(ArrayList<Point2D> d, int center) {
         Point2D V1, V2,
                 tHatCenter;
@@ -510,14 +482,12 @@ public class PolylineToCubicCurve {
         return tHatCenter;
     }
 
-    /**
-     * Assign parameter values to digitized points using relative distances
-     * between points.
-     *
-     * @param d     Digitized points.
-     * @param first Indice of first point of region in d.
-     * @param last  Indice of last point of region in d.
-     */
+    /// Assign parameter values to digitized points using relative distances
+    /// between points.
+    ///
+    /// @param d     Digitized points.
+    /// @param first Indice of first point of region in d.
+    /// @param last  Indice of last point of region in d.
     private static double[] chordLengthParameterize(ArrayList<Point2D> d, int first, int last) {
         int i;
         double[] u;
@@ -538,16 +508,14 @@ public class PolylineToCubicCurve {
         return (u);
     }
 
-    /**
-     * Given set of points and their parameterization, try to find a better
-     * parameterization.
-     *
-     * @param d        Array of digitized points.
-     * @param first    Indice of first point of region in d.
-     * @param last     Indice of last point of region in d.
-     * @param u        Current parameter values.
-     * @param bezCurve Current fitted curve.
-     */
+    /// Given set of points and their parameterization, try to find a better
+    /// parameterization.
+    ///
+    /// @param d        Array of digitized points.
+    /// @param first    Indice of first point of region in d.
+    /// @param last     Indice of last point of region in d.
+    /// @param u        Current parameter values.
+    /// @param bezCurve Current fitted curve.
     private static double[] reparameterize(ArrayList<Point2D> d, int first, int last, double[] u, Point2D[] bezCurve) {
         int nPts = last - first + 1;
         int i;
@@ -561,13 +529,11 @@ public class PolylineToCubicCurve {
         return (uPrime);
     }
 
-    /**
-     * Use Newton-Raphson iteration to find better root.
-     *
-     * @param Q Current fitted bezier curve.
-     * @param P Digitized point.
-     * @param u Parameter value for P.
-     */
+    /// Use Newton-Raphson iteration to find better root.
+    ///
+    /// @param Q Current fitted bezier curve.
+    /// @param P Digitized point.
+    /// @param u Parameter value for P.
     private static double newtonRaphsonRootFind(Point2D[] Q, Point2D P, double u) {
         double numerator, denominator;
         Point2D[] Q1 = new Point2D[3], Q2 = new Point2D[2];
@@ -609,17 +575,15 @@ public class PolylineToCubicCurve {
         return (uPrime);
     }
 
-    /**
-     * Find the maximum squared distance of digitized points to fitted curve.
-     *
-     * @param d          Digitized points.
-     * @param first      Indice of first point of region in d.
-     * @param last       Indice of last point of region in d.
-     * @param bezCurve   Fitted BezierFit curve
-     * @param u          Parameterization of points
-     * @param splitPoint Point of maximum error (input/output parameter, must be
-     *                   an array of 1)
-     */
+    /// Find the maximum squared distance of digitized points to fitted curve.
+    ///
+    /// @param d          Digitized points.
+    /// @param first      Indice of first point of region in d.
+    /// @param last       Indice of last point of region in d.
+    /// @param bezCurve   Fitted BezierFit curve
+    /// @param u          Parameterization of points
+    /// @param splitPoint Point of maximum error (input/output parameter, must be
+    ///                   an array of 1)
     private static double computeMaxError(ArrayList<Point2D> d, int first, int last, Point2D[] bezCurve, double[] u, int[] splitPoint) {
         int i;
         double maxDist;
@@ -645,17 +609,15 @@ public class PolylineToCubicCurve {
         return (maxDist);
     }
 
-    /**
-     * Use least-squares method to find BezierFit control points for region.
-     *
-     * @param d      Array of digitized points.
-     * @param first  Indice of first point in d.
-     * @param last   Indice of last point in d.
-     * @param uPrime Parameter values for region .
-     * @param tHat1  Unit tangent vectors at start point.
-     * @param tHat2  Unit tangent vector at end point.
-     * @return A cubic bezier curve consisting of 4 control points.
-     */
+    /// Use least-squares method to find BezierFit control points for region.
+    ///
+    /// @param d      Array of digitized points.
+    /// @param first  Indice of first point in d.
+    /// @param last   Indice of last point in d.
+    /// @param uPrime Parameter values for region .
+    /// @param tHat1  Unit tangent vectors at start point.
+    /// @param tHat2  Unit tangent vector at end point.
+    /// @return A cubic bezier curve consisting of 4 control points.
     private static Point2D[] generateBezier(ArrayList<Point2D> d, int first, int last, double[] uPrime, Point2D tHat1, Point2D tHat2) {
         Point2D[] bezCurve;
 
@@ -674,13 +636,11 @@ public class PolylineToCubicCurve {
         return (bezCurve);
     }
 
-    /**
-     * Evaluate a BezierFit curve at a particular parameter value.
-     *
-     * @param degree The degree of the bezier curve.
-     * @param V      Array of control points.
-     * @param t      Parametric value to find point for.
-     */
+    /// Evaluate a BezierFit curve at a particular parameter value.
+    ///
+    /// @param degree The degree of the bezier curve.
+    /// @param V      Array of control points.
+    /// @param t      Parametric value to find point for.
     private static Point2D bezierII(int degree, Point2D[] V, double t) {
         int i, j;
         Point2D q;
@@ -707,25 +667,19 @@ public class PolylineToCubicCurve {
     }
 
 
-    /**
-     * Return the distance between two points
-     */
+    /// Return the distance between two points
     private static double v2DistanceBetween2Points(Point2D a, Point2D b) {
         return Math.sqrt(v2SquaredDistanceBetween2Points(a, b));
     }
 
-    /**
-     * Return the distance between two points
-     */
+    /// Return the distance between two points
     private static double v2SquaredDistanceBetween2Points(Point2D a, Point2D b) {
         double dx = a.getX() - b.getX();
         double dy = a.getY() - b.getY();
         return (dx * dx) + (dy * dy);
     }
 
-    /**
-     * Scales the input vector to the new length and returns it.
-     */
+    /// Scales the input vector to the new length and returns it.
     private static Point2D v2Scale(Point2D v, double newlen) {
         double len = v2Length(v);
         double x = v.getX(), y = v.getY();
@@ -738,40 +692,30 @@ public class PolylineToCubicCurve {
     }
 
 
-    /**
-     * Returns length of input vector.
-     */
+    /// Returns length of input vector.
     private static double v2Length(Point2D a) {
         return Math.sqrt(v2SquaredLength(a));
     }
 
-    /**
-     * Returns squared length of input vector.
-     */
+    /// Returns squared length of input vector.
     private static double v2SquaredLength(Point2D a) {
         return (a.getX() * a.getX()) + (a.getY() * a.getY());
     }
 
-    /**
-     * Return vector sum c = a+b.
-     */
+    /// Return vector sum c = a+b.
     private static Point2D v2Add(Point2D a, Point2D b) {
         return new Point2D(a.getX() + b.getX(),
                 a.getY() + b.getY());
     }
 
-    /**
-     * Negates the input vector and returns it.
-     */
+    /// Negates the input vector and returns it.
     private static Point2D v2Negate(Point2D v) {
         return new Point2D(-v.getX(),
                 -v.getY());
     }
 
 
-    /**
-     * Normalizes the input vector and returns it.
-     */
+    /// Normalizes the input vector and returns it.
     private static Point2D v2Normalize(Point2D v) {
         double len = v2Length(v);
         if (len != 0.0) {
@@ -782,13 +726,11 @@ public class PolylineToCubicCurve {
         return v;
     }
 
-    /**
-     * Subtract Vector a from Vector b.
-     *
-     * @param a Vector a - the value is not changed by this method
-     * @param b Vector b - the value is not changed by this method
-     * @return Vector a subtracted by Vector v.
-     */
+    /// Subtract Vector a from Vector b.
+    ///
+    /// @param a Vector a - the value is not changed by this method
+    /// @param b Vector b - the value is not changed by this method
+    /// @return Vector a subtracted by Vector v.
     private static Point2D v2SubII(Point2D a, Point2D b) {
         Point2D c = new Point2D(a.getX() - b.getX(),
                 a.getY() - b.getY());

@@ -40,19 +40,14 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
-/**
- * A {@link Figure} which draws a {@link BezierPath}.
- *
- */
+/// A [Figure] which draws a [BezierPath].
 public class BezierPathFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, FillRulableFigure, TransformableFigure, HideableFigure,
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
 
     public static final NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new BezierPathCssConverter(false), BezierPath.of());
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Bezier";
 
     public BezierPathFigure() {

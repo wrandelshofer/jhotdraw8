@@ -8,11 +8,9 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 
 import java.util.Objects;
 
-/**
- * ReadOnlyNonNullWrapper.
- *
- * @param <T> the type of the wrapped object
- */
+/// ReadOnlyNonNullWrapper.
+///
+/// @param <T> the type of the wrapped object
 public class ReadOnlyNonNullWrapper<T> extends ReadOnlyObjectWrapper<T> {
 
     public ReadOnlyNonNullWrapper(Object bean, String name, T initialValue) {

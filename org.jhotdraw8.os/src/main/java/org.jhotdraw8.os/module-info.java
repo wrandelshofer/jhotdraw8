@@ -5,9 +5,7 @@
 
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Defines operation specific functions.
- */
+/// Defines operation specific functions.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.os {

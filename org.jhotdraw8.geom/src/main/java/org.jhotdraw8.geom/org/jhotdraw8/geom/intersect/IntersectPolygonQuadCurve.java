@@ -10,25 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IntersectPolygonQuadCurve {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private IntersectPolygonQuadCurve() {
     }
 
-    /**
-     * Computes the intersection between quadratic bezier curve 'p' and the
-     * given closed polygon.
-     * <p>
-     * The intersection will contain the parameters 't' of curve 'a' in range
-     * [0,1].
-     *
-     * @param p0     control point P0 of 'p'
-     * @param p1     control point P1 of 'p'
-     * @param p2     control point P2 of 'p'
-     * @param points the points of the polygon
-     * @return the computed intersection
-     */
+    /// Computes the intersection between quadratic bezier curve 'p' and the
+    /// given closed polygon.
+    ///
+    /// The intersection will contain the parameters 't' of curve 'a' in range
+    /// [0,1].
+    ///
+    /// @param p0     control point P0 of 'p'
+    /// @param p1     control point P1 of 'p'
+    /// @param p2     control point P2 of 'p'
+    /// @param points the points of the polygon
+    /// @return the computed intersection
     public static IntersectionResult intersectQuadCurvePolygon(Point2D p0, Point2D p1, Point2D p2, List<Point2D.Double> points) {
         List<IntersectionPoint> result = new ArrayList<>();
         int length = points.size();

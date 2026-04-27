@@ -25,15 +25,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static java.lang.Integer.highestOneBit;
 import static java.lang.Integer.max;
 
-/**
- * A map which stores its values in an array, and which can share its keys with
- * other SimpleStyleableMaps.
- * <p>
- * This map stores one distinct value for each StyleOrigin.
- *
- * @param <K> key type
- * @param <V> value type
- */
+/// A map which stores its values in an array, and which can share its keys with
+/// other SimpleStyleableMaps.
+///
+/// This map stores one distinct value for each StyleOrigin.
+///
+/// @param <K> key type
+/// @param <V> value type
 public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements StyleableMap<K, V> {
     @Override
     public Set<Entry<K, V>> entrySet(@Nullable StyleOrigin origin) {
@@ -57,10 +55,8 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     private final SimpleStyleableMap<K, V> originalMap;
     static final int AUTO_ORIGIN = -StyleOrigin.INLINE.ordinal();
 
-    /**
-     * Creates a new instance which supports insertion of
-     * new keys.
-     */
+    /// Creates a new instance which supports insertion of
+    /// new keys.
     public SimpleStyleableMap() {
         this(new HashMap<>() {
             @Serial
@@ -74,18 +70,16 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         });
     }
 
-    /**
-     * Creates a new instance which uses the provided key map.
-     * <p>
-     * The key map can be shared with other instances, provided that
-     * the key map is immutable.
-     * <p>
-     * All entries in the key map must contain distinct integer
-     * values in the range [0, keyMap.size() - 1].
-     *
-     * @param keyMap a map which maps from keys to indices. The indices must be
-     *               in the range {@code [0,keyMap.size()-1]}.
-     */
+    /// Creates a new instance which uses the provided key map.
+    ///
+    /// The key map can be shared with other instances, provided that
+    /// the key map is immutable.
+    ///
+    /// All entries in the key map must contain distinct integer
+    /// values in the range [0,keyMap.size()-1].
+    ///
+    /// @param keyMap a map which maps from keys to indices. The indices must be
+    ///               in the range `[0,keyMap.size()-1]`.
     public SimpleStyleableMap(Map<K, Integer> keyMap) {
         this.keyMap = keyMap;
         this.values = new Object[keyMap.size() * numOrigins];
@@ -126,9 +120,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         }
     }
 
-    /**
-     * Clears the map.
-     */
+    /// Clears the map.
     @Override
     public void clear() {
         removeAll(origin);
@@ -188,13 +180,11 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         return index;
     }
 
-    /**
-     * Returns the next power of two that is equal or greater than the specified
-     * value.
-     *
-     * @param value a value in the range [0,1<<29].
-     * @return nextUp with nextUp @gt;= value && nextUp == highestOneBit(nextUp).
-     */
+    /// Returns the next power of two that is equal or greater than the specified
+    /// value.
+    ///
+    /// @param value a value in the range [0,1<<29].
+    /// @return nextUp with nextUp @gt;= value && nextUp == highestOneBit(nextUp).
     private int nextPowerOfTwoUp(int value) {
         Objects.checkIndex(value, 1 << 29);
         int highestOneBit = highestOneBit(value);
@@ -281,16 +271,14 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         return rawValue == NO_VALUE ? defaultValue : rawValueToValue(rawValue);
     }
 
-    /**
-     * Gets a raw value from the specified ordinal StyleOrigin or (if the negative ordinal
-     * is given) searches through StyleOrigins starting from the given negative ordinal
-     * StyleOrigin.
-     *
-     * @param ordinal the ordinal of the StyleOrigin or the negative ordinal.
-     * @param index   the index of the Key
-     * @return rawValue: NO_VALUE means that no value is stored, NULL_VALUE means
-     * that the null value is stored, all other values are stored values.
-     */
+    /// Gets a raw value from the specified ordinal StyleOrigin or (if the negative ordinal
+    /// is given) searches through StyleOrigins starting from the given negative ordinal
+    /// StyleOrigin.
+    ///
+    /// @param ordinal the ordinal of the StyleOrigin or the negative ordinal.
+    /// @param index   the index of the Key
+    /// @return rawValue: NO_VALUE means that no value is stored, NULL_VALUE means
+    /// that the null value is stored, all other values are stored values.
     @SuppressWarnings("unchecked")
     private @Nullable Object getRawValue(int ordinal, int index) {
         Object value;

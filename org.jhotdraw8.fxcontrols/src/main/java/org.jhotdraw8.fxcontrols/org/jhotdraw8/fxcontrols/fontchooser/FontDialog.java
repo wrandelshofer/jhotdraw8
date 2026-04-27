@@ -21,10 +21,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * FontDialog for selecting a font family and a font size.
- *
- */
+/// FontDialog for selecting a font family and a font size.
 public class FontDialog extends Dialog<FontFamilySize> {
 
     private FontChooserController controller;
@@ -63,9 +60,7 @@ public class FontDialog extends Dialog<FontFamilySize> {
 
     }
 
-    /**
-     * This model is shared by all font dialogs.
-     */
+    /// This model is shared by all font dialogs.
     private static @Nullable FontChooserModel model = null;
 
     public static @Nullable FontChooserModel getModel() {

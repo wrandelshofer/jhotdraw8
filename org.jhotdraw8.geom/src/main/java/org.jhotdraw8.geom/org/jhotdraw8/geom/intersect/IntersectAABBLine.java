@@ -18,15 +18,13 @@ public class IntersectAABBLine {
         return intersectLineAABBEx(new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), rminx, rminy, rmaxx, rmaxy);
     }
 
-    /**
-     * @param a0
-     * @param a1
-     * @param rminx
-     * @param rminy
-     * @param rmaxx
-     * @param rmaxy
-     * @return
-     */
+    /// @param a0
+    /// @param a1
+    /// @param rminx
+    /// @param rminy
+    /// @param rmaxx
+    /// @param rmaxy
+    /// @return
     public static IntersectionResultEx intersectLineAABBEx(Point2D a0, Point2D a1,
                                                                     double rminx, double rminy, double rmaxx, double rmaxy) {
 
@@ -61,15 +59,13 @@ public class IntersectAABBLine {
         return new IntersectionResultEx(result);
     }
 
-    /**
-     * @param rminx
-     * @param rminy
-     * @param rmaxx
-     * @param rmaxy
-     * @param a0
-     * @param a1
-     * @return
-     */
+    /// @param rminx
+    /// @param rminy
+    /// @param rmaxx
+    /// @param rmaxy
+    /// @param a0
+    /// @param a1
+    /// @return
     public static IntersectionResultEx intersectAABBLineEx(
             double rminx, double rminy, double rmaxx, double rmaxy,
             Point2D a0, Point2D a1) {

@@ -19,12 +19,10 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Provides a {@link Map} facade to a set of {@code Map} functions.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Provides a [Map] facade to a set of `Map` functions.
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public class MapFacade<K, V> extends AbstractMap<K, V> {
     protected final Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction;
     protected final Supplier<Spliterator<Entry<K, V>>> spliteratorFunction;

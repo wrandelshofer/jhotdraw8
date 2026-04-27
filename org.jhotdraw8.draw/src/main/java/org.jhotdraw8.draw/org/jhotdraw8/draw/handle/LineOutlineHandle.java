@@ -20,11 +20,8 @@ import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Draws the {@code wireframe} of a {@code LineFigure}, but does not provide any
- * interactions.
- *
- */
+/// Draws the `wireframe` of a `LineFigure`, but does not provide any
+/// interactions.
 public class LineOutlineHandle extends AbstractHandle {
     private final Group node;
     private final Polyline polyline2;

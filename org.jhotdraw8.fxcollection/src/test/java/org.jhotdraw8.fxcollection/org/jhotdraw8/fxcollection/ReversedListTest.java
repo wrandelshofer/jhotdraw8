@@ -18,8 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- */
+///
 public class ReversedListTest {
 
     public static void testAdd(String initialList, int index, Character value, String expectedList, String expectedChanges) throws Exception {

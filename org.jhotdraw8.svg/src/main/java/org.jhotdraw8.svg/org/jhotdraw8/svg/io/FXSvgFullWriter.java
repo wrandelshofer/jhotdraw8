@@ -16,26 +16,21 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Exports a JavaFX scene graph to SVG 1.1 "Full".
- * <p>
- * References:
- * <dl>
- *     <dt>SVG 1.1</dt>
- *     <dd><a href="https://www.w3.org/TR/SVG11/">w3.org</a></dd>
- * </dl>
- *
- */
+/// Exports a JavaFX scene graph to SVG 1.1 "Full".
+///
+/// References:
+/// <dl>
+///     <dt>SVG 1.1</dt>
+///     <dd><a href="https://www.w3.org/TR/SVG11/">w3.org</a></dd>
+/// </dl>
 public class FXSvgFullWriter extends AbstractFXSvgWriter {
     private static final String SVG_VERSION = "1.1";
     private static final String SVG_BASE_PROFILE = "full";
     public static final String SVG_MIME_TYPE_WITH_VERSION = SVG_MIME_TYPE + ";version=\"" + SVG_VERSION + "\"";
 
-    /**
-     * @param imageUriKey this property is used to retrieve an URL from an
-     *                    ImageView
-     * @param skipKey     this property is used to retrieve a Boolean from a Node.
-     */
+    /// @param imageUriKey this property is used to retrieve an URL from an
+    ///                    ImageView
+    /// @param skipKey     this property is used to retrieve a Boolean from a Node.
     public FXSvgFullWriter(Object imageUriKey, Object skipKey) {
         super(imageUriKey, skipKey);
     }

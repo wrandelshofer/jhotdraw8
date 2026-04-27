@@ -9,10 +9,7 @@ import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
-/**
- * A {@link Locator} which locates a node on a point of a Figure.
- *
- */
+/// A [Locator] which locates a node on a point of a Figure.
 public class PointLocator extends AbstractLocator {
 
     private final NonNullMapAccessor<CssPoint2D> key;

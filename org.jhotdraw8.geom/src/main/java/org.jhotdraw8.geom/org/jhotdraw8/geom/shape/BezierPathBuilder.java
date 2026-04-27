@@ -11,10 +11,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * BezierPathBuilder.
- *
- */
+/// BezierPathBuilder.
 public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
 
     private final List<BezierNode> nodes = new ArrayList<>();

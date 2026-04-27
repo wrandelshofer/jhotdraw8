@@ -20,12 +20,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * Converts an SVG path to a AWT path.
- * <p>
- * The null value will be converted to the CSS identifier "none".
- *
- */
+/// Converts an SVG path to a AWT path.
+///
+/// The null value will be converted to the CSS identifier "none".
 public class AwtPathCssConverter extends AbstractCssConverter<Path2D.Double> {
 
 

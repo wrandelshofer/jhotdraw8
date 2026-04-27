@@ -7,10 +7,7 @@ package org.jhotdraw8.grapher;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-/**
- * GrapherMain.
- *
- */
+/// GrapherMain.
 public class GrapherMain extends Application {
 
     @Override
@@ -18,9 +15,7 @@ public class GrapherMain extends Application {
         new GrapherApplication().start(primaryStage);
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         GrapherApplication.main(args);
     }

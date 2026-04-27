@@ -25,18 +25,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.PathIterator;
 
-/**
- * Represents an SVG 'circle' element.
- *
- */
+/// Represents an SVG 'circle' element.
 public class SvgCircleFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure,
         PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,
         SvgElementFigure {
 
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "circle";
     public static final CssSizeStyleableKey CX = new CssSizeStyleableKey("cx", CssSize.ZERO);
     public static final CssSizeStyleableKey CY = new CssSizeStyleableKey("cy", CssSize.ZERO);

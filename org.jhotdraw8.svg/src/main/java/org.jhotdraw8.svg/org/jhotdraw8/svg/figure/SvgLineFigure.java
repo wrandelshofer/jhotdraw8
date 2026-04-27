@@ -8,10 +8,10 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.css.value.CssRectangle2D;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -27,16 +27,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 
-/**
- * Represents an SVG 'line' element.
- *
- */
+/// Represents an SVG 'line' element.
 public class SvgLineFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,
         SvgElementFigure {
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "line";
     public static final CssSizeStyleableKey X1 = new CssSizeStyleableKey("x1", CssSize.ZERO);
     public static final CssSizeStyleableKey Y1 = new CssSizeStyleableKey("y1", CssSize.ZERO);

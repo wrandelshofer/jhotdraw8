@@ -32,13 +32,10 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 
-/**
- * FXML Controller class.
- * <p>
- * XXX all keys must be customizable FIXME property binding in this class is a
- * mess
- *
- */
+/// FXML Controller class.
+///
+/// XXX all keys must be customizable FIXME property binding in this class is a
+/// mess
 public class LayerCell extends ListCell<Figure> {
 
     private HBox node;
@@ -165,14 +162,12 @@ public class LayerCell extends ListCell<Figure> {
         }
     }
 
-    /**
-     * Creates a {@code LayerCell} cell factory for use in {@code ListView}
-     * controls.
-     *
-     * @param drawingModel the drawing model
-     * @param inspector    the layers inspector
-     * @return callback
-     */
+    /// Creates a `LayerCell` cell factory for use in `ListView`
+    /// controls.
+    ///
+    /// @param drawingModel the drawing model
+    /// @param inspector    the layers inspector
+    /// @return callback
     public static Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingModel drawingModel, LayersInspector inspector) {
         return list -> new LayerCell(drawingModel, inspector);
     }
@@ -199,11 +194,9 @@ public class LayerCell extends ListCell<Figure> {
         return selectionLabel;
     }
 
-    /**
-     * Returns the {@link StringConverter} used in this cell.
-     *
-     * @return the converter
-     */
+    /// Returns the [StringConverter] used in this cell.
+    ///
+    /// @return the converter
     public final @Nullable StringConverter<Figure> getConverter() {
         return null;//converterProperty().get();
     }

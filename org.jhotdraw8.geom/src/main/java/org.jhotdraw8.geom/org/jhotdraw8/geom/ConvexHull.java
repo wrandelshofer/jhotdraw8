@@ -10,33 +10,24 @@ import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Provides utility methods for computing the convex hull from a set of points.
- *
- */
+/// Provides utility methods for computing the convex hull from a set of points.
 public class ConvexHull {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private ConvexHull() {
     }
 
-    /**
-     * Computes the convex hull from a set of points.
-     *
-     * @param points the points
-     * @return convex hull of the points
-     */
+    /// Computes the convex hull from a set of points.
+    ///
+    /// @param points the points
+    /// @return convex hull of the points
     public static List<Point2D.Double> getConvexHull2D(List<Point2D.Double> points) {
         return Arrays.asList(getConvexHull2D(points.toArray(new Point2D.Double[0])));
     }
 
-    /**
-     * Computes the convex hull from a set of points.
-     *
-     * @param points the points
-     * @return convex hull of the points
-     */
+    /// Computes the convex hull from a set of points.
+    ///
+    /// @param points the points
+    /// @return convex hull of the points
     public static Point2D.Double[] getConvexHull2D(Point2D.Double[] points) {
         // Quickly return if no work is needed
         if (points.length < 3) {
@@ -82,14 +73,12 @@ public class ConvexHull {
         return convexHull;
     }
 
-    /**
-     * Returns true, if the three given points make a right turn.
-     *
-     * @param p1 first point
-     * @param p2 second point
-     * @param p3 third point
-     * @return true if right turn.
-     */
+    /// Returns true, if the three given points make a right turn.
+    ///
+    /// @param p1 first point
+    /// @param p2 second point
+    /// @param p3 third point
+    /// @return true if right turn.
     public static boolean isRightTurn2D(Point.Double p1, Point.Double p2, Point.Double p3) {
         if (p1.equals(p2) || p2.equals(p3)) {
             // no right turn if points are at same location

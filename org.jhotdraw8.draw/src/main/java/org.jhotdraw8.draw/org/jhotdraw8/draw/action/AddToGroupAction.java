@@ -18,19 +18,14 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * AddToGroupAction.
- *
- */
+/// AddToGroupAction.
 public class AddToGroupAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.addToGroup";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public AddToGroupAction(DrawingEditor editor) {
         super(editor);
         Resources labels = DrawLabels.getResources();

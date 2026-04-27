@@ -5,23 +5,16 @@
 package org.jhotdraw8.draw.model;
 
 
-/**
- * Represents a bitmask of {@code DirtyBits}.
- *
- */
+/// Represents a bitmask of `DirtyBits`.
 public class DirtyMask {
 
-    /**
-     * The bit set is coalesced into a bitmask.
-     */
+    /// The bit set is coalesced into a bitmask.
     private final int bitmask;
 
     public static final DirtyMask EMPTY = new DirtyMask(0);
     public static final DirtyMask ALL = new DirtyMask(~0);
 
-    /**
-     * Prevent instantiation.
-     */
+    /// Prevent instantiation.
     private DirtyMask(int bitmask) {
         this.bitmask = bitmask;
     }
@@ -34,9 +27,7 @@ public class DirtyMask {
         return new DirtyMask(mask);
     }
 
-    /**
-     * Interface for DirtyBits.
-     */
+    /// Interface for DirtyBits.
     final int getMask() {
         return bitmask;
     }
@@ -62,12 +53,10 @@ public class DirtyMask {
         return bitmask == 0;
     }
 
-    /**
-     * Adds all bits of the specified dirty mask to this mask.
-     *
-     * @param that that mask
-     * @return a new mask
-     */
+    /// Adds all bits of the specified dirty mask to this mask.
+    ///
+    /// @param that that mask
+    /// @return a new mask
     public DirtyMask add(DirtyMask that) {
         return new DirtyMask(this.bitmask | that.bitmask);
     }

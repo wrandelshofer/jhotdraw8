@@ -18,19 +18,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * CssRectangle2DConverterTest.
- *
- */
+/// CssRectangle2DConverterTest.
 public class Rectangle2DConverterTest {
 
     public Rectangle2DConverterTest() {
     }
 
 
-    /**
-     * Test of fromString method, of class CssDoubleConverter.
-     */
+    /// Test of fromString method, of class CssDoubleConverter.
     public static void testFromString(CssRectangle2D expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();

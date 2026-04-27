@@ -13,10 +13,7 @@ import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 
-/**
- * NullConstrainer does not constrain anything.
- *
- */
+/// NullConstrainer does not constrain anything.
 public class NullConstrainer extends AbstractConstrainer {
 
     private final Path node = new Path();

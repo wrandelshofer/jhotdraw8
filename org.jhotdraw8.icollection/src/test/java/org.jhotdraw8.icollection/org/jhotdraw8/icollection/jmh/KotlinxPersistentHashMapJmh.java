@@ -16,38 +16,36 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * <pre>
- * # JMH version: 1.37
- * # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
- * # Apple M2 Max
- *                    (mask)  (size)  Mode  Cnt         Score   Error  Units
- * mContainsFound        -65  100000  avgt    2        38.214          ns/op
- * mContainsNotFound     -65  100000  avgt    2        39.175          ns/op
- * mCopyOf               -65  100000  avgt    2   9738079.390          ns/op
- * mCopyOnyByOne         -65  100000  avgt    2  15165845.241          ns/op
- * mHead                 -65  100000  avgt    2        29.194          ns/op
- * mIterate              -65  100000  avgt    2    933066.347          ns/op
- * mPut                  -65  100000  avgt    2       106.105          ns/op
- * mRemoveThenAdd        -65  100000  avgt    2       216.574          ns/op
- * mTail                 -65  100000  avgt    2        58.428          ns/op
- * </pre>
- * <pre>
- * # JMH version: 1.28
- * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
- * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
- *
- *                    (size)  Mode  Cnt     _     Score   Error  Units
- * ContainsFound     1000000  avgt          _   184.674          ns/op
- * ContainsNotFound  1000000  avgt          _   208.197          ns/op
- * CopyOf            1000000  avgt       399_299237.577          ns/op
- * Head              1000000  avgt          _    44.703          ns/op
- * Iterate           1000000  avgt        46_259569.668          ns/op
- * Put               1000000  avgt          _   353.429          ns/op
- * RemoveThenAdd     1000000  avgt          _   571.652          ns/op
- * Tail              1000000  avgt          _   131.255          ns/op
- * </pre>
- */
+/// <pre>
+/// # JMH version: 1.37
+/// # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
+/// # Apple M2 Max
+///                    (mask)  (size)  Mode  Cnt         Score   Error  Units
+/// mContainsFound        -65  100000  avgt    2        38.214          ns/op
+/// mContainsNotFound     -65  100000  avgt    2        39.175          ns/op
+/// mCopyOf               -65  100000  avgt    2   9738079.390          ns/op
+/// mCopyOnyByOne         -65  100000  avgt    2  15165845.241          ns/op
+/// mHead                 -65  100000  avgt    2        29.194          ns/op
+/// mIterate              -65  100000  avgt    2    933066.347          ns/op
+/// mPut                  -65  100000  avgt    2       106.105          ns/op
+/// mRemoveThenAdd        -65  100000  avgt    2       216.574          ns/op
+/// mTail                 -65  100000  avgt    2        58.428          ns/op
+/// </pre>
+/// <pre>
+/// # JMH version: 1.28
+/// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
+/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+///
+///                    (size)  Mode  Cnt     _     Score   Error  Units
+/// ContainsFound     1000000  avgt          _   184.674          ns/op
+/// ContainsNotFound  1000000  avgt          _   208.197          ns/op
+/// CopyOf            1000000  avgt       399_299237.577          ns/op
+/// Head              1000000  avgt          _    44.703          ns/op
+/// Iterate           1000000  avgt        46_259569.668          ns/op
+/// Put               1000000  avgt          _   353.429          ns/op
+/// RemoveThenAdd     1000000  avgt          _   571.652          ns/op
+/// Tail              1000000  avgt          _   131.255          ns/op
+/// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 2)

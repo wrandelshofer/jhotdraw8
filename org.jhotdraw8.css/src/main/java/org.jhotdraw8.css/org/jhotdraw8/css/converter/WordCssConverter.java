@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-/**
- * CssWordConverter.
- *
- */
+/// CssWordConverter.
 public class WordCssConverter implements Converter<String> {
 
     public WordCssConverter() {

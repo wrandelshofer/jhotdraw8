@@ -3,10 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-/**
- * Sample Skeleton for 'ColorChooserPane.fxml' Controller Class
- */
-
+/// Sample Skeleton for 'ColorChooserPane.fxml' Controller Class
 package org.jhotdraw8.fxcontrols.colorchooser;
 
 import javafx.beans.InvalidationListener;
@@ -29,23 +26,21 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-/**
- * HSL Chooser.
- * <p>
- * Useful for the following color spaces:
- * <dl>
- *     <dt>HSL</dt><dd>Hue, Saturation, Lightness</dd>
- *     <dt>HSB</dt><dd>Hue, Saturation, Brightness</dd>
- * </dl>
- * <pre>
- *           saturation→
- *           +--------------+ +---+
- *           |              | |   |
- *         ↑ |              | |   | ↑
- * lightness |              | |   | hue
- *           +--------------+ +---+
- * </pre>
- */
+/// HSL Chooser.
+///
+/// Useful for the following color spaces:
+/// <dl>
+///     <dt>HSL</dt><dd>Hue, Saturation, Lightness</dd>
+///     <dt>HSB</dt><dd>Hue, Saturation, Brightness</dd>
+/// </dl>
+/// <pre>
+///           saturation→
+///           +--------------+ +---+
+///           |              | |   |
+///         ↑ |              | |   | ↑
+/// lightness |              | |   | hue
+///           +--------------+ +---+
+/// </pre>
 public class HlsChooser extends HBox {
 
     private final ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");

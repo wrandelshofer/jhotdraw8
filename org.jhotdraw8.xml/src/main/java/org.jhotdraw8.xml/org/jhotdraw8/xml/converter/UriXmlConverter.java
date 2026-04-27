@@ -16,10 +16,7 @@ import java.net.URISyntaxException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-/**
- * XmlUriConverter.
- *
- */
+/// XmlUriConverter.
 public class UriXmlConverter implements Converter<URI> {
 
     public UriXmlConverter() {

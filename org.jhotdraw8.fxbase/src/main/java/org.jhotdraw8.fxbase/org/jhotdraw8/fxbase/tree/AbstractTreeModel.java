@@ -9,11 +9,9 @@ import org.jhotdraw8.base.event.Listener;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * AbstractTreeModel.
- *
- * @param <N> the node type
- */
+/// AbstractTreeModel.
+///
+/// @param <N> the node type
 public abstract class AbstractTreeModel<N> implements TreeModel<N> {
 
     private final CopyOnWriteArrayList<Listener<TreeModelEvent<N>>> treeModelListeners = new CopyOnWriteArrayList<>();

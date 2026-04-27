@@ -43,10 +43,7 @@ import org.jspecify.annotations.Nullable;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
-/**
- * Handle for the point of a figure.
- *
- */
+/// Handle for the point of a figure.
 public class BezierControlPointEditHandle extends AbstractHandle {
     private static final @Nullable Background REGION_BACKGROUND =
             new Background(new BackgroundFill(Color.WHITE, null, null));

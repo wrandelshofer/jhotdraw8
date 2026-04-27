@@ -7,9 +7,9 @@ package org.jhotdraw8.draw.tool;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.application.resources.Resources;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -25,15 +25,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-/**
- * ConnectionTool.
- *
- */
+/// ConnectionTool.
 public class ConnectionTool extends AbstractTool {
 
-    /**
-     * The created figure.
-     */
+    /// The created figure.
     private @Nullable ConnectingFigure figure;
 
     private Supplier<ConnectingFigure> figureFactory;
@@ -65,14 +60,12 @@ public class ConnectionTool extends AbstractTool {
         this.figureFactory = factory;
     }
 
-    /**
-     * Finds a layer for the specified figure. Creates a new layer if no
-     * suitable layer can be found.
-     *
-     * @param dv        the drawing view
-     * @param newFigure the figure
-     * @return a suitable layer for the figure
-     */
+    /// Finds a layer for the specified figure. Creates a new layer if no
+    /// suitable layer can be found.
+    ///
+    /// @param dv        the drawing view
+    /// @param newFigure the figure
+    /// @return a suitable layer for the figure
     protected @Nullable Figure getOrCreateParent(DrawingView dv, Figure newFigure) {
         // try to use the active layer
         Drawing drawing = dv.getDrawing();

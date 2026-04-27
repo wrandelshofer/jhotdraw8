@@ -27,19 +27,14 @@ import org.jspecify.annotations.Nullable;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-/**
- * {@code TextFigure} is a {@code TextFontableFigure} which supports stroking and
- * filling of the text.
- *
- */
+/// `TextFigure` is a `TextFontableFigure` which supports stroking and
+/// filling of the text.
 public class TextFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure, TextFontableFigure, TextLayoutableFigure,
         TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure, TextEditableFigure {
 
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Text";
     public static final CssPoint2DStyleableKey ORIGIN = new CssPoint2DStyleableKey("origin", new CssPoint2D(0, 0));
 

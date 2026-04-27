@@ -8,10 +8,7 @@ import javafx.beans.InvalidationListener;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * SimpleObservable.
- *
- */
+/// SimpleObservable.
 public class SimpleObservable implements ObservableMixin {
 
     private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();

@@ -20,19 +20,16 @@ import java.util.function.Function;
 
 import static java.lang.Math.min;
 
-/**
- * Computes the sets of strongly connected components in a directed graph.
- * <p>
- * References:
- * <dl>
- *     <dt>Robert Tarjan (1972). Depth-first search and linear graph algorithms.
- *     </dt>
- *     <dd><a href="http://www.cs.ucsb.edu/~gilbert/cs240a/old/cs240aSpr2011/slides/TarjanDFS.pdf">cs.ucsb.edu</a></dd>
- *
- *     <dt>Wikipedia. Tarjan's strongly connected components algorithm</dt>
- *     <dd><a href="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm">wikipedia.org</a></dd>
- * </dl>
- */
+/// Computes the sets of strongly connected components in a directed graph.
+///
+/// References:
+/// <dl>
+///     <dt>Robert Tarjan (1972). Depth-first search and linear graph algorithms.
+///     </dt>
+///     <dd><a href="http://www.cs.ucsb.edu/~gilbert/cs240a/old/cs240aSpr2011/slides/TarjanDFS.pdf">cs.ucsb.edu</a></dd>
+///     <dt>Wikipedia. Tarjan's strongly connected components algorithm</dt>
+///     <dd><a href="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm">wikipedia.org</a></dd>
+/// </dl>
 public class StronglyConnectedComponentsAlgo {
 
 
@@ -40,29 +37,25 @@ public class StronglyConnectedComponentsAlgo {
 
     }
 
-    /**
-     * Returns all strongly connected components in the specified graph.
-     *
-     * @param graph the graph
-     * @param <V>   the vertex data type
-     * @param <A>   the arrow data type
-     * @return the strongly connected components of the graph
-     * (this is actually a set of sets, but for performance reasons we return a list of lists).
-     */
+    /// Returns all strongly connected components in the specified graph.
+    ///
+    /// @param graph the graph
+    /// @param <V>   the vertex data type
+    /// @param <A>   the arrow data type
+    /// @return the strongly connected components of the graph
+    /// (this is actually a set of sets, but for performance reasons we return a list of lists).
     public <V, A> List<List<V>> findStronglyConnectedComponents(
             final DirectedGraph<V, A> graph) {
         return findStronglyConnectedComponents(graph.getVertices(), graph::getNextVertices);
     }
 
-    /**
-     * Returns all strongly connected components in the specified graph.
-     *
-     * @param <V>              the vertex data type
-     * @param vertices         the vertices of the graph
-     * @param nextNodeFunction returns the next nodes of a given node
-     * @return lists of strongly connected components
-     * (this is actually a set of sets, but for performance reasons we use a list of lists).
-     */
+    /// Returns all strongly connected components in the specified graph.
+    ///
+    /// @param <V>              the vertex data type
+    /// @param vertices         the vertices of the graph
+    /// @param nextNodeFunction returns the next nodes of a given node
+    /// @return lists of strongly connected components
+    /// (this is actually a set of sets, but for performance reasons we use a list of lists).
     public <V> List<List<V>> findStronglyConnectedComponents(
             final Collection<? extends V> vertices, final Function<V, Iterable<? extends V>> nextNodeFunction
     ) {
@@ -74,62 +67,46 @@ public class StronglyConnectedComponentsAlgo {
 
     }
 
-    /**
-     * This object holds the algorithm and its current state.
-     */
+    /// This object holds the algorithm and its current state.
     private static class SCCAlgo<V> {
 
         private final Function<V, Iterable<? extends V>> getNeighbors;
         private final List<List<V>> SCCs;
 
-        /**
-         * This time value is used to indicate that a vertex has not yet been visited.
-         */
+        /// This time value is used to indicate that a vertex has not yet been visited.
         private static final int UNVISITED = 0;
-        /**
-         * Visit time of a vertex.
-         * <p>
-         * This array is initialized with {@link #UNVISITED}.
-         * <p>
-         * Note: We choose {@link #UNVISITED} = 0, so that we do not have to explicitly fill this array.
-         */
+        /// Visit time of a vertex.
+        ///
+        /// This array is initialized with [#UNVISITED].
+        ///
+        /// Note: We choose [#UNVISITED] = 0, so that we do not have to explicitly fill this array.
         private final int[] visited;
-        /**
-         * Visit time counter.
-         */
+        /// Visit time counter.
         private int time = UNVISITED;
-        /**
-         * The earliest time a vertex could have been visited.
-         * <p<
-         * This is the earliest visit time of a vertex if we had performed the depth-first search
-         * using a different permutation of the 'neighbor' vertices.
-         */
+        /// The earliest time a vertex could have been visited.
+        /// <p<
+        /// This is the earliest visit time of a vertex if we had performed the depth-first search
+        /// using a different permutation of the 'neighbor' vertices.
         private final int[] earliest;
-        /**
-         * Tracks vertices that lie on the current path.
-         */
+        /// Tracks vertices that lie on the current path.
         private final boolean[] onStack;
-        /**
-         * The current stack.
-         * <p>
-         * The topmost elements of the stack contain the current
-         * strongly connected component ('scc').
-         * <p>
-         * The 'scc' extends from the top of the stack down to vertex 'v',
-         * if 'v' is the root of the 'scc'.
-         * <p>
-         * 'v' is the root if the 'scc', if its {@link #visited} time is equal to
-         * the earliest possible time that we have determined in {@link #earliest}.
-         * <p>
-         * If we find a neighbor 'w' that is on the current stack,
-         * and if it its {@link #visited} time is earlier than {@link #earliest} of 'v',
-         * then this means that 'w' and 'v' are on the same strongly connected component.
-         * Thus, we can update the {@link #earliest} of 'v' with that earlier time.
-         */
+        /// The current stack.
+        ///
+        /// The topmost elements of the stack contain the current
+        /// strongly connected component ('scc').
+        ///
+        /// The 'scc' extends from the top of the stack down to vertex 'v',
+        /// if 'v' is the root of the 'scc'.
+        ///
+        /// 'v' is the root if the 'scc', if its [#visited] time is equal to
+        /// the earliest possible time that we have determined in [#earliest].
+        ///
+        /// If we find a neighbor 'w' that is on the current stack,
+        /// and if it its [#visited] time is earlier than [#earliest] of 'v',
+        /// then this means that 'w' and 'v' are on the same strongly connected component.
+        /// Thus, we can update the [#earliest] of 'v' with that earlier time.
         private final IntDeque stack;
-        /**
-         * The explicit call stack of the non-recursive depth first search.
-         */
+        /// The explicit call stack of the non-recursive depth first search.
         private final Deque<StackFrame<V>> callStack = new ArrayDeque<>();
 
         private final Map<V, Integer> vertexToIndex;
@@ -163,9 +140,7 @@ public class StronglyConnectedComponentsAlgo {
             return SCCs;
         }
 
-        /**
-         * Non-recursive depth-first search using an explicit call stack.
-         */
+        /// Non-recursive depth-first search using an explicit call stack.
         private void dfs(V start) {
             callStack.push(new StackFrame<>(start, vertexToIndex.get(start), getNeighbors.apply(start).iterator()));
 

@@ -15,22 +15,19 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * CssNumberConverter.
- * <p>
- * Parses the following EBNF:
- * <pre>
- * Number := number-token | "-INF" | "INF" | "NaN";
- * number-token = (* CSS number-token *)
- * </pre>
- * <p>
- * References:
- * <dl>
- *     <dt>CSS Syntax Module Level 3, 4. Token Railroad Diagrams, Number Token Diagram</dt>
- *     <dd><a href="https://www.w3.org/TR/css-syntax-3/#number-token-diagram">w3.org</a></dd>
- * </dl>
- *
- */
+/// CssNumberConverter.
+///
+/// Parses the following EBNF:
+/// <pre>
+/// Number := number-token | "-INF" | "INF" | "NaN";
+/// number-token = (* CSS number-token *)
+/// </pre>
+///
+/// References:
+/// <dl>
+///     <dt>CSS Syntax Module Level 3, 4. Token Railroad Diagrams, Number Token Diagram</dt>
+///     <dd><a href="https://www.w3.org/TR/css-syntax-3/#number-token-diagram">w3.org</a></dd>
+/// </dl>
 public class NumberCssConverter extends AbstractCssConverter<Number> {
     private final Class<? extends Number> clazz;
 

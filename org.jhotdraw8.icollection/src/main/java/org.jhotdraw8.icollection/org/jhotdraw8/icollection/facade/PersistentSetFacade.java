@@ -19,11 +19,9 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.Function;
 
-/**
- * Provides a {@link PersistentSet} facade to a set of {@code PersistentSet} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [PersistentSet] facade to a set of `PersistentSet` functions.
+///
+/// @param <E> the element type
 public class PersistentSetFacade<E> extends AbstractReadableSet<E> implements PersistentSet<E> {
     private final Set<E> target;
     private final Function<Set<E>, Set<E>> cloneFunction;

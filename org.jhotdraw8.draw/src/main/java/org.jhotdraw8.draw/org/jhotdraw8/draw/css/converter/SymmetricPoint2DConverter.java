@@ -17,11 +17,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
- * versa. If the X and the Y-value are identical, then only one value is output.
- *
- */
+/// Converts a `javafx.geometry.Point2D` into a `String` and vice
+/// versa. If the X and the Y-value are identical, then only one value is output.
 public class SymmetricPoint2DConverter extends AbstractCssConverter<Point2D> {
 
     private final boolean withSpace;

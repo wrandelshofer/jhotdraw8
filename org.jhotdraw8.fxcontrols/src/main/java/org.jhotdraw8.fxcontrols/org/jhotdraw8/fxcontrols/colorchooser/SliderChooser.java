@@ -3,10 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-/**
- * Sample Skeleton for 'ColorChooserPane.fxml' Controller Class
- */
-
+/// Sample Skeleton for 'ColorChooserPane.fxml' Controller Class
 package org.jhotdraw8.fxcontrols.colorchooser;
 
 import javafx.beans.property.ObjectProperty;
@@ -23,20 +20,18 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-/**
- * Shows 3 horizontal sliders:
- * <pre>
- *     +---------------------+
- *     |                     |
- *     +---------------------+
- *     +---------------------+
- *     |                     |
- *     +---------------------+
- *     +---------------------+
- *     |                     |
- *     +---------------------+
- * </pre>
- */
+/// Shows 3 horizontal sliders:
+/// <pre>
+///     +---------------------+
+///     |                     |
+///     +---------------------+
+///     +---------------------+
+///     |                     |
+///     +---------------------+
+///     +---------------------+
+///     |                     |
+///     +---------------------+
+/// </pre>
 public class SliderChooser extends VBox {
     @SuppressWarnings("this-escape")
     private final ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");

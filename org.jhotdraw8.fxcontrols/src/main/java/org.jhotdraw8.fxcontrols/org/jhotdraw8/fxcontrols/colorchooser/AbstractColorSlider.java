@@ -58,52 +58,34 @@ import java.util.function.ToIntFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Base class for color sliders that support color spaces with up to 4 color components.
- */
+/// Base class for color sliders that support color spaces with up to 4 color components.
 public abstract class AbstractColorSlider extends Pane {
     public static final int BLOCK_SIZE_COARSE = 32;
     public static final int BLOCK_SIZE_FINE = 2;
     protected final DoubleProperty thumbTranslateX = new SimpleDoubleProperty(this, "thumbTranslateX", 0);
     protected final DoubleProperty thumbTranslateY = new SimpleDoubleProperty(this, "thumbTranslateY", -1);
-    /**
-     * Set this value to true when the user is adjusting a value in another control.
-     * <p>
-     * For example, when the user is pressing the mouse button in a slider in another control.
-     */
+    /// Set this value to true when the user is adjusting a value in another control.
+    ///
+    /// For example, when the user is pressing the mouse button in a slider in another control.
     protected final BooleanProperty adjusting = new SimpleBooleanProperty(this, "adjusting");
-    /**
-     * The value of the color component with index 0.
-     */
+    /// The value of the color component with index 0.
     protected final FloatProperty c0 = new SimpleFloatProperty(this, "c0");
-    /**
-     * The value of the color component with index 1.
-     */
+    /// The value of the color component with index 1.
     protected final FloatProperty c1 = new SimpleFloatProperty(this, "c1");
-    /**
-     * The value of the color component with index 2.
-     */
+    /// The value of the color component with index 2.
     protected final FloatProperty c2 = new SimpleFloatProperty(this, "c2");
-    /**
-     * The value of the color component with index 3.
-     */
+    /// The value of the color component with index 3.
     protected final FloatProperty c3 = new SimpleFloatProperty(this, "c3");
     protected final FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
-    /**
-     * The color space of the components.
-     */
+    /// The color space of the components.
     protected final ObjectProperty<NamedColorSpace> targetColorSpace = new SimpleObjectProperty<>(this, "targetColorSpace");
     protected final ObjectProperty<NamedColorSpace> sourceColorSpace = new SimpleObjectProperty<>(this, "sourceColorSpace");
-    /**
-     * The color space of the display.
-     */
+    /// The color space of the display.
     protected final ObjectProperty<NamedColorSpace> displayColorSpace = new SimpleObjectProperty<>(this, "displayColorSpace");
     protected final ObjectProperty<ToIntFunction<Integer>> rgbFilter = new SimpleObjectProperty<>(this, "rgbFilter",
             i -> i
     );
-    /**
-     * Indicates whether the value of the slider should always be aligned with the tick marks.
-     */
+    /// Indicates whether the value of the slider should always be aligned with the tick marks.
     protected final BooleanProperty snapToTicks = new SimpleBooleanProperty(this, "snapToTicks", true);
     @FXML // fx:id="sliderThumb"
     protected Region thumb; // Value injected by FXMLLoader
@@ -368,9 +350,7 @@ public abstract class AbstractColorSlider extends Pane {
         validateColorRect();
     }
 
-    /**
-     * Must be called from the constructor of the subclass!
-     */
+    /// Must be called from the constructor of the subclass!
     protected void load() {
         try {
             FXMLLoader loader = new FXMLLoader(AbstractColorSlider.getFxml());
@@ -447,40 +427,38 @@ public abstract class AbstractColorSlider extends Pane {
         return thumbTranslateX;
     }
 
-    /**
-     * If epsilon is 0, we get the best rendering with OK LCH: the shape is a triangle with a straight line
-     * from the bottom left to the right, and a curved line from the right to the top left. (as shown below).
-     * <p>
-     * However, with epsilon 0, pure white color converted from sRGB to Display P3 is out of gamut, because
-     * the converted color value is slightly greater than 1.0.
-     * <pre>
-     *     +---
-     *     |   ----
-     *     |       ------
-     *     |             --------
-     *     |             ----
-     *     |         ----
-     *     |    ----
-     *     +----
-     * </pre>
-     * <p>
-     * If epsilon is too large, we get wiggles in the OK LCH rendering: the shape wiggles at the bottom left
-     * before it goes to the right. The curved line from the right to the top left is still good.
-     * <pre>
-     *     +---
-     *     |   ----
-     *     |       ------
-     *     |             --------
-     *     |             ----
-     *     |         ----
-     *     |      ----
-     *     +----------
-     * </pre>
-     *
-     * @param colorSpace a color space
-     * @param component component values in the specified color space
-     * @return true if at least one component value is out of gamut
-     */
+    /// If epsilon is 0, we get the best rendering with OK LCH: the shape is a triangle with a straight line
+    /// from the bottom left to the right, and a curved line from the right to the top left. (as shown below).
+    ///
+    /// However, with epsilon 0, pure white color converted from sRGB to Display P3 is out of gamut, because
+    /// the converted color value is slightly greater than 1.0.
+    /// <pre>
+    ///     +---
+    ///     |   ----
+    ///     |       ------
+    ///     |             --------
+    ///     |             ----
+    ///     |         ----
+    ///     |    ----
+    ///     +----
+    /// </pre>
+    ///
+    /// If epsilon is too large, we get wiggles in the OK LCH rendering: the shape wiggles at the bottom left
+    /// before it goes to the right. The curved line from the right to the top left is still good.
+    /// <pre>
+    ///     +---
+    ///     |   ----
+    ///     |       ------
+    ///     |             --------
+    ///     |             ----
+    ///     |         ----
+    ///     |      ----
+    ///     +----------
+    /// </pre>
+    ///
+    /// @param colorSpace a color space
+    /// @param component  component values in the specified color space
+    /// @return true if at least one component value is out of gamut
     protected static boolean outOfGamut(NamedColorSpace colorSpace, float[] component) {
         float epsMax;
         float epsMin;

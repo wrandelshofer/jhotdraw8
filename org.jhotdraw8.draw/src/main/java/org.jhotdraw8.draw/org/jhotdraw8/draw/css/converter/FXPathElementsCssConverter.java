@@ -25,12 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Converts an SVG path to a list of {@link PathElement}s.
- * <p>
- * The {@code null} value will be converted to the CSS identifier {@code none}.
- *
- */
+/// Converts an SVG path to a list of [PathElement]s.
+///
+/// The `null` value will be converted to the CSS identifier `none`.
 public class FXPathElementsCssConverter extends AbstractCssConverter<PersistentList<PathElement>> {
 
 

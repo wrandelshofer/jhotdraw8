@@ -21,26 +21,23 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * A tool to select and manipulate figures.
- * <p>
- * A selection tool is in one of three states:
- * <ol>
- * <li>area selection</li>
- * <li>figure dragging</li>
- * <li>handle manipulation</li>
- * </ol>
- * The different states are handled by different tracker objects: the
- * <code>SimpleSelectAreaTracker</code>, the <code>SimpleDragTracker</code> and
- * the <code>SimpleHandleTracker</code>.
- * <p>
- * A Figure can be selected by clicking at it. Holding the alt key or the ctrl
- * key down, selects the Figure behind it.
- * <p>
- * Holding down the shift key on mouse pressed, enforces the area selection
- * function.
- *
- */
+/// A tool to select and manipulate figures.
+///
+/// A selection tool is in one of three states:
+/// <ol>
+///   - area selection
+///   - figure dragging
+///   - handle manipulation
+/// </ol>
+/// The different states are handled by different tracker objects: the
+/// <code>SimpleSelectAreaTracker</code>, the <code>SimpleDragTracker</code> and
+/// the <code>SimpleHandleTracker</code>.
+///
+/// A Figure can be selected by clicking at it. Holding the alt key or the ctrl
+/// key down, selects the Figure behind it.
+///
+/// Holding down the shift key on mouse pressed, enforces the area selection
+/// function.
 public class SelectionTool extends AbstractTool {
 
     public static final String ID = "tool.selectFigure";
@@ -52,26 +49,16 @@ public class SelectionTool extends AbstractTool {
     // Fields
     // ---
 
-    /**
-     * The tracker encapsulates the current state of the SelectionTool.
-     */
+    /// The tracker encapsulates the current state of the SelectionTool.
     private @Nullable Tracker tracker;
-    /**
-     * The tracker encapsulates the current state of the SelectionTool.
-     */
+    /// The tracker encapsulates the current state of the SelectionTool.
     private HandleTracker handleTracker;
-    /**
-     * The tracker encapsulates the current state of the SelectionTool.
-     */
+    /// The tracker encapsulates the current state of the SelectionTool.
     private SelectAreaTracker selectAreaTracker;
-    /**
-     * The tracker encapsulates the current state of the SelectionTool.
-     */
+    /// The tracker encapsulates the current state of the SelectionTool.
     private DragTracker dragTracker;
 
-    /**
-     * Whether to update the cursor on mouse movements.
-     */
+    /// Whether to update the cursor on mouse movements.
     private final boolean updateCursor = true;
 
     private final BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
@@ -288,13 +275,11 @@ public class SelectionTool extends AbstractTool {
         }
     }
 
-    /**
-     * Method to get a {@code HandleTracker} which handles user interaction for
-     * the specified handle.
-     *
-     * @param handle a handle
-     * @return a handle tracker
-     */
+    /// Method to get a `HandleTracker` which handles user interaction for
+    /// the specified handle.
+    ///
+    /// @param handle a handle
+    /// @return a handle tracker
     protected HandleTracker getHandleTracker(Handle handle) {
         if (handleTracker == null) {
             handleTracker = new SimpleHandleTracker();
@@ -304,14 +289,12 @@ public class SelectionTool extends AbstractTool {
         return handleTracker;
     }
 
-    /**
-     * Method to get a {@code DragTracker} which handles user interaction for
-     * dragging the specified figure.
-     *
-     * @param f  a figure
-     * @param dv a drawing view
-     * @return a tracker
-     */
+    /// Method to get a `DragTracker` which handles user interaction for
+    /// dragging the specified figure.
+    ///
+    /// @param f  a figure
+    /// @param dv a drawing view
+    /// @return a tracker
     protected DragTracker getDragTracker(Figure f, DrawingView dv) {
         if (dragTracker == null) {
             dragTracker = new SimpleDragTracker();
@@ -320,12 +303,10 @@ public class SelectionTool extends AbstractTool {
         return dragTracker;
     }
 
-    /**
-     * Method to get a {@code SelectAreaTracker} which handles user interaction
-     * for selecting an area on the drawing.
-     *
-     * @return a tracker
-     */
+    /// Method to get a `SelectAreaTracker` which handles user interaction
+    /// for selecting an area on the drawing.
+    ///
+    /// @return a tracker
     protected SelectAreaTracker getSelectAreaTracker() {
         if (selectAreaTracker == null) {
             selectAreaTracker = new SimpleSelectAreaTracker();
@@ -333,32 +314,26 @@ public class SelectionTool extends AbstractTool {
         return selectAreaTracker;
     }
 
-    /**
-     * Method to set a {@code HandleTracker}. If you specify null, the
-     * {@code SelectionTool} uses the {@code DefaultHandleTracker}.
-     *
-     * @param newValue a tracker
-     */
+    /// Method to set a `HandleTracker`. If you specify null, the
+    /// `SelectionTool` uses the `DefaultHandleTracker`.
+    ///
+    /// @param newValue a tracker
     public void setHandleTracker(HandleTracker newValue) {
         handleTracker = newValue;
     }
 
-    /**
-     * Method to set a {@code SelectAreaTracker}. If you specify null, the
-     * {@code SelectionTool} uses the {@code DefaultSelectAreaTracker}.
-     *
-     * @param newValue a tracker
-     */
+    /// Method to set a `SelectAreaTracker`. If you specify null, the
+    /// `SelectionTool` uses the `DefaultSelectAreaTracker`.
+    ///
+    /// @param newValue a tracker
     public void setSelectAreaTracker(SelectAreaTracker newValue) {
         selectAreaTracker = newValue;
     }
 
-    /**
-     * Method to set a {@code DragTracker}. If you specify null, the
-     * {@code SelectionTool} uses the {@code DefaultDragTracker}.
-     *
-     * @param newValue a tracker
-     */
+    /// Method to set a `DragTracker`. If you specify null, the
+    /// `SelectionTool` uses the `DefaultDragTracker`.
+    ///
+    /// @param newValue a tracker
     public void setDragTracker(DragTracker newValue) {
         dragTracker = newValue;
     }

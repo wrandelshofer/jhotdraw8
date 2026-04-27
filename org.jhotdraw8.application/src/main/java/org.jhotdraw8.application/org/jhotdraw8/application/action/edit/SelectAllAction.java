@@ -10,30 +10,23 @@ import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.EditableComponent;
 
-/**
- * Selects all items.
- *
- */
+/// Selects all items.
 public class SelectAllAction extends AbstractSelectionAction {
 
     public static final String ID = "edit.selectAll";
 
-    /**
-     * Creates a new instance which acts on the currently focused component.
-     *
-     * @param app the application
-     */
+    /// Creates a new instance which acts on the currently focused component.
+    ///
+    /// @param app the application
     public SelectAllAction(Application app) {
         this(app, null);
     }
 
-    /**
-     * Creates a new instance which acts on the specified component.
-     *
-     * @param app    the application
-     * @param target The target of the action. Specify null for the currently
-     *               focused component.
-     */
+    /// Creates a new instance which acts on the specified component.
+    ///
+    /// @param app    the application
+    /// @param target The target of the action. Specify null for the currently
+    ///               focused component.
     @SuppressWarnings("this-escape")
     public SelectAllAction(Application app, Node target) {
         super(app, target);

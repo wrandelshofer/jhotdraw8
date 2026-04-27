@@ -24,75 +24,66 @@ import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
-/**
- * This is a convenience wrapper for accessing resources stored in a
- * ResourceBundle.
- * <p>
- * A resources object may reference a parent resources object using the resource
- * key "$parent".
- * <p>
- * <b>Placeholders</b><br>
- * On top of the functionality provided by ResourceBundle, a property value can
- * include text from another property, by specifying the desired property name
- * and format type between <code>"${"</code> and <code>"}"</code>.
- * <p>
- * For example, if there is a {@code "imagedir"} property with the value
- * {@code "/org/jhotdraw8/undo/images"}, then this could be used in an attribute
- * like this: <code>${imagedir}/editUndo.png</code>. This is resolved at
- * run-time as {@code /org/jhotdraw8/undo/images/editUndo.png}.
- * <p>
- * Property names in placeholders can contain modifiers. Modifiers are written
- * between @code "[$"} and {@code "]"}. Each modifier has a fallback chain.
- * <p>
- * For example, if the property name modifier {@code "os"} has the value "win",
- * and its fallback chain is {@code "mac","default"}, then the property name
- * <code>${preferences.text.[$os]}</code> is first evaluated to {@code
- * preferences.text.win}, and - if no property with this name exists - it is
- * evaluated to {@code preferences.text.mac}, and then to
- * {@code preferences.text.default}.
- * <p>
- * The property name modifier "os" is defined by default. It can assume the
- * values "win", "mac" and "other". Its fallback chain is "default".
- * <p>
- * The format type can be optionally specified after a comma. The following
- * format types are supported:
- * <ul>
- * <li>{@code string} This is the default format.</li>
- * <li>{@code accelerator} This format replaces all occurrences of the keywords
- * shift, control, ctrl, meta, alt, altGraph by properties which start with
- * {@code accelerator.}. For example, shift is replaced by
- * {@code accelerator.shift}.
- * </li>
- * </ul>
- *
- */
+/// This is a convenience wrapper for accessing resources stored in a
+/// ResourceBundle.
+///
+/// A resources object may reference a parent resources object using the resource
+/// key "$parent".
+///
+/// **Placeholders**
+/// On top of the functionality provided by ResourceBundle, a property value can
+/// include text from another property, by specifying the desired property name
+/// and format type between <code>"${"</code> and <code>"}"</code>.
+///
+/// For example, if there is a `"imagedir"` property with the value
+/// `"/org/jhotdraw8/undo/images"`, then this could be used in an attribute
+/// like this: <code>${imagedir}/editUndo.png</code>. This is resolved at
+/// run-time as `/org/jhotdraw8/undo/images/editUndo.png`.
+///
+/// Property names in placeholders can contain modifiers. Modifiers are written
+/// between @code "[$"}and`"]"`. Each modifier has a fallback chain.
+///
+/// For example, if the property name modifier `"os"` has the value "win",
+/// and its fallback chain is `"mac","default"`, then the property name
+/// <code>${preferences.text.[$os]}</code> is first evaluated to
+/// `preferences.text.win`, and - if no property with this name exists - it is
+/// evaluated to `preferences.text.mac`, and then to
+/// `preferences.text.default`.
+///
+/// The property name modifier "os" is defined by default. It can assume the
+/// values "win", "mac" and "other". Its fallback chain is "default".
+///
+/// The format type can be optionally specified after a comma. The following
+/// format types are supported:
+///
+///   - `string` This is the default format.
+///   - `accelerator` This format replaces all occurrences of the keywords
+///     shift, control, ctrl, meta, alt, altGraph by properties which start with
+///     `accelerator.`. For example, shift is replaced by
+///     `accelerator.shift`.
+///
+///
 public interface Resources {
     String PARENT_RESOURCE_KEY = "$parent";
 
-    /**
-     * Adds a decoder.
-     *
-     * @param decoder the resource decoder
-     */
+    /// Adds a decoder.
+    ///
+    /// @param decoder the resource decoder
     static void addDecoder(ResourceDecoder decoder) {
         ResourcesHelper.decoders.add(decoder);
     }
 
-    /**
-     * Puts a property name modifier along with a fallback chain.
-     *
-     * @param name          The name of the modifier.
-     * @param fallbackChain The fallback chain of the modifier.
-     */
+    /// Puts a property name modifier along with a fallback chain.
+    ///
+    /// @param name          The name of the modifier.
+    /// @param fallbackChain The fallback chain of the modifier.
     static void putPropertyNameModifier(String name, String... fallbackChain) {
         ResourcesHelper.propertyNameModifiers.put(name, fallbackChain);
     }
 
-    /**
-     * Removes a property name modifier.
-     *
-     * @param name The name of the modifier.
-     */
+    /// Removes a property name modifier.
+    ///
+    /// @param name The name of the modifier.
     static void removePropertyNameModifier(String name) {
         ResourcesHelper.propertyNameModifiers.remove(name);
     }
@@ -143,26 +134,22 @@ public interface Resources {
         button.setTooltip(new Tooltip(getToolTipTextProperty(argument)));
     }
 
-    /**
-     * Configures a menu item with a text, an accelerator, a mnemonic and a menu
-     * icon.
-     *
-     * @param menu     the menu
-     * @param argument the argument
-     */
+    /// Configures a menu item with a text, an accelerator, a mnemonic and a menu
+    /// icon.
+    ///
+    /// @param menu     the menu
+    /// @param argument the argument
     default void configureMenu(Menu menu, String argument) {
         menu.setText(getTextProperty(argument));
         menu.setAccelerator(getAcceleratorProperty(argument));
         menu.setGraphic(getSmallIconProperty(argument, getBaseClass()));
     }
 
-    /**
-     * Configures a menu item with a text, an accelerator, a mnemonic and a menu
-     * icon.
-     *
-     * @param menu     the menu item
-     * @param argument the argument
-     */
+    /// Configures a menu item with a text, an accelerator, a mnemonic and a menu
+    /// icon.
+    ///
+    /// @param menu     the menu item
+    /// @param argument the argument
     default void configureMenuItem(MenuItem menu, String argument) {
         menu.setText(getTextProperty(argument));
         menu.setAccelerator(getAcceleratorProperty(argument));
@@ -187,38 +174,33 @@ public interface Resources {
 
     boolean containsKey(String key);
 
-    /**
-     * Returns a formatted string using {@link Formatter}.
-     *
-     * @param key       the key
-     * @param arguments the arguments
-     * @return formatted String
-     */
+    /// Returns a formatted string using [Formatter].
+    ///
+    /// @param key       the key
+    /// @param arguments the arguments
+    /// @return formatted String
     default String format(String key, Object... arguments) {
         return new Formatter(getLocale()).format(getString(key), arguments).toString();
     }
 
-    /**
-     * Returns a formatted string using {@link MessageFormat}.
-     *
-     * @param key       the key
-     * @param arguments the arguments
-     * @return formatted String
-     */
+    /// Returns a formatted string using [MessageFormat].
+    ///
+    /// @param key       the key
+    /// @param arguments the arguments
+    /// @return formatted String
     default String messageFormat(String key, Object... arguments) {
         return new MessageFormat(getString(key), getLocale()).format(arguments);
     }
 
-    /**
-     * Gets a KeyStroke for a JavaBeans "accelerator" property from the
-     * ResourceBundle.
-     * <BR>Convenience method.
-     *
-     * @param key The key of the property. This method adds ".accelerator" to
-     *            the key.
-     * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
-     * null if the property is missing.
-     */
+    /// Gets a KeyStroke for a JavaBeans "accelerator" property from the
+    /// ResourceBundle.
+    ///
+    /// Convenience method.
+    ///
+    /// @param key The key of the property. This method adds ".accelerator" to
+    ///            the key.
+    /// @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
+    /// null if the property is missing.
     default @Nullable KeyCombination getAcceleratorProperty(String key) {
         return getKeyCombination(key + ".accelerator");
     }
@@ -226,34 +208,29 @@ public interface Resources {
     Class<?> getBaseClass();
 
 
-    /**
-     * Returns a java.lang.Module if the resources have been created
-     * with named Java module on a Java VM that supports modules.
-     *
-     * @return java.lang.Module
-     */
+    /// Returns a java.lang.Module if the resources have been created
+    /// with named Java module on a Java VM that supports modules.
+    ///
+    /// @return java.lang.Module
     Object getModule();
 
     String getBaseName();
 
-    /**
-     * Returns a formatted string using javax.text.MessageFormat.
-     *
-     * @param key       the key
-     * @param arguments the arguments
-     * @return formatted String
-     */
+    /// Returns a formatted string using javax.text.MessageFormat.
+    ///
+    /// @param key       the key
+    /// @param arguments the arguments
+    /// @return formatted String
     default String getFormatted(String key, Object... arguments) {
         return MessageFormat.format(getString(key), arguments);
     }
 
-    /**
-     * Get an Integer from the ResourceBundle.
-     * <br>Convenience method to save casting.
-     *
-     * @param key The key of the property.
-     * @return The value of the property. Returns -1 if the property is missing.
-     */
+    /// Get an Integer from the ResourceBundle.
+    ///
+    ///Convenience method to save casting.
+    ///
+    /// @param key The key of the property.
+    /// @return The value of the property. Returns -1 if the property is missing.
     default Integer getInteger(String key) {
         try {
             return Integer.valueOf(getString(key));
@@ -263,14 +240,13 @@ public interface Resources {
         }
     }
 
-    /**
-     * Get a KeyStroke from the ResourceBundle.
-     * <BR>Convenience method.
-     *
-     * @param key The key of the property.
-     * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
-     * null if the property is missing.
-     */
+    /// Get a KeyStroke from the ResourceBundle.
+    ///
+    ///Convenience method.
+    ///
+    /// @param key The key of the property.
+    /// @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
+    /// null if the property is missing.
     default @Nullable KeyCombination getKeyCombination(String key) {
         KeyCombination ks = null;
         String s = getString(key);
@@ -283,45 +259,42 @@ public interface Resources {
     }
 
 
-    /**
-     * Get a large image icon from the ResourceBundle for use on a
-     * {@code JButton}.
-     * <br>Convenience method .
-     *
-     * @param key       The key of the property. This method appends ".largeIcon" to
-     *                  the key.
-     * @param baseClass the base class used to retrieve the image resource
-     * @return The value of the property. Returns null if the property is
-     * missing.
-     */
+    /// Get a large image icon from the ResourceBundle for use on a
+    /// `JButton`.
+    ///
+    ///Convenience method .
+    ///
+    /// @param key       The key of the property. This method appends ".largeIcon" to
+    ///                  the key.
+    /// @param baseClass the base class used to retrieve the image resource
+    /// @return The value of the property. Returns null if the property is
+    /// missing.
     default @Nullable Node getLargeIconProperty(String key, Class<?> baseClass) {
         return ResourcesHelper.getIconProperty(this, key, ".largeIcon", baseClass);
     }
 
     Locale getLocale();
 
-    /**
-     * Get a Mnemonic from the ResourceBundle.
-     * <br>Convenience method.
-     *
-     * @param key The key of the property.
-     * @return The first char of the value of the property. Returns '\0' if the
-     * property is missing.
-     */
+    /// Get a Mnemonic from the ResourceBundle.
+    ///
+    ///Convenience method.
+    ///
+    /// @param key The key of the property.
+    /// @return The first char of the value of the property. Returns '\0' if the
+    /// property is missing.
     default char getMnemonic(String key) {
         String s = getString(key);
         return (s == null || s.isEmpty()) ? '\0' : s.charAt(0);
     }
 
-    /**
-     * Gets a char for a JavaBeans "mnemonic" property from the ResourceBundle.
-     * <br>Convenience method.
-     *
-     * @param key The key of the property. This method appends ".mnemonic" to
-     *            the key.
-     * @return The first char of the value of the property. Returns '\0' if the
-     * property is missing.
-     */
+    /// Gets a char for a JavaBeans "mnemonic" property from the ResourceBundle.
+    ///
+    ///Convenience method.
+    ///
+    /// @param key The key of the property. This method appends ".mnemonic" to
+    ///            the key.
+    /// @return The first char of the value of the property. Returns '\0' if the
+    /// property is missing.
     default @Nullable KeyCombination getMnemonicProperty(String key) {
         String s;
         try {
@@ -333,31 +306,29 @@ public interface Resources {
         return (s == null || s.isEmpty()) ? null : KeyCombination.valueOf(s);
     }
 
-    /**
-     * Get a small image icon from the ResourceBundle for use on a
-     * {@code JMenuItem}.
-     * <br>Convenience method .
-     *
-     * @param key       The key of the property. This method appends ".smallIcon" to
-     *                  the key.
-     * @param baseClass the base class used to retrieve the image resource
-     * @return The value of the property. Returns null if the property is
-     * missing.
-     */
+    /// Get a small image icon from the ResourceBundle for use on a
+    /// `JMenuItem`.
+    ///
+    ///Convenience method .
+    ///
+    /// @param key       The key of the property. This method appends ".smallIcon" to
+    ///                  the key.
+    /// @param baseClass the base class used to retrieve the image resource
+    /// @return The value of the property. Returns null if the property is
+    /// missing.
     default @Nullable Node getSmallIconProperty(String key, Class<?> baseClass) {
         return ResourcesHelper.getIconProperty(this, key, ".smallIcon", baseClass);
     }
 
     String getString(String s);
 
-    /**
-     * Get a String for a JavaBeans "text" property from the ResourceBundle.
-     * <br>Convenience method.
-     *
-     * @param key The key of the property. This method appends ".text" to the
-     *            key.
-     * @return The ToolTip. Returns null if no tooltip is defined.
-     */
+    /// Get a String for a JavaBeans "text" property from the ResourceBundle.
+    ///
+    ///Convenience method.
+    ///
+    /// @param key The key of the property. This method appends ".text" to the
+    ///            key.
+    /// @return The ToolTip. Returns null if no tooltip is defined.
     default @Nullable String getTextProperty(String key) {
         try {
             String value = getString(key + ".text");
@@ -368,15 +339,14 @@ public interface Resources {
         }
     }
 
-    /**
-     * Get a String for a JavaBeans "toolTipText" property from the
-     * ResourceBundle.
-     * <br>Convenience method.
-     *
-     * @param key The key of the property. This method appends ".toolTipText" to
-     *            the key.
-     * @return The ToolTip. Returns null if no tooltip is defined.
-     */
+    /// Get a String for a JavaBeans "toolTipText" property from the
+    /// ResourceBundle.
+    ///
+    ///Convenience method.
+    ///
+    /// @param key The key of the property. This method appends ".toolTipText" to
+    ///            the key.
+    /// @return The ToolTip. Returns null if no tooltip is defined.
     default @Nullable String getToolTipTextProperty(String key) {
         try {
             String value = getString(key + ".toolTipText");
@@ -442,13 +412,11 @@ public interface Resources {
 
     }
 
-    /**
-     * Translate a String defining a {@code javax.swing.KeyStroke} into a String
-     * for {@code javafx.input.KeyCombination}.
-     *
-     * @param s The KeyStroke String
-     * @return The KeyCombination String
-     */
+    /// Translate a String defining a `javax.swing.KeyStroke` into a String
+    /// for `javafx.input.KeyCombination`.
+    ///
+    /// @param s The KeyStroke String
+    /// @return The KeyCombination String
     default @Nullable String translateKeyStrokeToKeyCombination(@Nullable String s) {
         if (s != null) {
             s = s.replace("ctrl ", "Ctrl+");

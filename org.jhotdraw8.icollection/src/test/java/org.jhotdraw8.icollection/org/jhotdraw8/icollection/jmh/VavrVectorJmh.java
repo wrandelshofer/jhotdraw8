@@ -17,58 +17,56 @@ import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
-/**
- * <pre>
- * # JMH version: 1.36
- * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
- * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
- *
- * Benchmark            (size)  Mode  Cnt          Score   Error  Units
- * mAddAll                 10  avgt              64.076          ns/op
- * mAddAll               1000  avgt            3901.188          ns/op
- * mAddAll            1000000  avgt        11149468.773          ns/op
- * mAddAllArray            10  avgt              37.557          ns/op
- * mAddAllArray          1000  avgt            4227.075          ns/op
- * mAddAllArray       1000000  avgt        24717308.914          ns/op
- * mAddFirst               10  avgt              97.450          ns/op
- * mAddFirst             1000  avgt              58.759          ns/op
- * mAddFirst          1000000  avgt             201.288          ns/op
- * mAddLast                10  avgt              31.247          ns/op
- * mAddLast              1000  avgt              48.038          ns/op
- * mAddLast           1000000  avgt             158.035          ns/op
- * mAddOneByOne            10  avgt             520.625          ns/op
- * mAddOneByOne          1000  avgt           57651.413          ns/op
- * mAddOneByOne       1000000  avgt       149117084.265          ns/op
- * mContainsNotFound       10  avgt              29.026          ns/op
- * mContainsNotFound     1000  avgt            2957.783          ns/op
- * mContainsNotFound  1000000  avgt        10539231.087          ns/op
- * mGet                    10  avgt               4.153          ns/op
- * mGet                  1000  avgt               7.605          ns/op
- * mGet               1000000  avgt              91.964          ns/op
- * mHead                   10  avgt               2.330          ns/op
- * mHead                 1000  avgt               2.896          ns/op
- * mHead              1000000  avgt               5.705          ns/op
- * mIterate                10  avgt              14.248          ns/op
- * mIterate              1000  avgt            1371.090          ns/op
- * mIterate           1000000  avgt        12618108.195          ns/op
- * mRemoveAtIndex          10  avgt              62.606          ns/op
- * mRemoveAtIndex        1000  avgt            3600.120          ns/op
- * mRemoveAtIndex     1000000  avgt         3686395.115          ns/op
- * mRemoveLast             10  avgt               7.967          ns/op
- * mRemoveLast           1000  avgt               8.969          ns/op
- * mRemoveLast        1000000  avgt               8.651          ns/op
- * mReversedIterate        10  avgt             183.846          ns/op
- * mReversedIterate      1000  avgt           11118.000          ns/op
- * mReversedIterate   1000000  avgt        31897269.280          ns/op
- * mSet                    10  avgt              18.467          ns/op
- * mSet                  1000  avgt              37.343          ns/op
- * mSet               1000000  avgt             209.726          ns/op
- * mTail                   10  avgt               7.729          ns/op
- * mTail                 1000  avgt               8.202          ns/op
- * mTail              1000000  avgt               8.605          ns/op
- *
- * Process finished with exit code 0
- */
+/// <pre>
+/// # JMH version: 1.36
+/// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
+/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+///
+/// Benchmark            (size)  Mode  Cnt          Score   Error  Units
+/// mAddAll                 10  avgt              64.076          ns/op
+/// mAddAll               1000  avgt            3901.188          ns/op
+/// mAddAll            1000000  avgt        11149468.773          ns/op
+/// mAddAllArray            10  avgt              37.557          ns/op
+/// mAddAllArray          1000  avgt            4227.075          ns/op
+/// mAddAllArray       1000000  avgt        24717308.914          ns/op
+/// mAddFirst               10  avgt              97.450          ns/op
+/// mAddFirst             1000  avgt              58.759          ns/op
+/// mAddFirst          1000000  avgt             201.288          ns/op
+/// mAddLast                10  avgt              31.247          ns/op
+/// mAddLast              1000  avgt              48.038          ns/op
+/// mAddLast           1000000  avgt             158.035          ns/op
+/// mAddOneByOne            10  avgt             520.625          ns/op
+/// mAddOneByOne          1000  avgt           57651.413          ns/op
+/// mAddOneByOne       1000000  avgt       149117084.265          ns/op
+/// mContainsNotFound       10  avgt              29.026          ns/op
+/// mContainsNotFound     1000  avgt            2957.783          ns/op
+/// mContainsNotFound  1000000  avgt        10539231.087          ns/op
+/// mGet                    10  avgt               4.153          ns/op
+/// mGet                  1000  avgt               7.605          ns/op
+/// mGet               1000000  avgt              91.964          ns/op
+/// mHead                   10  avgt               2.330          ns/op
+/// mHead                 1000  avgt               2.896          ns/op
+/// mHead              1000000  avgt               5.705          ns/op
+/// mIterate                10  avgt              14.248          ns/op
+/// mIterate              1000  avgt            1371.090          ns/op
+/// mIterate           1000000  avgt        12618108.195          ns/op
+/// mRemoveAtIndex          10  avgt              62.606          ns/op
+/// mRemoveAtIndex        1000  avgt            3600.120          ns/op
+/// mRemoveAtIndex     1000000  avgt         3686395.115          ns/op
+/// mRemoveLast             10  avgt               7.967          ns/op
+/// mRemoveLast           1000  avgt               8.969          ns/op
+/// mRemoveLast        1000000  avgt               8.651          ns/op
+/// mReversedIterate        10  avgt             183.846          ns/op
+/// mReversedIterate      1000  avgt           11118.000          ns/op
+/// mReversedIterate   1000000  avgt        31897269.280          ns/op
+/// mSet                    10  avgt              18.467          ns/op
+/// mSet                  1000  avgt              37.343          ns/op
+/// mSet               1000000  avgt             209.726          ns/op
+/// mTail                   10  avgt               7.729          ns/op
+/// mTail                 1000  avgt               8.202          ns/op
+/// mTail              1000000  avgt               8.605          ns/op
+///
+/// Process finished with exit code 0
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)

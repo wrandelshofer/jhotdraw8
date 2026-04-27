@@ -15,10 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 
-/**
- * ToggleViewPropertyAction.
- *
- */
+/// ToggleViewPropertyAction.
 public class ToggleViewPropertyAction extends AbstractActivityAction<Activity> {
 
     private final @Nullable BooleanProperty property;

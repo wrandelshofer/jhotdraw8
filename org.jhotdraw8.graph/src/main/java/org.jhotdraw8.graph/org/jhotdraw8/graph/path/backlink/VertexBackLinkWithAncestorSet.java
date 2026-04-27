@@ -12,29 +12,23 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.function.BiFunction;
 
-/**
- * Represents a vertex back link with depth and a set of ancestors.
- *
- * @param <V> the vertex data type
- */
+/// Represents a vertex back link with depth and a set of ancestors.
+///
+/// @param <V> the vertex data type
 public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBackLinkWithAncestorSet<V>> {
     private final V vertex;
 
-    /**
-     * This set contains the vertex of this back link and the vertices of all
-     * parent backlinks.
-     * <p>
-     * This set is only needed for backlinks that are in the search frontier.
-     * Once they leave the search frontier, the set is removed.
-     */
+    /// This set contains the vertex of this back link and the vertices of all
+    /// parent backlinks.
+    ///
+    /// This set is only needed for backlinks that are in the search frontier.
+    /// Once they leave the search frontier, the set is removed.
     private @Nullable PersistentSet<V> ancestors;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param vertex the vertex data
-     * @param parent the parent back link
-     */
+    /// Creates a new instance.
+    ///
+    /// @param vertex the vertex data
+    /// @param parent the parent back link
     public VertexBackLinkWithAncestorSet(
             V vertex,
             @Nullable VertexBackLinkWithAncestorSet<V> parent,
@@ -44,17 +38,15 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
         this.ancestors = ancestors;
     }
 
-    /**
-     * Converts an {@link VertexBackLinkWithAncestorSet} to {@link VertexBackLinkWithCost}.
-     *
-     * @param node         the {@link VertexBackLinkWithAncestorSet}
-     * @param zero         the zero cost value
-     * @param costFunction the cost function
-     * @param sumFunction  the sum function for cost values
-     * @param <VV>         the vertex data type
-     * @param <CC>         the cost number type
-     * @return the converted {@link VertexBackLinkWithCost}
-     */
+    /// Converts an [VertexBackLinkWithAncestorSet] to [VertexBackLinkWithCost].
+    ///
+    /// @param node         the [VertexBackLinkWithAncestorSet]
+    /// @param zero         the zero cost value
+    /// @param costFunction the cost function
+    /// @param sumFunction  the sum function for cost values
+    /// @param <VV>         the vertex data type
+    /// @param <CC>         the cost number type
+    /// @return the converted [VertexBackLinkWithCost]
     public static <VV, CC extends Number & Comparable<CC>> @Nullable VertexBackLinkWithCost<VV, CC> toVertexBackLinkWithCost(
             @Nullable VertexBackLinkWithAncestorSet<VV> node,
             CC zero,

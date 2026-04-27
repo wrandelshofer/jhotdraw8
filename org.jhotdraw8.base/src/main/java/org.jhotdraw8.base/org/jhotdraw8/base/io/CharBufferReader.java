@@ -9,10 +9,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
-/**
- * CharBufferReader.
- *
- */
+/// CharBufferReader.
 public class CharBufferReader extends Reader {
 
     private final CharBuffer buf;

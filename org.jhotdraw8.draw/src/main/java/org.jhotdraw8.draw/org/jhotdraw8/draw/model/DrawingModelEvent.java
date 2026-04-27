@@ -12,10 +12,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 
-/**
- * DrawingModelEvent.
- *
- */
+/// DrawingModelEvent.
 public class DrawingModelEvent extends Event<DrawingModel> {
 
     @Serial
@@ -23,17 +20,11 @@ public class DrawingModelEvent extends Event<DrawingModel> {
 
     public enum EventType {
 
-        /**
-         * A property value has been changed.
-         */
+        /// A property value has been changed.
         PROPERTY_VALUE_CHANGED,
-        /**
-         * The layout of a single figure has changed.
-         */
+        /// The layout of a single figure has changed.
         LAYOUT_CHANGED,
-        /**
-         * The transform of a figure has changed.
-         */
+        /// The transform of a figure has changed.
         TRANSFORM_CHANGED,
     }
 
@@ -76,110 +67,88 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         return new DrawingModelEvent(source, EventType.LAYOUT_CHANGED, figure, null, null, -1, null, null, null, false, false);
     }
 
-    /**
-     * The figure which was added, removed or of which a property changed.
-     *
-     * @return the figure
-     */
+    /// The figure which was added, removed or of which a property changed.
+    ///
+    /// @return the figure
     public Figure getNode() {
         return figure;
     }
 
-    /**
-     * If the figure was changed, returns the property key.
-     *
-     * @param <T> the value type
-     * @return the key
-     */
+    /// If the figure was changed, returns the property key.
+    ///
+    /// @param <T> the value type
+    /// @return the key
     public <T> Key<T> getKey() {
         @SuppressWarnings("unchecked")
         Key<T> tmp = (Key<T>) key;
         return tmp;
     }
 
-    /**
-     * If the figure was changed, returns the old property value.
-     *
-     * @param <T> the value type
-     * @return the old value
-     */
+    /// If the figure was changed, returns the old property value.
+    ///
+    /// @param <T> the value type
+    /// @return the old value
     public @Nullable <T> T getOldValue() {
         @SuppressWarnings("unchecked")
         T temp = (T) oldValue;
         return temp;
     }
 
-    /**
-     * If the figure was changed, returns the new property value.
-     *
-     * @param <T> the value type
-     * @return the new value
-     */
+    /// If the figure was changed, returns the new property value.
+    ///
+    /// @param <T> the value type
+    /// @return the new value
     public @Nullable <T> T getNewValue() {
         @SuppressWarnings("unchecked")
         T temp = (T) newValue;
         return temp;
     }
 
-    /**
-     * If a child was added or removed from a parent, returns the parent.
-     *
-     * @return the parent
-     */
+    /// If a child was added or removed from a parent, returns the parent.
+    ///
+    /// @return the parent
     public Figure getParent() {
         return parent;
     }
 
-    /**
-     * If a child was added or removed from a drawing, returns the drawing.
-     *
-     * @return the drawing
-     */
+    /// If a child was added or removed from a drawing, returns the drawing.
+    ///
+    /// @return the drawing
     public Drawing getDrawing() {
         return drawing;
     }
 
-    /**
-     * If a child was added or removed, returns the child.
-     *
-     * @return the child
-     */
+    /// If a child was added or removed, returns the child.
+    ///
+    /// @return the child
     public Figure getChild() {
         return figure;
     }
 
-    /**
-     * If the figure was added or removed, returns the child index.
-     *
-     * @return an index. Returns -1 if the figure was neither added or removed.
-     */
+    /// If the figure was added or removed, returns the child index.
+    ///
+    /// @return an index. Returns -1 if the figure was neither added or removed.
     public int getIndex() {
         return index;
     }
 
-    /**
-     * Returns the event type.
-     *
-     * @return the event type
-     */
+    /// Returns the event type.
+    ///
+    /// @return the event type
     public DrawingModelEvent.EventType getEventType() {
         return eventType;
     }
 
-    /**
-     * If the figure was changed, returns true if the property value was added.
-     *
-     * @return true if added
-     */
+    /// If the figure was changed, returns true if the property value was added.
+    ///
+    /// @return true if added
     public boolean wasAdded() {
         return valueWasAdded;
     }
 
-    /**
-     * If the figure was changed, returns true if the property value was removed.
-     *
-     * @return true if removed
-     */
+    /// If the figure was changed, returns true if the property value was removed.
+    ///
+    /// @return true if removed
     public boolean wasRemoved() {
         return valueWasRemoved;
     }

@@ -17,10 +17,7 @@ import org.jspecify.annotations.Nullable;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-/**
- * This base class can be used to implement figures which support child figures.
- *
- */
+/// This base class can be used to implement figures which support child figures.
 public abstract class AbstractCompositeFigure extends AbstractFigure {
     private final ChildList<Figure> children = new ChildList<>(this);
 

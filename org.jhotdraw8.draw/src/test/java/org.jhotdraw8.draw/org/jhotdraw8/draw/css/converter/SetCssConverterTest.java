@@ -12,7 +12,6 @@ import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
-import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -25,18 +24,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * CssSetConverterTest.
- *
- */
+/// CssSetConverterTest.
 public class SetCssConverterTest {
 
     public SetCssConverterTest() {
     }
 
-    /**
-     * Test of toString method.
-     */
+    /// Test of toString method.
     public void testToString(@Nullable List<Double> value, String expected) throws Exception {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
@@ -46,9 +40,7 @@ public class SetCssConverterTest {
         assertEquals(expected, actual);
     }
 
-    /**
-     * Test of fromString method with a {@code Double} element type.
-     */
+    /// Test of fromString method with a `Double` element type.
     public void testDoubleFromString(List<Double> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -57,9 +49,7 @@ public class SetCssConverterTest {
         assertEquals(expected, new ArrayList<>(actual.toMutable()));
     }
 
-    /**
-     * Test of fromString method with a {@code Double} element type and "=>" delimiter.
-     */
+    /// Test of fromString method with a `Double` element type and "=>" delimiter.
     public void testDoubleArrowFromString(List<Double> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -69,9 +59,7 @@ public class SetCssConverterTest {
     }
 
 
-    /**
-     * Test of fromString method with a {@code String} element type.
-     */
+    /// Test of fromString method with a `String` element type.
     public void testStringFromString(List<String> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;

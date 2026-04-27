@@ -11,10 +11,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-/**
- * A "universal selector" matches an element if the element exists.
- *
- */
+/// A "universal selector" matches an element if the element exists.
 public class UniversalSelector extends SimpleSelector {
 
     public UniversalSelector(@Nullable SourceLocator sourceLocator) {

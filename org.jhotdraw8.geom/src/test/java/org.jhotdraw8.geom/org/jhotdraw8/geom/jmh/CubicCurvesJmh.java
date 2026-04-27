@@ -18,32 +18,30 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.PathIterator;
 import java.util.concurrent.TimeUnit;
 
-/**
- * <pre>
- * # JMH version: 1.37
- * # VM version: JDK 21.0.1, OpenJDK 64-Bit Server VM, 21.0.1+12-LTS
- * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
- * Benchmark                                                (loop)  Mode  Cnt    Score   Error  Units
- * CubicCurvesJmh.arcLengthIntegrated                            0  avgt    2   89.458          ns/op
- * CubicCurvesJmh.arcLengthIntegrated                            1  avgt    2   97.762          ns/op
- * CubicCurvesJmh.invArcLengthIntegrated                         0  avgt    2  175.696          ns/op
- * CubicCurvesJmh.invArcLengthIntegrated                         1  avgt    2  282.595          ns/op
- * CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       0  avgt    2   80.758          ns/op
- * CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       1  avgt    2  196.637          ns/op
- * </pre>
- * <pre>
- * # JMH version: 1.37
- * # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
- * # Apple M2 Max @ 3.70GHz
- * Benchmark                                                (loop)  Mode  Cnt    Score   Error  Units
- * CubicCurvesJmh.arcLengthIntegrated                            0  avgt    2   33.879          ns/op
- * CubicCurvesJmh.arcLengthIntegrated                            1  avgt    2   34.120          ns/op
- * CubicCurvesJmh.invArcLengthIntegrated                         0  avgt    2  104.898          ns/op
- * CubicCurvesJmh.invArcLengthIntegrated                         1  avgt    2  189.029          ns/op
- * CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       0  avgt    2   39.451          ns/op
- * CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       1  avgt    2  117.550          ns/op
- * </pre>
- */
+/// <pre>
+/// # JMH version: 1.37
+/// # VM version: JDK 21.0.1, OpenJDK 64-Bit Server VM, 21.0.1+12-LTS
+/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+/// Benchmark                                                (loop)  Mode  Cnt    Score   Error  Units
+/// CubicCurvesJmh.arcLengthIntegrated                            0  avgt    2   89.458          ns/op
+/// CubicCurvesJmh.arcLengthIntegrated                            1  avgt    2   97.762          ns/op
+/// CubicCurvesJmh.invArcLengthIntegrated                         0  avgt    2  175.696          ns/op
+/// CubicCurvesJmh.invArcLengthIntegrated                         1  avgt    2  282.595          ns/op
+/// CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       0  avgt    2   80.758          ns/op
+/// CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       1  avgt    2  196.637          ns/op
+/// </pre>
+/// <pre>
+/// # JMH version: 1.37
+/// # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
+/// # Apple M2 Max @ 3.70GHz
+/// Benchmark                                                (loop)  Mode  Cnt    Score   Error  Units
+/// CubicCurvesJmh.arcLengthIntegrated                            0  avgt    2   33.879          ns/op
+/// CubicCurvesJmh.arcLengthIntegrated                            1  avgt    2   34.120          ns/op
+/// CubicCurvesJmh.invArcLengthIntegrated                         0  avgt    2  104.898          ns/op
+/// CubicCurvesJmh.invArcLengthIntegrated                         1  avgt    2  189.029          ns/op
+/// CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       0  avgt    2   39.451          ns/op
+/// CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       1  avgt    2  117.550          ns/op
+/// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 2)
@@ -85,15 +83,13 @@ public class CubicCurvesJmh {
         return CubicCurves.invArcLength(curve, 0, 70, arcLength, 0.125);
     }
 
-    /**
-     * Computes the arc length s from time 0 to time t using a flattening path iterator.
-     *
-     * @param p       points of the curve
-     * @param offset  index of the first point in array {@code p}
-     * @param t       the time
-     * @param epsilon the error tolerance
-     * @return the arc length
-     */
+    /// Computes the arc length s from time 0 to time t using a flattening path iterator.
+    ///
+    /// @param p       points of the curve
+    /// @param offset  index of the first point in array `p`
+    /// @param t       the time
+    /// @param epsilon the error tolerance
+    /// @return the arc length
     public static double arcLengthIterator(double[] p, int offset, double t, double epsilon) {
         PathIterator it = new CubicCurve2D.Double(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]).getPathIterator(null, epsilon);
         double arcLength = 0;

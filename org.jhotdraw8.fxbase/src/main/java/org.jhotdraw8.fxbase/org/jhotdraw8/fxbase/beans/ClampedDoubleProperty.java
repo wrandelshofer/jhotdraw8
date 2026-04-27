@@ -9,10 +9,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-/**
- * ClampedDoubleProperty.
- *
- */
+/// ClampedDoubleProperty.
 public class ClampedDoubleProperty extends SimpleDoubleProperty {
 
     private final double minValue;

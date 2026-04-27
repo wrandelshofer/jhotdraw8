@@ -23,36 +23,25 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jspecify.annotations.Nullable;
 
-/**
- * A figure which supports font attributes.
- *
- */
+/// A figure which supports font attributes.
 public interface TextFontableFigure extends Figure {
 
     // text properties
-    /**
-     * Defines the font used. Default value: {@code new Font("Arial",12)}
-     */
+    /// Defines the font used. Default value: `new Font("Arial",12)`
     StringOrIdentStyleableKey FONT_FAMILY = new StringOrIdentStyleableKey("fontFamily", "Arial");
     CssSizeStyleableKey FONT_SIZE = new CssSizeStyleableKey("fontSize", CssSize.of(12.0));
     NonNullEnumStyleableKey<FontPosture> FONT_STYLE = new NonNullEnumStyleableKey<>("fontStyle", FontPosture.class, FontPosture.REGULAR);
     NonNullEnumStyleableKey<FontWeight> FONT_WEIGHT = new NonNullEnumStyleableKey<>("fontWeight", FontWeight.class, FontWeight.NORMAL);
     FontStyleableMapAccessor FONT = new FontStyleableMapAccessor("font", FONT_FAMILY, FONT_WEIGHT, FONT_STYLE, FONT_SIZE);
-    /**
-     * Whether to strike through the text. Default value: {@code false}
-     */
+    /// Whether to strike through the text. Default value: `false`
     NonNullBooleanStyleableKey STRIKETHROUGH = new NonNullBooleanStyleableKey("strikethrough", false);
-    /**
-     * Whether to underline the text. Default value: {@code false}
-     */
+    /// Whether to underline the text. Default value: `false`
     NonNullBooleanStyleableKey UNDERLINE = new NonNullBooleanStyleableKey("underline", false);
 
-    /**
-     * Updates a text node with fontable properties.
-     *
-     * @param ctx  RenderContext, can be null
-     * @param text a text node
-     */
+    /// Updates a text node with fontable properties.
+    ///
+    /// @param ctx  RenderContext, can be null
+    /// @param text a text node
     default void applyTextFontableFigureProperties(@Nullable RenderContext ctx, Text text) {
         String family = getStyledNonNull(FONT_FAMILY);
         FontPosture style = getStyledNonNull(FONT_STYLE);
@@ -83,12 +72,10 @@ public interface TextFontableFigure extends Figure {
 
     }
 
-    /**
-     * Updates a Laeled node with fontable properties.
-     *
-     * @param ctx  context
-     * @param text a text node
-     */
+    /// Updates a Laeled node with fontable properties.
+    ///
+    /// @param ctx  context
+    /// @param text a text node
     default void applyTextFontableFigureProperties(@Nullable RenderContext ctx, Labeled text) {
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         Font font = getStyledNonNull(FONT).getFont();

@@ -24,10 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * UniqueShortestPathBuilderTest.
- *
- */
+/// UniqueShortestPathBuilderTest.
 public class UniqueOrOneHopVertexPathSearchAlgoTest {
 
     public UniqueOrOneHopVertexPathSearchAlgoTest() {
@@ -122,9 +119,7 @@ public class UniqueOrOneHopVertexPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyPath method, of class UniqueShortestPathBuilder.
-     */
+    /// Test of findAnyPath method, of class UniqueShortestPathBuilder.
     public void testFindUniqueVertexPath(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, PersistentList<Integer> expPath) throws Exception {
 
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
@@ -154,9 +149,7 @@ public class UniqueOrOneHopVertexPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyPath method, of class UniqueShortestPathBuilder.
-     */
+    /// Test of findAnyPath method, of class UniqueShortestPathBuilder.
     public void testFindUniqueMultiGoalPath(DirectedGraph<Integer, Double> graph, Integer start, PersistentList<Integer> multiGoal, PersistentList<Integer> expResult) throws Exception {
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
                 graph::getNextVertices, new UniqueOrOneHopVertexPathSearchAlgo<>());
@@ -200,9 +193,7 @@ public class UniqueOrOneHopVertexPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyVertexPath method, of class AnyPathBuilder.
-     */
+    /// Test of findAnyVertexPath method, of class AnyPathBuilder.
     private void testFindUniqueVertexPathOverWaypoints(PersistentList<Integer> waypoints, PersistentList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(

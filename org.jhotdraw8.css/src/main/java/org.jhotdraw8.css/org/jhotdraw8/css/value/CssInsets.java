@@ -9,10 +9,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * Represents a set of inside offsets specified as {@link CssSize}s.
- *
- */
+/// Represents a set of inside offsets specified as [CssSize]s.
 public class CssInsets {
 
     public static final CssInsets ZERO = new CssInsets();
@@ -65,16 +62,14 @@ public class CssInsets {
         return bottom;
     }
 
-    /**
-     * Converts values using the specified width and heights for converting
-     * percentages in the insets.
-     *
-     * @param width  the width for computing percentages for left and right
-     *               insets
-     * @param height the height for computing percentages for top and bottom
-     *               insets
-     * @return the converted value
-     */
+    /// Converts values using the specified width and heights for converting
+    /// percentages in the insets.
+    ///
+    /// @param width  the width for computing percentages for left and right
+    ///               insets
+    /// @param height the height for computing percentages for top and bottom
+    ///               insets
+    /// @return the converted value
     public Insets getConvertedValue(double width, double height) {
         final UnitConverter heightConverter = new DefaultUnitConverter(72.0, height);
         final UnitConverter widthConverter = new DefaultUnitConverter(72.0, width);

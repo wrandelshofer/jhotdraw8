@@ -17,18 +17,16 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * Converts SVG 2 stroke-alignment.
- * <pre>
- *  StrokeAlignment = "type(" , ("inner"|"outer"|"center"), ")";
- * </pre>
- * <p>
- * References:
- * <dl>
- * <dt>SVG Strokes, § 2.2. Specifying stroke alignment: the ‘stroke-alignment’ property</dt>
- * <dd><a href="https://www.w3.org/TR/svg-strokes/#SpecifyingStrokeAlignment">w3.org</a></dd>
- * </dl>
- */
+/// Converts SVG 2 stroke-alignment.
+/// <pre>
+///  StrokeAlignment = "type(" , ("inner"|"outer"|"center"), ")";
+/// </pre>
+///
+/// References:
+/// <dl>
+/// <dt>SVG Strokes, § 2.2. Specifying stroke alignment: the ‘stroke-alignment’ property</dt>
+/// <dd><a href="https://www.w3.org/TR/svg-strokes/#SpecifyingStrokeAlignment">w3.org</a></dd>
+/// </dl>
 public class SvgStrokeAlignmentConverter extends AbstractCssConverter<StrokeType> {
 
     public static final String INSIDE = "inner";

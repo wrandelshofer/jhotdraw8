@@ -12,11 +12,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * A "simple class selector" matches an element based on the value of its
- * "pseudo class" attribute.
- *
- */
+/// A "simple class selector" matches an element based on the value of its
+/// "pseudo class" attribute.
 public class SimplePseudoClassSelector extends PseudoClassSelector {
 
     private final String pseudoClass;

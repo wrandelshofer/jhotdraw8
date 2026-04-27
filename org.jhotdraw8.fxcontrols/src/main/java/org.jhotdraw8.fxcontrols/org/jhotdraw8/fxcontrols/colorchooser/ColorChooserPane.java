@@ -3,10 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-/**
- * Sample Skeleton for 'ColorChooserPane.fxml' Controller Class
- */
-
+/// Sample Skeleton for 'ColorChooserPane.fxml' Controller Class
 package org.jhotdraw8.fxcontrols.colorchooser;
 
 import javafx.beans.Observable;
@@ -31,11 +28,9 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import org.jhotdraw8.color.NamedColor;
 import org.jhotdraw8.color.NamedColorSpace;
-import org.jhotdraw8.color.SrgbColorSpace;
 import org.jhotdraw8.css.converter.ColorCssConverter;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.css.value.CssColor;
-import org.jhotdraw8.css.value.NamedCssColor;
 import org.jhotdraw8.fxbase.binding.Via;
 
 import java.io.IOException;
@@ -84,9 +79,7 @@ public class ColorChooserPane extends VBox {
     @FXML // fx:id="targetLabel"
     private Label targetLabel; // Value injected by FXMLLoader
 
-    /**
-     * The current value of this color chooser pane.
-     */
+    /// The current value of this color chooser pane.
     @SuppressWarnings("this-escape")
     private final ObjectProperty<NamedColor> value = new SimpleObjectProperty<>(this, "value");
     @SuppressWarnings("this-escape")
@@ -189,19 +182,16 @@ public class ColorChooserPane extends VBox {
         VBox.setVgrow(sliderChooser, Priority.ALWAYS);
     }
 
-    /**
-     * Target color region shows a fat white rectangle with the target color overlaid over a white and black
-     * pattern.
-     *
-     * <pre>
-     *  +----------+
-     *  |  +----+  |
-     *  |  |   /|  |
-     *  |  |/   |  |
-     *  |  +----+  |
-     *  +----------+
-     * </pre>
-     */
+    /// Target color region shows a fat white rectangle with the target color overlaid over a white and black
+    /// pattern.
+    /// <pre>
+    ///  +----------+
+    ///  |  +----+  |
+    ///  |  |   /|  |
+    ///  |  |/   |  |
+    ///  |  +----+  |
+    ///  +----------+
+    /// </pre>
     private void updatePreviewColor(Observable o, Color oldv, Color newv) {
         Color previewColor = newv == null ? Color.TRANSPARENT : newv;
         targetColorRegion.setBackground(new Background(

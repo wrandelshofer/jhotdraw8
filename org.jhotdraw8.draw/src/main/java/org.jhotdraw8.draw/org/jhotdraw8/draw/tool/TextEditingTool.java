@@ -21,10 +21,7 @@ import org.jspecify.annotations.Nullable;
 
 import static java.lang.Math.max;
 
-/**
- * TextEditingTool.
- *
- */
+/// TextEditingTool.
 public class TextEditingTool extends AbstractTool {
 
 
@@ -33,14 +30,10 @@ public class TextEditingTool extends AbstractTool {
     private final TextArea textArea = new TextArea();
     private TextEditableFigure.@Nullable TextEditorData editorData;
 
-    /**
-     * The rubber band.
-     */
+    /// The rubber band.
     private double x1, y1, x2, y2;
 
-    /**
-     * The minimum size of a created figure (in view coordinates.
-     */
+    /// The minimum size of a created figure (in view coordinates.
     private final double minSize = 2;
 
     @SuppressWarnings("this-escape")
@@ -153,9 +146,7 @@ public class TextEditingTool extends AbstractTool {
     }
 
 
-    /**
-     * This implementation is empty.
-     */
+    /// This implementation is empty.
     @Override
     public void activate(DrawingEditor editor) {
         requestFocus();

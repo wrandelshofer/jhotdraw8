@@ -7,14 +7,11 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 
-/**
- * Defines a slice of a drawing.
- * <p>
- * The parent of a slice must be a {@link Layer} or a {@link Clipping} .
- * <p>
- * A slice may not have children.
- *
- */
+/// Defines a slice of a drawing.
+///
+/// The parent of a slice must be a [Layer] or a [Clipping] .
+///
+/// A slice may not have children.
 public interface Slice extends Figure {
 
     @Override
@@ -27,13 +24,11 @@ public interface Slice extends Figure {
         return false;
     }
 
-    /**
-     * For vector graphics output. Specifies where the origin of the coordinate
-     * system in the exported slice is. By default, this is the top left corner
-     * of the slice.
-     *
-     * @return origin of coordinate system
-     */
+    /// For vector graphics output. Specifies where the origin of the coordinate
+    /// system in the exported slice is. By default, this is the top left corner
+    /// of the slice.
+    ///
+    /// @return origin of coordinate system
     default Point2D getSliceOrigin() {
         final Bounds b = getLayoutBounds();
         return new Point2D(b.getMinX(), b.getMinY());

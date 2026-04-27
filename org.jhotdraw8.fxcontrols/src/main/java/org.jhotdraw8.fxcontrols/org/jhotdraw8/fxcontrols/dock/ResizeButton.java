@@ -11,10 +11,7 @@ import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 
-/**
- * ResizeButton.
- *
- */
+/// ResizeButton.
 public class ResizeButton extends Region {
 
     private Point2D pressed;

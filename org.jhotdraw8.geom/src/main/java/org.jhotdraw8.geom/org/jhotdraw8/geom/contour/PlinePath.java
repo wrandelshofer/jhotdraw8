@@ -17,9 +17,7 @@ import java.util.function.BiPredicate;
 import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox;
 import static org.jhotdraw8.geom.contour.PlineVertex.segLength;
 
-/**
- * Represents a path consisting of {@link PlineVertex} elements.
- */
+/// Represents a path consisting of [PlineVertex] elements.
 public class PlinePath extends ArrayList<PlineVertex> implements Cloneable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -135,10 +133,8 @@ public class PlinePath extends ArrayList<PlineVertex> implements Cloneable {
         return b.build();
     }
 
-    /**
-     * Creates an approximate spatial index for all the segments in the polyline given using
-     * createFastApproxBoundingBox.
-     */
+    /// Creates an approximate spatial index for all the segments in the polyline given using
+    /// createFastApproxBoundingBox.
     public static StaticSpatialIndex createApproxSpatialIndex(final PlinePath pline) {
         assert pline.size() > 1 : "need at least 2 vertexes to form segments for spatial index";
 

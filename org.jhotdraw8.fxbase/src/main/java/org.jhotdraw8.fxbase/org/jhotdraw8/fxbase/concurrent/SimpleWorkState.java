@@ -19,13 +19,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.jhotdraw8.fxbase.concurrent.PlatformUtil.NO_UPDATE_IS_IN_PROGRESS;
 import static org.jhotdraw8.fxbase.concurrent.PlatformUtil.update;
 
-/**
- * A simple implementation of the {@link WorkState} interface.
- * <p>
- * This implementation requires that the FX Application Thread is running.
- *
- * @param <V> the type of the result value
- */
+/// A simple implementation of the [WorkState] interface.
+///
+/// This implementation requires that the FX Application Thread is running.
+///
+/// @param <V> the type of the result value
 public class SimpleWorkState<V> implements WorkState<V> {
     @SuppressWarnings("this-escape")
     private final ReadOnlyStringWrapper title = new ReadOnlyStringWrapper(this, TITLE_PROPERTY, null);
@@ -56,27 +54,21 @@ public class SimpleWorkState<V> implements WorkState<V> {
     private final AtomicReference<Object> progressUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     private volatile boolean isCancelled;
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public SimpleWorkState() {
     }
 
-    /**
-     * Creates a new instance with the specified title.
-     *
-     * @param title a title
-     */
+    /// Creates a new instance with the specified title.
+    ///
+    /// @param title a title
     @SuppressWarnings("this-escape")
     public SimpleWorkState(@Nullable String title) {
         updateTitle(title);
     }
 
-    /**
-     * This method may be called on any thread.
-     *
-     * @param newValue the new value
-     */
+    /// This method may be called on any thread.
+    ///
+    /// @param newValue the new value
     @Override
     public void updateValue(@Nullable V newValue) {
         update(newValue, value, valueUpdate);
@@ -92,11 +84,9 @@ public class SimpleWorkState<V> implements WorkState<V> {
         return value;
     }
 
-    /**
-     * This method may be called on any thread.
-     *
-     * @param newValue the new value
-     */
+    /// This method may be called on any thread.
+    ///
+    /// @param newValue the new value
     public void updateWorkDone(double newValue) {
         update(newValue, workDone, workDoneUpdate);
     }
@@ -111,11 +101,9 @@ public class SimpleWorkState<V> implements WorkState<V> {
         return workDone.getReadOnlyProperty();
     }
 
-    /**
-     * This method may be called on any thread.
-     *
-     * @param newValue the new value
-     */
+    /// This method may be called on any thread.
+    ///
+    /// @param newValue the new value
     public void updateTotalWork(double newValue) {
         update(newValue, totalWork, totalWorkUpdate);
     }
@@ -131,11 +119,9 @@ public class SimpleWorkState<V> implements WorkState<V> {
         return totalWork.getReadOnlyProperty();
     }
 
-    /**
-     * This method may be called on any thread.
-     *
-     * @param newValue the new value
-     */
+    /// This method may be called on any thread.
+    ///
+    /// @param newValue the new value
     @Override
     public void updateProgress(double newValue) {
         update(newValue, progress, progressUpdate);

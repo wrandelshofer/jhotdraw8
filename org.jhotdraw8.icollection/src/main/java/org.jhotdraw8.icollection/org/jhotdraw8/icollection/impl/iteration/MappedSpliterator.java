@@ -12,14 +12,12 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * Maps a {@link Spliterator} to a different element type.
- * <p>
- * The underlying iterator is referenced - not copied.
- *
- * @param <E> the mapped element type
- * @param <F> the original element type
- */
+/// Maps a [Spliterator] to a different element type.
+///
+/// The underlying iterator is referenced - not copied.
+///
+/// @param <E> the mapped element type
+/// @param <F> the original element type
 public class MappedSpliterator<E, F> implements Spliterator<E> {
     private final Spliterator<? extends F> s;
     private final Function<F, E> mappingFunction;

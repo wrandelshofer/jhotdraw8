@@ -7,8 +7,8 @@ package org.jhotdraw8.svg.figure;
 
 import javafx.scene.Node;
 import org.jhotdraw8.css.converter.StringCssConverter;
-import org.jhotdraw8.draw.css.converter.Rectangle2DCssConverter;
 import org.jhotdraw8.css.value.CssRectangle2D;
+import org.jhotdraw8.draw.css.converter.Rectangle2DCssConverter;
 import org.jhotdraw8.draw.figure.AbstractDrawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -18,9 +18,7 @@ import org.jhotdraw8.draw.key.NullableObjectStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 
-/**
- * Represents an SVG 'svg' element.
- */
+/// Represents an SVG 'svg' element.
 public class SvgDrawing extends AbstractDrawing
         implements StyleableFigure, LockableFigure, NonTransformableFigure, SvgDefaultableFigure,
         SvgElementFigure {

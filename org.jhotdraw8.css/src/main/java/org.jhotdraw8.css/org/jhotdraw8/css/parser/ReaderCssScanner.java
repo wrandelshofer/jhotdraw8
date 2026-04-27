@@ -11,15 +11,11 @@ import java.io.Reader;
 
 public class ReaderCssScanner extends AbstractCssScanner {
 
-    /**
-     * The underlying reader.
-     */
+    /// The underlying reader.
     private final Reader in;
 
 
-    /**
-     * Stack of pushed back characters.
-     */
+    /// Stack of pushed back characters.
     private final IntArrayList pushedChars = new IntArrayList();
 
     public ReaderCssScanner(Reader reader) {

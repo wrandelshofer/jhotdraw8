@@ -71,27 +71,19 @@ public abstract class AbstractSetTest {
         assertNotEquals(actual, expected);
     }
 
-    /**
-     * Creates a new empty instance.
-     */
+    /// Creates a new empty instance.
     protected abstract <E> Set<E> newInstance();
 
-    /**
-     * Creates a new instance with the specified expected number of elements
-     * and load factor.
-     */
+    /// Creates a new instance with the specified expected number of elements
+    /// and load factor.
     protected abstract <E> Set<E> newInstance(int numElements, float loadFactor);
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <E> Set<E> newInstance(Set<E> m);
 
     protected abstract <E> Set<E> newInstance(ReadableSet<E> m);
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <E> Set<E> newInstance(Iterable<E> m);
 
     @ParameterizedTest

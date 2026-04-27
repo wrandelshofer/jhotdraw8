@@ -19,11 +19,9 @@ import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Picker for picking an example from a set of provided examples.
- *
- * @param <T> the type of the examples
- */
+/// Picker for picking an example from a set of provided examples.
+///
+/// @param <T> the type of the examples
 public class ExamplesPicker<T> extends AbstractPicker<T> {
     private ContextMenu contextMenu;
     private MenuItem noneItem;

@@ -13,30 +13,23 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-/**
- * OutputFormat for clipboard.
- *
- */
+/// OutputFormat for clipboard.
 public interface ClipboardOutputFormat {
 
-    /**
-     * Writes a Drawing into a clipboard
-     *
-     * @param out     The clipboard
-     * @param drawing The drawing.
-     * @throws IOException if an IO error occurs
-     */
+    /// Writes a Drawing into a clipboard
+    ///
+    /// @param out     The clipboard
+    /// @param drawing The drawing.
+    /// @throws IOException if an IO error occurs
     default void write(Map<DataFormat, Object> out, Drawing drawing) throws IOException {
         write(out, drawing, Collections.singleton(drawing));
     }
 
-    /**
-     * Writes a selection of figures from a Drawing into a clipboard
-     *
-     * @param out       The clipboard
-     * @param drawing   The drawing.
-     * @param selection A selection
-     * @throws IOException if an IO error occurs
-     */
+    /// Writes a selection of figures from a Drawing into a clipboard
+    ///
+    /// @param out       The clipboard
+    /// @param drawing   The drawing.
+    /// @param selection A selection
+    /// @throws IOException if an IO error occurs
     void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException;
 }

@@ -16,15 +16,13 @@ import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * CssLiteralEnumConverter. Uses the names of the Java Enum literals
- * for conversion.
- * <p>
- * If you need a different mapping use {@link MappedCssConverter} or
- * {@link KebabCaseEnumCssConverter}.
- *
- * @param <E> the type of the enum that can be converted from/to CSS
- */
+/// CssLiteralEnumConverter. Uses the names of the Java Enum literals
+/// for conversion.
+///
+/// If you need a different mapping use [MappedCssConverter] or
+/// [KebabCaseEnumCssConverter].
+///
+/// @param <E> the type of the enum that can be converted from/to CSS
 public class LiteralEnumCssConverter<E extends Enum<E>> implements CssConverter<E> {
 
     private final Class<E> enumClass;

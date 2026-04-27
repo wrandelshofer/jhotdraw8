@@ -6,12 +6,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * An interface to an persistent navigable map; the implementation guarantees that the state of the collection does not change.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// An interface to an persistent navigable map; the implementation guarantees that the state of the collection does not change.
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public interface PersistentNavigableMap<K, V> extends ReadableNavigableMap<K, V>, PersistentSortedMap<K, V> {
     @Override
     PersistentNavigableMap<K, V> clear();

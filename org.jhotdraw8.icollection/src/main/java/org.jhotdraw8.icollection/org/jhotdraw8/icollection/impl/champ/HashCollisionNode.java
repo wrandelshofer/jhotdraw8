@@ -18,25 +18,24 @@ import java.util.function.ToIntFunction;
 
 import static org.jhotdraw8.icollection.impl.champ.NodeFactory.newHashCollisionNode;
 
-/**
- * Represents a hash-collision node in a CHAMP trie.
- * <p>
- * XXX hash-collision nodes may become huge performance bottlenecks.
- * If the trie contains keys that implement {@link Comparable} then a hash-collision
- * nodes should be a sorted tree structure (for example a red-black tree).
- * Otherwise, hash-collision node should be a vector (for example a bit mapped trie).
- * <p>
- * References:
- * <p>
- * This class has been derived from 'The Capsule Hash Trie Collections Library'.
- * <dl>
- *      <dt>The Capsule Hash Trie Collections Library.
- *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
- *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
- * </dl>
- *
- * @param <D> the data type
- */
+/// Represents a hash-collision node in a CHAMP trie.
+///
+/// XXX hash-collision nodes may become huge performance bottlenecks.
+/// If the trie contains keys that implement [Comparable] then a hash-collision
+/// nodes should be a sorted tree structure (for example a red-black tree).
+/// Otherwise, hash-collision node should be a vector (for example a bit mapped trie).
+///
+/// References:
+///
+/// This class has been derived from 'The Capsule Hash Trie Collections Library'.
+/// <dl>
+///      <dt>The Capsule Hash Trie Collections Library.
+///
+/// Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+///      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+/// </dl>
+///
+/// @param <D> the data type
 class HashCollisionNode<D> extends Node<D> {
     private static final HashCollisionNode<?> EMPTY = new HashCollisionNode<>(0, new Object[0]);
     private final int hash;

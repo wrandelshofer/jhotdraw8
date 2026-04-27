@@ -14,9 +14,7 @@ import org.jhotdraw8.application.action.Action;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/**
- * Sample Skeleton for 'SimpleActivity.fxml' Controller Class
- */
+/// Sample Skeleton for 'SimpleActivity.fxml' Controller Class
 public class SimpleActivityController extends AbstractActivity {
 
     @FXML // ResourceBundle that was given to the FXMLLoader

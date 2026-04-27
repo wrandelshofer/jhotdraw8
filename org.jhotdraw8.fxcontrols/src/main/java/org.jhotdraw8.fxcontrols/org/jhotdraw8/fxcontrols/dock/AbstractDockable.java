@@ -15,9 +15,7 @@ import javafx.scene.Node;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.readable.ReadableList;
 
-/**
- * Abstract base class for implementations of {@link Dockable}.
- */
+/// Abstract base class for implementations of [Dockable].
 public abstract class AbstractDockable implements Dockable {
     protected final ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>(this, DOCK_PARENT_PROPERTY);
     protected final ObjectProperty<Node> graphic = new SimpleObjectProperty<>(this, GRAPHIC_PROPERTY);

@@ -15,18 +15,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-/**
- * This class allows to provide a proxy for the children list of a figure,
- * the proxy performs all changes on the children list via the DrawingModel.
- */
+/// This class allows to provide a proxy for the children list of a figure,
+/// the proxy performs all changes on the children list via the DrawingModel.
 public class DrawingModelFigureChildrenObservableList extends TransformationList<Figure, Figure> {
     private final DrawingModel model;
     private final Figure parent;
     private final Listener<DrawingModelEvent> drawingModelEventListener;
 
-    /**
-     * Creates a new Transformation list wrapped around the source list.
-     */
+    /// Creates a new Transformation list wrapped around the source list.
     public DrawingModelFigureChildrenObservableList(DrawingModel model, Figure parent) {
         super(parent.getChildren());
         this.model = model;

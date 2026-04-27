@@ -4,9 +4,7 @@
  */
 package org.jhotdraw8.fxcontrols.dock;
 
-/**
- * Defines the axis of a {@link Track}.
- */
+/// Defines the axis of a [Track].
 public enum TrackAxis {
     X, Y, Z
 }

@@ -12,12 +12,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.text.ParseException;
 
-/**
- * Allows to use a {@link Converter} with the {@code javafx.css.StyleConverter}
- * API.
- *
- * rawcoder $
- */
+/// Allows to use a [Converter] with the `javafx.css.StyleConverter`
+/// API.
+/// rawcoder $
 public class StyleConverterAdapter<T> extends StyleConverter<String, T> {
 
     private final Converter<T> converter;

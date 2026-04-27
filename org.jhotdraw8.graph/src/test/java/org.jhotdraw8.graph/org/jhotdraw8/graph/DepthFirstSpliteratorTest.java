@@ -22,27 +22,22 @@ import java.util.Spliterators;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * DepthFirstSpliteratorTest.
- *
- */
+/// DepthFirstSpliteratorTest.
 public class DepthFirstSpliteratorTest {
 
-    /**
-     * <pre>
-     * 1 ←→ 2
-     * 1 → 3
-     * 1 ←→ 6
-     * 2 → 3
-     * 2 → 4
-     * 3 → 4
-     * 3 → 6
-     * 4 → 5
-     * 5 ←→ 6
-     * </pre>
-     *
-     * @return
-     */
+    /// <pre>
+    /// 1 ←→ 2
+    /// 1 → 3
+    /// 1 ←→ 6
+    /// 2 → 3
+    /// 2 → 4
+    /// 3 → 4
+    /// 3 → 6
+    /// 4 → 5
+    /// 5 ←→ 6
+    /// </pre>
+    ///
+    /// @return
     static DirectedGraph<Integer, Double> createGraph() {
         SimpleMutableDirectedGraph<Integer, Double> builder = new SimpleMutableDirectedGraph<>();
         builder.addVertex(1);
@@ -96,9 +91,7 @@ public class DepthFirstSpliteratorTest {
         }
     }
 
-    /**
-     * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
-     */
+    /// Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
     static void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         BfsDfsVertexSpliterator<Integer> instance = new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, true);

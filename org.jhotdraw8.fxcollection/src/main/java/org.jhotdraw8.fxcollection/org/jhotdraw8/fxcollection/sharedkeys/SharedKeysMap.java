@@ -20,13 +20,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * An observable map which stores its values in an array, and which shares
- * its immutable keys with other {@code SharedKeysMap} instances.
- *
- * @param <K> key type
- * @param <V> value type
- */
+/// An observable map which stores its values in an array, and which shares
+/// its immutable keys with other `SharedKeysMap` instances.
+///
+/// @param <K> key type
+/// @param <V> value type
 public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements ObservableMap<K, V> {
 
     private static final Object NULL_VALUE = new Object();
@@ -37,14 +35,12 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
 
     private final Object[] values;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param keyMap a map which maps from keys to indices. The indices must be
-     *               in the range {@code [0,keyMap.size()-1]}.
-     *               <p>
-     *               This map must be immutable.
-     */
+    /// Creates a new instance.
+    ///
+    /// @param keyMap a map which maps from keys to indices. The indices must be
+    ///               in the range `[0,keyMap.size()-1]`.
+    ///
+    ///               This map must be immutable.
     public SharedKeysMap(Map<K, Integer> keyMap) {
         this.keyMap = keyMap;
         this.values = new Object[keyMap.size()];

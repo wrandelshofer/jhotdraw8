@@ -10,9 +10,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-/**
- * The test data.
- */
+/// The test data.
 public final class MapData {
     private final String name;
     public final ReadableMap<Key, Value> a;
@@ -21,17 +19,15 @@ public final class MapData {
     private final ReadableMap<Key, Value> someAPlusSomeB;
     public final ReadableMap<Key, Value> b;
 
-    /**
-     * Creates a new instance with 3 maps of the same non-empty size.
-     *
-     * @param name                 the name of the data
-     * @param a                    a non-empty map, all values are distinct
-     * @param aWithDifferentValues a map with identical keys but different values from a,
-     *                             all values are distinct from the values in a
-     *                             and from other values in b
-     * @param c                    a map with different keys and values from a,
-     *                             all values are distinct from the values in a.
-     */
+    /// Creates a new instance with 3 maps of the same non-empty size.
+    ///
+    /// @param name                 the name of the data
+    /// @param a                    a non-empty map, all values are distinct
+    /// @param aWithDifferentValues a map with identical keys but different values from a,
+    ///                             all values are distinct from the values in a
+    ///                             and from other values in b
+    /// @param c                    a map with different keys and values from a,
+    ///                             all values are distinct from the values in a.
     MapData(String name, ReadableMap<Key, Value> a,
             ReadableMap<Key, Value> aWithDifferentValues,
             ReadableMap<Key, Value> b,

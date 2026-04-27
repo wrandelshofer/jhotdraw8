@@ -9,9 +9,9 @@ import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
 import org.jhotdraw8.application.resources.Resources;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
@@ -30,26 +30,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-/**
- * CreationTool for bezier figures.
- *
- */
+/// CreationTool for bezier figures.
 public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
-    /**
-     * Remembers the number ofCollection points that we had, when the user
-     * started to drag the mouse.
-     */
+    /// Remembers the number ofCollection points that we had, when the user
+    /// started to drag the mouse.
     private int dragStartIndex;
 
     private final NonNullObjectStyleableKey<BezierPath> key;
-    /**
-     * The bezier nodes being created.
-     */
+    /// The bezier nodes being created.
     private @Nullable BezierPath path;
-    /**
-     * The rubber band shows where the next point will be added.
-     */
+    /// The rubber band shows where the next point will be added.
     private final Line rubberBand = new Line();
 
     public BezierCreationTool(String name, Resources rsrc, NonNullObjectStyleableKey<BezierPath> key, Supplier<Figure> factory) {
@@ -67,9 +58,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         node.getChildren().add(rubberBand);
     }
 
-    /**
-     * This implementation is empty.
-     */
+    /// This implementation is empty.
     @Override
     public void activate(DrawingEditor editor) {
         requestFocus();

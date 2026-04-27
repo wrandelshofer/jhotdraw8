@@ -16,47 +16,39 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Spliterator;
 
-/**
- * A readable interface to a set. A set is a collection that contains no duplicate elements.
- * <p>
- * Note: To compare a ReadableList to a {@link List}, you must either
- * wrap the ReadableList into a List using {@link ListFacade},
- * or wrap the List into a ReadableList using {@link ReadableListFacade}.
- *
- * @param <E> the element type
- */
+/// A readable interface to a set. A set is a collection that contains no duplicate elements.
+///
+/// Note: To compare a ReadableList to a [List], you must either
+/// wrap the ReadableList into a List using [ListFacade],
+/// or wrap the List into a ReadableList using [ReadableListFacade].
+///
+/// @param <E> the element type
 public interface ReadableList<E> extends ReadableSequencedCollection<E> {
 
-    /**
-     * Returns the element at the specified position in this list.
-     *
-     * @param index the index of the element
-     * @return the element
-     * @throws IndexOutOfBoundsException if the index is out of range
-     *                                   ({@code index < 0 || index >= size()})
-     */
+    /// Returns the element at the specified position in this list.
+    ///
+    /// @param index the index of the element
+    /// @return the element
+    /// @throws IndexOutOfBoundsException if the index is out of range
+    ///                                   (`index < 0 || index >= size()`)
     E get(int index);
 
-    /**
-     * Returns the element at the specified position in this list, counted
-     * from the last element of the list.
-     *
-     * @param index the index of the element, counted from the last
-     *              element.
-     * @return the element
-     * @throws IndexOutOfBoundsException if the index is out of range
-     *                                   ({@code index < 0 || index >= size()})
-     */
+    /// Returns the element at the specified position in this list, counted
+    /// from the last element of the list.
+    ///
+    /// @param index the index of the element, counted from the last
+    ///              element.
+    /// @return the element
+    /// @throws IndexOutOfBoundsException if the index is out of range
+    ///                                   (`index < 0 || index >= size()`)
     default E getLast(int index) {
         return get(size() - index - 1);
     }
 
-    /**
-     * Gets the first element of the list.
-     *
-     * @return the first element
-     * @throws NoSuchElementException if the list is empty
-     */
+    /// Gets the first element of the list.
+    ///
+    /// @return the first element
+    /// @throws NoSuchElementException if the list is empty
     @Override
     default E getFirst() {
         if (isEmpty()) {
@@ -65,12 +57,10 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
         return get(0);
     }
 
-    /**
-     * Gets the last element of the list.
-     *
-     * @return the last element
-     * @throws NoSuchElementException if the list is empty
-     */
+    /// Gets the last element of the list.
+    ///
+    /// @return the last element
+    /// @throws NoSuchElementException if the list is empty
     @Override
     default E getLast() {
         int index = size() - 1;
@@ -80,91 +70,73 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
         return get(index);
     }
 
-    /**
-     * Peeks the first element of the list.
-     *
-     * @return the first element or null if the list is empty
-     */
+    /// Peeks the first element of the list.
+    ///
+    /// @return the first element or null if the list is empty
     default @Nullable E peekFirst() {
         return isEmpty() ? null : get(0);
     }
 
-    /**
-     * Peeks the last element of the list.
-     *
-     * @return the last element or null if the list is empty
-     */
+    /// Peeks the last element of the list.
+    ///
+    /// @return the last element or null if the list is empty
     default @Nullable E peekLast() {
         int index = size() - 1;
         return index < 0 ? null : get(index);
     }
 
-    /**
-     * Returns an iterator over elements of type {@code E}.
-     *
-     * @return an iterator.
-     */
+    /// Returns an iterator over elements of type `E`.
+    ///
+    /// @return an iterator.
     @Override
     default Iterator<E> iterator() {
         return new ReadableListSpliterator<>(this);
     }
 
-    /**
-     * Returns a spliterator over elements of type {@code E}.
-     *
-     * @return an iterator.
-     */
+    /// Returns a spliterator over elements of type `E`.
+    ///
+    /// @return an iterator.
     @Override
     default Spliterator<E> spliterator() {
         return new ReadableListSpliterator<>(this);
     }
 
-    /**
-     * Returns a list iterator over elements of type {@code E}.
-     *
-     * @return a list iterator.
-     */
+    /// Returns a list iterator over elements of type `E`.
+    ///
+    /// @return a list iterator.
     default ListIterator<E> listIterator() {
         return new ReadableListSpliterator<>(this);
     }
 
-    /**
-     * Returns a list iterator over elements of type {@code E} starting
-     * at the specified index.
-     *
-     * @param index the start index
-     * @return a list iterator.
-     */
+    /// Returns a list iterator over elements of type `E` starting
+    /// at the specified index.
+    ///
+    /// @param index the start index
+    /// @return a list iterator.
     default ListIterator<E> listIterator(int index) {
         return new ReadableListSpliterator<>(this, index, size());
     }
 
-    /**
-     * Wraps this list in the List interface - without copying.
-     *
-     * @return the wrapped list
-     */
+    /// Wraps this list in the List interface - without copying.
+    ///
+    /// @return the wrapped list
     default List<E> asList() {
         return new ListFacade<>(this);
     }
 
-    /**
-     * Returns a view of the portion of this list between the specified
-     * * {@code fromIndex}, inclusive, and {@code toIndex}, exclusive.
-     *
-     * @param fromIndex the from index
-     * @param toIndex   the to index (exclusive)
-     * @return the sub list
-     */
+    /// Returns a view of the portion of this list between the specified
+    /// * `fromIndex`, inclusive, and `toIndex`, exclusive.
+    ///
+    /// @param fromIndex the from index
+    /// @param toIndex   the to index (exclusive)
+    /// @return the sub list
     ReadableList<E> readableSubList(int fromIndex, int toIndex);
 
-    /**
-     * Returns the index of the first occurrence of the specified element
-     * in this list, or -1 if this list does not contain the element.
-     *
-     * @param o an element
-     * @return the index of the element or -1
-     */
+    /// Returns the index of the first occurrence of the specified element
+    /// in this list, or -1 if this list does not contain the element.
+    ///
+    /// @param o an element
+    /// @return the index of the element or -1
     default int indexOf(Object o) {
         for (int i = 0, n = size(); i < n; i++) {
             if (Objects.equals(get(i), o)) {
@@ -174,13 +146,11 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
         return -1;
     }
 
-    /**
-     * Returns the index of the last occurrence of the specified element
-     * in this list, or -1 if this list does not contain the element.
-     *
-     * @param o an element
-     * @return the index of the element or -1
-     */
+    /// Returns the index of the last occurrence of the specified element
+    /// in this list, or -1 if this list does not contain the element.
+    ///
+    /// @param o an element
+    /// @return the index of the element or -1
     default int lastIndexOf(Object o) {
         for (int i = size() - 1; i >= 0; i--) {
             if (Objects.equals(get(i), o)) {
@@ -190,17 +160,15 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
         return -1;
     }
 
-    /**
-     * Compares the given list with the given object for equality.
-     * <p>
-     * Returns {@code true} if the given object is also a readable list and the
-     * two lists contain the same elements in the same sequence.
-     *
-     * @param list a list
-     * @param o    an object
-     * @param <E>  the element type of the list
-     * @return {@code true} if the object is equal to this list
-     */
+    /// Compares the given list with the given object for equality.
+    ///
+    /// Returns `true` if the given object is also a readable list and the
+    /// two lists contain the same elements in the same sequence.
+    ///
+    /// @param list a list
+    /// @param o    an object
+    /// @param <E>  the element type of the list
+    /// @return `true` if the object is equal to this list
     static <E> boolean listEquals(ReadableList<E> list, @Nullable Object o) {
         if (o == list) {
             return true;
@@ -222,14 +190,12 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
         return true;
     }
 
-    /**
-     * Returns the hash code of the provided iterable, assuming that
-     * the iterator is from a list.
-     *
-     * @param iterator an iterator over a list
-     * @return the ordered sum of the hash codes of the elements in the list
-     * @see List#hashCode()
-     */
+    /// Returns the hash code of the provided iterable, assuming that
+    /// the iterator is from a list.
+    ///
+    /// @param iterator an iterator over a list
+    /// @return the ordered sum of the hash codes of the elements in the list
+    /// @see List#hashCode()
     static <E> int iteratorToHashCode(Iterator<E> iterator) {
         int h = 1;
         while (iterator.hasNext()) {
@@ -239,27 +205,23 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
         return h;
     }
 
-    /**
-     * Compares the specified object with this list for equality.
-     * <p>
-     * Returns {@code true} if the given object is also a readable list and the
-     * two lists contain the same elements in the same sequence.
-     * <p>
-     * Implementations of this method should use {@link ReadableList#listEquals}.
-     *
-     * @param o an object
-     * @return {@code true} if the object is equal to this list
-     */
+    /// Compares the specified object with this list for equality.
+    ///
+    /// Returns `true` if the given object is also a readable list and the
+    /// two lists contain the same elements in the same sequence.
+    ///
+    /// Implementations of this method should use [ReadableList#listEquals].
+    ///
+    /// @param o an object
+    /// @return `true` if the object is equal to this list
     boolean equals(@Nullable Object o);
 
-    /**
-     * Returns the hash code value for this list. The hash code
-     * is the result of the calculation described in {@link List#hashCode()}.
-     * <p>
-     * Implementations of this method should use {@link ReadableList#iteratorToHashCode}.
-     *
-     * @return the hash code value for this set
-     */
+    /// Returns the hash code value for this list. The hash code
+    /// is the result of the calculation described in [List#hashCode()].
+    ///
+    /// Implementations of this method should use [ReadableList#iteratorToHashCode].
+    ///
+    /// @return the hash code value for this set
     int hashCode();
 
 }

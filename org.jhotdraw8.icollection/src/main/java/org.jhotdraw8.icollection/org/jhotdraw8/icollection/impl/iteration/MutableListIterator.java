@@ -10,23 +10,17 @@ import java.util.function.IntSupplier;
 
 public class MutableListIterator<E> implements ListIterator<E> {
     private final List<E> src;
-    /**
-     * Index of next element to return.
-     */
+    /// Index of next element to return.
     int index;
-    /**
-     * Index of last element returned; negative if none.
-     */
+    /// Index of last element returned; negative if none.
     int lastReturned = -1;
     private final IntSupplier modCount;
     private int expectedCount;
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param src   the underlying source list
-     * @param index the next index of the iterator
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param src   the underlying source list
+    /// @param index the next index of the iterator
     public MutableListIterator(List<E> src, int index, IntSupplier modCount) {
         Objects.checkIndex(index, src.size() + 1);
         this.src = src;

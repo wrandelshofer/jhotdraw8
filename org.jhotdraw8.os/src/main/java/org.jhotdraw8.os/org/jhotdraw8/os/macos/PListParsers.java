@@ -26,20 +26,14 @@ import java.util.Map;
 import java.util.SequencedMap;
 import java.util.stream.StreamSupport;
 
-/**
- * Provides static methods for parsing PLists in XML format and in binary format.
- */
+/// Provides static methods for parsing PLists in XML format and in binary format.
 public class PListParsers {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private PListParsers() {
     }
 
-    /**
-     * Reads the specified PList file and returns it as a document.
-     * This method can deal with XML encoded and binary encoded PList files.
-     */
+    /// Reads the specified PList file and returns it as a document.
+    /// This method can deal with XML encoded and binary encoded PList files.
     public static Document readPList(File file) throws IOException {
         Document doc;
         try {

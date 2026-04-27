@@ -35,16 +35,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * DrawingFigure.
- *
- */
+/// DrawingFigure.
 public abstract class AbstractDrawing extends AbstractCompositeFigure
         implements Drawing {
 
-    /**
-     * The style manager is created lazily.
-     */
+    /// The style manager is created lazily.
     private @Nullable StylesheetsManager<Figure> styleManager = null;
 
     public AbstractDrawing() {
@@ -76,15 +71,13 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         return new SimpleStylesheetsManager<>(new FigureSelectorModel());
     }
 
-    /**
-     * The bounds of this drawing is determined by its {@code WIDTH} and its
-     * {@code HEIGHT}.
-     * <p>
-     * The bounds of the child figures does not affect the bounds of the
-     * drawing.
-     *
-     * @return bounding box (0, 0, WIDTH, HEIGHT).
-     */
+    /// The bounds of this drawing is determined by its `WIDTH` and its
+    /// `HEIGHT`.
+    ///
+    /// The bounds of the child figures does not affect the bounds of the
+    /// drawing.
+    ///
+    /// @return bounding box (0, 0, WIDTH, HEIGHT).
     @Override
     public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(CssSize.ZERO, CssSize.ZERO, getStyledNonNull(WIDTH), getStyledNonNull(HEIGHT));

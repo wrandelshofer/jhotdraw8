@@ -20,15 +20,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 
-/**
- * Represents an SVG 'radialGradient' element.
- *
- */
+/// Represents an SVG 'radialGradient' element.
 public class SvgRadialGradientFigure extends AbstractSvgGradientFigure {
 
-    /**
-     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "radialGradient";
     public static final CssSizeStyleableKey CX = new CssSizeStyleableKey("cx", CssSize.of(0.5));
     public static final CssSizeStyleableKey CY = new CssSizeStyleableKey("cy", CssSize.of(0.5));

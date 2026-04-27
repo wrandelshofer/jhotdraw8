@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
-/**
- */
+///
 public class NonNullObjectPropertyTest {
 
     @Test

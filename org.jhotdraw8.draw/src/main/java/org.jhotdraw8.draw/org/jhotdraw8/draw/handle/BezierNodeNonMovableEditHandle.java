@@ -43,10 +43,7 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import static org.jhotdraw8.geom.shape.BezierNode.CLOSE_MASK;
 import static org.jhotdraw8.geom.shape.BezierNode.MOVE_MASK;
 
-/**
- * Handle for the point ofCollection a figure.
- *
- */
+/// Handle for the point ofCollection a figure.
 public class BezierNodeNonMovableEditHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));

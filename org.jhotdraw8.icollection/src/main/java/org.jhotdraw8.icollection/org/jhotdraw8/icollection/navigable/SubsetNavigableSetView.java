@@ -24,11 +24,9 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     private final boolean toInclusive;
     private final boolean nullFirst;
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param src the source set
-     */
+    /// Constructs a new instance.
+    ///
+    /// @param src the source set
     public SubsetNavigableSetView(NavigableSet<E> src, IntSupplier modCount, boolean fromStart, @Nullable E fromElement, boolean fromInclusive, boolean toEnd, @Nullable E toElement, boolean toInclusive, boolean nullFirst) {
         this.src = src;
         this.modCount = modCount;

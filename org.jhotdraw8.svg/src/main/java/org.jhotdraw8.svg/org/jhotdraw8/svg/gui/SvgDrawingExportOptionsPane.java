@@ -121,11 +121,9 @@ public class SvgDrawingExportOptionsPane extends GridPane {
         }
     }
 
-    /**
-     * Returns a new map.
-     *
-     * @return the export options
-     */
+    /// Returns a new map.
+    ///
+    /// @return the export options
     public SequencedMap<Key<?>, Object> getExportOptions() {
         SequencedMap<Key<?>, Object> map = new LinkedHashMap<>();
         EXPORT_DRAWING_KEY.put(map, exportDrawingCheckBox.isSelected());

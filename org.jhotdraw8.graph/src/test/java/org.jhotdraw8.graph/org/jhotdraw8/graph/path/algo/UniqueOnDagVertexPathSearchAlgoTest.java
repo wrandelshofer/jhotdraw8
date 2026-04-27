@@ -23,10 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * UniqueShortestPathBuilderTest.
- *
- */
+/// UniqueShortestPathBuilderTest.
 public class UniqueOnDagVertexPathSearchAlgoTest {
 
     public UniqueOnDagVertexPathSearchAlgoTest() {
@@ -120,9 +117,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyPath method, of class UniqueShortestPathBuilder.
-     */
+    /// Test of findAnyPath method, of class UniqueShortestPathBuilder.
     public void testFindUniqueVertexPath(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, PersistentList<Integer> expPath) throws Exception {
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
                 graph::getNextVertices, new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
@@ -153,9 +148,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyPath method, of class UniqueShortestPathBuilder.
-     */
+    /// Test of findAnyPath method, of class UniqueShortestPathBuilder.
     public void testFindUniqueMultiGoalPath(DirectedGraph<Integer, Double> graph, Integer start, List<Integer> multiGoal, PersistentList<Integer> expResult) throws Exception {
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
                 new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
@@ -200,9 +193,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
         );
     }
 
-    /**
-     * Test of findAnyVertexPath method, of class AnyPathBuilder.
-     */
+    /// Test of findAnyVertexPath method, of class AnyPathBuilder.
     private void testFindUniqueVertexPathOverWaypoints(List<Integer> waypoints, @Nullable PersistentList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,

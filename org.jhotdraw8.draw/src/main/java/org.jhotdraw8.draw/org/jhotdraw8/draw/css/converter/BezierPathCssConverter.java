@@ -19,12 +19,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * Converts an BezierNodeList path to a CSS String.
- * <p>
- * The null value will be converted to the CSS identifier "none".
- *
- */
+/// Converts an BezierNodeList path to a CSS String.
+///
+/// The null value will be converted to the CSS identifier "none".
 public class BezierPathCssConverter extends AbstractCssConverter<BezierPath> {
 
     public BezierPathCssConverter(boolean nullable) {

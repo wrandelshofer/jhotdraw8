@@ -15,10 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
-/**
- * TListStyleableFigureKey.
- *
- */
+/// TListStyleableFigureKey.
 public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends AbstractStyleableKey<SvgDefaultablePaint<T>>
         implements WritableStyleableMapAccessor<SvgDefaultablePaint<T>>,
         SvgDefaultablePaintStyleableMapAccessor<T> {
@@ -28,14 +25,12 @@ public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends Abstra
     private final @Nullable T initialValue;
 
 
-    /**
-     * Creates a new instance with the specified name, mask and default value.
-     *
-     * @param name                   The name of the key.
-     * @param type                   The full type
-     * @param converter              String converter for a list element
-     * @param initialDefaultingValue The default value.
-     */
+    /// Creates a new instance with the specified name, mask and default value.
+    ///
+    /// @param name                   The name of the key.
+    /// @param type                   The full type
+    /// @param converter              String converter for a list element
+    /// @param initialDefaultingValue The default value.
     public SvgDefaultablePaintStyleableKey(String name, Type type, CssConverter<T> converter,
                                            SvgDefaultablePaint<T> initialDefaultingValue,
                                            @Nullable T initialValue) {
@@ -50,35 +45,32 @@ public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends Abstra
         return converter;
     }
 
-    /**
-     * Returns the initial value of the attribute.
-     * <p>
-     * We use the definition from CSS initial value:
-     * <p>
-     * "Each property has an initial value, defined in
-     * the property's definition table. If the property
-     * is not an inherited property, and the cascade does not
-     * result in a value, then the specified value of the
-     * property is its initial value."
-     * <p>
-     * We intentionally do <b>not</b> use the definition from SVG
-     * initial value:
-     * <p>
-     * <del>"The initial value of an attribute or property is
-     * the value used when that attribute or property is not
-     * specified, or when it has an invalid value."</del>
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>CSS Cascading and Inheritance Level 4, Chapter 7.1 Initial Values</dt>
-     *     <dd><a href="https://www.w3.org/TR/css-cascade-4/#initial-values">w3.org</a></dd>
-     *
-     *     <dt>SVG, Chapter 4: Basic Data Types and Interfaces, 4.1 Definitions, Initial Value</dt>
-     *     <dd><a href="https://www.w3.org/TR/SVG/types.html#definitions">w3.org</a></dd>
-     * </dl>
-     *
-     * @return the initial value.
-     */
+    /// Returns the initial value of the attribute.
+    ///
+    /// We use the definition from CSS initial value:
+    ///
+    /// "Each property has an initial value, defined in
+    /// the property's definition table. If the property
+    /// is not an inherited property, and the cascade does not
+    /// result in a value, then the specified value of the
+    /// property is its initial value."
+    ///
+    /// We intentionally do **not** use the definition from SVG
+    /// initial value:
+    ///
+    /// <del>"The initial value of an attribute or property is
+    /// the value used when that attribute or property is not
+    /// specified, or when it has an invalid value."</del>
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>CSS Cascading and Inheritance Level 4, Chapter 7.1 Initial Values</dt>
+    ///     <dd><a href="https://www.w3.org/TR/css-cascade-4/#initial-values">w3.org</a></dd>
+    ///     <dt>SVG, Chapter 4: Basic Data Types and Interfaces, 4.1 Definitions, Initial Value</dt>
+    ///     <dd><a href="https://www.w3.org/TR/SVG/types.html#definitions">w3.org</a></dd>
+    /// </dl>
+    ///
+    /// @return the initial value.
     @Override
     public T getInitialValue() {
         return initialValue;

@@ -4,37 +4,28 @@
  */
 package org.jhotdraw8.draw.figure;
 
-/**
- * Interface for figures which are always locked.
- *
- */
+/// Interface for figures which are always locked.
 public interface LockedFigure extends Figure {
 
-    /**
-     * Whether this figure is not locked and all its parents are editable.
-     *
-     * @return false
-     */
+    /// Whether this figure is not locked and all its parents are editable.
+    ///
+    /// @return false
     @Override
     default boolean isEditable() {
         return false;
     }
 
-    /**
-     * Whether the figure is not locked and all its parents are editable.
-     *
-     * @return false
-     */
+    /// Whether the figure is not locked and all its parents are editable.
+    ///
+    /// @return false
     @Override
     default boolean isDeletable() {
         return false;
     }
 
-    /**
-     * Whether the figure is not locked and all its parents are editable.
-     *
-     * @return false
-     */
+    /// Whether the figure is not locked and all its parents are editable.
+    ///
+    /// @return false
     @Override
     default boolean isSelectable() {
         return false;

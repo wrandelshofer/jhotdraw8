@@ -7,9 +7,7 @@ package org.jhotdraw8.collection.enumerator;
 
 import org.jspecify.annotations.Nullable;
 
-/**
- * An integer enumerator/spliterator over a char array.
- */
+/// An integer enumerator/spliterator over a char array.
 public class IntCharArrayEnumerator extends AbstractIntEnumerator {
     private final int limit;
     private final char[] arrows;

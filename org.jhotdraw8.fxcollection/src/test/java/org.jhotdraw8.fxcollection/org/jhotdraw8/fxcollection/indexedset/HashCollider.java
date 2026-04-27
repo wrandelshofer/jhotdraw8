@@ -7,10 +7,8 @@ package org.jhotdraw8.fxcollection.indexedset;
 
 import java.io.Serializable;
 
-/**
- * Elem has a configurable bit mask for its hash code.
- * Allowing to run the same test with many or few hash collisions.
- */
+/// Elem has a configurable bit mask for its hash code.
+/// Allowing to run the same test with many or few hash collisions.
 public class HashCollider implements Serializable {
     private static final long serialVersionUID = 0L;
     private final int value;

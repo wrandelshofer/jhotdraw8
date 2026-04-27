@@ -17,32 +17,28 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
- * See {@link UniqueOnAcyclicGraphArcPathSearchAlgo} for a description of this
- * algorithm.
- *
- * @param <V> the vertex data type
- * @param <C> the cost number type
- */
+/// See [UniqueOnAcyclicGraphArcPathSearchAlgo] for a description of this
+/// algorithm.
+///
+/// @param <V> the vertex data type
+/// @param <C> the cost number type
 public class UniqueOnAcyclicGraphVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
     public UniqueOnAcyclicGraphVertexPathSearchAlgo() {
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param startVertices        the set of start vertices
-     * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next vertices function
-     * @param maxDepth             the maximal depth (inclusive) of the search
-     *                             Must be {@literal >= 0}.
-     * @param zero                 the zero cost value
-     * @param costLimit            the cost limit is <b>ignored</b>
-     * @param costFunction         the cost function
-     * @param sumFunction          the sum function for adding two cost values
-     * @param visited
-     * @return on success: a back link, otherwise: null
-     */
+    /// {@inheritDoc}
+    ///
+    /// @param startVertices        the set of start vertices
+    /// @param goalPredicate        the goal predicate
+    /// @param nextVerticesFunction the next vertices function
+    /// @param maxDepth             the maximal depth (inclusive) of the search
+    ///                             Must be {@literal >= 0}.
+    /// @param zero                 the zero cost value
+    /// @param costLimit            the cost limit is **ignored**
+    /// @param costFunction         the cost function
+    /// @param sumFunction          the sum function for adding two cost values
+    /// @param visited
+    /// @return on success: a back link, otherwise: null
     @Override
     public @Nullable VertexBackLinkWithCost<V, C> search(
             Iterable<V> startVertices,
@@ -59,15 +55,13 @@ public class UniqueOnAcyclicGraphVertexPathSearchAlgo<V, C extends Number & Comp
                 zero, costFunction, sumFunction);
     }
 
-    /**
-     * Search engine method.
-     *
-     * @param startVertices        the set of start vertices
-     * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next vertices function
-     * @param maxDepth             the maximal depth (inclusive) of the search.
-     * @return on success: a back link, otherwise: null
-     */
+    /// Search engine method.
+    ///
+    /// @param startVertices        the set of start vertices
+    /// @param goalPredicate        the goal predicate
+    /// @param nextVerticesFunction the next vertices function
+    /// @param maxDepth             the maximal depth (inclusive) of the search.
+    /// @return on success: a back link, otherwise: null
     public @Nullable VertexBackLink<V> search(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,

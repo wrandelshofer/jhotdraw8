@@ -14,9 +14,7 @@ public class MacOsSystemPreferences extends AbstractSystemPreferences {
     public MacOsSystemPreferences() {
     }
 
-    /**
-     * Synchronously loads the system preferences.
-     */
+    /// Synchronously loads the system preferences.
     public void load() {
         LinkedHashMap<String, Object> prefs = new LinkedHashMap<>();
         MacOSPreferencesUtil.readPreferences(MacOSPreferencesUtil.GLOBAL_PREFERENCES, prefs);

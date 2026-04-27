@@ -13,11 +13,9 @@ import java.util.EventObject;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * SimpleWeakListener.
- *
- * @param <E> the type of the event
- */
+/// SimpleWeakListener.
+///
+/// @param <E> the type of the event
 public final class SimpleWeakListener<E extends EventObject> implements Listener<E>, WeakListener {
 
     private final WeakReference<Listener<E>> ref;
@@ -29,9 +27,7 @@ public final class SimpleWeakListener<E extends EventObject> implements Listener
         this.removeListener = removeListener;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /// {@inheritDoc}
     @Override
     public boolean wasGarbageCollected() {
         return (ref.get() == null);

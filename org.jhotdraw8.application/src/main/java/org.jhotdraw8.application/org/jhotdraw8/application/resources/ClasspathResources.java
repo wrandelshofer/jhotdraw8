@@ -25,35 +25,23 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     * The base class
-     */
+    /// The base class
     private final Class<?> baseClass = getClass();
-    /**
-     * The base name of the resource bundle.
-     */
+    /// The base name of the resource bundle.
     private final String baseName;
-    /**
-     * The locale. This field is currently only used for debugging.
-     */
+    /// The locale. This field is currently only used for debugging.
     private final Locale locale;
 
-    /**
-     * The parent resources object.
-     */
+    /// The parent resources object.
     private @Nullable Resources parent;
 
-    /**
-     * The wrapped resource bundle.
-     */
+    /// The wrapped resource bundle.
     private final transient ResourceBundle resource;
 
-    /**
-     * Creates a new ClasspathResources object which wraps the provided resource bundle.
-     *
-     * @param baseName the base name
-     * @param locale   the locale
-     */
+    /// Creates a new ClasspathResources object which wraps the provided resource bundle.
+    ///
+    /// @param baseName the base name
+    /// @param locale   the locale
     public ClasspathResources(String baseName, Locale locale) {
         this.locale = locale;
         this.baseName = baseName;
@@ -156,26 +144,22 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
         return baseName;
     }
 
-    /**
-     * Get the appropriate ResourceBundle subclass.
-     *
-     * @param baseName the base name
-     * @return the resource bundle
-     * @see ResourceBundle
-     */
+    /// Get the appropriate ResourceBundle subclass.
+    ///
+    /// @param baseName the base name
+    /// @return the resource bundle
+    /// @see ResourceBundle
     public static Resources getResources(String baseName)
             throws MissingResourceException {
         return getResources(baseName, LocaleUtil.getDefault());
     }
 
-    /**
-     * Get the appropriate ResourceBundle subclass.
-     *
-     * @param baseName the base name
-     * @param locale   the locale
-     * @return the resource bundle
-     * @see ResourceBundle
-     */
+    /// Get the appropriate ResourceBundle subclass.
+    ///
+    /// @param baseName the base name
+    /// @param locale   the locale
+    /// @return the resource bundle
+    /// @see ResourceBundle
     static Resources getResources(String baseName, Locale locale)
             throws MissingResourceException {
         Resources r;

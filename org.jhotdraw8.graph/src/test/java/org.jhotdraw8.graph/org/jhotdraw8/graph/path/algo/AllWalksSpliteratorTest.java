@@ -21,10 +21,7 @@ import java.util.stream.StreamSupport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * AnyPathBuilderTest.
- *
- */
+/// AnyPathBuilderTest.
 public class AllWalksSpliteratorTest {
 
     private CombinedAllSequencesFinder<Integer, Double, Double> newAllInstance(final DirectedGraph<Integer, Double> graph) {

@@ -15,7 +15,18 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.converter.BezierPathCssConverter;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
+import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
+import org.jhotdraw8.draw.handle.BezierNodeNonMovableEditHandle;
+import org.jhotdraw8.draw.handle.BezierNodeTangentHandle;
+import org.jhotdraw8.draw.handle.BezierPathEditHandle;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LineConnectorHandle;
+import org.jhotdraw8.draw.handle.LineOutlineHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
+import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.key.NonNullObjectStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -37,14 +48,11 @@ import java.util.List;
 
 import static org.jhotdraw8.draw.figure.FillRulableFigure.FILL_RULE;
 
-/**
- * AbstractPathConnectionWithMarkersFigure draws a path from start to end.
- * <p>
- * A subclass can hardcode the markers, or can implement one or multiple "marker-able" interfaces
- * that allow user-definable markers: {@link MarkerStartableFigure}, {@link MarkerEndableFigure},
- * {@link MarkerSegmentableFigure}.
- *
- */
+/// AbstractPathConnectionWithMarkersFigure draws a path from start to end.
+///
+/// A subclass can hardcode the markers, or can implement one or multiple "marker-able" interfaces
+/// that allow user-definable markers: [MarkerStartableFigure], [MarkerEndableFigure],
+/// [MarkerSegmentableFigure].
 public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure, PathMetricsFigure {
 
@@ -266,27 +274,23 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         }
     }
 
-    /**
-     * This method can be overridden by a subclass to apply styles to the marker
-     * node.
-     * <p>
-     * The implementation of this method in this class is empty.
-     * So no call to super is necessary.
-     *
-     * @param ctx  the context
-     * @param node the node
-     */
+    /// This method can be overridden by a subclass to apply styles to the marker
+    /// node.
+    ///
+    /// The implementation of this method in this class is empty.
+    /// So no call to super is necessary.
+    ///
+    /// @param ctx  the context
+    /// @param node the node
     protected void updateEndMarkerNode(RenderContext ctx, Path node) {
         // empty
     }
 
-    /**
-     * This method can be overridden by a subclass to apply styles to the line
-     * node.
-     *
-     * @param ctx  the context
-     * @param node the node
-     */
+    /// This method can be overridden by a subclass to apply styles to the line
+    /// node.
+    ///
+    /// @param ctx  the context
+    /// @param node the node
     protected void updateLineNode(RenderContext ctx, Path node) {
 
     }
@@ -345,16 +349,14 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         updateEndMarkerNode(ctx, endMarkerNode);
     }
 
-    /**
-     * This method can be overridden by a subclass to apply styles to the marker
-     * node.
-     * <p>
-     * The implementation of this method in this class is empty.
-     * So no call to super is necessary.
-     *
-     * @param ctx  the context
-     * @param node the node
-     */
+    /// This method can be overridden by a subclass to apply styles to the marker
+    /// node.
+    ///
+    /// The implementation of this method in this class is empty.
+    /// So no call to super is necessary.
+    ///
+    /// @param ctx  the context
+    /// @param node the node
     protected void updateStartMarkerNode(RenderContext ctx, Path node) {
         // empty
     }

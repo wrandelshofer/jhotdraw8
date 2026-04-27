@@ -39,19 +39,14 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * AbstractDrawingView.
- *
- */
+/// AbstractDrawingView.
 public abstract class AbstractDrawingView extends AbstractPropertyBean implements DrawingView {
     private final ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY,
             new BitmapExportOutputFormat(BitmapExportOutputFormat.PNG_MIME_TYPE, BitmapExportOutputFormat.PNG_EXTENSION));
     private final ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, EDITOR_PROPERTY, null);
     private final ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
-    /**
-     * The selectedFiguresProperty holds the list of selected figures in the
-     * sequence they were selected by the user.
-     */
+    /// The selectedFiguresProperty holds the list of selected figures in the
+    /// sequence they were selected by the user.
     private final ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
 
     private final ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);

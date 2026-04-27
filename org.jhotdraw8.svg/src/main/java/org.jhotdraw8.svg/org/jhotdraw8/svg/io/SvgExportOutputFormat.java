@@ -19,7 +19,13 @@ import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssDimension2D;
 import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.ImageFigure;
+import org.jhotdraw8.draw.figure.Page;
+import org.jhotdraw8.draw.figure.PageFigure;
+import org.jhotdraw8.draw.figure.Slice;
+import org.jhotdraw8.draw.figure.ViewBoxableDrawing;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.io.AbstractExportOutputFormat;
 import org.jhotdraw8.draw.io.OutputFormat;
@@ -50,10 +56,7 @@ import java.util.logging.Logger;
 
 import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 
-/**
- * Exports a JavaFX scene graph to SVG.
- *
- */
+/// Exports a JavaFX scene graph to SVG.
 public class SvgExportOutputFormat extends AbstractExportOutputFormat
         implements ClipboardOutputFormat, OutputFormat {
     private static final Logger LOGGER = Logger.getLogger(SvgExportOutputFormat.class.getName());

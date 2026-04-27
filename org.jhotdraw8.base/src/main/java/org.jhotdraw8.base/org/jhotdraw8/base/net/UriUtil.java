@@ -17,41 +17,34 @@ import java.util.SequencedMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * UriUtil.
- *
- */
+/// UriUtil.
 public class UriUtil {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private UriUtil() {
     }
 
 
-    /**
-     * Returns the name of an URI for display in the title bar of a window.
-     * <p>
-     * If the URI is a file URI, then displays the file name followed
-     * by the path to the file. If the file is inside the user home
-     * directory, only the relative path is shown.
-     * <p>
-     * Examples:
-     * <pre>
-     *     uri = /User/me/Desktop/Hello.txt
-     *     ⊢ title = Hello.txt [~/Desktop]
-     *
-     *     uri = /User/notme/Desktop/Hello.txt
-     *     ⊢ title = Hello.txt [/User/notme/Desktop]
-     *
-     *     uri = /Volumes/NetworkDrive/Hello.txt
-     *     ⊢ title = Hello.txt [/Volumes/NetworkDrive]
-     * </pre>
-     *
-     * @param uri the uri
-     * @return the name
-     */
+    /// Returns the name of an URI for display in the title bar of a window.
+    ///
+    /// If the URI is a file URI, then displays the file name followed
+    /// by the path to the file. If the file is inside the user home
+    /// directory, only the relative path is shown.
+    ///
+    /// Examples:
+    /// <pre>
+    ///     uri = /User/me/Desktop/Hello.txt
+    ///     ⊢ title = Hello.txt [~/Desktop]
+    ///
+    ///     uri = /User/notme/Desktop/Hello.txt
+    ///     ⊢ title = Hello.txt [/User/notme/Desktop]
+    ///
+    ///     uri = /Volumes/NetworkDrive/Hello.txt
+    ///     ⊢ title = Hello.txt [/Volumes/NetworkDrive]
+    /// </pre>
+    ///
+    /// @param uri the uri
+    /// @return the name
     public static String getName(URI uri) {
         if (uri.getScheme() != null && "file".equals(uri.getScheme())) {
             Path file = Paths.get(clearQuery(uri));
@@ -71,16 +64,14 @@ public class UriUtil {
         return uri.toString();
     }
 
-    /**
-     * Adds a query. If a query is already present, adds it after a {@literal '&'}
-     * character. Both, the key, and the value may not include the characters
-     * {@literal '&'} and '='.
-     *
-     * @param uri   an uri
-     * @param key   the key
-     * @param value the value
-     * @return the updated query
-     */
+    /// Adds a query. If a query is already present, adds it after a {@literal '&'}
+    /// character. Both, the key, and the value may not include the characters
+    /// {@literal '&'} and '='.
+    ///
+    /// @param uri   an uri
+    /// @param key   the key
+    /// @param value the value
+    /// @return the updated query
     public static URI addQuery(URI uri, @Nullable String key, @Nullable String value) {
         if (key == null || value == null) {
             return uri;
@@ -95,14 +86,12 @@ public class UriUtil {
         return addQuery(uri, key + '=' + value);
     }
 
-    /**
-     * Adds a query. If a query is already present, adds it after a {@literal '&'}
-     * character. The query may not include the characters {@literal '&'} or {@literal '='}.
-     *
-     * @param uri   an uri
-     * @param query the query
-     * @return the updated query
-     */
+    /// Adds a query. If a query is already present, adds it after a {@literal '&'}
+    /// character. The query may not include the characters {@literal '&'} or {@literal '='}.
+    ///
+    /// @param uri   an uri
+    /// @param query the query
+    /// @return the updated query
     public static URI addQuery(URI uri, @Nullable String query) {
         if (query == null) {
             return uri;
@@ -117,14 +106,12 @@ public class UriUtil {
         return setQuery(uri, newQuery);
     }
 
-    /**
-     * Sets the query on the specified URI. If a query is already present, it is
-     * removed.
-     *
-     * @param uri   an uri
-     * @param query the query
-     * @return the update uri
-     */
+    /// Sets the query on the specified URI. If a query is already present, it is
+    /// removed.
+    ///
+    /// @param uri   an uri
+    /// @param query the query
+    /// @return the update uri
     public static URI setQuery(URI uri, String query) {
         URI u = uri;
         try {
@@ -144,13 +131,11 @@ public class UriUtil {
         return setQuery(uri, null);
     }
 
-    /**
-     * Parses the query of the URI. Assumes that the query consists of
-     * {@literal '&'}-separated, key '=' value pairs.
-     *
-     * @param uri an URI
-     * @return a map
-     */
+    /// Parses the query of the URI. Assumes that the query consists of
+    /// {@literal '&'}-separated, key '=' value pairs.
+    ///
+    /// @param uri an URI
+    /// @return a map
     public static Map<String, String> parseQuery(URI uri) {
         String query = uri.getQuery();
         SequencedMap<String, String> map = new LinkedHashMap<>();
@@ -197,13 +182,11 @@ public class UriUtil {
         return relativized;
     }
 
-    /**
-     * Absolutizes an URI.
-     *
-     * @param base the base URI
-     * @param uri  an URI that is relative to the base URI
-     * @return the absolutized URI
-     */
+    /// Absolutizes an URI.
+    ///
+    /// @param base the base URI
+    /// @param uri  an URI that is relative to the base URI
+    /// @return the absolutized URI
     public static URI absolutize(@Nullable URI base, URI uri) {
         if (base == null) {
             return uri;

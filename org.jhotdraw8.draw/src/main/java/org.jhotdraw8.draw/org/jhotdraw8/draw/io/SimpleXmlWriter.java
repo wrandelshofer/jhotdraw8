@@ -47,24 +47,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * SimpleXmlWriter.
- * <p>
- * Represents each Figure by an element, and each figure property by an
- * attribute.
- * <p>
- * All attribute values are treated as value types, except if an attribute type
- * is an instance of Figure.
- * <p>
- * This writer only works for drawings which can be described entirely by
- * the properties of its figures.
- * <p>
- * Attempts to preserve comments in the XML file, by associating
- * them to the figures and to the drawing.
- * <p>
- * Does not preserve whitespace in the XML file.
- *
- */
+/// SimpleXmlWriter.
+///
+/// Represents each Figure by an element, and each figure property by an
+/// attribute.
+///
+/// All attribute values are treated as value types, except if an attribute type
+/// is an instance of Figure.
+///
+/// This writer only works for drawings which can be described entirely by
+/// the properties of its figures.
+///
+/// Attempts to preserve comments in the XML file, by associating
+/// them to the figures and to the drawing.
+///
+/// Does not preserve whitespace in the XML file.
 public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     protected FigureFactory figureFactory;
     final protected IdFactory idFactory;
@@ -72,9 +69,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     protected String namespaceURI;
     private PersistentMap<Key<?>, Object> options = ChampMap.of();
 
-    /**
-     * Specifies the number of characters that should be used for indentation.
-     */
+    /// Specifies the number of characters that should be used for indentation.
     final public static SimpleNonNullKey<Integer> INDENT_AMOUNT = new SimpleNonNullKey<>("indent-amount", Integer.class, 2);
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {

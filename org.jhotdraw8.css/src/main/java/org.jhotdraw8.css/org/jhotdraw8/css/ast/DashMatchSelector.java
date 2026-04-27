@@ -12,28 +12,23 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * A "dash match selector" {@code |=} matches an element if the element has an
- * attribute with the specified name and its value is either exactly the
- * specified substring or its value begins with the specified substring
- * immediately followed by a dash '-' character. This is primarily intended to
- * allow language subcode matches.
- *
- */
+/// A "dash match selector" `|=` matches an element if the element has an
+/// attribute with the specified name and its value is either exactly the
+/// specified substring or its value begins with the specified substring
+/// immediately followed by a dash '-' character. This is primarily intended to
+/// allow language subcode matches.
 public class DashMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;
     private final String attributeName;
     private final String substring;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param sourceLocator    source locator for debugging
-     * @param namespacePattern an optional namespace ("*" means any namespace,
-     *                         null means no namespace)
-     * @param attributeName    the attribute name
-     * @param substring        the substring in the attribute value
-     */
+    /// Creates a new instance.
+    ///
+    /// @param sourceLocator    source locator for debugging
+    /// @param namespacePattern an optional namespace ("*" means any namespace,
+    ///                         null means no namespace)
+    /// @param attributeName    the attribute name
+    /// @param substring        the substring in the attribute value
     public DashMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, String attributeName, String substring) {
         super(sourceLocator);
         this.namespacePattern = namespacePattern;

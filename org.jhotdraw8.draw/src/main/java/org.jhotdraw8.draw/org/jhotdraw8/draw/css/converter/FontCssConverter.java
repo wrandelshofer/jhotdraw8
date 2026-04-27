@@ -20,22 +20,19 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * CssFontConverter.
- * <p>
- * Parses the following EBNF from the
- * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
- * CSS Reference Guide</a>.
- * </p>
- * <pre>
- * CssFont := [FontStyle] [FontWeight] FontSize FontFamily ;
- * FontStyle := normal|italic|oblique;
- * FontWeight := normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900;
- * FontSize := Size;
- * FontFamily := Word|Quoted;
- * </pre>
- *
- */
+/// CssFontConverter.
+///
+/// Parses the following EBNF from the
+/// <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
+/// CSS Reference Guide</a>.
+///
+/// <pre>
+/// CssFont := [FontStyle] [FontWeight] FontSize FontFamily ;
+/// FontStyle := normal|italic|oblique;
+/// FontWeight := normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900;
+/// FontSize := Size;
+/// FontFamily := Word|Quoted;
+/// </pre>
 public class FontCssConverter extends AbstractCssConverter<CssFont> {
 
 

@@ -25,33 +25,30 @@ import java.util.function.Consumer;
 
 import static java.lang.Math.tan;
 
-/**
- * CssTransformConverter.
- * <p>
- * Parses a transform given in the following EBNF:
- * <pre>
- * Transform     = ( Matrix | Translate | Scale | Rotate | SkewX | SkewY ) ;
- *
- * Matrix        = "matrix(" ,
- *                 [S] , a , C , b , C , c , C , d , C , e , C , f , [S],
- *                 ")" ;
- * Translate     = "translate(" , [S] , tx , [ C , ty ] , [S], ")" ;
- * Scale         = "scale(" , [S] , sx , [ C , sy ] , [S], ")" ;
- * Rotate        = "rotate(" , [S] , rotate-angle , [ C , cs, C , cy ] , [S], ")" ;
- * SkewX         = "skewX(" , [S] , skew-angle , [S], ")" ;
- * SkewY         = "skewY(" , [S] , skew-angle , [S], ")" ;
- *
- * C             = ( S , { S } | { S } , "," , { S } ) ;
- * S             = (* white space *) ;
- * </pre>
- * <p>
- * References:
- * <dl>
- *     <dt>SVG Tiny 1.2, The 'transform' attribute.</dt>
- *     <dd><a href="http://www.w3.org/TR/2008/REC-SVGTiny12-20081222/coords.html#TransformAttribute">w3.org</a></dd>
- * </dl>
- *
- */
+/// CssTransformConverter.
+///
+/// Parses a transform given in the following EBNF:
+/// <pre>
+/// Transform     = ( Matrix | Translate | Scale | Rotate | SkewX | SkewY ) ;
+///
+/// Matrix        = "matrix(" ,
+///                 [S] , a , C , b , C , c , C , d , C , e , C , f , [S],
+///                 ")" ;
+/// Translate     = "translate(" , [S] , tx , [C,ty] , [S], ")" ;
+/// Scale         = "scale(" , [S] , sx , [C,sy] , [S], ")" ;
+/// Rotate        = "rotate(" , [S] , rotate-angle , [C,cs,C,cy] , [S], ")" ;
+/// SkewX         = "skewX(" , [S] , skew-angle , [S], ")" ;
+/// SkewY         = "skewY(" , [S] , skew-angle , [S], ")" ;
+///
+/// C             = ( S , { S } | { S } , "," , { S } ) ;
+/// S             = (* white space *) ;
+/// </pre>
+///
+/// References:
+/// <dl>
+///     <dt>SVG Tiny 1.2, The 'transform' attribute.</dt>
+///     <dd><a href="http://www.w3.org/TR/2008/REC-SVGTiny12-20081222/coords.html#TransformAttribute">w3.org</a></dd>
+/// </dl>
 public class SvgTransformConverter extends AbstractCssConverter<Transform> {
 
     public SvgTransformConverter(boolean nullable) {

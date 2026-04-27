@@ -9,11 +9,9 @@ import org.jhotdraw8.geom.contour.PlinePath;
 import org.jhotdraw8.geom.contour.PlinePathBuilder;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Builds a contour path around a path.
- *
- * @param <T> the product type
- */
+/// Builds a contour path around a path.
+///
+/// @param <T> the product type
 public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
     private final double offset;
 

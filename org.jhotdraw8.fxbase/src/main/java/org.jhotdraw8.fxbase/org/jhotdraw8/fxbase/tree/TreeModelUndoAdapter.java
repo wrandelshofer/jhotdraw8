@@ -20,16 +20,14 @@ import javax.swing.undo.UndoableEdit;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * This adapter can be bound to a {@link javafx.scene.control.TextInputControl}
- * to support undo/redo with a {@link FXUndoManager}.
- * <p>
- * This text filter can be added to multiple tree models.
- * If you do this, make sure that you add the {@link FXUndoManager}
- * only once as a listener.
- *
- * @param <E> the element type of the tree
- */
+/// This adapter can be bound to a [javafx.scene.control.TextInputControl]
+/// to support undo/redo with a [FXUndoManager].
+///
+/// This text filter can be added to multiple tree models.
+/// If you do this, make sure that you add the [FXUndoManager]
+/// only once as a listener.
+///
+/// @param <E> the element type of the tree
 public class TreeModelUndoAdapter<E> {
     public static final String RESOURCE_BUNDLE_PROPERTY = "resourceBundle";
     private final CopyOnWriteArrayList<UndoableEditListener> listeners = new CopyOnWriteArrayList<>();

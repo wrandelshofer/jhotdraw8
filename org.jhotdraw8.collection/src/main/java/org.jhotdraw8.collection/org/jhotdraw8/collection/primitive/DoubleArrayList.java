@@ -22,40 +22,29 @@ import java.util.Spliterators;
 import java.util.function.DoublePredicate;
 import java.util.stream.DoubleStream;
 
-/**
- * A {@code double}-valued list backed by a primitive array.
- *
- */
+/// A `double`-valued list backed by a primitive array.
 public class DoubleArrayList extends AbstractList<Double> implements DoubleList {
     private static final double[] EMPTY = new double[0];
     private double[] items;
 
-    /**
-     * Holds the size of the list. Invariant: size >= 0.
-     */
+    /// Holds the size of the list. Invariant: size >= 0.
     private int size;
 
-    /**
-     * Creates a new empty instance with 0 initial capacity.
-     */
+    /// Creates a new empty instance with 0 initial capacity.
     public DoubleArrayList() {
         items = EMPTY;
     }
 
-    /**
-     * Creates a new empty instance with the specified initial capacity.
-     *
-     * @param initialCapacity the initial capacity
-     */
+    /// Creates a new empty instance with the specified initial capacity.
+    ///
+    /// @param initialCapacity the initial capacity
     public DoubleArrayList(int initialCapacity) {
         items = new double[initialCapacity];
     }
 
-    /**
-     * Creates a new instance from the specified collection
-     *
-     * @param collection a collection of integers
-     */
+    /// Creates a new instance from the specified collection
+    ///
+    /// @param collection a collection of integers
     public DoubleArrayList(Collection<Double> collection) {
         this.size = collection.size();
         this.items = new double[size];
@@ -73,34 +62,28 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         this.size = items.length;
     }
 
-    /**
-     * Creates a new instance with the specified items.
-     *
-     * @param items the items (the newly created instance references the
-     *              provided array)
-     * @return the new instance
-     */
+    /// Creates a new instance with the specified items.
+    ///
+    /// @param items the items (the newly created instance references the
+    ///              provided array)
+    /// @return the new instance
     public static DoubleArrayList of(double... items) {
         return new DoubleArrayList(items);
     }
 
-    /**
-     * Adds a new item to the end of the list.
-     *
-     * @param newItem the new item
-     */
+    /// Adds a new item to the end of the list.
+    ///
+    /// @param newItem the new item
     @Override
     public void addAsDouble(double newItem) {
         grow(size + 1);
         items[size++] = newItem;
     }
 
-    /**
-     * Inserts a new item at the specified index into this list.
-     *
-     * @param index   the index
-     * @param newItem the new item
-     */
+    /// Inserts a new item at the specified index into this list.
+    ///
+    /// @param index   the index
+    /// @param newItem the new item
     @Override
     public void addAsDouble(int index, double newItem) {
         Objects.checkIndex(index, size + 1);
@@ -109,11 +92,9 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         ++size;
     }
 
-    /**
-     * Adds all items of the specified list to this list.
-     *
-     * @param that another list
-     */
+    /// Adds all items of the specified list to this list.
+    ///
+    /// @param that another list
     public void addAllAsDouble(DoubleArrayList that) {
         if (that.isEmpty()) {
             return;
@@ -123,13 +104,11 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         this.size += that.size;
     }
 
-    /**
-     * Adds all items of this collection to the specified collection.
-     *
-     * @param <T> the type of the collection
-     * @param out the output collection
-     * @return out
-     */
+    /// Adds all items of this collection to the specified collection.
+    ///
+    /// @param <T> the type of the collection
+    /// @param out the output collection
+    /// @return out
     public <T extends Collection<Double>> T addAllInto(T out) {
         for (int i = 0, n = size; i < n; i++) {
             out.add(items[i]);
@@ -137,21 +116,17 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return out;
     }
 
-    /**
-     * Clears the list in O(1).
-     */
+    /// Clears the list in O(1).
     @Override
     public void clear() {
         // Performance: do not fill array with 0 values
         size = 0;
     }
 
-    /**
-     * Copies the contents of this list into the provided array.
-     *
-     * @param a      an array
-     * @param offset the offset into the array
-     */
+    /// Copies the contents of this list into the provided array.
+    ///
+    /// @param a      an array
+    /// @param offset the offset into the array
     public void copyInto(double[] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
@@ -180,12 +155,10 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return true;
     }
 
-    /**
-     * Gets the item at the specified index.
-     *
-     * @param index an index
-     * @return the item at the index
-     */
+    /// Gets the item at the specified index.
+    ///
+    /// @param index an index
+    /// @return the item at the index
     @Override
     public double getAsDouble(int index) {
         Objects.checkIndex(index, size);
@@ -214,14 +187,12 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return getAsDouble(0);
     }
 
-    /**
-     * Sets the size of this list. If the new size is greater than the current
-     * size, new {@code 0} items are added to the end of the list. If the new
-     * size is less than the current size, all items at indices greater or
-     * equal {@code newSize} are discarded.
-     *
-     * @param newSize the new size
-     */
+    /// Sets the size of this list. If the new size is greater than the current
+    /// size, new `0` items are added to the end of the list. If the new
+    /// size is less than the current size, all items at indices greater or
+    /// equal `newSize` are discarded.
+    ///
+    /// @param newSize the new size
     public void setSize(int newSize) {
         grow(newSize);
         if (newSize > size) {
@@ -275,11 +246,9 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return -1;
     }
 
-    /**
-     * Returns true if size==0.
-     *
-     * @return true if empty
-     */
+    /// Returns true if size==0.
+    ///
+    /// @return true if empty
     @Override
     public boolean isEmpty() {
         return size == 0;
@@ -294,12 +263,10 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return false;
     }
 
-    /**
-     * Removes the item at the specified index from this list.
-     *
-     * @param index an index
-     * @return the removed item
-     */
+    /// Removes the item at the specified index from this list.
+    ///
+    /// @param index an index
+    /// @return the removed item
     @Override
     public double removeAtAsDouble(int index) {
         Objects.checkIndex(index, size);
@@ -312,12 +279,10 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return removedItem;
     }
 
-    /**
-     * Removes the last item
-     *
-     * @return the removed item
-     * @throws NoSuchElementException if the list is empty
-     */
+    /// Removes the last item
+    ///
+    /// @return the removed item
+    /// @throws NoSuchElementException if the list is empty
     @Override
     public double removeLastAsDouble() {
         if (isEmpty()) {
@@ -326,13 +291,11 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return removeAtAsDouble(size - 1);
     }
 
-    /**
-     * Replaces the item at the specified index.
-     *
-     * @param index   an index
-     * @param newItem the new item
-     * @return the old item
-     */
+    /// Replaces the item at the specified index.
+    ///
+    /// @param index   an index
+    /// @param newItem the new item
+    /// @return the old item
     public double setAsDouble(int index, double newItem) {
         Objects.checkIndex(index, size);
         double removedItem = items[index];
@@ -340,13 +303,11 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return removedItem;
     }
 
-    /**
-     * Replaces the item at the specified index.
-     *
-     * @param index   an index
-     * @param newItem the new item
-     * @return the old item
-     */
+    /// Replaces the item at the specified index.
+    ///
+    /// @param index   an index
+    /// @param newItem the new item
+    /// @return the old item
     @Override
     public Double set(int index, Double newItem) {
         Objects.checkIndex(index, size);
@@ -355,28 +316,22 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return removedItem;
     }
 
-    /**
-     * Returns the size of the list.
-     *
-     * @return the size
-     */
+    /// Returns the size of the list.
+    ///
+    /// @return the size
     @Override
     public int size() {
         return size;
     }
 
-    /**
-     * Trims the capacity of the list its current size.
-     */
+    /// Trims the capacity of the list its current size.
     public void trimToSize() {
         items = ListHelper.trimToSize(size, 1, items);
     }
 
-    /**
-     * Returns an iterator for this list.
-     *
-     * @return an iterator over the elements of this list
-     */
+    /// Returns an iterator for this list.
+    ///
+    /// @return an iterator over the elements of this list
     @Override
     public PrimitiveIterator.OfDouble iterator() {
         return new PrimitiveIterator.OfDouble() {
@@ -399,30 +354,24 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         };
     }
 
-    /**
-     * Returns a spliterator for this list.
-     *
-     * @return a spliterator over the elements of this list
-     */
+    /// Returns a spliterator for this list.
+    ///
+    /// @return a spliterator over the elements of this list
     @Override
     public Spliterator.OfDouble spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
-    /**
-     * Returns a stream for processing the items of this list.
-     *
-     * @return a stream
-     */
+    /// Returns a stream for processing the items of this list.
+    ///
+    /// @return a stream
     public DoubleStream doubleStream() {
         return (size == 0) ? DoubleStream.empty() : Arrays.stream(items, 0, size);
     }
 
-    /**
-     * Returns a new array containing all the elements in this collection.
-     *
-     * @return array
-     */
+    /// Returns a new array containing all the elements in this collection.
+    ///
+    /// @return array
     public double[] toDoubleArray() {
         double[] result = new double[size];
         System.arraycopy(items, 0, result, 0, size);
@@ -462,21 +411,17 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return b.append(']').toString();
     }
 
-    /**
-     * Sorts the items in ascending order.
-     */
+    /// Sorts the items in ascending order.
     public void sort() {
         Arrays.sort(items, 0, size);
     }
 
-    /**
-     * Removes all the elements of this collection that satisfy the given
-     * predicate.
-     *
-     * @param filter a predicate which returns {@code true} for elements to be
-     *               removed
-     * @return {@code true} if any elements were removed
-     */
+    /// Removes all the elements of this collection that satisfy the given
+    /// predicate.
+    ///
+    /// @param filter a predicate which returns `true` for elements to be
+    ///               removed
+    /// @return `true` if any elements were removed
     public boolean removeIfAsDouble(DoublePredicate filter) {
         boolean hasRemoved = false;
         Objects.requireNonNull(filter, "filter");
@@ -489,15 +434,13 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return hasRemoved;
     }
 
-    /**
-     * Sorts this list according to the order induced by the specified
-     * {@link Comparator}. The sort is <i>stable</i>: it does not
-     * reorder equal elements.
-     *
-     * @param c the {@code Comparator} used to compare list elements.
-     *          A {@code null} value indicates that the elements'
-     *          {@linkplain Comparable natural ordering} should be used.
-     */
+    /// Sorts this list according to the order induced by the specified
+    /// [Comparator]. The sort is _stable_: it does not
+    /// reorder equal elements.
+    ///
+    /// @param c the `Comparator` used to compare list elements.
+    ///          A `null` value indicates that the elements'
+    ///          {@linkplain Comparable natural ordering} should be used.
     @Override
     public void sort(@Nullable Comparator<? super Double> c) {
         if (size > 1) {
@@ -525,11 +468,9 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         );
     }
 
-    /**
-     * Gets the array that is used internally by this list.
-     *
-     * @return the internal array
-     */
+    /// Gets the array that is used internally by this list.
+    ///
+    /// @return the internal array
     public double[] getArray() {
         return items;
     }

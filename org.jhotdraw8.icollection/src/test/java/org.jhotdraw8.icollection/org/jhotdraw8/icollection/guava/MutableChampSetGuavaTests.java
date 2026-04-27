@@ -20,10 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-/**
- * Tests {@link MutableChampSet} with the Guava test suite.
- */
-
+/// Tests [MutableChampSet] with the Guava test suite.
 public class MutableChampSetGuavaTests {
 
     public static Test suite() {

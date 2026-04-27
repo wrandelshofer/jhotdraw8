@@ -20,10 +20,7 @@ import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE;
 import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
 import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_WIDTH;
 
-/**
- * RectangleConnector.
- *
- */
+/// RectangleConnector.
 public class RectangleConnector extends LocatorConnector {
 
     public RectangleConnector() {

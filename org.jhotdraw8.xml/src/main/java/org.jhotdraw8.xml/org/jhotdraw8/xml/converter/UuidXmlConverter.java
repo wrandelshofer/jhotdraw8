@@ -14,17 +14,12 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.UUID;
 
-/**
- * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
- * versa.
- *
- */
+/// Converts a `javafx.geometry.Point2D` into a `String` and vice
+/// versa.
 public class UuidXmlConverter implements Converter<UUID> {
 
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public UuidXmlConverter() {
     }
 

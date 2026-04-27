@@ -11,32 +11,26 @@ import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 
 import java.util.function.ToDoubleFunction;
 
-/**
- * Provides algorithms for computing the inverse of a function.
- */
+/// Provides algorithms for computing the inverse of a function.
 public class Solvers {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private Solvers() {
     }
 
 
-    /**
-     * Returns a function y(x) that maps the parameter x [xmin,xmax] to the integral of fp.
-     * For a circle tmin and tmax would be 0 and 2PI respectively for example.
-     * It also returns the total length of the curve.
-     * <p>
-     * Implemented using M. Walter, A. Fournier,
-     * Approximate Arc Length Parametrization, Anais do IX SIBGRAPHI, p. 143--150, 1996, see
-     * <a href="https://www.visgraf.impa.br/sibgrapi96/trabs/pdf/a14.pdf">visgraf.impa.br</a>.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
-     *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
-     * </dl>
-     */
+    /// Returns a function y(x) that maps the parameter x [xmin,xmax] to the integral of fp.
+    /// For a circle tmin and tmax would be 0 and 2PI respectively for example.
+    /// It also returns the total length of the curve.
+    ///
+    /// Implemented using M. Walter, A. Fournier,
+    /// Approximate Arc Length Parametrization, Anais do IX SIBGRAPHI, p. 143--150, 1996, see
+    /// <a href="https://www.visgraf.impa.br/sibgrapi96/trabs/pdf/a14.pdf">visgraf.impa.br</a>.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
+    ///     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
+    /// </dl>
     public static OrderedPair<ToDoubleFunction<Double>, Double> polynomialApprox3(Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
                                                                                   ToDoubleFunction<Double> fp,
                                                                                            double xmin, double xmax) {
@@ -68,16 +62,14 @@ public class Solvers {
                 Math.abs(y3));//  total length
     }
 
-    /**
-     * invPolynomialApprox does the opposite of {@link #polynomialApprox3}, it returns a function x(y) that maps the
-     * parameter y [f(xmin),f(xmax)] to x [xmin,xmax].
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
-     *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
-     * </dl>
-     */
+    /// invPolynomialApprox does the opposite of [#polynomialApprox3], it returns a function x(y) that maps the
+    /// parameter y [f(xmin),f(xmax)] to x [xmin,xmax].
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
+    ///     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
+    /// </dl>
     public static OrderedPair<ToDoubleFunction<Double>, Double> invPolynomialApprox3(
             Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
             ToDoubleFunction<Double> fp,
@@ -112,22 +104,20 @@ public class Solvers {
                 f3);
     }
 
-    /**
-     * Find value x for which f(x) = y in the interval x in [xmin, xmax] using the bisection method.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
-     *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
-     * </dl>
-     *
-     * @param f         a function that grows monotonically
-     * @param y         the desired y value
-     * @param xmin      the start of the interval
-     * @param xmax      the end of the interval
-     * @param tolerance
-     * @return x the estimated x value
-     */
+    /// Find value x for which f(x) = y in the interval x in [xmin,xmax] using the bisection method.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
+    ///     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
+    /// </dl>
+    ///
+    /// @param f         a function that grows monotonically
+    /// @param y         the desired y value
+    /// @param xmin      the start of the interval
+    /// @param xmax      the end of the interval
+    /// @param tolerance
+    /// @return x the estimated x value
     public static double bisectionMethod(ToDoubleFunction<Double> f, double y, double xmin, double xmax, double tolerance) {
         final int maxIterations = 100;
 
@@ -154,32 +144,30 @@ public class Solvers {
         }
     }
 
-    /**
-     * Find value x for which ∫f(x) = y in the interval x in [xmin, xmax] using a hybrid of Newton's method
-     * and the bisection method.
-     * <p>
-     * We perform iterations using the Newton’s method until the error of the solution becomes acceptable,
-     * or the number of iterations performed becomes unacceptably large.
-     * <p>
-     * There is a potential problem when using only Newton’s method. If the function is said to be convex, the Newton
-     * iterations are guaranteed to converge to the root. However, if the function is non-convex, the Newton iterations
-     * may converge outside the domain x∈[xmin,xmax]. In such a case, we use the bisection method instead.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Movement along the curve with constant speed. Copyright (c) 2021 Alexey Karamyshev.</dt>
-     *     <dd><a href="https://medium.com/@ommand/movement-along-the-curve-with-constant-speed-4fa383941507">medium.com</a></dd>
-     * </dl>
-     *
-     * @param quadratureFunction the function for computing the integral of f
-     * @param f                  a function
-     * @param y                  the desired y value
-     * @param xmin               the start of the interval
-     * @param xmax               the end of the interval
-     * @param x0                 the initial approximation
-     * @param epsilon the tolerance
-     * @return x the estimated x value
-     */
+    /// Find value x for which ∫f(x) = y in the interval x in [xmin,xmax] using a hybrid of Newton's method
+    /// and the bisection method.
+    ///
+    /// We perform iterations using the Newton’s method until the error of the solution becomes acceptable,
+    /// or the number of iterations performed becomes unacceptably large.
+    ///
+    /// There is a potential problem when using only Newton’s method. If the function is said to be convex, the Newton
+    /// iterations are guaranteed to converge to the root. However, if the function is non-convex, the Newton iterations
+    /// may converge outside the domain x∈[xmin,xmax]. In such a case, we use the bisection method instead.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Movement along the curve with constant speed. Copyright (c) 2021 Alexey Karamyshev.</dt>
+    ///     <dd><a href="https://medium.com/@ommand/movement-along-the-curve-with-constant-speed-4fa383941507">medium.com</a></dd>
+    /// </dl>
+    ///
+    /// @param quadratureFunction the function for computing the integral of f
+    /// @param f                  a function
+    /// @param y                  the desired y value
+    /// @param xmin               the start of the interval
+    /// @param xmax               the end of the interval
+    /// @param x0                 the initial approximation
+    /// @param epsilon            the tolerance
+    /// @return x the estimated x value
     public static double hybridNewtonBisectionMethod(
             Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
             ToDoubleFunction<Double> f, double y, double xmin, double xmax, double x0, double epsilon) {
@@ -188,32 +176,30 @@ public class Solvers {
     }
 
 
-    /**
-     * Find value x for which f(x) = y in the interval x in [xmin, xmax] using a hybrid of Newton's method
-     * and the bisection method.
-     * <p>
-     * We perform iterations using the Newton’s method until the error of the solution becomes acceptable,
-     * or the number of iterations performed becomes unacceptably large.
-     * <p>
-     * There is a potential problem when using only Newton’s method. If the function is said to be convex, the Newton
-     * iterations are guaranteed to converge to the root. However, if the function is non-convex, the Newton iterations
-     * may converge outside the domain x∈[xmin,xmax]. In such a case, we use the bisection method instead.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Movement along the curve with constant speed. Copyright (c) 2021 Alexey Karamyshev.</dt>
-     *     <dd><a href="https://medium.com/@ommand/movement-along-the-curve-with-constant-speed-4fa383941507">medium.com</a></dd>
-     * </dl>
-     *
-     * @param f       a function
-     * @param df      the derivative of the function
-     * @param y       the desired y value
-     * @param xmin    the start of the interval
-     * @param xmax    the end of the interval
-     * @param x0      the initial approximation
-     * @param epsilon the tolerance
-     * @return x the estimated x value
-     */
+    /// Find value x for which f(x) = y in the interval x in [xmin,xmax] using a hybrid of Newton's method
+    /// and the bisection method.
+    ///
+    /// We perform iterations using the Newton’s method until the error of the solution becomes acceptable,
+    /// or the number of iterations performed becomes unacceptably large.
+    ///
+    /// There is a potential problem when using only Newton’s method. If the function is said to be convex, the Newton
+    /// iterations are guaranteed to converge to the root. However, if the function is non-convex, the Newton iterations
+    /// may converge outside the domain x∈[xmin,xmax]. In such a case, we use the bisection method instead.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Movement along the curve with constant speed. Copyright (c) 2021 Alexey Karamyshev.</dt>
+    ///     <dd><a href="https://medium.com/@ommand/movement-along-the-curve-with-constant-speed-4fa383941507">medium.com</a></dd>
+    /// </dl>
+    ///
+    /// @param f       a function
+    /// @param df      the derivative of the function
+    /// @param y       the desired y value
+    /// @param xmin    the start of the interval
+    /// @param xmax    the end of the interval
+    /// @param x0      the initial approximation
+    /// @param epsilon the tolerance
+    /// @return x the estimated x value
     public static double hybridNewtonBisectionMethod(
             ToDoubleFunction<Double> f,
             ToDoubleFunction<Double> df, double y, double xmin, double xmax, double x0, double epsilon) {
@@ -252,22 +238,20 @@ public class Solvers {
         return x;
     }
 
-    /**
-     * Creates a function that computes time t given an arc length s.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
-     *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
-     * </dl>
-     *
-     * @param N
-     * @param quadratureFunction
-     * @param fp
-     * @param tmin
-     * @param tmax
-     * @return
-     */
+    /// Creates a function that computes time t given an arc length s.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
+    ///     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
+    /// </dl>
+    ///
+    /// @param N
+    /// @param quadratureFunction
+    /// @param fp
+    /// @param tmin
+    /// @param tmax
+    /// @return
     public static SimpleOrderedPair<ToDoubleFunction<Double>, Double> invPolynomialChebyshevApprox(
             int N,
             Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
@@ -282,15 +266,13 @@ public class Solvers {
         return new SimpleOrderedPair<>(polynomialChebyshevApprox(N, t, 0.0, totalLength, tmin, tmax), totalLength);
     }
 
-    /**
-     * Creates an approximation of the provided function using a Chebyshev polynomial of degree N.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
-     *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
-     * </dl>
-     */
+    /// Creates an approximation of the provided function using a Chebyshev polynomial of degree N.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Canvas. Copyright (c) 2015 Taco de Wolff, MIT License.</dt>
+    ///     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
+    /// </dl>
     public static ToDoubleFunction<Double> polynomialChebyshevApprox(
             int N,
             ToDoubleFunction<Double> f,

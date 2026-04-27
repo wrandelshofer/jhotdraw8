@@ -14,27 +14,21 @@ import java.util.Spliterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-/**
- * A readable interface to a collection.
- * <p>
- * A collection represents a group of objects, known as its elements.
- *
- * @param <E> the element type
- */
+/// A readable interface to a collection.
+///
+/// A collection represents a group of objects, known as its elements.
+///
+/// @param <E> the element type
 public interface ReadableCollection<E> extends Iterable<E> {
 
-    /**
-     * Returns the size of the collection.
-     *
-     * @return the size
-     */
+    /// Returns the size of the collection.
+    ///
+    /// @return the size
     int size();
 
-    /**
-     * Returns true if the collection is empty.
-     *
-     * @return true if empty
-     */
+    /// Returns true if the collection is empty.
+    ///
+    /// @return true if empty
     default boolean isEmpty() {
         return size() == 0;
     }
@@ -43,13 +37,11 @@ public interface ReadableCollection<E> extends Iterable<E> {
         return toArray(new Object[size()]);
     }
 
-    /**
-     * Converts the collection to an array.
-     *
-     * @param <T> the element type
-     * @param a   a template array
-     * @return an array
-     */
+    /// Converts the collection to an array.
+    ///
+    /// @param <T> the element type
+    /// @param a   a template array
+    /// @return an array
     default <T> T[] toArray(T[] a) {
         // Estimate size of array; be prepared to see more or fewer elements
         int size = size();
@@ -71,38 +63,30 @@ public interface ReadableCollection<E> extends Iterable<E> {
         return r;
     }
 
-    /**
-     * Returns a stream.
-     *
-     * @return a stream
-     */
+    /// Returns a stream.
+    ///
+    /// @return a stream
     default Stream<E> stream() {
         return StreamSupport.stream(spliterator(), false);
     }
 
-    /**
-     * Returns {@code true} if this collection contains the specified object.
-     *
-     * @param o an object
-     * @return {@code true} if this collection contains the specified
-     * object
-     */
+    /// Returns `true` if this collection contains the specified object.
+    ///
+    /// @param o an object
+    /// @return `true` if this collection contains the specified
+    /// object
     boolean contains(Object o);
 
-    /**
-     * Returns an iterator over the elements in this collection.
-     *
-     * @return an iterator
-     */
+    /// Returns an iterator over the elements in this collection.
+    ///
+    /// @return an iterator
     @Override
     Iterator<E> iterator();
 
-    /**
-     * Returns true if this collection contains all elements of that collection.
-     *
-     * @param c another collection
-     * @return true if this collection contains all of c
-     */
+    /// Returns true if this collection contains all elements of that collection.
+    ///
+    /// @param c another collection
+    /// @return true if this collection contains all of c
     default boolean containsAll(Iterable<?> c) {
         for (Object e : c) {
             if (!contains(e)) {
@@ -112,27 +96,23 @@ public interface ReadableCollection<E> extends Iterable<E> {
         return true;
     }
 
-    /**
-     * Wraps this collection in the Collection interface - without copying.
-     *
-     * @return the wrapped collection
-     */
+    /// Wraps this collection in the Collection interface - without copying.
+    ///
+    /// @return the wrapped collection
     default Collection<E> asCollection() {
         return new CollectionFacade<>(this);
     }
 
-    /**
-     * Returns a string representation of the provided iterable.  The string
-     * representation consists of a list of the iterable's elements in the
-     * order they are returned, enclosed in square brackets
-     * ({@code "[]"}).  Adjacent elements are separated by the characters
-     * {@code ", "} (comma and space).  Elements are converted to strings as
-     * by {@link String#valueOf(Object)}.
-     *
-     * @param c   an iterable
-     * @param <E> the element type
-     * @return a string representation of the iterable
-     */
+    /// Returns a string representation of the provided iterable.  The string
+    /// representation consists of a list of the iterable's elements in the
+    /// order they are returned, enclosed in square brackets
+    /// (`"[]"`).  Adjacent elements are separated by the characters
+    /// `", "` (comma and space).  Elements are converted to strings as
+    /// by [String#valueOf(Object)].
+    ///
+    /// @param c   an iterable
+    /// @param <E> the element type
+    /// @return a string representation of the iterable
     static <E> String iterableToString(final Iterable<E> c) {
         Iterator<E> it = c.iterator();
         if (!it.hasNext()) {
@@ -152,14 +132,12 @@ public interface ReadableCollection<E> extends Iterable<E> {
     }
 
 
-    /**
-     * Returns the Spliterator characteristics of this collection.
-     * <p>
-     * The default implementation in this interface
-     * returns {@link Spliterator#SIZED}.
-     *
-     * @return the characteristics
-     */
+    /// Returns the Spliterator characteristics of this collection.
+    ///
+    /// The default implementation in this interface
+    /// returns [Spliterator#SIZED].
+    ///
+    /// @return the characteristics
     default int characteristics() {
         return Spliterator.SIZED;
     }

@@ -15,10 +15,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * Converts a {@code Boolean} into the CSS String representation.
- *
- */
+/// Converts a `Boolean` into the CSS String representation.
 public class BooleanCssConverter extends AbstractCssConverter<Boolean> {
 
 

@@ -25,11 +25,8 @@ import org.jspecify.annotations.Nullable;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_X;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
 
-/**
- * Draws the {@code boundsInLocal} with applied translation of a {@code Figure},
- * but does not provide any interactions.
- *
- */
+/// Draws the `boundsInLocal` with applied translation of a `Figure`,
+/// but does not provide any interactions.
 public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     private final Group node;
     private final Polygon poly1;

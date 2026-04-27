@@ -25,59 +25,54 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/**
- * Searches a globally unique vertex path from a set of start vertices to a
- * set of goal vertices using a breadth-first search algorithm on a directed
- * (potentially cyclic) graph (DIG).
- * <p>
- * Uniqueness is global up to (inclusive) the specified maximal depth.
- * <p>
- * This algorithm <b>ignores</b> cost limit. If you need it, use one of
- * the shortest path search algorithms.
- * <p>
- * Performance characteristics:
- * <dl>
- *     <dt>When the algorithm returns a back link</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
- *     <dt>When the algorithm returns null</dt><dd>less or equal O( |A| + |V| ) within max depth</dd>
- * </dl>
- * <p>
- * References:
- * <dl>
- *     <dt>Robert Sedgewick, Kevin Wayne. (2011)</dt>
- *     <dd>Algorithms, 4th Edition. Chapter 4. Breadth-First Search.
- *          <a href="https://algs4.cs.princeton.edu/home/">algs4.cs.princeton.edu</a></dd>
- *
- *     <dt>Sampath Kannan, Sanjeef Khanna, Sudeepa Roy. (2008)</dt>
- *     <dd>STCON in Directed Unique-Path Graphs.
- *          Chapter 2.1 Properties of Unique-Path Graphs.
- *          <a href="https://www.cis.upenn.edu/~sanjeev/papers/fsttcs08_stcon.pdf">cis.upenn.edu</a></dd>
- * </dl>
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- * @param <C> the cost number type
- */
+/// Searches a globally unique vertex path from a set of start vertices to a
+/// set of goal vertices using a breadth-first search algorithm on a directed
+/// (potentially cyclic) graph (DIG).
+///
+/// Uniqueness is global up to (inclusive) the specified maximal depth.
+///
+/// This algorithm **ignores** cost limit. If you need it, use one of
+/// the shortest path search algorithms.
+///
+/// Performance characteristics:
+/// <dl>
+///     <dt>When the algorithm returns a back link</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
+///     <dt>When the algorithm returns null</dt><dd>less or equal O( |A| + |V| ) within max depth</dd>
+/// </dl>
+///
+/// References:
+/// <dl>
+///     <dt>Robert Sedgewick, Kevin Wayne. (2011)</dt>
+///     <dd>Algorithms, 4th Edition. Chapter 4. Breadth-First Search.
+///          <a href="https://algs4.cs.princeton.edu/home/">algs4.cs.princeton.edu</a></dd>
+///     <dt>Sampath Kannan, Sanjeef Khanna, Sudeepa Roy. (2008)</dt>
+///     <dd>STCON in Directed Unique-Path Graphs.
+///          Chapter 2.1 Properties of Unique-Path Graphs.
+///          <a href="https://www.cis.upenn.edu/~sanjeev/papers/fsttcs08_stcon.pdf">cis.upenn.edu</a></dd>
+/// </dl>
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
+/// @param <C> the cost number type
 public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
     private enum SearchResultType {SUCCESS_UNIQUE_PATH, FAILURE_NO_PATH, FAILURE_NOT_UNIQUE}
 
     public UniqueArcPathSearchAlgo() {
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param startVertices    the set of start vertices
-     * @param goalPredicate    the goal predicate
-     * @param nextArcsFunction the next arcs function
-     * @param maxDepth         the maximal depth (inclusive) of the search
-     *                         Must be {@literal >= 0}.
-     * @param zero             the zero cost value
-     * @param costLimit        the cost limit is <b>ignored</b>
-     * @param costFunction     the cost function
-     * @param sumFunction      the sum function for adding two cost values
-     * @param visited
-     * @return
-     */
+    /// {@inheritDoc}
+    ///
+    /// @param startVertices    the set of start vertices
+    /// @param goalPredicate    the goal predicate
+    /// @param nextArcsFunction the next arcs function
+    /// @param maxDepth         the maximal depth (inclusive) of the search
+    ///                         Must be {@literal >= 0}.
+    /// @param zero             the zero cost value
+    /// @param costLimit        the cost limit is **ignored**
+    /// @param costFunction     the cost function
+    /// @param sumFunction      the sum function for adding two cost values
+    /// @param visited
+    /// @return
     @Override
     public @Nullable ArcBackLinkWithCost<V, A, C> search(
             Iterable<V> startVertices,
@@ -95,16 +90,14 @@ public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> imp
     }
 
 
-    /**
-     * Search engine method.
-     *
-     * @param startVertices    the set of start vertices
-     * @param goalPredicate    the goal predicate
-     * @param nextArcsFunction the next arcs function
-     * @param maxDepth         the maximal depth (inclusive) of the search
-     *                         Must be {@literal >= 0}.
-     * @return on success: a back link, otherwise: null
-     */
+    /// Search engine method.
+    ///
+    /// @param startVertices    the set of start vertices
+    /// @param goalPredicate    the goal predicate
+    /// @param nextArcsFunction the next arcs function
+    /// @param maxDepth         the maximal depth (inclusive) of the search
+    ///                         Must be {@literal >= 0}.
+    /// @return on success: a back link, otherwise: null
     public @Nullable ArcBackLinkWithAncestorSet<V, A> search(
             final Iterable<V> startVertices,
             final Predicate<V> goalPredicate,
@@ -132,16 +125,14 @@ public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> imp
         return result;
     }
 
-    /**
-     * Search engine method with a single start vertex.
-     * <p>
-     * This algorithm does not work with start sets with
-     * multiple vertices because the used visited set
-     * cannot distinguish from where a vertex is visited
-     * and whether it is visited on a path or a walk
-     * (the latter is ignored when determining whether
-     * the result is unique).
-     */
+    /// Search engine method with a single start vertex.
+    ///
+    /// This algorithm does not work with start sets with
+    /// multiple vertices because the used visited set
+    /// cannot distinguish from where a vertex is visited
+    /// and whether it is visited on a path or a walk
+    /// (the latter is ignored when determining whether
+    /// the result is unique).
     private SimpleOrderedPair<SearchResultType, @Nullable ArcBackLinkWithAncestorSet<V, A>>
     searchSingleStartVertex(
             final V startVertex,

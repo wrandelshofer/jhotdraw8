@@ -13,13 +13,11 @@ import org.jspecify.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 
-/**
- * This property is weakly bound to a property of a figure in the DrawingModel.
- * <p>
- * If the key is not declared by the figure, then the value will always be null.
- *
- * @param <T> the value type of the property
- */
+/// This property is weakly bound to a property of a figure in the DrawingModel.
+///
+/// If the key is not declared by the figure, then the value will always be null.
+///
+/// @param <T> the value type of the property
 public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 
     private final DrawingModel model;
@@ -93,9 +91,7 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
         model.removeDrawingModelListener(weakListener);
     }
 
-    /**
-     * This implementation is empty.
-     */
+    /// This implementation is empty.
     protected void updateValue() {
     }
 }

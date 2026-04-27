@@ -12,10 +12,7 @@ import org.jhotdraw8.geom.BoundsCalculator;
 import static java.lang.Double.max;
 import static java.lang.Math.min;
 
-/**
- * Figures.
- *
- */
+/// Figures.
 public class Figures {
 
     private Figures() {

@@ -17,11 +17,9 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Provides a {@link ReadableCollection} facade to a set of {@code Collection} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [ReadableCollection] facade to a set of `Collection` functions.
+///
+/// @param <E> the element type
 public class ReadableCollectionFacade<E> extends AbstractReadableCollection<E> {
 
     protected final Supplier<Iterator<E>> iteratorFunction;

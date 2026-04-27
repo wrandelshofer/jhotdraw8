@@ -16,9 +16,7 @@ import javafx.scene.layout.VBox;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jspecify.annotations.Nullable;
 
-/**
- * This track stacks its children on the Z-axis into a tab pane.
- */
+/// This track stacks its children on the Z-axis into a tab pane.
 public class TabPaneTrack extends AbstractDockParent implements Track {
 
     private final TabPane tabPane = new TabPane();

@@ -10,10 +10,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * SimpleIdFactory.
- *
- */
+/// SimpleIdFactory.
 public class SimpleIdFactory implements IdFactory {
     private final Map<String, Long> prefixToNextId = new HashMap<>(128, 0.4f);
     private final Map<String, Object> idToObject = new HashMap<>(128, 0.4f);

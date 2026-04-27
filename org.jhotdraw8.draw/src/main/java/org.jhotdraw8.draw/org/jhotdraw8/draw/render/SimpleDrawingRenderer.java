@@ -17,10 +17,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-/**
- * SimpleDrawingRenderer.
- *
- */
+/// SimpleDrawingRenderer.
 public class SimpleDrawingRenderer extends AbstractPropertyBean implements RenderContext {
 
     // ---
@@ -45,23 +42,19 @@ public class SimpleDrawingRenderer extends AbstractPropertyBean implements Rende
         return n;
     }
 
-    /**
-     * Renders the provided figure into a JavaFX Node.
-     *
-     * @param figure The figure
-     * @return the rendered node
-     */
+    /// Renders the provided figure into a JavaFX Node.
+    ///
+    /// @param figure The figure
+    /// @return the rendered node
     public Node render(Figure figure) {
         figureToNodeMap.clear();
         renderRecursive(figure);
         return getNode(figure);
     }
 
-    /**
-     * Recursive part of the render method.
-     *
-     * @param figure The figure
-     */
+    /// Recursive part of the render method.
+    ///
+    /// @param figure The figure
     private void renderRecursive(Figure figure) {
         figure.updateNode(this, getNode(figure));
         for (Figure child : figure.getChildren()) {

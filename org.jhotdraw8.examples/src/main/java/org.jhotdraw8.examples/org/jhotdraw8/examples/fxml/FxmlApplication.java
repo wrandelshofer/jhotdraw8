@@ -21,10 +21,8 @@ import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
-/**
- * An application that adds a {@link Parent} created from an FXML file
- * to its primary {@link Stage}.
- */
+/// An application that adds a [Parent] created from an FXML file
+/// to its primary [Stage].
 public abstract class FxmlApplication extends Application {
     private static final String FXML_PROPERTY_NAME = "fxml";
 

@@ -10,34 +10,24 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-/**
- * This class provides collections that can be used in JMH benchmarks.
- */
+/// This class provides collections that can be used in JMH benchmarks.
 @SuppressWarnings("JmhInspections")
 public class BenchmarkData {
-    /**
-     * List 'a'.
-     * <p>
-     * The elements have been shuffled, so that they
-     * are not in contiguous memory addresses.
-     */
+    /// List 'a'.
+    ///
+    /// The elements have been shuffled, so that they
+    /// are not in contiguous memory addresses.
     public final List<Key> listA;
     private final List<Integer> indicesA;
-    /**
-     * Set 'a'.
-     */
+    /// Set 'a'.
     public final Set<Key> setA;
     public final Set<Key> setB;
-    /**
-     * Map 'a'.
-     */
+    /// Map 'a'.
     public final Map<Key, Boolean> mapA;
-    /**
-     * List 'b'.
-     * <p>
-     * The elements have been shuffled, so that they
-     * are not in contiguous memory addresses.
-     */
+    /// List 'b'.
+    ///
+    /// The elements have been shuffled, so that they
+    /// are not in contiguous memory addresses.
     public final List<Key> listB;
 
 

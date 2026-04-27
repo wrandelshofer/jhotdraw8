@@ -41,10 +41,7 @@ import java.util.Map;
 import static java.lang.Math.abs;
 import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 
-/**
- * PrinterExportFormat.
- *
- */
+/// PrinterExportFormat.
 public class PrinterExportFormat extends AbstractExportOutputFormat {
 
     private static final double INCH_2_MM = 25.4;
@@ -76,14 +73,12 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return Paper.A4;
     }
 
-    /**
-     * Prints a slice of a drawing.
-     *
-     * @param pageSize       the page size
-     * @param worldToLocal   The worldToLocal transform of the viewport (in case the viewport is rotated)
-     * @param viewportBounds the bounds of the viewport that we want to print
-     * @param node           the rendered node of the slice
-     */
+    /// Prints a slice of a drawing.
+    ///
+    /// @param pageSize       the page size
+    /// @param worldToLocal   The worldToLocal transform of the viewport (in case the viewport is rotated)
+    /// @param viewportBounds the bounds of the viewport that we want to print
+    /// @param node           the rendered node of the slice
     private void printSlice(CssDimension2D pageSize, @Nullable Transform worldToLocal, Bounds viewportBounds, Node node) {
         Paper paper = findPaper(pageSize);
         Dimension2D pgSize = pageSize.getConvertedValue();

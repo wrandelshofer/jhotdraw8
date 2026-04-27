@@ -24,34 +24,32 @@ import java.util.function.Predicate;
 import static java.util.function.Function.identity;
 import static org.jhotdraw8.icollection.impl.vector.ArrayType.obj;
 
-/**
- * A `bit-mapped trie` is a very wide and shallow tree (for integer indices the depth will be `≤6`).
- * <p>
- * Each node has a maximum of `32` children (configurable).
- * <p>
- * Access to a given position is done by converting the index to a base 32 number and using each digit to descend down
- * the tree.
- * <p>
- * Modifying the tree is done similarly, but along the way the path is copied, returning a new root every time.
- * <p>
- * `Append` inserts in the last leaf, or if the tree is full from the right, it adds another layer on top of it
- * (the old root will be the first of the new one).
- * <p>
- * `Prepend` is done similarly, but an offset is needed, because adding a new top node (where the current root would be
- * the last node of the new root) shifts the indices by half of the current tree's full size. The `offset` shifts them
- * back to the correct index.
- * <p>
- * `Slice` is done by trimming the path from the root and discarding any `leading`/`trailing` values in effectively
- * constant time (without memory leak, as in `Java`/`Clojure`).
- * <p>
- * References:
- * <p>
- * This class has been derived from 'vavr' BitMappedTrie.java.
- * <dl>
- *     <dt>Vector.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
- *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/BitMappedTrie.java">github.com</a></dd>
- * </dl>
- */
+/// A `bit-mapped trie` is a very wide and shallow tree (for integer indices the depth will be `≤6`).
+///
+/// Each node has a maximum of `32` children (configurable).
+///
+/// Access to a given position is done by converting the index to a base 32 number and using each digit to descend down
+/// the tree.
+///
+/// Modifying the tree is done similarly, but along the way the path is copied, returning a new root every time.
+///
+/// `Append` inserts in the last leaf, or if the tree is full from the right, it adds another layer on top of it
+/// (the old root will be the first of the new one).
+///
+/// `Prepend` is done similarly, but an offset is needed, because adding a new top node (where the current root would be
+/// the last node of the new root) shifts the indices by half of the current tree's full size. The `offset` shifts them
+/// back to the correct index.
+///
+/// `Slice` is done by trimming the path from the root and discarding any `leading`/`trailing` values in effectively
+/// constant time (without memory leak, as in `Java`/`Clojure`).
+///
+/// References:
+///
+/// This class has been derived from 'vavr' BitMappedTrie.java.
+/// <dl>
+///     <dt>Vector.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
+///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/BitMappedTrie.java">github.com</a></dd>
+/// </dl>
 public class BitMappedTrie<T> {
 
     static final int BRANCHING_BASE = 5;
@@ -372,11 +370,9 @@ public class BitMappedTrie<T> {
         return type.getAt(leaf, leafIndex);
     }
 
-    /**
-     * fetch the leaf, corresponding to the given index.
-     * Node: the offset and length should be taken into consideration as there may be leading and trailing garbage.
-     * Also, the returned array is mutable, but should not be mutated!
-     */
+    /// fetch the leaf, corresponding to the given index.
+    /// Node: the offset and length should be taken into consideration as there may be leading and trailing garbage.
+    /// Also, the returned array is mutable, but should not be mutated!
     @SuppressWarnings("WeakerAccess")
     @Nullable Object getLeaf(int index) {
         if (depthShift == 0) {

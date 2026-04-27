@@ -13,17 +13,15 @@ public class IntersectCubicCurvePolygon {
     private IntersectCubicCurvePolygon() {
     }
 
-    /**
-     * Computes the intersection between cubic bezier curve 'p' and the given
-     * closed polygon.
-     *
-     * @param p0     control point P0 of 'p'
-     * @param p1     control point P1 of 'p'
-     * @param p2     control point P2 of 'p'
-     * @param p3     control point P3 of 'p'
-     * @param points the points of the polygon
-     * @return the computed intersection
-     */
+    /// Computes the intersection between cubic bezier curve 'p' and the given
+    /// closed polygon.
+    ///
+    /// @param p0     control point P0 of 'p'
+    /// @param p1     control point P1 of 'p'
+    /// @param p2     control point P2 of 'p'
+    /// @param p3     control point P3 of 'p'
+    /// @param points the points of the polygon
+    /// @return the computed intersection
     public static IntersectionResult intersectCubicCurvePolygon(Point2D p0, Point2D p1, Point2D p2, Point2D p3, List<Point2D.Double> points) {
         List<IntersectionPoint> result = new ArrayList<>();
         int length = points.size();

@@ -19,9 +19,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Set;
 
-/**
- * Tests {@link java.util.TreeSet} with the Guava test suite.
- */
+/// Tests [java.util.TreeSet] with the Guava test suite.
 public class JavaTreeSetGuavaTests {
 
     public static Test suite() {

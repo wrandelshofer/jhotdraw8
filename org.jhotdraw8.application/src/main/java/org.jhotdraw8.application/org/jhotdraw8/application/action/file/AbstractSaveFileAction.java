@@ -35,11 +35,8 @@ import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Saves the changes in the active view. If the active view has not an URI, an
- * {@code URIChooser} is presented.
- *
- */
+/// Saves the changes in the active view. If the active view has not an URI, an
+/// `URIChooser` is presented.
 public abstract class AbstractSaveFileAction extends AbstractActivityAction<FileBasedActivity> {
 
     private final boolean saveAs;
@@ -48,25 +45,21 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
     public static final Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new SimpleNullableKey<>("saveChooserFactory",
             new SimpleParameterizedType(Supplier.class, URIChooser.class));
 
-    /**
-     * Creates a new instance.
-     *
-     * @param activity the view
-     * @param id       the id
-     * @param saveAs   whether to force a file dialog
-     */
+    /// Creates a new instance.
+    ///
+    /// @param activity the view
+    /// @param id       the id
+    /// @param saveAs   whether to force a file dialog
     public AbstractSaveFileAction(FileBasedActivity activity, String id, boolean saveAs) {
         this(activity, id, saveAs, activity.getApplication().getResources());
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param activity  the view
-     * @param id        the id
-     * @param saveAs    whether to force a file dialog
-     * @param resources the resources are used for setting labels and icons for the action
-     */
+    /// Creates a new instance.
+    ///
+    /// @param activity  the view
+    /// @param id        the id
+    /// @param saveAs    whether to force a file dialog
+    /// @param resources the resources are used for setting labels and icons for the action
     public AbstractSaveFileAction(FileBasedActivity activity, String id, boolean saveAs, Resources resources) {
         super(activity);
         this.saveAs = saveAs;

@@ -8,11 +8,11 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.application.resources.Resources;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.Constrainer;
-import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
@@ -23,23 +23,16 @@ import java.util.function.Supplier;
 
 import static java.lang.Math.abs;
 
-/**
- * CreationTool.
- *
- */
+/// CreationTool.
 public class CreationTool extends AbstractCreationTool<Figure> {
 
 
     private double defaultWidth = 100;
     private double defaultHeight = 100;
-    /**
-     * The rubber band.
-     */
+    /// The rubber band.
     protected double x1, y1, x2, y2;
 
-    /**
-     * The minimum size of a created figure (in view coordinates.
-     */
+    /// The minimum size of a created figure (in view coordinates.
     private final double minSize = 2;
 
     public CreationTool(String name, Resources rsrc, Supplier<Figure> factory) {
@@ -175,9 +168,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     }
 
 
-    /**
-     * This implementation is empty.
-     */
+    /// This implementation is empty.
     @Override
     public void activate(DrawingEditor editor) {
         requestFocus();

@@ -9,14 +9,12 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-/**
- * Converts a XML integer from/to String.
- * <p>
- * Reference:
- * <a href="https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#integer">W3C: XML
- * Schema Part 2: Datatypes Second Edition: 3.2.13 integer</a>
- * </p>
- */
+/// Converts a XML integer from/to String.
+///
+/// Reference:
+/// <a href="https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#integer">W3C: XML
+/// Schema Part 2: Datatypes Second Edition: 3.2.13 integer</a>
+///
 public class IntegerXmlConverter implements Converter<Integer> {
 
 

@@ -9,10 +9,7 @@ import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
-/**
- * NonNullBooleanStyleableKey (not nullable).
- *
- */
+/// NonNullBooleanStyleableKey (not nullable).
 public class NonNullBooleanStyleableKey extends NonNullObjectStyleableKey<Boolean>
         implements WritableStyleableMapAccessor<Boolean>,
         NonNullKey<Boolean> {

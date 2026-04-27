@@ -7,9 +7,7 @@ package org.jhotdraw8.geom;
 
 import java.awt.geom.PathIterator;
 
-/**
- * An immutable empty path iterator.
- */
+/// An immutable empty path iterator.
 public class EmptyPathIterator implements PathIterator {
     public EmptyPathIterator() {
     }

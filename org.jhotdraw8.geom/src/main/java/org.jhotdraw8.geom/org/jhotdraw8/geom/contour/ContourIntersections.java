@@ -42,28 +42,22 @@ import static org.jhotdraw8.geom.contour.PlineVertex.splitAtPoint;
 import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
 import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
 
-/**
- * ContourIntersections.
- * <p>
- * References:
- * <p>
- * This code has been derived from CavalierContours.
- * <dl>
- *     <dt>CavalierContours. Copyright (c) 2019 Jedidiah Buck McCready.
- *    <a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
- *     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
- * </dl>
- */
+/// ContourIntersections.
+///
+/// References:
+///
+/// This code has been derived from CavalierContours.
+/// <dl>
+///     <dt>CavalierContours. Copyright (c) 2019 Jedidiah Buck McCready.
+///    <a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
+///     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
+/// </dl>
 public class ContourIntersections {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private ContourIntersections() {
     }
 
-    /**
-     * Find intersect between two circles in 2D.
-     */
+    /// Find intersect between two circles in 2D.
     public static IntersectionResult intrCircle2Circle2(double radius1, final Point2D.Double center1,
                                                         double radius2, final Point2D.Double center2) {
         return IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Scalars.REAL_THRESHOLD);
@@ -78,18 +72,16 @@ public class ContourIntersections {
     }
 
 
-    /**
-     * Gets the intersect between a segment and a circle, returning the
-     * parametric solution t to the segment equation
-     * P(t) = v1 + t * (v2 - v1) for t = 0 to t = 1,
-     * if {@literal t < 0} or {@literal t > 1} then intersect
-     * occurs only when extending the segment out past the points given (if
-     * {@literal t < 0} intersect nearest v1,
-     * if {@literal t > 0} then intersect nearest v2),
-     * intersects are "sticky" and "snap" to tangent points, e.g. a
-     * segment very close to being a tangent will be returned as a single
-     * intersect point.
-     */
+    /// Gets the intersect between a segment and a circle, returning the
+    /// parametric solution t to the segment equation
+    /// P(t) = v1 + t * (v2 - v1) for t = 0 to t = 1,
+    /// if {@literal t < 0} or {@literal t > 1} then intersect
+    /// occurs only when extending the segment out past the points given (if
+    /// {@literal t < 0} intersect nearest v1,
+    /// if {@literal t > 0} then intersect nearest v2),
+    /// intersects are "sticky" and "snap" to tangent points, e.g. a
+    /// segment very close to being a tangent will be returned as a single
+    /// intersect point.
     public static IntersectionResult intrLineSeg2Circle2(final Point2D.Double p0,
                                                          final Point2D.Double p1, double radius,
                                                          final Point2D.Double circleCenter) {
@@ -229,11 +221,9 @@ public class ContourIntersections {
         return result;
     }
 
-    /**
-     * Finds all local self intersects of the polyline, local self intersects are defined as between
-     * two polyline segments that share a vertex. NOTES:
-     * - Singularities (repeating vertexes) are returned as coincident intersects
-     */
+    /// Finds all local self intersects of the polyline, local self intersects are defined as between
+    /// two polyline segments that share a vertex. NOTES:
+    /// - Singularities (repeating vertexes) are returned as coincident intersects
     public static void localSelfIntersects(final PlinePath pline, final List<PlineIntersect> output) {
         if (pline.size() < 2) {
             return;
@@ -302,15 +292,13 @@ public class ContourIntersections {
         }
     }
 
-    /**
-     * /// Finds all global self intersects of the polyline, global self intersects are defined as all
-     * /// intersects between polyline segments that DO NOT share a vertex (use the localSelfIntersects
-     * /// function to find those). A spatial index is used to minimize the intersect comparisons required,
-     * /// the spatial index should hold bounding boxes for all of the polyline's segments.
-     * /// NOTES:
-     * /// - We never include intersects at a segment's start point, the matching intersect from the
-     * /// previous segment's end point is included (no sense in including both)
-     */
+    /// /// Finds all global self intersects of the polyline, global self intersects are defined as all
+    /// /// intersects between polyline segments that DO NOT share a vertex (use the localSelfIntersects
+    /// /// function to find those). A spatial index is used to minimize the intersect comparisons required,
+    /// /// the spatial index should hold bounding boxes for all of the polyline's segments.
+    /// /// NOTES:
+    /// /// - We never include intersects at a segment's start point, the matching intersect from the
+    /// /// previous segment's end point is included (no sense in including both)
     static void globalSelfIntersects(final PlinePath pline, final List<PlineIntersect> output,
                                      final StaticSpatialIndex spatialIndex) {
         if (pline.size() < 3) {
@@ -392,9 +380,7 @@ public class ContourIntersections {
         globalSelfIntersects(pline, output, spatialIndex);
     }
 
-    /**
-     * Finds all intersects between pline1 and pline2.
-     */
+    /// Finds all intersects between pline1 and pline2.
     static void findIntersects(final PlinePath pline1, final PlinePath pline2,
                                final StaticSpatialIndex pline1SpatialIndex,
                                final PlineIntersectsResult output) {

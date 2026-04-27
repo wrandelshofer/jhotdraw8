@@ -21,30 +21,26 @@ public class DisjointSetsAlgo {
     public DisjointSetsAlgo() {
     }
 
-    /**
-     * Given a directed graph, returns all disjoint sets of vertices.
-     * <p>
-     * Uses Kruskal's algorithm.
-     *
-     * @param <V>   the vertex data type
-     * @param <A>   the arrow data type
-     * @param graph a directed graph
-     * @return the disjoint sets.
-     */
+    /// Given a directed graph, returns all disjoint sets of vertices.
+    ///
+    /// Uses Kruskal's algorithm.
+    ///
+    /// @param <V>   the vertex data type
+    /// @param <A>   the arrow data type
+    /// @param graph a directed graph
+    /// @return the disjoint sets.
     public <V, A> List<Set<V>> findDisjointSets(DirectedGraph<V, A> graph) {
         return findDisjointSets(graph.getVertices(), graph::getNextVertices);
     }
 
-    /**
-     * Given a directed graph, returns all disjoint sets of vertices.
-     * <p>
-     * Uses Kruskal's algorithm.
-     *
-     * @param <V>             the vertex data type
-     * @param vertices        the vertices of the directed graph
-     * @param getNextVertices a function that returns the next vertices given a vertex
-     * @return the disjoint sets.
-     */
+    /// Given a directed graph, returns all disjoint sets of vertices.
+    ///
+    /// Uses Kruskal's algorithm.
+    ///
+    /// @param <V>             the vertex data type
+    /// @param vertices        the vertices of the directed graph
+    /// @param getNextVertices a function that returns the next vertices given a vertex
+    /// @return the disjoint sets.
     public <V> List<Set<V>> findDisjointSets(Collection<V> vertices, Function<V, Iterable<V>> getNextVertices) {
         // Create initial forest
         Map<V, List<V>> forest = MinimumSpanningTreeAlgo.createForest(vertices);

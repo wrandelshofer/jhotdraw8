@@ -8,9 +8,7 @@ import java.awt.geom.Point2D;
 import java.util.DoubleSummaryStatistics;
 
 public class Points2D {
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private Points2D() {
     }
 

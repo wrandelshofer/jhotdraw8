@@ -14,10 +14,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * InsetsStyleableMapAccessor.
- *
- */
+/// InsetsStyleableMapAccessor.
 public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Insets> {
 
 
@@ -27,15 +24,13 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
     private final MapAccessor<Double> leftKey;
     private final Converter<Insets> converter = new InsetsConverter(false);
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name      the name of the accessor
-     * @param topKey    the insets top key
-     * @param rightKey  the insets right key
-     * @param bottomKey the insets bottom key
-     * @param leftKey   the insets left key
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name      the name of the accessor
+    /// @param topKey    the insets top key
+    /// @param rightKey  the insets right key
+    /// @param bottomKey the insets bottom key
+    /// @param leftKey   the insets left key
     public InsetsStyleableMapAccessor(String name, MapAccessor<Double> topKey, MapAccessor<Double> rightKey, MapAccessor<Double> bottomKey, MapAccessor<Double> leftKey) {
         super(name, Insets.class, new MapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new Insets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 

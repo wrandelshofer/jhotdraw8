@@ -52,14 +52,12 @@ public class IntersectCirclePoint {
         return new IntersectionResult(status, result);
     }
 
-    /**
-     * Computes the intersection between a point and a circle.
-     *
-     * @param point  the point
-     * @param center the center of the circle
-     * @param radius the radius of the circle
-     * @return computed intersection
-     */
+    /// Computes the intersection between a point and a circle.
+    ///
+    /// @param point  the point
+    /// @param center the center of the circle
+    /// @param radius the radius of the circle
+    /// @return computed intersection
     public static IntersectionResult intersectPointCircle(Point2D point, Point2D center, double radius) {
         List<IntersectionPoint> result = new ArrayList<>();
 

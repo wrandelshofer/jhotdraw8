@@ -11,12 +11,10 @@ import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * A spliterator for a {@code SimplePersistentSequencedMap} or {@code SimplePersistentSequencedSet} that skips
- * tombstones.
- *
- * @param <E> the element type
- */
+/// A spliterator for a `SimplePersistentSequencedMap` or `SimplePersistentSequencedSet` that skips
+/// tombstones.
+///
+/// @param <E> the element type
 public class ReverseTombSkippingVectorSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
     private final VectorList<Object> vector;
     private final Function<Object, E> mapper;

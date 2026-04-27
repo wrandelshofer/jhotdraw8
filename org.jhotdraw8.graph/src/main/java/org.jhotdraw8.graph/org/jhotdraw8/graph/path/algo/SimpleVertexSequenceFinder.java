@@ -16,12 +16,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Implements the {@link VertexSequenceFinder} interface.
- *
- * @param <V> the vertex data type
- * @param <C> the cost number type
- */
+/// Implements the [VertexSequenceFinder] interface.
+///
+/// @param <V> the vertex data type
+/// @param <C> the cost number type
 public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> implements VertexSequenceFinder<V, C> {
     private final C zero;
     private final Function<V, Iterable<V>> nextVerticesFunction;
@@ -29,18 +27,16 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
     private final BiFunction<C, C, C> sumFunction;
     private final VertexPathSearchAlgo<V, C> algo;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param zero                 the zero value, e.g. {@code 0}, {@code 0.0}.
-     * @param nextVerticesFunction a function that given a vertex,
-     *                             returns an {@link Iterable} for the next vertices
-     *                             of that vertex.
-     * @param costFunction         the cost function
-     * @param sumFunction          the sum function, which adds two numbers,
-     *                             e.g. {@link Integer#sum}, {@link Double#sum}.
-     * @param algo                 the search algorithm
-     */
+    /// Creates a new instance.
+    ///
+    /// @param zero                 the zero value, e.g. `0`, `0.0`.
+    /// @param nextVerticesFunction a function that given a vertex,
+    ///                             returns an [Iterable] for the next vertices
+    ///                             of that vertex.
+    /// @param costFunction         the cost function
+    /// @param sumFunction          the sum function, which adds two numbers,
+    ///                             e.g. [Integer#sum], [Double#sum].
+    /// @param algo                 the search algorithm
     public SimpleVertexSequenceFinder(
             C zero,
             Function<V, Iterable<V>> nextVerticesFunction,
@@ -54,18 +50,16 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
         this.algo = algo;
     }
 
-    /**
-     * Creates a new instance which has a cost function that returns integer
-     * numbers.
-     *
-     * @param nextVerticesFunction a function that given a vertex,
-     *                             returns an {@link Iterable} for the next vertices
-     *                             of that vertex.
-     * @param costFunction         the cost function
-     * @param algo                 the search algorithm
-     * @param <VV>                 the vertex data type
-     * @return the new {@link SimpleVertexSequenceFinder} instance.
-     */
+    /// Creates a new instance which has a cost function that returns integer
+    /// numbers.
+    ///
+    /// @param nextVerticesFunction a function that given a vertex,
+    ///                             returns an [Iterable] for the next vertices
+    ///                             of that vertex.
+    /// @param costFunction         the cost function
+    /// @param algo                 the search algorithm
+    /// @param <VV>                 the vertex data type
+    /// @return the new [SimpleVertexSequenceFinder] instance.
     public static <VV> SimpleVertexSequenceFinder<VV, Integer> newIntCostInstance(
             Function<VV, Iterable<VV>> nextVerticesFunction,
             BiFunction<VV, VV, Integer> costFunction,
@@ -73,35 +67,31 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
         return new SimpleVertexSequenceFinder<>(0, nextVerticesFunction, costFunction, Integer::sum, algo);
     }
 
-    /**
-     * Creates a new instance which has a int cost function that counts the
-     * number of arrows.
-     *
-     * @param nextVerticesFunction a function that given a vertex,
-     *                             returns an {@link Iterable} for the next vertices
-     *                             of that vertex.
-     * @param algo                 the search algorithm
-     * @param <VV>                 the vertex data type
-     * @return the new {@link SimpleVertexSequenceFinder} instance.
-     */
+    /// Creates a new instance which has a int cost function that counts the
+    /// number of arrows.
+    ///
+    /// @param nextVerticesFunction a function that given a vertex,
+    ///                             returns an [Iterable] for the next vertices
+    ///                             of that vertex.
+    /// @param algo                 the search algorithm
+    /// @param <VV>                 the vertex data type
+    /// @return the new [SimpleVertexSequenceFinder] instance.
     public static <VV> SimpleVertexSequenceFinder<VV, Integer> newIntCostInstance(
             Function<VV, Iterable<VV>> nextVerticesFunction,
             VertexPathSearchAlgo<VV, Integer> algo) {
         return new SimpleVertexSequenceFinder<>(0, nextVerticesFunction, (u, v) -> 1, Integer::sum, algo);
     }
 
-    /**
-     * Creates a new instance which has a cost function that returns long
-     * numbers.
-     *
-     * @param nextVerticesFunction a function that given a vertex,
-     *                             returns an {@link Iterable} for the next vertices
-     *                             of that vertex.
-     * @param costFunction         the cost function
-     * @param algo                 the search algorithm
-     * @param <VV>                 the vertex data type
-     * @return the new {@link SimpleVertexSequenceFinder} instance.
-     */
+    /// Creates a new instance which has a cost function that returns long
+    /// numbers.
+    ///
+    /// @param nextVerticesFunction a function that given a vertex,
+    ///                             returns an [Iterable] for the next vertices
+    ///                             of that vertex.
+    /// @param costFunction         the cost function
+    /// @param algo                 the search algorithm
+    /// @param <VV>                 the vertex data type
+    /// @return the new [SimpleVertexSequenceFinder] instance.
     public static <VV> SimpleVertexSequenceFinder<VV, Long> newLongCostInstance(
             Function<VV, Iterable<VV>> nextVerticesFunction,
             BiFunction<VV, VV, Long> costFunction,

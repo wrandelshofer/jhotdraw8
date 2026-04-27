@@ -16,11 +16,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Draws the {@code boundsInLocal} of all selected figurs, but does not provide
- * any interactions.
- *
- */
+/// Draws the `boundsInLocal` of all selected figurs, but does not provide
+/// any interactions.
 public class MultipleSelectionOutlineHandle extends AbstractHandle {
 
     private final Polygon node;

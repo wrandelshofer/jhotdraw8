@@ -10,9 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorChooserPane;
 
-/**
- * Displays the ColorChooserPane in the primary stage.
- */
+/// Displays the ColorChooserPane in the primary stage.
 public class ColorChooserPaneMain extends Application {
 
     @Override
@@ -29,9 +27,7 @@ public class ColorChooserPaneMain extends Application {
         primaryStage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         launch(args);
     }

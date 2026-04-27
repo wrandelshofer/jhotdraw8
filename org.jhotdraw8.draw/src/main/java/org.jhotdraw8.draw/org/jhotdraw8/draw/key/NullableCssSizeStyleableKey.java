@@ -10,10 +10,7 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jspecify.annotations.Nullable;
 
-/**
- * NullableCssSizeStyleableKey.
- *
- */
+/// NullableCssSizeStyleableKey.
 public class NullableCssSizeStyleableKey extends AbstractStyleableKey<CssSize>
         implements WritableStyleableMapAccessor<CssSize> {
 
@@ -22,21 +19,17 @@ public class NullableCssSizeStyleableKey extends AbstractStyleableKey<CssSize>
     private final Converter<CssSize> converter = new SizeCssConverter(true);
 
 
-    /**
-     * Creates a new instance with the specified name and default value = null.
-     *
-     * @param name         The name of the key.
-     */
+    /// Creates a new instance with the specified name and default value = null.
+    ///
+    /// @param name The name of the key.
     public NullableCssSizeStyleableKey(String name) {
         this(name, null);
     }
 
-    /**
-     * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
-     * @param defaultValue The default value.
-     */
+    /// Creates a new instance with the specified name and default value.
+    ///
+    /// @param name         The name of the key.
+    /// @param defaultValue The default value.
     public NullableCssSizeStyleableKey(String name, @Nullable CssSize defaultValue) {
         super(null, name, name, CssSize.class, true, defaultValue);
     }

@@ -25,11 +25,9 @@ public class DistributeVerticallyAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.distributeVertically";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     @SuppressWarnings("this-escape")
     public DistributeVerticallyAction(DrawingEditor editor) {
         super(editor);
@@ -44,12 +42,10 @@ public class DistributeVerticallyAction extends AbstractDrawingViewAction {
         distributeVertically(drawingView, figures);
     }
 
-    /**
-     * Distributes the given figure vertically by their centers on the y-axis.
-     *
-     * @param view    the drawing view
-     * @param figures the figures to be distributed horizontally
-     */
+    /// Distributes the given figure vertically by their centers on the y-axis.
+    ///
+    /// @param view    the drawing view
+    /// @param figures the figures to be distributed horizontally
     private void distributeVertically(DrawingView view, Set<Figure> figures) {
         if (figures.size() < 3) {
             return;

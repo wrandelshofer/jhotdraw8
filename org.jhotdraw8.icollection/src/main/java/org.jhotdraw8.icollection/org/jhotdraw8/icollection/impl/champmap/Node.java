@@ -11,31 +11,25 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.ToIntFunction;
 
-/**
- * Represents a node in a CHAMP trie.
- * <p>
- * A node can store entries which have a key, a value (optionally) and a
- * sequence number (optionally).
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Represents a node in a CHAMP trie.
+///
+/// A node can store entries which have a key, a value (optionally) and a
+/// sequence number (optionally).
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public abstract class Node<K, V> {
     static final int HASH_CODE_LENGTH = 32;
-    /**
-     * Bit partition size in the range [1,5].
-     * <p>
-     * The bit-mask must fit into the 32 bits of an int field ({@code 32 = 1<<5}).
-     * (You can use a size of 6, if you replace the bit-mask fields with longs).
-     */
+    /// Bit partition size in the range [1,5].
+    ///
+    /// The bit-mask must fit into the 32 bits of an int field (`32 = 1<<5`).
+    /// (You can use a size of 6, if you replace the bit-mask fields with longs).
     static final int BIT_PARTITION_SIZE = 5;
     static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
 
-    /**
-     * Represents no value.
-     * We can not use {@code null}, because we allow storing null-keys and
-     * null-values in the trie.
-     */
+    /// Represents no value.
+    /// We can not use `null`, because we allow storing null-keys and
+    /// null-values in the trie.
     public static final Object NO_DATA = new IdentityObject();
 
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
@@ -45,33 +39,29 @@ public abstract class Node<K, V> {
 
     }
 
-    /**
-     * Given a masked keyHash, returns its bit-position
-     * in the bit-map.
-     * <p>
-     * For example, if the bit partition is 5 bits, then
-     * we 2^5 == 32 distinct bit-positions.
-     * If the masked keyHash is 3 then the bit-position is
-     * the bit with index 3. That is, 1<<3 = 0b0100.
-     *
-     * @param mask masked key hash
-     * @return bit position
-     */
+    /// Given a masked keyHash, returns its bit-position
+    /// in the bit-map.
+    ///
+    /// For example, if the bit partition is 5 bits, then
+    /// we 2^5 == 32 distinct bit-positions.
+    /// If the masked keyHash is 3 then the bit-position is
+    /// the bit with index 3. That is, 1<<3 = 0b0100.
+    ///
+    /// @param mask masked key hash
+    /// @return bit position
     static int bitpos(final int mask) {
         return 1 << mask;
     }
 
-    /**
-     * Given a bitmap and a bit-position, returns the index
-     * in the array.
-     * <p>
-     * For example, if the bitmap is 0b1101 and
-     * bit-position is 0b0100, then the index is 1.
-     *
-     * @param bitmap a bit-map
-     * @param bitpos a bit-position
-     * @return the array index
-     */
+    /// Given a bitmap and a bit-position, returns the index
+    /// in the array.
+    ///
+    /// For example, if the bitmap is 0b1101 and
+    /// bit-position is 0b0100, then the index is 1.
+    ///
+    /// @param bitmap a bit-map
+    /// @param bitpos a bit-position
+    /// @return the array index
     static int index(final int bitmap, final int bitpos) {
         return Integer.bitCount(bitmap & (bitpos - 1));
     }
@@ -138,22 +128,18 @@ public abstract class Node<K, V> {
 
     abstract boolean hasDataArityOne();
 
-    /**
-     * Checks if this trie is equivalent to the specified other trie.
-     *
-     * @param other the other trie
-     * @return true if equivalent
-     */
+    /// Checks if this trie is equivalent to the specified other trie.
+    ///
+    /// @param other the other trie
+    /// @return true if equivalent
     abstract boolean equivalent(final Object other);
 
-    /**
-     * Finds a value by a key.
-     *
-     * @param key     a key
-     * @param keyHash the hash code of the key
-     * @param shift   the shift for this node
-     * @return the value, returns {@link #NO_DATA} if the value is not present.
-     */
+    /// Finds a value by a key.
+    ///
+    /// @param key     a key
+    /// @param keyHash the hash code of the key
+    /// @param shift   the shift for this node
+    /// @return the value, returns [#NO_DATA] if the value is not present.
     abstract Object findByKey(final K key, final int keyHash, final int shift);
 
 

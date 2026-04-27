@@ -8,24 +8,16 @@ package org.jhotdraw8.css.parser;
 import java.io.IOException;
 
 public abstract class AbstractCssScanner implements CssScanner {
-    /**
-     * The current position in the input stream.
-     */
+    /// The current position in the input stream.
     protected long position;
-    /**
-     * The current line number in the input stream.
-     * An input stream starts with line number 1.
-     */
+    /// The current line number in the input stream.
+    /// An input stream starts with line number 1.
     protected long lineNumber = 1;
 
-    /**
-     * The current character.
-     */
+    /// The current character.
     protected int currentChar;
 
-    /**
-     * Whether we need to skip a linefeed on the next read.
-     */
+    /// Whether we need to skip a linefeed on the next read.
     protected boolean skipLF;
 
     public AbstractCssScanner() {

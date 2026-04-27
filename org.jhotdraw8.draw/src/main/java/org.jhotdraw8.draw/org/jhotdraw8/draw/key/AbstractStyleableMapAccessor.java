@@ -17,57 +17,45 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * AbstractStyleableMapAccessor.
- *
- * @param <T> the value type
- */
+/// AbstractStyleableMapAccessor.
+///
+/// @param <T> the value type
 public abstract class AbstractStyleableMapAccessor<T>
         implements WritableStyleableMapAccessor<T>, CompositeMapAccessor<T> {
 
     private final String cssName;
 
 
-    /**
-     * Holds a String representation of the name.
-     */
+    /// Holds a String representation of the name.
     private final String name;
-    /**
-     * Holds the default value.
-     */
+    /// Holds the default value.
     private final @Nullable T defaultValue;
-    /**
-     * This variable is used as a "type token" so that we can check for
-     * assignability of attribute values at runtime.
-     */
+    /// This variable is used as a "type token" so that we can check for
+    /// assignability of attribute values at runtime.
     private final Type type;
 
     private final PersistentSequencedSet<MapAccessor<?>> subAccessors;
 
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param name         The name of the key.
-     * @param type         The type of the value.
-     * @param subAccessors sub accessors which are used by this accessor
-     * @param defaultValue The default value.
-     */
+    /// Creates a new instance with the specified name, type token class, default
+    /// value, and allowing or disallowing null values.
+    ///
+    /// @param name         The name of the key.
+    /// @param type         The type of the value.
+    /// @param subAccessors sub accessors which are used by this accessor
+    /// @param defaultValue The default value.
     public AbstractStyleableMapAccessor(String name, Class<T> type, MapAccessor<?>[] subAccessors, T defaultValue) {
         this(name, type, null, subAccessors, defaultValue);
     }
 
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param name           The name of the key.
-     * @param type           The type of the value.
-     * @param typeParameters The type parameters of the class. Specify "" if no
-     *                       type parameters are given. Otherwise, specify them in arrow brackets.
-     * @param subAccessors   sub accessors which are used by this accessor
-     * @param defaultValue   The default value.
-     */
+    /// Creates a new instance with the specified name, type token class, default
+    /// value, and allowing or disallowing null values.
+    ///
+    /// @param name           The name of the key.
+    /// @param type           The type of the value.
+    /// @param typeParameters The type parameters of the class. Specify "" if no
+    ///                       type parameters are given. Otherwise, specify them in arrow brackets.
+    /// @param subAccessors   sub accessors which are used by this accessor
+    /// @param defaultValue   The default value.
     public AbstractStyleableMapAccessor(String name, Class<?> type, @Nullable Class<?>[] typeParameters,
                                         MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
         Objects.requireNonNull(name, "name");
@@ -86,11 +74,9 @@ public abstract class AbstractStyleableMapAccessor<T>
         return CompositeMapAccessor.super.containsKey(map);
     }
 
-    /**
-     * Returns the name string.
-     *
-     * @return name string.
-     */
+    /// Returns the name string.
+    ///
+    /// @return name string.
     @Override
     public String getName() {
         return name;
@@ -102,11 +88,9 @@ public abstract class AbstractStyleableMapAccessor<T>
     }
 
 
-    /**
-     * Returns the default value of the attribute.
-     *
-     * @return the default value.
-     */
+    /// Returns the default value of the attribute.
+    ///
+    /// @return the default value.
     @Override
     public @Nullable T getDefaultValue() {
         return defaultValue;
@@ -119,9 +103,7 @@ public abstract class AbstractStyleableMapAccessor<T>
         return oldValue;
     }
 
-    /**
-     * Returns the name string.
-     */
+    /// Returns the name string.
     @Override
     public String toString() {
         String keyClass = getClass().getName();

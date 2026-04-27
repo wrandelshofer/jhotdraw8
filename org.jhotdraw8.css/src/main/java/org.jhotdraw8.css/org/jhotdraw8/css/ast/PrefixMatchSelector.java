@@ -12,26 +12,21 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * A "prefix match selector" {@code ^=} matches an element if the element has an
- * attribute with the specified name and its value starts with the specified
- * substring.
- *
- */
+/// A "prefix match selector" `^=` matches an element if the element has an
+/// attribute with the specified name and its value starts with the specified
+/// substring.
 public class PrefixMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;
     private final String attributeName;
     private final String prefix;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param sourceLocator    source locator for debugging
-     * @param namespacePattern an optional namespace ("*" means any namespace,
-     *                         null means no namespace)
-     * @param attributeName    the attribute name
-     * @param prefix           the attribute value prefix
-     */
+    /// Creates a new instance.
+    ///
+    /// @param sourceLocator    source locator for debugging
+    /// @param namespacePattern an optional namespace ("*" means any namespace,
+    ///                         null means no namespace)
+    /// @param attributeName    the attribute name
+    /// @param prefix           the attribute value prefix
     public PrefixMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, String attributeName, String prefix) {
         super(sourceLocator);
         this.namespacePattern = namespacePattern;

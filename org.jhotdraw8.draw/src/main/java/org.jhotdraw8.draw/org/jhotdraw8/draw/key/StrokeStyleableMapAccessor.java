@@ -19,10 +19,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * Stroke Style combines all stroke attributes.
- *
- */
+/// Stroke Style combines all stroke attributes.
 public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssStrokeStyle> {
 
 
@@ -82,12 +79,10 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
         return converter;
     }
 
-    /**
-     * This is a non-standard map composite map accessor and thus it is transient.
-     * We only used in the GUI to get a more concise presentation of attributes.
-     *
-     * @return true
-     */
+    /// This is a non-standard map composite map accessor and thus it is transient.
+    /// We only used in the GUI to get a more concise presentation of attributes.
+    ///
+    /// @return true
     @Override
     public boolean isTransient() {
         return true;

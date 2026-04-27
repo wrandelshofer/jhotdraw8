@@ -30,39 +30,32 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-/**
- * Reads a binary PList file and returns it as a DOM.
- * <p>
- * The DOM returned by this reader is equivalent to the
- * DOM returned, if a PList file in XML format is parsed with
- * a standard {@link DocumentBuilder}.
- * <p>
- * Description about property list taken from <a href="http://developer.apple.com/documentation/Cocoa/Conceptual/PropertyLists/index.html#//apple_ref/doc/uid/10000048i">
- * Apple's online documentation</a>:
- * <p>
- * "A property list is a data representation used by Mac OS X Cocoa and Core
- * Foundation as a convenient way to store, organize, and access standard object
- * types. Frequently called a plist, a property list is an object of one of
- * several certain Cocoa or Core Foundation types, including  arrays,
- * dictionaries, strings, binary data, numbers, dates, and Boolean values. If
- * the object is a container (an array or dictionary), all objects contained
- * within it must also be supported property list objects. (Arrays and
- * dictionaries can contain objects not supported by the architecture, but are
- * then not property lists, and cannot be saved and restored with the various
- * property list methods.)"
- *
- */
+/// Reads a binary PList file and returns it as a DOM.
+///
+/// The DOM returned by this reader is equivalent to the
+/// DOM returned, if a PList file in XML format is parsed with
+/// a standard [DocumentBuilder].
+///
+/// Description about property list taken from <a href="http://developer.apple.com/documentation/Cocoa/Conceptual/PropertyLists/index.html#//apple_ref/doc/uid/10000048i">
+/// Apple's online documentation</a>:
+///
+/// "A property list is a data representation used by Mac OS X Cocoa and Core
+/// Foundation as a convenient way to store, organize, and access standard object
+/// types. Frequently called a plist, a property list is an object of one of
+/// several certain Cocoa or Core Foundation types, including  arrays,
+/// dictionaries, strings, binary data, numbers, dates, and Boolean values. If
+/// the object is a container (an array or dictionary), all objects contained
+/// within it must also be supported property list objects. (Arrays and
+/// dictionaries can contain objects not supported by the architecture, but are
+/// then not property lists, and cannot be saved and restored with the various
+/// property list methods.)"
 public class BinaryPListParser {
 
     private static final boolean DEBUG = false;
-    /**
-     * Time interval based dates are measured in seconds from 2001-01-01.
-     */
+    /// Time interval based dates are measured in seconds from 2001-01-01.
     private static final long TIMER_INTERVAL_TIMEBASE = new GregorianCalendar(2001,
             Calendar.JANUARY, 1, 1, 0, 0).getTimeInMillis();
-    /**
-     * Factory for generating XML data types.
-     */
+    /// Factory for generating XML data types.
     private static DatatypeFactory datatypeFactory;
 
     /* Description of the binary plist format derived from
@@ -153,39 +146,25 @@ public class BinaryPListParser {
      * topLevelOffset ::= byte*8            // unsigned big-endian long
      * </pre>
      */
-    /**
-     * Total count of objrefs and keyrefs.
-     */
+    /// Total count of objrefs and keyrefs.
     private int refCount;
-    /**
-     * Total count of ofsets.
-     */
+    /// Total count of ofsets.
     private int offsetCount;
-    /**
-     * Total count of objects.
-     */
+    /// Total count of objects.
     private int objectCount;
-    /**
-     * Offset in file of top level offset in offset table.
-     */
+    /// Offset in file of top level offset in offset table.
     private int topLevelOffset;
-    /**
-     * Object table.
-     * We gradually fill in objects from the binary PList object table into
-     * this list.
-     */
+    /// Object table.
+    /// We gradually fill in objects from the binary PList object table into
+    /// this list.
     private ArrayList<Object> objectTable;
 
-    /**
-     * Holder for a binary PList Uid element.
-     */
+    /// Holder for a binary PList Uid element.
     private record BPLUid(int number) {
 
     }
 
-    /**
-     * Holder for a binary PList array element.
-     */
+    /// Holder for a binary PList array element.
     private static class BPLArray {
 
         ArrayList<Object> objectTable;
@@ -214,9 +193,7 @@ public class BinaryPListParser {
         }
     }
 
-    /**
-     * Holder for a binary PList dict element.
-     */
+    /// Holder for a binary PList dict element.
     private static class BPLDict {
 
         ArrayList<Object> objectTable;
@@ -261,20 +238,16 @@ public class BinaryPListParser {
         }
     }
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public BinaryPListParser() {
     }
 
-    /**
-     * Parses a binary PList file and turns it into a DOM.
-     * The Document is equivalent with a XML PList file parsed using
-     * a standard {@link DocumentBuilder}.
-     *
-     * @param file A file containing a binary PList.
-     * @return Returns the parsed Element.
-     */
+    /// Parses a binary PList file and turns it into a DOM.
+    /// The Document is equivalent with a XML PList file parsed using
+    /// a standard [DocumentBuilder].
+    ///
+    /// @param file A file containing a binary PList.
+    /// @return Returns the parsed Element.
     public Document parse(File file) throws IOException {
         long fileLength;
         byte[] buf;
@@ -362,19 +335,17 @@ public class BinaryPListParser {
 
     }
 
-    /**
-     * Converts the object table in the binary PList into an Element.
-     *
-     * @param doc                the document to which this method adds elements
-     * @param parent             the parent element
-     * @param object             the current object table
-     * @param remainingRecursion the remaining number of recursions that
-     *                           this method may perform. Since every
-     *                           element in the binary PList is at least
-     *                           one byte long, there can be no more
-     *                           recursions than the length of the file..
-     * @throws IOException
-     */
+    /// Converts the object table in the binary PList into an Element.
+    ///
+    /// @param doc                the document to which this method adds elements
+    /// @param parent             the parent element
+    /// @param object             the current object table
+    /// @param remainingRecursion the remaining number of recursions that
+    ///                           this method may perform. Since every
+    ///                           element in the binary PList is at least
+    ///                           one byte long, there can be no more
+    ///                           recursions than the length of the file..
+    /// @throws IOException
     private void convertObjectTableToXML(Document doc, Element parent, Object object, int remainingRecursion)
             throws IOException {
         if (remainingRecursion < 0) {
@@ -440,30 +411,28 @@ public class BinaryPListParser {
         parent.appendChild(elem);
     }
 
-    /**
-     * Object Formats (marker byte followed by additional info in some cases)
-     * <pre>
-     * null	0000 0000
-     * bool	0000 1000			// false
-     * bool	0000 1001			// true
-     * fill	0000 1111			// fill byte
-     * int	0001 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
-     * real	0010 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
-     * date	0011 0011	...		// 8 byte float follows, big-endian bytes
-     * data	0100 nnnn	[int]	...	// nnnn is number of bytes unless 1111 then int count follows, followed by bytes
-     * string	0101 nnnn	[int]	...	// ASCII string, nnnn is # of chars, else 1111 then int count, then bytes
-     * string	0110 nnnn	[int]	...	// Unicode string, nnnn is # of chars, else 1111 then int count, then big-endian 2-byte shorts
-     * 0111 xxxx			// unused
-     * uid	1000 nnnn	...		// nnnn+1 is # of bytes
-     * 1001 xxxx			// unused
-     * array	1010 nnnn	[int]	objref*	// nnnn is count, unless '1111', then int count follows
-     * 1011 xxxx			// unused
-     * 1100 xxxx			// unused
-     * dict	1101 nnnn	[int]	keyref* objref*	// nnnn is count, unless '1111', then int count follows
-     * 1110 xxxx			// unused
-     * 1111 xxxx			// unused
-     * </pre>
-     */
+    /// Object Formats (marker byte followed by additional info in some cases)
+    /// <pre>
+    /// null	0000 0000
+    /// bool	0000 1000			// false
+    /// bool	0000 1001			// true
+    /// fill	0000 1111			// fill byte
+    /// int	0001 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
+    /// real	0010 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
+    /// date	0011 0011	...		// 8 byte float follows, big-endian bytes
+    /// data	0100 nnnn	[int]	...	// nnnn is number of bytes unless 1111 then int count follows, followed by bytes
+    /// string	0101 nnnn	[int]	...	// ASCII string, nnnn is # of chars, else 1111 then int count, then bytes
+    /// string	0110 nnnn	[int]	...	// Unicode string, nnnn is # of chars, else 1111 then int count, then big-endian 2-byte shorts
+    /// 0111 xxxx			// unused
+    /// uid	1000 nnnn	...		// nnnn+1 is # of bytes
+    /// 1001 xxxx			// unused
+    /// array	1010 nnnn	[int]	objref*	// nnnn is count, unless '1111', then int count follows
+    /// 1011 xxxx			// unused
+    /// 1100 xxxx			// unused
+    /// dict	1101 nnnn	[int]	keyref* objref*	// nnnn is count, unless '1111', then int count follows
+    /// 1110 xxxx			// unused
+    /// 1111 xxxx			// unused
+    /// </pre>
     private void parseObjectTable(DataInputStream in) throws IOException {
         int marker;
         while ((marker = in.read()) != -1) {
@@ -547,12 +516,10 @@ public class BinaryPListParser {
         }
     }
 
-    /**
-     * Reads a count value from the object table. Count values are encoded
-     * using the following scheme:
-     * <p>
-     * int	0001 nnnn   ...     // # of bytes is 2^nnnn, big-endian bytes
-     */
+    /// Reads a count value from the object table. Count values are encoded
+    /// using the following scheme:
+    ///
+    /// int	0001 nnnn   ...     // # of bytes is 2^nnnn, big-endian bytes
     private int readCount(DataInputStream in) throws IOException {
         int marker = in.read();
         if (marker == -1) {
@@ -573,12 +540,10 @@ public class BinaryPListParser {
         return value;
     }
 
-    /**
-     * null	0000 0000
-     * bool	0000 1000			// false
-     * bool	0000 1001			// true
-     * fill	0000 1111			// fill byte
-     */
+    /// null	0000 0000
+    /// bool	0000 1000			// false
+    /// bool	0000 1001			// true
+    /// fill	0000 1111			// fill byte
     private void parsePrimitive(DataInputStream in, int primitive) throws IOException {
         switch (primitive) {
             case 0 -> objectTable.add(null);
@@ -591,9 +556,7 @@ public class BinaryPListParser {
         }
     }
 
-    /**
-     * array	1010 nnnn	[int]	objref*	// nnnn is count, unless '1111', then int count follows
-     */
+    /// array	1010 nnnn	[int]	objref*	// nnnn is count, unless '1111', then int count follows
     private void parseByteArray(DataInputStream in, int count) throws IOException {
         BPLArray arr = new BPLArray();
         arr.objectTable = objectTable;
@@ -609,9 +572,7 @@ public class BinaryPListParser {
         objectTable.add(arr);
     }
 
-    /**
-     * array	1010 nnnn	[int]	objref*	// nnnn is count, unless '1111', then int count follows
-     */
+    /// array	1010 nnnn	[int]	objref*	// nnnn is count, unless '1111', then int count follows
     private void parseShortArray(DataInputStream in, int count) throws IOException {
         BPLArray arr = new BPLArray();
         arr.objectTable = objectTable;
@@ -636,9 +597,7 @@ public class BinaryPListParser {
         objectTable.add(data);
     }
 
-    /**
-     * byte dict	1101 nnnn keyref* objref*	// nnnn is less than '1111'
-     */
+    /// byte dict	1101 nnnn keyref* objref*	// nnnn is less than '1111'
     private void parseByteDict(DataInputStream in, int count) throws IOException {
         BPLDict dict = new BPLDict();
         dict.objectTable = objectTable;
@@ -654,11 +613,9 @@ public class BinaryPListParser {
         objectTable.add(dict);
     }
 
-    /**
-     * <pre>
-     * short dict	1101 ffff int keyref* objref*	// int is count
-     * </pre>
-     */
+    /// <pre>
+    /// short dict	1101 ffff int keyref* objref*	// int is count
+    /// </pre>
     private void parseShortDict(DataInputStream in, int count) throws IOException {
         BPLDict dict = new BPLDict();
         dict.objectTable = objectTable;
@@ -674,9 +631,7 @@ public class BinaryPListParser {
         objectTable.add(dict);
     }
 
-    /**
-     * string	0101 nnnn	[int]	...	// ASCII string, nnnn is # of chars, else 1111 then int count, then bytes
-     */
+    /// string	0101 nnnn	[int]	...	// ASCII string, nnnn is # of chars, else 1111 then int count, then bytes
     private void parseAsciiString(DataInputStream in, int count) throws IOException {
         byte[] buf = new byte[count];
         in.readFully(buf);
@@ -693,9 +648,7 @@ public class BinaryPListParser {
         objectTable.add(new BPLUid(new BigInteger(uid).intValue()));
     }
 
-    /**
-     * int	0001 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
-     */
+    /// int	0001 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
     private void parseInteger(DataInputStream in, int count) throws IOException {
         byte[] bytes = new byte[count];
         in.readFully(bytes);
@@ -709,9 +662,7 @@ public class BinaryPListParser {
         }
     }
 
-    /**
-     * real	0010 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
-     */
+    /// real	0010 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
     private void parseReal(DataInputStream in, int count) throws IOException {
         switch (count) {
             case 4 -> objectTable.add(in.readFloat());
@@ -720,24 +671,18 @@ public class BinaryPListParser {
         }
     }
 
-    /**
-     * unknown	0011 0000	...		// 8 byte float follows, big-endian bytes
-     */
+    /// unknown	0011 0000	...		// 8 byte float follows, big-endian bytes
     private void parseUnknown(DataInputStream in) throws IOException {
         in.skipBytes(1);
         objectTable.add("unknown");
     }
 
-    /**
-     * date	0011 0011	...		// 8 byte float follows, big-endian bytes
-     */
+    /// date	0011 0011	...		// 8 byte float follows, big-endian bytes
     private void parseDate(DataInputStream in) throws IOException {
         objectTable.add(fromTimerInterval(in.readDouble()));
     }
 
-    /**
-     * string	0110 nnnn	[int]	...	// Unicode string, nnnn is # of chars, else 1111 then int count, then big-endian 2-byte shorts
-     */
+    /// string	0110 nnnn	[int]	...	// Unicode string, nnnn is # of chars, else 1111 then int count, then big-endian 2-byte shorts
     private void parseUnicodeString(DataInputStream in, int count) throws IOException {
         char[] buf = new char[count];
         for (int i = 0; i < count; i++) {
@@ -749,10 +694,8 @@ public class BinaryPListParser {
 
     //
 
-    /**
-     * Timer interval based dates are measured in seconds from 1/1/2001.
-     * Timer intervals have no time zone.
-     */
+    /// Timer interval based dates are measured in seconds from 1/1/2001.
+    /// Timer intervals have no time zone.
     private static XMLGregorianCalendar fromTimerInterval(double timerInterval) {
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(new Date(TIMER_INTERVAL_TIMEBASE + (long) timerInterval * 1000L));
@@ -762,9 +705,7 @@ public class BinaryPListParser {
         return xmlgc;
     }
 
-    /**
-     * Gets the factory for XML data types.
-     */
+    /// Gets the factory for XML data types.
     private static DatatypeFactory getDatatypeFactory() {
         if (datatypeFactory == null) {
             try {

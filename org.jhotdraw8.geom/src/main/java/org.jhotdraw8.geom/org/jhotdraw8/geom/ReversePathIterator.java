@@ -4,175 +4,143 @@
  */
 package org.jhotdraw8.geom;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.IllegalPathStateException;
 import java.awt.geom.PathIterator;
 
-/**
- * A path iterator which iterates over a path in the reverse direction.
- * This is missing in the java.awt.geom package, although it's quite simple to implement.
- * After initialization the original PathIterator is not used any longer.
- * <p>
- * There are several static convenience methods to create a reverse path iterator from
- * a shape directly:
- * <ul>
- * <li>{@link #getReversePathIterator(Shape)}
- *     for reversing the standard path iterator</li>
- * <li>{@link #getReversePathIterator(Shape, double)}
- *     for reversing a flattened path iterator</li>
- * <li>{@link #getReversePathIterator(Shape, AffineTransform)}
- *     for reversing a transformed path iterator</li>
- * <li>{@link #getReversePathIterator(Shape, AffineTransform, double)}
- *     for reversing a transformed flattened path iterator</li>
- * <li>{@link #getReversePathIterator(Shape, int)}
- *     for reversing the standard path iterator while explicitly defining a winding rule</li>
- * <li>{@link #getReversePathIterator(Shape, double, int)}
- *     for reversing a flattened path iterator while explicitly defining a winding rule</li>
- * <li>{@link #getReversePathIterator(Shape, AffineTransform, int)}
- *     for reversing a transformed path iterator while explicitly defining a winding rule</li>
- * <li>{@link #getReversePathIterator(Shape, AffineTransform, double, int)}
- *     for reversing a transformed flattened path iterator while explicitly defining a winding rule</li>
- * </ul>
- * <p>
- * References:
- * <dl>
- *     <dt>Rammi (2005). ReversePathIterator</dt>
- *     <dd>(c) 2005  Rammi (rammi@caff.de)
- *     This code is in the public domain.
- *     This usage of this code is allowed without any restrictions.
- *     No guarantees are given whatsoever.
- * <p>
- *     <a href="https://caff.de/projects/ReversePathIterator/">caff.de</a>
- *     </dd>
- * </dl>
- */
+/// A path iterator which iterates over a path in the reverse direction.
+/// This is missing in the java.awt.geom package, although it's quite simple to implement.
+/// After initialization the original PathIterator is not used any longer.
+///
+/// There are several static convenience methods to create a reverse path iterator from
+/// a shape directly:
+///
+///   - [#getReversePathIterator(Shape)]
+///     for reversing the standard path iterator
+///   - [#getReversePathIterator(Shape, double)]
+///     for reversing a flattened path iterator
+///   - [#getReversePathIterator(Shape, AffineTransform)]
+///     for reversing a transformed path iterator
+///   - [#getReversePathIterator(Shape, AffineTransform, double)]
+///     for reversing a transformed flattened path iterator
+///   - [#getReversePathIterator(Shape, int)]
+///     for reversing the standard path iterator while explicitly defining a winding rule
+///   - [#getReversePathIterator(Shape, double, int)]
+///     for reversing a flattened path iterator while explicitly defining a winding rule
+///   - [#getReversePathIterator(Shape, AffineTransform, int)]
+///     for reversing a transformed path iterator while explicitly defining a winding rule
+///   - [#getReversePathIterator(Shape, AffineTransform, double, int)]
+///     for reversing a transformed flattened path iterator while explicitly defining a winding rule
+///
+///
+/// References:
+/// <dl>
+///     <dt>Rammi (2005). ReversePathIterator</dt>
+///     <dd>(c) 2005  Rammi (rammi@caff.de)
+///     This code is in the public domain.
+///     This usage of this code is allowed without any restrictions.
+///     No guarantees are given whatsoever.
+///
+///     <a href="https://caff.de/projects/ReversePathIterator/">caff.de</a>
+///     </dd>
+/// </dl>
 public class ReversePathIterator
         implements PathIterator {
-    /**
-     * The winding rule.
-     */
+    /// The winding rule.
     private final int windingRule;
-    /**
-     * The reversed coordinates
-     */
+    /// The reversed coordinates
     private final double[] coordinates;
-    /**
-     * The reversed segment types.
-     */
+    /// The reversed segment types.
     private final int[] segmentTypes;
-    /**
-     * The index into the coordinates during iteration.
-     */
+    /// The index into the coordinates during iteration.
     private int coordIndex = 0;
-    /**
-     * The index into the segment types during iteration.
-     */
+    /// The index into the segment types during iteration.
     private int segmentIndex = 0;
 
-    /**
-     * Get a reverse path iterator for a shape, keeping the shape's winding rule.
-     *
-     * @param shape shape for which a reverse path iterator is needed
-     * @return reverse path iterator
-     */
+    /// Get a reverse path iterator for a shape, keeping the shape's winding rule.
+    ///
+    /// @param shape shape for which a reverse path iterator is needed
+    /// @return reverse path iterator
     public static PathIterator getReversePathIterator(Shape shape) {
         return new ReversePathIterator(shape.getPathIterator(null));
     }
 
-    /**
-     * Get a reverse flattened path iterator for a shape, keeping the shape's winding rule.
-     *
-     * @param shape    shape for which a reverse flattened path iterator is needed
-     * @param flatness flatness epsilon
-     * @return reverse flattened path iterator
-     */
+    /// Get a reverse flattened path iterator for a shape, keeping the shape's winding rule.
+    ///
+    /// @param shape    shape for which a reverse flattened path iterator is needed
+    /// @param flatness flatness epsilon
+    /// @return reverse flattened path iterator
     public static PathIterator getReversePathIterator(Shape shape, double flatness) {
         return new ReversePathIterator(shape.getPathIterator(null, flatness));
     }
 
-    /**
-     * Get a reverse transformed path iterator for a shape, keeping the shape's winding rule.
-     *
-     * @param shape shape for which a reverse transformed path iterator is needed
-     * @return reverse transformed path iterator
-     */
+    /// Get a reverse transformed path iterator for a shape, keeping the shape's winding rule.
+    ///
+    /// @param shape shape for which a reverse transformed path iterator is needed
+    /// @return reverse transformed path iterator
     public static PathIterator getReversePathIterator(Shape shape, AffineTransform at) {
         return new ReversePathIterator(shape.getPathIterator(at));
     }
 
-    /**
-     * Get a reverse transformed flattened path iterator for a shape, keeping the shape's winding rule.
-     *
-     * @param shape    shape for which a reverse transformed flattened path iterator is needed
-     * @param flatness flatness epsilon
-     * @return reverse transformed flattened path iterator
-     */
+    /// Get a reverse transformed flattened path iterator for a shape, keeping the shape's winding rule.
+    ///
+    /// @param shape    shape for which a reverse transformed flattened path iterator is needed
+    /// @param flatness flatness epsilon
+    /// @return reverse transformed flattened path iterator
     public static PathIterator getReversePathIterator(Shape shape, AffineTransform at, double flatness) {
         return new ReversePathIterator(shape.getPathIterator(at, flatness));
     }
 
-    /**
-     * Get a reverse path iterator for a shape.
-     *
-     * @param shape       shape for which a reverse path iterator is needed
-     * @param windingRule winding rule of newly created iterator
-     * @return reverse path iterator
-     */
+    /// Get a reverse path iterator for a shape.
+    ///
+    /// @param shape       shape for which a reverse path iterator is needed
+    /// @param windingRule winding rule of newly created iterator
+    /// @return reverse path iterator
     public static PathIterator getReversePathIterator(Shape shape, int windingRule) {
         return new ReversePathIterator(shape.getPathIterator(null), windingRule);
     }
 
-    /**
-     * Get a reverse flattened path iterator for a shape.
-     *
-     * @param shape       shape for which a reverse flattened path iterator is needed
-     * @param flatness    flatness epsilon
-     * @param windingRule winding rule of newly created iterator
-     * @return reverse flattened path iterator
-     */
+    /// Get a reverse flattened path iterator for a shape.
+    ///
+    /// @param shape       shape for which a reverse flattened path iterator is needed
+    /// @param flatness    flatness epsilon
+    /// @param windingRule winding rule of newly created iterator
+    /// @return reverse flattened path iterator
     public static PathIterator getReversePathIterator(Shape shape, double flatness, int windingRule) {
         return new ReversePathIterator(shape.getPathIterator(null, flatness), windingRule);
     }
 
-    /**
-     * Get a reverse transformed path iterator for a shape.
-     *
-     * @param shape       shape for which a reverse transformed path iterator is needed
-     * @param windingRule winding rule of newly created iterator
-     * @return reverse transformed path iterator
-     */
+    /// Get a reverse transformed path iterator for a shape.
+    ///
+    /// @param shape       shape for which a reverse transformed path iterator is needed
+    /// @param windingRule winding rule of newly created iterator
+    /// @return reverse transformed path iterator
     public static PathIterator getReversePathIterator(Shape shape, AffineTransform at, int windingRule) {
         return new ReversePathIterator(shape.getPathIterator(at), windingRule);
     }
 
-    /**
-     * Get a reverse transformed flattened path iterator for a shape.
-     *
-     * @param shape       shape for which a reverse transformed flattened path iterator is needed
-     * @param flatness    flatness epsilon
-     * @param windingRule winding rule of newly created iterator
-     * @return reverse transformed flattened path iterator
-     */
+    /// Get a reverse transformed flattened path iterator for a shape.
+    ///
+    /// @param shape       shape for which a reverse transformed flattened path iterator is needed
+    /// @param flatness    flatness epsilon
+    /// @param windingRule winding rule of newly created iterator
+    /// @return reverse transformed flattened path iterator
     public static PathIterator getReversePathIterator(Shape shape, AffineTransform at, double flatness, int windingRule) {
         return new ReversePathIterator(shape.getPathIterator(at, flatness), windingRule);
     }
 
-    /**
-     * Create an inverted path iterator from a standard one, keeping the winding rule.
-     *
-     * @param original original iterator
-     */
+    /// Create an inverted path iterator from a standard one, keeping the winding rule.
+    ///
+    /// @param original original iterator
     public ReversePathIterator(PathIterator original) {
         this(original, original.getWindingRule());
     }
 
-    /**
-     * Create an inverted path iterator from a standard one.
-     *
-     * @param original    original iterator
-     * @param windingRule winding rule of newly created iterator
-     */
+    /// Create an inverted path iterator from a standard one.
+    ///
+    /// @param original    original iterator
+    /// @param windingRule winding rule of newly created iterator
     public ReversePathIterator(PathIterator original, int windingRule) {
         this.windingRule = windingRule;
 
@@ -251,24 +219,20 @@ public class ReversePathIterator
         }
     }
 
-    /**
-     * Returns the winding rule for determining the interior of the
-     * path.
-     *
-     * @return the winding rule.
-     * @see #WIND_EVEN_ODD
-     * @see #WIND_NON_ZERO
-     */
+    /// Returns the winding rule for determining the interior of the
+    /// path.
+    ///
+    /// @return the winding rule.
+    /// @see #WIND_EVEN_ODD
+    /// @see #WIND_NON_ZERO
     public int getWindingRule() {
         return windingRule;
     }
 
-    /**
-     * Get the number of coordinates needed for a segment type.
-     *
-     * @param segtype segment type
-     * @return coordinates needed
-     */
+    /// Get the number of coordinates needed for a segment type.
+    ///
+    /// @param segtype segment type
+    /// @return coordinates needed
     private static int coordinatesForSegmentType(int segtype) {
         return switch (segtype) {
             case SEG_MOVETO, SEG_LINETO -> 2;
@@ -278,47 +242,41 @@ public class ReversePathIterator
         };
     }
 
-    /**
-     * Moves the iterator to the next segment of the path forwards
-     * along the primary direction of traversal as long as there are
-     * more points in that direction.
-     */
+    /// Moves the iterator to the next segment of the path forwards
+    /// along the primary direction of traversal as long as there are
+    /// more points in that direction.
     public void next() {
         coordIndex += coordinatesForSegmentType(segmentTypes[segmentIndex++]);
     }
 
-    /**
-     * Tests if the iteration is complete.
-     *
-     * @return <code>true</code> if all the segments have
-     * been read; <code>false</code> otherwise.
-     */
+    /// Tests if the iteration is complete.
+    ///
+    /// @return <code>true</code> if all the segments have
+    /// been read; <code>false</code> otherwise.
     public boolean isDone() {
         return segmentIndex >= segmentTypes.length;
     }
 
-    /**
-     * Returns the coordinates and type of the current path segment in
-     * the iteration.
-     * The return value is the path-segment type:
-     * SEG_MOVETO, SEG_LINETO, SEG_QUADTO, SEG_CUBICTO, or SEG_CLOSE.
-     * A double array of length 6 must be passed in and can be used to
-     * store the coordinates of the point(s).
-     * Each point is stored as a pair of double x,y coordinates.
-     * SEG_MOVETO and SEG_LINETO types returns one point,
-     * SEG_QUADTO returns two points,
-     * SEG_CUBICTO returns 3 points
-     * and SEG_CLOSE does not return any points.
-     *
-     * @param coords an array that holds the data returned from
-     *               this method
-     * @return the path-segment type of the current path segment.
-     * @see #SEG_MOVETO
-     * @see #SEG_LINETO
-     * @see #SEG_QUADTO
-     * @see #SEG_CUBICTO
-     * @see #SEG_CLOSE
-     */
+    /// Returns the coordinates and type of the current path segment in
+    /// the iteration.
+    /// The return value is the path-segment type:
+    /// SEG_MOVETO, SEG_LINETO, SEG_QUADTO, SEG_CUBICTO, or SEG_CLOSE.
+    /// A double array of length 6 must be passed in and can be used to
+    /// store the coordinates of the point(s).
+    /// Each point is stored as a pair of double x,y coordinates.
+    /// SEG_MOVETO and SEG_LINETO types returns one point,
+    /// SEG_QUADTO returns two points,
+    /// SEG_CUBICTO returns 3 points
+    /// and SEG_CLOSE does not return any points.
+    ///
+    /// @param coords an array that holds the data returned from
+    ///               this method
+    /// @return the path-segment type of the current path segment.
+    /// @see #SEG_MOVETO
+    /// @see #SEG_LINETO
+    /// @see #SEG_QUADTO
+    /// @see #SEG_CUBICTO
+    /// @see #SEG_CLOSE
     public int currentSegment(double[] coords) {
         final int segmentType = segmentTypes[segmentIndex];
         final int copy = coordinatesForSegmentType(segmentType);
@@ -328,28 +286,26 @@ public class ReversePathIterator
         return segmentType;
     }
 
-    /**
-     * Returns the coordinates and type of the current path segment in
-     * the iteration.
-     * The return value is the path-segment type:
-     * SEG_MOVETO, SEG_LINETO, SEG_QUADTO, SEG_CUBICTO, or SEG_CLOSE.
-     * A float array of length 6 must be passed in and can be used to
-     * store the coordinates of the point(s).
-     * Each point is stored as a pair of float x,y coordinates.
-     * SEG_MOVETO and SEG_LINETO types returns one point,
-     * SEG_QUADTO returns two points,
-     * SEG_CUBICTO returns 3 points
-     * and SEG_CLOSE does not return any points.
-     *
-     * @param coords an array that holds the data returned from
-     *               this method
-     * @return the path-segment type of the current path segment.
-     * @see #SEG_MOVETO
-     * @see #SEG_LINETO
-     * @see #SEG_QUADTO
-     * @see #SEG_CUBICTO
-     * @see #SEG_CLOSE
-     */
+    /// Returns the coordinates and type of the current path segment in
+    /// the iteration.
+    /// The return value is the path-segment type:
+    /// SEG_MOVETO, SEG_LINETO, SEG_QUADTO, SEG_CUBICTO, or SEG_CLOSE.
+    /// A float array of length 6 must be passed in and can be used to
+    /// store the coordinates of the point(s).
+    /// Each point is stored as a pair of float x,y coordinates.
+    /// SEG_MOVETO and SEG_LINETO types returns one point,
+    /// SEG_QUADTO returns two points,
+    /// SEG_CUBICTO returns 3 points
+    /// and SEG_CLOSE does not return any points.
+    ///
+    /// @param coords an array that holds the data returned from
+    ///               this method
+    /// @return the path-segment type of the current path segment.
+    /// @see #SEG_MOVETO
+    /// @see #SEG_LINETO
+    /// @see #SEG_QUADTO
+    /// @see #SEG_CUBICTO
+    /// @see #SEG_CLOSE
     public int currentSegment(float[] coords) {
         final int segmentType = segmentTypes[segmentIndex];
         final int copy = coordinatesForSegmentType(segmentType);

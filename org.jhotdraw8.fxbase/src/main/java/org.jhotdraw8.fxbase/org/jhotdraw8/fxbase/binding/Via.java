@@ -14,37 +14,34 @@ import javafx.beans.value.ObservableValue;
 import java.lang.ref.WeakReference;
 import java.util.function.Function;
 
-/**
- * Builder for bindings that go via multiple properties.
- * <p>
- * Usage: Bind a text field to {@code person.address.city}.
- * <pre>{@literal
- *     TextField cityField;
- *     Property<Person> personProperty;
- *
- *     Via<Person> via = new Via<>(personProperty);
- *     cityField.textProperty().bindBidirectional(
- *         via.via(Person::addressProperty)
- *         .via(Address::cityProperty)
- *         .get()
- *     );
- * }</pre>
- * <p>
- * Creates change listeners that are strongly referenced from the root object.
- * <p>
- * When the root object is garbage collected, the change listeners unregister themselves.
- *
- * @param <T> the value type of the property
- */
+/// Builder for bindings that go via multiple properties.
+///
+/// Usage: Bind a text field to `person.address.city`.
+/// <pre>
+/// {@literal
+///      TextField cityField;
+///      Property<Person> personProperty;
+///
+///      Via<Person> via = new Via<>(personProperty);
+///      cityField.textProperty().bindBidirectional(
+///          via.via(Person::addressProperty)
+///          .via(Address::cityProperty)
+///          .get()
+///      );
+///  }</pre>
+///
+/// Creates change listeners that are strongly referenced from the root object.
+///
+/// When the root object is garbage collected, the change listeners unregister themselves.
+///
+/// @param <T> the value type of the property
 public class Via<T> {
     private final WeakReference<Property<?>> weakReferenceToRoot;
     private final Property<T> intermediate;
 
-    /**
-     * Creates a new via builder.
-     *
-     * @param weakReferenceToRoot the root property
-     */
+    /// Creates a new via builder.
+    ///
+    /// @param weakReferenceToRoot the root property
     public Via(Property<T> weakReferenceToRoot) {
         this.weakReferenceToRoot = new WeakReference<>(weakReferenceToRoot);
         this.intermediate = weakReferenceToRoot;
@@ -55,13 +52,11 @@ public class Via<T> {
         this.intermediate = intermediate;
     }
 
-    /**
-     * Builds a new via step.
-     *
-     * @param viaFunction a function that returns the desired property
-     * @param <U>         the type of the property
-     * @return a via binding to the property
-     */
+    /// Builds a new via step.
+    ///
+    /// @param viaFunction a function that returns the desired property
+    /// @param <U>         the type of the property
+    /// @return a via binding to the property
     public <U> Via<U> via(Function<T, Property<U>> viaFunction) {
         // Create a change listener that has strong references to
         // - the 'viaFunction' function
@@ -74,12 +69,10 @@ public class Via<T> {
         return new Via<>(weakReferenceToRoot, changeListener.next);
     }
 
-    /**
-     * Internally used change listener.
-     *
-     * @param <T>
-     * @param <U>
-     */
+    /// Internally used change listener.
+    ///
+    /// @param <T>
+    /// @param <U>
     private static class ViaChangeListener<T, U> implements ChangeListener<T> {
         private final ObjectProperty<U> next = new SimpleObjectProperty<>();
         private final Function<T, Property<U>> viaFunction;
@@ -108,11 +101,9 @@ public class Via<T> {
         }
     }
 
-    /**
-     * Gets the binding that was built.
-     *
-     * @return a binding
-     */
+    /// Gets the binding that was built.
+    ///
+    /// @return a binding
     public Property<T> get() {
         return intermediate;
     }

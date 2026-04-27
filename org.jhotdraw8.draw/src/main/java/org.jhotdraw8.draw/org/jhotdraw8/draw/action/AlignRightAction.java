@@ -22,11 +22,9 @@ public class AlignRightAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.alignRight";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public AlignRightAction(DrawingEditor editor) {
         super(editor);
         Resources labels

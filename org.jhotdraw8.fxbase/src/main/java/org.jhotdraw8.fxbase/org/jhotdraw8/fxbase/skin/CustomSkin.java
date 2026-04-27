@@ -7,10 +7,7 @@ package org.jhotdraw8.fxbase.skin;
 import javafx.scene.control.Control;
 import javafx.scene.control.SkinBase;
 
-/**
- * A custom skin without behavior.
- *
- */
+/// A custom skin without behavior.
 public class CustomSkin<C extends Control> extends SkinBase<C> {
 
     public CustomSkin(C control) {

@@ -23,22 +23,19 @@ import java.util.Objects;
 import java.util.SortedMap;
 import java.util.Spliterator;
 
-/**
- * Implements the {@link PersistentNavigableSet} interface using a Red-Black tree.
- * <p>
- * References:
- * <p>
- * For a similar design, see 'TreeMap.java' in vavr. The internal data structure of
- * this class is licensed from vavr.
- * <dl>
- *     <dt>TreeMap.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
- *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/TreeMap.java">github.com</a></dd>
- * </dl>
- *
- * @param <K> the key type
- * @param <V> the value type
- */
-
+/// Implements the [PersistentNavigableSet] interface using a Red-Black tree.
+///
+/// References:
+///
+/// For a similar design, see 'TreeMap.java' in vavr. The internal data structure of
+/// this class is licensed from vavr.
+/// <dl>
+///     <dt>TreeMap.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
+///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/TreeMap.java">github.com</a></dd>
+/// </dl>
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public class RedBlackMap<K, V> implements PersistentNavigableMap<K, V>, Serializable {
 
     @Serial
@@ -46,27 +43,23 @@ public class RedBlackMap<K, V> implements PersistentNavigableMap<K, V>, Serializ
     final transient RedBlackTree<K, V> root;
     final transient Comparator<? super K> comparator;
 
-    /**
-     * Creates a new instance with the provided privateData data object.
-     * <p>
-     * This constructor is intended to be called from a constructor
-     * of the subclass, that is called from method {@link #newInstance(PrivateData)}.
-     *
-     * @param privateData an privateData data object
-     */
+    /// Creates a new instance with the provided privateData data object.
+    ///
+    /// This constructor is intended to be called from a constructor
+    /// of the subclass, that is called from method [#newInstance(PrivateData)].
+    ///
+    /// @param privateData an privateData data object
     @SuppressWarnings("unchecked")
     protected RedBlackMap(PrivateData privateData) {
         this(((Map.Entry<?, RedBlackTree<K, V>>) privateData.get()).getValue(), ((Map.Entry<Comparator<? super K>, ?>) privateData.get()).getKey());
     }
 
-    /**
-     * Creates a new instance with the provided privateData object as its internal data structure.
-     * <p>
-     * Subclasses must override this method, and return a new instance of their subclass!
-     *
-     * @param privateData the internal data structure needed by this class for creating the instance.
-     * @return a new instance of the subclass
-     */
+    /// Creates a new instance with the provided privateData object as its internal data structure.
+    ///
+    /// Subclasses must override this method, and return a new instance of their subclass!
+    ///
+    /// @param privateData the internal data structure needed by this class for creating the instance.
+    /// @return a new instance of the subclass
     protected RedBlackMap<K, V> newInstance(PrivateData privateData) {
         return new RedBlackMap<>(privateData);
     }
@@ -80,15 +73,13 @@ public class RedBlackMap<K, V> implements PersistentNavigableMap<K, V>, Serializ
         this.comparator = comparator;
     }
 
-    /**
-     * Returns an persistent map that contains the provided entries, sorted according to the
-     * specified comparator.
-     *
-     * @param c   an iterable
-     * @param <K> the key type
-     * @param <V> the value type
-     * @return an persistent map of the provided elements
-     */
+    /// Returns an persistent map that contains the provided entries, sorted according to the
+    /// specified comparator.
+    ///
+    /// @param c   an iterable
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an persistent map of the provided elements
     @SuppressWarnings("unchecked")
     public static <K, V> RedBlackMap<K, V> copyOf(Comparator<? super K> comparator, Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         if (c instanceof RedBlackMap<?, ?> r && r.comparator.equals(comparator)) {
@@ -131,54 +122,46 @@ public class RedBlackMap<K, V> implements PersistentNavigableMap<K, V>, Serializ
         return (RedBlackMap<K, V>) PersistentNavigableMap.super.retainAll(c);
     }
 
-    /**
-     * Returns an persistent map that contains the provided elements sorted according to the
-     * <i>natural ordering</i> of its elements.
-     *
-     * @param c   an iterable
-     * @param <K> the key type
-     * @param <V> the value type
-     * @return an persistent map of the provided elements
-     */
+    /// Returns an persistent map that contains the provided elements sorted according to the
+    /// _natural ordering_ of its elements.
+    ///
+    /// @param c   an iterable
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an persistent map of the provided elements
     public static <K, V> RedBlackMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         return RedBlackMap.copyOf(NaturalComparator.instance(), c);
     }
 
-    /**
-     * Returns an persistent copy of the provided map that contains the provided elements sorted according to the
-     * <i>natural ordering</i> of its elements.
-     *
-     * @param map a map
-     * @param <K> the key type
-     * @param <V> the value type
-     * @return an persistent copy
-     */
+    /// Returns an persistent copy of the provided map that contains the provided elements sorted according to the
+    /// _natural ordering_ of its elements.
+    ///
+    /// @param map a map
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an persistent copy
     public static <K, V> RedBlackMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
         return RedBlackMap.<K, V>of().putAll(map);
     }
 
-    /**
-     * Returns an empty persistent map, sorted according to the
-     * specified comparator.
-     *
-     * @param <K> the key type
-     * @param <V> the value type
-     * @return an empty persistent map
-     */
+    /// Returns an empty persistent map, sorted according to the
+    /// specified comparator.
+    ///
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an empty persistent map
     public static <K, V> RedBlackMap<K, V> sortedOf(@Nullable Comparator<? super K> comparator) {
         comparator = comparator == null ? NaturalComparator.instance() : comparator;
         return new RedBlackMap<>(RedBlackTree.of(comparator), comparator);
     }
 
-    /**
-     * Returns an persistent map that contains the provided elements, sorted according to the
-     * specified comparator.
-     *
-     * @param elements elements
-     * @param <K>      the key type
-     * @param <V>      the value type
-     * @return an persistent map of the provided elements
-     */
+    /// Returns an persistent map that contains the provided elements, sorted according to the
+    /// specified comparator.
+    ///
+    /// @param elements elements
+    /// @param <K>      the key type
+    /// @param <V>      the value type
+    /// @return an persistent map of the provided elements
     @SuppressWarnings({"varargs"})
     @SafeVarargs
     public static <K, V> RedBlackMap<K, V> sortedOf(@Nullable Comparator<? super K> comparator, Map.Entry<K, V> @Nullable ... elements) {
@@ -186,28 +169,24 @@ public class RedBlackMap<K, V> implements PersistentNavigableMap<K, V>, Serializ
         return RedBlackMap.<K, V>sortedOf(comparator).putAll(Arrays.asList(elements));
     }
 
-    /**
-     * Returns an empty persistent map, sorted according to the
-     * <i>natural ordering</i> of its entries.
-     *
-     * @param <K> the key type
-     * @param <V> the value type
-     * @return an empty persistent map
-     */
+    /// Returns an empty persistent map, sorted according to the
+    /// _natural ordering_ of its entries.
+    ///
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an empty persistent map
     public static <K, V> RedBlackMap<K, V> of() {
         return new RedBlackMap<>(RedBlackTree.of(NaturalComparator.instance()), NaturalComparator.instance()
         );
     }
 
-    /**
-     * Returns an persistent map that contains the provided entries, sorted according to the
-     * <i>natural ordering</i> of its entries.
-     *
-     * @param entries entries
-     * @param <K>     the key type
-     * @param <V>     the value type
-     * @return an persistent map of the provided entries
-     */
+    /// Returns an persistent map that contains the provided entries, sorted according to the
+    /// _natural ordering_ of its entries.
+    ///
+    /// @param entries entries
+    /// @param <K>     the key type
+    /// @param <V>     the value type
+    /// @return an persistent map of the provided entries
     @SuppressWarnings({"varargs"})
     @SafeVarargs
     public static <K, V> RedBlackMap<K, V> of(Map.Entry<K, V> @Nullable ... entries) {

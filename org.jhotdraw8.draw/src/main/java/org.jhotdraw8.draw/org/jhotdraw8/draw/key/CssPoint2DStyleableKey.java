@@ -11,35 +11,28 @@ import org.jhotdraw8.draw.css.converter.Point2DCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
-/**
- * Non-null CssPoint2DStyleableFigureKey.
- *
- */
+/// Non-null CssPoint2DStyleableFigureKey.
 public class CssPoint2DStyleableKey extends AbstractStyleableKey<CssPoint2D>
         implements WritableStyleableMapAccessor<CssPoint2D>, NonNullKey<CssPoint2D> {
 
 
     private final Converter<CssPoint2D> converter;
 
-    /**
-     * Creates a new instance with the specified name and with 0,0 as the
-     * default value.
-     *
-     * @param name The name of the key.
-     */
+    /// Creates a new instance with the specified name and with 0,0 as the
+    /// default value.
+    ///
+    /// @param name The name of the key.
     public CssPoint2DStyleableKey(String name) {
         this(name, CssPoint2D.ZERO);
     }
 
 
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise
-     *                     specify them in arrow brackets.
-     * @param defaultValue The default value.
-     */
+    /// Creates a new instance with the specified name, type token class, default
+    /// value, and allowing or disallowing null values.
+    ///
+    /// @param key          The name of the name. type parameters are given. Otherwise
+    ///                     specify them in arrow brackets.
+    /// @param defaultValue The default value.
     public CssPoint2DStyleableKey(String key, CssPoint2D defaultValue) {
         this(key, defaultValue, new Point2DCssConverter(false));
     }

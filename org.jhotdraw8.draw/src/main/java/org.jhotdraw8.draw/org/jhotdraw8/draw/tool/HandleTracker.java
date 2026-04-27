@@ -11,16 +11,13 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
-/**
- * A <em>handle tracker</em> provides the behavior for manipulating a
- * {@link Handle} of a figure to the {@link SelectionTool}.
- * <p>
- * A {@link HandleTracker} should set the {@link Node#accessibleTextProperty()}
- * and {@link Node#accessibleHelpProperty()} of its own {@link Node}, to the
- * values of the corresponding properties in the {@link Node} provided
- * by the current {@link Handle}.
- *
- */
+/// A _handle tracker_ provides the behavior for manipulating a
+/// [Handle] of a figure to the [SelectionTool].
+///
+/// A [HandleTracker] should set the [Node#accessibleTextProperty()]
+/// and [Node#accessibleHelpProperty()] of its own [Node], to the
+/// values of the corresponding properties in the [Node] provided
+/// by the current [Handle].
 public interface HandleTracker extends Tracker {
 
     void setHandles(@Nullable Handle handle, Collection<Figure> compatibleFigures);

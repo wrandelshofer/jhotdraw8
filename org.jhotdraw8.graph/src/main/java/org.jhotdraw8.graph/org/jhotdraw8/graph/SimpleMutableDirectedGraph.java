@@ -19,59 +19,45 @@ import java.util.Set;
 import java.util.function.Function;
 
 
-/**
- * Simple implementation of the {@link MutableDirectedGraph} interface.
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- */
+/// Simple implementation of the [MutableDirectedGraph] interface.
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
 public class SimpleMutableDirectedGraph<V, A>
         implements MutableDirectedGraph<V, A>, AttributedIndexedDirectedGraph<V, A> {
 
     private static final Object TOMBSTONE_OBJECT = new Object();
 
     private final SimpleMutableIndexedDirectedGraph g;
-    /**
-     * Maps a vertex to a vertex index.
-     */
+    /// Maps a vertex to a vertex index.
     private final Map<V, Integer> vertexMap;
-    /**
-     * Maps a vertex index to a vertex object.
-     */
+    /// Maps a vertex index to a vertex object.
     private final List<V> vertices;
-    /**
-     * Maps an arrow index to an arrow object. May contain {@link #TOMBSTONE_OBJECT}s.
-     */
+    /// Maps an arrow index to an arrow object. May contain [#TOMBSTONE_OBJECT]s.
     private final List<Object> arrows;
 
-    /**
-     * Creates a new instance with an initial capacity for 16 vertices and 16 arrows.
-     * <p>
-     * Uses a non-identity hash map for storing the vertices.
-     */
+    /// Creates a new instance with an initial capacity for 16 vertices and 16 arrows.
+    ///
+    /// Uses a non-identity hash map for storing the vertices.
     public SimpleMutableDirectedGraph() {
         this(16, 16, false);
     }
 
-    /**
-     * Creates a new instance with the specified initial capacities.
-     * <p>
-     * Uses a non-identity hash map for storing the vertices.
-     *
-     * @param vertexCapacity the initial capacity for vertices
-     * @param arrowCapacity  the initial capacity for arrows
-     */
+    /// Creates a new instance with the specified initial capacities.
+    ///
+    /// Uses a non-identity hash map for storing the vertices.
+    ///
+    /// @param vertexCapacity the initial capacity for vertices
+    /// @param arrowCapacity  the initial capacity for arrows
     public SimpleMutableDirectedGraph(int vertexCapacity, int arrowCapacity) {
         this(vertexCapacity, arrowCapacity, false);
     }
 
-    /**
-     * Creates a new instance with the specified initial capacities.
-     *
-     * @param vertexCapacity the initial capacity for vertices
-     * @param arrowCapacity  the initial capacity for arrows
-     * @param identityMap    whether to use an identity hash map for storing the vertices
-     */
+    /// Creates a new instance with the specified initial capacities.
+    ///
+    /// @param vertexCapacity the initial capacity for vertices
+    /// @param arrowCapacity  the initial capacity for arrows
+    /// @param identityMap    whether to use an identity hash map for storing the vertices
     public SimpleMutableDirectedGraph(int vertexCapacity, int arrowCapacity, boolean identityMap) {
         this.g = new SimpleMutableIndexedDirectedGraph(vertexCapacity, arrowCapacity);
         this.vertexMap = identityMap ? new IdentityHashMap<>(vertexCapacity) : new HashMap<>(vertexCapacity);
@@ -84,26 +70,22 @@ public class SimpleMutableDirectedGraph<V, A>
         };
     }
 
-    /**
-     * Creates a new instance which contains a copy of the specified graph.
-     *
-     * @param graph a graph
-     */
+    /// Creates a new instance which contains a copy of the specified graph.
+    ///
+    /// @param graph a graph
     public SimpleMutableDirectedGraph(DirectedGraph<V, A> graph) {
         this(graph, Function.identity(), (v1, v2, a) -> a);
     }
 
-    /**
-     * Creates a new instance which contains a copy of the specified graph.
-     * <p>
-     * Uses a non-identity hash map for storing the vertices.
-     *
-     * @param graph        a graph
-     * @param vertexMapper a mapping function for the vertices
-     * @param arrowMapper  a mapping function for the arrows
-     * @param <VV>         the vertex data type of the graph
-     * @param <AA>         the arrow data type of the graph
-     */
+    /// Creates a new instance which contains a copy of the specified graph.
+    ///
+    /// Uses a non-identity hash map for storing the vertices.
+    ///
+    /// @param graph        a graph
+    /// @param vertexMapper a mapping function for the vertices
+    /// @param arrowMapper  a mapping function for the arrows
+    /// @param <VV>         the vertex data type of the graph
+    /// @param <AA>         the arrow data type of the graph
     public <VV, AA> SimpleMutableDirectedGraph(DirectedGraph<VV, AA> graph,
                                                Function<VV, V> vertexMapper,
                                                Function3<VV, VV, AA, A> arrowMapper) {
@@ -184,35 +166,29 @@ public class SimpleMutableDirectedGraph<V, A>
         arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
     }
 
-    /**
-     * Adds an arrow from 'va' to 'vb' and an arrow from 'vb' to 'va'.
-     *
-     * @param va    vertex a
-     * @param vb    vertex b
-     * @param arrow the arrow
-     */
+    /// Adds an arrow from 'va' to 'vb' and an arrow from 'vb' to 'va'.
+    ///
+    /// @param va    vertex a
+    /// @param vb    vertex b
+    /// @param arrow the arrow
     public void addBidiArrow(V va, V vb, A arrow) {
         addArrow(va, vb, arrow);
         addArrow(vb, va, arrow);
     }
 
-    /**
-     * Adds a vertex.
-     *
-     * @param v vertex
-     */
+    /// Adds a vertex.
+    ///
+    /// @param v vertex
     @Override
     public void addVertex(V v) {
         Objects.requireNonNull(v, "v");
         vertexMap.computeIfAbsent(v, addVertexIfAbsent);
     }
 
-    /**
-     * Adds a vertex at the specified index.
-     *
-     * @param v    vertex
-     * @param vidx vertex index
-     */
+    /// Adds a vertex at the specified index.
+    ///
+    /// @param v    vertex
+    /// @param vidx vertex index
     public void addVertex(V v, int vidx) {
         Objects.requireNonNull(v, "v");
         g.insertVertexAt(vidx);
@@ -258,10 +234,8 @@ public class SimpleMutableDirectedGraph<V, A>
         }
     }
 
-    /**
-     * Performance: We need this lambda very often if a large graph is created
-     * with this builder.
-     */
+    /// Performance: We need this lambda very often if a large graph is created
+    /// with this builder.
     private final Function<V, Integer> addVertexIfAbsent;
 
 

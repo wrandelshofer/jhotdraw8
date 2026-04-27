@@ -37,20 +37,17 @@ import java.util.logging.Logger;
 import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_CHOOSER_FACTORY_KEY;
 import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_CHOOSER_KEY;
 
-/**
- * This abstract class can be extended to implement an {@code Action} that asks
- * to write unsaved changes of a {@link FileBasedActivity}
- * before a destructive action is performed.
- * <p>
- * If the view has no unsaved changes, method {@code doIt} is invoked
- * immediately. If unsaved changes are present, a dialog is shown asking whether
- * the user wants to discard the changes, cancel or write the changes before
- * doing it. If the user chooses to discard the changes, {@code doIt} is invoked
- * immediately. If the user chooses to cancel, the action is aborted. If the
- * user chooses to write the changes, the view is saved, and {@code doIt} is
- * only invoked after the view was successfully saved.
- *
- */
+/// This abstract class can be extended to implement an `Action` that asks
+/// to write unsaved changes of a [FileBasedActivity]
+/// before a destructive action is performed.
+///
+/// If the view has no unsaved changes, method `doIt` is invoked
+/// immediately. If unsaved changes are present, a dialog is shown asking whether
+/// the user wants to discard the changes, cancel or write the changes before
+/// doing it. If the user chooses to discard the changes, `doIt` is invoked
+/// immediately. If the user chooses to cancel, the action is aborted. If the
+/// user chooses to write the changes, the view is saved, and `doIt` is
+/// only invoked after the view was successfully saved.
 public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityAction<FileBasedActivity> {
 
     private final Logger LOGGER = Logger.getLogger(AbstractSaveUnsavedChangesAction.class.getName());
@@ -58,11 +55,9 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
 
     private @Nullable Node oldFocusOwner = null;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param activity the view
-     */
+    /// Creates a new instance.
+    ///
+    /// @param activity the view
     public AbstractSaveUnsavedChangesAction(FileBasedActivity activity) {
         super(activity);
     }

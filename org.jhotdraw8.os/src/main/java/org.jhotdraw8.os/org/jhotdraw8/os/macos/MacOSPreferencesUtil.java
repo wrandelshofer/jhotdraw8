@@ -20,26 +20,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Provides read methods for some well known macOS preferences files.
- */
+/// Provides read methods for some well known macOS preferences files.
 public class MacOSPreferencesUtil {
-    /**
-     * Path to global preferences.
-     */
+    /// Path to global preferences.
     public static final File GLOBAL_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/.GlobalPreferences.plist");
-    /**
-     * Path to finder preferences.
-     */
+    /// Path to finder preferences.
     public static final File FINDER_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/com.apple.finder.plist");
-    /**
-     * Each entry in this hash map represents a cached preferences file.
-     */
+    /// Each entry in this hash map represents a cached preferences file.
     private static ConcurrentHashMap<File, Map<String, Object>> cachedFiles;
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public MacOSPreferencesUtil() {
     }
 
@@ -55,13 +45,11 @@ public class MacOSPreferencesUtil {
         return get(file, key, defaultValue).equals(compareWithThisValue);
     }
 
-    /**
-     * Gets a preferences value
-     *
-     * @param file the preferences file
-     * @param key  the key may contain tabulator separated entries to directly access a value in a sub-dictionary
-     * @return the value associated with the key
-     */
+    /// Gets a preferences value
+    ///
+    /// @param file the preferences file
+    /// @param key  the key may contain tabulator separated entries to directly access a value in a sub-dictionary
+    /// @return the value associated with the key
     public static @Nullable Object get(File file, String key) {
         ensureCached(file);
         final Map<String, Object> map = cachedFiles.get(file);
@@ -111,39 +99,31 @@ public class MacOSPreferencesUtil {
         return null;
     }
 
-    /**
-     * Returns all known keys for the specified preferences file.
-     *
-     * @return
-     */
+    /// Returns all known keys for the specified preferences file.
+    ///
+    /// @return
     public static Set<String> getKeySet(File file) {
         ensureCached(file);
         return cachedFiles.get(file).keySet();
     }
 
-    /**
-     * Clears all caches.
-     */
+    /// Clears all caches.
     public static void clearAllCaches() {
         cachedFiles.clear();
 
     }
 
-    /**
-     * Clears the cache for the specified preference file.
-     */
+    /// Clears the cache for the specified preference file.
     public static void clearCache(File f) {
         cachedFiles.remove(f);
     }
 
-    /**
-     * Get a value from a Mac OS X preferences file.
-     *
-     * @param file         The preferences file.
-     * @param key          Hierarchical keys are separated by \t characters.
-     * @param defaultValue This value is returned when the key does not exist.
-     * @return Returns the preferences value.
-     */
+    /// Get a value from a Mac OS X preferences file.
+    ///
+    /// @param file         The preferences file.
+    /// @param key          Hierarchical keys are separated by \t characters.
+    /// @param defaultValue This value is returned when the key does not exist.
+    /// @return Returns the preferences value.
     public static Object get(File file, String key, Object defaultValue) {
         ensureCached(file);
         return cachedFiles.get(file).getOrDefault(key, defaultValue);

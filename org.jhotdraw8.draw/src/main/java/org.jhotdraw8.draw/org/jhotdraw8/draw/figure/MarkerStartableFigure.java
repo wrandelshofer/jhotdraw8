@@ -10,14 +10,9 @@ import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
-/**
- * A figure which supports start markers.
- *
- */
+/// A figure which supports start markers.
 public interface MarkerStartableFigure extends Figure {
-    /**
-     * Marker start is an SVG path that points to the right, with coordinate 0,0 at the head of the path.
-     */
+    /// Marker start is an SVG path that points to the right, with coordinate 0,0 at the head of the path.
     NullableFXPathElementsStyleableKey MARKER_START_SHAPE = new NullableFXPathElementsStyleableKey("marker-start-shape", null);
     DoubleStyleableKey MARKER_START_SCALE_FACTOR = new DoubleStyleableKey("marker-start-scale-factor", 1.0);
 

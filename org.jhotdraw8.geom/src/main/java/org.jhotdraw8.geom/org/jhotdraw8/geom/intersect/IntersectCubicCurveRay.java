@@ -29,34 +29,29 @@ public class IntersectCubicCurveRay {
                 new Point2D.Double(box, boy), new Point2D.Double(bdx, bdy), maxT, epsilon);
     }
 
-    /**
-     * Computes the intersection between cubic bezier curve 'p' and the line
-     * 'a'.
-     *
-     * @param a0 control point P0 of 'p'
-     * @param a1 control point P1 of 'p'
-     * @param a2 control point P2 of 'p'
-     * @param a3 control point P3 of 'p'
-     * @param bo point 0 of ray 'b'
-     * @param bd direction of ray 'b'
-     * @return the computed intersection
-     */
+    /// Computes the intersection between cubic bezier curve 'p' and the line
+    /// 'a'.
+    ///
+    /// @param a0 control point P0 of 'p'
+    /// @param a1 control point P1 of 'p'
+    /// @param a2 control point P2 of 'p'
+    /// @param a3 control point P3 of 'p'
+    /// @param bo point 0 of ray 'b'
+    /// @param bd direction of ray 'b'
+    /// @return the computed intersection
     public static IntersectionResult intersectCubicCurveRay(Point2D a0, Point2D a1, Point2D a2, Point2D a3, Point2D bo, Point2D bd) {
         return intersectCubicCurveRay(a0, a1, a2, a3, bo, bd, Double.MAX_VALUE, Scalars.REAL_THRESHOLD);
     }
 
-    /**
-     * @param p0
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param ao
-     * @param ad
-     * @param maxT
-     * @param epsilon
-     * @return
-     */
-
+    /// @param p0
+    /// @param p1
+    /// @param p2
+    /// @param p3
+    /// @param ao
+    /// @param ad
+    /// @param maxT
+    /// @param epsilon
+    /// @return
     public static IntersectionResult intersectCubicCurveRay(Point2D p0, Point2D p1, Point2D p2, Point2D p3,
                                                             Point2D ao, Point2D ad, double maxT, double epsilon) {
         final Point2D.Double topLeft = Intersections.topLeft(ao, Points2D.add(ao, ad)); // used to determine if point is on line segment

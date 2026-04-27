@@ -41,21 +41,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
-/**
- * AbstractApplication.
- *
- */
+/// AbstractApplication.
 public abstract class AbstractApplication extends javafx.application.Application implements org.jhotdraw8.application.Application {
 
     private static final String RECENT_URIS = ".recentUriFormats";
 
-    /**
-     * Holds the disabled state.
-     */
+    /// Holds the disabled state.
     private final ReadOnlyBooleanProperty disabled;
-    /**
-     * Holds the disablers.
-     */
+    /// Holds the disablers.
     private final ObservableSet<Object> disablers = FXCollections.observableSet();
 
     @SuppressWarnings("this-escape")
@@ -74,21 +67,15 @@ public abstract class AbstractApplication extends javafx.application.Application
     @SuppressWarnings("this-escape")
     private final NonNullObjectProperty<Preferences> preferences = new NonNullObjectProperty<>(this, PREFERENCES_PROPERTY, Preferences.userNodeForPackage(getClass()));
 
-    /**
-     * Holds the max number of recent URIs.
-     */
+    /// Holds the max number of recent URIs.
     private final IntegerProperty maxNumberOfRecentUris//
             = new SimpleIntegerProperty(//
             this, MAX_NUMBER_OF_RECENT_URIS_PROPERTY, //
             10);
-    /**
-     * Properties.
-     */
+    /// Properties.
     private ObservableMap<Key<?>, Object> properties;
 
-    /**
-     * Holds the recent URIs.
-     */
+    /// Holds the recent URIs.
     private final ReadOnlyMapProperty<URI, DataFormat> recentUris//
             = new ReadOnlyMapWrapper<URI, DataFormat>(//
             this, RECENT_URIS_PROPERTY, //

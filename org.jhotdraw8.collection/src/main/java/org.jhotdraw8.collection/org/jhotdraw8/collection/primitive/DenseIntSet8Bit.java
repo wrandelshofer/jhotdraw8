@@ -9,41 +9,35 @@ import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.BitSet;
 
-/**
- * A dense set of int-values which can be cleared in O(1);
- * needs 8-bits storage space for each int-value.
- * <p>
- * This set is optimised for frequent setting and clearing.
- * <p>
- * Setting a boolean at an index is O(1).
- * <p>
- * Clearing the set is O(1) amortized. Every 255 times it takes O(n) time to
- * clear the set.
- * <p>
- * Storage space is one byte per boolean.
- * <p>
- * This set has a fixed capacity. Attempting to access an element outside of the
- * capacity range results in an {@link ArrayIndexOutOfBoundsException}.
- */
+/// A dense set of int-values which can be cleared in O(1);
+/// needs 8-bits storage space for each int-value.
+///
+/// This set is optimised for frequent setting and clearing.
+///
+/// Setting a boolean at an index is O(1).
+///
+/// Clearing the set is O(1) amortized. Every 255 times it takes O(n) time to
+/// clear the set.
+///
+/// Storage space is one byte per boolean.
+///
+/// This set has a fixed capacity. Attempting to access an element outside of the
+/// capacity range results in an [ArrayIndexOutOfBoundsException].
 public class DenseIntSet8Bit implements IntSet {
     private byte[] a;
     private byte mark = 1;
 
-    /**
-     * Creates a set with the specified capacity.
-     */
+    /// Creates a set with the specified capacity.
     public DenseIntSet8Bit(int capacity) {
         a = new byte[capacity];
     }
 
-    /**
-     * Adds an element to the set.
-     *
-     * @param element the element
-     * @return true if the element was added, false if it was already in the set.
-     * @throws ArrayIndexOutOfBoundsException if element is outside of the
-     *                                        capacity range.
-     */
+    /// Adds an element to the set.
+    ///
+    /// @param element the element
+    /// @return true if the element was added, false if it was already in the set.
+    /// @throws ArrayIndexOutOfBoundsException if element is outside of the
+    ///                                        capacity range.
     @Override
     public boolean addAsInt(int element) {
         if (a[element] != mark) {
@@ -53,14 +47,12 @@ public class DenseIntSet8Bit implements IntSet {
         return false;
     }
 
-    /**
-     * Removes the specified element from the set.
-     *
-     * @param element an element
-     * @return true if the element was in the set, false otherwise
-     * @throws ArrayIndexOutOfBoundsException if element is outside of the
-     *                                        capacity range.
-     */
+    /// Removes the specified element from the set.
+    ///
+    /// @param element an element
+    /// @return true if the element was in the set, false otherwise
+    /// @throws ArrayIndexOutOfBoundsException if element is outside of the
+    ///                                        capacity range.
     @Override
     public boolean removeAsInt(int element) {
         if (a[element] == mark) {
@@ -70,14 +62,12 @@ public class DenseIntSet8Bit implements IntSet {
         return false;
     }
 
-    /**
-     * Checks if the set contains the specified element.
-     *
-     * @param e an element
-     * @return true if the element is in the set.
-     * @throws ArrayIndexOutOfBoundsException if element is outside of the
-     *                                        capacity range.
-     */
+    /// Checks if the set contains the specified element.
+    ///
+    /// @param e an element
+    /// @return true if the element is in the set.
+    /// @throws ArrayIndexOutOfBoundsException if element is outside of the
+    ///                                        capacity range.
     @Override
     public boolean containsAsInt(int e) {
         return a[e] == mark;
@@ -91,20 +81,16 @@ public class DenseIntSet8Bit implements IntSet {
         }
     }
 
-    /**
-     * Sets the capacity of the set.
-     *
-     * @param capacity the new capacity
-     */
+    /// Sets the capacity of the set.
+    ///
+    /// @param capacity the new capacity
     public void setCapacity(int capacity) {
         a = Arrays.copyOf(a, capacity);
     }
 
-    /**
-     * Gets the capacity of the set.
-     *
-     * @return the capacity
-     */
+    /// Gets the capacity of the set.
+    ///
+    /// @return the capacity
     public int capacity() {
         return a.length;
     }
@@ -122,11 +108,9 @@ public class DenseIntSet8Bit implements IntSet {
                 && Arrays.equals(this.toLongArray(), that.toLongArray());
     }
 
-    /**
-     * The hash code is the same as {@link BitSet#hashCode()}.
-     *
-     * @return hashcode
-     */
+    /// The hash code is the same as [BitSet#hashCode()].
+    ///
+    /// @return hashcode
     @Override
     public int hashCode() {
         long h = 1234;
@@ -137,11 +121,9 @@ public class DenseIntSet8Bit implements IntSet {
         return (int) ((h >> 32) ^ h);
     }
 
-    /**
-     * Returns a new long array containing all the bits in this int set.
-     *
-     * @return a new long array.
-     */
+    /// Returns a new long array containing all the bits in this int set.
+    ///
+    /// @return a new long array.
     public long[] toLongArray() {
         int length = (a.length - 1 >>> 6) + 1;
         long[] words = new long[length];

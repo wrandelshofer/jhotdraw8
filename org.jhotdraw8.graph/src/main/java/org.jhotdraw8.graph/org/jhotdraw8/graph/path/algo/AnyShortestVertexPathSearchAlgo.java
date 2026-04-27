@@ -17,33 +17,29 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
- * See {@link AnyShortestArcPathSearchAlgo} for a description of this
- * algorithm.
- *
- * @param <V> the vertex data type
- * @param <C> the cost number type
- */
+/// See [AnyShortestArcPathSearchAlgo] for a description of this
+/// algorithm.
+///
+/// @param <V> the vertex data type
+/// @param <C> the cost number type
 public class AnyShortestVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
     public AnyShortestVertexPathSearchAlgo() {
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param startVertices        the set of start vertices
-     * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next vertices function
-     * @param maxDepth             the maximal depth (inclusive) of the search
-     *                             Must be {@literal >= 0}.
-     * @param zero                 the zero cost value
-     * @param costLimit            the maximal cost (inclusive) of a path.
-     *                             Must be {@literal >= zero}.
-     * @param costFunction         the cost function
-     * @param sumFunction          the sum function for adding two cost values
-     * @param visited
-     * @return on success: a back link, otherwise: null
-     */
+    /// {@inheritDoc}
+    ///
+    /// @param startVertices        the set of start vertices
+    /// @param goalPredicate        the goal predicate
+    /// @param nextVerticesFunction the next vertices function
+    /// @param maxDepth             the maximal depth (inclusive) of the search
+    ///                             Must be {@literal >= 0}.
+    /// @param zero                 the zero cost value
+    /// @param costLimit            the maximal cost (inclusive) of a path.
+    ///                             Must be {@literal >= zero}.
+    /// @param costFunction         the cost function
+    /// @param sumFunction          the sum function for adding two cost values
+    /// @param visited
+    /// @return on success: a back link, otherwise: null
     @Override
     public @Nullable VertexBackLinkWithCost<V, C> search(
             Iterable<V> startVertices,

@@ -35,13 +35,10 @@ import java.util.function.Function;
 
 import static java.lang.Math.PI;
 
-/**
- * Handle for the start or end point of a connection figure.
- * <p>
- * Pressing the alt or the control key while dragging the handle prevents
- * connecting the point.
- *
- */
+/// Handle for the start or end point of a connection figure.
+///
+/// Pressing the alt or the control key while dragging the handle prevents
+/// connecting the point.
 public class LabelConnectorHandle extends AbstractConnectorHandle {
 
     protected Background regionBackgroundConnected = new Background(new BackgroundFill(Color.BLUE, null, null));

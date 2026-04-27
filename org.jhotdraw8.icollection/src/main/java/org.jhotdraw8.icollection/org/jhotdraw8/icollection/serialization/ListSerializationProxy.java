@@ -14,46 +14,43 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A serialization proxy that serializes a list independently of its internal
- * structure.
- * <p>
- * Usage:
- * <pre>
- * class MyList&lt;E&gt; implements List&lt;E&gt;, Serializable {
- *   private final static long serialVersionUID = 0L;
- *
- *   private Object writeReplace() throws ObjectStreamException {
- *      return new SerializationProxy&lt;&gt;(this);
- *   }
- *
- *   static class SerializationProxy&lt;E&gt;
- *                  extends ListSerializationProxy&lt;E&gt; {
- *      private final static long serialVersionUID = 0L;
- *      SerializationProxy(Set&lt;E&gt; target) {
- *          super(target);
- *      }
- *     {@literal @Override}
- *      protected Object readResolve() {
- *          return new MyList&lt;&gt;(deserializedElements);
- *      }
- *   }
- * }
- * </pre>
- * <p>
- * References:
- * <dl>
- *     <dt>Java Object Serialization Specification: 2 - Object Output Classes,
- *     2.5 The writeReplace Method</dt>
- *     <dd><a href="https://docs.oracle.com/en/java/javase/17/docs/specs/serialization/output.html#the-writereplace-method"></a>oracle.com</dd>
- *
- *     <dt>Java Object Serialization Specification: 3 - Object Input Classes,
- *     3.7 The readResolve Method</dt>
- *     <dd><a href="https://docs.oracle.com/en/java/javase/17/docs/specs/serialization/input.html#the-readresolve-method"></a>oracle.com</dd>
- * </dl>
- *
- * @param <E> the element type
- */
+/// A serialization proxy that serializes a list independently of its internal
+/// structure.
+///
+/// Usage:
+/// <pre>
+/// class MyList&lt;E&gt; implements List&lt;E&gt;, Serializable {
+///   private final static long serialVersionUID = 0L;
+///
+///   private Object writeReplace() throws ObjectStreamException {
+///      return new SerializationProxy&lt;&gt;(this);
+///   }
+///
+///   static class SerializationProxy&lt;E&gt;
+///                  extends ListSerializationProxy&lt;E&gt; {
+///      private final static long serialVersionUID = 0L;
+///      SerializationProxy(Set&lt;E&gt; target) {
+///          super(target);
+///      }
+///     {@literal @Override}
+///      protected Object readResolve() {
+///          return new MyList&lt;&gt;(deserializedElements);
+///      }
+///   }
+/// }
+/// </pre>
+///
+/// References:
+/// <dl>
+///     <dt>Java Object Serialization Specification: 2 - Object Output Classes,
+///     2.5 The writeReplace Method</dt>
+///     <dd><a href="https://docs.oracle.com/en/java/javase/17/docs/specs/serialization/output.html#the-writereplace-method"></a>oracle.com</dd>
+///     <dt>Java Object Serialization Specification: 3 - Object Input Classes,
+///     3.7 The readResolve Method</dt>
+///     <dd><a href="https://docs.oracle.com/en/java/javase/17/docs/specs/serialization/input.html#the-readresolve-method"></a>oracle.com</dd>
+/// </dl>
+///
+/// @param <E> the element type
 public abstract class ListSerializationProxy<E> implements Serializable {
     @Serial
     private static final long serialVersionUID = 0L;

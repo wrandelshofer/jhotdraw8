@@ -34,206 +34,203 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-/**
- * IndentingXMLStreamWriter is a {@link XMLStreamWriter} that supports automatic
- * indentation of XML elements and alphabetic sorting of XML attributes.
- * <p>
- * The textual representation of the output is non-canonical. The
- * following aspects of the textual representation are the same as in Canonical
- * XML:
- * <ul>
- *     <li>Attributes are sorted by namespace URI, rather than by the namespace
- *     prefix.</li>
- *     <li>The hex-encoding of special characters, is written in uppercase
- *     hexadecimal with no leading zeroes, for example {@code #xD}.</li>
- * </ul>
- *
- * <p>
- * This writer writes an XML 1.0 document with the following syntax rules.
- * <pre>
- * Document
- *  [1]  document       ::=  prolog element Misc*
- *
- * Character Range
- *  [2]  Char           ::=  #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
- *
- * White Space
- *  [3]     S           ::=  (#x20 | #x9 | #xD | #xA)+
- *
- * Names and Tokens
- *  [4]  NameStartChar  ::=  ":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
- *  [4a] NameChar       ::=  NameStartChar | "-" | "." | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
- *  [5]  Name           ::=  NameStartChar (NameChar)*
- *  [6]  Names          ::=  Name (#x20 Name)*
- *  [7]  Nmtoken        ::=  (NameChar)+
- *  [8]  Nmtokens       ::=  Nmtoken (#x20 Nmtoken)*
- *
- * Literals
- *  [9]  EntityValue    ::=  '"' ([^%&amp;"] | PEReference | Reference)* '"'
- *                        |  "'" ([^%&amp;'] | PEReference | Reference)* "'"
- * [10]  AttValue       ::=  '"' ([^&lt;&amp;"] | Reference)* '"'
- *                        |  "'" ([^&lt;&amp;'] | Reference)* "'"
- * [11]  SystemLiteral  ::=  ('"' [^"]* '"') | ("'" [^']* "'")
- * [12]  PubidLiteral   ::=  '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
- * [13]  PubidChar      ::=  #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
- *
- * Character Data
- * [14]  CharData       ::=  [^&lt;&amp;]* - ([^&lt;&amp;]* ']]&gt;' [^&lt;&amp;]*)
- *
- * Comments
- * [15]  Comment        ::=  '&lt;!--' ((Char - '-') | ('-' (Char - '-')))* '--&gt;'
- *
- * Processing Instructions
- * [16]  PI             ::=  '&lt;?' PITarget (S (Char* - (Char* '?&gt;' Char*)))? '?&gt;'
- * [17]  PITarget       ::=  Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
- *
- * CDATA Sections
- * [18]  CDSect         ::=  CDStart CData CDEnd
- * [19]  CDStart        ::=  '&lt;![CDATA['
- * [20]  CData          ::=  (Char* - (Char* ']]&gt;' Char*))
- * [21]  CDEnd          ::=  ']]&gt;'
- *
- * Prolog
- * [22] prolog          ::=  XMLDecl? Misc* (doctypedecl Misc*)?
- * [23] XMLDecl         ::=  '&lt;?xml' VersionInfo EncodingDecl? SDDecl? S? '?&gt;'
- * [24] VersionInfo     ::=  S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"')
- * [25] Eq              ::=  S? '=' S?
- * [26] VersionNum      ::=  '1.' [0-9]+
- * [27] Misc            ::=  Comment | PI | S
- *
- * Document Type Definition
- * [28]  doctypedecl    ::=  '&lt;!DOCTYPE' S Name (S ExternalID)? S? ('[' intSubset ']' S?)? '&gt;'
- * [28a] DeclSep        ::=  PEReference | S     [WFC: PE Between Declarations]
- * [28b] intSubset      ::=  (markupdecl | DeclSep)*
- * [29]  markupdecl     ::=  elementdecl | AttlistDecl | EntityDecl | NotationDecl | PI | Comment
- *
- * External Subset
- * [30]  extSubset      ::=  TextDecl? extSubsetDecl
- * [31]  extSubsetDecl  ::=  ( markupdecl | conditionalSect | DeclSep)*
- *
- * Standalone Document Declaration
- * [32]  SDDecl         ::=  S 'standalone' Eq (("'" ('yes' | 'no') "'") | ('"' ('yes' | 'no') '"'))
- *
- * Element
- * [39]  element        ::=  EmptyElemTag
- *                        |  STag content ETag
- *
- * Start-tag
- * [40]  STag           ::=  '&lt;' Name (S Attribute)* S? '&gt;'
- * [41]  Attribute      ::=  Name Eq AttValue
- *
- * End-tag
- * [42]  ETag           ::=  '&lt;/' Name S? '&gt;'
- *
- * Content of Elements
- * [43]  content        ::=  CharData? ((element | Reference | CDSect | PI | Comment) CharData?)*
- *
- * Tags for Empty Elements
- * [44]  EmptyElemTag   ::=  '&lt;' Name (S Attribute)* S? '/&gt;'    [WFC: Unique Att Spec]
- *
- * Element Type Declaration
- * [45]  elementdecl    ::=  '&lt;!ELEMENT' S Name S contentspec S? '&gt;'    [VC: Unique Element Type Declaration]
- * [46]  contentspec    ::=  'EMPTY' | 'ANY' | Mixed | children
- *
- * Element-content Models
- * [47]  children       ::=  (choice | seq) ('?' | '*' | '+')?
- * [48]  cp             ::=  (Name | choice | seq) ('?' | '*' | '+')?
- * [49]  choice         ::=  '(' S? cp ( S? '|' S? cp )+ S? ')'    [VC: Proper Group/PE Nesting]
- * [50]  seq            ::=  '(' S? cp ( S? ',' S? cp )* S? ')'
- *
- * Mixed-content Declaration
- * [51]  Mixed          ::= '(' S? '#PCDATA' (S? '|' S? Name)* S? ')*'
- *                        | '(' S? '#PCDATA' S? ')'
- *
- * Attribute-list Declaration
- * [52]  AttlistDecl    ::=  '&lt;!ATTLIST' S Name AttDef* S? '&gt;'
- * [53]  AttDef         ::=  S Name S AttType S DefaultDecl
- *
- * Attribute Types
- * [54]  AttType        ::=  StringType | TokenizedType | EnumeratedType
- * [55]  StringType     ::=  'CDATA'
- * [56]  TokenizedType  ::=  'ID'
- *                        |  'IDREF'
- *                        |  'IDREFS'
- *                        |  'ENTITY'
- *                        |  'ENTITIES'
- *                        |  'NMTOKEN'
- *                        |  'NMTOKENS'
- *
- *
- * Enumerated Attribute Types
- * [57]  EnumeratedType ::=  NotationType | Enumeration
- * [58]  NotationType   ::=  'NOTATION' S '(' S? Name (S? '|' S? Name)* S? ')'
- *
- * [59]  Enumeration    ::=  '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
- *
- * Attribute Defaults
- * [60] DefaultDecl     ::=  '#REQUIRED' | '#IMPLIED'
- *                        |  (('#FIXED' S)? AttValue)
- *
- * Conditional Section
- * [61]  conditionalSect ::= includeSect | ignoreSect
- * [62]  includeSect    ::=  '&lt;![' S? 'INCLUDE' S? '[' extSubsetDecl ']]&gt;'
- * [63]  ignoreSect     ::=  '&lt;![' S? 'IGNORE' S? '[' ignoreSectContents* ']]&gt;'
- * [64]  ignoreSectContents ::= Ignore ('&lt;![' ignoreSectContents ']]&gt;' Ignore)*
- * [65]  Ignore         ::=  Char* - (Char* ('&lt;![' | ']]&gt;') Char*)
- *
- * Character Reference
- * [66]  CharRef        ::=  '&amp;' '#' [0-9]+ ';'
- *                        |  '&amp;' '#' 'x' [0-9a-fA-F]+ ';'
- *
- * Entity Reference
- * [67]  Reference      ::=  EntityRef | CharRef
- * [68]  EntityRef      ::=  '&amp;' Name ';'
- * [69]  PEReference    ::=  '%' Name ';'
- *
- * Entity Declaration
- * [70]  EntityDecl     ::=  GEDecl | PEDecl
- * [71]  GEDecl         ::=  '&lt;!ENTITY' S Name S EntityDef S? '&gt;'
- * [72]  PEDecl         ::=  '&lt;!ENTITY' S '%' S Name S PEDef S? '&gt;'
- * [73]  EntityDef      ::=  EntityValue | (ExternalID NDataDecl?)
- * [74]  PEDef          ::=  EntityValue | ExternalID
- *
- * External Entity Declaration
- * [75]  ExternalID     ::=  'SYSTEM' S SystemLiteral
- *                        |  'PUBLIC' S PubidLiteral S SystemLiteral
- * [76]  NDataDecl      ::=  S 'NDATA' S Name
- *
- *
- * Text Declaration
- * [77]  TextDecl       ::=  '&lt;?xml' VersionInfo? EncodingDecl S? '?&gt;'
- *
- * Well-Formed External Parsed Entity
- * [78]  extParsedEnt   ::=  TextDecl? content
- *
- * Encoding Declaration
- * [80]  EncodingDecl   ::=  S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
- * [81]  EncName        ::=  [A-Za-z] ([A-Za-z0-9._] | '-')*
- *
- * Notation Declarations
- * [82]  NotationDecl   ::=  '&lt;!NOTATION' S Name S (ExternalID | PublicID) S? '&gt;'
- * [83]  PublicID       ::=  'PUBLIC' S PubidLiteral
- * </pre>
- * <p>
- * References:
- * <dl>
- *     <dt>Extensible Markup Language (XML) 1.0 (Fifth Edition)</dt>
- *     <dd><a href="https://www.w3.org/TR/xml/">w3.org</a></dd>
- * </dl>
- * <dl>
- *     <dt>Canonical XML Version 1.1</dt>
- *     <dd><a href="https://www.w3.org/TR/xml-c14n11/">w3.org</a></dd>
- * </dl>
- * <dl>
- *     <dt>Extensible Markup Language (XML) 1.0 (Fifth Edition),
- *     2.10 White Space Handling, xml:space='preserve'</dt>
- *     <dd><a href="https://www.w3.org/TR/xml/#sec-white-space">w3.org</a></dd>
- * </dl>
- * <dl>
- *     <dt>Understanding xml:space</dt>
- *     <dd><a href="http://www.xmlplease.com/xml/xmlspace/">xmlplease.com</a></dd>
- * </dl>
- */
+/// IndentingXMLStreamWriter is a [XMLStreamWriter] that supports automatic
+/// indentation of XML elements and alphabetic sorting of XML attributes.
+///
+/// The textual representation of the output is non-canonical. The
+/// following aspects of the textual representation are the same as in Canonical
+/// XML:
+///
+///   - Attributes are sorted by namespace URI, rather than by the namespace
+///     prefix.
+///   - The hex-encoding of special characters, is written in uppercase
+///     hexadecimal with no leading zeroes, for example `#xD`.
+///
+///
+/// This writer writes an XML 1.0 document with the following syntax rules.
+/// <pre>
+/// Document
+///  [1]  document       ::=  prolog element Misc*
+///
+/// Character Range
+///  [2]  Char           ::=  #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+///
+/// White Space
+///  [3]     S           ::=  (#x20 | #x9 | #xD | #xA)+
+///
+/// Names and Tokens
+///  [4]  NameStartChar  ::=  ":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+///  [4a] NameChar       ::=  NameStartChar | "-" | "." | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
+///  [5]  Name           ::=  NameStartChar (NameChar)*
+///  [6]  Names          ::=  Name (#x20 Name)*
+///  [7]  Nmtoken        ::=  (NameChar)+
+///  [8]  Nmtokens       ::=  Nmtoken (#x20 Nmtoken)*
+///
+/// Literals
+///  [9]  EntityValue    ::=  '"' ([^%&amp;"] | PEReference | Reference)* '"'
+///                        |  "'" ([^%&amp;'] | PEReference | Reference)* "'"
+/// [10]  AttValue       ::=  '"' ([^&lt;&amp;"] | Reference)* '"'
+///                        |  "'" ([^&lt;&amp;'] | Reference)* "'"
+/// [11]  SystemLiteral  ::=  ('"' [^"]* '"') | ("'" [^']* "'")
+/// [12]  PubidLiteral   ::=  '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
+/// [13]  PubidChar      ::=  #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
+///
+/// Character Data
+/// [14]  CharData       ::=  [^&lt;&amp;]* - ([^&lt;&amp;]* ']]&gt;' [^&lt;&amp;]*)
+///
+/// Comments
+/// [15]  Comment        ::=  '&lt;!--' ((Char - '-') | ('-' (Char - '-')))* '--&gt;'
+///
+/// Processing Instructions
+/// [16]  PI             ::=  '&lt;?' PITarget (S (Char* - (Char* '?&gt;' Char*)))? '?&gt;'
+/// [17]  PITarget       ::=  Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
+///
+/// CDATA Sections
+/// [18]  CDSect         ::=  CDStart CData CDEnd
+/// [19]  CDStart        ::=  '&lt;![CDATA['
+/// [20]  CData          ::=  (Char* - (Char* ']]&gt;' Char*))
+/// [21]  CDEnd          ::=  ']]&gt;'
+///
+/// Prolog
+/// [22] prolog          ::=  XMLDecl? Misc* (doctypedecl Misc*)?
+/// [23] XMLDecl         ::=  '&lt;?xml' VersionInfo EncodingDecl? SDDecl? S? '?&gt;'
+/// [24] VersionInfo     ::=  S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"')
+/// [25] Eq              ::=  S? '=' S?
+/// [26] VersionNum      ::=  '1.' [0-9]+
+/// [27] Misc            ::=  Comment | PI | S
+///
+/// Document Type Definition
+/// [28]  doctypedecl    ::=  '&lt;!DOCTYPE' S Name (S ExternalID)? S? ('['intSubset']' S?)? '&gt;'
+/// [28a] DeclSep        ::=  PEReference | S     [WFC:PEBetweenDeclarations]
+/// [28b] intSubset      ::=  (markupdecl | DeclSep)*
+/// [29]  markupdecl     ::=  elementdecl | AttlistDecl | EntityDecl | NotationDecl | PI | Comment
+///
+/// External Subset
+/// [30]  extSubset      ::=  TextDecl? extSubsetDecl
+/// [31]  extSubsetDecl  ::=  ( markupdecl | conditionalSect | DeclSep)*
+///
+/// Standalone Document Declaration
+/// [32]  SDDecl         ::=  S 'standalone' Eq (("'" ('yes' | 'no') "'") | ('"' ('yes' | 'no') '"'))
+///
+/// Element
+/// [39]  element        ::=  EmptyElemTag
+///                        |  STag content ETag
+///
+/// Start-tag
+/// [40]  STag           ::=  '&lt;' Name (S Attribute)* S? '&gt;'
+/// [41]  Attribute      ::=  Name Eq AttValue
+///
+/// End-tag
+/// [42]  ETag           ::=  '&lt;/' Name S? '&gt;'
+///
+/// Content of Elements
+/// [43]  content        ::=  CharData? ((element | Reference | CDSect | PI | Comment) CharData?)*
+///
+/// Tags for Empty Elements
+/// [44]  EmptyElemTag   ::=  '&lt;' Name (S Attribute)* S? '/&gt;'    [WFC:UniqueAttSpec]
+///
+/// Element Type Declaration
+/// [45]  elementdecl    ::=  '&lt;!ELEMENT' S Name S contentspec S? '&gt;'    [VC:UniqueElementTypeDeclaration]
+/// [46]  contentspec    ::=  'EMPTY' | 'ANY' | Mixed | children
+///
+/// Element-content Models
+/// [47]  children       ::=  (choice | seq) ('?' | '*' | '+')?
+/// [48]  cp             ::=  (Name | choice | seq) ('?' | '*' | '+')?
+/// [49]  choice         ::=  '(' S? cp ( S? '|' S? cp )+ S? ')'    [VC:ProperGroup/PENesting]
+/// [50]  seq            ::=  '(' S? cp ( S? ',' S? cp )* S? ')'
+///
+/// Mixed-content Declaration
+/// [51]  Mixed          ::= '(' S? '#PCDATA' (S? '|' S? Name)* S? ')*'
+///                        | '(' S? '#PCDATA' S? ')'
+///
+/// Attribute-list Declaration
+/// [52]  AttlistDecl    ::=  '&lt;!ATTLIST' S Name AttDef* S? '&gt;'
+/// [53]  AttDef         ::=  S Name S AttType S DefaultDecl
+///
+/// Attribute Types
+/// [54]  AttType        ::=  StringType | TokenizedType | EnumeratedType
+/// [55]  StringType     ::=  'CDATA'
+/// [56]  TokenizedType  ::=  'ID'
+///                        |  'IDREF'
+///                        |  'IDREFS'
+///                        |  'ENTITY'
+///                        |  'ENTITIES'
+///                        |  'NMTOKEN'
+///                        |  'NMTOKENS'
+///
+///
+/// Enumerated Attribute Types
+/// [57]  EnumeratedType ::=  NotationType | Enumeration
+/// [58]  NotationType   ::=  'NOTATION' S '(' S? Name (S? '|' S? Name)* S? ')'
+///
+/// [59]  Enumeration    ::=  '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
+///
+/// Attribute Defaults
+/// [60] DefaultDecl     ::=  '#REQUIRED' | '#IMPLIED'
+///                        |  (('#FIXED' S)? AttValue)
+///
+/// Conditional Section
+/// [61]  conditionalSect ::= includeSect | ignoreSect
+/// [62]  includeSect    ::=  '&lt;![' S? 'INCLUDE' S? '['extSubsetDecl']]&gt;'
+/// [63]  ignoreSect     ::=  '&lt;![' S? 'IGNORE' S? '['ignoreSectContents*']]&gt;'
+/// [64]  ignoreSectContents ::= Ignore ('&lt;!['ignoreSectContents']]&gt;' Ignore)*
+/// [65]  Ignore         ::=  Char* - (Char* ('&lt;!['|']]&gt;') Char*)
+///
+/// Character Reference
+/// [66]  CharRef        ::=  '&amp;' '#' [0-9]+ ';'
+///                        |  '&amp;' '#' 'x' [0-9a-fA-F]+ ';'
+///
+/// Entity Reference
+/// [67]  Reference      ::=  EntityRef | CharRef
+/// [68]  EntityRef      ::=  '&amp;' Name ';'
+/// [69]  PEReference    ::=  '%' Name ';'
+///
+/// Entity Declaration
+/// [70]  EntityDecl     ::=  GEDecl | PEDecl
+/// [71]  GEDecl         ::=  '&lt;!ENTITY' S Name S EntityDef S? '&gt;'
+/// [72]  PEDecl         ::=  '&lt;!ENTITY' S '%' S Name S PEDef S? '&gt;'
+/// [73]  EntityDef      ::=  EntityValue | (ExternalID NDataDecl?)
+/// [74]  PEDef          ::=  EntityValue | ExternalID
+///
+/// External Entity Declaration
+/// [75]  ExternalID     ::=  'SYSTEM' S SystemLiteral
+///                        |  'PUBLIC' S PubidLiteral S SystemLiteral
+/// [76]  NDataDecl      ::=  S 'NDATA' S Name
+///
+///
+/// Text Declaration
+/// [77]  TextDecl       ::=  '&lt;?xml' VersionInfo? EncodingDecl S? '?&gt;'
+///
+/// Well-Formed External Parsed Entity
+/// [78]  extParsedEnt   ::=  TextDecl? content
+///
+/// Encoding Declaration
+/// [80]  EncodingDecl   ::=  S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
+/// [81]  EncName        ::=  [A-Za-z] ([A-Za-z0-9._] | '-')*
+///
+/// Notation Declarations
+/// [82]  NotationDecl   ::=  '&lt;!NOTATION' S Name S (ExternalID | PublicID) S? '&gt;'
+/// [83]  PublicID       ::=  'PUBLIC' S PubidLiteral
+/// </pre>
+///
+/// References:
+/// <dl>
+///     <dt>Extensible Markup Language (XML) 1.0 (Fifth Edition)</dt>
+///     <dd><a href="https://www.w3.org/TR/xml/">w3.org</a></dd>
+/// </dl>
+/// <dl>
+///     <dt>Canonical XML Version 1.1</dt>
+///     <dd><a href="https://www.w3.org/TR/xml-c14n11/">w3.org</a></dd>
+/// </dl>
+/// <dl>
+///     <dt>Extensible Markup Language (XML) 1.0 (Fifth Edition),
+///     2.10 White Space Handling, xml:space='preserve'</dt>
+///     <dd><a href="https://www.w3.org/TR/xml/#sec-white-space">w3.org</a></dd>
+/// </dl>
+/// <dl>
+///     <dt>Understanding xml:space</dt>
+///     <dd><a href="http://www.xmlplease.com/xml/xmlspace/">xmlplease.com</a></dd>
+/// </dl>
 public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable {
     public static final String DEFAULT_NAMESPACE = "";
     public static final String DEFAULT_PREFIX = "";
@@ -267,19 +264,13 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     private static final String XMLNS_NAMESPACE = "https://www.w3.org/TR/REC-xml-names/";
     private static final String XMLNS_PREFIX = "xmlns";
     private static final String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
-    /**
-     * The local name of the special {@code xml:space} attribute.
-     */
+    /// The local name of the special `xml:space` attribute.
     private static final String XML_SPACE_ATTRIBUTE = "space";
-    /**
-     * The value of the special {@code xml:space="preserve"} attribute.
-     */
+    /// The value of the special `xml:space="preserve"` attribute.
     private static final String XML_SPACE_PRESERVE_VALUE = "preserve";
     private final StringBuffer charBuffer = new StringBuffer();
     private final CharsetEncoder encoder;
-    /**
-     * Invariant: this stack always contains at least the root element.
-     */
+    /// Invariant: this stack always contains at least the root element.
     private final Deque<Element> stack = new ArrayDeque<>();
     private final Writer w;
     private Set<Attribute> attributes = new TreeSet<>(Comparator.comparing(Attribute::namespace).thenComparing(Attribute::localName));
@@ -445,15 +436,13 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         return escapeClosingAngleBracket;
     }
 
-    /**
-     * Whether to replace {@literal '<'} and {@literal '>} characters by
-     * entity references.
-     * <p>
-     * These characters should always be replaced by entity references,
-     * but some non-conforming parsers can not handle the entities.
-     *
-     * @param b true if less-than sign and greater-than sign shall be replaced
-     */
+    /// Whether to replace {@literal '<'} and {@literal '>} characters by
+    /// entity references.
+    ///
+    /// These characters should always be replaced by entity references,
+    /// but some non-conforming parsers can not handle the entities.
+    ///
+    /// @param b true if less-than sign and greater-than sign shall be replaced
     public void setEscapeClosingAngleBracket(boolean b) {
         escapeClosingAngleBracket = b;
     }
@@ -462,15 +451,13 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         return escapeLineBreak;
     }
 
-    /**
-     * Whether to replace the {@literal '\n'} character by an
-     * entity references.
-     * <p>
-     * This character should always be replaced by an entity reference,
-     * but some non-conforming parsers can not handle the entities.
-     *
-     * @param escapeLineBreak true if line break shall be replaced
-     */
+    /// Whether to replace the {@literal '\n'} character by an
+    /// entity references.
+    ///
+    /// This character should always be replaced by an entity reference,
+    /// but some non-conforming parsers can not handle the entities.
+    ///
+    /// @param escapeLineBreak true if line break shall be replaced
     public void setEscapeLineBreak(boolean escapeLineBreak) {
         this.escapeLineBreak = escapeLineBreak;
     }
@@ -572,11 +559,9 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         write(END_CDATA);
     }
 
-    /**
-     * Writes character reference in upper case hex format.
-     * <p>
-     * We use upper case here, because Canonical XML uses upper case hex characters.
-     */
+    /// Writes character reference in upper case hex format.
+    ///
+    /// We use upper case here, because Canonical XML uses upper case hex characters.
     private void writeCharRef(int codePoint) throws XMLStreamException {
         write(START_CHAR_REF);
         write(Integer.toHexString(codePoint).toUpperCase());
@@ -1001,10 +986,8 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         }
     }
 
-    /**
-     * In a valid XML there can only be one attribute with the same local name
-     * in the same name space.
-     */
+    /// In a valid XML there can only be one attribute with the same local name
+    /// in the same name space.
     private record Attribute(@Nullable String prefix, String namespace, String localName,
                              String value) {
 

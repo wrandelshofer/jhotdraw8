@@ -8,14 +8,10 @@ package org.jhotdraw8.icollection.impl.champmap;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Provides static utility methods for CHAMP tries.
- */
+/// Provides static utility methods for CHAMP tries.
 public class ChampTrie {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private ChampTrie() {
     }
 

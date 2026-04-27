@@ -10,9 +10,7 @@ import javafx.scene.shape.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Builds a list of {@link Double}s for a {@link Polygon}.
- */
+/// Builds a list of [Double]s for a [Polygon].
 public class FXPolygonBuilder extends AbstractPathBuilder<List<Double>> {
     private final List<Double> poly = new ArrayList<>();
 

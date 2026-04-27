@@ -20,15 +20,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 
-/**
- * Represents an SVG 'linearGradient' element.
- *
- */
+/// Represents an SVG 'linearGradient' element.
 public class SvgLinearGradientFigure extends AbstractSvgGradientFigure {
 
-    /**
-     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "linearGradient";
     public static final CssSizeStyleableKey X1 = new CssSizeStyleableKey("x1", CssSize.ZERO);
     public static final CssSizeStyleableKey Y1 = new CssSizeStyleableKey("y1", CssSize.ZERO);

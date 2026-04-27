@@ -27,38 +27,32 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(ModulepathResources.class.getName());
 
-    /**
-     * Get the appropriate ResourceBundle subclass.
-     *
-     * @param baseName the base name
-     * @return the resource bundle
-     * @see ResourceBundle
-     */
+    /// Get the appropriate ResourceBundle subclass.
+    ///
+    /// @param baseName the base name
+    /// @return the resource bundle
+    /// @see ResourceBundle
     public static ModulepathResources getResources(String moduleName, String baseName)
             throws MissingResourceException {
         return getResources(moduleName, baseName, LocaleUtil.getDefault());
     }
 
-    /**
-     * Get the appropriate ResourceBundle subclass.
-     *
-     * @param baseName the base name
-     * @return the resource bundle
-     * @see ResourceBundle
-     */
+    /// Get the appropriate ResourceBundle subclass.
+    ///
+    /// @param baseName the base name
+    /// @return the resource bundle
+    /// @see ResourceBundle
     public static Resources getResources(Module module, String baseName)
             throws MissingResourceException {
         return getResources(module, baseName, LocaleUtil.getDefault());
     }
 
-    /**
-     * Get the appropriate ResourceBundle subclass.
-     *
-     * @param baseName the base name
-     * @param locale   the locale
-     * @return the resource bundle
-     * @see ResourceBundle
-     */
+    /// Get the appropriate ResourceBundle subclass.
+    ///
+    /// @param baseName the base name
+    /// @param locale   the locale
+    /// @return the resource bundle
+    /// @see ResourceBundle
     static ModulepathResources getResources(String moduleName, String baseName, Locale locale)
             throws MissingResourceException {
         ModulepathResources r;
@@ -68,14 +62,12 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         return r;
     }
 
-    /**
-     * Get the appropriate ResourceBundle subclass.
-     *
-     * @param baseName the base name
-     * @param locale   the locale
-     * @return the resource bundle
-     * @see ResourceBundle
-     */
+    /// Get the appropriate ResourceBundle subclass.
+    ///
+    /// @param baseName the base name
+    /// @param locale   the locale
+    /// @return the resource bundle
+    /// @see ResourceBundle
     public static ModulepathResources getResources(Module module, String baseName, Locale locale)
             throws MissingResourceException {
         ModulepathResources r;
@@ -83,39 +75,25 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         return r;
     }
 
-    /**
-     * The base class
-     */
+    /// The base class
     private Class<?> baseClass = getClass();
-    /**
-     * The base name of the resource bundle.
-     */
+    /// The base name of the resource bundle.
     private final String baseName;
-    /**
-     * The locale.
-     */
+    /// The locale.
     private final Locale locale;
 
-    /**
-     * The parent resources object.
-     */
+    /// The parent resources object.
     private @Nullable Resources parent;
-    /**
-     * The wrapped resource bundle.
-     */
+    /// The wrapped resource bundle.
     private final transient ResourceBundle resource;
-    /**
-     * The module from which the resource bundle was instantiated
-     * and which we use to load resources (i.e. images) from.
-     */
+    /// The module from which the resource bundle was instantiated
+    /// and which we use to load resources (i.e. images) from.
     private final Module module;
 
-    /**
-     * Creates a new object which wraps the provided resource bundle.
-     *
-     * @param baseName the base name
-     * @param locale   the locale
-     */
+    /// Creates a new object which wraps the provided resource bundle.
+    ///
+    /// @param baseName the base name
+    /// @param locale   the locale
     public ModulepathResources(Module module, String baseName, Locale locale) throws MissingResourceException {
         this.locale = locale;
         this.baseName = baseName;
@@ -203,13 +181,11 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         this.baseClass = baseClass;
     }
 
-    /**
-     * Returns a formatted string using javax.text.MessageFormat.
-     *
-     * @param key       the key
-     * @param arguments the arguments
-     * @return formatted String
-     */
+    /// Returns a formatted string using javax.text.MessageFormat.
+    ///
+    /// @param key       the key
+    /// @param arguments the arguments
+    /// @return formatted String
     @Override
     public String getFormatted(String key, Object... arguments) {
         return MessageFormat.format(getString(key), arguments);

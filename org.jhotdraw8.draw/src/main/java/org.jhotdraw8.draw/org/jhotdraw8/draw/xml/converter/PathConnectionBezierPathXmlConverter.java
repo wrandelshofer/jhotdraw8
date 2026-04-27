@@ -11,14 +11,11 @@ import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 
-/**
- * Converts an BezierNodeList path to an XML attribute value.
- * <p>
- * The null value will be converted to an empty String.
- * <p>
- * If the path is a straight line, it will be converted to an empty String.
- *
- */
+/// Converts an BezierNodeList path to an XML attribute value.
+///
+/// The null value will be converted to an empty String.
+///
+/// If the path is a straight line, it will be converted to an empty String.
 public class PathConnectionBezierPathXmlConverter extends BezierPathXmlConverter {
 
     public PathConnectionBezierPathXmlConverter() {

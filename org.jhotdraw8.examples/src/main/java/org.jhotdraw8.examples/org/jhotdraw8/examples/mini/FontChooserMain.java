@@ -15,10 +15,7 @@ import org.jhotdraw8.fxcontrols.fontchooser.FontDialog;
 import org.jhotdraw8.fxcontrols.fontchooser.FontFamilyDialog;
 import org.jhotdraw8.fxcontrols.fontchooser.FontFamilySize;
 
-/**
- * FontChooserMain.
- *
- */
+/// FontChooserMain.
 public class FontChooserMain extends Application {
 
     @Override
@@ -55,9 +52,7 @@ public class FontChooserMain extends Application {
         primaryStage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         launch(args);
     }

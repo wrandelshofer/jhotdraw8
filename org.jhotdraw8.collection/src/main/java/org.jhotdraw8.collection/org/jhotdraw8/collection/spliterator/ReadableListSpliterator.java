@@ -12,14 +12,12 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-/**
- * A {@link ListIterator}, and {@link Spliterator} for a
- * {@link ReadableList}.
- * <p>
- * Does not perform modification checks.
- *
- * @param <E> the element type
- */
+/// A [ListIterator], and [Spliterator] for a
+/// [ReadableList].
+///
+/// Does not perform modification checks.
+///
+/// @param <E> the element type
 public class ReadableListSpliterator<E> extends AbstractListIteratorSpliterator<E> {
     private final ReadableList<E> list;
     private int index;

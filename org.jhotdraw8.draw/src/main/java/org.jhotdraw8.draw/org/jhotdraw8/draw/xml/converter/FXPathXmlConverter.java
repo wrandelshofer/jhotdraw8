@@ -16,10 +16,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-/**
- * Converts a list of {@link PathElement} from/to an XML attribute text.
- *
- */
+/// Converts a list of [PathElement] from/to an XML attribute text.
 public class FXPathXmlConverter implements Converter<Path> {
 
     public FXPathXmlConverter() {

@@ -14,17 +14,13 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-/**
- * AbstractCreationTool.
- *
- * @param <F> the type of the figures that can be created by this tool
- */
+/// AbstractCreationTool.
+///
+/// @param <F> the type of the figures that can be created by this tool
 public abstract class AbstractCreationTool<F extends Figure> extends AbstractTool {
     protected Supplier<Layer> layerFactory;
     protected Supplier<? extends F> figureFactory;
-    /**
-     * The created figure.
-     */
+    /// The created figure.
     protected @Nullable F createdFigure;
 
     public AbstractCreationTool(String name, Resources rsrc, Supplier<? extends F> figureFactory, Supplier<Layer> layerFactory) {
@@ -47,14 +43,12 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
     }
 
 
-    /**
-     * Finds a layer for the specified figure. Creates a new layer if no
-     * suitable layer can be found.
-     *
-     * @param dv        the drawing view
-     * @param newFigure the figure
-     * @return a suitable parent for the figure
-     */
+    /// Finds a layer for the specified figure. Creates a new layer if no
+    /// suitable layer can be found.
+    ///
+    /// @param dv        the drawing view
+    /// @param newFigure the figure
+    /// @return a suitable parent for the figure
     protected @Nullable Figure getOrCreateParent(DrawingView dv, Figure newFigure) {
         Drawing drawing = dv.getDrawing();
         if (drawing == null) {

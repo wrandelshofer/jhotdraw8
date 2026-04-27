@@ -8,16 +8,14 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.base.function.Function3;
 import org.jspecify.annotations.Nullable;
 
-/**
- * A cost function that checks if the provided cost function always returns
- * value greater zero.
- * <p>
- * This class is package private.
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- * @param <C> the cost number type
- */
+/// A cost function that checks if the provided cost function always returns
+/// value greater zero.
+///
+/// This class is package private.
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
+/// @param <C> the cost number type
 record CheckedNonNegativeArcCostFunction3<V, A, C extends Number & Comparable<C>>(C zero,
                                                                                   Function3<V, V, A, C> costFunction) implements Function3<V, V, A, C> {
     CheckedNonNegativeArcCostFunction3 {

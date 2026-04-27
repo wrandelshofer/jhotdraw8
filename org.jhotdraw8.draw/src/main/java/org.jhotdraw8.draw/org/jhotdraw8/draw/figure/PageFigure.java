@@ -47,21 +47,15 @@ import java.util.List;
 
 import static java.lang.Double.max;
 
-/**
- * Defines a page layout for printing.
- */
+/// Defines a page layout for printing.
 public class PageFigure extends AbstractCompositeFigure
         implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
         FillableFigure, StrokableFigure {
 
     public static final CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
-    /**
-     * The computed number of pages along the x-axis.
-     */
+    /// The computed number of pages along the x-axis.
     public static final DoubleStyleableKey NUM_PAGES_X = new DoubleStyleableKey("num-pages-x", 1.0);
-    /**
-     * The computed number of pages along the y-axis.
-     */
+    /// The computed number of pages along the y-axis.
     public static final DoubleStyleableKey NUM_PAGES_Y = new DoubleStyleableKey("num-pages-y", 1.0);
     public static final Point2DStyleableMapAccessor NUM_PAGES_X_Y = new Point2DStyleableMapAccessor("num-pages", NUM_PAGES_X, NUM_PAGES_Y);
     public static final CssSizeStyleableKey PAGE_INSETS_BOTTOM = new CssSizeStyleableKey("page-insets-bottom", CssSize.ZERO);
@@ -75,9 +69,7 @@ public class PageFigure extends AbstractCompositeFigure
     public static final CssSizeStyleableKey PAPER_HEIGHT = new CssSizeStyleableKey("paper-size-height", CssSize.of(297.0, "mm"));
     public static final CssSizeStyleableKey PAPER_WIDTH = new CssSizeStyleableKey("paper-size-width", CssSize.of(210.0, "mm"));
     public static final PaperSizeStyleableMapAccessor PAPER_SIZE = new PaperSizeStyleableMapAccessor("paper-size", PAPER_WIDTH, PAPER_HEIGHT);
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Page";
     public static final CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
     public static final CssSizeStyleableKey X = RectangleFigure.X;

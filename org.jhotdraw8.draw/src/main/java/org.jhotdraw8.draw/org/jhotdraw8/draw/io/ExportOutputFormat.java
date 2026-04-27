@@ -8,10 +8,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 
-/**
- * ExportOutputFormat.
- *
- */
+/// ExportOutputFormat.
 public interface ExportOutputFormat {
     void setOptions(PersistentMap<Key<?>, Object> newValue);
 

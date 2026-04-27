@@ -55,36 +55,24 @@ public class InteractiveHandleRenderer {
         }
     };
     private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW);
-    /**
-     * This is the set of handles which are out of sync with their JavaFX node.
-     */
+    /// This is the set of handles which are out of sync with their JavaFX node.
     private final Set<Figure> dirtyHandles = new HashSet<>();
-    /**
-     * The selectedFiguresProperty holds the list of selected figures in the
-     * sequence they were selected by the user.
-     */
+    /// The selectedFiguresProperty holds the list of selected figures in the
+    /// sequence they were selected by the user.
     private final SetProperty<Figure> selectedFigures = new SimpleSetProperty<>(this, DrawingView.SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>()));
     private final ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
-    /**
-     * Maps each JavaFX node to a handle in the drawing view.
-     */
+    /// Maps each JavaFX node to a handle in the drawing view.
     private final SequencedMap<Node, Handle> nodeToHandleMap = new LinkedHashMap<>();
     private final Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
-    /**
-     * The set of all handles which were produced by selected figures.
-     */
+    /// The set of all handles which were produced by selected figures.
     private final SequencedMap<Figure, List<Handle>> handles = new LinkedHashMap<>();
     private final ObservableSet<Handle> handlesView = FXCollections.observableSet(new LinkedHashSet<>());
 
-    /**
-     * Provides a read-only view on the current set of handles.
-     */
+    /// Provides a read-only view on the current set of handles.
     private final ReadOnlySetWrapper<Handle> handlesProperty = new ReadOnlySetWrapper<>(this, "handles", FXCollections.unmodifiableObservableSet(handlesView));
 
-    /**
-     * The set of all secondary handles. One handle at a time may create
-     * secondary handles.
-     */
+    /// The set of all secondary handles. One handle at a time may create
+    /// secondary handles.
     private final ArrayList<Handle> secondaryHandles = new ArrayList<>();
     private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
@@ -113,11 +101,9 @@ public class InteractiveHandleRenderer {
     }
 
 
-    /**
-     * Creates selection handles and adds them to the provided list.
-     *
-     * @param handles The provided list
-     */
+    /// Creates selection handles and adds them to the provided list.
+    ///
+    /// @param handles The provided list
     protected void createHandles(Map<Figure, List<Handle>> handles) {
         List<Figure> selection = new ArrayList<>(getSelectedFigures());
         if (selection.size() > 1) {
@@ -311,14 +297,12 @@ public class InteractiveHandleRenderer {
         handlesPane.requestLayout();
     }
 
-    /**
-     * The selected figures.
-     * <p>
-     * Note: The selection is represented by a {@code SequencedSet} because the
-     * sequence of the selection is important.
-     *
-     * @return a list of the selected figures
-     */
+    /// The selected figures.
+    ///
+    /// Note: The selection is represented by a `SequencedSet` because the
+    /// sequence of the selection is important.
+    ///
+    /// @return a list of the selected figures
     ReadOnlySetProperty<Figure> selectedFiguresProperty() {
         return selectedFigures;
     }
@@ -379,9 +363,7 @@ public class InteractiveHandleRenderer {
         }
     }
 
-    /**
-     * Validates the handles.
-     */
+    /// Validates the handles.
     private void validateHandles() {
         // Validate handles only, if they are invalid/*, and if
         // the DrawingView has a DrawingEditor.*/

@@ -8,11 +8,9 @@ import org.jhotdraw8.icollection.readable.ReadableMap;
 
 import java.util.Map;
 
-/**
- * NonNullKey.
- *
- * @param <T> the value type
- */
+/// NonNullKey.
+///
+/// @param <T> the value type
 public interface NonNullKey<T> extends Key<T>, NonNullMapAccessor<T> {
     @Override
     default T get(Map<? super Key<?>, Object> a) {
@@ -23,12 +21,10 @@ public interface NonNullKey<T> extends Key<T>, NonNullMapAccessor<T> {
         return result == null ? getDefaultValueNonNull() : result;
     }
 
-    /**
-     * Gets the value of the attribute denoted by this Key from a Map.
-     *
-     * @param a A Map.
-     * @return The value of the attribute.
-     */
+    /// Gets the value of the attribute denoted by this Key from a Map.
+    ///
+    /// @param a A Map.
+    /// @return The value of the attribute.
     @Override
     default T get(ReadableMap<? super Key<?>, Object> a) {
         // Performance: explicit cast is nice, but is very slow

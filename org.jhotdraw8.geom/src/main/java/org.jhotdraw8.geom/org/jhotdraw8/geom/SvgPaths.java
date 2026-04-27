@@ -12,7 +12,7 @@ import org.jhotdraw8.base.converter.FloatConverter;
 import org.jhotdraw8.base.io.StreamPosTokenizer;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.IllegalPathStateException;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
@@ -22,29 +22,23 @@ import java.io.StringReader;
 import java.text.ParseException;
 import java.util.logging.Logger;
 
-/**
- * Provides methods for parsing and generating SVG path strings from AWT paths.
- */
+/// Provides methods for parsing and generating SVG path strings from AWT paths.
 public class SvgPaths {
     private static final Logger LOGGER = Logger.getLogger(SvgPaths.class.getName());
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private SvgPaths() {
     }
 
-    /**
-     * Returns a value as a SvgPath2D.
-     * <p>
-     * Also supports elliptical arc commands 'a' and 'A' as specified in
-     * <a href="http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands">w3.org</a>
-     *
-     * @param builder the builder
-     * @param str     the SVG path
-     * @return the path builder
-     * @throws ParseException if the String is not a valid path
-     */
+    /// Returns a value as a SvgPath2D.
+    ///
+    /// Also supports elliptical arc commands 'a' and 'A' as specified in
+    /// <a href="http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands">w3.org</a>
+    ///
+    /// @param builder the builder
+    /// @param str     the SVG path
+    /// @return the path builder
+    /// @throws ParseException if the String is not a valid path
     public static <T> PathBuilder<T> buildSvgString(PathBuilder<T> builder, String str) throws ParseException {
         StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(str));
         try {
@@ -301,12 +295,11 @@ public class SvgPaths {
 
 
     private final static DoubleConverter nb = new DoubleConverter();
-    /**
-     * Converts a Java Path iterator to a SVG path with double precision.
-     *
-     * @param iter AWT Path Iterator
-     * @return SVG Path
-     */
+
+    /// Converts a Java Path iterator to a SVG path with double precision.
+    ///
+    /// @param iter AWT Path Iterator
+    /// @return SVG Path
     public static String awtPathIteratorToDoubleSvgString(PathIterator iter) {
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
@@ -401,12 +394,10 @@ public class SvgPaths {
         return buf.toString();
     }
 
-    /**
-     * Converts a Java Path iterator to a SVG path with double precision.
-     *
-     * @param iter AWT Path Iterator
-     * @return SVG Path
-     */
+    /// Converts a Java Path iterator to a SVG path with double precision.
+    ///
+    /// @param iter AWT Path Iterator
+    /// @return SVG Path
     public static String awtPathIteratorToDoubleRelativeSvgString(PathIterator iter) {
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
@@ -475,12 +466,11 @@ public class SvgPaths {
     }
 
     private final static FloatConverter nbf = new FloatConverter();
-    /**
-     * Converts a Java Path iterator to a SVG path with double precision.
-     *
-     * @param iter AWT Path Iterator
-     * @return SVG Path
-     */
+
+    /// Converts a Java Path iterator to a SVG path with double precision.
+    ///
+    /// @param iter AWT Path Iterator
+    /// @return SVG Path
     public static String awtPathIteratorToFloatRelativeSvgString(PathIterator iter) {
         StringBuilder buf = new StringBuilder();
         float[] coords = new float[6];
@@ -548,12 +538,10 @@ public class SvgPaths {
         return buf.toString();
     }
 
-    /**
-     * Converts a Java Path iterator to a SVG path with float precision.
-     *
-     * @param iter AWT Path Iterator
-     * @return SVG Path
-     */
+    /// Converts a Java Path iterator to a SVG path with float precision.
+    ///
+    /// @param iter AWT Path Iterator
+    /// @return SVG Path
     public static String awtPathIteratorToFloatSvgString(PathIterator iter) {
 
         StringBuilder buf = new StringBuilder();
@@ -617,32 +605,28 @@ public class SvgPaths {
         return buf.toString();
     }
 
-    /**
-     * Returns a value as a SvgPath2D.
-     * <p>
-     * Also supports elliptical arc commands 'a' and 'A' as specified in
-     * <a href="http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands">w3.org</a>
-     *
-     * @param str the SVG path
-     * @return the SvgPath2D
-     * @throws ParseException if the String is not a valid path
-     */
+    /// Returns a value as a SvgPath2D.
+    ///
+    /// Also supports elliptical arc commands 'a' and 'A' as specified in
+    /// <a href="http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands">w3.org</a>
+    ///
+    /// @param str the SVG path
+    /// @return the SvgPath2D
+    /// @throws ParseException if the String is not a valid path
     public static Path2D.Double svgStringToAwtShape(String str) throws ParseException {
         AwtPathBuilder b = new AwtPathBuilder();
         buildSvgString(b, str);
         return b.build();
     }
 
-    /**
-     * Fits the specified SVGPath into the given bounds.
-     * <p>
-     * If parsing the SVG Path fails, logs a warning message and fits a rectangle
-     * into the bounds.
-     *
-     * @param builder the builder into which the path is output
-     * @param pathstr an SVGPath String
-     * @param b       the desired bounds
-     */
+    /// Fits the specified SVGPath into the given bounds.
+    ///
+    /// If parsing the SVG Path fails, logs a warning message and fits a rectangle
+    /// into the bounds.
+    ///
+    /// @param builder the builder into which the path is output
+    /// @param pathstr an SVGPath String
+    /// @param b       the desired bounds
     public static void buildReshapedSvgString(PathBuilder<?> builder, @Nullable String pathstr, Bounds b) {
         if (pathstr != null) {
             Shape shape = null;

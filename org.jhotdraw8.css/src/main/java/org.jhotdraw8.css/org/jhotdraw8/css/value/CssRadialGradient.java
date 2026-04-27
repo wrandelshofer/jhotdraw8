@@ -14,10 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Represents a radial gradient.
- *
- */
+/// Represents a radial gradient.
 public class CssRadialGradient implements Paintable {
 
     private RadialGradient radialGradient;

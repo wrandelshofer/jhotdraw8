@@ -17,17 +17,15 @@ import java.text.ParseException;
 import java.util.Comparator;
 import java.util.regex.Pattern;
 
-/**
- * Parses a set with items separated by configurable delimiters.
- * <p>
- * References:
- * <dl>
- * <dt>HTML 5, Common Microsyntaxes, Space-separated tokens</dt>
- * <dd><a href="https://dev.w3.org/html5/spec-preview/common-microsyntaxes.html#set-of-space-separated-tokens">w3.org</a></dd>
- * </dl>
- *
- * @param <T> the element type
- */
+/// Parses a set with items separated by configurable delimiters.
+///
+/// References:
+/// <dl>
+/// <dt>HTML 5, Common Microsyntaxes, Space-separated tokens</dt>
+/// <dd><a href="https://dev.w3.org/html5/spec-preview/common-microsyntaxes.html#set-of-space-separated-tokens">w3.org</a></dd>
+/// </dl>
+///
+/// @param <T> the element type
 public class ListXmlConverter<T> implements Converter<PersistentList<T>> {
 
 
@@ -37,11 +35,9 @@ public class ListXmlConverter<T> implements Converter<PersistentList<T>> {
     private final @Nullable String prefix;
     private final @Nullable String suffix;
 
-    /**
-     * Creates a new instance with a space character  " " as the delimiter.
-     *
-     * @param elementConverter the element converter
-     */
+    /// Creates a new instance with a space character  " " as the delimiter.
+    ///
+    /// @param elementConverter the element converter
     public ListXmlConverter(Converter<T> elementConverter) {
         this(elementConverter, " ");
     }

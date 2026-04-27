@@ -10,16 +10,12 @@ import java.util.ListIterator;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-/**
- * Abstract base classes for {@link Spliterator}s that also implement
- * the {@link ListIterator} interface.
- *
- * @param <E> the element type
- */
+/// Abstract base classes for [Spliterator]s that also implement
+/// the [ListIterator] interface.
+///
+/// @param <E> the element type
 public abstract class AbstractListIteratorSpliterator<E> implements ListIterator<E>, Spliterator<E> {
-    /**
-     * Constructs a new instance.
-     */
+    /// Constructs a new instance.
     public AbstractListIteratorSpliterator() {
     }
 

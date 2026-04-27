@@ -30,87 +30,69 @@ import java.util.List;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
-/**
- * A <em>drawing</em> is an image composed of graphical (figurative) elements.
- * <p>
- * <b>Styling.</b> A drawing can have a style sheet which affects the style of
- * the figures.
- * <p>
- * <b>Layers.</b> By convention the children of a {@code Drawing} must be
- * {@link Layer}s. To addChild figures to a drawing, first addChild a layer, and then addChild the figures to the layer.</p>
- */
+/// A _drawing_ is an image composed of graphical (figurative) elements.
+///
+/// **Styling.** A drawing can have a style sheet which affects the style of
+/// the figures.
+///
+/// **Layers.** By convention the children of a `Drawing` must be
+/// [Layer]s. To addChild figures to a drawing, first addChild a layer, and then addChild the figures to the layer.
 public interface Drawing extends Figure {
 
-    /**
-     * Specifies the home address of all relative URLs used in a drawing.
-     * <p>
-     * This property is not styleable.
-     */
+    /// Specifies the home address of all relative URLs used in a drawing.
+    ///
+    /// This property is not styleable.
     Key<URI> DOCUMENT_HOME = new SimpleNullableKey<>("documentHome", URI.class,
             Paths.get(System.getProperty("user.home")).toUri());
 
-    /**
-     * Holds a list of author stylesheets. If the value is null, then no
-     * stylesheets are used.
-     * <p>
-     * Supports the following data types for list entries:
-     * <ul>
-     * <li>URI. The URI points to a CSS file. If the URI is relative, then it is
-     * relative to {@code DOCUMENT_HOME}.</li>
-     * <li>String. The String contains a CSS as a literal.</li>
-     * </ul>
-     * <p>
-     * This property is not styleable.</p>
-     */
+    /// Holds a list of author stylesheets. If the value is null, then no
+    /// stylesheets are used.
+    ///
+    /// Supports the following data types for list entries:
+    ///
+    ///   - URI. The URI points to a CSS file. If the URI is relative, then it is
+    ///     relative to `DOCUMENT_HOME`.
+    ///   - String. The String contains a CSS as a literal.
+    ///
+    ///
+    /// This property is not styleable.
     NonNullKey<PersistentList<URI>> AUTHOR_STYLESHEETS = new NonNullListKey<>("authorStylesheets",
             new SimpleParameterizedType(PersistentList.class, URI.class));
-    /**
-     * Holds a list of user agent stylesheets. If the value is null, then no
-     * stylesheets are used.
-     * <ul>
-     * <li>URI. The URI points to a CSS file. If the URI is relative, then it is
-     * relative to {@code DOCUMENT_HOME}.</li>
-     * <li>String. The String contains a CSS as a literal.</li>
-     * </ul>
-     * <p>
-     * This property is not styleable.</p>
-     */
+    /// Holds a list of user agent stylesheets. If the value is null, then no
+    /// stylesheets are used.
+    ///
+    ///   - URI. The URI points to a CSS file. If the URI is relative, then it is
+    ///     relative to `DOCUMENT_HOME`.
+    ///   - String. The String contains a CSS as a literal.
+    ///
+    ///
+    /// This property is not styleable.
     NonNullKey<PersistentList<URI>> USER_AGENT_STYLESHEETS = new NonNullListKey<>("userAgentStylesheets", new SimpleParameterizedType(PersistentList.class, URI.class));
-    /**
-     * Holds a list of inline stylesheets. If the value is null, then no
-     * stylesheets are used.
-     * <p>
-     * This property is not styleable.</p>
-     */
+    /// Holds a list of inline stylesheets. If the value is null, then no
+    /// stylesheets are used.
+    ///
+    /// This property is not styleable.
     NonNullKey<PersistentList<String>> INLINE_STYLESHEETS = new NonNullListKey<>("inlineStylesheets", new SimpleParameterizedType(PersistentList.class, String.class));
 
 
-    /**
-     * Defines the width of the canvas.
-     */
+    /// Defines the width of the canvas.
     CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.of(640.0));
-    /**
-     * Defines the height of the canvas.
-     */
+    /// Defines the height of the canvas.
     CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.of(480.0));
 
 
-    /**
-     * Defines the canvas color.
-     * <p>
-     * A drawing typically renders a rectangle with the dimensions given by
-     * {@code WIDTH} and {@code HEIGHT} and fills it with the {@code BACKGROUND}
-     * paint.
-     * </p>
-     * <p>
-     * This property is styleable with the key
-     * {@code Figure.JHOTDRAW_CSS_PREFIX+"background"}.</p>
-     */
+    /// Defines the canvas color.
+    ///
+    /// A drawing typically renders a rectangle with the dimensions given by
+    /// `WIDTH` and `HEIGHT` and fills it with the `BACKGROUND`
+    /// paint.
+    ///
+    ///
+    /// This property is styleable with the key
+    /// `Figure.JHOTDRAW_CSS_PREFIX+"background"`.
     NullableCssColorStyleableKey BACKGROUND = new NullableCssColorStyleableKey("background", new CssColor("white", Color.WHITE));
 
-    /**
-     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
     String TYPE_SELECTOR = "Drawing";
 
     @Override
@@ -118,44 +100,36 @@ public interface Drawing extends Figure {
         return TYPE_SELECTOR;
     }
 
-    /**
-     * Gets the style manager of the drawing.
-     *
-     * @return the style manager
-     */
+    /// Gets the style manager of the drawing.
+    ///
+    /// @return the style manager
     @Nullable
     StylesheetsManager<Figure> getStyleManager();
 
-    /**
-     * Updates the stylesheets in the style manager.
-     */
+    /// Updates the stylesheets in the style manager.
     void updateStyleManager();
 
-    /**
-     * Performs one layout pass over the entire drawing.
-     * <p>
-     * This method lays out figures that do not depend on the layout
-     * of other figures first, and then lays out figures that depend
-     * on them, until all figures are laid out once.
-     * Circular dependencies are broken up deterministically.
-     *
-     * @param ctx the render context
-     */
+    /// Performs one layout pass over the entire drawing.
+    ///
+    /// This method lays out figures that do not depend on the layout
+    /// of other figures first, and then lays out figures that depend
+    /// on them, until all figures are laid out once.
+    /// Circular dependencies are broken up deterministically.
+    ///
+    /// @param ctx the render context
     default void layoutAll(RenderContext ctx) {
         layoutAll(ctx, true);
     }
 
-    /**
-     * Performs one layout pass over the entire drawing.
-     * <p>
-     * This method lays out figures that do not depend on the layout
-     * of other figures first, and then lays out figures that depend
-     * on them, until all figures are laid out once.
-     * Circular dependencies are broken up deterministically.
-     *
-     * @param ctx      the render context
-     * @param parallel performs the layout in parallel or sequentially
-     */
+    /// Performs one layout pass over the entire drawing.
+    ///
+    /// This method lays out figures that do not depend on the layout
+    /// of other figures first, and then lays out figures that depend
+    /// on them, until all figures are laid out once.
+    /// Circular dependencies are broken up deterministically.
+    ///
+    /// @param ctx      the render context
+    /// @param parallel performs the layout in parallel or sequentially
     default void layoutAll(RenderContext ctx, boolean parallel) {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively
@@ -208,12 +182,10 @@ public interface Drawing extends Figure {
         }
     }
 
-    /**
-     * Returns all figures in topological order according to their layout dependencies.
-     * Independent figures come first.
-     *
-     * @return figures in topological order according to layout dependencies
-     */
+    /// Returns all figures in topological order according to their layout dependencies.
+    /// Independent figures come first.
+    ///
+    /// @return figures in topological order according to layout dependencies
     default Iterable<Figure> layoutDependenciesIterable() {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively

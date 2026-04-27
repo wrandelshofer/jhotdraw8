@@ -19,9 +19,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class DimensionInsetsConverterTest {
 
-    /**
-     * Test of fromString method, of class CssPoint2DConverterTest.
-     */
+    /// Test of fromString method, of class CssPoint2DConverterTest.
     public static void doTestFromString(CssInsets expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;

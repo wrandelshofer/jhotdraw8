@@ -10,45 +10,40 @@ import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
 import org.jspecify.annotations.Nullable;
 
-/**
- * This builder slices the input path into 9 regions, and scales them by the
- * specified scale factor and pivot.
- * <p>
- * The builder takes a four values minx, miny, maxx, maxy as input, or a
- * rectangle and insets from which these four values are computed.
- * <p>
- * The coordinate space is split along minx, miny, maxx, maxy into 9 pieces:
- * top-left, top-right, bottom-right, bottom-left, top, right, bottom, left,
- * center.
- * <ul>
- * <li>the top left piece is translated by the scaled distance from the left and
- * the top inset to the pivot.</li>
- * <li>similar translations are applied to the top right, bottom right and
- * bottom left pieces.</li>
- * <li>the top piece is translated by the scaled distance from the top inset to
- * the pivot,and scaled by the sx-factor of the scaling.</li>
- * <li>similar transformations are applied to the right, bottom and left
- * pieces.</li>
- * <li>the piece in the center is scaled by the scale factor around the
- * pivot</li>
- * </ul>
- *
- * @param <T> the product type
- */
+/// This builder slices the input path into 9 regions, and scales them by the
+/// specified scale factor and pivot.
+///
+/// The builder takes a four values minx, miny, maxx, maxy as input, or a
+/// rectangle and insets from which these four values are computed.
+///
+/// The coordinate space is split along minx, miny, maxx, maxy into 9 pieces:
+/// top-left, top-right, bottom-right, bottom-left, top, right, bottom, left,
+/// center.
+///
+///   - the top left piece is translated by the scaled distance from the left and
+///     the top inset to the pivot.
+///   - similar translations are applied to the top right, bottom right and
+///     bottom left pieces.
+///   - the top piece is translated by the scaled distance from the top inset to
+///     the pivot,and scaled by the sx-factor of the scaling.
+///   - similar transformations are applied to the right, bottom and left
+///     pieces.
+///   - the piece in the center is scaled by the scale factor around the
+///     pivot
+///
+/// @param <T> the product type
 public class NineRegionsScalingBuilder<T> extends AbstractPathBuilder<T> {
 
     private final double minX, minY, maxX, maxY;
     private final Transform topLeft, topRight, bottomRight, bottomLeft, top, right, bottom, left, center;
     private final PathBuilder<T> target;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param dest       The destination (target) of the builder.
-     * @param srcBounds  The bounds of the source image.
-     * @param srcInsets  The nine regions in the bounds of the source image.
-     * @param destBounds The bounds of the destination image.
-     */
+    /// Creates a new instance.
+    ///
+    /// @param dest       The destination (target) of the builder.
+    /// @param srcBounds  The bounds of the source image.
+    /// @param srcInsets  The nine regions in the bounds of the source image.
+    /// @param destBounds The bounds of the destination image.
     public NineRegionsScalingBuilder(PathBuilder<T> dest, Bounds srcBounds, Insets srcInsets, Bounds destBounds) {
         this.target = dest;
 

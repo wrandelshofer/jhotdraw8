@@ -9,11 +9,9 @@ import org.jspecify.annotations.Nullable;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-/**
- * Provides an {@link Enumerator} facade for a {@link Spliterator}.
- *
- * @param <E> the element type
- */
+/// Provides an [Enumerator] facade for a [Spliterator].
+///
+/// @param <E> the element type
 public class SpliteratorEnumeratorFacade<E> implements Enumerator<E>, Consumer<E> {
     private final Spliterator<E> spliterator;
     private E current;

@@ -9,10 +9,7 @@ import org.jhotdraw8.css.converter.IntegerCssConverter;
 import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
-/**
- * NullableIntegerStyleableKey.
- *
- */
+/// NullableIntegerStyleableKey.
 public class NullableIntegerStyleableKey extends NullableObjectStyleableKey<Integer> implements WritableStyleableMapAccessor<Integer> {
 
 

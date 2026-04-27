@@ -26,17 +26,15 @@ import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 
 import java.util.List;
 
-/**
- * Shows sliders for Lab color spaces.
- * <pre>
- *     a →
- * +-----------------+  +--+
- * | ↑               |  |  |↑
- * | b               |  |  |brightness/value
- * |                 |  |  |
- * +-----------------+  +--+
- * </pre>
- */
+/// Shows sliders for Lab color spaces.
+/// <pre>
+///     a →
+/// +-----------------+  +--+
+/// | ↑               |  |  |↑
+/// | b               |  |  |brightness/value
+/// |                 |  |  |
+/// +-----------------+  +--+
+/// </pre>
 public class ColorSlidersLabMain extends AbstractColorSlidersMain {
 
 
@@ -95,9 +93,7 @@ public class ColorSlidersLabMain extends AbstractColorSlidersMain {
     }
 
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         launch(args);
     }

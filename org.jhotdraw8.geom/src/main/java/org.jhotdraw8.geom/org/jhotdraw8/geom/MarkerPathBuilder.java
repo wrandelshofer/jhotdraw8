@@ -10,12 +10,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.Path2D;
 
-/**
- * MarkerPathBuilder. Places markers at the start, end and middle of the path.
- * The path itself is not included by the builder.
- *
- * @param <T> the product type
- */
+/// MarkerPathBuilder. Places markers at the start, end and middle of the path.
+/// The path itself is not included by the builder.
+///
+/// @param <T> the product type
 public class MarkerPathBuilder<T> extends AbstractPathBuilder<T> {
 
     private final Path2D.Double startMarker;

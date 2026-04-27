@@ -8,14 +8,10 @@ package org.jhotdraw8.icollection.impl.champ;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Provides factory methods for {@link Node}s.
- */
+/// Provides factory methods for [Node]s.
 class NodeFactory {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private NodeFactory() {
     }
 

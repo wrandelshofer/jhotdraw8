@@ -44,7 +44,8 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
 import javax.imageio.stream.MemoryCacheImageOutputStream;
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.awt.image.SampleModel;
@@ -66,10 +67,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 
-/**
- * BitmapExportOutputFormat.
- *
- */
+/// BitmapExportOutputFormat.
 public class BitmapExportOutputFormat extends AbstractExportOutputFormat implements ClipboardOutputFormat, OutputFormat {
 
     private static final double INCH_2_MM = 25.4;
@@ -288,34 +286,32 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         return target;
     }
 
-    /**
-     * Snapshots the specified JavaFX {@link Image} object and stores a
-     * copy of its pixels into a {@link BufferedImage} object, creating
-     * a new object if needed.
-     * The method will only convert a JavaFX {@code Image} that is readable
-     * as per the conditions on the
-     * {@link Image#getPixelReader() Image.getPixelReader()}
-     * method.
-     * If the {@code Image} is not readable, as determined by its
-     * {@code getPixelReader()} method, then this method will return null.
-     * If the {@code Image} is a writable, or other dynamic image, then
-     * the {@code BufferedImage} will only be set to the current state of
-     * the pixels in the image as determined by its {@link PixelReader}.
-     * Further changes to the pixels of the {@code Image} will not be
-     * reflected in the returned {@code BufferedImage}.
-     * <p>
-     * The optional {@code BufferedImage} parameter may be reused to store
-     * the copy of the pixels.
-     * A new {@code BufferedImage} will be created if the supplied object
-     * is null, is too small or of a type which the image pixels cannot
-     * be easily converted into.
-     *
-     * @param img  the JavaFX {@code Image} to be converted
-     * @param bimg an optional {@code BufferedImage} object that may be
-     *             used to store the returned pixel data
-     * @return a {@code BufferedImage} containing a snapshot of the JavaFX
-     * {@code Image}, or null if the {@code Image} is not readable.
-     */
+    /// Snapshots the specified JavaFX [Image] object and stores a
+    /// copy of its pixels into a [BufferedImage] object, creating
+    /// a new object if needed.
+    /// The method will only convert a JavaFX `Image` that is readable
+    /// as per the conditions on the
+    /// [Image.getPixelReader()][Image#getPixelReader()]
+    /// method.
+    /// If the `Image` is not readable, as determined by its
+    /// `getPixelReader()` method, then this method will return null.
+    /// If the `Image` is a writable, or other dynamic image, then
+    /// the `BufferedImage` will only be set to the current state of
+    /// the pixels in the image as determined by its [PixelReader].
+    /// Further changes to the pixels of the `Image` will not be
+    /// reflected in the returned `BufferedImage`.
+    ///
+    /// The optional `BufferedImage` parameter may be reused to store
+    /// the copy of the pixels.
+    /// A new `BufferedImage` will be created if the supplied object
+    /// is null, is too small or of a type which the image pixels cannot
+    /// be easily converted into.
+    ///
+    /// @param img  the JavaFX `Image` to be converted
+    /// @param bimg an optional `BufferedImage` object that may be
+    ///             used to store the returned pixel data
+    /// @return a `BufferedImage` containing a snapshot of the JavaFX
+    /// `Image`, or null if the `Image` is not readable.
     public static @Nullable BufferedImage fromFXImage(Image img, @Nullable BufferedImage bimg) {
         // This method has been copied from class SwingFXUtils.
 
@@ -392,16 +388,14 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         return true;
     }
 
-    /**
-     * Determine the optimal BufferedImage type to use for the specified
-     * {@code fxFormat} allowing for the specified {@code bimg} to be used
-     * as a potential default storage space if it is not null and is compatible.
-     *
-     * @param fxFormat the PixelFormat of the source FX Image
-     * @param bimg     an optional existing {@code BufferedImage} to be used
-     *                 for storage if it is compatible, or null
-     * @return the best image type
-     */
+    /// Determine the optimal BufferedImage type to use for the specified
+    /// `fxFormat` allowing for the specified `bimg` to be used
+    /// as a potential default storage space if it is not null and is compatible.
+    ///
+    /// @param fxFormat the PixelFormat of the source FX Image
+    /// @param bimg     an optional existing `BufferedImage` to be used
+    ///                 for storage if it is compatible, or null
+    /// @return the best image type
     static int getBestBufferedImageType(PixelFormat<?> fxFormat,
                                         @Nullable BufferedImage bimg,
                                         boolean isOpaque) {
@@ -433,14 +427,12 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         };
     }
 
-    /**
-     * Determine the appropriate {@link WritablePixelFormat} type that can
-     * be used to transfer data into the indicated BufferedImage.
-     *
-     * @param bimg the BufferedImage that will be used as a destination for
-     *             a {@code PixelReader<IntBuffer>#getPixels()} operation.
-     * @return the pixel format
-     */
+    /// Determine the appropriate [WritablePixelFormat] type that can
+    /// be used to transfer data into the indicated BufferedImage.
+    ///
+    /// @param bimg the BufferedImage that will be used as a destination for
+    ///             a `PixelReader<IntBuffer>#getPixels()` operation.
+    /// @return the pixel format
     private static WritablePixelFormat<IntBuffer>
     getAssociatedPixelFormat(BufferedImage bimg) {
         // This method has been copied from class SwingFXUtils.

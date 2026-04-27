@@ -15,10 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * CssPoint2DStyleableMapAccessor.
- *
- */
+/// CssPoint2DStyleableMapAccessor.
 public class CssPoint2DStyleableMapAccessor
         extends AbstractStyleableMapAccessor<CssPoint2D>
         implements NonNullMapAccessor<CssPoint2D> {
@@ -28,25 +25,21 @@ public class CssPoint2DStyleableMapAccessor
     private final NonNullMapAccessor<CssSize> xKey;
     private final NonNullMapAccessor<CssSize> yKey;
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name the name of the accessor
-     * @param xKey the key for the x coordinate of the point
-     * @param yKey the key for the y coordinate of the point
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name the name of the accessor
+    /// @param xKey the key for the x coordinate of the point
+    /// @param yKey the key for the y coordinate of the point
     public CssPoint2DStyleableMapAccessor(String name, NonNullMapAccessor<CssSize> xKey, NonNullMapAccessor<CssSize> yKey) {
         this(name, xKey, yKey, new Point2DCssConverter(false));
     }
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name      the name of the accessor
-     * @param xKey      the key for the x coordinate of the point
-     * @param yKey      the key for the y coordinate of the point
-     * @param converter String converter for the point
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name      the name of the accessor
+    /// @param xKey      the key for the x coordinate of the point
+    /// @param yKey      the key for the y coordinate of the point
+    /// @param converter String converter for the point
     public CssPoint2DStyleableMapAccessor(String name, NonNullMapAccessor<CssSize> xKey, NonNullMapAccessor<CssSize> yKey, Converter<CssPoint2D> converter) {
         super(name, CssPoint2D.class, new NonNullMapAccessor<?>[]{xKey, yKey}, new CssPoint2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
 

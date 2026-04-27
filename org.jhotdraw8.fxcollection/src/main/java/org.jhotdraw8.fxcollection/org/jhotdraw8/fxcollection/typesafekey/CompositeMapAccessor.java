@@ -9,16 +9,12 @@ import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import java.io.Serial;
 import java.util.Map;
 
-/**
- * CompositeMapAccessor composes one or more {@link MapAccessor}s.
- *
- * @param <T> the value type
- */
+/// CompositeMapAccessor composes one or more [MapAccessor]s.
+///
+/// @param <T> the value type
 public interface CompositeMapAccessor<T> extends MapAccessor<T> {
 
-    /**
-     * Serial version UID:
-     */
+    /// Serial version UID:
     @Serial
     long serialVersionUID = 1L;
 
@@ -32,10 +28,9 @@ public interface CompositeMapAccessor<T> extends MapAccessor<T> {
         return true;
     }
 
-    /**
-     * Gets all {@link MapAccessor}s that this accessor is composing.
-     * @return the sub-accessors
-     */
+    /// Gets all [MapAccessor]s that this accessor is composing.
+    ///
+    /// @return the sub-accessors
     PersistentSequencedSet<MapAccessor<?>> getSubAccessors();
 
 }

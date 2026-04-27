@@ -55,34 +55,28 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
         return modCount;
     }
 
-    /**
-     * Constructs a new empty map, using the natural ordering of its
-     * keys.
-     */
+    /// Constructs a new empty map, using the natural ordering of its
+    /// keys.
     public MutableRedBlackMap() {
         root = RedBlackTree.empty();
         comparator = NaturalComparator.instance();
     }
 
-    /**
-     * Constructs a new empty map, that uses the specified comparator
-     * for ordering its keys.
-     *
-     * @param comparator the comparator that will be used to order this map.
-     *                   If null, the natural ordering of the keys is used.
-     */
+    /// Constructs a new empty map, that uses the specified comparator
+    /// for ordering its keys.
+    ///
+    /// @param comparator the comparator that will be used to order this map.
+    ///                   If null, the natural ordering of the keys is used.
     public MutableRedBlackMap(@Nullable Comparator<? super K> comparator) {
         root = RedBlackTree.empty();
         this.comparator = comparator == null ? NaturalComparator.instance() : comparator;
     }
 
-    /**
-     * Constructs a map containing the same entries as in the specified
-     * {@link Map}, using the natural ordering of its
-     * keys.
-     *
-     * @param m a map
-     */
+    /// Constructs a map containing the same entries as in the specified
+    /// [Map], using the natural ordering of its
+    /// keys.
+    ///
+    /// @param m a map
     @SuppressWarnings("this-escape")
     public MutableRedBlackMap(Map<? extends K, ? extends V> m) {
         this.comparator = NaturalComparator.instance();
@@ -96,12 +90,10 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
         }
     }
 
-    /**
-     * Constructs a map containing the same entries as in the specified
-     * {@link Map}, using the same ordering as used by the provided map.
-     *
-     * @param m a map
-     */
+    /// Constructs a map containing the same entries as in the specified
+    /// [Map], using the same ordering as used by the provided map.
+    ///
+    /// @param m a map
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableRedBlackMap(SortedMap<? extends K, ? extends V> m) {
         this.comparator = m.comparator() == null ? NaturalComparator.instance() : (Comparator<? super K>) m.comparator();
@@ -114,13 +106,11 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
         }
     }
 
-    /**
-     * Constructs a map containing the same entries as in the specified
-     * {@link Iterable}, using the natural ordering of its
-     * keys.
-     *
-     * @param m an iterable
-     */
+    /// Constructs a map containing the same entries as in the specified
+    /// [Iterable], using the natural ordering of its
+    /// keys.
+    ///
+    /// @param m an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableRedBlackMap(Iterable<? extends Entry<? extends K, ? extends V>> m) {
         this.comparator = NaturalComparator.instance();
@@ -438,12 +428,10 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
         );
     }
 
-    /**
-     * Removes the specified entry from the map.
-     *
-     * @param o an entry (should be a {@link Map.Entry}).
-     * @return true if the element was contained in the map
-     */
+    /// Removes the specified entry from the map.
+    ///
+    /// @param o an entry (should be a [Map.Entry]).
+    /// @return true if the element was contained in the map
     @SuppressWarnings("unchecked")
     private boolean removeEntry(@Nullable Object o) {
         if (containsEntry(o)) {

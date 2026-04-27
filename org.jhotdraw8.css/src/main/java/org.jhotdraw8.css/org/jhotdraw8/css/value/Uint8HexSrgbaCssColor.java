@@ -7,15 +7,13 @@ package org.jhotdraw8.css.value;
 
 import javafx.scene.paint.Color;
 
-/**
- * sRGBA color with 8 bits per channel, encoded as a hexadecimal digit.
- * <p>
- * References:
- * <dl>
- *     <dt>CSS Color Module Level 4, The RGB hexadecimal notations</dt>
- *     <dd><a href="https://www.w3.org/TR/css-color-4/#hex-notation">w3.org/<a></a></a></dd>
- * </dl>
- */
+/// sRGBA color with 8 bits per channel, encoded as a hexadecimal digit.
+///
+/// References:
+/// <dl>
+///     <dt>CSS Color Module Level 4, The RGB hexadecimal notations</dt>
+///     <dd><a href="https://www.w3.org/TR/css-color-4/#hex-notation">w3.org/<a></a></a></dd>
+/// </dl>
 public class Uint8HexSrgbaCssColor extends CssColor {
     private Uint8HexSrgbaCssColor(int argb) {
         super(Uint8HexSrgbaCssColor.toName(argb),

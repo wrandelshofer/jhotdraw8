@@ -7,14 +7,12 @@ package org.jhotdraw8.geom.intersect;
 import java.awt.geom.Point2D;
 import java.io.Serial;
 
-/**
- * Provides the coordinates and the argument value of one intersecting
- * function at an intersection point.
- * <p>
- * This class extends Point2D.Double rather than aggregating it to reduce
- * pointer chasing. As a consequence, IntersectionPoint only uses the x and y
- * coordinates for equals and hashCode.
- */
+/// Provides the coordinates and the argument value of one intersecting
+/// function at an intersection point.
+///
+/// This class extends Point2D.Double rather than aggregating it to reduce
+/// pointer chasing. As a consequence, IntersectionPoint only uses the x and y
+/// coordinates for equals and hashCode.
 public class IntersectionPoint extends Point2D.Double {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -44,13 +42,11 @@ public class IntersectionPoint extends Point2D.Double {
         return argumentA;
     }
 
-    /**
-     * If parametric function 'a' is a segment of a segmented function,
-     * then this field is used to indicate to which segment the parametric
-     * function belongs.
-     * <p>
-     * The index of the segment.
-     */
+    /// If parametric function 'a' is a segment of a segmented function,
+    /// then this field is used to indicate to which segment the parametric
+    /// function belongs.
+    ///
+    /// The index of the segment.
     public int segmentA() {
         return segmentA;
     }

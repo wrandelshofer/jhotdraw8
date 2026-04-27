@@ -54,9 +54,7 @@ public interface ThemeManager {
         this.themeProperty().set(theme);
     }
 
-    /**
-     * Updates {@link Application#setUserAgentStylesheet(String)} with
-     * the current theme.
-     */
+    /// Updates [Application#setUserAgentStylesheet(String)] with
+    /// the current theme.
     void updateUserAgentStylesheet();
 }

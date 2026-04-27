@@ -8,10 +8,8 @@ package org.jhotdraw8.collection.primitive;
 
 import java.util.SequencedCollection;
 
-/**
- * Interface for collection of {@code int}-values with a well-defined linear
- * ordering of its elements.
- */
+/// Interface for collection of `int`-values with a well-defined linear
+/// ordering of its elements.
 public interface DoubleSequencedCollection extends SequencedCollection<Double> {
     void addFirstAsDouble(double e);
 

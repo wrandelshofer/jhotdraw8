@@ -11,34 +11,28 @@ import org.jhotdraw8.css.value.CssColor;
 
 import java.util.prefs.Preferences;
 
-/**
- * Handles preferences for a drawing editor.
- */
+/// Handles preferences for a drawing editor.
 public class DrawingEditorPreferencesHandler {
     private static final String DRAWING_EDITOR = "DrawingEditor.";
     private final DrawingEditor editor;
     private final Preferences prefs;
     private final String prefix;
 
-    /**
-     * Creates a new handler for the specified editor. All preferences
-     * have the prefix {@value #DRAWING_EDITOR}.
-     *
-     * @param editor the editor
-     * @param prefs  the preferences
-     */
+    /// Creates a new handler for the specified editor. All preferences
+    /// have the prefix {@value #DRAWING_EDITOR}.
+    ///
+    /// @param editor the editor
+    /// @param prefs  the preferences
     public DrawingEditorPreferencesHandler(DrawingEditor editor, Preferences prefs) {
         this(editor, prefs, DRAWING_EDITOR);
     }
 
-    /**
-     * Creates a new handler for the specified editor. All preferences
-     * have the specified prefix.
-     *
-     * @param editor the editor
-     * @param prefs  the preferences
-     * @param prefix the prefix
-     */
+    /// Creates a new handler for the specified editor. All preferences
+    /// have the specified prefix.
+    ///
+    /// @param editor the editor
+    /// @param prefs  the preferences
+    /// @param prefix the prefix
     public DrawingEditorPreferencesHandler(DrawingEditor editor, Preferences prefs, String prefix) {
         this.editor = editor;
         this.prefs = prefs;

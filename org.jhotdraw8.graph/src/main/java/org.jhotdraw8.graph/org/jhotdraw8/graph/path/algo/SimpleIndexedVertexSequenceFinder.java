@@ -18,11 +18,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Implements the {@link VertexSequenceFinder} interface.
- *
- * @param <C> the cost number type
- */
+/// Implements the [VertexSequenceFinder] interface.
+///
+/// @param <C> the cost number type
 public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>> implements VertexSequenceFinder<Integer, C> {
     private final IndexedVertexPathSearchAlgo<C> algo;
     private final C zero;
@@ -30,17 +28,15 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
     private final BiFunction<Integer, Integer, C> costFunction;
     private final BiFunction<C, C, C> sumFunction;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param zero                 the zero value, e.g. {@code 0}, {@code 0.0}.
-     * @param nextVerticesFunction a function that given a vertex,
-     *                             returns an {@link Iterable} for the next vertices
-     *                             of that vertex.
-     * @param costFunction         the cost function
-     * @param sumFunction          the sum function, which adds two numbers,
-     *                             e.g. {@link Integer#sum}, {@link Double#sum}.
-     */
+    /// Creates a new instance.
+    ///
+    /// @param zero                 the zero value, e.g. `0`, `0.0`.
+    /// @param nextVerticesFunction a function that given a vertex,
+    ///                             returns an [Iterable] for the next vertices
+    ///                             of that vertex.
+    /// @param costFunction         the cost function
+    /// @param sumFunction          the sum function, which adds two numbers,
+    ///                             e.g. [Integer#sum], [Double#sum].
     public SimpleIndexedVertexSequenceFinder(
             C zero,
             Function<Integer, Spliterator.OfInt> nextVerticesFunction,
@@ -54,17 +50,15 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
         this.algo = algo;
     }
 
-    /**
-     * Creates a new instance which has a cost function that returns integer
-     * numbers.
-     *
-     * @param nextVerticesFunction a function that given a vertex,
-     *                             returns an {@link Iterable} for the next vertices
-     *                             of that vertex.
-     * @param costFunction         the cost function
-     * @param algo                 the search algorithm
-     * @return the new {@link SimpleIndexedVertexSequenceFinder} instance.
-     */
+    /// Creates a new instance which has a cost function that returns integer
+    /// numbers.
+    ///
+    /// @param nextVerticesFunction a function that given a vertex,
+    ///                             returns an [Iterable] for the next vertices
+    ///                             of that vertex.
+    /// @param costFunction         the cost function
+    /// @param algo                 the search algorithm
+    /// @return the new [SimpleIndexedVertexSequenceFinder] instance.
     public static SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
             Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             BiFunction<Integer, Integer, Integer> costFunction,
@@ -72,33 +66,29 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
         return new SimpleIndexedVertexSequenceFinder<>(0, nextVerticesFunction, costFunction, Integer::sum, algo);
     }
 
-    /**
-     * Creates a new instance which has a int cost function that counts the
-     * number of arrows.
-     *
-     * @param nextVerticesFunction a function that given a vertex,
-     *                             returns an {@link Iterable} for the next vertices
-     *                             of that vertex.
-     * @param algo                 the search algorithm
-     * @return the new {@link SimpleIndexedVertexSequenceFinder} instance.
-     */
+    /// Creates a new instance which has a int cost function that counts the
+    /// number of arrows.
+    ///
+    /// @param nextVerticesFunction a function that given a vertex,
+    ///                             returns an [Iterable] for the next vertices
+    ///                             of that vertex.
+    /// @param algo                 the search algorithm
+    /// @return the new [SimpleIndexedVertexSequenceFinder] instance.
     public static SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
             Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             IndexedVertexPathSearchAlgo<Integer> algo) {
         return new SimpleIndexedVertexSequenceFinder<>(0, nextVerticesFunction, (u, v) -> 1, Integer::sum, algo);
     }
 
-    /**
-     * Creates a new instance which has a cost function that returns long
-     * numbers.
-     *
-     * @param nextVerticesFunction a function that given a vertex,
-     *                             returns an {@link Iterable} for the next vertices
-     *                             of that vertex.
-     * @param costFunction         the cost function
-     * @param algo                 the search algorithm
-     * @return the new {@link SimpleIndexedVertexSequenceFinder} instance.
-     */
+    /// Creates a new instance which has a cost function that returns long
+    /// numbers.
+    ///
+    /// @param nextVerticesFunction a function that given a vertex,
+    ///                             returns an [Iterable] for the next vertices
+    ///                             of that vertex.
+    /// @param costFunction         the cost function
+    /// @param algo                 the search algorithm
+    /// @return the new [SimpleIndexedVertexSequenceFinder] instance.
     public static SimpleIndexedVertexSequenceFinder<Long> newLongCostInstance(
             Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             BiFunction<Integer, Integer, Long> costFunction,

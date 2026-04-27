@@ -14,24 +14,20 @@ import javafx.scene.control.DialogPane;
 
 import java.util.function.Supplier;
 
-/**
- * This class is similar to TextInputDialog, but allows to specify an arbitrary JavaFX node as input form.
- *
- * @param <R> the return type of the dialog
- */
+/// This class is similar to TextInputDialog, but allows to specify an arbitrary JavaFX node as input form.
+///
+/// @param <R> the return type of the dialog
 public class InputDialog<R> extends Dialog<R> {
 
     private Node inputForm;
     private Supplier<R> resultSupplier;
 
-    /**
-     * Creates a new InputDialog.
-     *
-     * @param title          the title
-     * @param headerText     the header text
-     * @param inputForm      the input form
-     * @param resultSupplier the result supplier
-     */
+    /// Creates a new InputDialog.
+    ///
+    /// @param title          the title
+    /// @param headerText     the header text
+    /// @param inputForm      the input form
+    /// @param resultSupplier the result supplier
     public InputDialog(String title, String headerText, Node inputForm, Supplier<R> resultSupplier) {
         final DialogPane dialogPane = getDialogPane();
 
@@ -55,21 +51,17 @@ public class InputDialog<R> extends Dialog<R> {
         });
     }
 
-    /**
-     * Returns the input form used within this dialog.
-     *
-     * @return the input form
-     */
+    /// Returns the input form used within this dialog.
+    ///
+    /// @return the input form
     public final Node getInputForm() {
         return inputForm;
     }
 
 
-    /**
-     * Sets the input form used within this dialog.
-     *
-     * @param newValue the new input form
-     */
+    /// Sets the input form used within this dialog.
+    ///
+    /// @param newValue the new input form
     public final void setInputForm(Node newValue) {
         inputForm = newValue;
         updateGrid();

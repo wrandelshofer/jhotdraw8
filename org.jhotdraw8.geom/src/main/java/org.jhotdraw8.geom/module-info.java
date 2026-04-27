@@ -5,9 +5,7 @@
 
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Defines functions for 2D geometry processing.
- */
+/// Defines functions for 2D geometry processing.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.geom {

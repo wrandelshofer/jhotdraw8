@@ -16,16 +16,14 @@ public class IntersectEllipsePoint {
     private IntersectEllipsePoint() {
     }
 
-    /**
-     * Computes the intersection between a point and an ellipse.
-     *
-     * @param point  the point
-     * @param center the center of the ellipse
-     * @param rx     the x-radius of ellipse
-     * @param ry     the y-radius of ellipse
-     * @return computed intersection. Status can be{@link IntersectionStatus#INTERSECTION},
-     * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
-     */
+    /// Computes the intersection between a point and an ellipse.
+    ///
+    /// @param point  the point
+    /// @param center the center of the ellipse
+    /// @param rx     the x-radius of ellipse
+    /// @param ry     the y-radius of ellipse
+    /// @return computed intersection. Status can be[IntersectionStatus#INTERSECTION],
+    /// Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
     public static IntersectionResult intersectPointEllipse(Point2D point, Point2D center, double rx, double ry) {
         List<IntersectionPoint> result = new ArrayList<>();
 

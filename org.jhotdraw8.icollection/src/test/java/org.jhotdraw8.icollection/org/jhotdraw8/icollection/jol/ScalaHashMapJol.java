@@ -8,30 +8,26 @@ import scala.collection.mutable.ReusableBuilder;
 
 import java.util.AbstractMap;
 
-/**
- * ScalaHashMapJol.
- */
+/// ScalaHashMapJol.
 public class ScalaHashMapJol extends AbstractJol {
 
-    /**
-     * <pre>
-     * class scala.collection.immutable.HashMap with 1000 elements.
-     * total size              : 82848
-     * element size            : 48
-     * data size               : 48000 57%
-     * data structure size     : 34848 42%
-     * overhead per element    : 34.848 bytes
-     * ----footprint---
-     * scala.collection.immutable.HashMap@70f59913d footprint:
-     *      COUNT       AVG       SUM   DESCRIPTION
-     *        292        30      8968   [I
-     *        296        47     14024   [Ljava.lang.Object;
-     *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-     *        296        40     11840   scala.collection.immutable.BitmapIndexedMapNode
-     *          1        16        16   scala.collection.immutable.HashMap
-     *       2885               82848   (total)
-     * </pre>
-     */
+    /// <pre>
+    /// class scala.collection.immutable.HashMap with 1000 elements.
+    /// total size              : 82848
+    /// element size            : 48
+    /// data size               : 48000 57%
+    /// data structure size     : 34848 42%
+    /// overhead per element    : 34.848 bytes
+    /// ----footprint---
+    /// scala.collection.immutable.HashMap@70f59913d footprint:
+    ///      COUNT       AVG       SUM   DESCRIPTION
+    ///        292        30      8968   [I
+    ///        296        47     14024   [Ljava.lang.Object;
+    ///       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
+    ///        296        40     11840   scala.collection.immutable.BitmapIndexedMapNode
+    ///          1        16        16   scala.collection.immutable.HashMap
+    ///       2885               82848   (total)
+    /// </pre>
     @Test
     @Disabled
     public void estimateMemoryUsage() {

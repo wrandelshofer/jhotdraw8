@@ -9,12 +9,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * Wraps a value that supports CSS defaulting.
- *
- * @param <T> the value type
- * @see CssDefaulting
- */
+/// Wraps a value that supports CSS defaulting.
+///
+/// @param <T> the value type
+/// @see CssDefaulting
 public class CssDefaultableValue<T> {
     private final @Nullable CssDefaulting defaulting;
     private final @Nullable T value;

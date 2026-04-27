@@ -28,18 +28,16 @@ import static org.jhotdraw8.geom.contour.Utils.closestPointOnLineSeg;
 import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
 import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
 
-/**
- * PlineVertex.
- * <p>
- * References:
- * <p>
- * This code has been derived from CavalierContours.
- * <dl>
- *     <dt>CavalierContours. Copyright (c) 2019 Jedidiah Buck McCready.
- *    <a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
- *     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
- * </dl>
- */
+/// PlineVertex.
+///
+/// References:
+///
+/// This code has been derived from CavalierContours.
+/// <dl>
+///     <dt>CavalierContours. Copyright (c) 2019 Jedidiah Buck McCready.
+///    <a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
+///     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
+/// </dl>
 public class PlineVertex implements Cloneable {
     private final double x;
     private final double y;
@@ -114,10 +112,8 @@ public class PlineVertex implements Cloneable {
         return Objects.hash(x, y, bulge);
     }
 
-    /**
-     * Computes a fast approximate AABB of a segment described by v1 to v2, bounding box may be larger
-     * than the true bounding box for the segment
-     */
+    /// Computes a fast approximate AABB of a segment described by v1 to v2, bounding box may be larger
+    /// than the true bounding box for the segment
     static AABB createFastApproxBoundingBox(final PlineVertex v1, final PlineVertex v2) {
         if (v1.bulgeIsZero()) {
             return new AABB(
@@ -183,9 +179,7 @@ public class PlineVertex implements Cloneable {
         );
     }
 
-    /**
-     * Split the segment defined by v1 to v2 at some point defined along it.
-     */
+    /// Split the segment defined by v1 to v2 at some point defined along it.
     static SplitResult splitAtPoint(final PlineVertex v1, final PlineVertex v2,
                                     final Point2D.Double point) {
         SplitResult result = new SplitResult();

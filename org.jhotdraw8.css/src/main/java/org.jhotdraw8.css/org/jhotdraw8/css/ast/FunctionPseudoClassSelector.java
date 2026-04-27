@@ -12,11 +12,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * A "class selector" matches an element based on the value of its "pseudo
- * class" attribute.
- *
- */
+/// A "class selector" matches an element based on the value of its "pseudo
+/// class" attribute.
 public class FunctionPseudoClassSelector extends PseudoClassSelector {
 
     private final String functionIdentifier;

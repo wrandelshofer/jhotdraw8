@@ -21,22 +21,17 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Supplier;
 
-/**
- * GroupAction.
- *
- */
+/// GroupAction.
 public class GroupAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.group";
     public static final String COMBINE_PATHS_ID = "edit.combinePaths";
     public final @Nullable Supplier<Figure> groupFactory;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor       the drawing editor
-     * @param groupFactory the group factory
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor       the drawing editor
+    /// @param groupFactory the group factory
     public GroupAction(DrawingEditor editor, Supplier<Figure> groupFactory) {
         this(ID, editor, groupFactory);
     }

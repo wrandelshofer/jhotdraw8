@@ -23,15 +23,13 @@ import static org.jhotdraw8.icollection.MapEntries.entry;
 import static org.jhotdraw8.icollection.MapEntries.linkedHashMap;
 import static org.jhotdraw8.icollection.MapEntries.ofEntries;
 
-/**
- * Converts SVG font-size.
- * <p>
- * Reference:
- * <dl>
- * <dt>Font Size</dt><dd><a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">
- *     link</a></dd>
- * </dl>
- */
+/// Converts SVG font-size.
+///
+/// Reference:
+/// <dl>
+/// <dt>Font Size</dt><dd><a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">
+///     link</a></dd>
+/// </dl>
 public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
 
     private final MappedConverter<SvgFontSize.SizeKeyword> mappedConverter =

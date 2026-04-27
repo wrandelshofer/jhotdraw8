@@ -10,33 +10,26 @@ import org.jhotdraw8.draw.css.converter.FXPathCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jspecify.annotations.Nullable;
 
-/**
- * NullableSvgPathStyleableKey.
- *
- */
+/// NullableSvgPathStyleableKey.
 public class NullableFXPathStyleableKey extends AbstractStyleableKey<Path> implements WritableStyleableMapAccessor<Path> {
 
     private final Converter<Path> converter;
 
-    /**
-     * Creates a new instance with the specified name and with null as the
-     * default value.
-     *
-     * @param name The name of the key.
-     */
+    /// Creates a new instance with the specified name and with null as the
+    /// default value.
+    ///
+    /// @param name The name of the key.
     public NullableFXPathStyleableKey(String name) {
         this(name, null);
     }
 
 
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise,
-     *                     specify them in arrow brackets.
-     * @param defaultValue The default value.
-     */
+    /// Creates a new instance with the specified name, type token class, default
+    /// value, and allowing or disallowing null values.
+    ///
+    /// @param key          The name of the name. type parameters are given. Otherwise,
+    ///                     specify them in arrow brackets.
+    /// @param defaultValue The default value.
     @SuppressWarnings("this-escape")
     public NullableFXPathStyleableKey(String key, @Nullable Path defaultValue) {
         super(null, key, Path.class, true, defaultValue);

@@ -27,65 +27,60 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.Function;
 
-/**
- * Implements the {@link Set} interface using a Compressed Hash-Array Mapped
- * Prefix-tree (CHAMP).
- * <p>
- * Features:
- * <ul>
- *     <li>supports up to 2<sup>31</sup> - 1 elements</li>
- *     <li>allows null elements</li>
- *     <li>is mutable</li>
- *     <li>is not thread-safe</li>
- *     <li>does not guarantee a specific iteration order</li>
- * </ul>
- * <p>
- * Performance characteristics:
- * <ul>
- *     <li>add: O(log₃₂ N)</li>
- *     <li>remove: O(log₃₂ N)</li>
- *     <li>contains: O(log₃₂ N)</li>
- *     <li>toPersistent: O(1) + O(log₃₂ N) distributed across subsequent updates in
- *     this set</li>
- *     <li>clone: O(1) + O(log₃₂ N) distributed across subsequent updates in this
- *     set and in the clone</li>
- *     <li>iterator.next: O(1)</li>
- * </ul>
- * <p>
- * Implementation details:
- * <p>
- * See description at {@link ChampSet}.
- * <p>
- * References:
- * <p>
- * Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
- * <dl>
- *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Persistent Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
- *      <dt>The Capsule Hash Trie Collections Library.
- *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
- *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
- * </dl>
- *
- * @param <E> the element type
- */
+/// Implements the [Set] interface using a Compressed Hash-Array Mapped
+/// Prefix-tree (CHAMP).
+///
+/// Features:
+///
+///   - supports up to 2<sup>31</sup> - 1 elements
+///   - allows null elements
+///   - is mutable
+///   - is not thread-safe
+///   - does not guarantee a specific iteration order
+///
+///
+/// Performance characteristics:
+///
+///   - add: O(log₃₂ N)
+///   - remove: O(log₃₂ N)
+///   - contains: O(log₃₂ N)
+///   - toPersistent: O(1) + O(log₃₂ N) distributed across subsequent updates in
+///     this set
+///   - clone: O(1) + O(log₃₂ N) distributed across subsequent updates in this
+///     set and in the clone
+///   - iterator.next: O(1)
+///
+///
+/// Implementation details:
+///
+/// See description at [ChampSet].
+///
+/// References:
+///
+/// Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
+/// <dl>
+///      <dt>Michael J. Steindorfer (2017).
+///      Efficient Persistent Collections.</dt>
+///      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
+///      <dt>The Capsule Hash Trie Collections Library.
+///
+/// Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+///      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+/// </dl>
+///
+/// @param <E> the element type
 public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Serial
     private static final long serialVersionUID = 0L;
 
-    /**
-     * Constructs a new empty set.
-     */
+    /// Constructs a new empty set.
     public MutableChampSet() {
         root = BitmapIndexedNode.emptyNode();
     }
 
-    /**
-     * Constructs a set containing the elements in the specified iterable.
-     *
-     * @param c an iterable
-     */
+    /// Constructs a set containing the elements in the specified iterable.
+    ///
+    /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableChampSet(Iterable<? extends E> c) {
         if (c instanceof MutableChampSet<?>) {
@@ -115,12 +110,10 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         return details.isModified();
     }
 
-    /**
-     * Adds all specified elements that are not already in this set.
-     *
-     * @param c an iterable of elements
-     * @return {@code true} if this set changed
-     */
+    /// Adds all specified elements that are not already in this set.
+    ///
+    /// @param c an iterable of elements
+    /// @return `true` if this set changed
     @SuppressWarnings("unchecked")
     public boolean addAll(Iterable<? extends E> c) {
         if (c instanceof MutableChampSet<?> m) {
@@ -237,9 +230,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         return true;
     }
 
-    /**
-     * Removes all elements from this set.
-     */
+    /// Removes all elements from this set.
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
@@ -247,9 +238,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         modCount++;
     }
 
-    /**
-     * Returns a shallow copy of this set.
-     */
+    /// Returns a shallow copy of this set.
     @Override
     public MutableChampSet<E> clone() {
         return (MutableChampSet<E>) super.clone();
@@ -293,11 +282,9 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         return details.isModified();
     }
 
-    /**
-     * Returns an persistent copy of this set.
-     *
-     * @return an persistent copy
-     */
+    /// Returns an persistent copy of this set.
+    ///
+    /// @return an persistent copy
     public ChampSet<E> toPersistent() {
         owner = null;
         return size == 0

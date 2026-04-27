@@ -20,13 +20,11 @@ import java.util.stream.StreamSupport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-/**
- * Base class for tests that test implementations of the {@link MutableDirectedGraph}
- * interface.
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- */
+/// Base class for tests that test implementations of the [MutableDirectedGraph]
+/// interface.
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
 public abstract class AbstractMutableDirectedGraphTest<V, A> {
     protected abstract MutableDirectedGraph<V, A> newInstance();
 
@@ -36,25 +34,21 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
 
     protected abstract A newArrow(V start, V end, char id);
 
-    /**
-     * Returns the arrow id. Returns \u0000 if the arrow is null.
-     */
+    /// Returns the arrow id. Returns \u0000 if the arrow is null.
     protected abstract char getArrowId(@Nullable A a);
 
     protected abstract int getVertexId(V v);
 
-    /**
-     * Example graph:
-     * <pre>
-     *            x
-     *           ⟲
-     *     0 ─a→ 1 ─c→ 2
-     *     │     │
-     *     b     d
-     *     ↓     ↓
-     *     3 ←e─ 4
-     * </pre>
-     */
+    /// Example graph:
+    /// <pre>
+    ///            x
+    ///           ⟲
+    ///     0 ─a→ 1 ─c→ 2
+    ///     │     │
+    ///     b     d
+    ///     ↓     ↓
+    ///     3 ←e─ 4
+    /// </pre>
     protected MutableDirectedGraph<V, A> buildGraph() {
         MutableDirectedGraph<V, A> g = newInstance();
         V v0 = newVertex(0);
@@ -76,9 +70,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
         return g;
     }
 
-    /**
-     * Test getters.
-     */
+    /// Test getters.
     @Test
     public void testAddVerticesAndArrows() {
         MutableDirectedGraph<V, A> g = buildGraph();
@@ -86,9 +78,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
         assertEqualsToInitialGraph(g);
     }
 
-    /**
-     * Test copy.
-     */
+    /// Test copy.
     @Test
     public void testCopy() {
         MutableDirectedGraph<V, A> g = newInstance(buildGraph());
@@ -164,9 +154,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
         return vertices;
     }
 
-    /**
-     * Test arrow removal.
-     */
+    /// Test arrow removal.
     @Test
     public void testRemoveArrow() {
         MutableDirectedGraph<V, A> g = buildGraph();
@@ -180,9 +168,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
         continueTestRemoveArrow(g);
     }
 
-    /**
-     * Test arrow removal.
-     */
+    /// Test arrow removal.
     @Test
     public void testRemoveArrowWithoutData() {
         MutableDirectedGraph<V, A> g = buildGraph();
@@ -225,9 +211,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
         assertEqualsToInitialGraph(g);
     }
 
-    /**
-     * Test arrowAt removal.
-     */
+    /// Test arrowAt removal.
     @Test
     public void testRemoveArrowAt() {
         MutableDirectedGraph<V, A> g = buildGraph();
@@ -236,17 +220,15 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
         continueTestRemoveArrow(g);
     }
 
-    /**
-     * Test remove vertex 1. Vertex 1 has a self-loop.
-     * <p>
-     * Example graph after removal of 1:
-     * <pre>
-     *     0          2
-     *     │
-     *     ↓
-     *     3 ←── 4
-     * </pre>
-     */
+    /// Test remove vertex 1. Vertex 1 has a self-loop.
+    ///
+    /// Example graph after removal of 1:
+    /// <pre>
+    ///     0          2
+    ///     │
+    ///     ↓
+    ///     3 ←── 4
+    /// </pre>
     @Test
     public void testRemoveVertexWithSelfLoop() {
         MutableDirectedGraph<V, A> g = buildGraph();

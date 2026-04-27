@@ -24,9 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * Abstract base class for testing classes that implement the {@link Set} interface.
- */
+/// Abstract base class for testing classes that implement the [Set] interface.
 @SuppressWarnings({"SlowAbstractSetRemoveAll", "unchecked", "EqualsWithItself", "SimplifiableAssertion"})
 public abstract class AbstractSetTestOld {
 

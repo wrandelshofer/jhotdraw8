@@ -35,75 +35,67 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * CssColorConverter.
- * <p>
- * Parses the following EBNF:
- * </p>
- * <pre>
- * CssColor ::= NamedColor | HexColor | ColorFunction  ;
- *
- * NamedColor ::= 'none' | TT_IDENT;
- *
- * HexColor ::= ('#'|'0x') , ( hexdigit * 3 | hexdigit * 4 | hexdigit * 6 | hexdigit * 8 );
- *
- * ColorFunction ::= RGBFunction | RGBAFunction
- *                 | HSBFunction | HSBAFunction
- *                 | HSLFunction | HSLAFunction
- *                 | HWBFunction
- *                 | LABFunction
- *                 | LCHFunction
- *                 | OKLABFunction
- *                 | OKLCHFunction
- *                 | COLORFunction
- *                 ;
- * RGBFunction   ::= 'rgb('   , color-params , ')' ;
- * RGBAFunction  ::= 'rgba('  , color-params , ')' ;
- * HSBFunction   ::= 'hsb('   , color-params , ')' ;
- * HSBAFunction  ::= 'hsba('   , color-params , ')' ;
- * HSLFunction   ::= 'hsl('   , color-params , ')' ;
- * HSLAFunction  ::= 'hsla('  , color-params , ')' ;
- * HWBFunction   ::= 'hwb('   , color-params , ')' ;
- * LABFunction   ::= 'lab('   , color-params , ')' ;
- * OKLABFunction ::= 'oklab(' , color-params , ')' ;
- * OKLCHFunction ::= 'oklch(' , color-params , ')' ;
- * COLORFunction ::= 'color(' ,  color-params , ')' ;
- *
- * color-params  ::= [ color-space-param ] , ( ( number | angle | percentage | 'none' ) , [ "," ] ) * 3 , alpha-param ;
- * alpha-param   ::= [ [ '/' ] ( number | percentage | 'none' ) ] ;
- * color-space-param ::= 'srgb'
- *                     | 'srgb-linear'
- *                     | 'display-p3'
- *                     | 'a98-rgb'
- *                     | 'prophoto-rgb'
- *                     | 'rec2020'
- *                     | 'xyz'
- *                     | 'xyz-d50'
- *                     | 'xyz-d65'
- *                     ;
- * </pre>
- * <p>
- * References:
- * <dl>
- *     <dt>CSS Color Module Level 4. 4. Representing Colors: the &lt;color&gt; type.</dt>
- *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-type">w3.org</a></dd>
- *
- *     <dt>CSS Color Module Level 4. 4. Representing Colors: the &lt;color&gt; type.  4.1 The &lt;color&gt; syntax.</dt>
- *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-syntax">w3.org</a></dd>
- *
- *     <dt>CSS Color Module Level 4. 5. sRGB Colors.</dt>
- *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#rgb-functions">w3.org</a></dd>
- *
- *     <dt>JavaFX 20. JavaFX CSS Reference Guide. Types. {@literal <color>}.</dt>
- *     <dd><a href="https://openjfx.io/javadoc/20/javafx.graphics/javafx/scene/doc-files/cssref.html#typecolor">openjfx.io</a></dd>
- * </dl>
- *
- */
+/// CssColorConverter.
+///
+/// Parses the following EBNF:
+///
+/// <pre>
+/// CssColor ::= NamedColor | HexColor | ColorFunction  ;
+///
+/// NamedColor ::= 'none' | TT_IDENT;
+///
+/// HexColor ::= ('#'|'0x') , ( hexdigit * 3 | hexdigit * 4 | hexdigit * 6 | hexdigit * 8 );
+///
+/// ColorFunction ::= RGBFunction | RGBAFunction
+///                 | HSBFunction | HSBAFunction
+///                 | HSLFunction | HSLAFunction
+///                 | HWBFunction
+///                 | LABFunction
+///                 | LCHFunction
+///                 | OKLABFunction
+///                 | OKLCHFunction
+///                 | COLORFunction
+///                 ;
+/// RGBFunction   ::= 'rgb('   , color-params , ')' ;
+/// RGBAFunction  ::= 'rgba('  , color-params , ')' ;
+/// HSBFunction   ::= 'hsb('   , color-params , ')' ;
+/// HSBAFunction  ::= 'hsba('   , color-params , ')' ;
+/// HSLFunction   ::= 'hsl('   , color-params , ')' ;
+/// HSLAFunction  ::= 'hsla('  , color-params , ')' ;
+/// HWBFunction   ::= 'hwb('   , color-params , ')' ;
+/// LABFunction   ::= 'lab('   , color-params , ')' ;
+/// OKLABFunction ::= 'oklab(' , color-params , ')' ;
+/// OKLCHFunction ::= 'oklch(' , color-params , ')' ;
+/// COLORFunction ::= 'color(' ,  color-params , ')' ;
+///
+/// color-params  ::= [color-space-param] , ( ( number | angle | percentage | 'none' ) , [","] ) * 3 , alpha-param ;
+/// alpha-param   ::= [ ['/'] ( number | percentage | 'none' ) ] ;
+/// color-space-param ::= 'srgb'
+///                     | 'srgb-linear'
+///                     | 'display-p3'
+///                     | 'a98-rgb'
+///                     | 'prophoto-rgb'
+///                     | 'rec2020'
+///                     | 'xyz'
+///                     | 'xyz-d50'
+///                     | 'xyz-d65'
+///                     ;
+/// </pre>
+///
+/// References:
+/// <dl>
+///     <dt>CSS Color Module Level 4. 4. Representing Colors: the &lt;color&gt; type.</dt>
+///     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-type">w3.org</a></dd>
+///     <dt>CSS Color Module Level 4. 4. Representing Colors: the &lt;color&gt; type.  4.1 The &lt;color&gt; syntax.</dt>
+///     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-syntax">w3.org</a></dd>
+///     <dt>CSS Color Module Level 4. 5. sRGB Colors.</dt>
+///     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#rgb-functions">w3.org</a></dd>
+///     <dt>JavaFX 20. JavaFX CSS Reference Guide. Types. {@literal <color>}.</dt>
+///     <dd><a href="https://openjfx.io/javadoc/20/javafx.graphics/javafx/scene/doc-files/cssref.html#typecolor">openjfx.io</a></dd>
+/// </dl>
 public class ColorCssConverter implements CssConverter<CssColor> {
-    /**
-     * Configure the number convert so that it preserves 32-bit float values,
-     * which have a precision of 8 decimal digits.
-     */
+    /// Configure the number convert so that it preserves 32-bit float values,
+    /// which have a precision of 8 decimal digits.
     private final static FloatConverter number = new FloatConverter();
 
     final boolean nullable;
@@ -354,15 +346,13 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         };
     }
 
-    /**
-     * FIXME Implement gamut mapping!
-     * <p>
-     * <a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#css-gamut-mapping">w3.org</a>
-     *
-     * @param param
-     * @param params
-     * @return
-     */
+    /// FIXME Implement gamut mapping!
+    ///
+    /// <a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#css-gamut-mapping">w3.org</a>
+    ///
+    /// @param param
+    /// @param params
+    /// @return
     private static float[] clampColors(NamedColorSpace param, double[] params) {
         return clampColors(toFloat(params));
     }

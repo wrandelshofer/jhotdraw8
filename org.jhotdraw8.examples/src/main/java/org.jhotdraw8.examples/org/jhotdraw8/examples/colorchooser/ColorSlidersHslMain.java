@@ -50,21 +50,19 @@ import java.awt.color.ColorSpace;
 import java.util.List;
 import java.util.function.ToIntFunction;
 
-/**
- * Shows sliders for HSB/HSV color spaces.
- * <pre>
- *     saturation →
- * +-----------------+
- * |                 | ↑
- * |                 | brightness/value
- * |                 |
- * +-----------------+
- *
- * +-----------------+
- * |   hue →         |
- * +-----------------+
- * </pre>
- */
+/// Shows sliders for HSB/HSV color spaces.
+/// <pre>
+///     saturation →
+/// +-----------------+
+/// |                 | ↑
+/// |                 | brightness/value
+/// |                 |
+/// +-----------------+
+///
+/// +-----------------+
+/// |   hue →         |
+/// +-----------------+
+/// </pre>
 public class ColorSlidersHslMain extends AbstractColorSlidersMain {
 
 
@@ -274,9 +272,7 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
     }
 
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         launch(args);
     }

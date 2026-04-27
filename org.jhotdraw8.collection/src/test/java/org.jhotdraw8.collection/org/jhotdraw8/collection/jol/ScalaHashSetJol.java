@@ -5,16 +5,14 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import scala.collection.immutable.HashSet;
 
-/**
- * <pre>
- * class scala.collection.immutable.HashSet with 1000000 elements.
- *
- * total size              : 55957248
- * element size            : 24
- * data size               : 24000000 42%
- * data structure size     : 31957248 57%
- * </pre>
- */
+/// <pre>
+/// class scala.collection.immutable.HashSet with 1000000 elements.
+///
+/// total size              : 55957248
+/// element size            : 24
+/// data size               : 24000000 42%
+/// data structure size     : 31957248 57%
+/// </pre>
 public class ScalaHashSetJol extends AbstractJol {
 
     @Test

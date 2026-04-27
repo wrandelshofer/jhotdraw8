@@ -7,10 +7,10 @@ package org.jhotdraw8.svg.text;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
+import org.jhotdraw8.css.converter.ColorCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
-import org.jhotdraw8.css.converter.ColorCssConverter;
 import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.css.value.Paintable;
 import org.jspecify.annotations.Nullable;
@@ -21,14 +21,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-/**
- * SvgCssPaintableConverter.
- *
- */
+/// SvgCssPaintableConverter.
 public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
-    /**
-     * The currentColor keyword.
-     */
+    /// The currentColor keyword.
     public static final String CURRENT_COLOR_KEYWORD = "currentColor";
 
     private static final ColorCssConverter colorConverter = new ColorCssConverter(false);

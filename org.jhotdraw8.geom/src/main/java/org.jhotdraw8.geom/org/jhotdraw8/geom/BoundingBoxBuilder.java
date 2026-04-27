@@ -12,10 +12,7 @@ import java.awt.geom.Rectangle2D;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-/**
- * Builds a bounding box path.
- *
- */
+/// Builds a bounding box path.
 public class BoundingBoxBuilder extends AbstractPathBuilder<BoundingBox> {
 
     private double minx = Double.POSITIVE_INFINITY,

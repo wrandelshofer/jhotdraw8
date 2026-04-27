@@ -21,42 +21,38 @@ public class IntersectQuadCurveLine {
     }
 
 
-    /**
-     * Computes the intersection between quadratic bezier curve 'p' and the line
-     * 'a'.
-     * <p>
-     * The intersection will contain the parameters 't1' of curve 'a' in range
-     * [0,1].
-     *
-     * @param p0 control point P0 of 'p'
-     * @param p1 control point P1 of 'p'
-     * @param p2 control point P2 of 'p'
-     * @param a0 point 0 of 'a'
-     * @param a1 point 1 of 'a'
-     * @return the computed intersection
-     */
+    /// Computes the intersection between quadratic bezier curve 'p' and the line
+    /// 'a'.
+    ///
+    /// The intersection will contain the parameters 't1' of curve 'a' in range
+    /// [0,1].
+    ///
+    /// @param p0 control point P0 of 'p'
+    /// @param p1 control point P1 of 'p'
+    /// @param p2 control point P2 of 'p'
+    /// @param a0 point 0 of 'a'
+    /// @param a1 point 1 of 'a'
+    /// @return the computed intersection
     public static IntersectionResult intersectQuadCurveLine(Point2D p0, Point2D p1, Point2D p2, Point2D a0, Point2D a1) {
         return intersectQuadCurveLine(p0, p1, p2, a0, a1, Scalars.REAL_THRESHOLD);
     }
 
-    /**
-     * The code of this method has been derived from intersection.js.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>intersection.js</dt>
-     *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
-     *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
-     * </dl>
-     *
-     * @param p0      control point of the quad curve
-     * @param p1      control point of the quad curve
-     * @param p2      control point of the quad curve
-     * @param a0      start point of the line
-     * @param a1      end point of the line
-     * @param epsilon the desired precision
-     * @return the intersection result
-     */
+    /// The code of this method has been derived from intersection.js.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>intersection.js</dt>
+    ///     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+    ///     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
+    /// </dl>
+    ///
+    /// @param p0      control point of the quad curve
+    /// @param p1      control point of the quad curve
+    /// @param p2      control point of the quad curve
+    /// @param a0      start point of the line
+    /// @param a1      end point of the line
+    /// @param epsilon the desired precision
+    /// @return the intersection result
     public static IntersectionResult intersectQuadCurveLine(Point2D p0, Point2D p1, Point2D p2, Point2D a0, Point2D a1,
                                                             double epsilon) {
 

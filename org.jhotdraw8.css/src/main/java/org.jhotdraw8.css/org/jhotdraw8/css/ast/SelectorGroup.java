@@ -15,11 +15,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * A "selector group" matches an element if one of its selectors matches the
- * element.
- *
- */
+/// A "selector group" matches an element if one of its selectors matches the
+/// element.
 public class SelectorGroup extends Selector {
 
     private final ReadableList<Selector> selectors;
@@ -55,15 +52,13 @@ public class SelectorGroup extends Selector {
         return selectors.stream().mapToInt(Selector::getSpecificity).sum();
     }
 
-    /**
-     * Returns true if the rule matches the element.
-     *
-     * @param <T>     the element type
-     * @param model   The helper is used to access properties of the element and
-     *                parent or sibling elements in the document.
-     * @param element the element
-     * @return true on match
-     */
+    /// Returns true if the rule matches the element.
+    ///
+    /// @param <T>     the element type
+    /// @param model   The helper is used to access properties of the element and
+    ///                parent or sibling elements in the document.
+    /// @param element the element
+    /// @return true on match
     @Override
     public <T> boolean matches(SelectorModel<T> model, T element) {
         return match(model, element) != null;
@@ -80,23 +75,21 @@ public class SelectorGroup extends Selector {
         return null;
     }
 
-    /**
-     * Returns the last selector with highest specificity that
-     * matches the specified element or null.
-     * <p>
-     * If multiple selectors match, then this method returns the selector
-     * with the highest specificity value.
-     * <p>
-     * If multiple matching selectors have the highest specificity, then this
-     * method returns the last one.
-     *
-     * @param <T>     the element type
-     * @param model   The helper is used to access properties of the element and
-     *                parent or sibling elements in the document.
-     * @param element the element
-     * @return the last selector with highest specificity that matches the specified element,
-     * returns null if no selector matches
-     */
+    /// Returns the last selector with highest specificity that
+    /// matches the specified element or null.
+    ///
+    /// If multiple selectors match, then this method returns the selector
+    /// with the highest specificity value.
+    ///
+    /// If multiple matching selectors have the highest specificity, then this
+    /// method returns the last one.
+    ///
+    /// @param <T>     the element type
+    /// @param model   The helper is used to access properties of the element and
+    ///                parent or sibling elements in the document.
+    /// @param element the element
+    /// @return the last selector with highest specificity that matches the specified element,
+    /// returns null if no selector matches
     public @Nullable <T> Selector matchSelector(SelectorModel<T> model, T element) {
         int maxSpecificity = 0;
         Selector found = null;// selector with maxSpecificity or last
@@ -147,10 +140,8 @@ public class SelectorGroup extends Selector {
         return Objects.hash(selectors);
     }
 
-    /**
-     * This selector matches only on a specific type, if all its selectors
-     * match on the same type.
-     */
+    /// This selector matches only on a specific type, if all its selectors
+    /// match on the same type.
     @Override
     public @Nullable TypeSelector matchesOnlyOnASpecificType() {
         TypeSelector typeSelector = null;

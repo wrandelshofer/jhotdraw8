@@ -11,58 +11,35 @@ import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 
-/**
- * LineConnectingFigure.
- *
- */
+/// LineConnectingFigure.
 public interface LineConnectingFigure extends ConnectingFigure {
-    /**
-     * The end position of the line.
-     */
+    /// The end position of the line.
     CssPoint2DStyleableMapAccessor END = LineFigure.END;
-    /**
-     * The end connector.
-     */
+    /// The end connector.
     SimpleNullableKey<Connector> END_CONNECTOR = new SimpleNullableKey<>("endConnector", Connector.class, null);
-    /**
-     * The end target.
-     * <p>
-     * This property can not be styled with CSS because it affects the
-     * layout observer relationship between the label and the target
-     * figure.
-     */
+    /// The end target.
+    ///
+    /// This property can not be styled with CSS because it affects the
+    /// layout observer relationship between the label and the target
+    /// figure.
     SimpleNullableKey<Figure> END_TARGET = new SimpleNullableKey<>("endTarget", Figure.class, null);
-    /**
-     * The end position of the line.
-     */
+    /// The end position of the line.
     CssSizeStyleableKey END_X = LineFigure.END_X;
-    /**
-     * The end position of the line.
-     */
+    /// The end position of the line.
     CssSizeStyleableKey END_Y = LineFigure.END_Y;
-    /**
-     * The start position of the line.
-     */
+    /// The start position of the line.
     CssPoint2DStyleableMapAccessor START = LineFigure.START;
-    /**
-     * The start connector.
-     */
+    /// The start connector.
     SimpleNullableKey<Connector> START_CONNECTOR = new SimpleNullableKey<>("startConnector", Connector.class, null);
-    /**
-     * The start target.
-     * <p>
-     * This property can not be styled with CSS because it affects the
-     * layout observer relationship between the label and the target
-     * figure.
-     */
+    /// The start target.
+    ///
+    /// This property can not be styled with CSS because it affects the
+    /// layout observer relationship between the label and the target
+    /// figure.
     SimpleNullableKey<Figure> START_TARGET = new SimpleNullableKey<>("startTarget", Figure.class, null);
-    /**
-     * The start position of the line.
-     */
+    /// The start position of the line.
     CssSizeStyleableKey START_X = LineFigure.START_X;
-    /**
-     * The start position of the line.
-     */
+    /// The start position of the line.
     CssSizeStyleableKey START_Y = LineFigure.START_Y;
 
     default boolean isStartConnected() {
@@ -73,11 +50,9 @@ public interface LineConnectingFigure extends ConnectingFigure {
         return get(END_CONNECTOR) != null && get(END_TARGET) != null;
     }
 
-    /**
-     * Gets the start target point or the start point if the start target point is not present.
-     *
-     * @return start target point or start point.
-     */
+    /// Gets the start target point or the start point if the start target point is not present.
+    ///
+    /// @return start target point or start point.
     default Point2D getStartTargetPoint() {
         Connector connector = get(START_CONNECTOR);
         Figure target = get(START_TARGET);
@@ -88,11 +63,9 @@ public interface LineConnectingFigure extends ConnectingFigure {
         }
     }
 
-    /**
-     * Gets the end target point or the end point if the end target point is not present.
-     *
-     * @return end target point or end point.
-     */
+    /// Gets the end target point or the end point if the end target point is not present.
+    ///
+    /// @return end target point or end point.
     default Point2D getEndTargetPoint() {
         Connector connector = get(END_CONNECTOR);
         Figure target = get(END_TARGET);

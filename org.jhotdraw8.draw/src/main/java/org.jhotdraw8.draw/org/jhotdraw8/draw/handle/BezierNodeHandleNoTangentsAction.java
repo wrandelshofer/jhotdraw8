@@ -9,11 +9,9 @@ import org.jhotdraw8.geom.shape.BezierPath;
 
 import static org.jhotdraw8.geom.shape.BezierNode.IN_OUT_MASK;
 
-/**
- * This action sets the mask bits {@link BezierNode#IN_MASK},
- * {@link BezierNode#OUT_MASK} to {@code false}, {@code false} in
- * the specified {@link BezierNode}.
- */
+/// This action sets the mask bits [BezierNode#IN_MASK],
+/// [BezierNode#OUT_MASK] to `false`, `false` in
+/// the specified [BezierNode].
 public class BezierNodeHandleNoTangentsAction extends AbstractBezierNodeHandleAction {
     public final static String ID = "handle.bezierNode.noTangents";
 

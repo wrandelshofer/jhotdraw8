@@ -23,42 +23,36 @@ import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import static java.lang.Math.round;
 
-/**
- * {@code SimpleSelectAreaTracker} implements interactions with the background
- * area of a {@code Drawing}.
- * <p>
- * The {@code DefaultSelectAreaTracker} handles one of the three states of the
- * {@code SelectionTool}. It comes into action, when the user presses the mouse
- * button over the background of a {@code Drawing}.
- * <p>
- * This tool draws a {@code Rectangle} with style class "tool-rubberband".
- * <p>
- * Design pattern:<br>
- * Name: Chain of Responsibility.<br>
- * Role: Handler.<br>
- * Partners: {@link SelectionTool} as Handler, {@link DragTracker} as Handler,
- * {@link HandleTracker} as Handler.
- * <p>
- * Design pattern:<br>
- * Name: State.<br>
- * Role: State.<br>
- * Partners: {@link SelectionTool} as Context, {@link DragTracker} as State,
- * {@link HandleTracker} as State.
- *
- * @see SelectionTool
- */
+/// `SimpleSelectAreaTracker` implements interactions with the background
+/// area of a `Drawing`.
+///
+/// The `DefaultSelectAreaTracker` handles one of the three states of the
+/// `SelectionTool`. It comes into action, when the user presses the mouse
+/// button over the background of a `Drawing`.
+///
+/// This tool draws a `Rectangle` with style class "tool-rubberband".
+///
+/// Design pattern:
+/// Name: Chain of Responsibility.
+/// Role: Handler.
+/// Partners: [SelectionTool] as Handler, [DragTracker] as Handler,
+/// [HandleTracker] as Handler.
+///
+/// Design pattern:
+/// Name: State.
+/// Role: State.
+/// Partners: [SelectionTool] as Context, [DragTracker] as State,
+/// [HandleTracker] as State.
+///
+/// @see SelectionTool
 public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAreaTracker {
 
-    /**
-     * This tool draws a JavaFX {@code Rectangle} with style class
-     * "tool-rubberband".
-     */
+    /// This tool draws a JavaFX `Rectangle` with style class
+    /// "tool-rubberband".
     public static final String STYLECLASS_TOOL_RUBBERBAND = "tool-rubberband";
 
 
-    /**
-     * The rubberband.
-     */
+    /// The rubberband.
     private final Rectangle rubberband = new Rectangle();
 
     double x;

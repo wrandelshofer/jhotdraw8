@@ -321,11 +321,9 @@ public class BezierArcLengthExampleMain extends Application {
 
     }
 
-    /**
-     * inflection points: black
-     * cusp: white
-     * max curvature: red
-     */
+    /// inflection points: black
+    /// cusp: white
+    /// max curvature: red
     private void updatePointsOfInterest() {
 
         DoubleArrayList infl = CubicCurveCharacteristics.inflectionPoints(curve.getStartX(),
@@ -380,9 +378,7 @@ public class BezierArcLengthExampleMain extends Application {
         pointsOfInterest.getChildren().add(circle);
     }
 
-    /**
-     * Provides an arc-length parameterization from a flattening path iterator.
-     */
+    /// Provides an arc-length parameterization from a flattening path iterator.
     private static class PathArcLengthParameterization {
         private static class Segment implements Comparable<Segment> {
             private final double x0, y0, x1, y1;
@@ -401,9 +397,7 @@ public class BezierArcLengthExampleMain extends Application {
                 this.length = Points.distance(x0, y0, x1, y1);
             }
 
-            /**
-             * Absolute arc-length position.
-             */
+            /// Absolute arc-length position.
             public Point2D interpolate(double sabs) {
                 //   return new javafx.geometry.Point2D(x0,y0);
                 return FXGeom.lerp(x0, y0, x1, y1, (sabs - pos) / length);
@@ -446,9 +440,7 @@ public class BezierArcLengthExampleMain extends Application {
             this.length = sum.getSum();
         }
 
-        /**
-         * Interpolates in {@code s in [0,1]
-         */
+        /// Interpolates in `s in [0,1]`
         public Point2D interpolate(double s) {
             double pos = s * length;
             Segment key = new Segment(pos);

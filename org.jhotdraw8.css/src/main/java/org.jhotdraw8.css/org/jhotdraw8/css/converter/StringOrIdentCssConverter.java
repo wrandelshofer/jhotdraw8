@@ -16,10 +16,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-/**
- * Converts an {@code String} from/to a CSS ident-token or a CSS string-token.
- *
- */
+/// Converts an `String` from/to a CSS ident-token or a CSS string-token.
 public class StringOrIdentCssConverter implements Converter<String> {
 
     public StringOrIdentCssConverter() {

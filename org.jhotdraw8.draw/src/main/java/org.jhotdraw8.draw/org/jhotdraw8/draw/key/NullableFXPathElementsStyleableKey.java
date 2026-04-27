@@ -12,34 +12,27 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
-/**
- * NullableFXSvgPathStyleableKey.
- *
- */
+/// NullableFXSvgPathStyleableKey.
 public class NullableFXPathElementsStyleableKey extends AbstractStyleableKey<PersistentList<PathElement>> implements WritableStyleableMapAccessor<PersistentList<PathElement>> {
 
 
     private final Converter<PersistentList<PathElement>> converter;
 
-    /**
-     * Creates a new instance with the specified name and with null as the
-     * default value.
-     *
-     * @param name The name of the key.
-     */
+    /// Creates a new instance with the specified name and with null as the
+    /// default value.
+    ///
+    /// @param name The name of the key.
     public NullableFXPathElementsStyleableKey(String name) {
         this(name, null);
     }
 
 
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise
-     *                     specify them in arrow brackets.
-     * @param defaultValue The default value.
-     */
+    /// Creates a new instance with the specified name, type token class, default
+    /// value, and allowing or disallowing null values.
+    ///
+    /// @param key          The name of the name. type parameters are given. Otherwise
+    ///                     specify them in arrow brackets.
+    /// @param defaultValue The default value.
     @SuppressWarnings("this-escape")
     public NullableFXPathElementsStyleableKey(String key, @Nullable PersistentList<PathElement> defaultValue) {
         super(null, key, new SimpleParameterizedType(PersistentList.class, PathElement.class), true, defaultValue);

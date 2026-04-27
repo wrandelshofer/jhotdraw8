@@ -22,34 +22,30 @@ public class IntersectQuadCurveRay {
     }
 
 
-    /**
-     * Computes the intersection between quadratic bezier curve 'p' and the line
-     * 'a'.
-     * <p>
-     * The intersection will contain the parameters 't1' of curve 'a' in range
-     * [0,1].
-     *
-     * @param p0 control point P0 of 'p'
-     * @param p1 control point P1 of 'p'
-     * @param p2 control point P2 of 'p'
-     * @param ao point 0 of 'a'
-     * @param ad point 1 of 'a'
-     * @return the computed intersection
-     */
+    /// Computes the intersection between quadratic bezier curve 'p' and the line
+    /// 'a'.
+    ///
+    /// The intersection will contain the parameters 't1' of curve 'a' in range
+    /// [0,1].
+    ///
+    /// @param p0 control point P0 of 'p'
+    /// @param p1 control point P1 of 'p'
+    /// @param p2 control point P2 of 'p'
+    /// @param ao point 0 of 'a'
+    /// @param ad point 1 of 'a'
+    /// @return the computed intersection
     public static IntersectionResult intersectQuadCurveRay(Point2D p0, Point2D p1, Point2D p2, Point2D ao, Point2D ad, double maxT) {
         return intersectQuadCurveRay(p0, p1, p2, ao, ad, maxT, Scalars.REAL_THRESHOLD);
     }
 
-    /**
-     * @param p0
-     * @param p1
-     * @param p2
-     * @param ao
-     * @param ad
-     * @param maxT
-     * @param epsilon
-     * @return
-     */
+    /// @param p0
+    /// @param p1
+    /// @param p2
+    /// @param ao
+    /// @param ad
+    /// @param maxT
+    /// @param epsilon
+    /// @return
     public static IntersectionResult intersectQuadCurveRay(Point2D p0, Point2D p1, Point2D p2, Point2D ao, Point2D ad, double maxT,
                                                            double epsilon) {
 

@@ -4,10 +4,7 @@
  */
 package org.jhotdraw8.draw;
 
-/**
- * An application view which can return an editor.
- *
- */
+/// An application view which can return an editor.
 public interface EditorActivity {
     DrawingEditor getEditor();
 }

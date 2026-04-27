@@ -13,11 +13,8 @@ import java.util.prefs.NodeChangeListener;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
-/**
- * {@code PreferencesStub} can be used as a stub when the system
- * preferences are not available due to security restrictions.
- *
- */
+/// `PreferencesStub` can be used as a stub when the system
+/// preferences are not available due to security restrictions.
 public class PreferencesStub
         extends Preferences {
 

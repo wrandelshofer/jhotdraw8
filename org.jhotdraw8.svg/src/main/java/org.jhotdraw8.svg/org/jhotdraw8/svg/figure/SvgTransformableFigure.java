@@ -31,19 +31,16 @@ import java.util.SequencedSet;
 import java.util.Set;
 
 
-/**
- * A transformable figure supports the transformation of a figure.
- * <p>
- * The following transformations are supported:
- * <ul>
- * <li>Arbitrary sequence of affine transformations of the
- * figure.</li>
- * </ul>
- * Note that transformation matrices computed from the Rotation and Scaling must
- * be recomputed every time when the local bounds of the figure
- * change.
- *
- */
+/// A transformable figure supports the transformation of a figure.
+///
+/// The following transformations are supported:
+///
+///   - Arbitrary sequence of affine transformations of the
+///     figure.
+///
+/// Note that transformation matrices computed from the Rotation and Scaling must
+/// be recomputed every time when the local bounds of the figure
+/// change.
 public interface SvgTransformableFigure extends TransformCachingFigure {
     boolean CACHE = true;
     TransformListStyleableKey TRANSFORMS = TransformableFigure.TRANSFORMS;
@@ -54,20 +51,18 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         return keys;
     }
 
-    /**
-     * Updates a figure node with all transformation properties defined in this
-     * interface.
-     * <p>
-     * Applies the following properties: {@code TRANSFORM}, translation
-     * {@code TRANSLATE_X}, {@code TRANSLATE_Y}, {@code TRANSLATE_Z}, scale
-     * {@code SCALE_X}, {@code SCALE_Y}, {@code SCALE_Z}, and rotation
-     * {@code ROTATE}, {@code ROTATION_AXIS}.
-     * <p>
-     * This method is intended to be used by {@link #updateNode}.
-     *
-     * @param ctx  the render context
-     * @param node a node which was created with method {@link #createNode}.
-     */
+    /// Updates a figure node with all transformation properties defined in this
+    /// interface.
+    ///
+    /// Applies the following properties: `TRANSFORM`, translation
+    /// `TRANSLATE_X`, `TRANSLATE_Y`, `TRANSLATE_Z`, scale
+    /// `SCALE_X`, `SCALE_Y`, `SCALE_Z`, and rotation
+    /// `ROTATE`, `ROTATION_AXIS`.
+    ///
+    /// This method is intended to be used by [#updateNode].
+    ///
+    /// @param ctx  the render context
+    /// @param node a node which was created with method [#createNode].
     default void applyTransformableFigureProperties(RenderContext ctx, Node node) {
         Transform t = getLocalToParent();
         List<Transform> transforms = node.getTransforms();
@@ -255,12 +250,10 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         }
     }
 
-    /**
-     * Convenience method for setting a new value for the {@link #TRANSFORMS}
-     * property.
-     *
-     * @param transforms new value
-     */
+    /// Convenience method for setting a new value for the [#TRANSFORMS]
+    /// property.
+    ///
+    /// @param transforms new value
     default void setTransforms(Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
             set(TRANSFORMS, VectorList.of());

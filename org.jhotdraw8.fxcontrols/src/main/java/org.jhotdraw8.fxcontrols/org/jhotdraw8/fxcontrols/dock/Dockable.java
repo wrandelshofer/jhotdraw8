@@ -8,27 +8,19 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 
-/**
- * Represents a dock child that the user can drag from one {@link Track} to
- * another {@link Track}.
- */
+/// Represents a dock child that the user can drag from one [Track] to
+/// another [Track].
 public interface Dockable extends DockChild {
-    /**
-     * The name of the {@link #graphicProperty()} ()}.
-     */
+    /// The name of the [#graphicProperty()] ()}.
     String GRAPHIC_PROPERTY = "graphic";
-    /**
-     * The name of the {@link #textProperty()} ()}.
-     */
+    /// The name of the [#textProperty()] ()}.
     String TEXT_PROPERTY = "text";
 
-    /**
-     * The graphic of this dockable.
-     * <p>
-     * The user uses the graphic to drag and drop the dockable.
-     *
-     * @return the graphic
-     */
+    /// The graphic of this dockable.
+    ///
+    /// The user uses the graphic to drag and drop the dockable.
+    ///
+    /// @return the graphic
     ObjectProperty<Node> graphicProperty();
 
     default Node getGraphic() {
@@ -39,13 +31,11 @@ public interface Dockable extends DockChild {
         graphicProperty().set(value);
     }
 
-    /**
-     * The text of this dockable.
-     * <p>
-     * The user uses the text to identify the dockable.
-     *
-     * @return the graphic
-     */
+    /// The text of this dockable.
+    ///
+    /// The user uses the text to identify the dockable.
+    ///
+    /// @return the graphic
     StringProperty textProperty();
 
     default String getText() {

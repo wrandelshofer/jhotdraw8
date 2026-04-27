@@ -9,24 +9,20 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.function.Function;
 
-/**
- * Computes the maximal depth of a tree.
- */
+/// Computes the maximal depth of a tree.
 public class TreeMaxDepthCalculator {
     public TreeMaxDepthCalculator() {
     }
 
-    /**
-     * Computes the maximal depth of the sub-tree starting at this tree node.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Binary Tree: Maximum Depth/Height Of Deepest Node using recursive and iterative way </dt>
-     *     <dd><a href="https://dev.to/ashutosh049/binary-tree-maximum-depthheight-of-deepest-node-using-recursive-and-iterative-way-hpp">dev.to</a></dd>
-     * </dl>
-     *
-     * @return the maximal depth
-     */
+    /// Computes the maximal depth of the sub-tree starting at this tree node.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Binary Tree: Maximum Depth/Height Of Deepest Node using recursive and iterative way </dt>
+    ///     <dd><a href="https://dev.to/ashutosh049/binary-tree-maximum-depthheight-of-deepest-node-using-recursive-and-iterative-way-hpp">dev.to</a></dd>
+    /// </dl>
+    ///
+    /// @return the maximal depth
     public <T> int getMaxDepth(T root, Function<T, Iterable<T>> getChildren) {
         Deque<T> q = new ArrayDeque<>();
         q.add(root);

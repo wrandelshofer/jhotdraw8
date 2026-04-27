@@ -17,10 +17,7 @@ import java.util.List;
 import static org.jhotdraw8.application.action.file.AbstractOpenFileAction.OPEN_CHOOSER_FACTORY_KEY;
 import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_CHOOSER_FACTORY_KEY;
 
-/**
- * TeddyApplication.
- *
- */
+/// TeddyApplication.
 public class TeddyApplication extends AbstractFileBasedApplication {
 
     @Override
@@ -54,9 +51,7 @@ public class TeddyApplication extends AbstractFileBasedApplication {
         super.initActions(map);
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         if (Screen.getPrimary().getOutputScaleX() >= 2.0) {
             // The following settings improve font rendering quality on

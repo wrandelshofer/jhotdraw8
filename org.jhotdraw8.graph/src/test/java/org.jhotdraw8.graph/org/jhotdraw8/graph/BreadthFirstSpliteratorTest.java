@@ -22,10 +22,7 @@ import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * BreadthFirstSpliteratorTest.
- *
- */
+/// BreadthFirstSpliteratorTest.
 public class BreadthFirstSpliteratorTest {
 
     private DirectedGraph<Integer, Double> createGraph() {

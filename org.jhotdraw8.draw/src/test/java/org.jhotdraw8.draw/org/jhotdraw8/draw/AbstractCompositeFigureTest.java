@@ -22,8 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- */
+///
 public class AbstractCompositeFigureTest {
 
     @Test
@@ -109,9 +108,7 @@ public class AbstractCompositeFigureTest {
     }
 
 
-    /**
-     * Mock class.
-     */
+    /// Mock class.
     public static class AbstractCompositeFigureImpl extends AbstractCompositeFigure implements NonTransformableFigure {
 
         private static final long serialVersionUID = 1L;

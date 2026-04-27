@@ -9,9 +9,7 @@ package org.jhotdraw8.graph;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * Provides a {@link BidiGraph} facade for an {@link IndexedBidiGraph}.
- */
+/// Provides a [BidiGraph] facade for an [IndexedBidiGraph].
 public class IndexedBidiGraphBidiGraphFacade implements BidiGraph<Integer, Integer> {
     private final IndexedBidiGraph graph;
 

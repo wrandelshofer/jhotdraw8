@@ -11,12 +11,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-/**
- * An "general sibling combinator" matches an element if its first selector
- * matches the sibling of the element and if its second selector
- * matches the element.
- *
- */
+/// An "general sibling combinator" matches an element if its first selector
+/// matches the sibling of the element and if its second selector
+/// matches the element.
 public class GeneralSiblingCombinator extends Combinator {
 
     public GeneralSiblingCombinator(@Nullable SourceLocator sourceLocator, SimpleSelector first, Selector second) {
@@ -56,12 +53,10 @@ public class GeneralSiblingCombinator extends Combinator {
         second.produceTokens(consumer);
     }
 
-    /**
-     * This selector matches only on a specific type, if its second
-     * selector matches only on a specific type.
-     *
-     * @return {@code second.matchesOnlyOnASpecificType()}
-     */
+    /// This selector matches only on a specific type, if its second
+    /// selector matches only on a specific type.
+    ///
+    /// @return `second.matchesOnlyOnASpecificType()`
     @Override
     public @Nullable TypeSelector matchesOnlyOnASpecificType() {
         return second.matchesOnlyOnASpecificType();

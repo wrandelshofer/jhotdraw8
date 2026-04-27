@@ -14,32 +14,25 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 
-/**
- * TransformListStyleableKey.
- *
- */
+/// TransformListStyleableKey.
 public class TransformListStyleableKey extends AbstractStyleableKey<PersistentList<Transform>>
         implements WritableStyleableMapAccessor<PersistentList<Transform>>, NonNullKey<PersistentList<Transform>> {
 
 
     private final Converter<PersistentList<Transform>> converter;
 
-    /**
-     * Creates a new instance with the specified name and with an empty list as the
-     * default value.
-     *
-     * @param name The name of the key.
-     */
+    /// Creates a new instance with the specified name and with an empty list as the
+    /// default value.
+    ///
+    /// @param name The name of the key.
     public TransformListStyleableKey(String name) {
         this(name, VectorList.of());
     }
 
-    /**
-     * Creates a new instance with the specified name, and default value.
-     *
-     * @param name         The name of the key.
-     * @param defaultValue The default value.
-     */
+    /// Creates a new instance with the specified name, and default value.
+    ///
+    /// @param name         The name of the key.
+    /// @param defaultValue The default value.
     public TransformListStyleableKey(String name, PersistentList<Transform> defaultValue) {
         super(name, new SimpleParameterizedType(PersistentList.class, Transform.class), defaultValue);
         converter = new ListCssConverter<>(new TransformCssConverter());

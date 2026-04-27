@@ -21,20 +21,16 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * DimensionConverterTest.
- *
- * @version $$Id: CssSizeConverterNGTest_1.java 1176 2016-12-11 19:48:19Z
- * rawcoder $$
- */
+/// DimensionConverterTest.
+///
+/// @version $$Id: CssSizeConverterNGTest_1.java 1176 2016-12-11 19:48:19Z
+/// rawcoder $$
 public class DimensionConverterTest {
 
     public DimensionConverterTest() {
     }
 
-    /**
-     * Test of toString method, of class CssDoubleConverter.
-     */
+    /// Test of toString method, of class CssDoubleConverter.
     public static void testToString(@Nullable Double value, String expected) throws Exception {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
@@ -44,9 +40,7 @@ public class DimensionConverterTest {
         assertEquals(expected, actual);
     }
 
-    /**
-     * Test of fromString method, of class CssDoubleConverter.
-     */
+    /// Test of fromString method, of class CssDoubleConverter.
     public static void testFromString(@Nullable Double expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();

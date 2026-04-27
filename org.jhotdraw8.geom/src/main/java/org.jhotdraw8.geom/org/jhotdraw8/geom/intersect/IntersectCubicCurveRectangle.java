@@ -13,18 +13,16 @@ public class IntersectCubicCurveRectangle {
     private IntersectCubicCurveRectangle() {
     }
 
-    /**
-     * Computes the intersection between cubic bezier curve 'p' and the provided
-     * rectangle.
-     *
-     * @param p0 control point P0 of 'p'
-     * @param p1 control point P1 of 'p'
-     * @param p2 control point P2 of 'p'
-     * @param p3 control point P3 of 'p'
-     * @param r0 corner point 0 of the rectangle
-     * @param r1 corner point 1 of the rectangle
-     * @return the computed intersection
-     */
+    /// Computes the intersection between cubic bezier curve 'p' and the provided
+    /// rectangle.
+    ///
+    /// @param p0 control point P0 of 'p'
+    /// @param p1 control point P1 of 'p'
+    /// @param p2 control point P2 of 'p'
+    /// @param p3 control point P3 of 'p'
+    /// @param r0 corner point 0 of the rectangle
+    /// @param r1 corner point 1 of the rectangle
+    /// @return the computed intersection
     public static IntersectionResult intersectCubicCurveRectangle(Point2D p0, Point2D p1, Point2D p2, Point2D p3, Point2D r0, Point2D r1) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(r0, r1);

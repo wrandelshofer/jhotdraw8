@@ -6,17 +6,15 @@
 package org.jhotdraw8.css.value;
 
 
-/**
- * Specifies the name of a named color in a cascading stylesheet.
- * <p>
- * All names are given in lower case. Although the color names are not case sensitive.
- * <p>
- * References:
- * <dl>
- *     <dt>CSS Color Module Level 4, System Color</dt>
- *     <dd><a href="https://www.w3.org/TR/css-color-4/#css-system-colors">w3.org/<a></a></a></dd>
- * </dl>
- */
+/// Specifies the name of a named color in a cascading stylesheet.
+///
+/// All names are given in lower case. Although the color names are not case sensitive.
+///
+/// References:
+/// <dl>
+///     <dt>CSS Color Module Level 4, System Color</dt>
+///     <dd><a href="https://www.w3.org/TR/css-color-4/#css-system-colors">w3.org/<a></a></a></dd>
+/// </dl>
 public interface NamedColorName {
 
 

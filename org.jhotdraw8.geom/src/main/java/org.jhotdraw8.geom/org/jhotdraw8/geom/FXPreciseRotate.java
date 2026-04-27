@@ -13,10 +13,8 @@ import javafx.scene.transform.Transform;
 
 import static java.lang.Math.fma;
 
-/**
- * Same as class {@link Rotate} but treats 180 degree angles
- * specially for better numeric precision.
- */
+/// Same as class [Rotate] but treats 180 degree angles
+/// specially for better numeric precision.
 public class FXPreciseRotate extends Rotate {
     public FXPreciseRotate(double r, double x, double y) {
         super(r, x, y);
@@ -34,15 +32,13 @@ public class FXPreciseRotate extends Rotate {
         this(r, 0, 0);
     }
 
-    /**
-     * Creates a three-dimensional Rotate transform with pivot.
-     *
-     * @param angle  the angle of rotation measured in degrees
-     * @param pivotX the X coordinate of the rotation pivot point
-     * @param pivotY the Y coordinate of the rotation pivot point
-     * @param pivotZ the Z coordinate of the rotation pivot point
-     * @param axis   the axis of rotation
-     */
+    /// Creates a three-dimensional Rotate transform with pivot.
+    ///
+    /// @param angle  the angle of rotation measured in degrees
+    /// @param pivotX the X coordinate of the rotation pivot point
+    /// @param pivotY the Y coordinate of the rotation pivot point
+    /// @param pivotZ the Z coordinate of the rotation pivot point
+    /// @param axis   the axis of rotation
     public FXPreciseRotate(double angle, double pivotX, double pivotY, double pivotZ, Point3D axis) {
         this(angle, pivotX, pivotY);
         setPivotZ(pivotZ);
@@ -146,9 +142,7 @@ public class FXPreciseRotate extends Rotate {
         return super.createConcatenation(transform);
     }
 
-    /**
-     * @return mxx, mxy, tx, myx, myy, ty
-     */
+    /// @return mxx, mxy, tx, myx, myy, ty
     private Matrix computeMatrix() {
         Point3D axis = getAxis();
         if (axis == Z_AXIS ||
@@ -230,12 +224,10 @@ public class FXPreciseRotate extends Rotate {
     }
 
 
-    /**
-     * Helper method for transforming arrays of points that deals with
-     * overlapping arrays.
-     *
-     * @return the (if necessary fixed) srcOff
-     */
+    /// Helper method for transforming arrays of points that deals with
+    /// overlapping arrays.
+    ///
+    /// @return the (if necessary fixed) srcOff
     private int getFixedSrcOffset(double[] srcPts, int srcOff,
                                   double[] dstPts, int dstOff,
                                   int numPts, int dimensions) {

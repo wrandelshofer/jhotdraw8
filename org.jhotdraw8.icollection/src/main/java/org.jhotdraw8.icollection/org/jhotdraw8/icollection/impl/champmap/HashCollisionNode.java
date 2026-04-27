@@ -12,12 +12,10 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.ToIntFunction;
 
-/**
- * Represents a hash-collision node in a CHAMP trie.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Represents a hash-collision node in a CHAMP trie.
+///
+/// @param <K> the key type
+/// @param <V> the value type
 class HashCollisionNode<K, V> extends Node<K, V> {
     private final int hash;
     Object[] entries;

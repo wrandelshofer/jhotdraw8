@@ -56,10 +56,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-/**
- * XmlUtil.
- *
- */
+/// XmlUtil.
 public class XmlUtil {
 
     public static final String LOCATION_ATTRIBUTE = "location";
@@ -84,15 +81,13 @@ public class XmlUtil {
     private XmlUtil() {
     }
 
-    /**
-     * Creates a namespace aware document.
-     *
-     * @param nsURI       nullable namespace URI
-     * @param nsQualifier nullable namespace qualifier
-     * @param docElemName notnull name of the document element
-     * @return a new Document
-     * @throws IOException if the parser configuration fails
-     */
+    /// Creates a namespace aware document.
+    ///
+    /// @param nsURI       nullable namespace URI
+    /// @param nsQualifier nullable namespace qualifier
+    /// @param docElemName notnull name of the document element
+    /// @return a new Document
+    /// @throws IOException if the parser configuration fails
     public static Document createDocument(@Nullable String nsURI, @Nullable String nsQualifier, String docElemName) throws IOException {
         try {
             Document doc;
@@ -151,22 +146,20 @@ public class XmlUtil {
         }
     }
 
-    /**
-     * Reads the specified input into a document. Adds a "location" attribute to each node,
-     * specifying the file, the line number and the column number of the node.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Stackoverflow, Is there a way to parse XML via SAX/DOM with line numbers available per node,
-     *     Copyright Reg Whitton, CC BY-SA 4.0 license</dt>
-     *     <dd><a href="https://stackoverflow.com/questions/2798376/is-there-a-way-to-parse-xml-via-sax-dom-with-line-numbers-available-per-node">stackoverflow.com</a>.</dd>
-     * </dl>
-     *
-     * @param inputSource    the input source
-     * @param namespaceAware whether to be name space aware
-     * @return the document
-     * @throws IOException in case of failure
-     */
+    /// Reads the specified input into a document. Adds a "location" attribute to each node,
+    /// specifying the file, the line number and the column number of the node.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>Stackoverflow, Is there a way to parse XML via SAX/DOM with line numbers available per node,
+    ///     Copyright Reg Whitton, CC BY-SA 4.0 license</dt>
+    ///     <dd><a href="https://stackoverflow.com/questions/2798376/is-there-a-way-to-parse-xml-via-sax-dom-with-line-numbers-available-per-node">stackoverflow.com</a>.</dd>
+    /// </dl>
+    ///
+    /// @param inputSource    the input source
+    /// @param namespaceAware whether to be name space aware
+    /// @return the document
+    /// @throws IOException in case of failure
     public static Document readWithLocations(InputSource inputSource, boolean namespaceAware) throws IOException {
         try {
             // Create transformer SAX source that adds current element position to
@@ -272,25 +265,21 @@ public class XmlUtil {
         }
     }
 
-    /**
-     * Creates an XMLStreamWriter that only writes data to the specified file.
-     * That is, it does not create socket connections.
-     *
-     * @param file a file
-     * @return an XMLStreamWriter
-     */
+    /// Creates an XMLStreamWriter that only writes data to the specified file.
+    /// That is, it does not create socket connections.
+    ///
+    /// @param file a file
+    /// @return an XMLStreamWriter
     public static XMLStreamWriter streamWriter(final Result file, @Nullable Properties outputProperties) {
         return ((StAXResult) replaceStreamResultByStAXResult(file, outputProperties)).getXMLStreamWriter();
     }
 
-    /**
-     * Creates an XMLStreamReader that only reads data from the specified file.
-     * That is, it does not create socket connections.
-     *
-     * @param file a file
-     * @return an XMLStreamReader
-     * @throws XMLStreamException when the XMLStreamReader could not be created
-     */
+    /// Creates an XMLStreamReader that only reads data from the specified file.
+    /// That is, it does not create socket connections.
+    ///
+    /// @param file a file
+    /// @return an XMLStreamReader
+    /// @throws XMLStreamException when the XMLStreamReader could not be created
     public static XMLStreamReader streamReader(final Source file) throws XMLStreamException {
         final XMLInputFactory dbf = XMLInputFactory.newInstance();
 
@@ -308,13 +297,11 @@ public class XmlUtil {
         return dbf.createXMLStreamReader(file);
     }
 
-    /**
-     * Attempts to replace the provided result by a StaxResult.
-     *
-     * @param result           a result
-     * @param outputProperties the desired output properties of the StaxResult
-     * @return the StaxResult if replacement was successful, the provided result otherwise
-     */
+    /// Attempts to replace the provided result by a StaxResult.
+    ///
+    /// @param result           a result
+    /// @param outputProperties the desired output properties of the StaxResult
+    /// @return the StaxResult if replacement was successful, the provided result otherwise
     private static Result replaceStreamResultByStAXResult(Result result, @Nullable Properties outputProperties) {
         if (outputProperties == null) {
             outputProperties = new Properties();

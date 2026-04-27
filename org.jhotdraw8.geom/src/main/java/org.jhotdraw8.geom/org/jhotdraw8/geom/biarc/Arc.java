@@ -7,32 +7,26 @@ package org.jhotdraw8.geom.biarc;
 
 import java.awt.geom.Point2D;
 
-/**
- * Definition of an Arc. It contains redundant information.
- *
- * @param c          Center point.
- * @param r          Radius.
- * @param startAngle Start angle in radian.
- * @param sweepAngle Sweep angle in radian.
- * @param p1         Start point of the arc.
- * @param p2         End point of the arc.
- */
+/// Definition of an Arc. It contains redundant information.
+///
+/// @param c          Center point.
+/// @param r          Radius.
+/// @param startAngle Start angle in radian.
+/// @param sweepAngle Sweep angle in radian.
+/// @param p1         Start point of the arc.
+/// @param p2         End point of the arc.
 public record Arc(Point2D.Double c, double r, double startAngle, double sweepAngle, Point2D.Double p1,
                   Point2D.Double p2) {
 
-    /**
-     * Orientation of the arc.
-     */
+    /// Orientation of the arc.
     public boolean isClockwise() {
         return sweepAngle > 0;
     }
 
-    /**
-     * Implements the parametric equation.
-     *
-     * @param t Parameter of the curve. Must be in [0,1]
-     * @return the point at t
-     */
+    /// Implements the parametric equation.
+    ///
+    /// @param t Parameter of the curve. Must be in [0,1]
+    /// @return the point at t
     public Point2D.Double pointAt(double t) {
         double x = c.getX() + r * Math.cos(startAngle + t * sweepAngle);
         double y = c.getY() + r * Math.sin(startAngle + t * sweepAngle);

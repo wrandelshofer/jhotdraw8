@@ -31,25 +31,19 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * Exports a scene graph to a FXML file.
- */
+/// Exports a scene graph to a FXML file.
 public class SceneGraphToFxml {
 
-    /**
-     * Set of styleable and writeable properties,
-     * which we are not allowed to write in an FXML.
-     */
+    /// Set of styleable and writeable properties,
+    /// which we are not allowed to write in an FXML.
     private static final Set<String> unsupportedAttributes = Set.of(
             "cssDashArray", "skinClassName", "messageLocationGap", "showDuration"
     );
 
-    /**
-     * Map of layout constraints.
-     * <p>
-     * Key: property name
-     * Value: XML attribute name
-     */
+    /// Map of layout constraints.
+    ///
+    /// Key: property name
+    /// Value: XML attribute name
     private static final Map<String, String> layoutConstraints = Map.ofEntries(
             // GridPane constraint
             Map.entry("gridpane-margin", "GridPane.margin"),

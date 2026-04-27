@@ -14,32 +14,26 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-/**
- * This model can be used to present a {@code TreeModel}
- * in a {@code TreeView} or a {@code TreeTableView}.
- * <p>
- * Maps {@code TreeModel} to a {@code TreeItem&lt;E&gt;} hierarchy.
- * <p>
- * Note: for performance reasons we do not expand the tree nodes by default.
- *
- * @param <N> the node type
- */
+/// This model can be used to present a `TreeModel`
+/// in a `TreeView` or a `TreeTableView`.
+///
+/// Maps `TreeModel` to a `TreeItem&lt;E&gt;` hierarchy.
+///
+/// Note: for performance reasons we do not expand the tree nodes by default.
+///
+/// @param <N> the node type
 public class SimpleTreePresentationModel<N> extends AbstractTreePresentationModel<N> {
-    /**
-     * TODO implement lazy tree item as described in {@link TreeItem}.
-     *
-     * @param <N> the value type
-     */
+    /// TODO implement lazy tree item as described in [TreeItem].
+    ///
+    /// @param <N> the value type
     private static class LazyTreeItem<N> extends TreeItem<N> {
         public LazyTreeItem(N value) {
             super(value);
         }
     }
 
-    /**
-     * Performance: An identity hash map can be significantly faster than
-     * an equality-based map.
-     */
+    /// Performance: An identity hash map can be significantly faster than
+    /// an equality-based map.
     private final Map<N, TreeItem<N>> items;
     private final Listener<TreeModelEvent<N>> modelHandler = new Listener<>() {
         @Override
@@ -78,14 +72,12 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         }
     };
 
-    /**
-     * Creates a new instance.
-     *
-     * @param mapFactory used to create a map which maps from nodes of
-     *                   type {@code N} to {@link TreeItem<N>}.
-     *                   For best performance, try to
-     *                   provide an {@link IdentityHashMap} here.
-     */
+    /// Creates a new instance.
+    ///
+    /// @param mapFactory used to create a map which maps from nodes of
+    ///                   type `N` to [TreeItem<N>].
+    ///                   For best performance, try to
+    ///                   provide an [IdentityHashMap] here.
     public SimpleTreePresentationModel(Supplier<Map<N, TreeItem<N>>> mapFactory) {
         this.items = mapFactory.get();
     }

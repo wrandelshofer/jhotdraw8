@@ -18,11 +18,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
- * interactions.
- *
- */
+/// Draws the `boundsInLocal` of a `Figure`, but does not provide any
+/// interactions.
 public class BoundsInParentOutlineHandle extends AbstractHandle {
 
     private final Polygon node;

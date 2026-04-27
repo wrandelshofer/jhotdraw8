@@ -9,17 +9,15 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Iterator;
 
-/**
- * Helper to replace reflective array access.
- * <p>
- * References:
- * <p>
- * This class has been derived from 'vavr' ArrayType.java.
- * <dl>
- *     <dt>ArrayType.java. Copyright 2023 (c) vavr. MIT License.</dt>
- *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Array.java">github.com</a></dd>
- * </dl>
- */
+/// Helper to replace reflective array access.
+///
+/// References:
+///
+/// This class has been derived from 'vavr' ArrayType.java.
+/// <dl>
+///     <dt>ArrayType.java. Copyright 2023 (c) vavr. MIT License.</dt>
+///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Array.java">github.com</a></dd>
+/// </dl>
 public interface ArrayType<T> {
     @SuppressWarnings("unchecked")
     static <T> ArrayType<T> obj() {
@@ -74,17 +72,13 @@ public interface ArrayType<T> {
         return copy(empty(), length);
     }
 
-    /**
-     * System.arrayCopy with same source and destination
-     */
+    /// System.arrayCopy with same source and destination
     default Object copyRange(Object array, int from, int to) {
         final int length = to - from;
         return copy(array, length, from, 0, length);
     }
 
-    /**
-     * Repeatedly group an array into equal sized sub-trees
-     */
+    /// Repeatedly group an array into equal sized sub-trees
     default Object grouped(Object array, int groupSize) {
         final int arrayLength = lengthOf(array);
         final Object results = obj().newInstance(1 + ((arrayLength - 1) / groupSize));
@@ -99,9 +93,7 @@ public interface ArrayType<T> {
         return results;
     }
 
-    /**
-     * clone the source and set the value at the given position
-     */
+    /// clone the source and set the value at the given position
     default Object copyUpdate(Object array, int index, T element) {
         final Object copy = copy(array, index + 1);
         setAt(copy, index, element);
@@ -114,33 +106,25 @@ public interface ArrayType<T> {
         return copy(array, length, 0, 0, arrayLength);
     }
 
-    /**
-     * clone the source and keep everything after the index (pre-padding the values with null)
-     */
+    /// clone the source and keep everything after the index (pre-padding the values with null)
     default Object copyDrop(Object array, int index) {
         final int length = lengthOf(array);
         return copy(array, length, index, index, length - index);
     }
 
-    /**
-     * clone the source and keep everything before and including the index
-     */
+    /// clone the source and keep everything before and including the index
     default Object copyTake(Object array, int lastIndex) {
         return copyRange(array, 0, lastIndex + 1);
     }
 
-    /**
-     * Create a single element array
-     */
+    /// Create a single element array
     default Object asArray(T element) {
         final Object result = newInstance(1);
         setAt(result, 0, element);
         return result;
     }
 
-    /**
-     * Store the content of an iterator in an array
-     */
+    /// Store the content of an iterator in an array
     static Object[] asArray(Iterator<?> it, int length) {
         final Object[] array = new Object[length];
         for (int i = 0; i < length; i++) {

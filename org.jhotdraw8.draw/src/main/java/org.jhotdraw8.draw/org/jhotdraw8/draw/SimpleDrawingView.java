@@ -7,7 +7,14 @@ package org.jhotdraw8.draw;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlySetProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableSet;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -36,41 +43,41 @@ import org.jhotdraw8.fxbase.tree.TreeBreadthFirstSpliterator;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
 import org.jspecify.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
-/**
- * A simple implementation of {@link DrawingView}.
- * <p>
- * The SimpleDrawingView has the following scene structure:
- * <ul>
- *   <li>{@value #DRAWING_VIEW_STYLE_CLASS} – {@link BorderPane}<ul>
- *     <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_STYLE_CLASS} – see {@link ZoomableScrollPane}<ul>
- *       <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS}<ul>
- *           <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS}<ul>
- *               <li>{@value #CANVAS_REGION_STYLE_CLASS} – {@link Region}</li>
- *           </ul></li>
- *           <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS}<ul>
- *              <li>content</li>
- *           </ul></li>
- *           <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS}</li>
- *       </ul></li>
- *     </ul></li>
- *     </ul></li>
- * </ul>
- * The scene node of the SimpleDrawingView has the following structure and
- * CSS style classes:
- */
+/// A simple implementation of [DrawingView].
+///
+/// The SimpleDrawingView has the following scene structure:
+///
+///     - {@value #DRAWING_VIEW_STYLE_CLASS} – [BorderPane]
+///   - {@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_STYLE_CLASS} – see [ZoomableScrollPane]
+///   - {@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS}
+///   - {@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS}
+///   - {@value #CANVAS_REGION_STYLE_CLASS} – [Region]
+///
+///         - {@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS}
+///   - content
+///
+///         - {@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS}
+///
+///
+///
+///
+/// The scene node of the SimpleDrawingView has the following structure and
+/// CSS style classes:
 public class SimpleDrawingView extends AbstractDrawingView {
-    /**
-     * The style class of the canvas pane is {@value #CANVAS_REGION_STYLE_CLASS}.
-     */
+    /// The style class of the canvas pane is {@value #CANVAS_REGION_STYLE_CLASS}.
     public static final String CANVAS_REGION_STYLE_CLASS = "jhotdraw8-drawing-view-canvas-region";
 
-    /**
-     * The style class of the drawing view is {@value #DRAWING_VIEW_STYLE_CLASS}.
-     */
+    /// The style class of the drawing view is {@value #DRAWING_VIEW_STYLE_CLASS}.
     public static final String DRAWING_VIEW_STYLE_CLASS = "jhotdraw8-drawing-view";
     private final ZoomableScrollPane zoomableScrollPane = ZoomableScrollPane.create();
     private final SimpleDrawingViewNode node = new SimpleDrawingViewNode();
@@ -392,9 +399,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
     }
 
-    /**
-     * For testing: paints the drawing immediately.
-     */
+    /// For testing: paints the drawing immediately.
     public void paintImmediately() {
         drawingRenderer.paintImmediately();
         paint();
@@ -426,10 +431,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         zoomableScrollPane.scrollViewRectToVisible(boundsInView);
     }
 
-    /**
-     * Selects all enabled and selectable figures in all enabled layers.
-     */
-
+    /// Selects all enabled and selectable figures in all enabled layers.
     public void selectAll() {
         ArrayList<Figure> figures = new ArrayList<>();
         Drawing d = getDrawing();

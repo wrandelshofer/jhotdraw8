@@ -6,10 +6,7 @@ package org.jhotdraw8.draw.handle;
 
 import org.jhotdraw8.draw.figure.Figure;
 
-/**
- * AbstractHandle.
- *
- */
+/// AbstractHandle.
 public abstract class AbstractHandle implements Handle {
 
     // ---
@@ -36,9 +33,7 @@ public abstract class AbstractHandle implements Handle {
         return owner;
     }
 
-    /**
-     * Returns true if both handles have the same class.
-     */
+    /// Returns true if both handles have the same class.
     @Override
     public boolean isCompatible(Handle that) {
         return that.getClass() == this.getClass();

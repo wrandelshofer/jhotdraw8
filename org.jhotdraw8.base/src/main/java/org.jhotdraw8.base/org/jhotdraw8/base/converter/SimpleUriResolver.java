@@ -9,10 +9,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 
-/**
- * Provides utility methods for absolutizing and relativizing URIs.
- *
- */
+/// Provides utility methods for absolutizing and relativizing URIs.
 public class SimpleUriResolver implements UriResolver {
 
     public SimpleUriResolver() {

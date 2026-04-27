@@ -31,16 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Represents an SVG 'polygon' element.
- *
- */
+/// Represents an SVG 'polygon' element.
 public class SvgPolygonFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,
         SvgElementFigure {
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "polygon";
     public static final DoubleListStyleableKey POINTS = SvgPolylineFigure.POINTS;
 

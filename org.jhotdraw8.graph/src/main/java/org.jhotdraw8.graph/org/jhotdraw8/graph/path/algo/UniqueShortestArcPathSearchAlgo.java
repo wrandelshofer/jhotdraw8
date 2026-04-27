@@ -19,63 +19,58 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
- * Searches a unique shortest path from a set of start vertices to a set of goal
- * vertices using Dijkstra's algorithm.
- * <p>
- * If the graph is acyclic, then the provided cost function must return values
- * {@literal >= 0} for all arrows.<br>
- * If the graph has cycles, then the provided cost function must return values
- * {@literal > 0} for all arrows. (If the graph has cycles and the cost function
- * returns values that are 0, then this algorithm incorrectly considers a
- * path as non-unique, if it can be reached by a walk).
- * <p>
- * Performance characteristics:
- * <dl>
- *     <dt>When the algorithm returns a back link</dt><dd>less or equal {@literal O( |A| + |V|*log|V| )} within max cost</dd>
- *     <dt>When the algorithm returns null</dt><dd>less or equal {@literal O( |A| + |V|*log|V| )} within max cost</dd>
- * </dl>
- * <p>
- * References:
- * <dl>
- *   <dt>Edsger W. Dijkstra (1959)</dt>
- *   <dd>A note on two problems in connexion with graphs,Problem 2.
- *   <a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
- *
- *   <dt>Sampath Kannan, Sanjeef Khanna, Sudeepa Roy. (2008)</dt>
- *   <dd>STCON in Directed Unique-Path Graphs.
- *        Chapter 2.1 Properties of Unique-Path Graphs.
- *        <a href="https://www.cis.upenn.edu/~sanjeev/papers/fsttcs08_stcon.pdf">cis.upenn.edu</a></dd>
- * </dl>
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- * @param <C> the cost number type
- */
+/// Searches a unique shortest path from a set of start vertices to a set of goal
+/// vertices using Dijkstra's algorithm.
+///
+/// If the graph is acyclic, then the provided cost function must return values
+/// {@literal >= 0} for all arrows.
+/// If the graph has cycles, then the provided cost function must return values
+/// {@literal > 0} for all arrows. (If the graph has cycles and the cost function
+/// returns values that are 0, then this algorithm incorrectly considers a
+/// path as non-unique, if it can be reached by a walk).
+///
+/// Performance characteristics:
+/// <dl>
+///     <dt>When the algorithm returns a back link</dt><dd>less or equal {@literal O( |A| + |V|*log|V| )} within max cost</dd>
+///     <dt>When the algorithm returns null</dt><dd>less or equal {@literal O( |A| + |V|*log|V| )} within max cost</dd>
+/// </dl>
+///
+/// References:
+/// <dl>
+///   <dt>Edsger W. Dijkstra (1959)</dt>
+///   <dd>A note on two problems in connexion with graphs,Problem 2.
+///   <a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
+///   <dt>Sampath Kannan, Sanjeef Khanna, Sudeepa Roy. (2008)</dt>
+///   <dd>STCON in Directed Unique-Path Graphs.
+///        Chapter 2.1 Properties of Unique-Path Graphs.
+///        <a href="https://www.cis.upenn.edu/~sanjeev/papers/fsttcs08_stcon.pdf">cis.upenn.edu</a></dd>
+/// </dl>
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
+/// @param <C> the cost number type
 public class UniqueShortestArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
     public UniqueShortestArcPathSearchAlgo() {
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param startVertices    the set of start vertices
-     * @param goalPredicate    the goal predicate
-     * @param nextArcsFunction the next arcs function
-     * @param maxDepth         the maximal depth (inclusive) of the search
-     *                         Must be {@literal >= 0}.
-     * @param zero             the zero cost value
-     * @param costLimit        the maximal cost (inclusive) of a path.
-     *                         Must be {@literal >= zero}.
-     * @param costFunction     the cost function.<br>
-     *                         The cost must be {@literal > 0} if the graph
-     *                         has cycles.<br>
-     *                         The cost must be {@literal >= 0} if the graph
-     *                         is acyclic.
-     * @param sumFunction      the sum function for adding two cost values
-     * @param visited
-     * @return on success: a back link, otherwise: null
-     */
+    /// {@inheritDoc}
+    ///
+    /// @param startVertices    the set of start vertices
+    /// @param goalPredicate    the goal predicate
+    /// @param nextArcsFunction the next arcs function
+    /// @param maxDepth         the maximal depth (inclusive) of the search
+    ///                         Must be {@literal >= 0}.
+    /// @param zero             the zero cost value
+    /// @param costLimit        the maximal cost (inclusive) of a path.
+    ///                         Must be {@literal >= zero}.
+    /// @param costFunction     the cost function.
+    ///                         The cost must be {@literal > 0} if the graph
+    ///                         has cycles.
+    ///                         The cost must be {@literal >= 0} if the graph
+    ///                         is acyclic.
+    /// @param sumFunction      the sum function for adding two cost values
+    /// @param visited
+    /// @return on success: a back link, otherwise: null
     @Override
     public @Nullable ArcBackLinkWithCost<V, A, C> search(
             final Iterable<V> startVertices,

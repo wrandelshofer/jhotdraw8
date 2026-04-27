@@ -25,12 +25,10 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Provides a {@link SequencedMap} facade to a set of {@code Map} functions.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Provides a [SequencedMap] facade to a set of `Map` functions.
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements SequencedMap<K, V> {
     private final Supplier<Map.Entry<K, V>> firstEntryFunction;
     private final Supplier<Map.Entry<K, V>> lastEntryFunction;

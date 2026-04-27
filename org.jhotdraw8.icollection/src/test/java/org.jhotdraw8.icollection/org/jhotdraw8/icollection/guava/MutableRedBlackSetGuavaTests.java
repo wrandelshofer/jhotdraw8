@@ -20,9 +20,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Set;
 
-/**
- * Tests {@link MutableRedBlackSet} with the Guava test suite.
- */
+/// Tests [MutableRedBlackSet] with the Guava test suite.
 public class MutableRedBlackSetGuavaTests {
 
     public static Test suite() {

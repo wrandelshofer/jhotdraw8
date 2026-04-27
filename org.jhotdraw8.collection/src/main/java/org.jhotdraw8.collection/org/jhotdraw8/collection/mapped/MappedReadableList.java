@@ -14,14 +14,12 @@ import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.function.Function;
 
-/**
- * Maps a {@link ReadableList} to a different element type.
- * <p>
- * The underlying List is referenced - not copied.
- *
- * @param <E> the mapped element type
- * @param <F> the original element type
- */
+/// Maps a [ReadableList] to a different element type.
+///
+/// The underlying List is referenced - not copied.
+///
+/// @param <E> the mapped element type
+/// @param <F> the original element type
 public final class MappedReadableList<E, F> extends AbstractReadableList<E> {
 
     private final ReadableList<F> backingList;

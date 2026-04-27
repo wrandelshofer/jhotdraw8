@@ -8,18 +8,13 @@ import org.jhotdraw8.base.event.Event;
 
 import java.io.Serial;
 
-/**
- * ToolEvent.
- *
- */
+/// ToolEvent.
 public class ToolEvent extends Event<Tool> {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Defines the event type.
-     */
+    /// Defines the event type.
     public enum EventType {
 
         TOOL_STARTED,

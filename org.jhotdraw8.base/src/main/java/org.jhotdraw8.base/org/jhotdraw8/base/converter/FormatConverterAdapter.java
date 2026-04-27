@@ -13,10 +13,7 @@ import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
-/**
- * Allows to use a {@code Converter} with the {@code java.text.Format} API.
- *
- */
+/// Allows to use a `Converter` with the `java.text.Format` API.
 @SuppressWarnings({"serial", "RedundantSuppression"})
 public class FormatConverterAdapter extends Format {
 

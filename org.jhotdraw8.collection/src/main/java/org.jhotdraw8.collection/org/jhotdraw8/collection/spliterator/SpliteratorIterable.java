@@ -12,12 +12,10 @@ import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/**
- * An Iterable which takes a Spliterator supplier to implement the
- * Iterable methods.
- *
- * @param <T> the element type
- */
+/// An Iterable which takes a Spliterator supplier to implement the
+/// Iterable methods.
+///
+/// @param <T> the element type
 public class SpliteratorIterable<T> implements Iterable<T> {
     private final Supplier<Spliterator<T>> factory;
 

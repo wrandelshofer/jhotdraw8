@@ -7,12 +7,10 @@ package org.jhotdraw8.fxbase.styleable;
 import javafx.css.ParsedValue;
 import javafx.css.StyleConverter;
 
-/**
- * SimpleParsedValue.
- *
- * @param <V> type of the parsed value
- * @param <T> {@code StyleableProperty} type of the converted value
- */
+/// SimpleParsedValue.
+///
+/// @param <V> type of the parsed value
+/// @param <T> `StyleableProperty` type of the converted value
 public class SimpleParsedValue<V, T> extends ParsedValue<V, T> {
 
     public SimpleParsedValue(V value, StyleConverter<V, T> converter) {

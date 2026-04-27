@@ -20,49 +20,37 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-/**
- * Abstract base class for CHAMP maps.
- *
- * @param <K> the key type of the map
- * @param <V> the value typeof the map
- * @param <D> the data type of the CHAMP trie
- */
+/// Abstract base class for CHAMP maps.
+///
+/// @param <K> the key type of the map
+/// @param <V> the value typeof the map
+/// @param <D> the data type of the CHAMP trie
 public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V> implements Serializable, Cloneable,
         ReadableMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
 
-    /**
-     * The current owner id of this map.
-     * <p>
-     * All nodes that have the same non-null owner id, are exclusively owned
-     * by this map, and therefore can be mutated without affecting other map.
-     * <p>
-     * If this owner id is null, then this map does not own any nodes.
-     */
+    /// The current owner id of this map.
+    ///
+    /// All nodes that have the same non-null owner id, are exclusively owned
+    /// by this map, and therefore can be mutated without affecting other map.
+    ///
+    /// If this owner id is null, then this map does not own any nodes.
     @Nullable
     protected IdentityObject owner;
 
-    /**
-     * The root of this CHAMP trie.
-     */
+    /// The root of this CHAMP trie.
     protected transient BitmapIndexedNode<D> root;
 
-    /**
-     * The number of entries in this map.
-     */
+    /// The number of entries in this map.
     protected int size;
 
-    /**
-     * The number of times this map has been structurally modified.
-     */
+    /// The number of times this map has been structurally modified.
     protected int modCount;
 
-    /**
-     * Gets the owner object. If the owner object was set to null, creates a new one.
-     *
-     * @return the owner object
-     */
+    /// Gets the owner object. If the owner object was set to null, creates a new one.
+    ///
+    /// @return the owner object
     protected IdentityObject getOrCreateOwner() {
         if (owner == null) {
             owner = new IdentityObject();
@@ -102,21 +90,17 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
         return super.getOrDefault(key, defaultValue);
     }
 
-    /**
-     * Returns the current value of the modification counter.
-     *
-     * @return value of modification counter
-     */
+    /// Returns the current value of the modification counter.
+    ///
+    /// @return value of modification counter
     protected int getModCount() {
         return modCount;
     }
 
-    /**
-     * Adds all specified elements that are not already in this set.
-     *
-     * @param c an iterable of elements
-     * @return {@code true} if this set changed
-     */
+    /// Adds all specified elements that are not already in this set.
+    ///
+    /// @param c an iterable of elements
+    /// @return `true` if this set changed
     public boolean putAll(Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c == this) {
             return false;
@@ -133,12 +117,10 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
         return modified;
     }
 
-    /**
-     * Removes all specified entries that are in this set.
-     *
-     * @param c an iterable of keys
-     * @return {@code true} if this map changed
-     */
+    /// Removes all specified entries that are in this set.
+    ///
+    /// @param c an iterable of keys
+    /// @return `true` if this map changed
     public boolean removeAll(Iterable<?> c) {
         if (isEmpty()) {
             return false;
@@ -153,12 +135,10 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
         return modified;
     }
 
-    /**
-     * Retains all specified entries that are in this set.
-     *
-     * @param c an iterable of keys
-     * @return {@code true} if this map changed
-     */
+    /// Retains all specified entries that are in this set.
+    ///
+    /// @param c an iterable of keys
+    /// @return `true` if this map changed
     public boolean retainAll(Iterable<?> c) {
         if (isEmpty()) {
             return false;
@@ -189,12 +169,10 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
         return removed;
     }
 
-    /**
-     * Removes the specified entry from the map.
-     *
-     * @param o an entry (should be a {@link Map.Entry}).
-     * @return true if the element was contained in the map
-     */
+    /// Removes the specified entry from the map.
+    ///
+    /// @param o an entry (should be a [Map.Entry]).
+    /// @return true if the element was contained in the map
     @SuppressWarnings("unchecked")
     protected boolean removeEntry(@Nullable Object o) {
         if (containsEntry(o)) {

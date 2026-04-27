@@ -1,10 +1,10 @@
 package org.jhotdraw8.examples.mini;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.geom.AbstractShape;
 import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.PathData;
 import org.jhotdraw8.geom.PathDataBuilder;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -12,21 +12,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * A shape that can have multiple style-dimensions like a multiple-master font.
- */
+/// A shape that can have multiple style-dimensions like a multiple-master font.
 public class MultipleMasterShape extends AbstractShape {
     private PathData defaultShape;
     final private List<double[]> deltas = new ArrayList<>();
     final private List<Double> weights = new ArrayList<>();
 
-    /**
-     * Creates a new instance from the given shapes.
-     * <p>
-     * All shapes must have an identical command sequence!
-     *
-     * @param shapes
-     */
+    /// Creates a new instance from the given shapes.
+    ///
+    /// All shapes must have an identical command sequence!
+    ///
+    /// @param shapes
     public MultipleMasterShape(PathIterator... shapes) {
         this(Arrays.asList(shapes));
     }
@@ -56,14 +52,12 @@ public class MultipleMasterShape extends AbstractShape {
         return weights.size();
     }
 
-    /**
-     * Set a weight in the range 0 to 1 for a specific style dimension.
-     * <p>
-     * You can set a weight outside the range to under- or over-compensate a specific style dimension.
-     *
-     * @param dimension
-     * @param value
-     */
+    /// Set a weight in the range 0 to 1 for a specific style dimension.
+    ///
+    /// You can set a weight outside the range to under- or over-compensate a specific style dimension.
+    ///
+    /// @param dimension
+    /// @param value
     public void setWeight(int dimension, double value) {
         weights.set(dimension, value);
     }

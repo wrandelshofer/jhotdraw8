@@ -23,57 +23,48 @@ import org.jspecify.annotations.Nullable;
 import java.net.URI;
 import java.util.concurrent.CompletionStage;
 
-/**
- * A {@code FileBasedActivity} is an {@link Activity} that involves data
- * that is stored in a file.
- * <p>
- * There is one activity instance per file. The filename is
- * used as the title of the activity.
- * <p>
- * The storage location of a file is not restricted to the file system.
- * This is why, the storage location of the file is identified by an {@link URI}.
- *
- */
+/// A `FileBasedActivity` is an [Activity] that involves data
+/// that is stored in a file.
+///
+/// There is one activity instance per file. The filename is
+/// used as the title of the activity.
+///
+/// The storage location of a file is not restricted to the file system.
+/// This is why, the storage location of the file is identified by an [URI].
 public interface FileBasedActivity extends Activity {
     String MODIFIED_PROPERTY = "modified";
     String URI_PROPERTY = "uri";
     String DATA_FORMAT_PROPERTY = "dataFormat";
 
-    /**
-     * The modified property indicates that the content has been
-     * modified and needs to be saved to the file.
-     * <p>
-     * This property is set to true if a change in the content has
-     * been detected.
-     * <p>
-     * The property is only set to false by calling {@link #clearModified()}.
-     * This is typically done by an {@code Action} invoked by the user,
-     * or by an automatic save function managed by the {@code Application}.
-     *
-     * @return the modified property
-     */
+    /// The modified property indicates that the content has been
+    /// modified and needs to be saved to the file.
+    ///
+    /// This property is set to true if a change in the content has
+    /// been detected.
+    ///
+    /// The property is only set to false by calling [#clearModified()].
+    /// This is typically done by an `Action` invoked by the user,
+    /// or by an automatic save function managed by the `Application`.
+    ///
+    /// @return the modified property
     ReadOnlyBooleanProperty modifiedProperty();
 
     default boolean isModified() {
         return modifiedProperty().get();
     }
 
-    /**
-     * Clears the modified property.
-     *
-     * @see #modifiedProperty()
-     */
+    /// Clears the modified property.
+    ///
+    /// @see #modifiedProperty()
     void clearModified();
 
-    /**
-     * This property is used to identify the file that is
-     * used for storing the content.
-     * <p>
-     * This property is managed by the {@code Action}s that load
-     * and save the content from/to the file.
-     *
-     * @return the resource
-     */
+    /// This property is used to identify the file that is
+    /// used for storing the content.
+    ///
+    /// This property is managed by the `Action`s that load
+    /// and save the content from/to the file.
+    ///
+    /// @return the resource
     ObjectProperty<@Nullable URI> uriProperty();
 
     default @Nullable URI getURI() {
@@ -84,16 +75,14 @@ public interface FileBasedActivity extends Activity {
         uriProperty().set(newValue);
     }
 
-    /**
-     * This property specifies the format that is used for
-     * storing the content in the file.
-     * <p>
-     * This property is managed by {@code Action}s.
-     * Typically by actions that load or save the content,
-     * and actions that manage file properties.
-     *
-     * @return the data format of the content
-     */
+    /// This property specifies the format that is used for
+    /// storing the content in the file.
+    ///
+    /// This property is managed by `Action`s.
+    /// Typically by actions that load or save the content,
+    /// and actions that manage file properties.
+    ///
+    /// @return the data format of the content
     ObjectProperty<@Nullable DataFormat> dataFormatProperty();
 
     default @Nullable DataFormat getDataFormat() {
@@ -104,148 +93,132 @@ public interface FileBasedActivity extends Activity {
         dataFormatProperty().set(newValue);
     }
 
-    /**
-     * Asynchronously reads content data from the specified URI.
-     * <p>
-     * This method must not change the current document if reading fails or is canceled.
-     * <p>
-     * The activity must be disabled with a {@link SimpleWorkState} during a read.
-     * See {@link Disableable}.
-     * <p>
-     * Usage:
-     * <pre><code>
-     * WorkState ws = new WorkState("read");
-     * activity.addDisablers(ws);
-     * activity.read(uri, format, options, insert, workState).handle((fmt,ex)-&gt;{
-     *    ...
-     *    activity.removeDisablers(ws);
-     * });
-     * </code></pre>
-     *
-     * @param uri       the URI
-     * @param format    the desired data format, null means default data format
-     *                  should be used
-     * @param options   read options
-     * @param insert    whether to insert into the current document or to replace it.
-     * @param workState the work state for monitoring this invocation of the read method.
-     *                  The work state is updated by the read method. The worker can be used
-     *                  to cancel the read.
-     * @return Returns a CompletionStage which is completed with the data format that was
-     * actually used for reading the file.
-     */
+    /// Asynchronously reads content data from the specified URI.
+    ///
+    /// This method must not change the current document if reading fails or is canceled.
+    ///
+    /// The activity must be disabled with a [SimpleWorkState] during a read.
+    /// See [Disableable].
+    ///
+    /// Usage:
+    /// <pre><code>
+    /// WorkState ws = new WorkState("read");
+    /// activity.addDisablers(ws);
+    /// activity.read(uri, format, options, insert, workState).handle((fmt,ex)-&gt;{
+    ///    ...
+    ///    activity.removeDisablers(ws);
+    /// });
+    /// </code></pre>
+    ///
+    /// @param uri       the URI
+    /// @param format    the desired data format, null means default data format
+    ///                  should be used
+    /// @param options   read options
+    /// @param insert    whether to insert into the current document or to replace it.
+    /// @param workState the work state for monitoring this invocation of the read method.
+    ///                  The work state is updated by the read method. The worker can be used
+    ///                  to cancel the read.
+    /// @return Returns a CompletionStage which is completed with the data format that was
+    /// actually used for reading the file.
     CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, PersistentMap<Key<?>, Object> options, boolean insert, WorkState<Void> workState);
 
-    /**
-     * Sets the content of this activity by asynchronously reading the data from
-     * the specified uri.
-     * <p>
-     * The activity must be disabled with the {@link Action} that invokes
-     * this method.
-     * <pre><code>
-     * activity.addDisablers(anAction);
-     * activity.read(uri, options).handle((data,ex)-&gt;{
-     *    ...
-     *    activity.removeDisablers(anAction);
-     * });
-     * </code></pre>
-     *
-     * @param uri     an uri
-     * @param options reading options
-     * @return a completable worker for monitoring the progress of the read operation
-     */
+    /// Sets the content of this activity by asynchronously reading the data from
+    /// the specified uri.
+    ///
+    /// The activity must be disabled with the [Action] that invokes
+    /// this method.
+    /// <pre><code>
+    /// activity.addDisablers(anAction);
+    /// activity.read(uri, options).handle((data,ex)-&gt;{
+    ///    ...
+    ///    activity.removeDisablers(anAction);
+    /// });
+    /// </code></pre>
+    ///
+    /// @param uri     an uri
+    /// @param options reading options
+    /// @return a completable worker for monitoring the progress of the read operation
     default CompletableWorker<Void> read(URI uri, PersistentMap<Key<?>, Object> options) {
         SimpleCompletableWorker<Void> worker = new SimpleCompletableWorker<>(new SimpleWorkState<>(getApplication().getResources().getFormatted("file.reading.worker.title", uri.getPath())));
         worker.completeExceptionally(new UnsupportedOperationException());
         return worker;
     }
 
-    /**
-     * Asynchronously writes document data to the specified URI.
-     * <p>
-     * This method must not change the current document.
-     * <p>
-     * The activity must be disabled with a {@link SimpleWorkState} during a read.
-     * See usage example in {@link #read}.
-     *
-     * @param uri       the URI
-     * @param format    the desired data format, null means default data format
-     *                  should be used
-     * @param options   write options
-     * @param workState the work state for monitoring this invocation of the write method.
-     *                  The work state is updated by the write method. The worker can be used
-     *                  to cancel the write.
-     * @return Returns a CompletionStage which is completed when the write
-     * operation has finished.
-     */
+    /// Asynchronously writes document data to the specified URI.
+    ///
+    /// This method must not change the current document.
+    ///
+    /// The activity must be disabled with a [SimpleWorkState] during a read.
+    /// See usage example in [#read].
+    ///
+    /// @param uri       the URI
+    /// @param format    the desired data format, null means default data format
+    ///                  should be used
+    /// @param options   write options
+    /// @param workState the work state for monitoring this invocation of the write method.
+    ///                  The work state is updated by the write method. The worker can be used
+    ///                  to cancel the write.
+    /// @return Returns a CompletionStage which is completed when the write
+    /// operation has finished.
     CompletionStage<Void> write(URI uri, @Nullable DataFormat format, PersistentMap<Key<?>, Object> options, WorkState<Void> workState);
 
-    /**
-     * Asynchronously writes the content of this activity into the specified uri.
-     * <p>
-     * The activity must be disabled with the {@link Action} that invokes
-     * this method.
-     * <pre><code>
-     * activity.addDisablers(anAction);
-     * activity.write(uri, options).handle((data,ex)-&gt;{
-     *    ...
-     *    activity.removeDisablers(anAction);
-     * });
-     * </code></pre>
-     *
-     * @param uri     an uri
-     * @param options writing options
-     * @return a completable worker for monitoring the progress of the write operation
-     */
+    /// Asynchronously writes the content of this activity into the specified uri.
+    ///
+    /// The activity must be disabled with the [Action] that invokes
+    /// this method.
+    /// <pre><code>
+    /// activity.addDisablers(anAction);
+    /// activity.write(uri, options).handle((data,ex)-&gt;{
+    ///    ...
+    ///    activity.removeDisablers(anAction);
+    /// });
+    /// </code></pre>
+    ///
+    /// @param uri     an uri
+    /// @param options writing options
+    /// @return a completable worker for monitoring the progress of the write operation
     default CompletableWorker<Void> write(URI uri, PersistentMap<Key<?>, Object> options, WorkState<Void> state) {
         return FXWorker.work(getApplication().getExecutor(), s -> null, state);
     }
 
-    /**
-     * Clears the content.
-     *
-     * @return Returns a CompletionStage which is completed when the clear
-     * operation has finished. For example
-     * {@code return CompletableFuture.completedFuture(null);}
-     */
+    /// Clears the content.
+    ///
+    /// @return Returns a CompletionStage which is completed when the clear
+    /// operation has finished. For example
+    /// `return CompletableFuture.completedFuture(null);`
     CompletionStage<Void> clear();
 
-    /**
-     * Prints the current content.
-     * <p>
-     * This method must not change the current document.
-     * <p>
-     * The activity must be disabled with a {@link SimpleWorkState} during printing.
-     * See usage example in {@link #read}.
-     *
-     * @param job       the printer job
-     * @param workState the work state for monitoring this invocation of the print method.
-     *                  The work state is updated by the print method. The worker can be used
-     *                  to cancel printing.
-     * @return Returns a CompletionStage which is completed when the print
-     * operation has finished. For example
-     * {@code return CompletableFuture.completedFuture(null);}
-     */
+    /// Prints the current content.
+    ///
+    /// This method must not change the current document.
+    ///
+    /// The activity must be disabled with a [SimpleWorkState] during printing.
+    /// See usage example in [#read].
+    ///
+    /// @param job       the printer job
+    /// @param workState the work state for monitoring this invocation of the print method.
+    ///                  The work state is updated by the print method. The worker can be used
+    ///                  to cancel printing.
+    /// @return Returns a CompletionStage which is completed when the print
+    /// operation has finished. For example
+    /// `return CompletableFuture.completedFuture(null);`
     CompletionStage<Void> print(PrinterJob job, WorkState<Void> workState);
 
-    /**
-     * Returns true if this content is empty and can be replaced by
-     * another document without that the user loses data.
-     *
-     * @return true if empty
-     */
+    /// Returns true if this content is empty and can be replaced by
+    /// another document without that the user loses data.
+    ///
+    /// @return true if empty
     default boolean isEmpty() {
         return !isModified() && getURI() == null;
     }
 
-    /**
-     * For file-based activity, the title should be bound to the file name
-     * from the {@link #uriProperty()}.
-     * <p>
-     * See {@link Activity#titleProperty()} for a general description of
-     * this property.
-     *
-     * @return the title of the activity
-     */
+    /// For file-based activity, the title should be bound to the file name
+    /// from the [#uriProperty()].
+    ///
+    /// See [Activity#titleProperty()] for a general description of
+    /// this property.
+    ///
+    /// @return the title of the activity
     @Override
     StringProperty titleProperty();
 }

@@ -29,9 +29,7 @@ public class TextAreaFigure extends AbstractLeafFigure
         ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure, RectangularFigure, ShapeableFigure,
         TextableFigure, TextFontableFigure, TextLayoutableFigure, TextFillableFigure, PaddableFigure, TextEditableFigure {
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "TextArea";
     private Path path;
 

@@ -65,10 +65,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-/**
- * IntersectionSampleMain.
- *
- */
+/// IntersectionSampleMain.
 public class IntersectionExampleMain extends Application {
 
     StackPane canvas;
@@ -320,9 +317,7 @@ public class IntersectionExampleMain extends Application {
         stage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         launch(args);
     }

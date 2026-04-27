@@ -6,17 +6,12 @@ package org.jhotdraw8.draw.inspector;
 
 import org.jhotdraw8.application.resources.Resources;
 
-/**
- * InspectorLabels.
- *
- */
+/// InspectorLabels.
 public class InspectorLabels {
 
     public static final String RESOURCE_BUNDLE = "org.jhotdraw8.draw.inspector.Labels";
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private InspectorLabels() {
     }
 

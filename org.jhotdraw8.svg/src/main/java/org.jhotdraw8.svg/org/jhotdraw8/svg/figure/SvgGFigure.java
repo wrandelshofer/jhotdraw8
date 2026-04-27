@@ -22,18 +22,13 @@ import org.jhotdraw8.draw.render.RenderContext;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Represents an SVG 'g' element.
- *
- */
+/// Represents an SVG 'g' element.
 public class SvgGFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, SvgTransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
         SvgDefaultableFigure,
         SvgElementFigure {
 
-    /**
-     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "g";
 
     @Override

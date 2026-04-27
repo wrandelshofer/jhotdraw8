@@ -17,11 +17,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * Converts a {@code javafx.geometry.BoundingBox} into a {@code String} and vice
- * versa.
- *
- */
+/// Converts a `javafx.geometry.BoundingBox` into a `String` and vice
+/// versa.
 public class BoundingBoxCssConverter extends AbstractCssConverter<BoundingBox> {
     private final boolean withSpace;
     private final boolean withComma;

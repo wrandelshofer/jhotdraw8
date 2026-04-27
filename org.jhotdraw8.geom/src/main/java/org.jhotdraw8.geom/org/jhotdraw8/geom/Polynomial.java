@@ -20,69 +20,55 @@ import static java.lang.Math.max;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
-/**
- * A polynomial.
- * <p>
- * References:
- * <dl>
- *     <dt>polynomial.js</dt>
- *     <dd>polynomial.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
- *     <a href="http://www.kevlindev.com/gui/math/polynomial/Polynomial.js">kevlindev.com</a></dd>
- * </dl>
- */
+/// A polynomial.
+///
+/// References:
+/// <dl>
+///     <dt>polynomial.js</dt>
+///     <dd>polynomial.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+///     <a href="http://www.kevlindev.com/gui/math/polynomial/Polynomial.js">kevlindev.com</a></dd>
+/// </dl>
 public class Polynomial implements ToDoubleFunction<Double> {
 
     private static final double ACCURACY = 6;
 
-    /**
-     * ln(10)≈2.302
-     */
+    /// ln(10)≈2.302
     private static final double LN10 = log(10);
-    /**
-     * ln(2)≈0.693
-     */
+    /// ln(2)≈0.693
     private static final double LN2 = log(2);
-    /**
-     * Values closer to zero than epsilon are treated as zero .
-     * Machine precision for double is 2^-53.
-     */
+    /// Values closer to zero than epsilon are treated as zero .
+    /// Machine precision for double is 2^-53.
     private static final double EPSILON = 1.0 / (1L << 33);
 
-    /**
-     * Holds the coefficients from lowest to highest degree, that is
-     * {@literal coefs[i]*x^i}.
-     */
+    /// Holds the coefficients from lowest to highest degree, that is
+    /// {@literal coefs[i]*x^i}.
     private final double[] coefs;
 
-    /**
-     * Creates a new polynomial.
-     * <p>
-     * The coefficients are in order by highest degree monomial first. For
-     * example, the following example initializes a Polynomial object for:
-     * <code>3x^4 + 2x^2 + 5</code>.
-     * <pre>
-     * var poly = new Polynomial(3, 0, 2, 0, 5);
-     * </pre> All coefficients from highest degree to degree 0 must be provided.
-     * A zero is used for monomials that are not present in the polynomial.
-     * <p>
-     * NOTE: The polynomial coefficients are stored in an array in the reverse
-     * order to how they were specified. This has the benefit that the
-     * coefficient's position in the array corresponds to the degree of the
-     * monomial to which it belongs. *
-     *
-     * @param coefs the coefficients of the polynomial
-     */
+    /// Creates a new polynomial.
+    ///
+    /// The coefficients are in order by highest degree monomial first. For
+    /// example, the following example initializes a Polynomial object for:
+    /// <code>3x^4 + 2x^2 + 5</code>.
+    /// <pre>
+    /// var poly = new Polynomial(3, 0, 2, 0, 5);
+    /// </pre> All coefficients from highest degree to degree 0 must be provided.
+    /// A zero is used for monomials that are not present in the polynomial.
+    ///
+    /// NOTE: The polynomial coefficients are stored in an array in the reverse
+    /// order to how they were specified. This has the benefit that the
+    /// coefficient's position in the array corresponds to the degree of the
+    /// monomial to which it belongs. *
+    ///
+    /// @param coefs the coefficients of the polynomial
     public Polynomial(double... coefs) {
         this(true, coefs);
     }
 
-    /**
-     * Alternative constructor.
-     *
-     * @param highestToLowestDegree true if sorted from highest to lowest degree, false if
-     *                              sorted from lowest do highest degree.
-     * @param coefs                 will be referenced
-     */
+    /// Alternative constructor.
+    ///
+    /// @param highestToLowestDegree true if sorted from highest to lowest degree, false if
+    ///                              sorted from lowest do highest degree.
+    /// @param coefs                 will be referenced
     public Polynomial(boolean highestToLowestDegree, double... coefs) {
         if (highestToLowestDegree) {
             this.coefs = new double[coefs.length];
@@ -94,14 +80,12 @@ public class Polynomial implements ToDoubleFunction<Double> {
         }
     }
 
-    /**
-     * Adds the coefficients of that polynomial to the coefficients of this
-     * polynomial and returns the resulting polynomial. Does not change this
-     * polynomial.
-     *
-     * @param that another polynomial
-     * @return a new polynomial containing the sum of the coefficients
-     */
+    /// Adds the coefficients of that polynomial to the coefficients of this
+    /// polynomial and returns the resulting polynomial. Does not change this
+    /// polynomial.
+    ///
+    /// @param that another polynomial
+    /// @return a new polynomial containing the sum of the coefficients
     public Polynomial add(Polynomial that) {
         int d1 = this.getDegree();
         int d2 = that.getDegree();
@@ -118,14 +102,12 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return new Polynomial(false, result);
     }
 
-    /**
-     * Subtracts the coefficients of that polynomial from the coefficients of this
-     * polynomial and returns the resulting polynomial. Does not change this
-     * polynomial.
-     *
-     * @param that another polynomial
-     * @return a new polynomial containing the difference of the coefficients
-     */
+    /// Subtracts the coefficients of that polynomial from the coefficients of this
+    /// polynomial and returns the resulting polynomial. Does not change this
+    /// polynomial.
+    ///
+    /// @param that another polynomial
+    /// @return a new polynomial containing the difference of the coefficients
     public Polynomial subtract(Polynomial that) {
         int d1 = this.getDegree();
         int d2 = that.getDegree();
@@ -147,14 +129,12 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return eval(x);
     }
 
-    /**
-     * Searches for a root in the given interval using the bisection method.
-     *
-     * @param func the function
-     * @param min  the lower bound of the interval
-     * @param max  the upper bound of the interval
-     * @return the root, null if no root could be found
-     */
+    /// Searches for a root in the given interval using the bisection method.
+    ///
+    /// @param func the function
+    /// @param min  the lower bound of the interval
+    /// @param max  the upper bound of the interval
+    /// @return the root, null if no root could be found
     public static @Nullable Double bisection(final ToDoubleFunction<Double> func, double min, double max) {
         double minValue = func.applyAsDouble(min);
         double maxValue = func.applyAsDouble(max);
@@ -188,13 +168,11 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return result;
     }
 
-    /**
-     * Divides the coefficients of this polynomial by the provided scalar.
-     * Does not change this polynomial.
-     *
-     * @param scalar a scalar
-     * @return a new polynomial
-     */
+    /// Divides the coefficients of this polynomial by the provided scalar.
+    /// Does not change this polynomial.
+    ///
+    /// @param scalar a scalar
+    /// @return a new polynomial
     public Polynomial divideScalar(double scalar) {
         double[] result = new double[this.coefs.length];
         for (int i = 0; i < this.coefs.length; i++) {
@@ -203,13 +181,11 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return new Polynomial(false, result);
     }
 
-    /**
-     * Evaluates the polynomial at the specified x value.
-     *
-     * @param x is a number that is "plugged into" the polynomial to evaluate
-     *          it.
-     * @return the value of the polynomial at x
-     */
+    /// Evaluates the polynomial at the specified x value.
+    ///
+    /// @param x is a number that is "plugged into" the polynomial to evaluate
+    ///          it.
+    /// @return the value of the polynomial at x
     public double eval(double x) {
         double result = 0;
         for (int i = this.coefs.length - 1; i >= 0; i--) {
@@ -218,11 +194,9 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return result;
     }
 
-    /**
-     * Returns the roots of a cubic polynomial (degree equals three).
-     *
-     * @return the roots
-     */
+    /// Returns the roots of a cubic polynomial (degree equals three).
+    ///
+    /// @return the roots
     private double[] getCubicRoots() {
         final double[] results = new double[4];
         int numResults = 0;
@@ -294,20 +268,16 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return trim(numResults, results);
     }
 
-    /**
-     * Returns the degree of this polynomial.
-     *
-     * @return the degree = number of coefficients.
-     */
+    /// Returns the degree of this polynomial.
+    ///
+    /// @return the degree = number of coefficients.
     public int getDegree() {
         return this.coefs.length - 1;
     }
 
-    /**
-     * Returns the derivative of this polynomial.
-     *
-     * @return returns the derivative of the current polynomial.
-     */
+    /// Returns the derivative of this polynomial.
+    ///
+    /// @return returns the derivative of the current polynomial.
     public Polynomial getDerivative() {
         double[] derivative = new double[coefs.length - 1];
 
@@ -318,11 +288,9 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return new Polynomial(false, derivative);
     }
 
-    /**
-     * Returns the root of a linear polynomial (degree equals one).
-     *
-     * @return the roots
-     */
+    /// Returns the root of a linear polynomial (degree equals one).
+    ///
+    /// @return the roots
     private double[] getLinearRoot() {
         double[] result = new double[0];
         double a = this.coefs[1];
@@ -334,11 +302,9 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return result;
     }
 
-    /**
-     * Returns the roots of a quadratic polynomial (degree equals two).
-     *
-     * @return the roots
-     */
+    /// Returns the roots of a quadratic polynomial (degree equals two).
+    ///
+    /// @return the roots
     private double[] getQuadraticRoots() {
         double a = this.coefs[2];
         double b = this.coefs[1] / a;
@@ -346,18 +312,16 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return getQuadraticRoots(a, b, c);
     }
 
-    /**
-     * Returns the roots of a quadratic polynomial (degree equals two).
-     * <pre>
-     *     a*t^2 + b*t + c = 0
-     *
-     *     d = b^2 - 4 * c
-     *     t1 = ( -b + sqrt(d) ) / 2
-     *     t2 = ( -b - sqrt(d) ) / 2
-     * </pre>
-     *
-     * @return the roots
-     */
+    /// Returns the roots of a quadratic polynomial (degree equals two).
+    /// <pre>
+    ///     a*t^2 + b*t + c = 0
+    ///
+    ///     d = b^2 - 4 * c
+    ///     t1 = ( -b + sqrt(d) ) / 2
+    ///     t2 = ( -b - sqrt(d) ) / 2
+    /// </pre>
+    ///
+    /// @return the roots
     public static double[] getQuadraticRoots(double a, double b, double c) {
         double d = b * b - 4 * c;
         if (d > 0) {
@@ -373,11 +337,9 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return new double[0];
     }
 
-    /**
-     * Returns the roots of a quartic polynomial (degree equals four).
-     *
-     * @return the roots
-     */
+    /// Returns the roots of a quartic polynomial (degree equals four).
+    ///
+    /// @return the roots
     private double[] getQuarticRoots() {
 
         double[] results = new double[4];
@@ -456,19 +418,17 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return trim(numResults, results);
     }
 
-    /**
-     * Attempts to find the roots of the current polynomial. This method will
-     * attempt to decrease the degree of the polynomial using the
-     * {@link #simplifiedDegree}. method. Once the degree is determined,
-     * getRoots() dispatches the appropriate root-finding method for the degree
-     * of the polynomial.
-     * <p>
-     * NOTE This method does not find roots for polynomials, which can not be
-     * simplfied to 4th degree or less. Use {@link #getRootsInInterval} for
-     * polynomials above 4th degree.
-     *
-     * @return the roots of the polynomial
-     */
+    /// Attempts to find the roots of the current polynomial. This method will
+    /// attempt to decrease the degree of the polynomial using the
+    /// [#simplifiedDegree]. method. Once the degree is determined,
+    /// getRoots() dispatches the appropriate root-finding method for the degree
+    /// of the polynomial.
+    ///
+    /// NOTE This method does not find roots for polynomials, which can not be
+    /// simplfied to 4th degree or less. Use [#getRootsInInterval] for
+    /// polynomials above 4th degree.
+    ///
+    /// @return the roots of the polynomial
     public double[] getRoots() {
         double[] result;
         final int simplifiedDegree = simplifiedDegree();
@@ -486,14 +446,12 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return result;
     }
 
-    /**
-     * Gets roots in the given interval. Uses the bisection method for root
-     * finding. Can work with a polynomial of any degree.
-     *
-     * @param min the lower bound of the interval (inclusive)
-     * @param max the upper bound of the interval (inclusive)
-     * @return a list of roots
-     */
+    /// Gets roots in the given interval. Uses the bisection method for root
+    /// finding. Can work with a polynomial of any degree.
+    ///
+    /// @param min the lower bound of the interval (inclusive)
+    /// @param max the upper bound of the interval (inclusive)
+    /// @return a list of roots
     public DoubleArrayList getRootsInInterval(double min, double max) {
         DoubleArrayList roots = new DoubleArrayList(getDegree());
         int numRoots = 0;
@@ -528,16 +486,14 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return roots;
     }
 
-    /**
-     * Gets roots in the given interval. Uses the bisection method for root
-     * finding. Can work with a polynomial of any degree.
-     *
-     * @param func   the function
-     * @param droots the roots of the derivative of the function in the interval [min,max].
-     * @param min    the lower bound of the interval (inclusive)
-     * @param max    the upper bound of the interval (inclusive)
-     * @return a list of roots. The list if empty, if no roots have been found
-     */
+    /// Gets roots in the given interval. Uses the bisection method for root
+    /// finding. Can work with a polynomial of any degree.
+    ///
+    /// @param func   the function
+    /// @param droots the roots of the derivative of the function in the interval [min,max].
+    /// @param min    the lower bound of the interval (inclusive)
+    /// @param max    the upper bound of the interval (inclusive)
+    /// @return a list of roots. The list if empty, if no roots have been found
     public static DoubleArrayList getRootsInInterval(ToDoubleFunction<Double> func, DoubleArrayList droots, double min, double max) {
         final DoubleArrayList roots = new DoubleArrayList(droots.size());
         int numRoots = 0;
@@ -573,14 +529,12 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return roots;
     }
 
-    /**
-     * Multiplies the coefficients of this polynomial with the coefficients of
-     * that polynomial and returns the resulting polynomial. Does not change
-     * this polynomial.
-     *
-     * @param that another polynomial
-     * @return a new polynomial containing the product of the coefficients
-     */
+    /// Multiplies the coefficients of this polynomial with the coefficients of
+    /// that polynomial and returns the resulting polynomial. Does not change
+    /// this polynomial.
+    ///
+    /// @param that another polynomial
+    /// @return a new polynomial containing the product of the coefficients
     public Polynomial multiply(Polynomial that) {
         Polynomial result = new Polynomial(new double[this.getDegree() + that.getDegree()]);
         for (int i = 0; i <= this.getDegree(); i++) {
@@ -599,12 +553,10 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return i;
     }
 
-    /**
-     * Returns a simplified polynomial, by removing coefficients of the highest
-     * degrees if they have a very small absolute value.
-     *
-     * @return a new polynomial
-     */
+    /// Returns a simplified polynomial, by removing coefficients of the highest
+    /// degrees if they have a very small absolute value.
+    ///
+    /// @return a new polynomial
     public Polynomial simplify() {
         int popAt = simplifiedDegree();
         if (popAt == this.getDegree()) {
@@ -616,11 +568,9 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return new Polynomial(false, newCoefs);
     }
 
-    /**
-     * toString.
-     *
-     * @return string representation
-     */
+    /// toString.
+    ///
+    /// @return string representation
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append('[');
@@ -642,15 +592,13 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return b.append(']').toString();
     }
 
-    /**
-     * Trims an array to the specified length.
-     * <p>
-     * Returns the same array if it already has the specified length.
-     *
-     * @param length the specified length
-     * @param a      the array
-     * @return array of the specified length
-     */
+    /// Trims an array to the specified length.
+    ///
+    /// Returns the same array if it already has the specified length.
+    ///
+    /// @param length the specified length
+    /// @param a      the array
+    /// @return array of the specified length
     public static double[] trim(int length, double[] a) {
         if (length == a.length) {
             return a;
@@ -661,15 +609,13 @@ public class Polynomial implements ToDoubleFunction<Double> {
     }
 
 
-    /**
-     * Estimates the arc length of the polynomial in the interval [min,max].
-     * <p>
-     * Computes {@literal  ∫_min‾max sqrt(1 + (f'(x))^2 ) }
-     *
-     * @param min the lower bound of the interval
-     * @param max the upper bound of the interval
-     * @return the estimated arc length
-     */
+    /// Estimates the arc length of the polynomial in the interval [min,max].
+    ///
+    /// Computes {@literal  ∫_min‾max sqrt(1 + (f'(x))^2 ) }
+    ///
+    /// @param min the lower bound of the interval
+    /// @param max the upper bound of the interval
+    /// @return the estimated arc length
     public double arcLength(double min, double max) {
         final Polynomial dfdx = getDerivative();
         return Integrals.simpson(x -> {

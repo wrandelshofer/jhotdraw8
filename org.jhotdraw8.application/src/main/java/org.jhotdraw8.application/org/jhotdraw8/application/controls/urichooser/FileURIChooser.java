@@ -16,15 +16,10 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * FileURIChooser.
- *
- */
+/// FileURIChooser.
 public class FileURIChooser implements URIChooser {
 
-    /**
-     * The associated file chooser object.
-     */
+    /// The associated file chooser object.
     private final FileChooser chooser = new FileChooser();
 
     private final ObservableList<URIExtensionFilter> filters = FXCollections.observableArrayList();

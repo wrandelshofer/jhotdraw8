@@ -14,11 +14,9 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * SetValueMapAccessor.
- *
- * @param <E> the value type
- */
+/// SetValueMapAccessor.
+///
+/// @param <E> the value type
 public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
 
     private final MapAccessor<PersistentSet<E>> setAccessor;

@@ -18,86 +18,77 @@ import java.util.Map;
 import java.util.Set;
 
 
-/**
- * A mutable bidi graph with balanced performance for all operations.
- * <ul>
- *     <li>Insertion of a vertex is done in amortized {@code O(1)}.</li>
- *     <li>Insertion of an arrow is done in amortized {@code O(1)}.</li>
- *     <li>Removal of a vertex is done in amortized {@code O(|A'|)},
- *     where {@code |A'|} is the number of ingoing and outgoing arrows of the vertex.</li>
- *     <li>Removal of an arrow is done in amortized {@code O(|A'|)},
- *      where {@code |A'|} is the number of ingoing and outgoing arrows of the
- *      involved vertices.</li>
- * </ul>
- * Memory locality is poor. If you need to perform query operations on the
- * graph, then an immutable graph will give you better performance.
- * <p>
- * <b>Implementation:</b>
- * <p>
- * Example graph:
- * <pre>
- *     0 ──→ 1 ──→ 2
- *     │     │
- *     ↓     ↓
- *     3 ←── 4
- * </pre>
- * If the graph is inserted in the following sequence
- * into the builder:
- * <pre>
- *     addVertex(0);
- *     addVertex(1);
- *     addVertex(2);
- *     addVertex(3);
- *     addVertex(4);
- *     addArrow(0, 1);
- *     addArrow(0, 3);
- *     addArrow(1, 2);
- *     addArrow(1, 4);
- *     addArrow(4, 3);
- * </pre>
- * Then the internal representation is as follows:
- * <pre>
- * vertex#  next- and prev-arrows
- *
- *    0:    next={1, 3};  prev={}
- *    1:    next={2, 4};  prev={0}
- *    2:    next={};      prev={1}
- *    3:    next={};      prev={0, 4}
- *    4:    next={3};     prev={1}
- * </pre>
- *
- *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
- */
+/// A mutable bidi graph with balanced performance for all operations.
+///
+///   - Insertion of a vertex is done in amortized `O(1)`.
+///   - Insertion of an arrow is done in amortized `O(1)`.
+///   - Removal of a vertex is done in amortized `O(|A'|)`,
+///     where `|A'|` is the number of ingoing and outgoing arrows of the vertex.
+///   - Removal of an arrow is done in amortized `O(|A'|)`,
+///     where `|A'|` is the number of ingoing and outgoing arrows of the
+///     involved vertices.
+///
+/// Memory locality is poor. If you need to perform query operations on the
+/// graph, then an immutable graph will give you better performance.
+///
+/// **Implementation:**
+///
+/// Example graph:
+/// <pre>
+///     0 ──→ 1 ──→ 2
+///     │     │
+///     ↓     ↓
+///     3 ←── 4
+/// </pre>
+/// If the graph is inserted in the following sequence
+/// into the builder:
+/// <pre>
+///     addVertex(0);
+///     addVertex(1);
+///     addVertex(2);
+///     addVertex(3);
+///     addVertex(4);
+///     addArrow(0, 1);
+///     addArrow(0, 3);
+///     addArrow(1, 2);
+///     addArrow(1, 4);
+///     addArrow(4, 3);
+/// </pre>
+/// Then the internal representation is as follows:
+/// <pre>
+/// vertex#  next- and prev-arrows
+///
+///    0:    next={1, 3};  prev={}
+///    1:    next={2, 4};  prev={0}
+///    2:    next={};      prev={1}
+///    3:    next={};      prev={0, 4}
+///    4:    next={3};     prev={1}
+/// </pre>
+///
+/// @param <V> the vertex data type
+/// @param <A> the arrow data type
 public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
     private final Map<V, Node<V, A>> nodeMap;
     private @Nullable List<V> cachedVertices = null;
     private int arrowCount = 0;
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public SimpleMutableBidiGraph() {
         this(10, 10);
     }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param initialVertexCapacity the initial vertex capacity
-     * @param initialArrowCapacity  the initial arrow capacity (ignored)
-     */
+    /// Creates a new instance.
+    ///
+    /// @param initialVertexCapacity the initial vertex capacity
+    /// @param initialArrowCapacity  the initial arrow capacity (ignored)
     public SimpleMutableBidiGraph(final int initialVertexCapacity, final int initialArrowCapacity) {
         nodeMap = new LinkedHashMap<>(initialVertexCapacity * 2);
     }
 
-    /**
-     * Creates a new instance with a copy of the provided graph
-     *
-     * @param g a graph
-     */
+    /// Creates a new instance with a copy of the provided graph
+    ///
+    /// @param g a graph
     public SimpleMutableBidiGraph(final DirectedGraph<V, A> g) {
         nodeMap = new LinkedHashMap<>(g.getVertexCount() * 2);
         for (V v : g.getVertices()) {
@@ -261,14 +252,12 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
 
-    /**
-     * A Node holds a vertex and an adjacency list
-     * for the next nodes and an adjacency list for
-     * the previous nodes.
-     *
-     * @param <V>
-     * @param <A>
-     */
+    /// A Node holds a vertex and an adjacency list
+    /// for the next nodes and an adjacency list for
+    /// the previous nodes.
+    ///
+    /// @param <V>
+    /// @param <A>
     private static class Node<V, A> {
         final AdjacencyList<V, A> next = new AdjacencyList<>();
         final AdjacencyList<V, A> prev = new AdjacencyList<>();
@@ -279,49 +268,33 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         }
     }
 
-    /**
-     * List of adjacent nodes, each element is a tuple {@literal (Node<V,A>,A)}.
-     *
-     * @param <V> the vertex data type
-     * @param <A> the arrow data type
-     */
+    /// List of adjacent nodes, each element is a tuple {@literal (Node<V,A>,A)}.
+    ///
+    /// @param <V> the vertex data type
+    /// @param <A> the arrow data type
     private static class AdjacencyList<V, A> {
-        /**
-         * An item occupies {@value #ITEM_SIZE} array entries.
-         */
+        /// An item occupies {@value #ITEM_SIZE} array entries.
         private static final int ITEM_SIZE = 2;
-        /**
-         * An array entry with offset {@value #ITEM_NODE_OFFSET}
-         * contains a {@link Node}.
-         */
+        /// An array entry with offset {@value #ITEM_NODE_OFFSET}
+        /// contains a [Node].
         private static final int ITEM_NODE_OFFSET = 0;
-        /**
-         * An array entry with offset {@value #ITEM_ARROW_OFFSET}
-         * contains a {@code A}.
-         */
+        /// An array entry with offset {@value #ITEM_ARROW_OFFSET}
+        /// contains a `A`.
         private static final int ITEM_ARROW_OFFSET = 1;
         private static final Object[] EMPTY_ARRAY = new Object[0];
-        /**
-         * Item array.
-         */
+        /// Item array.
         private Object[] items = EMPTY_ARRAY;
-        /**
-         * Holds the size of the list. Invariant: size >= 0.
-         */
+        /// Holds the size of the list. Invariant: size >= 0.
         private int size;
 
-        /**
-         * Creates a new empty instance with 0 initial capacity.
-         */
+        /// Creates a new empty instance with 0 initial capacity.
         public AdjacencyList() {
         }
 
-        /**
-         * Adds a new item to the end of the list.
-         *
-         * @param node the node
-         * @param a    the arrow data
-         */
+        /// Adds a new item to the end of the list.
+        ///
+        /// @param node the node
+        /// @param a    the arrow data
         public void add(Node<V, A> node, A a) {
             grow(size + 1);
             int index = size++;
@@ -329,12 +302,10 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
             items[index * ITEM_SIZE + ITEM_ARROW_OFFSET] = a;
         }
 
-        /**
-         * Gets the node at the specified index.
-         *
-         * @param index an index
-         * @return the node at the index
-         */
+        /// Gets the node at the specified index.
+        ///
+        /// @param index an index
+        /// @return the node at the index
         public Node<V, A> getNode(int index) {
             rangeCheck(index, size);
 
@@ -347,12 +318,10 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
             return getNode(index).vertex;
         }
 
-        /**
-         * Gets the arrow data at the specified index.
-         *
-         * @param index an index
-         * @return the node at the index
-         */
+        /// Gets the arrow data at the specified index.
+        ///
+        /// @param index an index
+        /// @return the node at the index
         public A getArrow(int index) {
             rangeCheck(index, size);
 
@@ -404,11 +373,9 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
             return false;
         }
 
-        /**
-         * Removes the item at the specified index from this list.
-         *
-         * @param index an index
-         */
+        /// Removes the item at the specified index from this list.
+        ///
+        /// @param index an index
         public void removeAt(int index) {
             rangeCheck(index, size);
             int numMoved = size - index - 1;
@@ -422,11 +389,9 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
             items = ListHelper.grow(targetCapacity, ITEM_SIZE, items);
         }
 
-        /**
-         * Returns the size of the list.
-         *
-         * @return the size
-         */
+        /// Returns the size of the list.
+        ///
+        /// @return the size
         public int size() {
             return size;
         }

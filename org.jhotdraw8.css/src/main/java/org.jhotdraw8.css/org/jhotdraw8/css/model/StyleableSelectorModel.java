@@ -28,11 +28,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * A {@link SelectorModel} for objects that implement the {@link Styleable}
- * interface.
- *
- */
+/// A [SelectorModel] for objects that implement the [Styleable]
+/// interface.
 public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
 
 

@@ -14,10 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * CssScannerNGTest.
- *
- */
+/// CssScannerNGTest.
 public abstract class AbstractCssScannerTest {
 
     public AbstractCssScannerTest() {
@@ -25,9 +22,7 @@ public abstract class AbstractCssScannerTest {
 
     protected abstract CssScanner createScanner(String inputData);
 
-    /**
-     * Test of nextChar method, of class CssScanner.
-     */
+    /// Test of nextChar method, of class CssScanner.
     public void testScanner(String inputData, String expectedValue) throws Exception {
         CssScanner s = createScanner(inputData);
         //

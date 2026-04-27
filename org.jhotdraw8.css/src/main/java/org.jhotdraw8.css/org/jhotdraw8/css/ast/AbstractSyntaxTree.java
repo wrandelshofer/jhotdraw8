@@ -9,10 +9,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-/**
- * Abstract syntax tree for cascading style sheets.
- *
- */
+/// Abstract syntax tree for cascading style sheets.
 public abstract class AbstractSyntaxTree {
     private final @Nullable SourceLocator sourceLocator;
 
@@ -20,11 +17,9 @@ public abstract class AbstractSyntaxTree {
         this.sourceLocator = sourceLocator;
     }
 
-    /**
-     * Produces tokens for the subtree starting at this tree node.
-     *
-     * @param consumer a consumer for the tokens
-     */
+    /// Produces tokens for the subtree starting at this tree node.
+    ///
+    /// @param consumer a consumer for the tokens
     public void produceTokens(Consumer<CssToken> consumer) {
     }
 

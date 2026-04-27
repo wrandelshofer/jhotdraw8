@@ -23,11 +23,9 @@ public class AlignHorizontalAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.alignHorizontal";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     @SuppressWarnings("this-escape")
     public AlignHorizontalAction(DrawingEditor editor) {
         super(editor);

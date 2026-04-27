@@ -31,90 +31,88 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 
 
-/**
- * Implements the {@link PersistentSequencedSet} interface using a Compressed
- * Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
- * <p>
- * Features:
- * <ul>
- *     <li>supports up to 2<sup>30</sup> elements</li>
- *     <li>allows null elements</li>
- *     <li>is persistent</li>
- *     <li>is thread-safe</li>
- *     <li>iterates in the order, in which elements were inserted</li>
- * </ul>
- * <p>
- * Performance characteristics:
- * <ul>
- *     <li>add: O(log₃₂ N) in an amortized sense, because we sometimes have to
- *     renumber the elements.</li>
- *     <li>remove: O(log₃₂ N) in an amortized sense, because we sometimes have to
- *     renumber the elements.</li>
- *     <li>contains: O(log₃₂ N)</li>
- *     <li>toMutable: O(1) + O(log₃₂ N) distributed across subsequent updates in
- *     the mutable copy</li>
- *     <li>clone: O(1)</li>
- *     <li>iterator creation: O(log₃₂ N)</li>
- *     <li>iterator.next: O(1)</li>
- *     <li>getFirst(), getLast(): O(log₃₂ N)</li>
- * </ul>
- * <p>
- * Implementation details:
- * <p>
- * This set performs read and write operations of single elements in O(log N) time,
- * and in O(log N) space, where N is the number of elements in the set.
- * <p>
- * The CHAMP trie contains nodes that may be shared with other sets.
- * <p>
- * If a write operation is performed on a node, then this set creates a
- * copy of the node and of all parent nodes up to the root (copy-path-on-write).
- * Since the CHAMP trie has a fixed maximal height, the cost is O(1).
- * <p>
- * This set can create a mutable copy of itself in O(1) time and O(1) space
- * using method {@link #toMutable()}. The mutable copy shares its nodes
- * with this set, until it has gradually replaced the nodes with exclusively
- * owned nodes.
- * <p>
- * Insertion Order:
- * <p>
- * This set uses a counter to keep track of the insertion order.
- * It stores the current value of the counter in the sequence number
- * field of each data entry. If the counter wraps around, it must renumber all
- * sequence numbers.
- * <p>
- * The renumbering is why the {@code add} and {@code remove} methods are O(1)
- * only in an amortized sense.
- * <p>
- * To support iteration, we use a Vector. The Vector has the same contents
- * as the CHAMP trie. However, its elements are stored in insertion order.
- * <p>
- * If an element is removed from the CHAMP trie that is not the first or the
- * last element of the Vector, we replace its corresponding element in
- * the Vector by a tombstone. If the element is at the start or end of the Vector,
- * we remove the element and all its neighboring tombstones from the Vector.
- * <p>
- * A tombstone can store the number of neighboring tombstones in ascending and in descending
- * direction. We use these numbers to skip tombstones when we iterate over the vector.
- * Since we only allow iteration in ascending or descending order from one of the ends of
- * the vector, we do not need to keep the number of neighbors in all tombstones up to date.
- * It is sufficient, if we update the neighbor with the lowest index and the one with the
- * highest index.
- * <p>
- * If the number of tombstones exceeds half of the size of the collection, we renumber all
- * sequence numbers, and we create a new Vector.
- * <p>
- * References:
- * <p>
- * For a similar design, see 'SimplePersistentSequencedMap.scala'. Note, that this code is not a derivative
- * of that code.
- * <dl>
- *     <dt>The Scala library. SimplePersistentSequencedMap.scala. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
- *     <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/persistent/VectorMap.scala">github.com</a>
- *     </dd>
- * </dl>
- *
- * @param <E> the element type
- */
+/// Implements the [PersistentSequencedSet] interface using a Compressed
+/// Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
+///
+/// Features:
+///
+///   - supports up to 2<sup>30</sup> elements
+///   - allows null elements
+///   - is persistent
+///   - is thread-safe
+///   - iterates in the order, in which elements were inserted
+///
+///
+/// Performance characteristics:
+///
+///   - add: O(log₃₂ N) in an amortized sense, because we sometimes have to
+///     renumber the elements.
+///   - remove: O(log₃₂ N) in an amortized sense, because we sometimes have to
+///     renumber the elements.
+///   - contains: O(log₃₂ N)
+///   - toMutable: O(1) + O(log₃₂ N) distributed across subsequent updates in
+///     the mutable copy
+///   - clone: O(1)
+///   - iterator creation: O(log₃₂ N)
+///   - iterator.next: O(1)
+///   - getFirst(), getLast(): O(log₃₂ N)
+///
+///
+/// Implementation details:
+///
+/// This set performs read and write operations of single elements in O(log N) time,
+/// and in O(log N) space, where N is the number of elements in the set.
+///
+/// The CHAMP trie contains nodes that may be shared with other sets.
+///
+/// If a write operation is performed on a node, then this set creates a
+/// copy of the node and of all parent nodes up to the root (copy-path-on-write).
+/// Since the CHAMP trie has a fixed maximal height, the cost is O(1).
+///
+/// This set can create a mutable copy of itself in O(1) time and O(1) space
+/// using method [#toMutable()]. The mutable copy shares its nodes
+/// with this set, until it has gradually replaced the nodes with exclusively
+/// owned nodes.
+///
+/// Insertion Order:
+///
+/// This set uses a counter to keep track of the insertion order.
+/// It stores the current value of the counter in the sequence number
+/// field of each data entry. If the counter wraps around, it must renumber all
+/// sequence numbers.
+///
+/// The renumbering is why the `add` and `remove` methods are O(1)
+/// only in an amortized sense.
+///
+/// To support iteration, we use a Vector. The Vector has the same contents
+/// as the CHAMP trie. However, its elements are stored in insertion order.
+///
+/// If an element is removed from the CHAMP trie that is not the first or the
+/// last element of the Vector, we replace its corresponding element in
+/// the Vector by a tombstone. If the element is at the start or end of the Vector,
+/// we remove the element and all its neighboring tombstones from the Vector.
+///
+/// A tombstone can store the number of neighboring tombstones in ascending and in descending
+/// direction. We use these numbers to skip tombstones when we iterate over the vector.
+/// Since we only allow iteration in ascending or descending order from one of the ends of
+/// the vector, we do not need to keep the number of neighbors in all tombstones up to date.
+/// It is sufficient, if we update the neighbor with the lowest index and the one with the
+/// highest index.
+///
+/// If the number of tombstones exceeds half of the size of the collection, we renumber all
+/// sequence numbers, and we create a new Vector.
+///
+/// References:
+///
+/// For a similar design, see 'SimplePersistentSequencedMap.scala'. Note, that this code is not a derivative
+/// of that code.
+/// <dl>
+///     <dt>The Scala library. SimplePersistentSequencedMap.scala. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
+///     <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/persistent/VectorMap.scala">github.com</a>
+///     </dd>
+/// </dl>
+///
+/// @param <E> the element type
 @SuppressWarnings("exports")
 public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E> {
     private static final ChampVectorSet<?> EMPTY = new ChampVectorSet<>(
@@ -122,20 +120,13 @@ public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E
     @Serial
     private static final long serialVersionUID = 0L;
     final transient BitmapIndexedNode<SequencedElement<E>> root;
-    /**
-     * Offset of sequence numbers to vector indices.
-     *
-     * <pre>vector index = sequence number + offset</pre>
-     */
+    /// Offset of sequence numbers to vector indices.
+    /// <pre>vector index = sequence number + offset</pre>
     final int offset;
-    /**
-     * The size of the set.
-     */
+    /// The size of the set.
     final int size;
 
-    /**
-     * In this vector we store the elements in the order in which they were inserted.
-     */
+    /// In this vector we store the elements in the order in which they were inserted.
     final VectorList<Object> vector;
 
     private record OpaqueRecord<E>(BitmapIndexedNode<SequencedElement<E>> root,
@@ -143,14 +134,12 @@ public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E
                                    int size, int offset) {
     }
 
-    /**
-     * Creates a new instance with the provided privateData data object.
-     * <p>
-     * This constructor is intended to be called from a constructor
-     * of the subclass, that is called from method {@link #newInstance(PrivateData)}.
-     *
-     * @param privateData an privateData data object
-     */
+    /// Creates a new instance with the provided privateData data object.
+    ///
+    /// This constructor is intended to be called from a constructor
+    /// of the subclass, that is called from method [#newInstance(PrivateData)].
+    ///
+    /// @param privateData an privateData data object
     @SuppressWarnings("unchecked")
     protected ChampVectorSet(PrivateData privateData) {
         this(((ChampVectorSet.OpaqueRecord<E>) privateData.get()).root,
@@ -159,14 +148,12 @@ public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E
                 ((ChampVectorSet.OpaqueRecord<E>) privateData.get()).offset);
     }
 
-    /**
-     * Creates a new instance with the provided privateData object as its internal data structure.
-     * <p>
-     * Subclasses must override this method, and return a new instance of their subclass!
-     *
-     * @param privateData the internal data structure needed by this class for creating the instance.
-     * @return a new instance of the subclass
-     */
+    /// Creates a new instance with the provided privateData object as its internal data structure.
+    ///
+    /// Subclasses must override this method, and return a new instance of their subclass!
+    ///
+    /// @param privateData the internal data structure needed by this class for creating the instance.
+    /// @return a new instance of the subclass
     protected ChampVectorSet<E> newInstance(PrivateData privateData) {
         return new ChampVectorSet<>(privateData);
     }
@@ -188,41 +175,32 @@ public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E
     }
 
 
-    /**
-     * Returns an persistent set that contains the provided elements.
-     *
-     * @param c   an iterable
-     * @param <E> the element type
-     * @return an persistent set of the provided elements
-     */
-
+    /// Returns an persistent set that contains the provided elements.
+    ///
+    /// @param c   an iterable
+    /// @param <E> the element type
+    /// @return an persistent set of the provided elements
     @SuppressWarnings("unchecked")
     public static <E> ChampVectorSet<E> copyOf(Iterable<? extends E> c) {
         return ChampVectorSet.<E>of().addAll(c);
     }
 
 
-    /**
-     * Returns an empty persistent set.
-     *
-     * @param <E> the element type
-     * @return an empty persistent set
-     */
-
+    /// Returns an empty persistent set.
+    ///
+    /// @param <E> the element type
+    /// @return an empty persistent set
     @SuppressWarnings("unchecked")
     public static <E> ChampVectorSet<E> of() {
         return ((ChampVectorSet<E>) ChampVectorSet.EMPTY);
     }
 
 
-    /**
-     * Returns an persistent set that contains the provided elements.
-     *
-     * @param elements elements
-     * @param <E>      the element type
-     * @return an persistent set of the provided elements
-     */
-
+    /// Returns an persistent set that contains the provided elements.
+    ///
+    /// @param elements elements
+    /// @param <E>      the element type
+    /// @return an persistent set of the provided elements
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
     public static <E> ChampVectorSet<E> of(E @Nullable ... elements) {
@@ -307,9 +285,7 @@ public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /// {@inheritDoc}
     @Override
     public <T> ChampVectorSet<T> empty() {
         return of();
@@ -410,15 +386,13 @@ public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E
         return remove(getLast());
     }
 
-    /**
-     * Renumbers the sequenced elements in the trie if necessary.
-     *
-     * @param root   the root of the trie
-     * @param vector the root of the vector
-     * @param size   the size of the trie
-     * @param offset the offset that must be added to a sequence number to get the index into the vector
-     * @return a new {@link ChampVectorSet} instance
-     */
+    /// Renumbers the sequenced elements in the trie if necessary.
+    ///
+    /// @param root   the root of the trie
+    /// @param vector the root of the vector
+    /// @param size   the size of the trie
+    /// @param offset the offset that must be added to a sequence number to get the index into the vector
+    /// @return a new [ChampVectorSet] instance
     private ChampVectorSet<E> renumber(
             BitmapIndexedNode<SequencedElement<E>> root,
             VectorList<Object> vector,
@@ -472,14 +446,12 @@ public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E
         return new MutableChampVectorSet<>(this);
     }
 
-    /**
-     * Returns a string representation of this set.
-     * <p>
-     * The string representation is consistent with the one produced
-     * by {@link AbstractSet#toString()}.
-     *
-     * @return a string representation
-     */
+    /// Returns a string representation of this set.
+    ///
+    /// The string representation is consistent with the one produced
+    /// by [AbstractSet#toString()].
+    ///
+    /// @return a string representation
     @Override
     public String toString() {
         return ReadableCollection.iterableToString(this);

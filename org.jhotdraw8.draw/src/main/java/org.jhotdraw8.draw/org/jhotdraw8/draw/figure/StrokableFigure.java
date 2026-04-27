@@ -27,108 +27,87 @@ import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.BasicStroke;
 import java.util.ArrayList;
 import java.util.Objects;
 
-/**
- * Interface for figures which render a {@code javafx.scene.shape.Shape} and can
- * be stroked.
- *
- */
+/// Interface for figures which render a `javafx.scene.shape.Shape` and can
+/// be stroked.
 public interface StrokableFigure extends Figure {
 
-    /**
-     * Defines the distance in user coordinates for the dashing pattern. Default
-     * value: {@code 0}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the distance in user coordinates for the dashing pattern. Default
+    /// value: `0`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     CssSizeStyleableKey STROKE_DASH_OFFSET = new CssSizeStyleableKey("stroke-dashoffset", CssSize.ZERO);
-    /**
-     * Defines the end cap style. Default value: {@code SQUARE}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the end cap style. Default value: `SQUARE`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     NonNullEnumStyleableKey<StrokeLineCap> STROKE_LINE_CAP = new NonNullEnumStyleableKey<>("stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
-    /**
-     * Defines the style applied where path segments meet. Default value:
-     * {@code MITER}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the style applied where path segments meet. Default value:
+    /// `MITER`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     NonNullEnumStyleableKey<StrokeLineJoin> STROKE_LINE_JOIN = new NonNullEnumStyleableKey<>("stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
-    /**
-     * Defines the limit for the {@code StrokeLineJoin.MITER} style.
-     * <p>
-     * Default value: {@code 4.0}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the limit for the `StrokeLineJoin.MITER` style.
+    ///
+    /// Default value: `4.0`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     CssSizeStyleableKey STROKE_MITER_LIMIT = new CssSizeStyleableKey("stroke-miterlimit", CssSize.of(4.0));
-    /**
-     * Defines the paint used for filling the outline of the figure. Default
-     * value: {@code Color.BLACK}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the paint used for filling the outline of the figure. Default
+    /// value: `Color.BLACK`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     NullablePaintableStyleableKey STROKE = new NullablePaintableStyleableKey("stroke", new CssColor("canvastext", Color.BLACK));
-    /**
-     * Defines the stroke type used for drawing outline of the figure.
-     * <p>
-     * Default value: {@code StrokeType.CENTERED}.
-     */
+    /// Defines the stroke type used for drawing outline of the figure.
+    ///
+    /// Default value: `StrokeType.CENTERED`.
     NonNullEnumStyleableKey<StrokeType> STROKE_TYPE = new NonNullEnumStyleableKey<>("stroke-type", StrokeType.class, StrokeType.CENTERED);
-    /**
-     * Defines the width of the outline of the figure.
-     * <p>
-     * Default value: {@code 1.0}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the width of the outline of the figure.
+    ///
+    /// Default value: `1.0`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     CssSizeStyleableKey STROKE_WIDTH = new CssSizeStyleableKey("stroke-width", CssSize.ONE);
-    /**
-     * Defines the dash array used. Default value: {@code empty array}.
-     * <p>
-     * References:
-     * <dl>
-     * <dt>SVG Stroke Properties</dt>
-     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
-     * </dl>
-     */
+    /// Defines the dash array used. Default value: `empty array`.
+    ///
+    /// References:
+    /// <dl>
+    /// <dt>SVG Stroke Properties</dt>
+    /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+    /// </dl>
     NonNullListStyleableKey<CssSize> STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("stroke-dasharray",
             CssSize.class,
             new SizeCssConverter(false), VectorList.of());
 
-    /**
-     * Combined map accessor for all stroke style properties.
-     * <p>
-     * Note: this is a non-standard composite map accessor and thus transient!
-     */
+    /// Combined map accessor for all stroke style properties.
+    ///
+    /// Note: this is a non-standard composite map accessor and thus transient!
     @Nullable StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("stroke-style",
             STROKE_TYPE, STROKE_LINE_CAP, STROKE_LINE_JOIN, STROKE_MITER_LIMIT, STROKE_DASH_OFFSET, STROKE_DASH_ARRAY);
 
@@ -172,12 +151,10 @@ public interface StrokableFigure extends Figure {
         }
     }
 
-    /**
-     * Updates a shape node.
-     *
-     * @param ctx   the render context
-     * @param shape a shape node
-     */
+    /// Updates a shape node.
+    ///
+    /// @param ctx   the render context
+    /// @param shape a shape node
     default void applyStrokableFigureProperties(@Nullable RenderContext ctx, Shape shape) {
         applyStrokeColorProperties(ctx, shape);
         applyStrokeWidthProperties(ctx, shape);

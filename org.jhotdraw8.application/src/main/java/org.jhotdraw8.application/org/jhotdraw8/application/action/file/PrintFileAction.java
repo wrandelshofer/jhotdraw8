@@ -14,24 +14,19 @@ import org.jhotdraw8.application.action.AbstractActivityAction;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 
-/**
- * Presents a printer chooser to the user and then prints the
- * {@link FileBasedActivity}.
- * <p>
- * This action requires that the view implements the {@code PrintableView}
- * interface.
- *
- */
+/// Presents a printer chooser to the user and then prints the
+/// [FileBasedActivity].
+///
+/// This action requires that the view implements the `PrintableView`
+/// interface.
 public class PrintFileAction extends AbstractActivityAction<FileBasedActivity> {
 
     public static final String ID = "file.print";
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param activity the activity
-     */
+    /// Creates a new instance.
+    ///
+    /// @param activity the activity
     @SuppressWarnings("this-escape")
     public PrintFileAction(FileBasedActivity activity) {
         super(activity);

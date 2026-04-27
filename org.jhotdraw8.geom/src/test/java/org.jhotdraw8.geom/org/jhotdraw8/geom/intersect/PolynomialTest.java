@@ -16,10 +16,7 @@ import static java.lang.Math.sqrt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * PolynomialTest.
- *
- */
+/// PolynomialTest.
 public class PolynomialTest {
 
 

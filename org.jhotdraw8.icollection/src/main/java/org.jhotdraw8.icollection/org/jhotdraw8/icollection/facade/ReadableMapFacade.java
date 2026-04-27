@@ -16,12 +16,10 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Provides a {@link ReadableMap} facade to a set of {@code ReadableMap} functions.
- *
- * @param <K> the key type
- * @param <V> the value type
- */
+/// Provides a [ReadableMap] facade to a set of `ReadableMap` functions.
+///
+/// @param <K> the key type
+/// @param <V> the value type
 public class ReadableMapFacade<K, V> implements ReadableMap<K, V> {
     protected final Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction;
     protected final IntSupplier sizeFunction;

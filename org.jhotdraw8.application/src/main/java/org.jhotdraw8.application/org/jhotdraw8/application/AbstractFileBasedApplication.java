@@ -84,19 +84,16 @@ import java.util.logging.Logger;
 
 import static java.lang.Math.min;
 
-/**
- * An {@link AbstractFileBasedApplication} handles the life-cycle of {@link FileBasedActivity} objects and
- * provides stages to present them on screen.
- * <p>
- * This implementation supports the following command line parameters:
- * <pre>
- *     [path ...]
- * </pre>
- * <dl>
- * <dt>path</dt><dd>The URI to a file. Opens a {@link FileBasedActivity} for each provided path.</dd>
- * </dl>
- *
- */
+/// An [AbstractFileBasedApplication] handles the life-cycle of [FileBasedActivity] objects and
+/// provides stages to present them on screen.
+///
+/// This implementation supports the following command line parameters:
+/// <pre>
+///     [path...]
+/// </pre>
+/// <dl>
+/// <dt>path</dt><dd>The URI to a file. Opens a [FileBasedActivity] for each provided path.</dd>
+/// </dl>
 @SuppressWarnings("this-escape")
 public abstract class AbstractFileBasedApplication extends AbstractApplication implements FileBasedApplication {
 
@@ -107,9 +104,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     public static final String FILE_OPEN_RECENT_MENU = "file.openRecentMenu";
     private final Logger LOGGER = Logger.getLogger(AbstractFileBasedApplication.class.getName());
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         launch(args);
     }
@@ -152,13 +147,11 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         return activeActivity.getReadOnlyProperty();
     }
 
-    /**
-     * Creates a menu bar and sets it to the stage or to the system menu.
-     *
-     * @param stage   the stage, or null to set the system menu
-     * @param actions the action map
-     * @return the menu bar
-     */
+    /// Creates a menu bar and sets it to the stage or to the system menu.
+    ///
+    /// @param stage   the stage, or null to set the system menu
+    /// @param actions the action map
+    /// @return the menu bar
     protected @Nullable MenuBar createMenuBar(@Nullable FileBasedActivity activity, @Nullable Stage stage, Map<String, Action> actions) {
         Supplier<MenuBar> factory = getMenuBarFactory();
         MenuBar mb = factory == null ? null : factory.get();
@@ -286,21 +279,17 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         System.exit(0);
     }
 
-    /**
-     * Called immediately when a views needs to be activated.
-     *
-     * @param view the view
-     */
+    /// Called immediately when a views needs to be activated.
+    ///
+    /// @param view the view
     protected void onActivityActivated(FileBasedActivity view) {
 
     }
 
-    /**
-     * Called immediately after a view has been added to the views
-     * property.
-     *
-     * @param activity the activity
-     */
+    /// Called immediately after a view has been added to the views
+    /// property.
+    ///
+    /// @param activity the activity
     protected void onActivityAdded(FileBasedActivity activity) {
         activity.setApplication(this);
         activity.init();
@@ -405,21 +394,17 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         return stage;
     }
 
-    /**
-     * Called immediately when a view needs to be deactivated.
-     *
-     * @param view the view
-     */
+    /// Called immediately when a view needs to be deactivated.
+    ///
+    /// @param view the view
     protected void onActivityDeactivated(FileBasedActivity view) {
 
     }
 
-    /**
-     * Called immediately after a view has been removed from the views
-     * property.
-     *
-     * @param activity the view
-     */
+    /// Called immediately after a view has been removed from the views
+    /// property.
+    ///
+    /// @param activity the view
     protected void onActivityRemoved(FileBasedActivity activity) {
         Stage stage = (Stage) activity.getNode().getScene().getWindow();
         activity.stop();

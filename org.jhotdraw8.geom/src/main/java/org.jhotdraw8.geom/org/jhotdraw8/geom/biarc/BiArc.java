@@ -13,15 +13,13 @@ import java.awt.geom.Point2D;
 
 public record BiArc(Arc a1, Arc a2) {
 
-    /**
-     * Creates a new instance.
-     *
-     * @param p1 Start point
-     * @param t1 Tangent vector at P1
-     * @param p2 End point
-     * @param t2 Tangent vector at P2
-     * @param tp Transition point
-     */
+    /// Creates a new instance.
+    ///
+    /// @param p1 Start point
+    /// @param t1 Tangent vector at P1
+    /// @param p2 End point
+    /// @param t2 Tangent vector at P2
+    /// @param tp Transition point
     public static BiArc create(Point2D.Double p1, Point2D.Double t1, Point2D.Double p2, Point2D.Double t2, Point2D.Double tp) {
         // Calculate the orientation
         // https://en.wikipedia.org/wiki/Curve_orientation
@@ -83,12 +81,10 @@ public record BiArc(Arc a1, Arc a2) {
                 new Arc(C2, r2, startAngle2, sweepAngle2, tp, p2));
     }
 
-    /**
-     * Implements the parametric equation.
-     *
-     * @param t Parameter of the curve. Must be in [0,1]
-     * @return the point at t
-     */
+    /// Implements the parametric equation.
+    ///
+    /// @param t Parameter of the curve. Must be in [0,1]
+    /// @return the point at t
     public Point2D.Double pointAt(double t) {
         double s = a1.length() / (a1.length() + a2.length());
 

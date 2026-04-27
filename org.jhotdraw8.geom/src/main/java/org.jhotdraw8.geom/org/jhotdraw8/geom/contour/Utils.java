@@ -13,29 +13,21 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 public class Utils {
-    /**
-     * absolute threshold to be used for reals in common geometric computation (e.g. to check for
-     * singularities).
-     */
+    /// absolute threshold to be used for reals in common geometric computation (e.g. to check for
+    /// singularities).
     public static final double realPrecision = 1e-5;
-    /**
-     * absolute threshold to be used for joining slices together at end points
-     */
+    /// absolute threshold to be used for joining slices together at end points
     public static final double sliceJoinThreshold = 1e-4;
 
     public static final double tau = 2.0 * Math.PI;
     // absolute threshold to be used for pruning invalid slices for offset
     public static final double offsetThreshold = 1e-4;
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private Utils() {
     }
 
-    /**
-     * Test if a point is within an arc sweep angle region defined by center, start, end, and bulge.
-     */
+    /// Test if a point is within an arc sweep angle region defined by center, start, end, and bulge.
     static boolean pointWithinArcSweepAngle(final Point2D.Double center, final Point2D.Double arcStart,
                                             final Point2D.Double arcEnd, double bulge, final Point2D.Double point) {
         assert Math.abs(bulge) > Scalars.REAL_THRESHOLD : "expected arc";
@@ -49,10 +41,8 @@ public class Utils {
         return isRightOrCoincident(center, arcStart, point) && isLeftOrCoincident(center, arcEnd, point);
     }
 
-    /**
-     * Returns true if point is left or fuzzy coincident with the line pointing in the direction of the
-     * vector (p1 - p0).
-     */
+    /// Returns true if point is left or fuzzy coincident with the line pointing in the direction of the
+    /// vector (p1 - p0).
     static boolean isLeftOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
                                       final Point2D.Double point) {
         return isLeftOrCoincident(p0, p1, point, Scalars.REAL_THRESHOLD);
@@ -64,10 +54,8 @@ public class Utils {
                 -epsilon;
     }
 
-    /**
-     * Returns true if point is right or fuzzy coincident with the line pointing in the direction of
-     * the vector (p1 - p0).
-     */
+    /// Returns true if point is right or fuzzy coincident with the line pointing in the direction of
+    /// the vector (p1 - p0).
     static boolean isRightOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
                                        final Point2D.Double point) {
         return isRightOrCoincident(p0, p1, point, Scalars.REAL_THRESHOLD);
@@ -80,25 +68,19 @@ public class Utils {
     }
 
 
-    /**
-     * Return the point on the segment going from p0 to p1 at parametric value t.
-     */
+    /// Return the point on the segment going from p0 to p1 at parametric value t.
     public static Point2D.Double pointFromParametric(final Point2D.Double p0, final Point2D.Double p1, double t) {
         return Lines.lerp(p0, p1, t);
         //return Points2D.add(p0,Points2D.multiply(Points2D.subtract(p1,p0),t));
     }
 
-    /**
-     * Counter-clockwise angle of the vector going from p0 to p1.
-     */
+    /// Counter-clockwise angle of the vector going from p0 to p1.
     public static double angle(final Point2D.Double p0, final Point2D.Double p1) {
         return Angles.atan2(p1.getY() - p0.getY(), p1.getX() - p0.getX());
     }
 
-    /**
-     * Returns the smaller difference between two angles, result is negative if
-     * {@literal angle2 < angle1}.
-     */
+    /// Returns the smaller difference between two angles, result is negative if
+    /// {@literal angle2 < angle1}.
     public static double deltaAngle(double angle1, double angle2) {
         double diff = normalizeRadians(angle2 - angle1);
         if (diff > Math.PI) {
@@ -108,9 +90,7 @@ public class Utils {
         return diff;
     }
 
-    /**
-     * Normalize radians to be between 0 and 2PI, e.g. -PI/4 becomes 7PI/8 and 5PI becomes PI.
-     */
+    /// Normalize radians to be between 0 and 2PI, e.g. -PI/4 becomes 7PI/8 and 5PI becomes PI.
     public static double normalizeRadians(double angle) {
         if (angle >= 0.0 && angle < tau) {
             return angle;
@@ -119,9 +99,7 @@ public class Utils {
         return angle - Math.floor(angle / tau) * tau;
     }
 
-    /**
-     * Normalized perpendicular vector to v (rotating counter clockwise).
-     */
+    /// Normalized perpendicular vector to v (rotating counter clockwise).
     public static Point2D.Double unitPerp(Point2D.Double v) {
         Point2D.Double result = new Point2D.Double(-v.getY(), v.getX());
         return Points2D.normalize(result);

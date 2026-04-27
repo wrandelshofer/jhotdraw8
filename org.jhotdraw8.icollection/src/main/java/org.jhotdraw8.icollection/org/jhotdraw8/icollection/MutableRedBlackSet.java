@@ -25,47 +25,41 @@ import java.util.SortedSet;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 
-/**
- * Implements the {@link NavigableSet} interface using a Red-Black tree.
- * <p>
- * References:
- * <p>
- * For a similar design, see 'TreeSet.java' in vavr. The internal data structure of
- * this class is licensed from vavr.
- * <dl>
- *     <dt>TreeSet.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
- *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/TreeSet.java">github.com</a></dd>
- * </dl>
- *
- * @param <E> the element type
- */
+/// Implements the [NavigableSet] interface using a Red-Black tree.
+///
+/// References:
+///
+/// For a similar design, see 'TreeSet.java' in vavr. The internal data structure of
+/// this class is licensed from vavr.
+/// <dl>
+///     <dt>TreeSet.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
+///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/TreeSet.java">github.com</a></dd>
+/// </dl>
+///
+/// @param <E> the element type
 public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSet<E>, Serializable, Cloneable, ReadableNavigableSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
     @SuppressWarnings({"serial", "RedundantSuppression"})// Conditionally serializable
     final Comparator<E> comparator;
-    /**
-     * The number of times this set has been structurally modified.
-     */
+    /// The number of times this set has been structurally modified.
     protected transient int modCount;
     transient RedBlackTree<E, Void> root;
-    /**
-     * Constructs a new, empty set, sorted according to the
-     * specified comparator.
-     *
-     * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
-     */
+
+    /// Constructs a new, empty set, sorted according to the
+    /// specified comparator.
+    ///
+    /// @param comparator a comparator, if `null` the natural ordering of the elements is used
     public MutableRedBlackSet(@Nullable Comparator<E> comparator) {
         this.comparator = comparator == null ? NaturalComparator.instance() : comparator;
         this.root = RedBlackTree.empty();
     }
-    /**
-     * Constructs a new tree set containing the elements in the specified
-     * collection, sorted according to the specified comparator.
-     *
-     * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
-     * @param c          the collection
-     */
+
+    /// Constructs a new tree set containing the elements in the specified
+    /// collection, sorted according to the specified comparator.
+    ///
+    /// @param comparator a comparator, if `null` the natural ordering of the elements is used
+    /// @param c          the collection
     @SuppressWarnings("this-escape")
     public MutableRedBlackSet(@Nullable Comparator<E> comparator, Collection<? extends E> c) {
         this.comparator = comparator == null ? NaturalComparator.instance() : comparator;
@@ -73,23 +67,19 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         this.addAll(c);
     }
 
-    /**
-     * Constructs a new, empty set, sorted according to the
-     * <i>natural ordering</i> of its elements.
-     */
+    /// Constructs a new, empty set, sorted according to the
+    /// _natural ordering_ of its elements.
     @SuppressWarnings("this-escape")
     public MutableRedBlackSet() {
         this.comparator = NaturalComparator.instance();
         this.root = RedBlackTree.empty();
     }
 
-    /**
-     * Constructs a new tree set containing the elements in the specified
-     * collection, sorted according to the <i>natural ordering</i> of its
-     * elements.
-     *
-     * @param c the collection
-     */
+    /// Constructs a new tree set containing the elements in the specified
+    /// collection, sorted according to the _natural ordering_ of its
+    /// elements.
+    ///
+    /// @param c the collection
     @SuppressWarnings("this-escape")
     public MutableRedBlackSet(Iterable<? extends E> c) {
         this.comparator = NaturalComparator.instance();
@@ -193,11 +183,9 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return last();
     }
 
-    /**
-     * Returns the current value of the modification counter.
-     *
-     * @return value of modification counter
-     */
+    /// Returns the current value of the modification counter.
+    ///
+    /// @return value of modification counter
     protected int getModCount() {
         return modCount;
     }
@@ -335,11 +323,9 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     }
 
 
-    /**
-     * Returns an persistent copy of this set.
-     *
-     * @return an persistent copy
-     */
+    /// Returns an persistent copy of this set.
+    ///
+    /// @return an persistent copy
     public RedBlackSet<E> toPersistent() {
         return new RedBlackSet<>(comparator, root);
     }

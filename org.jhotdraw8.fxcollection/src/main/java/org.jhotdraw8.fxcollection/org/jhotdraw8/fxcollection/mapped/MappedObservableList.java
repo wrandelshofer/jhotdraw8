@@ -13,13 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-/**
- * Maps an {@link ObservableList} in an {@link ObservableList} of a different
- * element type.
- *
- * @param <A> the element type of this list
- * @param <B> the element type of the source list
- */
+/// Maps an [ObservableList] in an [ObservableList] of a different
+/// element type.
+///
+/// @param <A> the element type of this list
+/// @param <B> the element type of the source list
 public class MappedObservableList<A, B> extends TransformationList<A, B> {
 
     private final Function<A, B> toB;
@@ -98,13 +96,11 @@ public class MappedObservableList<A, B> extends TransformationList<A, B> {
         src.remove(from, to);
     }
 
-    /**
-     * Maps a {@link ListChangeListener.Change} in a {@link ListChangeListener.Change}
-     * of a different element type.
-     *
-     * @param <A> the new element type
-     * @param <B> the original element type
-     */
+    /// Maps a [ListChangeListener.Change] in a [ListChangeListener.Change]
+    /// of a different element type.
+    ///
+    /// @param <A> the new element type
+    /// @param <B> the original element type
     public static class ChangeProxy<B, A> extends ListChangeListener.Change<A> {
 
         private final ListChangeListener.Change<? extends B> change;

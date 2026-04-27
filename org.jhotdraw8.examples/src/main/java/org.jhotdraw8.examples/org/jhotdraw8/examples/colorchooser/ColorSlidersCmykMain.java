@@ -22,23 +22,21 @@ import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 
 import java.util.List;
 
-/**
- * Show sliders for RGB color spaces.
- * <pre>
- * +-----------------+
- * |   cyan →        |
- * +-----------------+
- * +-----------------+
- * |   magenta →     |
- * +-----------------+
- * +-----------------+
- * |   yellow →      |
- * +-----------------+
- * +-----------------+
- * |   black →       |
- * +-----------------+
- * </pre>
- */
+/// Show sliders for RGB color spaces.
+/// <pre>
+/// +-----------------+
+/// |   cyan →        |
+/// +-----------------+
+/// +-----------------+
+/// |   magenta →     |
+/// +-----------------+
+/// +-----------------+
+/// |   yellow →      |
+/// +-----------------+
+/// +-----------------+
+/// |   black →       |
+/// +-----------------+
+/// </pre>
 public class ColorSlidersCmykMain extends AbstractColorSlidersMain {
 
     @Override
@@ -113,9 +111,7 @@ public class ColorSlidersCmykMain extends AbstractColorSlidersMain {
         primaryStage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    /// @param args the command line arguments
     public static void main(String[] args) {
         launch(args);
     }

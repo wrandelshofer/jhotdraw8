@@ -28,10 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * AbstractFigure.
- *
- */
+/// AbstractFigure.
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         implements Figure, TransformCachingFigure {
 
@@ -65,33 +62,27 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         });
     }
 
-    /**
-     * This method calls {@link #doAddedToDrawing}.
-     *
-     * @param drawing the drawing
-     */
+    /// This method calls [#doAddedToDrawing].
+    ///
+    /// @param drawing the drawing
     @Override
     public final void addedToDrawing(Drawing drawing) {
         this.drawing = drawing;
         doAddedToDrawing(drawing);
     }
 
-    /**
-     * This method is called by {@link Figure#addedToDrawing}. The implementation of this
-     * class is empty.
-     *
-     * @param drawing the drawing
-     */
+    /// This method is called by [Figure#addedToDrawing]. The implementation of this
+    /// class is empty.
+    ///
+    /// @param drawing the drawing
     protected void doAddedToDrawing(Drawing drawing) {
 
     }
 
-    /**
-     * This method is called by {@link #removedFromDrawing}. The implementation of
-     * this class is empty.
-     *
-     * @param drawing the drawing
-     */
+    /// This method is called by [#removedFromDrawing]. The implementation of
+    /// this class is empty.
+    ///
+    /// @param drawing the drawing
     protected void doRemovedFromDrawing(Drawing drawing) {
 
     }
@@ -136,27 +127,21 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         return parent;
     }
 
-    /**
-     * This implementation is empty.
-     */
+    /// This implementation is empty.
     @Override
     public void removeAllLayoutSubjects() {
         // empty
     }
 
-    /**
-     * This implementation is empty.
-     *
-     * @param connectedFigure the connected figure
-     */
+    /// This implementation is empty.
+    ///
+    /// @param connectedFigure the connected figure
     @Override
     public void removeLayoutSubject(Figure connectedFigure) {
         // empty
     }
 
-    /**
-     * This method calls {@link #doAddedToDrawing}.
-     */
+    /// This method calls [#doAddedToDrawing].
     @Override
     public final void removedFromDrawing(Drawing drawing) {
         this.drawing = null;
@@ -236,16 +221,14 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         //invalidateTransforms();
     }
 
-    /**
-     * Overrides of this method must call super!
-     *
-     * @param key        the changed key
-     * @param oldValue   the old value
-     * @param newValue   the new value
-     * @param wasAdded   whether the value was added (hence oldValue does not matter)
-     * @param wasRemoved whether the value was removed (hence newValue does not matter)
-     * @param <T>        the value type of the property
-     */
+    /// Overrides of this method must call super!
+    ///
+    /// @param key        the changed key
+    /// @param oldValue   the old value
+    /// @param newValue   the new value
+    /// @param wasAdded   whether the value was added (hence oldValue does not matter)
+    /// @param wasRemoved whether the value was removed (hence newValue does not matter)
+    /// @param <T>        the value type of the property
     @Override
     protected <T> void onPropertyChanged(Key<T> key, T oldValue, T newValue, boolean wasAdded, boolean wasRemoved) {
         firePropertyChangeEvent(this, key, oldValue, newValue, wasAdded, wasRemoved);

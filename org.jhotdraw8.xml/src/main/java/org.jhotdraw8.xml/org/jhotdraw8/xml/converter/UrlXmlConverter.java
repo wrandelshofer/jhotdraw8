@@ -17,10 +17,7 @@ import java.net.URL;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-/**
- * XmlUrlConverter.
- *
- */
+/// XmlUrlConverter.
 public class UrlXmlConverter implements Converter<URL> {
 
     public UrlXmlConverter() {

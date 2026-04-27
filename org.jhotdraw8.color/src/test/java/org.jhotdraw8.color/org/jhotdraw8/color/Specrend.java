@@ -53,44 +53,28 @@ import static java.lang.Math.exp;
 import static java.lang.Math.max;
 import static java.lang.Math.pow;
 
-/**
- * Color rendering of spectra, based on {@code specrend} by John Walker.
- *
- * @author Werner Randelshofer
- * @version 1.0 2011-02-25 Created.
- */
+/// Color rendering of spectra, based on `specrend` by John Walker.
+///
+/// @author Werner Randelshofer
+/// @version 1.0 2011-02-25 Created.
 public class Specrend {
 
-    /**
-     * A colour system is defined by the CIE x and y coordinates of
-     * its three primary illuminants and the x and y coordinates of
-     * the white point.
-     */
+    /// A colour system is defined by the CIE x and y coordinates of
+    /// its three primary illuminants and the x and y coordinates of
+    /// the white point.
     public static class ColourSystem {
 
-        /**
-         * Colour system name.
-         */
+        /// Colour system name.
         String name;
-        /**
-         * Red x, y
-         */
+        /// Red x, y
         double xRed, yRed;
-        /**
-         * Green x, y
-         */
+        /// Green x, y
         double xGreen, yGreen;
-        /**
-         * Blue x, y
-         */
+        /// Blue x, y
         double xBlue, yBlue;
-        /**
-         * White point x, y
-         */
+        /// White point x, y
         double xWhite, yWhite;
-        /**
-         * Gamma correction for system
-         */
+        /// Gamma correction for system
         double gamma;
 
         public ColourSystem(String name, double xRed, double yRed, double xGreen, double yGreen, double xBlue, double yBlue, double xWhite, double yWhite, double gamma) {
@@ -120,28 +104,20 @@ public class Specrend {
         }
     }
 
-    /**
-     * White point chromaticities for NTSC television.
-     */
+    /// White point chromaticities for NTSC television.
     private final static double[] IlluminantC = {0.3101, 0.3162};
-    /**
-     * White point chromaticities for EBU and SMPTE.
-     */
+    /// White point chromaticities for EBU and SMPTE.
     private final static double[] IlluminantD65 = {0.3127, 0.3291};
-    /**
-     * White point chromaticities for CIE equal-energy illuminant.
-     */
+    /// White point chromaticities for CIE equal-energy illuminant.
     private final static double[] IlluminantE = {0.33333333, 0.33333333};
-    /**
-     * Gamma of nonlinear correction.
-     * <p>
-     * See Charles Poynton's ColorFAQ Item 45 and GammaFAQ Item 6 at:
-     * <p>
-     * http://www.poynton.com/ColorFAQ.html
-     * http://www.poynton.com/GammaFAQ.html
-     * <p>
-     * Rec. 709
-     */
+    /// Gamma of nonlinear correction.
+    ///
+    /// See Charles Poynton's ColorFAQ Item 45 and GammaFAQ Item 6 at:
+    ///
+    /// http://www.poynton.com/ColorFAQ.html
+    /// http://www.poynton.com/GammaFAQ.html
+    ///
+    /// Rec. 709
     private final static double GAMMA_REC709 = 0;
     public final static ColourSystem /* Name                  xRed    yRed    xGreen  yGreen  xBlue  yBlue    White point        Gamma   */ NTSCsystem = new ColourSystem("NTSC", 0.67, 0.33, 0.21, 0.71, 0.14, 0.08, IlluminantC, GAMMA_REC709),
             EBUsystem = new ColourSystem("EBU (PAL/SECAM)", 0.64, 0.33, 0.29, 0.60, 0.15, 0.06, IlluminantD65, GAMMA_REC709),
@@ -333,17 +309,13 @@ public class Specrend {
         }
     }
 
-    /**
-     * Interface for the spectral intensity function used by spectrum_to_xyz.
-     */
+    /// Interface for the spectral intensity function used by spectrum_to_xyz.
     public static interface SpecIntens {
 
-        /**
-         * Returns the spectral intensity for the given wavelength.
-         *
-         * @param wavelength Wavelength in meters.
-         * @return Emittance at that wavelength in arbitrary units.
-         */
+        /// Returns the spectral intensity for the given wavelength.
+        ///
+        /// @param wavelength Wavelength in meters.
+        /// @return Emittance at that wavelength in arbitrary units.
         double specIntens(double wavelength);
     }
 
@@ -433,11 +405,9 @@ public class Specrend {
                 / (exp(1.4388e-2 / (wlm * bbTemp)) - 1.0);
     }
 
-    /**
-     * Returns the XYZ color for a black body of temperature bbTemp.
-     *
-     * @param bbTemp The temperature of the black body in kelvin.
-     */
+    /// Returns the XYZ color for a black body of temperature bbTemp.
+    ///
+    /// @param bbTemp The temperature of the black body in kelvin.
     public static void bb_to_xyz(final double bbTemp,
                                  double[] xyz) {
 
@@ -450,33 +420,31 @@ public class Specrend {
         }, xyz);
     }
 
-    /**
-     * Built-in test program which displays the x, y, and Z and RGB
-     * values for black body spectra from 1000 to 10000 degrees kelvin.
-     * When run, this program should produce the following output:
-     * <p>
-     * Temperature       x      y      z       R     G     B
-     * -----------    ------ ------ ------   ----- ----- -----
-     * 1000 K      0.6528 0.3444 0.0028   1.000 0.007 0.000 (Approximation)
-     * 1500 K      0.5857 0.3931 0.0212   1.000 0.126 0.000 (Approximation)
-     * 2000 K      0.5267 0.4133 0.0600   1.000 0.234 0.010
-     * 2500 K      0.4770 0.4137 0.1093   1.000 0.349 0.067
-     * 3000 K      0.4369 0.4041 0.1590   1.000 0.454 0.151
-     * 3500 K      0.4053 0.3907 0.2040   1.000 0.549 0.254
-     * 4000 K      0.3805 0.3768 0.2428   1.000 0.635 0.370
-     * 4500 K      0.3608 0.3636 0.2756   1.000 0.710 0.493
-     * 5000 K      0.3451 0.3516 0.3032   1.000 0.778 0.620
-     * 5500 K      0.3325 0.3411 0.3265   1.000 0.837 0.746
-     * 6000 K      0.3221 0.3318 0.3461   1.000 0.890 0.869
-     * 6500 K      0.3135 0.3237 0.3628   1.000 0.937 0.988
-     * 7000 K      0.3064 0.3166 0.3770   0.907 0.888 1.000
-     * 7500 K      0.3004 0.3103 0.3893   0.827 0.839 1.000
-     * 8000 K      0.2952 0.3048 0.4000   0.762 0.800 1.000
-     * 8500 K      0.2908 0.3000 0.4093   0.711 0.766 1.000
-     * 9000 K      0.2869 0.2956 0.4174   0.668 0.738 1.000
-     * 9500 K      0.2836 0.2918 0.4246   0.632 0.714 1.000
-     * 10000 K      0.2807 0.2884 0.4310   0.602 0.693 1.000
-     */
+    /// Built-in test program which displays the x, y, and Z and RGB
+    /// values for black body spectra from 1000 to 10000 degrees kelvin.
+    /// When run, this program should produce the following output:
+    ///
+    /// Temperature       x      y      z       R     G     B
+    /// -----------    ------ ------ ------   ----- ----- -----
+    /// 1000 K      0.6528 0.3444 0.0028   1.000 0.007 0.000 (Approximation)
+    /// 1500 K      0.5857 0.3931 0.0212   1.000 0.126 0.000 (Approximation)
+    /// 2000 K      0.5267 0.4133 0.0600   1.000 0.234 0.010
+    /// 2500 K      0.4770 0.4137 0.1093   1.000 0.349 0.067
+    /// 3000 K      0.4369 0.4041 0.1590   1.000 0.454 0.151
+    /// 3500 K      0.4053 0.3907 0.2040   1.000 0.549 0.254
+    /// 4000 K      0.3805 0.3768 0.2428   1.000 0.635 0.370
+    /// 4500 K      0.3608 0.3636 0.2756   1.000 0.710 0.493
+    /// 5000 K      0.3451 0.3516 0.3032   1.000 0.778 0.620
+    /// 5500 K      0.3325 0.3411 0.3265   1.000 0.837 0.746
+    /// 6000 K      0.3221 0.3318 0.3461   1.000 0.890 0.869
+    /// 6500 K      0.3135 0.3237 0.3628   1.000 0.937 0.988
+    /// 7000 K      0.3064 0.3166 0.3770   0.907 0.888 1.000
+    /// 7500 K      0.3004 0.3103 0.3893   0.827 0.839 1.000
+    /// 8000 K      0.2952 0.3048 0.4000   0.762 0.800 1.000
+    /// 8500 K      0.2908 0.3000 0.4093   0.711 0.766 1.000
+    /// 9000 K      0.2869 0.2956 0.4174   0.668 0.738 1.000
+    /// 9500 K      0.2836 0.2918 0.4246   0.632 0.714 1.000
+    /// 10000 K      0.2807 0.2884 0.4310   0.602 0.693 1.000
     public static void main(String[] args) {
         double t;
         double[] xyz = new double[3], rgb = new double[3];

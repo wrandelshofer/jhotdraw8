@@ -11,19 +11,15 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.function.BiFunction;
 
-/**
- * Represents an indexed vertex back link with depth.
- */
+/// Represents an indexed vertex back link with depth.
 public class IndexedVertexBackLink extends AbstractBackLink<IndexedVertexBackLink> {
 
     final int vertex;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param vertex the vertex index
-     * @param parent the parent back link
-     */
+    /// Creates a new instance.
+    ///
+    /// @param vertex the vertex index
+    /// @param parent the parent back link
     public IndexedVertexBackLink(int vertex, @Nullable IndexedVertexBackLink parent) {
         super(parent);
         this.vertex = vertex;
@@ -34,16 +30,14 @@ public class IndexedVertexBackLink extends AbstractBackLink<IndexedVertexBackLin
         return vertex;
     }
 
-    /**
-     * Converts an {@link IndexedVertexBackLink} to {@link IndexedVertexBackLinkWithCost}.
-     *
-     * @param node         the {@link IndexedVertexBackLink}
-     * @param zero         the zero cost value
-     * @param costFunction the cost function
-     * @param sumFunction  the sum function for cost values
-     * @param <CC>         the cost number type
-     * @return the converted {@link IndexedVertexBackLinkWithCost}
-     */
+    /// Converts an [IndexedVertexBackLink] to [IndexedVertexBackLinkWithCost].
+    ///
+    /// @param node         the [IndexedVertexBackLink]
+    /// @param zero         the zero cost value
+    /// @param costFunction the cost function
+    /// @param sumFunction  the sum function for cost values
+    /// @param <CC>         the cost number type
+    /// @return the converted [IndexedVertexBackLinkWithCost]
     public static <CC extends Number & Comparable<CC>> @Nullable IndexedVertexBackLinkWithCost<CC>
     toIndexedVertexBackLinkWithCost(@Nullable IndexedVertexBackLink node,
                                     CC zero,

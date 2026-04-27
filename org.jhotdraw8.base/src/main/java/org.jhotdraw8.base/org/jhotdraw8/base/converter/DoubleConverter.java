@@ -9,9 +9,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.Locale;
 
-/**
- * Converts a Java double from/to String.
- */
+/// Converts a Java double from/to String.
 public class DoubleConverter implements Converter<Double> {
     private final boolean nullable;
     private final boolean usesScientificNotation = true;

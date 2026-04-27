@@ -9,13 +9,10 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jspecify.annotations.Nullable;
 
 
-/**
- * TransformCachingFigure.
- * <p>
- * This implementation is somewhat inefficient because we store the cached
- * values in a map.
- *
- */
+/// TransformCachingFigure.
+///
+/// This implementation is somewhat inefficient because we store the cached
+/// values in a map.
 public interface TransformCachingFigure extends Figure {
     boolean CACHE = true;
 

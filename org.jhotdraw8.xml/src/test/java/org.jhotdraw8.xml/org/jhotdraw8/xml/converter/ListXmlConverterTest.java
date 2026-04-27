@@ -21,18 +21,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * XmlListConverterTest.
- *
- */
+/// XmlListConverterTest.
 public class ListXmlConverterTest {
 
     public ListXmlConverterTest() {
     }
 
-    /**
-     * Test of toString method.
-     */
+    /// Test of toString method.
     public void testToString(@Nullable List<Double> value, String expected) throws Exception {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
@@ -42,9 +37,7 @@ public class ListXmlConverterTest {
         Assertions.assertEquals(expected, actual);
     }
 
-    /**
-     * Test of fromString method with a {@code Double} element type.
-     */
+    /// Test of fromString method with a `Double` element type.
     public void testDoubleFromString(List<Double> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -53,9 +46,7 @@ public class ListXmlConverterTest {
         Assertions.assertEquals(expected, actual.toMutable());
     }
 
-    /**
-     * Test of fromString method with a {@code Double} element type.
-     */
+    /// Test of fromString method with a `Double` element type.
     public void testIllegalDoubleFromString(String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -63,9 +54,7 @@ public class ListXmlConverterTest {
         Assertions.assertThrows(ParseException.class, () -> instance.fromString(buf, idFactory));
     }
 
-    /**
-     * Test of fromString method with a {@code Double} element type and "=>" delimiter.
-     */
+    /// Test of fromString method with a `Double` element type and "=>" delimiter.
     public void testDoubleArrowFromString(List<Double> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -74,9 +63,7 @@ public class ListXmlConverterTest {
         Assertions.assertEquals(expected, actual.toMutable());
     }
 
-    /**
-     * Test of fromString method with a {@code Double} element type and "=>" delimiter.
-     */
+    /// Test of fromString method with a `Double` element type and "=>" delimiter.
     public void testIllegalDoubleArrowFromString(String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -86,9 +73,7 @@ public class ListXmlConverterTest {
     }
 
 
-    /**
-     * Test of fromString method with a {@code String} element type.
-     */
+    /// Test of fromString method with a `String` element type.
     public void testStringFromString(List<String> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;

@@ -11,22 +11,18 @@ import java.util.Deque;
 import java.util.Objects;
 import java.util.function.Function;
 
-/**
- * DepthFirstSpliterator for a tree structure.
- *
- * @param <V> the vertex data type
- */
+/// DepthFirstSpliterator for a tree structure.
+///
+/// @param <V> the vertex data type
 public class TreeDepthFirstSpliterator<V> extends AbstractEnumerator<V> {
 
     private final Function<V, Iterable<V>> nextFunction;
     private final Deque<V> deque;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param nextFunction the nextFunction
-     * @param root         the root vertex
-     */
+    /// Creates a new instance.
+    ///
+    /// @param nextFunction the nextFunction
+    /// @param root         the root vertex
     public TreeDepthFirstSpliterator(Function<V, Iterable<V>> nextFunction, V root) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         Objects.requireNonNull(nextFunction, "nextFunction");

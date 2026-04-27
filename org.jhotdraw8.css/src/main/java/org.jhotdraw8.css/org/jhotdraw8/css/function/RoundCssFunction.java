@@ -18,30 +18,26 @@ import java.util.Deque;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * Processes the {@code round()} function.
- * <pre>
- * round               = "round(", [ rounding-strategy , "," ] , calc-sum , [ "," , calc-sum ] ")" ;
- * rounding-strategy   = "nearest" | "up" | "down" | "to-zero" ;
- * calc-sum            = (* see superclass *)
- * </pre>
- * <dl>
- *     <dt>CSS Values and Units Module Level 4.
- *     Paragraph 10.3. Stepped Value Functions: round(), mod(), and rem()</dt>
- *     <dd><a href="https://drafts.csswg.org/css-values/#round-func">csswg.org</a></dd>
- * </dl>
- * <dl>
- *     <dt>CSS Values and Units Module Level 4.
- *     Paragraph 10.8. Syntax</dt>
- *     <dd><a href="https://drafts.csswg.org/css-values/#calc-syntax">csswg.org</a></dd>
- * </dl>
- *
- * @param <T> the element type of the DOM
- */
+/// Processes the `round()` function.
+/// <pre>
+/// round               = "round(", [rounding-strategy,","] , calc-sum , [",",calc-sum] ")" ;
+/// rounding-strategy   = "nearest" | "up" | "down" | "to-zero" ;
+/// calc-sum            = (* see superclass *)
+/// </pre>
+/// <dl>
+///     <dt>CSS Values and Units Module Level 4.
+///     Paragraph 10.3. Stepped Value Functions: round(), mod(), and rem()</dt>
+///     <dd><a href="https://drafts.csswg.org/css-values/#round-func">csswg.org</a></dd>
+/// </dl>
+/// <dl>
+///     <dt>CSS Values and Units Module Level 4.
+///     Paragraph 10.8. Syntax</dt>
+///     <dd><a href="https://drafts.csswg.org/css-values/#calc-syntax">csswg.org</a></dd>
+/// </dl>
+///
+/// @param <T> the element type of the DOM
 public class RoundCssFunction<T> extends CalcCssFunction<T> {
-    /**
-     * Function name.
-     */
+    /// Function name.
     public static final String NAME = "round";
 
     public RoundCssFunction(String name) {

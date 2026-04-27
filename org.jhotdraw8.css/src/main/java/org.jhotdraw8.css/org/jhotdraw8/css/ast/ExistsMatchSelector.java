@@ -12,23 +12,18 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * An "exists match" matches an element if the element has an attribute with the
- * specified name.
- *
- */
+/// An "exists match" matches an element if the element has an attribute with the
+/// specified name.
 public class ExistsMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;
     private final String attributeName;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param sourceLocator source locator for debugging
-     * @param namespacePattern an optional namespace ("*" means any namespace,
-     *                         null means no namespace)
-     * @param attributeName the attribute name
-     */
+    /// Creates a new instance.
+    ///
+    /// @param sourceLocator    source locator for debugging
+    /// @param namespacePattern an optional namespace ("*" means any namespace,
+    ///                         null means no namespace)
+    /// @param attributeName    the attribute name
     public ExistsMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, String attributeName) {
         super(sourceLocator);
         this.namespacePattern = namespacePattern;

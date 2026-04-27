@@ -18,19 +18,14 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Set;
 
-/**
- * RemoveTransformationsAction.
- *
- */
+/// RemoveTransformationsAction.
 public class RemoveTransformationsAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.removeTransformations";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     public RemoveTransformationsAction(DrawingEditor editor) {
         super(editor);
         Resources labels

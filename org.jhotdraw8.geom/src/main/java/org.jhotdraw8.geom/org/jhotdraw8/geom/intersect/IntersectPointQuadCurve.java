@@ -20,58 +20,57 @@ public class IntersectPointQuadCurve {
     private IntersectPointQuadCurve() {
     }
 
-    /**
-     * Computes the intersection between a quadratic bezier curve and a point
-     * with a tolerance radius.
-     * <p>
-     * This method solves the last equation shown in the list below.
-     * <ol>
-     * <li>{@literal (1 - t)²·p0 + 2·(1 - t)·t·p1 + t²·p2 , 0 ≤ t ≤ 1 }<br>
-     * : quadratic bezier equation, vector form
-     * </li>
-     * <li>{@literal  (p0 - 2·p1 + p2)·t² - 2·(p0 - p1)·t + p0 }<br>
-     * : expanded, and then collected for t
-     * </li>
-     * <li>{@literal c2·t² + c1·t + c0 }<br>
-     * : coefficients compacted
-     * </li>
-     * <li>{@literal c2x·t² + c1x·t + c0x , c2y·t² + c1y·t + c0y }<br>
-     * : bezier equation in matrix form
-     * </li>
-     * <li>{@literal fx , fy }<br>
-     * : compacted matrix form
-     * </li>
-     * <li>{@literal (fx - cx)² + (fy - cy)² = 0 }<br>
-     * : distance to point equation, with fx, fy inserted from matrix form
-     * </li>
-     * <li>{@literal c2x²·t⁴ + 2·c1x·c2x·t³ + (c1x² - 2·cx·c2x + 2·c0x·c2x)·t² + cx² - 2·cx·c0x + c0x² - 2·(cx·c1x - c0x·c1x)·t
-     * }<br> {@literal + ..same for y-axis... }<br>
-     * : coefficients expanded
-     * </li>
-     * <li>{@literal (c2x^2 + c2y^2)*t^4 }<br>
-     * {@literal + 2*(c1x*c2x + c1y*c2y)*t^3 }<br>
-     * {@literal + (c1x ^ 2 + c1y ^ 2 + 2 * c0x * c2x + 2 * c0y * c2y - 2 * c2x * cx - 2 * c2y * cy)*t^2 }<br>
-     * {@literal + c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2 + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t}<br>
-     * : coefficients collected for t</li>
-     * <li>{@literal a·t⁴ + b·t³ + c·t² + d·t + e = 0, 0 ≤ t ≤ 1 }<br>
-     * : final polynomial equation
-     * </li>
-     * <li>{@literal 4·a·t³ + 3·b·t² + 2·c·t + d = 0, 0 ≤ t ≤ 1 }<br>
-     * : derivative
-     * </li>
-     * </ol>
-     *
-     * @param x0 x-coordinate of control point 0 of the bezier curve
-     * @param y0 y-coordinate of control point 0 of the bezier curve
-     * @param x1 x-coordinate of control point P0 of the bezier curve
-     * @param y1 y-coordinate of control point P0 of the bezier curve
-     * @param x2 x-coordinate of control point P1 of the bezier curve
-     * @param y2 y-coordinate of control point P1 of the bezier curve
-     * @param cx x-coordinate of the point
-     * @param cy y-coordinate of the point
-     * @param r  the tolerance radius
-     * @return the intersection
-     */
+    /// Computes the intersection between a quadratic bezier curve and a point
+    /// with a tolerance radius.
+    ///
+    /// This method solves the last equation shown in the list below.
+    /// <ol>
+    ///   - {@literal (1 - t)²·p0 + 2·(1 - t)·t·p1 + t²·p2 , 0 ≤ t ≤ 1 }
+    ///     : quadratic bezier equation, vector form
+    ///
+    ///   - {@literal  (p0 - 2·p1 + p2)·t² - 2·(p0 - p1)·t + p0 }
+    ///     : expanded, and then collected for t
+    ///
+    ///   - {@literal c2·t² + c1·t + c0 }
+    ///     : coefficients compacted
+    ///
+    ///   - {@literal c2x·t² + c1x·t + c0x , c2y·t² + c1y·t + c0y }
+    ///     : bezier equation in matrix form
+    ///
+    ///   - {@literal fx , fy }
+    ///     : compacted matrix form
+    ///
+    ///   - {@literal (fx - cx)² + (fy - cy)² = 0 }
+    ///     : distance to point equation, with fx, fy inserted from matrix form
+    ///
+    ///   - {@literal c2x²·t⁴ + 2·c1x·c2x·t³ + (c1x² - 2·cx·c2x + 2·c0x·c2x)·t² + cx² - 2·cx·c0x + c0x² - 2·(cx·c1x - c0x·c1x)·t
+    ///     }
+    /// {@literal + ..same for y-axis... }
+    ///     : coefficients expanded
+    ///
+    ///   - {@literal (c2x^2 + c2y^2)*t^4 }
+    ///     {@literal + 2*(c1x*c2x + c1y*c2y)*t^3 }
+    ///     {@literal + (c1x ^ 2 + c1y ^ 2 + 2 * c0x * c2x + 2 * c0y * c2y - 2 * c2x * cx - 2 * c2y * cy)*t^2 }
+    ///     {@literal + c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2 + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t}
+    ///     : coefficients collected for t
+    ///   - {@literal a·t⁴ + b·t³ + c·t² + d·t + e = 0, 0 ≤ t ≤ 1 }
+    ///     : final polynomial equation
+    ///
+    ///   - {@literal 4·a·t³ + 3·b·t² + 2·c·t + d = 0, 0 ≤ t ≤ 1 }
+    ///     : derivative
+    ///
+    /// </ol>
+    ///
+    /// @param x0 x-coordinate of control point 0 of the bezier curve
+    /// @param y0 y-coordinate of control point 0 of the bezier curve
+    /// @param x1 x-coordinate of control point P0 of the bezier curve
+    /// @param y1 y-coordinate of control point P0 of the bezier curve
+    /// @param x2 x-coordinate of control point P1 of the bezier curve
+    /// @param y2 y-coordinate of control point P1 of the bezier curve
+    /// @param cx x-coordinate of the point
+    /// @param cy y-coordinate of the point
+    /// @param r  the tolerance radius
+    /// @return the intersection
     public static IntersectionResult intersectQuadCurvePoint(
             double x0, double y0, double x1, double y1, double x2, double y2,
             double cx, double cy, double r) {

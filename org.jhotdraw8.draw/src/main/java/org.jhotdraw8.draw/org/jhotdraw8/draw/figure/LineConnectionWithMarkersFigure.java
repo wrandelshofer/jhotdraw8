@@ -15,28 +15,22 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
-/**
- * This figure draws a straight line from a start point to an end point.
- * <p>
- * The start point and the end point can be located either
- * <ul>
- *     <li>at an absolute position on the drawing,</li>
- *     <li>or at a point inside another figure</li>
- * </ul>
- * <p>
- * The figure can have an optional marker shape at the start point,
- * and at the end point.
- *
- *
- */
+/// This figure draws a straight line from a start point to an end point.
+///
+/// The start point and the end point can be located either
+///
+///   - at an absolute position on the drawing,
+///   - or at a point inside another figure
+///
+///
+/// The figure can have an optional marker shape at the start point,
+/// and at the end point.
 public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, MarkerFillableFigure, StrokableFigure, MarkerStartableFigure,
         MarkerEndableFigure, StrokeCuttableFigure {
 
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "LineConnectionWithMarkers";
 
     public LineConnectionWithMarkersFigure() {

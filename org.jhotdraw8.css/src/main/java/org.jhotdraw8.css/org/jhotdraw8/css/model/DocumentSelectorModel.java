@@ -26,11 +26,8 @@ import java.util.Objects;
 import java.util.SequencedSet;
 import java.util.Set;
 
-/**
- * {@code DocumentSelectorModel} provides an API for CSS
- * {@link org.jhotdraw8.css.ast.SelectorGroup}'s.
- *
- */
+/// `DocumentSelectorModel` provides an API for CSS
+/// [org.jhotdraw8.css.ast.SelectorGroup]'s.
 public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
 
     public DocumentSelectorModel() {
@@ -109,39 +106,36 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
         return ChampSet.of();
     }
 
-    /**
-     * Supports the following pseudo classes:
-     * <ul>
-     * <li>root</li>
-     * <li>nth-child(odd)</li>
-     * <li>nth-child(even)</li>
-     * <li>first-child</li>
-     * <li>last-child</li>
-     * </ul>
-     * Does not support the following pseudo classes:
-     * <ul>
-     * <li>nth-child(2n+1)</li>
-     * <li>nth-last-child(2n+1)</li>
-     * <li>nth-last-child(odd)</li>
-     * <li>nth-last-child(even)</li>
-     * <li>nth-of-type(2n+1)</li>
-     * <li>nth-of-type(even)</li>
-     * <li>nth-of-type(odd)</li>
-     * <li>nth-last-of-type(2n+1)</li>
-     * <li>nth-last-of-type(even)</li>
-     * <li>nth-last-of-type(odd)</li>
-     * <li>first-of-type()</li>
-     * <li>last-of-type()</li>
-     * <li>only-child()</li>
-     * <li>only-of-type()</li>
-     * <li>empty</li>
-     * <li>not(...)</li>
-     * </ul>
-     *
-     * @param element     the element
-     * @param pseudoClass the desired pseudo clas
-     * @return true if the element has the pseudo class
-     */
+    /// Supports the following pseudo classes:
+    ///
+    ///   - root
+    ///   - nth-child(odd)
+    ///   - nth-child(even)
+    ///   - first-child
+    ///   - last-child
+    ///
+    /// Does not support the following pseudo classes:
+    ///
+    ///   - nth-child(2n+1)
+    ///   - nth-last-child(2n+1)
+    ///   - nth-last-child(odd)
+    ///   - nth-last-child(even)
+    ///   - nth-of-type(2n+1)
+    ///   - nth-of-type(even)
+    ///   - nth-of-type(odd)
+    ///   - nth-last-of-type(2n+1)
+    ///   - nth-last-of-type(even)
+    ///   - nth-last-of-type(odd)
+    ///   - first-of-type()
+    ///   - last-of-type()
+    ///   - only-child()
+    ///   - only-of-type()
+    ///   - empty
+    ///   - not(...)
+    ///
+    /// @param element     the element
+    /// @param pseudoClass the desired pseudo clas
+    /// @return true if the element has the pseudo class
     @Override
     public boolean hasPseudoClass(Element element, String pseudoClass) {
         return switch (pseudoClass) {

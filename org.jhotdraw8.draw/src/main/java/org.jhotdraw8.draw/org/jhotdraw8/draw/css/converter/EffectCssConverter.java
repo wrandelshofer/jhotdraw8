@@ -37,58 +37,55 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.function.Consumer;
 
-/**
- * CssEffectConverter.
- * <p>
- * Parses the following EBNF:
- * </p>
- * <pre>
- * Effect = "none" | ( Blend | Bloom | BoxBlur | ColorAdjust | DropShadow | GaussianBlur | Glow | InnerShadow | Shadow ) , { Effect };
- * Blend = "blend(" , [
- *                 blendType
- *              ] , ")";
- * Bloom = "bloom(" , [
- *                 threshold
- *              ] , ")";
- * BoxBlur = "box-blur(" , [
- *                 width, Sep, height, Sep, iterations
- *              ] , ")";
- * ColorAdjust = "color-adjust(" , [
- *                 "hue", S, hue, Sep,
- *                 "saturation" , S , saturation, Sep,
- *                 "brightness", S, brightness, Sep,
- *                 "contrast", S, contrast
- *              ] , ")";
- * DropShadow = "drop-shadow(" , [
- *                 blurType , Sep , color , Sep ,
- *                 radius , Sep ,  spread , Sep ,  xOffset , Sep ,  yOffset
- *              ] , ")";
- * GaussianBlur = "gaussian-blur(" , [
- *                 radius
- *              ] , ")";
- * Glow = "glow(" , [
- *                 level
- *              ] , ")";
- * InnerShadow = "inner-shadow(" , [
- *                 blurType , Sep , color , Sep ,
- *                 radius , Sep, choke , Sep ,  xOffset , Sep ,  yOffset
- *               ] , ")";
- * Shadow = "shadow(" , [
- *                 blurType , Sep , color , Sep ,
- *                 radius
- *               ] , ")";
- *
- * Sep         = ( S , { S } | { S } , "," , { S } ) ;
- * S           = (* white space character *)
- * </pre>
- * <p>
- * References:
- * <dl>
- *     <dt>JavaFX CSS Reference Guide</dt>
- *     <dd><a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">oracle.com</a></dd>
- * </dl>
- *
- */
+/// CssEffectConverter.
+///
+/// Parses the following EBNF:
+///
+/// <pre>
+/// Effect = "none" | ( Blend | Bloom | BoxBlur | ColorAdjust | DropShadow | GaussianBlur | Glow | InnerShadow | Shadow ) , { Effect };
+/// Blend = "blend(" , [
+///blendType
+///] , ")";
+/// Bloom = "bloom(" , [
+///threshold
+///] , ")";
+/// BoxBlur = "box-blur(" , [
+///width,Sep,height,Sep,iterations
+///] , ")";
+/// ColorAdjust = "color-adjust(" , [
+///"hue",S,hue,Sep,
+///                 "saturation",S,saturation,Sep,
+///                 "brightness",S,brightness,Sep,
+///                 "contrast",S,contrast
+///] , ")";
+/// DropShadow = "drop-shadow(" , [
+///blurType,Sep,color,Sep,
+///                 radius,Sep,spread,Sep,xOffset,Sep,yOffset
+///] , ")";
+/// GaussianBlur = "gaussian-blur(" , [
+///radius
+///] , ")";
+/// Glow = "glow(" , [
+///level
+///] , ")";
+/// InnerShadow = "inner-shadow(" , [
+///blurType,Sep,color,Sep,
+///                 radius,Sep,choke,Sep,xOffset,Sep,yOffset
+///] , ")";
+/// Shadow = "shadow(" , [
+///blurType,Sep,color,Sep,
+///                 radius
+///] , ")";
+///
+/// Sep         = ( S , { S } | { S } , "," , { S } ) ;
+/// S           = (* white space character *)
+/// </pre>
+///
+/// References:
+/// <dl>
+///     <dt>JavaFX CSS Reference Guide</dt>
+///     <dd><a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">oracle.com</a></dd>
+/// </dl>
 public class EffectCssConverter implements CssConverter<Effect> {
     private static final PersistentList<String> examples = VectorList.of(
             "blend(hard-light)",

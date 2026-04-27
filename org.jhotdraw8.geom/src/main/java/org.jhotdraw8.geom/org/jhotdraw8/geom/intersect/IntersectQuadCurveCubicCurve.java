@@ -42,38 +42,34 @@ public class IntersectQuadCurveCubicCurve {
 
     }
 
-    /**
-     * Computes the intersection between a quadratic bezier curve 'a' and cubic
-     * bezier curve 'b'.
-     * <p>
-     * The intersection will contain the parameters 't1' of curve 'a' in range
-     * [0,1].
-     *
-     * @param a0 control point P0 of 'a'
-     * @param a1 control point P1 of 'a'
-     * @param a2 control point P2 of 'a'
-     * @param b0 control point P0 of 'b'
-     * @param b1 control point P1 of 'b'
-     * @param b2 control point P2 of 'b'
-     * @param b3 control point P3 of 'b'
-     * @return the computed result
-     */
+    /// Computes the intersection between a quadratic bezier curve 'a' and cubic
+    /// bezier curve 'b'.
+    ///
+    /// The intersection will contain the parameters 't1' of curve 'a' in range
+    /// [0,1].
+    ///
+    /// @param a0 control point P0 of 'a'
+    /// @param a1 control point P1 of 'a'
+    /// @param a2 control point P2 of 'a'
+    /// @param b0 control point P0 of 'b'
+    /// @param b1 control point P1 of 'b'
+    /// @param b2 control point P2 of 'b'
+    /// @param b3 control point P3 of 'b'
+    /// @return the computed result
     public static IntersectionResult intersectQuadCurveCubicCurve(Point2D a0, Point2D a1, Point2D a2,
                                                                   Point2D b0, Point2D b1, Point2D b2, Point2D b3) {
         return intersectQuadCurveCubicCurve(a0, a1, a2, b0, b1, b2, b3, Scalars.REAL_THRESHOLD);
     }
 
-    /**
-     * @param a0
-     * @param a1
-     * @param a2
-     * @param b0
-     * @param b1
-     * @param b2
-     * @param b3
-     * @param epsilon
-     * @return
-     */
+    /// @param a0
+    /// @param a1
+    /// @param a2
+    /// @param b0
+    /// @param b1
+    /// @param b2
+    /// @param b3
+    /// @param epsilon
+    /// @return
     public static IntersectionResult intersectQuadCurveCubicCurve(Point2D a0, Point2D a1, Point2D a2,
                                                                   Point2D b0, Point2D b1, Point2D b2, Point2D b3, double epsilon) {
         final Point2D c12, c11, c10;

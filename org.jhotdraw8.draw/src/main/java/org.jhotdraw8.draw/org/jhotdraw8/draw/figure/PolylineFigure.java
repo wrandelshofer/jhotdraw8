@@ -32,19 +32,14 @@ import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A figure which draws a connected line segments.
- *
- */
+/// A figure which draws a connected line segments.
 public class PolylineFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure {
 
     public static final Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", VectorList.of());
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Polyline";
 
     public PolylineFigure() {

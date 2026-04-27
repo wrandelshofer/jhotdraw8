@@ -105,37 +105,29 @@ import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/**
- * Intentionally does not implement the inspector interface, so
- * that subclasses can use this inspector on different subject
- * types.
- *
- * @param <E> the element type
- */
+/// Intentionally does not implement the inspector interface, so
+/// that subclasses can use this inspector on different subject
+/// types.
+///
+/// @param <E> the element type
 public abstract class AbstractStyleAttributesInspector<E> {
-    /**
-     * The name of the {@link #showingProperty}.
-     */
+    /// The name of the [#showingProperty].
     public static final String SHOWING_PROPERTY = "showing";
-    /**
-     * This placeholder is displayed to indicate that no value has
-     * been specified for this property.
-     * <p>
-     * The placeholder should be a comment, e.g. "/* unspecified value * /",
-     * or white space, e.g. "  ", or one of the keywords
-     * {@link CssTokenType#IDENT_INITIAL},
-     * {@link CssTokenType#IDENT_INHERIT},
-     * {@link CssTokenType#IDENT_REVERT},
-     * {@link CssTokenType#IDENT_UNSET},
-     */
+    /// This placeholder is displayed to indicate that no value has
+    /// been specified for this property.
+    ///
+    /// The placeholder should be a comment, e.g. "/* unspecified value * /",
+    /// or white space, e.g. "  ", or one of the keywords
+    /// [CssTokenType#IDENT_INITIAL],
+    /// [CssTokenType#IDENT_INHERIT],
+    /// [CssTokenType#IDENT_REVERT],
+    /// [CssTokenType#IDENT_UNSET],
     public static final String UNSPECIFIED_VALUE_PLACEHOLDER = "  ";//"/* unspecified value */";
-    /**
-     * This placeholder is displayed to indicate that multiple values have
-     * been specified for this property.
-     * <p>
-     * The placeholder should be a comment, e.g. "/* multiple values * /",
-     * or white space, e.g. "  ".
-     */
+    /// This placeholder is displayed to indicate that multiple values have
+    /// been specified for this property.
+    ///
+    /// The placeholder should be a comment, e.g. "/* multiple values * /",
+    /// or white space, e.g. "  ".
     public static final String MULTIPLE_VALUES_PLACEHOLDER = "/* multiple values */";
     protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
     protected final UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
@@ -256,12 +248,10 @@ public abstract class AbstractStyleAttributesInspector<E> {
     }
 
 
-    /**
-     * Attribute filter can be used to show only a specific set
-     * of attributes in the inspector.
-     *
-     * @return attribute filter
-     */
+    /// Attribute filter can be used to show only a specific set
+    /// of attributes in the inspector.
+    ///
+    /// @return attribute filter
     public Property<Predicate<QualifiedName>> attributeFilter() {
         return attributeFilter;
     }
@@ -446,12 +436,10 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return new SelectorGroup(null, Collections.singletonList(prev));
     }
 
-    /**
-     * This method is invoked when this inspector has changed properties of
-     * the specified element.
-     *
-     * @param f an element
-     */
+    /// This method is invoked when this inspector has changed properties of
+    /// the specified element.
+    ///
+    /// @param f an element
     protected abstract void fireInvalidated(E f);
 
     protected abstract @Nullable Object get(E f, WritableStyleableMapAccessor<Object> finalSelectedAccessor);
@@ -793,12 +781,10 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return null;
     }
 
-    /**
-     * This method shows the selection in the drawing view, by scrolling
-     * the selected elements into the view and "jiggling" the handles.
-     * <p>
-     * This method is called when the user hits the "select" button.
-     */
+    /// This method shows the selection in the drawing view, by scrolling
+    /// the selected elements into the view and "jiggling" the handles.
+    ///
+    /// This method is called when the user hits the "select" button.
     protected abstract void showSelection();
 
     public BooleanProperty showingProperty() {

@@ -15,10 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * IntersectionTest.
- *
- */
+/// IntersectionTest.
 public class IntersectLineLineTest {
     @TestFactory
     public List<DynamicTest> dynamicTestsIntersectLineLine() {
@@ -80,9 +77,7 @@ public class IntersectLineLineTest {
         );
     }
 
-    /**
-     * Test of intersectLineBezier2 method, of class Intersection.
-     */
+    /// Test of intersectLineBezier2 method, of class Intersection.
     public static void testIntersectLineLine(Line a, Line b, IntersectionStatus expectedStatus,
                                              double[] expectedParamsA, double[] expectedParamsB) {
         IntersectionResultEx isec = IntersectLineLine.intersectLineLineEx(a.getStartX(), a.getStartY(),

@@ -33,10 +33,7 @@ import org.jspecify.annotations.Nullable;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
-/**
- * Handle for the point of a figure which is relative to the top left corner of the figure.
- *
- */
+/// Handle for the point of a figure which is relative to the top left corner of the figure.
 public class RelativePointHandle extends AbstractHandle {
     public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 

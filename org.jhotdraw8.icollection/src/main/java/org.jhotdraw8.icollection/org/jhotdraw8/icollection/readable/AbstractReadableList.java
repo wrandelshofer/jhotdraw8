@@ -4,15 +4,11 @@
  */
 package org.jhotdraw8.icollection.readable;
 
-/**
- * Abstract base class for {@link ReadableList}s.
- *
- * @param <E> the element type
- */
+/// Abstract base class for [ReadableList]s.
+///
+/// @param <E> the element type
 public abstract class AbstractReadableList<E> extends AbstractReadableCollection<E> implements ReadableList<E> {
-    /**
-     * Constructs a new instance.
-     */
+    /// Constructs a new instance.
     public AbstractReadableList() {
     }
 

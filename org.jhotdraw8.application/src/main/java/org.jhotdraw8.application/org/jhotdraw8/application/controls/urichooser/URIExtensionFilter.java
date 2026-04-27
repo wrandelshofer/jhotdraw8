@@ -10,10 +10,7 @@ import org.jhotdraw8.fxbase.clipboard.DataFormats;
 
 import java.util.List;
 
-/**
- * URIExtensionFilter.
- *
- */
+/// URIExtensionFilter.
 public class URIExtensionFilter {
 
     private final DataFormat format;

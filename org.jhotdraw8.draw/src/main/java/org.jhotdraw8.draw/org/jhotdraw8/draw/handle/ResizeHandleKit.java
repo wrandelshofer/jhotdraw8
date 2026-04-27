@@ -23,27 +23,21 @@ import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.function.Function;
 
-/**
- * /**
- * A set of utility methods to create handles which resize a Figure by using its
- * {@code reshapeInLocal} method, if the Figure is transformable.
- */
+/// /**
+/// A set of utility methods to create handles which resize a Figure by using its
+/// `reshapeInLocal` method, if the Figure is transformable.
 public class ResizeHandleKit {
 
-    /**
-     * Prevent instance creation.
-     */
+    /// Prevent instance creation.
     private ResizeHandleKit() {
 
     }
 
-    /**
-     * Creates handles for each corner of a figure and adds them to the provided
-     * collection.
-     *
-     * @param f       the figure which will own the handles
-     * @param handles the list to which the handles should be added
-     */
+    /// Creates handles for each corner of a figure and adds them to the provided
+    /// collection.
+    ///
+    /// @param f       the figure which will own the handles
+    /// @param handles the list to which the handles should be added
     public static void addCornerResizeHandles(Figure f, Collection<Handle> handles) {
         handles.add(southEast(f));
         handles.add(southWest(f));
@@ -51,13 +45,11 @@ public class ResizeHandleKit {
         handles.add(northWest(f));
     }
 
-    /**
-     * Fills the given collection with handles at each the north, south, east,
-     * and west of the figure.
-     *
-     * @param f       the figure which will own the handles
-     * @param handles the list to which the handles should be added
-     */
+    /// Fills the given collection with handles at each the north, south, east,
+    /// and west of the figure.
+    ///
+    /// @param f       the figure which will own the handles
+    /// @param handles the list to which the handles should be added
     public static void addEdgeResizeHandles(Figure f, Collection<Handle> handles) {
         handles.add(south(f));
         handles.add(north(f));
@@ -65,94 +57,76 @@ public class ResizeHandleKit {
         handles.add(west(f));
     }
 
-    /**
-     * Fills the given collection with handles at each the north, south, east,
-     * and west of the figure.
-     *
-     * @param f       the figure which will own the handles
-     * @param handles the list to which the handles should be added
-     */
+    /// Fills the given collection with handles at each the north, south, east,
+    /// and west of the figure.
+    ///
+    /// @param f       the figure which will own the handles
+    /// @param handles the list to which the handles should be added
     public static void addResizeHandles(Figure f, Collection<Handle> handles) {
         addCornerResizeHandles(f, handles);
         addEdgeResizeHandles(f, handles);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle south(Figure owner) {
         return new SouthHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle southEast(Figure owner) {
         return new SouthEastHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle southWest(Figure owner) {
         return new SouthWestHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle north(Figure owner) {
         return new NorthHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle northEast(Figure owner) {
         return new NorthEastHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle northWest(Figure owner) {
         return new NorthWestHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle east(Figure owner) {
         return new EastHandle(owner);
     }
 
-    /**
-     * Creates a handle for the specified figure.
-     *
-     * @param owner the figure which will own the handle
-     * @return the handle
-     */
+    /// Creates a handle for the specified figure.
+    ///
+    /// @param owner the figure which will own the handle
+    /// @return the handle
     public static Handle west(Figure owner) {
         return new WestHandle(owner);
     }

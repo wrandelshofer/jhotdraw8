@@ -15,28 +15,26 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * <pre>
- * # JMH version: 1.37
- * # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
- * # Apple M2 Max
- *
- * Benchmark                (mask)  (size)  Mode  Cnt         Score   Error  Units
- * mContainsFound             -65  100000  avgt    2        32.075          ns/op
- * mContainsNotFound          -65  100000  avgt    2        31.649          ns/op
- * mCopyOf                    -65  100000  avgt    2  11764743.641          ns/op
- * mCopyOnyByOne              -65  100000  avgt    2  16341700.025          ns/op
- * mHead                      -65  100000  avgt    2        26.465          ns/op
- * mIterate                   -65  100000  avgt    2   1284574.355          ns/op
- * mPut                       -65  100000  avgt    2       107.241          ns/op
- * mRemoveAll                 -65  100000  avgt    2  14470914.017          ns/op
- * mRemoveOneByOne            -65  100000  avgt    2  18262681.706          ns/op
- * mRemoveThenAdd             -65  100000  avgt    2       231.794          ns/op
- * mRetainAllAllRetained      -65  100000  avgt    2   2880248.290          ns/op
- * mRetainAllNoneRetained     -65  100000  avgt    2   8823159.716          ns/op
- * mTail                      -65  100000  avgt    2        81.924          ns/op
- * </pre>
- */
+/// <pre>
+/// # JMH version: 1.37
+/// # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
+/// # Apple M2 Max
+///
+/// Benchmark                (mask)  (size)  Mode  Cnt         Score   Error  Units
+/// mContainsFound             -65  100000  avgt    2        32.075          ns/op
+/// mContainsNotFound          -65  100000  avgt    2        31.649          ns/op
+/// mCopyOf                    -65  100000  avgt    2  11764743.641          ns/op
+/// mCopyOnyByOne              -65  100000  avgt    2  16341700.025          ns/op
+/// mHead                      -65  100000  avgt    2        26.465          ns/op
+/// mIterate                   -65  100000  avgt    2   1284574.355          ns/op
+/// mPut                       -65  100000  avgt    2       107.241          ns/op
+/// mRemoveAll                 -65  100000  avgt    2  14470914.017          ns/op
+/// mRemoveOneByOne            -65  100000  avgt    2  18262681.706          ns/op
+/// mRemoveThenAdd             -65  100000  avgt    2       231.794          ns/op
+/// mRetainAllAllRetained      -65  100000  avgt    2   2880248.290          ns/op
+/// mRetainAllNoneRetained     -65  100000  avgt    2   8823159.716          ns/op
+/// mTail                      -65  100000  avgt    2        81.924          ns/op
+/// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 2)

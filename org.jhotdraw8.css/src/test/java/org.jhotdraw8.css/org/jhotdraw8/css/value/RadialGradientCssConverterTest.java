@@ -18,9 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class RadialGradientCssConverterTest {
-    /**
-     * Test of fromString method, of class CssPoint2DConverterTest.
-     */
+    /// Test of fromString method, of class CssPoint2DConverterTest.
     public static void doTestFromString(CssRadialGradient expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;

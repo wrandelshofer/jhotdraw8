@@ -13,15 +13,12 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 
-/**
- * Converts a {@code Boolean} into the XML String representation.
- * <p>
- * Reference:
- * <a href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#boolean">W3C: XML
- * Schema Part 2: Datatypes Second Edition: 3.2.5 boolean</a>
- * </p>
- *
- */
+/// Converts a `Boolean` into the XML String representation.
+///
+/// Reference:
+/// <a href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#boolean">W3C: XML
+/// Schema Part 2: Datatypes Second Edition: 3.2.5 boolean</a>
+///
 public class BooleanXmlConverter implements Converter<Boolean> {
 
 
@@ -32,15 +29,12 @@ public class BooleanXmlConverter implements Converter<Boolean> {
     private final String zeroString = "0";
     private final boolean nullable;
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public BooleanXmlConverter(boolean nullable) {
         this.nullable = nullable;
     }
-    /**
-     * Creates a new instance.
-     */
+
+    /// Creates a new instance.
     public BooleanXmlConverter() {
         this(false);
     }

@@ -13,11 +13,9 @@ import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * PostorderSpliterator.
- *
- * @param <T> the element type
- */
+/// PostorderSpliterator.
+///
+/// @param <T> the element type
 public class PostorderSpliterator<T> extends AbstractSpliterator<T> {
     private final Function<T, Iterable<T>> getChildrenFunction;
     private @Nullable T root;

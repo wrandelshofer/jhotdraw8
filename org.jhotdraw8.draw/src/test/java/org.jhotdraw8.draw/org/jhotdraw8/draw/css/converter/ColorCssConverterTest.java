@@ -23,18 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * CssColorConverterTest.
- *
- */
+/// CssColorConverterTest.
 public class ColorCssConverterTest {
 
     public ColorCssConverterTest() {
     }
 
-    /**
-     * Test of fromString method, of class CssColorConverter.
-     */
+    /// Test of fromString method, of class CssColorConverter.
     static void testFromString(@Nullable CssColor expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;

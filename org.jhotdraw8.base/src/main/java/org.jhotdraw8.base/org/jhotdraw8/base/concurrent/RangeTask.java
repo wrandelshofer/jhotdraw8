@@ -10,15 +10,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountedCompleter;
 import java.util.function.BiConsumer;
 
-/**
- * A fork-join task that processes a range of integers from {@code lo} to {@code hi} (exclusive)
- * in chunks of up to {@code chunkSize}.
- * <p>
- * Usage:
- * <pre>
- * RangeTask.forEach(0,1000,10,(lo,hi)->{for(int i=lo;i&lt;hi;i++) {....};});
- * </pre>
- */
+/// A fork-join task that processes a range of integers from `lo` to `hi` (exclusive)
+/// in chunks of up to `chunkSize`.
+///
+/// Usage:
+/// <pre>
+/// RangeTask.forEach(0,1000,10,(lo,hi)->{for(int i=lo;i&lt;hi;i++) {....};});
+/// </pre>
 @SuppressWarnings({"serial", "RedundantSuppression"})
 public class RangeTask extends CountedCompleter<Void> {
     private final int lo, hi;

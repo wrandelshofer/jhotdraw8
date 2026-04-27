@@ -3,15 +3,13 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-/**
- * Enum for the "text-anchor" property.
- * <p>
- * References:
- * <dl>
- *     <dt>SVG Tiny 1.2, Text Alignment Properties</dt>
- *     <dd><a href="https://www.w3.org/TR/SVGTiny12/text.html#TextAlignmentProperties">w3.org</a></dd>
- * </dl>
- */
+/// Enum for the "text-anchor" property.
+///
+/// References:
+/// <dl>
+///     <dt>SVG Tiny 1.2, Text Alignment Properties</dt>
+///     <dd><a href="https://www.w3.org/TR/SVGTiny12/text.html#TextAlignmentProperties">w3.org</a></dd>
+/// </dl>
 package org.jhotdraw8.svg.text;
 
 public enum SvgTextAnchor {

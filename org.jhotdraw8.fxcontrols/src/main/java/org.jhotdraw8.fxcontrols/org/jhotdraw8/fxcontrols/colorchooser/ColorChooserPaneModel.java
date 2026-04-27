@@ -45,35 +45,33 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 
-/**
- * Data flow:
- * <pre>
- *     colorChooser + targetColorSpace
- *                  |
- *                  v
- *           chooserColorSpace
- *
- *     c0,c1,c2,c3,alpha     +   chooserColorSpace,
- *                           |
- *                           v
- *                      chooserColor
- *
- *    chooserColor + targetColorSpace
- *                 |
- *                 v
- *            targetColor
- *
- *    chooserColor + displayColorSpace + displayBitDepth
- *                 |
- *                 v
- *            displayColor
- *
- *   chooserColorSpace
- *         |
- *         v
- *     hueSliderLightness
- * </pre>
- */
+/// Data flow:
+/// <pre>
+///     colorChooser + targetColorSpace
+///                  |
+///                  v
+///           chooserColorSpace
+///
+///     c0,c1,c2,c3,alpha     +   chooserColorSpace,
+///                           |
+///                           v
+///                      chooserColor
+///
+///    chooserColor + targetColorSpace
+///                 |
+///                 v
+///            targetColor
+///
+///    chooserColor + displayColorSpace + displayBitDepth
+///                 |
+///                 v
+///            displayColor
+///
+///   chooserColorSpace
+///         |
+///         v
+///     hueSliderLightness
+/// </pre>
 public class ColorChooserPaneModel {
     public static final CieLabColorSpace CIE_LAB_COLOR_SPACE = new CieLabColorSpace();
     public static final ParametricLchColorSpace CIE_LCH_COLOR_SPACE = new ParametricLchColorSpace("CIE LCH", CIE_LAB_COLOR_SPACE);

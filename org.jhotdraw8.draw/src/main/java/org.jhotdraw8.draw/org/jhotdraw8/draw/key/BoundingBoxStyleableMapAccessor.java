@@ -14,10 +14,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * BoundingBoxStyleableMapAccessor.
- *
- */
+/// BoundingBoxStyleableMapAccessor.
 public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccessor<BoundingBox> {
 
 
@@ -26,15 +23,13 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
     private final MapAccessor<Double> widthKey;
     private final MapAccessor<Double> heightKey;
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name      the name of the accessor
-     * @param xKey      the key for the x coordinate of the rectangle
-     * @param yKey      the key for the y coordinate of the rectangle
-     * @param widthKey  the key for the width of the rectangle
-     * @param heightKey the key for the height of the rectangle
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name      the name of the accessor
+    /// @param xKey      the key for the x coordinate of the rectangle
+    /// @param yKey      the key for the y coordinate of the rectangle
+    /// @param widthKey  the key for the width of the rectangle
+    /// @param heightKey the key for the height of the rectangle
     public BoundingBoxStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> widthKey, MapAccessor<Double> heightKey) {
         super(name, BoundingBox.class, new MapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new BoundingBox(xKey.getDefaultValue(), yKey.getDefaultValue(), widthKey.getDefaultValue(), heightKey.getDefaultValue()));
 

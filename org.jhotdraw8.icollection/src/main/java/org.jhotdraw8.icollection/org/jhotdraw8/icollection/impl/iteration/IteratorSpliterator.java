@@ -11,16 +11,14 @@ public class IteratorSpliterator<E> extends Spliterators.AbstractSpliterator<E> 
     private final Iterator<E> iterator;
     private final @Nullable Comparator<E> comparator;
 
-    /**
-     * Creates a spliterator reporting the given estimated size and
-     * additionalCharacteristics.
-     *
-     * @param est                       the estimated size of this spliterator if known, otherwise
-     *                                  {@code Long.MAX_VALUE}.
-     * @param additionalCharacteristics properties of this spliterator's
-     *                                  source or elements.  If {@code SIZED} is reported then this
-     *                                  spliterator will additionally report {@code SUBSIZED}.
-     */
+    /// Creates a spliterator reporting the given estimated size and
+    /// additionalCharacteristics.
+    ///
+    /// @param est                       the estimated size of this spliterator if known, otherwise
+    ///                                  `Long.MAX_VALUE`.
+    /// @param additionalCharacteristics properties of this spliterator's
+    ///                                  source or elements.  If `SIZED` is reported then this
+    ///                                  spliterator will additionally report `SUBSIZED`.
     public IteratorSpliterator(Iterator<E> iterator, long est, int additionalCharacteristics, @Nullable Comparator<E> comparator) {
         super(est, additionalCharacteristics);
         this.iterator = iterator;

@@ -11,26 +11,19 @@ import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Interface figures which render a {@code javafx.scene.shape.Shape} and can have
- * a fill rule.
- *
- */
+/// Interface figures which render a `javafx.scene.shape.Shape` and can have
+/// a fill rule.
 public interface FillRulableFigure extends Figure {
 
-    /**
-     * Defines the fill-rule used for filling the interior of the figure..
-     * <p>
-     * Default value: {@code StrokeType.NON_ZERO}.
-     */
+    /// Defines the fill-rule used for filling the interior of the figure..
+    ///
+    /// Default value: `StrokeType.NON_ZERO`.
     NonNullEnumStyleableKey<FillRule> FILL_RULE = new NonNullEnumStyleableKey<>("fill-rule", FillRule.class, FillRule.NON_ZERO);
 
-    /**
-     * Updates a shape node.
-     *
-     * @param ctx   the render context
-     * @param shape a shape node
-     */
+    /// Updates a shape node.
+    ///
+    /// @param ctx   the render context
+    /// @param shape a shape node
     default void applyFillRulableFigureProperties(@Nullable RenderContext ctx, Shape shape) {
         if (shape instanceof Path) {
             ((Path) shape).setFillRule(getStyled(FILL_RULE));

@@ -15,16 +15,12 @@ import org.jhotdraw8.draw.render.RenderContext;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A figure which groups child figures, so that they can be edited by the user
- * as a unit.
- */
+/// A figure which groups child figures, so that they can be edited by the user
+/// as a unit.
 public class GroupFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
-    /**
-     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Group";
 
     public GroupFigure() {

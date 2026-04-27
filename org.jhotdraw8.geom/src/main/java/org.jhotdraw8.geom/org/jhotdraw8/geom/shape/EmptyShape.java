@@ -7,15 +7,14 @@ package org.jhotdraw8.geom.shape;
 
 import org.jhotdraw8.geom.EmptyPathIterator;
 
-import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-/**
- * An immutable empty shape.
- */
+/// An immutable empty shape.
 public class EmptyShape implements Shape {
     public EmptyShape() {
     }

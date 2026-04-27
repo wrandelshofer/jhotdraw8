@@ -14,25 +14,21 @@ import java.util.ArrayList;
 public class ArcToCubicCurve {
     private static final double TAU = Math.PI * 2.0;
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private ArcToCubicCurve() {
     }
 
-    /**
-     * Approximates one unit arc segment with a bézier curve.
-     * <p>
-     * See discussion in
-     * <a href="http://math.stackexchange.com/questions/873224">math.stackexchange.com</a>
-     * on how to calculate control points of cubic bezier curve approximating a
-     * part of a circle.
-     *
-     * @param theta1      the start angle in radians of the arc on the circle.
-     * @param delta_theta the length of the arc segment in radians,
-     *                    *               must be less than π/2 = 90°.
-     * @return
-     */
+    /// Approximates one unit arc segment with a bézier curve.
+    ///
+    /// See discussion in
+    /// <a href="http://math.stackexchange.com/questions/873224">math.stackexchange.com</a>
+    /// on how to calculate control points of cubic bezier curve approximating a
+    /// part of a circle.
+    ///
+    /// @param theta1      the start angle in radians of the arc on the circle.
+    /// @param delta_theta the length of the arc segment in radians,
+    ///                    *               must be less than π/2 = 90°.
+    /// @return
     private static double[] approximateUnitArc(double theta1, double delta_theta) {
         double alpha = (4 / 3.0) * Math.tan(delta_theta * 0.25);
 
@@ -44,38 +40,36 @@ public class ArcToCubicCurve {
         return new double[]{x1, y1, x1 - y1 * alpha, y1 + x1 * alpha, x2 + y2 * alpha, y2 - x2 * alpha, x2, y2};
     }
 
-    /**
-     * Converts an arcTo into a sequence of curveTo,
-     * or - if the arcTo is degenerate - to a lineTo or to nothing.
-     * <p>
-     * As specified in
-     * <a href="http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands">w3.org</a>
-     * <p>
-     * This code has been derived from svgpath library [1].
-     * <p>
-     * See <a href="http://math.stackexchange.com/questions/873224">math.stackexchange.com</a>
-     * for a discussion on how to calculate control points of cubic bezier curve
-     * approximating a part of a circle.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>[1] svgpath library</dt>
-     *     <dd>svgpath. Copyright (C) 2013-2015 by Vitaly Puzrin, MIT License.
-     *     <a href="https://github.com/fontello/svgpath/blob/master/lib/a2c.js">github.com</a></dd>
-     * </dl>
-     *
-     * @param lastX         the last x coordinate
-     * @param lastY         the last y coordinate
-     * @param radiusX       the x radius of the arc
-     * @param radiusY       the y radius of the arc
-     * @param xAxisRotation the x-axis rotation of the arc in degrees
-     * @param x             the x to coordinate
-     * @param y             the y to coordinate
-     * @param largeArcFlag  the large-arc flag
-     * @param sweepFlag     the sweep-arc flag
-     * @param lineTo        the consumer for lineTo (can be called 0 to 1 times
-     * @param curveTo       the consumer for curveTo (can be called 0 to 4 times)
-     */
+    /// Converts an arcTo into a sequence of curveTo,
+    /// or - if the arcTo is degenerate - to a lineTo or to nothing.
+    ///
+    /// As specified in
+    /// <a href="http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands">w3.org</a>
+    ///
+    /// This code has been derived from svgpath library [1].
+    ///
+    /// See <a href="http://math.stackexchange.com/questions/873224">math.stackexchange.com</a>
+    /// for a discussion on how to calculate control points of cubic bezier curve
+    /// approximating a part of a circle.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>[1] svgpath library</dt>
+    ///     <dd>svgpath. Copyright (C) 2013-2015 by Vitaly Puzrin, MIT License.
+    ///     <a href="https://github.com/fontello/svgpath/blob/master/lib/a2c.js">github.com</a></dd>
+    /// </dl>
+    ///
+    /// @param lastX         the last x coordinate
+    /// @param lastY         the last y coordinate
+    /// @param radiusX       the x radius of the arc
+    /// @param radiusY       the y radius of the arc
+    /// @param xAxisRotation the x-axis rotation of the arc in degrees
+    /// @param x             the x to coordinate
+    /// @param y             the y to coordinate
+    /// @param largeArcFlag  the large-arc flag
+    /// @param sweepFlag     the sweep-arc flag
+    /// @param lineTo        the consumer for lineTo (can be called 0 to 1 times
+    /// @param curveTo       the consumer for curveTo (can be called 0 to 4 times)
     public static void arcTo(
             double lastX, double lastY,
             double radiusX, double radiusY,
@@ -173,14 +167,12 @@ public class ArcToCubicCurve {
         }
     }
 
-    /**
-     * Converts from endpoint to center parameterization.
-     * <p>
-     * See <a href="http://www.w3.org/TR/SVG11/implnote.html#ArcImplementationNotes">
-     * w3.org</a>
-     * <p>
-     * Return [cx, cy, theta1, delta_theta]
-     */
+    /// Converts from endpoint to center parameterization.
+    ///
+    /// See <a href="http://www.w3.org/TR/SVG11/implnote.html#ArcImplementationNotes">
+    /// w3.org</a>
+    ///
+    /// Return [cx,cy,theta1,delta_theta]
     private static ArcCenter getArcCenter(double x1, double y1, double x2, double y2, boolean fa, boolean fs,
                                           double rx, double ry, double sin_phi, double cos_phi) {
         // Step 1.
@@ -241,21 +233,20 @@ public class ArcToCubicCurve {
         return new ArcCenter(cx, cy, theta1, delta_theta);
     }
 
-    /**
-     * Returns the angle in radians between two unit vectors {@code u} and
-     * {@code v}.
-     * <pre>{@literal
-     *  angle = sign * acos( <u,v> )
-     * }</pre>
-     * Since we measure angle between radii of circular arcs,
-     * we can use simplified math (without length normalization).
-     *
-     * @param ux x-coordinate of unit vector u
-     * @param uy y-coordinate of unit vector u
-     * @param vx x-coordinate of unit vector v
-     * @param vy y-coordinate of unit vector v
-     * @return angle in radians
-     */
+    /// Returns the angle in radians between two unit vectors `u` and
+    /// `v`.
+    /// <pre>
+    /// {@literal
+    ///   angle = sign * acos( <u,v> )
+    ///  }</pre>
+    /// Since we measure angle between radii of circular arcs,
+    /// we can use simplified math (without length normalization).
+    ///
+    /// @param ux x-coordinate of unit vector u
+    /// @param uy y-coordinate of unit vector u
+    /// @param vx x-coordinate of unit vector v
+    /// @param vy y-coordinate of unit vector v
+    /// @return angle in radians
     private static double unitVectorAngle(double ux, double uy, double vx, double vy) {
         int sign = (ux * vy - uy * vx < 0) ? -1 : 1;
 

@@ -9,10 +9,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-/**
- * RectangleTransition performs a linear transition of the bounds of a JavaFX Rectangle.
- *
- */
+/// RectangleTransition performs a linear transition of the bounds of a JavaFX Rectangle.
 public class RectangleTransition extends Transition {
     private final Rectangle rectangle;
     private final Bounds fromBounds;

@@ -14,12 +14,10 @@ import java.util.SequencedMap;
 import java.util.SequencedSet;
 import java.util.Set;
 
-/**
- * Run the java command with the following option to prevent that the JVM hangs:
- * <pre>
- * {@value #REQUIRED_VM_OPTIONS}
- * </pre>
- */
+/// Run the java command with the following option to prevent that the JVM hangs:
+/// <pre>
+/// {@value #REQUIRED_VM_OPTIONS}
+/// </pre>
 public class AbstractJol {
     private final static String REQUIRED_VM_OPTIONS = "-Djdk.attach.allowAttachSelf -XX:+EnableDynamicAgentLoading --add-modules jol.core,jdk.attach --add-reads org.jhotdraw8.icollection=jol.core";
 

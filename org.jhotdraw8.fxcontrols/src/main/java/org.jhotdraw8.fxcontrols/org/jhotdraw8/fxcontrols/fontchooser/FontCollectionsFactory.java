@@ -9,12 +9,10 @@ import java.util.concurrent.CompletableFuture;
 public interface FontCollectionsFactory {
     List<FontCollection> create();
 
-    /**
-     * Creates a FontChooserModel asynchronously in a worker thread, and completes the returned
-     * {@link CompletableFuture} on the JavaFX Application Thread.
-     *
-     * @return a {@link CompletableFuture}.
-     */
+    /// Creates a FontChooserModel asynchronously in a worker thread, and completes the returned
+    /// [CompletableFuture] on the JavaFX Application Thread.
+    ///
+    /// @return a [CompletableFuture].
     default CompletableFuture<List<FontCollection>> createAsync() {
         CompletableFuture<List<FontCollection>> future = new CompletableFuture<>();
         Task<List<FontCollection>> task = new Task<>() {

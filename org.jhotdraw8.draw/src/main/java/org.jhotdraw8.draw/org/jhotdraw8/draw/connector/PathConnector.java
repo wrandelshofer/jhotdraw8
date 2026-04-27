@@ -16,11 +16,8 @@ import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
 import java.awt.geom.PathIterator;
 
-/**
- * PathConnector. The target of the connection must implement {@link PathIterableFigure}.
- *
- * $$
- */
+/// PathConnector. The target of the connection must implement [PathIterableFigure].
+/// $$
 public class PathConnector extends LocatorConnector {
 
     public PathConnector() {

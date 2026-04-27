@@ -25,20 +25,15 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Handle for the start or end point of a connection figure.
- * <p>
- * Pressing the alt or the control key while dragging the handle prevents
- * connecting the point.
- *
- */
+/// Handle for the start or end point of a connection figure.
+///
+/// Pressing the alt or the control key while dragging the handle prevents
+/// connecting the point.
 public abstract class AbstractConnectorHandle extends AbstractHandle {
-    /**
-     * Record for a connector and its connected figure.
-     *
-     * @param connector       a connector
-     * @param connectedFigure the connected figure
-     */
+    /// Record for a connector and its connected figure.
+    ///
+    /// @param connector       a connector
+    /// @param connectedFigure the connected figure
     public record ConnectorAndConnectedFigure(Connector connector,
                                               Figure connectedFigure) {
     }
@@ -197,13 +192,11 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         prevTarget = owner.get(targetKey);
     }
 
-    /**
-     * This method is called when the popup menu is triggered.
-     * This implementation does nothing.
-     *
-     * @param event the mouse event
-     * @param view  the drawing view
-     */
+    /// This method is called when the popup menu is triggered.
+    /// This implementation does nothing.
+    ///
+    /// @param event the mouse event
+    /// @param view  the drawing view
     protected void onPopupTriggered(MouseEvent event, DrawingView view) {
     }
 

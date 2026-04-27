@@ -10,10 +10,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * Represents a dimension with width, height values specified as {@link CssSize}s.
- *
- */
+/// Represents a dimension with width, height values specified as [CssSize]s.
 public class CssDimension2D {
 
     public static final CssDimension2D ZERO = new CssDimension2D();

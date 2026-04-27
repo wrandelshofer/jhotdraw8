@@ -25,14 +25,12 @@ public class CubicCurveToBiArc {
     }
 
 
-    /**
-     * Algorithm to approximate a bezier curve with bi-arcs.
-     *
-     * @param bezier          The bezier curve to be approximated.
-     * @param nrPointsToCheck The number of points used for calculating the approximation error
-     * @param tolerance       The approximation is accepted if the maximum deviation at the sampling points is smaller than this number.
-     * @return the approximated biarcs
-     */
+    /// Algorithm to approximate a bezier curve with bi-arcs.
+    ///
+    /// @param bezier          The bezier curve to be approximated.
+    /// @param nrPointsToCheck The number of points used for calculating the approximation error
+    /// @param tolerance       The approximation is accepted if the maximum deviation at the sampling points is smaller than this number.
+    /// @return the approximated biarcs
     public static List<BiArc> approxCubicBezier(CubicCurve2D.Double bezier, int nrPointsToCheck, double tolerance) {
         // The result will be put here
         List<BiArc> biarcs = new ArrayList<>();
@@ -108,22 +106,20 @@ public class CubicCurveToBiArc {
         return biarcs;
     }
 
-    /**
-     * G: incenter point of the triangle (P1, V, P2).
-     * <p>
-     * Reference:
-     * <dl>
-     *     <dt>Incenter of a triangle</dt>
-     *     <dd>
-     *      <a href="http://www.mathopenref.com/coordincenter.html">mathopenref.com</a>
-     *      </dd>
-     * </dl>
-     *
-     * @param a point A of the triangle
-     * @param b point B of the triangle
-     * @param c point C of the triangle
-     * @return the incenter point G
-     */
+    /// G: incenter point of the triangle (P1, V, P2).
+    ///
+    /// Reference:
+    /// <dl>
+    ///     <dt>Incenter of a triangle</dt>
+    ///     <dd>
+    ///      <a href="http://www.mathopenref.com/coordincenter.html">mathopenref.com</a>
+    ///      </dd>
+    /// </dl>
+    ///
+    /// @param a point A of the triangle
+    /// @param b point B of the triangle
+    /// @param c point C of the triangle
+    /// @return the incenter point G
     public static Point2D.Double computeIncenterPoint(Point2D.Double a, Point2D.Double b, Point2D.Double c) {
         double dac = c.distance(a);
         double dab = b.distance(a);
@@ -135,16 +131,14 @@ public class CubicCurveToBiArc {
                 dac + dab + dbc);
     }
 
-    /**
-     * Calculate the parameter value with maximum error > tolerance,
-     * returns -1d if all checked points are within tolerance
-     *
-     * @param bezier          the bezier curve
-     * @param nrPointsToCheck the number of points to check
-     * @param tolerance       the tolerated distance
-     * @param biarc           the approximated bi-arc
-     * @return the parameter with maximum error or -1d
-     */
+    /// Calculate the parameter value with maximum error > tolerance,
+    /// returns -1d if all checked points are within tolerance
+    ///
+    /// @param bezier          the bezier curve
+    /// @param nrPointsToCheck the number of points to check
+    /// @param tolerance       the tolerated distance
+    /// @param biarc           the approximated bi-arc
+    /// @return the parameter with maximum error or -1d
     private static double getParamWithMaxErrorOverTolerance(CubicCurve2D.Double bezier, int nrPointsToCheck, double tolerance, BiArc biarc) {
         double maxDistance = tolerance;
         double maxDistanceAt = -1d;

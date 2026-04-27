@@ -17,31 +17,29 @@ import scala.collection.mutable.Builder;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * <pre>
- * # JMH version: 1.36
- * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
- * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
- *
- *                    (size)  Mode  Cnt    _     Score   Error  Units
- * ContainsFound     1000000  avgt         _   348.505          ns/op
- * ContainsNotFound  1000000  avgt         _   264.846          ns/op
- * Head              1000000  avgt         _    53.705          ns/op
- * Iterate           1000000  avgt       33_279549.804          ns/op
- * Put               1000000  avgt         _  1074.934          ns/op
- * RemoveThenAdd     1000000  avgt         _  1509.428          ns/op
- * Tail              1000000  avgt         _   312.867          ns/op
- * CopyOf            1000000  avgt      846_489177.333          ns/op
- *
- * Benchmark                           (mask)   (size)  Mode  Cnt      _     Score   Error  Units
- * ScalaTreeSeqMapJmh.mRemoveOneByOne     -65       10  avgt    2      _   744.003          ns/op
- * ScalaTreeSeqMapJmh.mRemoveOneByOne     -65      100  avgt    2      _ 13533.827          ns/op
- * ScalaTreeSeqMapJmh.mRemoveOneByOne     -65     1000  avgt    2      _303397.737          ns/op
- * ScalaTreeSeqMapJmh.mRemoveOneByOne     -65    10000  avgt    2     5_825785.719          ns/op
- * ScalaTreeSeqMapJmh.mRemoveOneByOne     -65   100000  avgt    2   119_658560.411          ns/op
- * ScalaTreeSeqMapJmh.mRemoveOneByOne     -65  1000000  avgt    2  1971_439819.167          ns/op
- * </pre>
- */
+/// <pre>
+/// # JMH version: 1.36
+/// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
+/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+///
+///                    (size)  Mode  Cnt    _     Score   Error  Units
+/// ContainsFound     1000000  avgt         _   348.505          ns/op
+/// ContainsNotFound  1000000  avgt         _   264.846          ns/op
+/// Head              1000000  avgt         _    53.705          ns/op
+/// Iterate           1000000  avgt       33_279549.804          ns/op
+/// Put               1000000  avgt         _  1074.934          ns/op
+/// RemoveThenAdd     1000000  avgt         _  1509.428          ns/op
+/// Tail              1000000  avgt         _   312.867          ns/op
+/// CopyOf            1000000  avgt      846_489177.333          ns/op
+///
+/// Benchmark                           (mask)   (size)  Mode  Cnt      _     Score   Error  Units
+/// ScalaTreeSeqMapJmh.mRemoveOneByOne     -65       10  avgt    2      _   744.003          ns/op
+/// ScalaTreeSeqMapJmh.mRemoveOneByOne     -65      100  avgt    2      _ 13533.827          ns/op
+/// ScalaTreeSeqMapJmh.mRemoveOneByOne     -65     1000  avgt    2      _303397.737          ns/op
+/// ScalaTreeSeqMapJmh.mRemoveOneByOne     -65    10000  avgt    2     5_825785.719          ns/op
+/// ScalaTreeSeqMapJmh.mRemoveOneByOne     -65   100000  avgt    2   119_658560.411          ns/op
+/// ScalaTreeSeqMapJmh.mRemoveOneByOne     -65  1000000  avgt    2  1971_439819.167          ns/op
+/// </pre>
 @SuppressWarnings("unchecked")
 @State(Scope.Benchmark)
 @Measurement(iterations = 0)

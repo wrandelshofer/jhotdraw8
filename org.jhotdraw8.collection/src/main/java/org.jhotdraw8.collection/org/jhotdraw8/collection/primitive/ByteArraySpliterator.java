@@ -16,28 +16,24 @@ public class ByteArraySpliterator implements SpliteratorOfByte {
     private final int fence;  // one past last index
     private final int characteristics;
 
-    /**
-     * Creates a spliterator covering all of the given array.
-     *
-     * @param array                     the array, assumed to be unmodified during use
-     * @param additionalCharacteristics Additional spliterator characteristics
-     *                                  of this spliterator's source or elements beyond {@code SIZED} and
-     *                                  {@code SUBSIZED} which are always reported
-     */
+    /// Creates a spliterator covering all of the given array.
+    ///
+    /// @param array                     the array, assumed to be unmodified during use
+    /// @param additionalCharacteristics Additional spliterator characteristics
+    ///                                  of this spliterator's source or elements beyond `SIZED` and
+    ///                                  `SUBSIZED` which are always reported
     public ByteArraySpliterator(byte[] array, int additionalCharacteristics) {
         this(array, 0, array.length, additionalCharacteristics);
     }
 
-    /**
-     * Creates a spliterator covering the given array and range
-     *
-     * @param array                     the array, assumed to be unmodified during use
-     * @param origin                    the least index (inclusive) to cover
-     * @param fence                     one past the greatest index to cover
-     * @param additionalCharacteristics Additional spliterator characteristics
-     *                                  of this spliterator's source or elements beyond {@code SIZED} and
-     *                                  {@code SUBSIZED} which are always reported
-     */
+    /// Creates a spliterator covering the given array and range
+    ///
+    /// @param array                     the array, assumed to be unmodified during use
+    /// @param origin                    the least index (inclusive) to cover
+    /// @param fence                     one past the greatest index to cover
+    /// @param additionalCharacteristics Additional spliterator characteristics
+    ///                                  of this spliterator's source or elements beyond `SIZED` and
+    ///                                  `SUBSIZED` which are always reported
     public ByteArraySpliterator(byte[] array, int origin, int fence, int additionalCharacteristics) {
         this.array = array;
         this.index = origin;

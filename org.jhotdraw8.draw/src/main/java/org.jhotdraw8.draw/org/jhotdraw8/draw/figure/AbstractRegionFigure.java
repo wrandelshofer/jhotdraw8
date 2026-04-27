@@ -35,10 +35,7 @@ import org.jspecify.annotations.Nullable;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-/**
- * Renders a Shape (either a Rectangle or an SVGPath) inside a rectangular region.
- *
- */
+/// Renders a Shape (either a Rectangle or an SVGPath) inside a rectangular region.
 public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {
     public static final CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;

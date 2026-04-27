@@ -12,12 +12,10 @@ import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 
-/**
- * An iterator that fails when a provided modification counter does not have an
- * expected value.
- *
- * @param <E> the element type
- */
+/// An iterator that fails when a provided modification counter does not have an
+/// expected value.
+///
+/// @param <E> the element type
 public class FailFastIterator<E> implements Iterator<E> {
     private final Iterator<? extends E> i;
     private int expectedModCount;

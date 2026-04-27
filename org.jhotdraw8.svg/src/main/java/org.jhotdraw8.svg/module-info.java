@@ -6,9 +6,7 @@
 import org.jhotdraw8.svg.spi.SvgImageReaderProvider;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * Provides SVG interoperability for drawing editors.
- */
+/// Provides SVG interoperability for drawing editors.
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.svg {

@@ -18,9 +18,7 @@ public class RegionFigure extends AbstractRegionFigure
         StyleableFigure, TransformableFigure, HideableFigure,
         ConnectableFigure, LockableFigure, ResizableFigure {
 
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Region";
 
     public RegionFigure() {

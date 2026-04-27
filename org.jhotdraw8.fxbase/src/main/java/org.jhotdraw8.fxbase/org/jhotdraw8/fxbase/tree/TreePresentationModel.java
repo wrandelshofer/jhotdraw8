@@ -8,21 +8,17 @@ import javafx.scene.control.TreeItem;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jspecify.annotations.Nullable;
 
-/**
- * The {@code TreePresentationModel} can be used to present a {@code TreeModel}
- * in a {@code TreeView} or a {@code TreeTableView}.
- * <p>
- * Maps {@code TreeModel} to a {@code TreeItem&lt;E&gt;} hierarchy.
- * <p>
- * Note: for performance reasons we do not expand the tree nodes by default.
- *
- * @param <N> the node type
- */
+/// The `TreePresentationModel` can be used to present a `TreeModel`
+/// in a `TreeView` or a `TreeTableView`.
+///
+/// Maps `TreeModel` to a `TreeItem&lt;E&gt;` hierarchy.
+///
+/// Note: for performance reasons we do not expand the tree nodes by default.
+///
+/// @param <N> the node type
 public interface TreePresentationModel<N> {
 
-    /**
-     * The name of the model property.
-     */
+    /// The name of the model property.
     String MODEL_PROPERTY = "model";
 
     default TreeModel<N> getTreeModel() {
@@ -39,13 +35,11 @@ public interface TreePresentationModel<N> {
 
     boolean isUpdating();
 
-    /**
-     * Returns the tree item associated to the specified node.
-     *
-     * @param value the node value
-     * @return a TreeItem. Returns null if no tree item has been associated to
-     * the node because the tree is not expanded yet.
-     */
+    /// Returns the tree item associated to the specified node.
+    ///
+    /// @param value the node value
+    /// @return a TreeItem. Returns null if no tree item has been associated to
+    /// the node because the tree is not expanded yet.
     @Nullable
     TreeItem<N> getTreeItem(N value);
 

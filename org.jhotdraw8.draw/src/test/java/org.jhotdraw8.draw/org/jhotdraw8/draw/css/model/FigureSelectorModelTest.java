@@ -21,18 +21,13 @@ import java.text.ParseException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-/**
- * FigureSelectorModelTest.
- *
- */
+/// FigureSelectorModelTest.
 public class FigureSelectorModelTest {
 
     public FigureSelectorModelTest() {
     }
 
-    /**
-     * Test of getProperties method, of class SimplePropertyBean.
-     */
+    /// Test of getProperties method, of class SimplePropertyBean.
     @Test
     public void testNullValueIsNotSameAsDefaultPropertyValue() throws ParseException {
         LabelFigure figure = new LabelFigure();

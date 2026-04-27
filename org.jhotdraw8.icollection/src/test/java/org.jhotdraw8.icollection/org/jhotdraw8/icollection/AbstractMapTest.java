@@ -74,25 +74,17 @@ public abstract class AbstractMapTest {
         assertNotEquals(expected.entrySet(), actual.entrySet());
     }
 
-    /**
-     * Creates a new empty instance.
-     */
+    /// Creates a new empty instance.
     protected abstract <K, V> Map<K, V> newInstance();
 
-    /**
-     * Creates a new instance with the specified expected number of elements
-     * and load factor.
-     */
+    /// Creates a new instance with the specified expected number of elements
+    /// and load factor.
     protected abstract <K, V> Map<K, V> newInstance(int numElements, float loadFactor);
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <K, V> Map<K, V> newInstance(Map<K, V> m);
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     abstract <K, V> Map<K, V> newInstance(Iterable<Map.Entry<K, V>> m);
 
     @ParameterizedTest

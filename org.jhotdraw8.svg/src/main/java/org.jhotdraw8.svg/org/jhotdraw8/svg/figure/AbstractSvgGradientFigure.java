@@ -11,9 +11,9 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import org.jhotdraw8.base.converter.MappedConverter;
+import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.css.value.NamedCssColor;
 import org.jhotdraw8.css.value.Paintable;
 import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
@@ -38,18 +38,13 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Map;
 
-/**
- * Represents an SVG 'linearGradient' element.
- *
- */
+/// Represents an SVG 'linearGradient' element.
 public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, NonTransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
         SvgDefaultableFigure,
         SvgElementFigure, Paintable {
 
-    /**
-     * <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementGradientUnitsAttribute">w3.org</a>
-     */
+    /// <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementGradientUnitsAttribute">w3.org</a>
     public static final NonNullObjectStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
             new NonNullObjectStyleableKey<>("gradientUnits", SvgGradientUnits.class,
                     new MappedConverter<>(Map.of(
@@ -59,9 +54,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
                     SvgGradientUnits.OBJECT_BOUNDING_BOX
             );
 
-    /**
-     * <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementSpreadMethodAttribute">w3.org</a>
-     */
+    /// <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementSpreadMethodAttribute">w3.org</a>
     public static final NonNullObjectStyleableKey<CycleMethod> SPREAD_METHOD =
             new NonNullObjectStyleableKey<>("spreadMethod", CycleMethod.class,
                     new MappedConverter<>(Map.of(

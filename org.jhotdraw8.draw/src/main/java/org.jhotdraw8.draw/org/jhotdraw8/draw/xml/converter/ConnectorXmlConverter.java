@@ -27,17 +27,14 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.function.Function;
 
-/**
- * XmlConnectorConverter.
- * <p>
- * This converter supports the following connectors:
- * <ul>
- * <li>PathConnector</li>
- * <li>RectangleConnector</li>
- * <li>EllipseConnector</li>
- * </ul>
- *
- */
+/// XmlConnectorConverter.
+///
+/// This converter supports the following connectors:
+///
+///   - PathConnector
+///   - RectangleConnector
+///   - EllipseConnector
+///
 public class ConnectorXmlConverter implements Converter<Connector> {
 
     private final LocatorCssConverter locatorConverter = new LocatorCssConverter();
@@ -92,15 +89,13 @@ public class ConnectorXmlConverter implements Converter<Connector> {
         return null;
     }
 
-    /**
-     * Parses a Locator.
-     *
-     * @param tt         the tokenizer
-     * @param idResolver
-     * @return the parsed color
-     * @throws ParseException if parsing fails
-     * @throws IOException    if IO fails
-     */
+    /// Parses a Locator.
+    ///
+    /// @param tt         the tokenizer
+    /// @param idResolver
+    /// @return the parsed color
+    /// @throws ParseException if parsing fails
+    /// @throws IOException    if IO fails
     public @Nullable Connector parseConnector(CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
         Locator locator;
         Function<Locator, Connector> supplier;

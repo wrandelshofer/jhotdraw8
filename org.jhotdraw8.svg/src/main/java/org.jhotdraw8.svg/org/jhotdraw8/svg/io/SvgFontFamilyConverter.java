@@ -21,30 +21,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Parses a font family.
- * <pre>
- * font-family = ( { family-name | generic-family , "," }
- *     	             family-name | generic-family )
- *     	       | "inherit" ;
- *
- *
- * family-name = STRING
- *             | IDENT, { IDENT } ;
- *
- * generic-family = 'serif' | 'sans-serif' | 'cursive' | 'fantasy' | 'monospace' ;
- * </pre>
- * <p>
- * References:
- * <dl>
- *     <dt>SVG Tiny 1.2, Font Properties</dt>
- *     <dd><a href="https://www.w3.org/TR/SVGTiny12/text.html#FontPropertiesUsedBySVG">w3.org</a></dd>
- *     <dt>Extensible Stylesheet Language (XSL) Version 1.1, Common Font Properties</dt>
- *     <dd><a href="https://www.w3.org/TR/2006/REC-xsl11-20061205/#common-font-properties">w3.org</a></dd>
- *     <dt>Cascading Style Sheets, Level 2, CSS2 Specification, Font Family</dt>
- *     <dd><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#propdef-font-family">w3.org</a></dd>
- * </dl>
- */
+/// Parses a font family.
+/// <pre>
+/// font-family = ( { family-name | generic-family , "," }
+///     	             family-name | generic-family )
+///     	       | "inherit" ;
+///
+///
+/// family-name = STRING
+///             | IDENT, { IDENT } ;
+///
+/// generic-family = 'serif' | 'sans-serif' | 'cursive' | 'fantasy' | 'monospace' ;
+/// </pre>
+///
+/// References:
+/// <dl>
+///     <dt>SVG Tiny 1.2, Font Properties</dt>
+///     <dd><a href="https://www.w3.org/TR/SVGTiny12/text.html#FontPropertiesUsedBySVG">w3.org</a></dd>
+///     <dt>Extensible Stylesheet Language (XSL) Version 1.1, Common Font Properties</dt>
+///     <dd><a href="https://www.w3.org/TR/2006/REC-xsl11-20061205/#common-font-properties">w3.org</a></dd>
+///     <dt>Cascading Style Sheets, Level 2, CSS2 Specification, Font Family</dt>
+///     <dd><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#propdef-font-family">w3.org</a></dd>
+/// </dl>
 public class SvgFontFamilyConverter implements CssConverter<PersistentList<String>> {
 
     public static final String GENERIC_FONT_FAMILY_SERIF = "serif";

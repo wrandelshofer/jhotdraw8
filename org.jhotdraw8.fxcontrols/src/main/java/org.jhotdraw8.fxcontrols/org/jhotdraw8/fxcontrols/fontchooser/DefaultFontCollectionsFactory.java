@@ -17,31 +17,24 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
-/**
- * DefaultFontCollectionsFactory.
- *
- */
+/// DefaultFontCollectionsFactory.
 public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
 
     public DefaultFontCollectionsFactory() {
     }
 
-    /**
-     * Creates a FontChooserModel.
-     * <p>
-     * This is an IO intensive operation and should therefore not be called on the JavaFX Application Thread.
-     *
-     * @return a FontChooserModel.
-     */
+    /// Creates a FontChooserModel.
+    ///
+    /// This is an IO intensive operation and should therefore not be called on the JavaFX Application Thread.
+    ///
+    /// @return a FontChooserModel.
     public List<FontCollection> create() {
         return generateCollections(loadFonts());
     }
 
-    /**
-     * Loads all Fonts that are available to JavaFX.
-     *
-     * @return the list of fonts
-     */
+    /// Loads all Fonts that are available to JavaFX.
+    ///
+    /// @return the list of fonts
     protected List<FontFamily> loadFonts() {
         List<FontFamily> allFamilies = new ArrayList<>();
 
@@ -75,14 +68,12 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
         return allFamilies;
     }
 
-    /**
-     * Groups a list of font families into collections.
-     * <p>
-     * This implementation uses a hardcoded set of collections.
-     *
-     * @param families a list of font families
-     * @return a collection of font families
-     */
+    /// Groups a list of font families into collections.
+    ///
+    /// This implementation uses a hardcoded set of collections.
+    ///
+    /// @param families a list of font families
+    /// @return a collection of font families
     protected ObservableList<FontCollection> generateCollections(List<FontFamily> families) {
         ObservableList<FontCollection> collections = FXCollections.observableArrayList();
 

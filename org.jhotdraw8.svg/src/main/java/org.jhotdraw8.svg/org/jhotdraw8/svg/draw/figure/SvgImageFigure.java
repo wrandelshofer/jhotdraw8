@@ -14,11 +14,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.base.converter.SimpleUriResolver;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.CompositableFigure;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
@@ -48,18 +48,13 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * SvgImageFigure presents an SVG image or a bitmap image on a drawing.
- *
- */
+/// SvgImageFigure presents an SVG image or a bitmap image on a drawing.
 public class SvgImageFigure extends AbstractLeafFigure
         implements ResizableFigure, TransformableFigure, StyleableFigure,
         LockableFigure, CompositableFigure,
         ConnectableFigure, HideableFigure, ImageableFigure {
 
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
+    /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Image";
 
     public static final CssSizeStyleableKey X = RectangleFigure.X;

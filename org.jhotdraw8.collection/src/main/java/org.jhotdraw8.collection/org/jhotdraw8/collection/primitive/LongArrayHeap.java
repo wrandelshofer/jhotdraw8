@@ -14,85 +14,70 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Spliterators;
 
-/**
- * An optimized array-based binary heap with long keys.
- * <p>
- * This is a highly optimized implementation which uses
- * <ol type="a">
- * <li>the Wegener bottom-up heuristic and</li>
- * <li>sentinel values</li>
- * </ol>
- * The implementation uses an array
- * in order to store the elements, providing amortized O(log(n)) time for the
- * {@link #addAsLong} and {@link #removeAsLong} operations.
- * Operation {@code findMin},
- * is a worst-case O(1) operation. All bounds are worst-case if the user
- * initializes the heap with a capacity larger or equal to the total number of
- * elements that are going to be inserted into the heap.
- *
- * <p>
- * See the following papers for details about the optimizations:
- * <ul>
- * <li>Ingo Wegener. BOTTOM-UP-HEAPSORT, a new variant of HEAPSORT beating, on
- * an average, QUICKSORT (if n is not very small). Theoretical Computer Science,
- * 118(1), 81--98, 1993.</li>
- * <li>Peter Sanders. Fast Priority Queues for Cached Memory. Algorithms
- * Engineering and Experiments (ALENEX), 312--327, 1999.</li>
- * </ul>
- *
- * <p>
- * <strong>Note that this implementation is not synchronized.</strong> If
- * multiple threads access a heap concurrently, and at least one of the threads
- * modifies the heap structurally, it <em>must</em> be synchronized externally.
- * (A structural modification is any operation that adds or deletes one or more
- * elements or changing the key of some element.) This is typically accomplished
- * by synchronizing on some object that naturally encapsulates the heap.
- *
- *
- * <dl>
- *      <dt>JHeaps Library
- *      <br>Copyright (c) 2014-2022 Dimitrios Michail. Apache License 2.0.</dt>
- *      <dd><a href="https://github.com/d-michail/jheaps">github.com</a>
- * </dl>
- */
+/// An optimized array-based binary heap with long keys.
+///
+/// This is a highly optimized implementation which uses
+/// <ol type="a">
+///   - the Wegener bottom-up heuristic and
+///   - sentinel values
+/// </ol>
+/// The implementation uses an array
+/// in order to store the elements, providing amortized O(log(n)) time for the
+/// [#addAsLong] and [#removeAsLong] operations.
+/// Operation `findMin`,
+/// is a worst-case O(1) operation. All bounds are worst-case if the user
+/// initializes the heap with a capacity larger or equal to the total number of
+/// elements that are going to be inserted into the heap.
+///
+/// See the following papers for details about the optimizations:
+///
+///   - Ingo Wegener. BOTTOM-UP-HEAPSORT, a new variant of HEAPSORT beating, on
+///     an average, QUICKSORT (if n is not very small). Theoretical Computer Science,
+///     118(1), 81--98, 1993.
+///   - Peter Sanders. Fast Priority Queues for Cached Memory. Algorithms
+///     Engineering and Experiments (ALENEX), 312--327, 1999.
+///
+///
+/// **Note that this implementation is not synchronized.** If
+/// multiple threads access a heap concurrently, and at least one of the threads
+/// modifies the heap structurally, it _must_ be synchronized externally.
+/// (A structural modification is any operation that adds or deletes one or more
+/// elements or changing the key of some element.) This is typically accomplished
+/// by synchronizing on some object that naturally encapsulates the heap.
+/// <dl>
+///      <dt>JHeaps Library
+///
+/// Copyright (c) 2014-2022 Dimitrios Michail. Apache License 2.0.</dt>
+///      <dd><a href="https://github.com/d-michail/jheaps">github.com</a>
+/// </dl>
 public class LongArrayHeap extends AbstractCollection<Long>
         implements LongQueue, Serializable, Cloneable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     * The array used for representing the heap.
-     */
+    /// The array used for representing the heap.
     private long[] array;
 
-    /**
-     * Number of elements in the heap.
-     */
+    /// Number of elements in the heap.
     private int size;
 
-    /**
-     * Constructs a new, empty heap, using the natural ordering of its keys.
-     *
-     * <p>
-     * The initial capacity of the heap is {@code 16} and
-     * adjusts automatically based on the sequence of insertions and deletions.
-     */
+    /// Constructs a new, empty heap, using the natural ordering of its keys.
+    ///
+    /// The initial capacity of the heap is `16` and
+    /// adjusts automatically based on the sequence of insertions and deletions.
     public LongArrayHeap() {
         this(16);
     }
 
-    /**
-     * Constructs a new, empty heap, with a provided initial capacity using the
-     * natural ordering of its keys.
-     *
-     * <p>
-     * The initial capacity of the heap is provided by the user and is adjusted
-     * automatically based on the sequence of insertions and deletions. The
-     * capacity will never become smaller than the initial requested capacity.
-     *
-     * @param capacity the initial heap capacity
-     */
+    /// Constructs a new, empty heap, with a provided initial capacity using the
+    /// natural ordering of its keys.
+    ///
+    /// The initial capacity of the heap is provided by the user and is adjusted
+    /// automatically based on the sequence of insertions and deletions. The
+    /// capacity will never become smaller than the initial requested capacity.
+    ///
+    /// @param capacity the initial heap capacity
     public LongArrayHeap(int capacity) {
         Objects.checkIndex(capacity + 1, Integer.MAX_VALUE - 8 - 1);
         this.array = new long[capacity + 1];
@@ -167,9 +152,7 @@ public class LongArrayHeap extends AbstractCollection<Long>
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /// {@inheritDoc}
     @Override
     public long removeAsLong() {
         if (size == 0) {

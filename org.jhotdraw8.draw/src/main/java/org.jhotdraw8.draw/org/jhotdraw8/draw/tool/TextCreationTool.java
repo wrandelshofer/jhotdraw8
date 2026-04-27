@@ -11,11 +11,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.application.resources.Resources;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.Constrainer;
-import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
@@ -30,10 +30,7 @@ import java.util.function.Supplier;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
-/**
- * TextCreationTool.
- *
- */
+/// TextCreationTool.
 public class TextCreationTool extends AbstractCreationTool<Figure> {
 
 
@@ -42,14 +39,10 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     private final TextArea textArea = new TextArea();
     private TextEditableFigure.@Nullable TextEditorData editorData;
 
-    /**
-     * The rubber band.
-     */
+    /// The rubber band.
     private double x1, y1, x2, y2;
 
-    /**
-     * The minimum size of a created figure (in view coordinates.
-     */
+    /// The minimum size of a created figure (in view coordinates.
     private final double minSize = 2;
 
     public TextCreationTool(String name, Resources rsrc, Supplier<TextEditableFigure> factory) {
@@ -222,9 +215,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     }
 
 
-    /**
-     * This implementation is empty.
-     */
+    /// This implementation is empty.
     @Override
     public void activate(DrawingEditor editor) {
         requestFocus();

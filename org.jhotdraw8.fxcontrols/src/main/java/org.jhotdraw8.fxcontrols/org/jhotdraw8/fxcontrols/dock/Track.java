@@ -4,10 +4,8 @@
  */
 package org.jhotdraw8.fxcontrols.dock;
 
-/**
- * A Track is a {@link DockParent} that can also be added as a
- * {@link DockChild} to another {@link DockParent}.
- */
+/// A Track is a [DockParent] that can also be added as a
+/// [DockChild] to another [DockParent].
 public interface Track extends DockChild, DockParent {
 
 }

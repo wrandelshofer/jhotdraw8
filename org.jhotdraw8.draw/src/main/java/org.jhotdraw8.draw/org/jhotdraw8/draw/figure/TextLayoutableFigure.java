@@ -20,39 +20,24 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jspecify.annotations.Nullable;
 
-/**
- * A figure which supports font attributes.
- *
- */
+/// A figure which supports font attributes.
 public interface TextLayoutableFigure extends Figure {
 
-    /**
-     * The line spacing. Default value: {@code 0.0}
-     */
+    /// The line spacing. Default value: `0.0`
     @Nullable CssSizeStyleableKey LINE_SPACING = new CssSizeStyleableKey("lineSpacing", CssSize.ZERO);
-    /**
-     * The text alignment. Default value: {@code left}
-     */
+    /// The text alignment. Default value: `left`
     NonNullEnumStyleableKey<TextAlignment> TEXT_ALIGNMENT = new NonNullEnumStyleableKey<>("textAlignment", TextAlignment.class, TextAlignment.LEFT);
-    /**
-     * The vertical position of the text. Default value: {@code baseline}
-     */
+    /// The vertical position of the text. Default value: `baseline`
     NonNullEnumStyleableKey<VPos> TEXT_VPOS = new NonNullEnumStyleableKey<>("textVPos", VPos.class, VPos.BASELINE);
-    /**
-     * The horizontal position of the text. Default value: {@code left}
-     */
+    /// The horizontal position of the text. Default value: `left`
     NonNullEnumStyleableKey<HPos> TEXT_HPOS = new NonNullEnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
-    /**
-     * Text wrapping width. Default value: {@code 0.0} (no wrapping).
-     */
+    /// Text wrapping width. Default value: `0.0` (no wrapping).
     DoubleStyleableKey WRAPPING_WIDTH = new DoubleStyleableKey("wrappingWidth", 0.0);
 
-    /**
-     * Updates a text node with fontable properties.
-     *
-     * @param ctx  RenderContext, can be null
-     * @param text a text node
-     */
+    /// Updates a text node with fontable properties.
+    ///
+    /// @param ctx  RenderContext, can be null
+    /// @param text a text node
     default void applyTextLayoutableFigureProperties(@Nullable RenderContext ctx, Text text) {
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
 
@@ -93,12 +78,10 @@ public interface TextLayoutableFigure extends Figure {
 
     }
 
-    /**
-     * Updates a Labeled node with fontable properties.
-     *
-     * @param ctx  context
-     * @param text a text node
-     */
+    /// Updates a Labeled node with fontable properties.
+    ///
+    /// @param ctx  context
+    /// @param text a text node
     default void applyTextLayoutableFigureProperties(@Nullable RenderContext ctx, Labeled text) {
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         double d = units.convert(getStyledNonNull(LINE_SPACING), UnitConverter.DEFAULT);

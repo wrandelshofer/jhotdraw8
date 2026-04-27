@@ -10,10 +10,7 @@ import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.fxbase.styleable.StyleableBean;
 import org.jspecify.annotations.Nullable;
 
-/**
- * SimpleFigureIdFactory.
- *
- */
+/// SimpleFigureIdFactory.
 public class SimpleFigureIdFactory extends SimpleIdFactory {
     public SimpleFigureIdFactory() {
     }

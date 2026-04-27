@@ -13,10 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Represents a font specified with family, weight, posture and size properties.
- *
- */
+/// Represents a font specified with family, weight, posture and size properties.
 public class CssFont {
 
     private final String family;

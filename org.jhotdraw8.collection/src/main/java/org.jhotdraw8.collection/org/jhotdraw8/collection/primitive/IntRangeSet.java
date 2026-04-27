@@ -11,19 +11,15 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-/**
- * Represents a set of integers in a given range.
- */
+/// Represents a set of integers in a given range.
 public class IntRangeSet extends AbstractReadableSet<Integer> {
     private final int from;
     private final int to;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param from from inclusive
-     * @param to   exclusive
-     */
+    /// Creates a new instance.
+    ///
+    /// @param from from inclusive
+    /// @param to   exclusive
     public IntRangeSet(int from, int to) {
         Objects.checkIndex(from, to);
         this.from = from;

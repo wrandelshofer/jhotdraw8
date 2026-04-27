@@ -16,19 +16,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * BringToFrontAction.
- *
- */
+/// BringToFrontAction.
 public class BringToFrontAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.bringToFront";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param editor the drawing editor
-     */
+    /// Creates a new instance.
+    ///
+    /// @param editor the drawing editor
     @SuppressWarnings("this-escape")
     public BringToFrontAction(DrawingEditor editor) {
         super(editor);

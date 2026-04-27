@@ -27,9 +27,7 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
 import org.jspecify.annotations.Nullable;
 
-/**
- * Handle for moving all selected figures.
- */
+/// Handle for moving all selected figures.
 public class MultipleSelectionMoveHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));

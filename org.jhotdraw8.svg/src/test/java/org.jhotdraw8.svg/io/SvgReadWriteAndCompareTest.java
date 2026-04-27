@@ -15,7 +15,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.jhotdraw8.collection.pair.OrderedPair;
@@ -50,31 +55,25 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * The tests in this class perform the following steps:
- * <ol>
- *     <li>Create JavaFX scene graph from an SVG file.</li>
- *     <li>Render the JavaFX scene graph into a Bitmap (expected bitmap).</li>
- *     <li>Write a new SVG file into a temporary file (byte array).</li>
- *     <li>Create a JavaFX scene graph from that temporary file.</li>
- *     <li>Render the JavaFX scene graph into a Bitmap (actual bitmap).</li>
- *     <li>Asser that actual bitmap is equal to expected bitmap.</li>
- * </ol>
- */
+/// The tests in this class perform the following steps:
+/// <ol>
+///   - Create JavaFX scene graph from an SVG file.
+///   - Render the JavaFX scene graph into a Bitmap (expected bitmap).
+///   - Write a new SVG file into a temporary file (byte array).
+///   - Create a JavaFX scene graph from that temporary file.
+///   - Render the JavaFX scene graph into a Bitmap (actual bitmap).
+///   - Asser that actual bitmap is equal to expected bitmap.
+/// </ol>
 public class SvgReadWriteAndCompareTest {
-    /**
-     * Set this constant to the path of the folder into which you checked
-     * out the SVG Tiny 1.2 test suite.
-     * <p>
-     * <a href="https://dev.w3.org/cvsweb/SVG/profiles/1.2T/test/archives/W3C_SVG_12_TinyTestSuite.tar.gz">dev.w3.org</a>
-     */
+    /// Set this constant to the path of the folder into which you checked
+    /// out the SVG Tiny 1.2 test suite.
+    ///
+    /// <a href="https://dev.w3.org/cvsweb/SVG/profiles/1.2T/test/archives/W3C_SVG_12_TinyTestSuite.tar.gz">dev.w3.org</a>
     private static final String W3C_SVG_12_TINY_TEST_SUITE = "data/W3C_SVG_12_TinyTestSuite";
     private static final boolean INTERACTIVE = true;
     private static final long INTERACTIVE_TIMEOUT_SECONDS = 60;
 
-    /**
-     * This launcher starts the JavaFX application thread.
-     */
+    /// This launcher starts the JavaFX application thread.
     public static class Launcher extends Application {
         public Launcher() {
 

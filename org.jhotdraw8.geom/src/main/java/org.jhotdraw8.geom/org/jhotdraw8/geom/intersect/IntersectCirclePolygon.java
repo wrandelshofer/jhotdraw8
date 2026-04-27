@@ -13,14 +13,12 @@ public class IntersectCirclePolygon {
     private IntersectCirclePolygon() {
     }
 
-    /**
-     * Computes the intersection between a circle and a polygon.
-     *
-     * @param c      the center of the circle
-     * @param r      the radius of the circle
-     * @param points the points of the polygon
-     * @return computed intersection
-     */
+    /// Computes the intersection between a circle and a polygon.
+    ///
+    /// @param c      the center of the circle
+    /// @param r      the radius of the circle
+    /// @param points the points of the polygon
+    /// @return computed intersection
     public static IntersectionResultEx intersectCirclePolygonEx(Point2D c, double r, List<Point2D.Double> points) {
         List<IntersectionPointEx> result = new ArrayList<>();
         int length = points.size();

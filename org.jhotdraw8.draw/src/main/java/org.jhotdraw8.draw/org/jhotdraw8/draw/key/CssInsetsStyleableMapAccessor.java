@@ -15,10 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * InsetsStyleableMapAccessor.
- *
- */
+/// InsetsStyleableMapAccessor.
 public class CssInsetsStyleableMapAccessor
         extends AbstractStyleableMapAccessor<CssInsets>
         implements NonNullMapAccessor<CssInsets> {
@@ -29,15 +26,13 @@ public class CssInsetsStyleableMapAccessor
     private final NonNullMapAccessor<CssSize> bottomKey;
     private final NonNullMapAccessor<CssSize> leftKey;
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name      the name of the accessor
-     * @param topKey    the insets top key
-     * @param rightKey  the insets right key
-     * @param bottomKey the insets bottom key
-     * @param leftKey   the insets left key
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name      the name of the accessor
+    /// @param topKey    the insets top key
+    /// @param rightKey  the insets right key
+    /// @param bottomKey the insets bottom key
+    /// @param leftKey   the insets left key
     public CssInsetsStyleableMapAccessor(String name, NonNullMapAccessor<CssSize> topKey, NonNullMapAccessor<CssSize> rightKey, NonNullMapAccessor<CssSize> bottomKey, NonNullMapAccessor<CssSize> leftKey) {
         super(name, CssInsets.class, new NonNullMapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 

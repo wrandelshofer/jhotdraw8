@@ -42,14 +42,11 @@ import java.util.List;
 import static org.jhotdraw8.draw.render.RenderContext.UNIT_CONVERTER_KEY;
 import static org.jhotdraw8.geom.Scalars.almostEqual;
 
-/**
- * AbstractElbowLineConnectionWithMarkersFigure draws a straight line or an elbow line from start to end.
- * <p>
- * A subclass can hardcode the markers, or can implement one or multiple "markerable" interfaces
- * that allow user-defineable markers: {@link MarkerStartableFigure}, {@link MarkerEndableFigure},
- * {@link MarkerSegmentableFigure}, {@link MarkerMidableFigure}.
- *
- */
+/// AbstractElbowLineConnectionWithMarkersFigure draws a straight line or an elbow line from start to end.
+///
+/// A subclass can hardcode the markers, or can implement one or multiple "markerable" interfaces
+/// that allow user-defineable markers: [MarkerStartableFigure], [MarkerEndableFigure],
+/// [MarkerSegmentableFigure], [MarkerMidableFigure].
 public abstract class AbstractElbowLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
@@ -108,35 +105,29 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         }
     }
 
-    /**
-     * This method can be overridden by a subclass to apply styles to the line
-     * node.
-     *
-     * @param ctx  the context
-     * @param node the node
-     */
+    /// This method can be overridden by a subclass to apply styles to the line
+    /// node.
+    ///
+    /// @param ctx  the context
+    /// @param node the node
     protected void updateLineNode(RenderContext ctx, Polyline node) {
         // empty
     }
 
-    /**
-     * This method can be overridden by a subclass to apply styles to the marker
-     * node.
-     *
-     * @param ctx  the context
-     * @param node the node
-     */
+    /// This method can be overridden by a subclass to apply styles to the marker
+    /// node.
+    ///
+    /// @param ctx  the context
+    /// @param node the node
     protected void updateStartMarkerNode(RenderContext ctx, Path node) {
         // empty
     }
 
-    /**
-     * This method can be overridden by a subclass to apply styles to the marker
-     * node.
-     *
-     * @param ctx  the context
-     * @param node the node
-     */
+    /// This method can be overridden by a subclass to apply styles to the marker
+    /// node.
+    ///
+    /// @param ctx  the context
+    /// @param node the node
     protected void updateEndMarkerNode(RenderContext ctx, Path node) {
         // empty
     }
@@ -223,13 +214,11 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     public abstract double getMarkerEndScaleFactor();
 
-    /**
-     * The offset of the elbow from the end of the line.
-     * <p>
-     * If the value is null, or less or equal 0, then a straight line is drawn instead of an elbow.
-     *
-     * @return an offset
-     */
+    /// The offset of the elbow from the end of the line.
+    ///
+    /// If the value is null, or less or equal 0, then a straight line is drawn instead of an elbow.
+    ///
+    /// @return an offset
     public abstract @Nullable CssSize getElbowOffset();
 
 
@@ -357,14 +346,12 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     }
 
-    /**
-     * Connects two points with a z-shaped elbow line.
-     *
-     * @param a      the first point
-     * @param b      the second point
-     * @param dir    the direction of the z-shape
-     * @param points
-     */
+    /// Connects two points with a z-shaped elbow line.
+    ///
+    /// @param a      the first point
+    /// @param b      the second point
+    /// @param dir    the direction of the z-shape
+    /// @param points
     private void connectWithElbowLine(Point2D a, Point2D b, Point2D dir, ObservableList<Double> points) {
         Point2D derivative = b.subtract(a);
         double distance = dir.dotProduct(derivative);

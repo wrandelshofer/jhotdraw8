@@ -9,7 +9,7 @@ import javafx.scene.shape.PathElement;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.text.ParseException;
 import java.util.Arrays;
@@ -18,10 +18,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * This test requires Java SE 9 or higher because in Java 9 the precision (and performance) of
- * Math.toRadians() has been improved.
- */
+/// This test requires Java SE 9 or higher because in Java 9 the precision (and performance) of
+/// Math.toRadians() has been improved.
 public class ShapesTest {
 
     void testDoubleSvgStringFromAWT(String input, String expected) throws ParseException {

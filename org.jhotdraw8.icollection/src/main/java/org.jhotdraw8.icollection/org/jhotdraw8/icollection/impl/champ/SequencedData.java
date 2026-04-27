@@ -15,29 +15,25 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
 
-/**
- * A {@code SequencedData} stores a sequence number plus some data.
- * <p>
- * {@code SequencedData} objects are used to store sequenced data in a CHAMP
- * trie (see {@link Node}).
- * <p>
- * The kind of data is specified in concrete implementations of this
- * interface.
- * <p>
- * All sequence numbers of {@code SequencedData} objects in the same CHAMP trie
- * are unique. Sequence numbers range from {@link Integer#MIN_VALUE} (exclusive)
- * to {@link Integer#MAX_VALUE} (inclusive).
- */
+/// A `SequencedData` stores a sequence number plus some data.
+///
+/// `SequencedData` objects are used to store sequenced data in a CHAMP
+/// trie (see [Node]).
+///
+/// The kind of data is specified in concrete implementations of this
+/// interface.
+///
+/// All sequence numbers of `SequencedData` objects in the same CHAMP trie
+/// are unique. Sequence numbers range from [Integer#MIN_VALUE] (exclusive)
+/// to [Integer#MAX_VALUE] (inclusive).
 public interface SequencedData {
-    /**
-     * We use {@link Integer#MIN_VALUE} to detect overflows in the sequence number.
-     * <p>
-     * {@link Integer#MIN_VALUE} is the only integer number which can not
-     * be negated.
-     * <p>
-     * Therefore, we can not use {@link Integer#MIN_VALUE} as a sequence number
-     * anyway.
-     */
+    /// We use [Integer#MIN_VALUE] to detect overflows in the sequence number.
+    ///
+    /// [Integer#MIN_VALUE] is the only integer number which can not
+    /// be negated.
+    ///
+    /// Therefore, we can not use [Integer#MIN_VALUE] as a sequence number
+    /// anyway.
     int NO_SEQUENCE_NUMBER = Integer.MIN_VALUE;
 
 
@@ -48,22 +44,20 @@ public interface SequencedData {
                 || offset < Integer.MIN_VALUE + 2;
     }
 
-    /**
-     * Renumbers the sequence numbers in all nodes from {@code 0} to {@code size}.
-     * <p>
-     * Afterward, the sequence number for the next inserted entry must be
-     * set to the value {@code size};
-     *
-     * @param <K>
-     * @param owner
-     * @param size            the size of the trie
-     * @param root            the root of the trie
-     * @param vector          the sequence root of the trie
-     * @param hashFunction    the hash function for data elements
-     * @param equalsFunction  the equals function for data elements
-     * @param factoryFunction the factory function for data elements
-     * @return a new renumbered root and a new vector with matching entries
-     */
+    /// Renumbers the sequence numbers in all nodes from `0` to `size`.
+    ///
+    /// Afterward, the sequence number for the next inserted entry must be
+    /// set to the value `size`;
+    ///
+    /// @param <K>
+    /// @param owner
+    /// @param size            the size of the trie
+    /// @param root            the root of the trie
+    /// @param vector          the sequence root of the trie
+    /// @param hashFunction    the hash function for data elements
+    /// @param equalsFunction  the equals function for data elements
+    /// @param factoryFunction the factory function for data elements
+    /// @return a new renumbered root and a new vector with matching entries
     @SuppressWarnings("unchecked")
     static <K extends SequencedData> OrderedPair<BitmapIndexedNode<K>, VectorList<Object>> vecRenumber(
             @Nullable IdentityObject owner, int size, int sizeWithTombstones,
@@ -140,12 +134,10 @@ public interface SequencedData {
     }
 
 
-    /**
-     * Gets the sequence number of the data.
-     *
-     * @return sequence number in the range from {@link Integer#MIN_VALUE}
-     * (exclusive) to {@link Integer#MAX_VALUE} (inclusive).
-     */
+    /// Gets the sequence number of the data.
+    ///
+    /// @return sequence number in the range from [Integer#MIN_VALUE]
+    /// (exclusive) to [Integer#MAX_VALUE] (inclusive).
     int getSequenceNumber();
 
 

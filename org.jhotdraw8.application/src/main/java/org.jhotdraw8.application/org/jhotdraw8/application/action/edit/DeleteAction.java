@@ -9,22 +9,15 @@ import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.EditableComponent;
 
-/**
- * Deletes the region at (or after) the caret position.
- *
- */
+/// Deletes the region at (or after) the caret position.
 public class DeleteAction extends AbstractSelectionAction {
 
-    /**
-     * The ID for this action.
-     */
+    /// The ID for this action.
     public static final String ID = "edit.delete";
 
-    /**
-     * Creates a new instance which acts on the currently focused component.
-     *
-     * @param app the app
-     */
+    /// Creates a new instance which acts on the currently focused component.
+    ///
+    /// @param app the app
     public DeleteAction(Application app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);

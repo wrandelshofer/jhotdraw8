@@ -10,23 +10,19 @@ import java.util.Objects;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-/**
- * UnitConverter.
- * <p>
- * References:
- * <dl>
- *     <dt>CSS Values and Units Module Level 3. § 5.1.1 Font-relative lengths: the em, ex, ch, rem units</dt>
- *     <dd><a href="https://www.w3.org/TR/css3-values/#font-relative-lengths">w3.org</a></dd>
- *     <dt>CSS Values and Units Module Level 3. § 5.1.2 Viewport-percentage lengths: the vw, vh, vmin, vmax units</dt>
- *     <dd><a href="https://www.w3.org/TR/css3-values/#viewport-relative-lengths">w3.org</a></dd>
- *     <dt>CSS Values and Units Module Level 3. § 5.2 Absolute lengths: the cm, mm, Q, in, pt, pc, px units</dt>
- *     <dd><a href="https://www.w3.org/TR/css3-values/#absolute-length">w3.org</a></dd>
- * </dl>
- */
+/// UnitConverter.
+///
+/// References:
+/// <dl>
+///     <dt>CSS Values and Units Module Level 3. § 5.1.1 Font-relative lengths: the em, ex, ch, rem units</dt>
+///     <dd><a href="https://www.w3.org/TR/css3-values/#font-relative-lengths">w3.org</a></dd>
+///     <dt>CSS Values and Units Module Level 3. § 5.1.2 Viewport-percentage lengths: the vw, vh, vmin, vmax units</dt>
+///     <dd><a href="https://www.w3.org/TR/css3-values/#viewport-relative-lengths">w3.org</a></dd>
+///     <dt>CSS Values and Units Module Level 3. § 5.2 Absolute lengths: the cm, mm, Q, in, pt, pc, px units</dt>
+///     <dd><a href="https://www.w3.org/TR/css3-values/#absolute-length">w3.org</a></dd>
+/// </dl>
 public interface UnitConverter {
-    /**
-     * Default unit.
-     */
+    /// Default unit.
     String DEFAULT = "";
     String CENTIMETERS = "cm";
     String DEGREES = "deg";
@@ -44,38 +40,30 @@ public interface UnitConverter {
     String VIEWPORT_MIN_PERCENTAGE = "vmin";
     String VIEWPORT_MAX_PERCENTAGE = "vmax";
 
-    /**
-     * Gets the resolution in dots per inch.
-     *
-     * @return dpi, default value: 96.0.
-     */
+    /// Gets the resolution in dots per inch.
+    ///
+    /// @return dpi, default value: 96.0.
     default double getDpi() {
         return 96.0;
     }
 
-    /**
-     * Gets the viewport width.
-     *
-     * @return viewport width, default value: 1000.0.
-     */
+    /// Gets the viewport width.
+    ///
+    /// @return viewport width, default value: 1000.0.
     default double getViewportWidth() {
         return 1000;
     }
 
-    /**
-     * Gets the viewport height.
-     *
-     * @return viewport height, default value: 1000.0.
-     */
+    /// Gets the viewport height.
+    ///
+    /// @return viewport height, default value: 1000.0.
     default double getViewportHeight() {
         return 1000.0;
     }
 
-    /**
-     * Gets the factor for percentage values.
-     *
-     * @return percentageFactor, for example 100.
-     */
+    /// Gets the factor for percentage values.
+    ///
+    /// @return percentageFactor, for example 100.
     default double getPercentageFactor() {
         return 100.0;
     }
@@ -100,32 +88,26 @@ public interface UnitConverter {
         return factor;
     }
 
-    /**
-     * Gets the font size;
-     *
-     * @return em
-     */
+    /// Gets the font size;
+    ///
+    /// @return em
     default double getFontSize() {
         return 12;
     }
 
-    /**
-     * Gets the x-height of the font size.
-     *
-     * @return ex
-     */
+    /// Gets the x-height of the font size.
+    ///
+    /// @return ex
     default double getFontXHeight() {
         return 8;
     }
 
-    /**
-     * Converts the specified value from input unit to output unit.
-     *
-     * @param value      a value
-     * @param inputUnit  the units of the value
-     * @param outputUnit the desired output unit
-     * @return converted value
-     */
+    /// Converts the specified value from input unit to output unit.
+    ///
+    /// @param value      a value
+    /// @param inputUnit  the units of the value
+    /// @param outputUnit the desired output unit
+    /// @return converted value
     default double convert(double value, String inputUnit, String outputUnit) {
         if (value == 0.0 || Objects.equals(inputUnit, outputUnit)) {
             return value;
@@ -138,13 +120,11 @@ public interface UnitConverter {
         return CssSize.of(convert(value, inputUnit, outputUnit), outputUnit);
     }
 
-    /**
-     * Converts the specified value from input unit to output unit.
-     *
-     * @param value      a value
-     * @param outputUnit the desired output unit
-     * @return converted value
-     */
+    /// Converts the specified value from input unit to output unit.
+    ///
+    /// @param value      a value
+    /// @param outputUnit the desired output unit
+    /// @return converted value
     default double convert(CssSize value, String outputUnit) {
         return convert(value.getValue(), value.getUnits(), outputUnit);
     }

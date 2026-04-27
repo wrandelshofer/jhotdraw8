@@ -13,15 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public abstract class AbstractImmutableNavigableMapTest extends AbstractImmutableSortedMapTest {
 
-    /**
-     * Creates a new empty instance.
-     */
+    /// Creates a new empty instance.
     protected abstract <K, V> PersistentNavigableMap<K, V> newInstance();
 
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <K, V> PersistentNavigableMap<K, V> newInstance(Map<K, V> m);
 
     protected abstract <K, V> PersistentNavigableMap<K, V> newInstance(ReadableMap<K, V> m);
@@ -29,9 +25,7 @@ public abstract class AbstractImmutableNavigableMapTest extends AbstractImmutabl
 
     protected abstract <K, V> PersistentNavigableMap<K, V> toClonedInstance(PersistentMap<K, V> m);
 
-    /**
-     * Creates a new instance with the specified map.
-     */
+    /// Creates a new instance with the specified map.
     protected abstract <K, V> PersistentNavigableMap<K, V> newInstance(Iterable<Map.Entry<K, V>> m);
 
     @Test

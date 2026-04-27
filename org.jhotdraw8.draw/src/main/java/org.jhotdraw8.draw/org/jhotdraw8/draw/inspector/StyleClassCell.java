@@ -18,12 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-/**
- * FXML Controller class.
- * <p>
- * XXX all keys must be customizable
- *
- */
+/// FXML Controller class.
+///
+/// XXX all keys must be customizable
 public class StyleClassCell extends ListCell<StyleClassItem> {
 
     private HBox node;

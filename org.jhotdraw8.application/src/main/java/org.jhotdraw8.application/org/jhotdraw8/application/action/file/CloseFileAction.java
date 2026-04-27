@@ -12,19 +12,14 @@ import org.jspecify.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-/**
- * Closes the active view after letting the user save unsaved changes.
- *
- */
+/// Closes the active view after letting the user save unsaved changes.
 public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
 
     public static final String ID = "file.close";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param activity the view
-     */
+    /// Creates a new instance.
+    ///
+    /// @param activity the view
     @SuppressWarnings("this-escape")
     public CloseFileAction(FileBasedActivity activity) {
         super(activity);

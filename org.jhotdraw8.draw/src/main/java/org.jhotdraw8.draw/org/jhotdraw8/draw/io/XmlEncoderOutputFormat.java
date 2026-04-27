@@ -15,10 +15,7 @@ import java.beans.XMLEncoder;
 import java.io.OutputStream;
 import java.net.URI;
 
-/**
- * XMLEncoderOutputFormat.
- *
- */
+/// XMLEncoderOutputFormat.
 public class XmlEncoderOutputFormat implements OutputFormat {
     public static final String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
     private PersistentMap<Key<?>, Object> options = ChampMap.of();

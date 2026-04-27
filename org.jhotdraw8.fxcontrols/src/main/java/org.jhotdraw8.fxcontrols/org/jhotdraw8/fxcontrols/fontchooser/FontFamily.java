@@ -9,10 +9,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-/**
- * FontFamily.
- *
- */
+/// FontFamily.
 public class FontFamily {
     private final StringProperty name = new SimpleStringProperty();
 

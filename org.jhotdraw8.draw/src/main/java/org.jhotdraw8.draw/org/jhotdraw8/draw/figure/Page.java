@@ -16,28 +16,21 @@ import org.jhotdraw8.css.value.UnitConverter;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Defines a page layout for printing.
- * <p>
- * The layout may be used for multiple pages, for example for continuous form
- * paper.
- * <p>
- * The parent of a page must be a {@link Layer}. A page may have children.
- *
- */
+/// Defines a page layout for printing.
+///
+/// The layout may be used for multiple pages, for example for continuous form
+/// paper.
+///
+/// The parent of a page must be a [Layer]. A page may have children.
 public interface Page extends Figure {
 
-    /**
-     * Returns a node which will be placed on the paper.
-     *
-     * @param internalPageNumber the internal page number
-     * @return a new node
-     */
+    /// Returns a node which will be placed on the paper.
+    ///
+    /// @param internalPageNumber the internal page number
+    /// @return a new node
     Node createPageNode(int internalPageNumber);
 
-    /**
-     * List of all available papers.
-     */
+    /// List of all available papers.
     List<Paper> PAPERS = Arrays.asList(
             Paper.A0,
             Paper.A1,
@@ -61,12 +54,10 @@ public interface Page extends Figure {
             Paper.JAPANESE_POSTCARD
     );
 
-    /**
-     * Creates a paper for the specified page.
-     *
-     * @param internalPageNumber the internal page number
-     * @return the internal page number
-     */
+    /// Creates a paper for the specified page.
+    ///
+    /// @param internalPageNumber the internal page number
+    /// @return the internal page number
     default Paper createPaper(int internalPageNumber) {
         CssDimension2D size = getPaperSize();
         UnitConverter c = new DefaultUnitConverter(72);
@@ -84,43 +75,33 @@ public interface Page extends Figure {
         return Paper.A4;
     }
 
-    /**
-     * Returns the number of sub-pages defined by this page.
-     *
-     * @return number of internal pages
-     */
+    /// Returns the number of sub-pages defined by this page.
+    ///
+    /// @return number of internal pages
     int getNumberOfSubPages();
 
-    /**
-     * Returns the bounds for the page content.
-     *
-     * @param internalPageNumber the internal page number
-     * @return the clipping region
-     */
+    /// Returns the bounds for the page content.
+    ///
+    /// @param internalPageNumber the internal page number
+    /// @return the clipping region
     Bounds getPageBounds(int internalPageNumber);
 
-    /**
-     * Returns the clip for the page content.
-     *
-     * @param internalPageNumber the internal page number
-     * @return the clipping region
-     */
+    /// Returns the clip for the page content.
+    ///
+    /// @param internalPageNumber the internal page number
+    /// @return the clipping region
     Shape getPageClip(int internalPageNumber);
 
-    /**
-     * Returns a transform which will position the drawing contents inside the
-     * clip on the page.
-     *
-     * @param internalPageNumber the internal page number
-     * @return the transform
-     */
+    /// Returns a transform which will position the drawing contents inside the
+    /// clip on the page.
+    ///
+    /// @param internalPageNumber the internal page number
+    /// @return the transform
     Transform getPageTransform(int internalPageNumber);
 
-    /**
-     * Returns the paper size.
-     *
-     * @return the page size
-     */
+    /// Returns the paper size.
+    ///
+    /// @return the page size
     CssDimension2D getPaperSize();
 
     @Override

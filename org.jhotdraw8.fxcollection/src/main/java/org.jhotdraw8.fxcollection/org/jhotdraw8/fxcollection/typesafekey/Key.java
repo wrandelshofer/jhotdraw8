@@ -19,30 +19,24 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * An <em>name</em> which provides typesafe access to a map entry.
- * <p>
- * A Key has a name, a type and a default value.
- * <p>
- * A key is identified by its identity. The hashcode and equals are based on
- * the identity of the key.
- * <p>
- * The following code example shows how to set and get a value from a map.
- * <pre>
- * {@code
- * String value = "Werner";
- * Key<String> stringKey = new Key("name",String.class,null);
- * Map<Key<?>,Object> map = new HashMap<>();
- * stringKey.put(map, value);
- * }
- * </pre>
- * <p>
- * Note that {@code Key} is not a value type. Thus using two distinct instances
- * of a Key will result in two distinct entries in the hash map, even if both
- * keys have the same name, type, nullity and default value.
- *
- * @param <T> the value type
- */
+/// An _name_ which provides typesafe access to a map entry.
+///
+/// A Key has a name, a type and a default value.
+///
+/// A key is identified by its identity. The hashcode and equals are based on
+/// the identity of the key.
+///
+/// The following code example shows how to set and get a value from a map.
+/// <pre>
+///
+/// `String value = "Werner";Key<String> stringKey = new Key("name",String.class,null);Map<Key<?>,Object> map = new HashMap<>();stringKey.put(map, value);`
+/// </pre>
+///
+/// Note that `Key` is not a value type. Thus using two distinct instances
+/// of a Key will result in two distinct entries in the hash map, even if both
+/// keys have the same name, type, nullity and default value.
+///
+/// @param <T> the value type
 public interface Key<T> extends MapAccessor<T> {
 
     long serialVersionUID = 1L;
@@ -52,12 +46,10 @@ public interface Key<T> extends MapAccessor<T> {
         return map.containsKey(this);
     }
 
-    /**
-     * Gets the value of the attribute denoted by this Key from a Map.
-     *
-     * @param a A Map.
-     * @return The value of the attribute.
-     */
+    /// Gets the value of the attribute denoted by this Key from a Map.
+    ///
+    /// @param a A Map.
+    /// @return The value of the attribute.
     @Override
     default @Nullable T get(Map<? super Key<?>, Object> a) {
         // Performance: explicit cast is nice, but is very slow
@@ -67,12 +59,10 @@ public interface Key<T> extends MapAccessor<T> {
         return result;
     }
 
-    /**
-     * Gets the value of the attribute denoted by this Key from a Map.
-     *
-     * @param a A Map.
-     * @return The value of the attribute.
-     */
+    /// Gets the value of the attribute denoted by this Key from a Map.
+    ///
+    /// @param a A Map.
+    /// @return The value of the attribute.
     @Override
     default @Nullable T get(ReadableMap<? super Key<?>, Object> a) {
         // Performance: explicit cast is nice, but is very slow
@@ -82,12 +72,10 @@ public interface Key<T> extends MapAccessor<T> {
         return result;
     }
 
-    /**
-     * Gets the value of the attribute denoted by this Key from a Map.
-     *
-     * @param a A Map.
-     * @return The value of the attribute.
-     */
+    /// Gets the value of the attribute denoted by this Key from a Map.
+    ///
+    /// @param a A Map.
+    /// @return The value of the attribute.
     default ObjectProperty<T> getValueProperty(Map<? super Key<?>, ObjectProperty<?>> a) {
         if (!a.containsKey(this)) {
             a.put(this, new SimpleObjectProperty<>(getDefaultValue()));
@@ -97,12 +85,10 @@ public interface Key<T> extends MapAccessor<T> {
         return value;
     }
 
-    /**
-     * Gets the value of the attribute denoted by this Key from a Map.
-     *
-     * @param a A Map.
-     * @return The value of the attribute.
-     */
+    /// Gets the value of the attribute denoted by this Key from a Map.
+    ///
+    /// @param a A Map.
+    /// @return The value of the attribute.
     default @Nullable T getValue(Map<? super Key<?>, ObjectProperty<?>> a) {
         if (!a.containsKey(this)) {
             a.put(this, new SimpleObjectProperty<>(getDefaultValue()));
@@ -112,14 +98,12 @@ public interface Key<T> extends MapAccessor<T> {
         return value.get();
     }
 
-    /**
-     * Use this method to perform a type-safe put operation of an attribute into
-     * a Map.
-     *
-     * @param a     An attribute map.
-     * @param value The new value.
-     * @return The old value.
-     */
+    /// Use this method to perform a type-safe put operation of an attribute into
+    /// a Map.
+    ///
+    /// @param a     An attribute map.
+    /// @param value The new value.
+    /// @return The old value.
     @Override
     default @Nullable T put(Map<? super Key<?>, Object> a, @Nullable T value) {
         if (a.containsKey(this)) {
@@ -130,26 +114,22 @@ public interface Key<T> extends MapAccessor<T> {
         }
     }
 
-    /**
-     * Use this method to perform a type-safe put operation of an attribute into
-     * a Map.
-     *
-     * @param a     An attribute map.
-     * @param value The new value.
-     * @return The updated map
-     */
+    /// Use this method to perform a type-safe put operation of an attribute into
+    /// a Map.
+    ///
+    /// @param a     An attribute map.
+    /// @param value The new value.
+    /// @return The updated map
     @Override
     default PersistentMap<Key<?>, Object> put(PersistentMap<Key<?>, Object> a, @Nullable T value) {
         return a.put(this, value);
     }
 
-    /**
-     * Use this method to perform a type-safe remove operation of an attribute
-     * on a Map.
-     *
-     * @param a An attribute map.
-     * @return The old value.
-     */
+    /// Use this method to perform a type-safe remove operation of an attribute
+    /// on a Map.
+    ///
+    /// @param a An attribute map.
+    /// @return The old value.
     @Override
     default @Nullable T remove(Map<? super Key<?>, Object> a) {
         if (a.containsKey(this)) {
@@ -159,26 +139,22 @@ public interface Key<T> extends MapAccessor<T> {
         }
     }
 
-    /**
-     * Use this method to perform a type-safe remove operation of an attribute
-     * on a Map.
-     *
-     * @param a An attribute map.
-     * @return The old value.
-     */
+    /// Use this method to perform a type-safe remove operation of an attribute
+    /// on a Map.
+    ///
+    /// @param a An attribute map.
+    /// @return The old value.
     @Override
     default PersistentMap<Key<?>, Object> remove(PersistentMap<Key<?>, Object> a) {
         return a.remove(this);
     }
 
-    /**
-     * Use this method to perform a type-safe put operation of an attribute into
-     * a Map.
-     *
-     * @param a     An attribute map.
-     * @param value The new value.
-     * @return The old value.
-     */
+    /// Use this method to perform a type-safe put operation of an attribute into
+    /// a Map.
+    ///
+    /// @param a     An attribute map.
+    /// @param value The new value.
+    /// @return The old value.
     default @Nullable T putValue(Map<? super Key<?>, ObjectProperty<?>> a, @Nullable T value) {
         if (!isAssignable(value)) {
             throw new IllegalArgumentException("Value is not assignable to key. key="
@@ -196,19 +172,15 @@ public interface Key<T> extends MapAccessor<T> {
         }
     }
 
-    /**
-     * Whether the value may be set to null.
-     *
-     * @return true if nullable
-     */
+    /// Whether the value may be set to null.
+    ///
+    /// @return true if nullable
     boolean isNullable();
 
-    /**
-     * Returns true if the specified value is assignable with this key.
-     *
-     * @param value The object to be verified for assignability.
-     * @return True if assignable.
-     */
+    /// Returns true if the specified value is assignable with this key.
+    ///
+    /// @param value The object to be verified for assignability.
+    /// @return True if assignable.
     default boolean isAssignable(@Nullable Object value) {
         if (getValueType() instanceof Class<?> clazz) {
             return value == null && isNullable() || clazz.isInstance(value);
@@ -222,22 +194,18 @@ public interface Key<T> extends MapAccessor<T> {
         return value == null && isNullable();
     }
 
-    /**
-     * Returns true if the specified value is the default value of this key.
-     *
-     * @param value The object to be verified for assignability.
-     * @return True if assignable.
-     */
+    /// Returns true if the specified value is the default value of this key.
+    ///
+    /// @param value The object to be verified for assignability.
+    /// @return True if assignable.
     default boolean isDefault(@Nullable Object value) {
         return Objects.equals(getDefaultValue(), value);
     }
 
-    /**
-     * Creates a new binding for the map entry specified by this key.
-     *
-     * @param map a map
-     * @return a binding for the map entry
-     */
+    /// Creates a new binding for the map entry specified by this key.
+    ///
+    /// @param map a map
+    /// @return a binding for the map entry
     default Binding<T> valueAt(ObservableMap<Key<?>, Object> map) {
         ObjectBinding<Object> value = Bindings.valueAt(map, this);
         @SuppressWarnings("unchecked")
@@ -245,22 +213,18 @@ public interface Key<T> extends MapAccessor<T> {
         return binding;
     }
 
-    /**
-     * Creates a new property for the map entry specified by this key.
-     *
-     * @param map a map
-     * @return a property for the map entry
-     */
+    /// Creates a new property for the map entry specified by this key.
+    ///
+    /// @param map a map
+    /// @return a property for the map entry
     default ObjectProperty<T> propertyAt(final ObservableMap<Key<?>, Object> map) {
         return new KeyMapEntryProperty<>(map, this);
     }
 
-    /**
-     * Creates a new read-only property for the map entry specified by this key.
-     *
-     * @param map a map
-     * @return a property for the map entry
-     */
+    /// Creates a new read-only property for the map entry specified by this key.
+    ///
+    /// @param map a map
+    /// @return a property for the map entry
     default ReadOnlyProperty<T> readOnlyPropertyAt(final ObservableMap<Key<?>, Object> map) {
         return new KeyMapEntryProperty<>(map, this);
     }

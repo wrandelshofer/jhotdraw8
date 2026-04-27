@@ -15,26 +15,19 @@ import java.util.function.ToDoubleFunction;
 
 import static org.jhotdraw8.geom.Lines.lerp;
 
-/**
- * Provides utility methods for Bézier curves.
- *
- */
+/// Provides utility methods for Bézier curves.
 public class CubicCurves {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private CubicCurves() {
     }
 
-    /**
-     * Evaluates the given curve at the specified time.
-     *
-     * @param a       points of the curve
-     * @param offsetA index of the first point in array {@code a}
-     * @param t       the time
-     * @return the point at time t
-     */
+    /// Evaluates the given curve at the specified time.
+    ///
+    /// @param a       points of the curve
+    /// @param offsetA index of the first point in array `a`
+    /// @param t       the time
+    /// @return the point at time t
     public static PointAndDerivative eval(double[] a, int offsetA, double t) {
         return eval(
                 a[offsetA], a[offsetA + 1],
@@ -44,20 +37,18 @@ public class CubicCurves {
                 t);
     }
 
-    /**
-     * Evaluates the given curve at the specified time.
-     *
-     * @param x0 point P0 of the curve
-     * @param y0 point P0 of the curve
-     * @param x1 point P1 of the curve
-     * @param y1 point P1 of the curve
-     * @param x2 point P2 of the curve
-     * @param y2 point P2 of the curve
-     * @param x3 point P3 of the curve
-     * @param y3 point P3 of the curve
-     * @param t  the time
-     * @return the point at time t
-     */
+    /// Evaluates the given curve at the specified time.
+    ///
+    /// @param x0 point P0 of the curve
+    /// @param y0 point P0 of the curve
+    /// @param x1 point P1 of the curve
+    /// @param y1 point P1 of the curve
+    /// @param x2 point P2 of the curve
+    /// @param y2 point P2 of the curve
+    /// @param x3 point P3 of the curve
+    /// @param y3 point P3 of the curve
+    /// @param t  the time
+    /// @return the point at time t
     public static PointAndDerivative eval(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                                                    double t) {
 
@@ -83,12 +74,10 @@ public class CubicCurves {
         return new PointAndDerivative(x0123, y0123, x123 - x012, y123 - y012);
     }
 
-    /**
-     * Tries to merge two bézier curves. Returns the new control point.
-     *
-     * @param tolerance distance (radius) at which the joined point may be off from x0123,y0123.
-     * @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2)(x3,y3), null if merging failed
-     */
+    /// Tries to merge two bézier curves. Returns the new control point.
+    ///
+    /// @param tolerance distance (radius) at which the joined point may be off from x0123,y0123.
+    /// @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2)(x3,y3), null if merging failed
     public static double @Nullable [] merge(double[] a, int offsetA,
                                             double[] b, int offsetB,
                                             double tolerance) {
@@ -107,26 +96,24 @@ public class CubicCurves {
                 tolerance);
     }
 
-    /**
-     * Tries to merge two bézier curves. Returns the new control point.
-     *
-     * @param x0        point P0 of the first curve
-     * @param y0        point P0 of the first curve
-     * @param x01       point P1 of the first curve
-     * @param y01       point P1 of the first curve
-     * @param x012      point P2 of the first curve
-     * @param y012      point P2 of the first curve
-     * @param x0123     point P3 of the first curve or point p0 of the second curve respectively
-     * @param y0123     point P3 of the first curve or point p0 of the second curve respectively
-     * @param x123      point P1 of the second curve
-     * @param y123      point P1 of the second curve
-     * @param x23       point P2 of the second curve
-     * @param y23       point P2 of the second curve
-     * @param x3        point P3 of the second curve
-     * @param y3        point P3 of the second curve
-     * @param tolerance distance (radius) at which the joined point may be off from x0123,y0123.
-     * @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2)(x3,y3), null if merging failed
-     */
+    /// Tries to merge two bézier curves. Returns the new control point.
+    ///
+    /// @param x0        point P0 of the first curve
+    /// @param y0        point P0 of the first curve
+    /// @param x01       point P1 of the first curve
+    /// @param y01       point P1 of the first curve
+    /// @param x012      point P2 of the first curve
+    /// @param y012      point P2 of the first curve
+    /// @param x0123     point P3 of the first curve or point p0 of the second curve respectively
+    /// @param y0123     point P3 of the first curve or point p0 of the second curve respectively
+    /// @param x123      point P1 of the second curve
+    /// @param y123      point P1 of the second curve
+    /// @param x23       point P2 of the second curve
+    /// @param y23       point P2 of the second curve
+    /// @param x3        point P3 of the second curve
+    /// @param y3        point P3 of the second curve
+    /// @param tolerance distance (radius) at which the joined point may be off from x0123,y0123.
+    /// @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2)(x3,y3), null if merging failed
     public static double @Nullable [] merge(final double x0, final double y0, final double x01, final double y01,
                                             final double x012, final double y012, final double x0123, final double y0123,
                                             final double x123, final double y123,
@@ -149,10 +136,8 @@ public class CubicCurves {
                 ? new double[]{x0, y0, ctrl1.getX(), ctrl1.getY(), ctrl2.getX(), ctrl2.getY(), x3, y3} : null;
     }
 
-    /**
-     * Splits the provided Bézier curve into two parts at the specified
-     * parameter value {@code t}.
-     */
+    /// Splits the provided Bézier curve into two parts at the specified
+    /// parameter value `t`.
     public static SimpleOrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> split(CubicCurve2D.Double source,
                                                                                     double t) {
         CubicCurve2D.Double left = new CubicCurve2D.Double();
@@ -166,10 +151,8 @@ public class CubicCurves {
         return new SimpleOrderedPair<>(left, right);
     }
 
-    /**
-     * Splits the provided bezier curve into two parts at the specified
-     * parameter value {@code t}.
-     */
+    /// Splits the provided bezier curve into two parts at the specified
+    /// parameter value `t`.
     public static void split(CubicCurve2D.Double source,
                              double t,
                              CubicCurve2D.Double left,
@@ -180,22 +163,20 @@ public class CubicCurves {
                 left::setCurve, right::setCurve);
     }
 
-    /**
-     * Splits the provided bezier curve into two parts at the specified
-     * parameter value {@code t}.
-     *
-     * @param x0    point P0 of the curve
-     * @param y0    point P0 of the curve
-     * @param x1    point P1 of the curve
-     * @param y1    point P1 of the curve
-     * @param x2    point P2 of the curve
-     * @param y2    point P2 of the curve
-     * @param x3    point P3 of the curve
-     * @param y3    point P3 of the curve
-     * @param t     where to split
-     * @param left  if not null, accepts the curve from x1,y1 to t
-     * @param right if not null, accepts the curve from t to x4,y4
-     */
+    /// Splits the provided bezier curve into two parts at the specified
+    /// parameter value `t`.
+    ///
+    /// @param x0    point P0 of the curve
+    /// @param y0    point P0 of the curve
+    /// @param x1    point P1 of the curve
+    /// @param y1    point P1 of the curve
+    /// @param x2    point P2 of the curve
+    /// @param y2    point P2 of the curve
+    /// @param x3    point P3 of the curve
+    /// @param y3    point P3 of the curve
+    /// @param t     where to split
+    /// @param left  if not null, accepts the curve from x1,y1 to t
+    /// @param right if not null, accepts the curve from t to x4,y4
     public static void splitCubicCurveTo(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                                          double t,
                                          @Nullable DoubleConsumer6 left,
@@ -206,28 +187,26 @@ public class CubicCurves {
         );
     }
 
-    /**
-     * Splits the provided Bézier curve into two parts at the specified
-     * parameter value {@code t}.
-     * <p>
-     * Reference:
-     * <dl>
-     *     <dt>Stackoverflow, Splitting a bezier curve, Copyright Jonathan, CC BY-SA 4.0 license</dt>
-     *     <dd><a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">stackoverflow.com</a></dd>
-     * </dl>
-     *
-     * @param x0    point P0 of the curve
-     * @param y0    point P0 of the curve
-     * @param x1    point P1 of the curve
-     * @param y1    point P1 of the curve
-     * @param x2    point P2 of the curve
-     * @param y2    point P2 of the curve
-     * @param x3    point P3 of the curve
-     * @param y3    point P3 of the curve
-     * @param t     where to split
-     * @param first  if not null, accepts the curve from x1,y1 to t
-     * @param second if not null, accepts the curve from t to x4,y4
-     */
+    /// Splits the provided Bézier curve into two parts at the specified
+    /// parameter value `t`.
+    ///
+    /// Reference:
+    /// <dl>
+    ///     <dt>Stackoverflow, Splitting a bezier curve, Copyright Jonathan, CC BY-SA 4.0 license</dt>
+    ///     <dd><a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">stackoverflow.com</a></dd>
+    /// </dl>
+    ///
+    /// @param x0     point P0 of the curve
+    /// @param y0     point P0 of the curve
+    /// @param x1     point P1 of the curve
+    /// @param y1     point P1 of the curve
+    /// @param x2     point P2 of the curve
+    /// @param y2     point P2 of the curve
+    /// @param x3     point P3 of the curve
+    /// @param y3     point P3 of the curve
+    /// @param t      where to split
+    /// @param first  if not null, accepts the curve from x1,y1 to t
+    /// @param second if not null, accepts the curve from t to x4,y4
     public static void split(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                              double t,
                              @Nullable DoubleConsumer8 first,
@@ -254,23 +233,21 @@ public class CubicCurves {
         }
     }
 
-    /**
-     * Splits the provided Bézier curve into two parts at the specified
-     * parameter value {@code t}.
-     * <p>
-     * Reference:
-     * <dl>
-     *     <dt>Stackoverflow, Splitting a bezier curve, Copyright Jonathan, CC BY-SA 4.0 license</dt>
-     *     <dd><a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">stackoverflow.com</a></dd>
-     * </dl>
-     *
-     * @param p points of the curve
-     * @param o offset of first point in p
-     * @param t where to split
-     * @param f if not null, array that accepts the curve from x1,y1 to t
-     * @param f array that accepts the curve from x1,y1 to t
-     * @param s if not null, accepts the curve from t to x4,y4
-     */
+    /// Splits the provided Bézier curve into two parts at the specified
+    /// parameter value `t`.
+    ///
+    /// Reference:
+    /// <dl>
+    ///     <dt>Stackoverflow, Splitting a bezier curve, Copyright Jonathan, CC BY-SA 4.0 license</dt>
+    ///     <dd><a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">stackoverflow.com</a></dd>
+    /// </dl>
+    ///
+    /// @param p points of the curve
+    /// @param o offset of first point in p
+    /// @param t where to split
+    /// @param f if not null, array that accepts the curve from x1,y1 to t
+    /// @param f array that accepts the curve from x1,y1 to t
+    /// @param s if not null, accepts the curve from t to x4,y4
     public static void split(double[] p, int o,
                              double t,
                              double[] f, int fo,
@@ -312,27 +289,25 @@ public class CubicCurves {
         }
     }
 
-    /**
-     * Splits the provided Bézier curve into two parts.
-     * <p>
-     * Reference:
-     * <dl>
-     *     <dt>Stackoverflow, Splitting a bezier curve, Copyright Jonathan, CC BY-SA 4.0 license</dt>
-     *     <dd><a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">stackoverflow.com</a></dd>
-     * </dl>
-     *
-     * @param x0    point P0 of the curve
-     * @param y0    point P0 of the curve
-     * @param x1    point P1 of the curve
-     * @param y1    point P1 of the curve
-     * @param x2    point P2 of the curve
-     * @param y2    point P2 of the curve
-     * @param x3    point P3 of the curve
-     * @param y3    point P3 of the curve
-     * @param t     where to split
-     * @param left  if not null, accepts the curve from x1,y1 to t
-     * @param right if not null, accepts the curve from t to x4,y4
-     */
+    /// Splits the provided Bézier curve into two parts.
+    ///
+    /// Reference:
+    /// <dl>
+    ///     <dt>Stackoverflow, Splitting a bezier curve, Copyright Jonathan, CC BY-SA 4.0 license</dt>
+    ///     <dd><a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">stackoverflow.com</a></dd>
+    /// </dl>
+    ///
+    /// @param x0    point P0 of the curve
+    /// @param y0    point P0 of the curve
+    /// @param x1    point P1 of the curve
+    /// @param y1    point P1 of the curve
+    /// @param x2    point P2 of the curve
+    /// @param y2    point P2 of the curve
+    /// @param x3    point P3 of the curve
+    /// @param y3    point P3 of the curve
+    /// @param t     where to split
+    /// @param left  if not null, accepts the curve from x1,y1 to t
+    /// @param right if not null, accepts the curve from t to x4,y4
     public static void split(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3, double t,
                              double[] left,
                              double[] right) {
@@ -356,17 +331,14 @@ public class CubicCurves {
 
     }
 
-    /**
-     * Extracts the specified segment [ta,tb] from the given cubic curve.
-     *
-     * @param q             the cubic bezier curve
-     * @param qOffset       the index of the first curve parameter in q
-     * @param ta            where to split from
-     * @param tb            where to split to
-     * @param segment       the output array
-     * @param segmentOffset the index of the first curve parameter in segment
-     */
-
+    /// Extracts the specified segment [ta,tb] from the given cubic curve.
+    ///
+    /// @param q             the cubic bezier curve
+    /// @param qOffset       the index of the first curve parameter in q
+    /// @param ta            where to split from
+    /// @param tb            where to split to
+    /// @param segment       the output array
+    /// @param segmentOffset the index of the first curve parameter in segment
     public static void subCurve(double[] q, int qOffset,
                                 double ta, double tb,
                                 double[] segment, int segmentOffset) {
@@ -377,19 +349,17 @@ public class CubicCurves {
                 null, 0, segment, segmentOffset);
     }
 
-    /**
-     * From paper.js, src/path/Curve.js, MIT License.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>paper.js. Copyright (c) 2011 - 2020 Jürg Lehni &amp; Jonathan Puckey. MIT License.</dt>
-     *     <dd><a href="https://github.com/paperjs/paper.js/blob/develop/src/path/Curve.js">github.com</a></dd>
-     * </dl>
-     *
-     * @param v      a cubic bezier curve
-     * @param offset offset into array v
-     * @return the arc length integrand of a cubic Bézier curve
-     */
+    /// From paper.js, src/path/Curve.js, MIT License.
+    ///
+    /// References:
+    /// <dl>
+    ///     <dt>paper.js. Copyright (c) 2011 - 2020 Jürg Lehni &amp; Jonathan Puckey. MIT License.</dt>
+    ///     <dd><a href="https://github.com/paperjs/paper.js/blob/develop/src/path/Curve.js">github.com</a></dd>
+    /// </dl>
+    ///
+    /// @param v      a cubic bezier curve
+    /// @param offset offset into array v
+    /// @return the arc length integrand of a cubic Bézier curve
     public static ToDoubleFunction<Double> getArcLengthIntegrand(double[] v, int offset) {
         // Instead of the code below, we could evaluate the magnitude of the derivative
         /*
@@ -428,60 +398,49 @@ public class CubicCurves {
         return new double[]{c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2};
     }
 
-    /**
-     * Computes the arc length s.
-     *
-     * @param p       points of the curve
-     * @param offset  index of the first point in array {@code p}
-     * @param epsilon
-     * @return the arc length
-     */
+    /// Computes the arc length s.
+    ///
+    /// @param p       points of the curve
+    /// @param offset  index of the first point in array `p`
+    /// @param epsilon
+    /// @return the arc length
     public static double arcLength(double[] p, int offset, double epsilon) {
         return arcLength(p, offset, 1, epsilon);
     }
 
 
-
-    /**
-     * Computes the arc length s from time 0 to time t using an integration method.
-     *
-     * @param p       points of the curve
-     * @param offset  index of the first point in array {@code p}
-     * @param t       the time
-     * @param epsilon the error tolerance
-     * @return the arc length
-     */
+    /// Computes the arc length s from time 0 to time t using an integration method.
+    ///
+    /// @param p       points of the curve
+    /// @param offset  index of the first point in array `p`
+    /// @param t       the time
+    /// @param epsilon the error tolerance
+    /// @return the arc length
     public static double arcLength(double[] p, int offset, double t, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Integrals.rombergQuadrature(f, 0, t, epsilon);
     }
 
 
-
-
-    /**
-     * Computes time t at the given arc length s.
-     *
-     * @param p       points of the curve
-     * @param offset  index of the first point in array {@code p}
-     * @param s       arc length
-     * @param epsilon
-     * @return t at s
-     */
+    /// Computes time t at the given arc length s.
+    ///
+    /// @param p       points of the curve
+    /// @param offset  index of the first point in array `p`
+    /// @param s       arc length
+    /// @param epsilon
+    /// @return t at s
     public static double invArcLength(double[] p, int offset, double s, double epsilon) {
         return invArcLength(p, offset, s, arcLength(p, offset, 1, epsilon), epsilon);
     }
 
-    /**
-     * Computes time t at the given arc length s.
-     *
-     * @param p              points of the curve
-     * @param offset         index of the first point in array {@code p}
-     * @param s              arc length
-     * @param totalArcLength the total arc length of the curve
-     * @param epsilon
-     * @return t at s
-     */
+    /// Computes time t at the given arc length s.
+    ///
+    /// @param p              points of the curve
+    /// @param offset         index of the first point in array `p`
+    /// @param s              arc length
+    /// @param totalArcLength the total arc length of the curve
+    /// @param epsilon
+    /// @return t at s
     public static double invArcLength(double[] p, int offset, double s, double totalArcLength, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Solvers.hybridNewtonBisectionMethod(Integrals::rombergQuadrature, f, s, 0, 1, s / totalArcLength, epsilon);

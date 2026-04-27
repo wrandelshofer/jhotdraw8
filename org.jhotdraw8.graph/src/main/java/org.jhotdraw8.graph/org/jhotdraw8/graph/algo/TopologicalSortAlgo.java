@@ -23,22 +23,17 @@ import java.util.SequencedMap;
 import java.util.Set;
 import java.util.function.Function;
 
-/**
- * Provides topological sort algorithms for directed graphs.
- *
- */
+/// Provides topological sort algorithms for directed graphs.
 public class TopologicalSortAlgo {
     public TopologicalSortAlgo() {
     }
 
-    /**
-     * Sorts the specified directed graph topologically.
-     *
-     * @param <V> the vertex data type
-     * @param <A> the arrow data type
-     * @param m   the graph
-     * @return the sorted list of vertices
-     */
+    /// Sorts the specified directed graph topologically.
+    ///
+    /// @param <V> the vertex data type
+    /// @param <A> the arrow data type
+    /// @param m   the graph
+    /// @return the sorted list of vertices
     @SuppressWarnings("unchecked")
     public <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
         final AttributedIndexedDirectedGraph<V, A> im;
@@ -56,12 +51,10 @@ public class TopologicalSortAlgo {
     }
 
 
-    /**
-     * Sorts the specified directed graph topologically.
-     *
-     * @param model the graph
-     * @return the sorted list of vertices
-     */
+    /// Sorts the specified directed graph topologically.
+    ///
+    /// @param model the graph
+    /// @return the sorted list of vertices
     public int[] sortTopologicallyInt(IndexedDirectedGraph model) {
         final int n = model.getVertexCount();
 
@@ -119,15 +112,13 @@ public class TopologicalSortAlgo {
         return result;
     }
 
-    /**
-     * Sorts the specified directed graph topologically.
-     * Returns a list of batches that do not depend topologically on
-     * each other.
-     *
-     * @param model the graph
-     * @return the sorted list of vertices and the list of batches,
-     * batches will be empty if the graph has cycles
-     */
+    /// Sorts the specified directed graph topologically.
+    /// Returns a list of batches that do not depend topologically on
+    /// each other.
+    ///
+    /// @param model the graph
+    /// @return the sorted list of vertices and the list of batches,
+    /// batches will be empty if the graph has cycles
     public SimpleOrderedPair<int[], IntArrayList> sortTopologicallyIntBatches(IndexedDirectedGraph model) {
         final int n = model.getVertexCount();
         IntArrayList batches = new IntArrayList();
@@ -200,29 +191,25 @@ public class TopologicalSortAlgo {
         return new SimpleOrderedPair<>(result, batches);
     }
 
-    /**
-     * Sorts the specified directed graph topologically.
-     *
-     * @param <V>   the vertex data type
-     * @param <A>   the arrow data type
-     * @param model the graph
-     * @return the sorted list of vertices
-     */
+    /// Sorts the specified directed graph topologically.
+    ///
+    /// @param <V>   the vertex data type
+    /// @param <A>   the arrow data type
+    /// @param model the graph
+    /// @return the sorted list of vertices
     public <V, A> List<V> sortTopologicallyObject(DirectedGraph<V, A> model) {
         return sortTopologically(model.getVertices(), model::getNextVertices);
     }
 
-    /**
-     * Sorts the specified directed graph topologically.
-     * <p>
-     * If the graph contains cycles, then this method splits the graph
-     * inside a cycle.
-     *
-     * @param <V>          the vertex data type
-     * @param vertices     the vertices of the graph
-     * @param nextVertices a function that delivers the next vertices for a given vertex
-     * @return the sorted list of vertices
-     */
+    /// Sorts the specified directed graph topologically.
+    ///
+    /// If the graph contains cycles, then this method splits the graph
+    /// inside a cycle.
+    ///
+    /// @param <V>          the vertex data type
+    /// @param vertices     the vertices of the graph
+    /// @param nextVertices a function that delivers the next vertices for a given vertex
+    /// @return the sorted list of vertices
     public <V> List<V> sortTopologically(Collection<V> vertices,
                                          Function<V, Iterable<? extends V>> nextVertices) {
         final int n = vertices.size();

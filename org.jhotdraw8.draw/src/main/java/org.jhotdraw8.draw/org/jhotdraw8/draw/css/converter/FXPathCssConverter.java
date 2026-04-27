@@ -23,12 +23,9 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Converts an SVG path to a CSS String.
- * <p>
- * The null value will be converted to the CSS identifier "none".
- *
- */
+/// Converts an SVG path to a CSS String.
+///
+/// The null value will be converted to the CSS identifier "none".
 public class FXPathCssConverter extends AbstractCssConverter<Path> {
 
 

@@ -15,11 +15,9 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**
- * Provides a {@link ReadableSortedSet} facade to a set of {@code SortedSet} functions.
- *
- * @param <E> the element type
- */
+/// Provides a [ReadableSortedSet] facade to a set of `SortedSet` functions.
+///
+/// @param <E> the element type
 public class ReadableSortedSetFacade<E> extends ReadableSetFacade<E>
         implements ReadableSortedSet<E> {
 

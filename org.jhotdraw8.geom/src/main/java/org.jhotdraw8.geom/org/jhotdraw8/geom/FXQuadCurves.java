@@ -9,9 +9,7 @@ import javafx.scene.shape.QuadCurve;
 
 public class FXQuadCurves {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private FXQuadCurves() {
     }
 

@@ -35,15 +35,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- */
+///
 public class CssSelectorTest {
 
     private static final String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
 
-    /**
-     * Test various selectors.
-     */
+    /// Test various selectors.
     public static void testSelector(String stylesheet, String before, String expectedValue) throws Exception {
         //---
         CssParser p = new CssParser();
@@ -167,9 +164,7 @@ public class CssSelectorTest {
 
     }
 
-    /**
-     * Test various selectors.
-     */
+    /// Test various selectors.
     public static void testSelectorSpecificity(String stylesheet, String xml, int expectedSpecifity) throws IOException, ParserConfigurationException, SAXException {
         //---
         CssParser p = new CssParser();

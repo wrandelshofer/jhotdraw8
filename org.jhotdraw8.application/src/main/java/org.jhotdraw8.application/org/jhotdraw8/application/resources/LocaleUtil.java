@@ -6,19 +6,14 @@ package org.jhotdraw8.application.resources;
 
 import java.util.Locale;
 
-/**
- * LocaleUtil provides a setDefault()/getDefault() wrapper to java.util.Locale
- * in order to overcome the security restriction preventing Applets from using
- * their own locale.
- *
- */
+/// LocaleUtil provides a setDefault()/getDefault() wrapper to java.util.Locale
+/// in order to overcome the security restriction preventing Applets from using
+/// their own locale.
 public class LocaleUtil {
 
     private static Locale defaultLocale;
 
-    /**
-     * Creates a new instance.
-     */
+    /// Creates a new instance.
     public LocaleUtil() {
     }
 

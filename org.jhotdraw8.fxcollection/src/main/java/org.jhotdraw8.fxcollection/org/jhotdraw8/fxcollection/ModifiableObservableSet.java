@@ -11,12 +11,10 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * This ObservableSet implementation provides overridable fire methods, saving one
- * level of indirection.
- *
- * @param <E> the element type
- */
+/// This ObservableSet implementation provides overridable fire methods, saving one
+/// level of indirection.
+///
+/// @param <E> the element type
 public class ModifiableObservableSet<E> extends AbstractObservableSet<E> {
 
     private Set<E> backingSet;

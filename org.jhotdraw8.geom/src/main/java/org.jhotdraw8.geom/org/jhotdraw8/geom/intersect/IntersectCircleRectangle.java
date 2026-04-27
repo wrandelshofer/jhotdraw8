@@ -14,18 +14,16 @@ public class IntersectCircleRectangle {
     private IntersectCircleRectangle() {
     }
 
-    /**
-     * Computes the intersection between a line and a rectangle.
-     * <p>
-     * The intersection will contain the parameters 't1' of the line in range
-     * [0,1].
-     *
-     * @param a0 point 0 of the line
-     * @param a1 point 1 of the line
-     * @param r0 corner point 0 of the rectangle
-     * @param r1 corner point 1 of the rectangle
-     * @return computed intersection
-     */
+    /// Computes the intersection between a line and a rectangle.
+    ///
+    /// The intersection will contain the parameters 't1' of the line in range
+    /// [0,1].
+    ///
+    /// @param a0 point 0 of the line
+    /// @param a1 point 1 of the line
+    /// @param r0 corner point 0 of the rectangle
+    /// @param r1 corner point 1 of the rectangle
+    /// @return computed intersection
     public static IntersectionResultEx intersectLineRectangleEx(Point2D a0, Point2D a1, Point2D r0, Point2D r1) {
         return IntersectAABBLine.intersectLineAABBEx(a0, a1,
                 Math.min(r0.getX(), r1.getX()),
@@ -46,15 +44,13 @@ public class IntersectCircleRectangle {
         return intersectCircleRectangleEx(new Point2D.Double(c1x, c1y), r1, new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
     }
 
-    /**
-     * Computes the intersection between a circle and a rectangle.
-     *
-     * @param c  the center of the circle
-     * @param r  the radius of the circle
-     * @param r0 corner point 0 of the rectangle
-     * @param r1 corner point 1 of the rectangle
-     * @return computed intersection
-     */
+    /// Computes the intersection between a circle and a rectangle.
+    ///
+    /// @param c  the center of the circle
+    /// @param r  the radius of the circle
+    /// @param r0 corner point 0 of the rectangle
+    /// @param r1 corner point 1 of the rectangle
+    /// @return computed intersection
     public static IntersectionResultEx intersectCircleRectangleEx(Point2D c, double r, Point2D r0, Point2D r1) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(r0, r1);

@@ -23,21 +23,18 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-/**
- * CssPaintableConverter.
- * <p>
- * Parses the following EBNF from the
- * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
- * CSS Reference Guide</a>.
- * </p>
- * <pre>
- * Paintable := (Color|LinearGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
- * </pre>
- * <p>
- * FIXME currently only parses the Color and the LinearGradient productions
- * </p>
- *
- */
+/// CssPaintableConverter.
+///
+/// Parses the following EBNF from the
+/// <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
+/// CSS Reference Guide</a>.
+///
+/// <pre>
+/// Paintable := (Color|LinearGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
+/// </pre>
+///
+/// FIXME currently only parses the Color and the LinearGradient productions
+///
 public class PaintCssConverter extends AbstractCssConverter<Paint> {
 
     protected static final PaintableCssConverter paintableConverter = new PaintableCssConverter(false);

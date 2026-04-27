@@ -13,15 +13,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 
-/**
- * An abstrac implementation of the {@link PropertyBean} interface.
- *
- */
+/// An abstrac implementation of the [PropertyBean] interface.
 public abstract class AbstractPropertyBean implements PropertyBean {
 
-    /**
-     * Holds the properties.
-     */
+    /// Holds the properties.
     protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableMap(new LinkedHashMap<>());
 
     public AbstractPropertyBean() {

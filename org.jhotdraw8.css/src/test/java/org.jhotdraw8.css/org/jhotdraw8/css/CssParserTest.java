@@ -33,17 +33,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- */
+///
 public class CssParserTest {
 
     private static final String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
 
-    /**
-     * Test of CSS syntax.
-     * <p>
-     * Takes a stylesheet and applies it to the given XML document.
-     */
+    /// Test of CSS syntax.
+    ///
+    /// Takes a stylesheet and applies it to the given XML document.
     public static void testCssSyntax(boolean valid, String stylesheet, String xml, String expectedValue) throws Exception {
         //---
         CssParser p = new CssParser();
@@ -85,13 +82,11 @@ public class CssParserTest {
         assertEquals(valid, p.getParseExceptions().isEmpty());
     }
 
-    /**
-     * Examples from
-     * <a href="http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/">
-     * CSS Syntax 3</a>.
-     *
-     * @return examples
-     */
+    /// Examples from
+    /// <a href="http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/">
+    /// CSS Syntax 3</a>.
+    ///
+    /// @return examples
     @TestFactory
     public List<DynamicTest> dynamicTestsCssSyntax() {
         return Arrays.asList(
@@ -248,9 +243,7 @@ public class CssParserTest {
         )/**/;
     }
 
-    /**
-     * Tests parsing of at rules.
-     */
+    /// Tests parsing of at rules.
     public static void testAtRule(boolean valid, String stylesheetStr, String before, String expectedValue) throws Exception {
         testCssSyntax(valid, stylesheetStr, before, expectedValue);
 
@@ -259,11 +252,9 @@ public class CssParserTest {
         ReadableList<Rule> rules = stylesheet.getRules();
     }
 
-    /**
-     * Test of CSS selector syntax.
-     * <p>
-     * Takes a stylesheet and applies it to the given XML document.
-     */
+    /// Test of CSS selector syntax.
+    ///
+    /// Takes a stylesheet and applies it to the given XML document.
     public static void testSelectorSyntax(boolean valid, String stylesheet, String xml, String expectedValue) throws Exception {
         //---
         CssParser p = new CssParser();
@@ -307,9 +298,7 @@ public class CssParserTest {
     }
 
 
-    /**
-     * Tests selectors.
-     */
+    /// Tests selectors.
     @TestFactory
     public List<DynamicTest> dynamicTestsSelectorSyntax() {
         return Arrays.asList(
@@ -334,16 +323,12 @@ public class CssParserTest {
         );
     }
 
-    /**
-     * Test of selectors.
-     */
+    /// Test of selectors.
     public static void testSelector(boolean valid, String stylesheet, String before, String expectedValue) throws Exception {
         testSelectorSyntax(valid, stylesheet, before, expectedValue);
     }
 
-    /**
-     * Test selectors with name space.
-     */
+    /// Test selectors with name space.
     @TestFactory
     public List<DynamicTest> dynamicTestsSelectorSyntaxNS() {
         return Arrays.asList(
@@ -384,9 +369,7 @@ public class CssParserTest {
     }
 
 
-    /**
-     * Test of selectors with namespace.
-     */
+    /// Test of selectors with namespace.
     public static void testSelectorSyntaxNS(boolean valid, String stylesheet, String before, String expectedValue) throws Exception {
         testSelectorSyntax(valid, stylesheet, before, expectedValue);
     }

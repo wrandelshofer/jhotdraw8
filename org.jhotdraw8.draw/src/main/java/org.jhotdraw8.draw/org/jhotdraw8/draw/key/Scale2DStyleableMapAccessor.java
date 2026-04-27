@@ -14,10 +14,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * Scale2DStyleableMapAccessor.
- *
- */
+/// Scale2DStyleableMapAccessor.
 public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point2D> {
 
 
@@ -25,13 +22,11 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     private final MapAccessor<Double> yKey;
     private final Converter<Point2D> converter = new Scale2DCssConverter();
 
-    /**
-     * Creates a new instance with the specified name.
-     *
-     * @param name the name of the accessor
-     * @param xKey the key for the x coordinate of the point
-     * @param yKey the key for the y coordinate of the point
-     */
+    /// Creates a new instance with the specified name.
+    ///
+    /// @param name the name of the accessor
+    /// @param xKey the key for the x coordinate of the point
+    /// @param yKey the key for the y coordinate of the point
     public Scale2DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey) {
         super(name, Point2D.class, new MapAccessor<?>[]{xKey, yKey}, new Point2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
 
