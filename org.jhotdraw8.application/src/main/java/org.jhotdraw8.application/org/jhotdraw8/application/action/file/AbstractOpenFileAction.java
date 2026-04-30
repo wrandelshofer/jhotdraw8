@@ -57,27 +57,25 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
 
     @Override
     protected void onActionPerformed(ActionEvent evt, Application app) {
-        {
-            WorkState<Void> workState = new SimpleWorkState<>(getLabel());
-            app.addDisabler(workState);
-            // Search for an empty view
-            FileBasedActivity emptyView;
-            if (isReuseEmptyViews()) {
-                emptyView = (FileBasedActivity) app.getActiveActivity(); // FIXME class cast exception
-                if (emptyView == null
-                        || !emptyView.isEmpty()
-                        || emptyView.isDisabled()) {
-                    emptyView = null;
-                }
-            } else {
+        WorkState<Void> workState = new SimpleWorkState<>(getLabel());
+        app.addDisabler(workState);
+        // Search for an empty view
+        FileBasedActivity emptyView;
+        if (isReuseEmptyViews()) {
+            emptyView = (FileBasedActivity) app.getActiveActivity(); // FIXME class cast exception
+            if (emptyView == null
+                    || !emptyView.isEmpty()
+                    || emptyView.isDisabled()) {
                 emptyView = null;
             }
+        } else {
+            emptyView = null;
+        }
 
-            if (emptyView == null) {
-                app.createActivity().thenAccept(v -> doIt((FileBasedActivity) v, true, workState));
-            } else {
-                doIt(emptyView, false, workState);
-            }
+        if (emptyView == null) {
+            app.createActivity().thenAccept(v -> doIt((FileBasedActivity) v, true, workState));
+        } else {
+            doIt(emptyView, false, workState);
         }
     }
 
@@ -126,7 +124,9 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         v.read(uri, chosenFormat, ChampMap.copyOf(options), false, workState).whenComplete((actualFormat, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
-            } else if (exception != null) {
+                return;
+            }
+            if (exception != null) {
                 Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + exception.getMessage(), exception);
 
                 Resources labels = ApplicationLabels.getResources();
@@ -140,14 +140,15 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
                 alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtil.getName(uri)));
                 alert.getDialogPane().setContent(textArea);
                 alert.showAndWait();
-                v.removeDisabler(workState);
             } else {
                 v.setURI(uri);
                 v.setDataFormat(actualFormat);
                 v.clearModified();
-                getApplication().getRecentUris().put(uri, actualFormat);
-                v.removeDisabler(workState);
             }
+
+            // Always add the file to recent uris, even if we failed reading it.
+            getApplication().getRecentUris().put(uri, actualFormat);
+            v.removeDisabler(workState);
         });
     }
 
