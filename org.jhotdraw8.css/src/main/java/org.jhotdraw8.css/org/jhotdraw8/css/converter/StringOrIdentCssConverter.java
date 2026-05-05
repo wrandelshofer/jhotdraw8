@@ -46,34 +46,39 @@ public class StringOrIdentCssConverter implements Converter<String> {
         StringBuilder buf = new StringBuilder();
         boolean isIdent = true;
         buf.append('"');
-        for (char ch : value.toCharArray()) {
+        char[] charArray = value.toCharArray();
+        for (int j = 0; j < charArray.length; j++) {
+            char ch = charArray[j];
             switch (ch) {
-                case '"':
-                    buf.append('\\');
-                    buf.append('"');
-                    isIdent = false;
-                    break;
-            case ' ':
-                buf.append(ch);
-                isIdent = false;
-                break;
-            case '\n':
-                buf.append('\\');
-                buf.append('\n');
-                isIdent = false;
-                break;
-            default:
-                if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
-                    buf.append('\\');
-                    String hex = Integer.toHexString(ch);
-                    for (int i = 0, n = 6 - hex.length(); i < n; i++) {
-                        buf.append('0');
-                    }
-                    buf.append(hex);
-                } else {
+                case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
                     buf.append(ch);
+                    isIdent &= j > 0;
                 }
-                break;
+                case ' ', '\'' -> {
+                    buf.append(ch);
+                    isIdent = false;
+                }
+                case '"', '\n', '@', '#' -> {
+                    buf.append('\\');
+                    buf.append(ch);
+                    isIdent = false;
+                }
+                default -> {
+                    if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || 0xA0 <= ch) {
+                        buf.append(ch);
+                    } else if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
+                        buf.append('\\');
+                        String hex = Integer.toHexString(ch);
+                        for (int i = 0, n = 6 - hex.length(); i < n; i++) {
+                            buf.append('0');
+                        }
+                        buf.append(hex);
+                        isIdent = false;
+                    } else {
+                        buf.append(ch);
+                        isIdent = false;
+                    }
+                }
             }
         }
         buf.append('"');

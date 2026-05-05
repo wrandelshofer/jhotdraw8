@@ -59,25 +59,25 @@ public class CssToken {
 
     public CssToken(int ttype, @Nullable String stringValue, @Nullable Number numericValue, @Nullable Character preferredQuoteChar, int lineNumber, int startPos, int endPos) {
         switch (ttype) {
-        case CssTokenType.TT_DIMENSION:
-            Objects.requireNonNull(numericValue, "numericValue must not be null for ttype=TT_DIMENSION");
-            Objects.requireNonNull(stringValue, "stringValue must not be null for ttype=TT_DIMENSION");
-            break;
-        case CssTokenType.TT_NUMBER:
-        case CssTokenType.TT_PERCENTAGE:
-            Objects.requireNonNull(numericValue, "numeric value must not be null for ttype=TT_NUMBER or ttype=TT_PERCENTAGE");
-            break;
-        case CssTokenType.TT_IDENT:
-        case CssTokenType.TT_AT_KEYWORD:
-            if (stringValue == null || stringValue.isEmpty()) {
-                throw new IllegalArgumentException("stringValue must not be null or empty for ttype=TT_IDENT or ttype=TT_AT_KEYWORD");
-            }
-            break;
-        default:
-            if (ttype < 0 && ttype != CssTokenType.TT_EOF && stringValue == null) {
-                throw new IllegalArgumentException("string value must not be null for ttype=" + ttype);
-            }
-            break;
+            case CssTokenType.TT_DIMENSION:
+                Objects.requireNonNull(numericValue, "numericValue must not be null for ttype=TT_DIMENSION");
+                Objects.requireNonNull(stringValue, "stringValue must not be null for ttype=TT_DIMENSION");
+                break;
+            case CssTokenType.TT_NUMBER:
+            case CssTokenType.TT_PERCENTAGE:
+                Objects.requireNonNull(numericValue, "numeric value must not be null for ttype=TT_NUMBER or ttype=TT_PERCENTAGE");
+                break;
+            case CssTokenType.TT_IDENT:
+            case CssTokenType.TT_AT_KEYWORD:
+                if (stringValue == null || stringValue.isEmpty()) {
+                    throw new IllegalArgumentException("stringValue must not be null or empty for ttype=TT_IDENT or ttype=TT_AT_KEYWORD");
+                }
+                break;
+            default:
+                if (ttype < 0 && ttype != CssTokenType.TT_EOF && stringValue == null) {
+                    throw new IllegalArgumentException("string value must not be null for ttype=" + ttype);
+                }
+                break;
         }
         this.ttype = ttype;
         this.stringValue = stringValue;
@@ -162,30 +162,30 @@ public class CssToken {
             }
 
             // escape nmstart if necessary
-            if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || 0xA0 <= ch) {
+            if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z') {
                 out.append((char) ch);
             } else {
                 switch (ch) {
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                case '\n':
-                    String hex = Integer.toHexString(ch);
-                    out.append('\\');
-                    out.append(hex);
-                    out.append(' ');
-                    break;
-                default:
-                    out.append('\\');
-                    out.append((char) ch);
-                    break;
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                    case '\n':
+                        String hex = Integer.toHexString(ch);
+                        out.append('\\');
+                        out.append(hex);
+                        out.append(' ');
+                        break;
+                    default:
+                        out.append('\\');
+                        out.append((char) ch);
+                        break;
                 }
             }
 
@@ -253,36 +253,36 @@ public class CssToken {
         out.append(firstQuoteChar);
         for (char ch : value.toCharArray()) {
             switch (ch) {
-            case ' ':
-                out.append(ch);
-                break;
-            case '\\':
-                out.append('\\');
-                out.append('\\');
-                break;
-            case '\n':
-                out.append('\\');
-                out.append('\n');
-                break;
-            default:
-                if (ch == firstQuoteChar) {
+                case ' ':
+                    out.append(ch);
+                    break;
+                case '\\':
                     out.append('\\');
-                    out.append(firstQuoteChar);
-                } else {
-
-                    if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
+                    out.append('\\');
+                    break;
+                case '\n':
+                    out.append('\\');
+                    out.append('\n');
+                    break;
+                default:
+                    if (ch == firstQuoteChar) {
                         out.append('\\');
-                        String hex = Integer.toHexString(ch);
-                        for (int i = 0, n = 6 - hex.length(); i < n; i++) {
-                            out.append('0');
-                        }
-                        out.append(hex);
+                        out.append(firstQuoteChar);
                     } else {
-                        out.append(ch);
-                    }
 
-                }
-                break;
+                        if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
+                            out.append('\\');
+                            String hex = Integer.toHexString(ch);
+                            for (int i = 0, n = 6 - hex.length(); i < n; i++) {
+                                out.append('0');
+                            }
+                            out.append(hex);
+                        } else {
+                            out.append(ch);
+                        }
+
+                    }
+                    break;
             }
         }
         out.append(lastQuoteChar);
