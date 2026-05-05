@@ -52,19 +52,19 @@ public class StringOrIdentCssConverter implements Converter<String> {
             switch (ch) {
                 case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
                     buf.append(ch);
-                    isIdent &= j > 0;
+                    isIdent &= j > 0;// ident must not start with a digit
                 }
                 case ' ', '\'' -> {
                     buf.append(ch);
-                    isIdent = false;
+                    isIdent = false;// ident must not contain space or quote characters
                 }
                 case '"', '\n', '@', '#' -> {
                     buf.append('\\');
                     buf.append(ch);
-                    isIdent = false;
+                    isIdent = false;// ident must not contain quote, linebreak, @, #.
                 }
                 default -> {
-                    if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || 0xA0 <= ch) {
+                    if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z') {
                         buf.append(ch);
                     } else if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
                         buf.append('\\');
