@@ -4,22 +4,21 @@
  */
 package org.jhotdraw8.fxbase.tree;
 
+import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
+import org.jhotdraw8.collection.enumerator.EmptyEnumerator;
+import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.Spliterators.AbstractSpliterator;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /// PostorderSpliterator.
 ///
 /// @param <T> the element type
-public class PostorderSpliterator<T> extends AbstractSpliterator<T> {
+public class PostorderSpliterator<T> extends AbstractEnumerator<T> {
     private final Function<T, Iterable<T>> getChildrenFunction;
     private @Nullable T root;
-    private Spliterator<T> subtree;
+    private Enumerator<T> subtree;
     private final Iterator<T> children;
 
     public PostorderSpliterator(Function<T, Iterable<T>> getChildrenFunction, T root) {
@@ -27,25 +26,25 @@ public class PostorderSpliterator<T> extends AbstractSpliterator<T> {
         this.getChildrenFunction = getChildrenFunction;
         this.root = root;
         children = getChildrenFunction.apply(root).iterator();
-        subtree = Spliterators.emptySpliterator();
+        subtree = EmptyEnumerator.emptyEnumerator();
     }
 
     @Override
-    public boolean tryAdvance(Consumer<? super T> consumer) {
+    public boolean moveNext() {
         if (root == null) {
             return false;
         }
-
-        //noinspection StatementWithEmptyBody
-        if (subtree.tryAdvance(consumer)) {
-            // empty
+        if (subtree.moveNext()) {
+            current = subtree.current();
         } else if (children.hasNext()) {
             subtree = new PostorderSpliterator<>(getChildrenFunction, children.next());
-            subtree.tryAdvance(consumer);
+            subtree.moveNext();
+            current = subtree.current();
         } else {
-            consumer.accept(root);
+            current = root;
             root = null;
         }
         return true;
     }
+
 }

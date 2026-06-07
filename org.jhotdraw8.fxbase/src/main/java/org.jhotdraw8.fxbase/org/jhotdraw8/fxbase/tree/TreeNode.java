@@ -137,7 +137,6 @@ public interface TreeNode<T extends TreeNode<T>> {
     ///     If a child is removed from this tree node, then this tree node sets
     ///     the parent of the child to null.
     ///
-    ///
     /// @return the children
     List<T> getChildren();
 

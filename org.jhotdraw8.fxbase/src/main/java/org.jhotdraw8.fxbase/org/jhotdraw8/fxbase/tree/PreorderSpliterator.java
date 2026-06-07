@@ -31,7 +31,6 @@ public class PreorderSpliterator<T> extends AbstractEnumerator<T> {
         if (iter == null) {
             return false;
         }
-
         current = iter.next();
         if (!iter.hasNext()) {
             stack.pop();
