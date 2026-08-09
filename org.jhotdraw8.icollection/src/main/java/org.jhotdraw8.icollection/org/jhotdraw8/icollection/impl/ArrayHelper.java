@@ -73,7 +73,7 @@ public class ArrayHelper {
     /// @param <T>   the array type
     /// @return a new array
     public static <T> T[] copyAdd(T[] src, int index, T value) {
-        final T[] dst = copyComponentAdd(src, index, 1);
+        T[] dst = copyComponentAdd(src, index, 1);
         dst[index] = value;
         return dst;
     }
@@ -86,7 +86,7 @@ public class ArrayHelper {
     /// @param <T>    the array type
     /// @return a new array
     public static <T> T[] copyAddAll(T[] src, int index, T[] values) {
-        final T[] dst = copyComponentAdd(src, index, values.length);
+        T[] dst = copyComponentAdd(src, index, values.length);
         System.arraycopy(values, 0, dst, index, values.length);
         return dst;
     }
@@ -104,7 +104,7 @@ public class ArrayHelper {
         if (index == src.length) {
             return Arrays.copyOf(src, src.length + numComponents);
         }
-        @SuppressWarnings("unchecked") final T[] dst = (T[]) Array.newInstance(src.getClass().getComponentType(), src.length + numComponents);
+        @SuppressWarnings("unchecked") T[] dst = (T[]) Array.newInstance(src.getClass().getComponentType(), src.length + numComponents);
         System.arraycopy(src, 0, dst, 0, index);
         System.arraycopy(src, index, dst, index + numComponents, src.length - index);
         return dst;
@@ -121,7 +121,7 @@ public class ArrayHelper {
         if (index == src.length - numComponents) {
             return Arrays.copyOf(src, src.length - numComponents);
         }
-        @SuppressWarnings("unchecked") final T[] dst = (T[]) Array.newInstance(src.getClass().getComponentType(), src.length - numComponents);
+        @SuppressWarnings("unchecked") T[] dst = (T[]) Array.newInstance(src.getClass().getComponentType(), src.length - numComponents);
         System.arraycopy(src, 0, dst, 0, index);
         System.arraycopy(src, index + numComponents, dst, index, src.length - index - numComponents);
         return dst;
@@ -145,7 +145,7 @@ public class ArrayHelper {
     /// @param <T>   the array type
     /// @return a new array
     public static <T> T[] copySet(T[] src, int index, T value) {
-        final T[] dst = Arrays.copyOf(src, src.length);
+        T[] dst = Arrays.copyOf(src, src.length);
         dst[index] = value;
         return dst;
     }

@@ -41,7 +41,7 @@ public class ReadableSortedSetFacade<E> extends ReadableSetFacade<E>
                                    Supplier<E> getFirstFunction,
                                    Supplier<E> getLastFunction,
 
-                                   final Supplier<Comparator<? super E>> comparatorSupplier,
+                                   Supplier<Comparator<? super E>> comparatorSupplier,
                                    int characteristics) {
         super(iteratorFunction, sizeFunction, containsFunction, characteristics);
         this.getFirstFunction = getFirstFunction;

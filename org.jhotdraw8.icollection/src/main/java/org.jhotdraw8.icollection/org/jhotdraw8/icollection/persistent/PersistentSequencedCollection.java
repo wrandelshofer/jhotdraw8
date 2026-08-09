@@ -43,7 +43,7 @@ public interface PersistentSequencedCollection<E> extends PersistentCollection<E
     /// as the first in the iteration order, or
     /// a different collection instance with the element added as the first
     /// in the iteration order
-    PersistentSequencedCollection<E> addFirst(final @Nullable E element);
+    PersistentSequencedCollection<E> addFirst(@Nullable E element);
 
     /// Returns a copy of this collection that contains all elements
     /// of this collection and also the specified element as the last
@@ -62,13 +62,13 @@ public interface PersistentSequencedCollection<E> extends PersistentCollection<E
     /// as the last in the iteration order, or
     /// a different collection instance with the element added as the last
     /// in the iteration order
-    PersistentSequencedCollection<E> addLast(final @Nullable E element);
+    PersistentSequencedCollection<E> addLast(@Nullable E element);
 
     @Override
     <T> PersistentSequencedCollection<T> empty();
 
     @Override
-    PersistentSequencedCollection<E> remove(E element);
+    PersistentSequencedCollection<E> remove(@Nullable E element);
 
     @Override
     PersistentSequencedCollection<E> removeAll(Iterable<?> c);

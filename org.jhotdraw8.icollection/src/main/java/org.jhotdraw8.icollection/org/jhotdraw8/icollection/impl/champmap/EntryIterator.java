@@ -21,19 +21,9 @@ import java.util.function.Consumer;
 /// Supports remove and [Map.Entry#setValue]. The functions that are
 /// passed to this iterator must not change the trie structure that the iterator
 /// currently uses.
-public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
+public class EntryIterator<K, V> extends AbstractChampIterator<K, V> implements Iterator<Map.Entry<K, V>> {
 
-    private final int[] nodeCursorsAndLengths = new int[Node.MAX_DEPTH * 2];
-    int nextValueCursor;
-    private int nextValueLength;
-    private int nextStackLevel = -1;
-    Node<K, V> nextValueNode;
     @Nullable EditableMapEntry<K, V> current;
-    private boolean canRemove = false;
-    private final @Nullable Consumer<K> persistentRemoveFunction;
-    private final @Nullable BiConsumer<K, V> persistentPutIfPresentFunction;
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    final Node<K, V>[] nodes = new Node[Node.MAX_DEPTH];
 
     /// Creates a new instance.
     ///
@@ -45,28 +35,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
     ///                                       the function must not change the trie that was passed
     ///                                       to this iterator
     public EntryIterator(Node<K, V> rootNode, @Nullable Consumer<K> persistentRemoveFunction, @Nullable BiConsumer<K, V> persistentPutIfPresentFunction) {
-        this.persistentRemoveFunction = persistentRemoveFunction;
-        this.persistentPutIfPresentFunction = persistentPutIfPresentFunction;
-        if (rootNode.hasNodes()) {
-            nextStackLevel = 0;
-            nodes[0] = rootNode;
-            nodeCursorsAndLengths[0] = 0;
-            nodeCursorsAndLengths[1] = rootNode.nodeArity();
-        }
-        if (rootNode.hasData()) {
-            nextValueNode = rootNode;
-            nextValueCursor = 0;
-            nextValueLength = rootNode.dataArity();
-        }
-    }
-
-    @Override
-    public boolean hasNext() {
-        if (nextValueCursor < nextValueLength) {
-            return true;
-        } else {
-            return searchNextValueNode();
-        }
+        super(rootNode, persistentRemoveFunction, persistentPutIfPresentFunction);
     }
 
     @Override
@@ -81,41 +50,6 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
         }
     }
 
-    /*
-     * Searches for the next node that contains values.
-     */
-    private boolean searchNextValueNode() {
-        while (nextStackLevel >= 0) {
-            final int currentCursorIndex = nextStackLevel * 2;
-            final int currentLengthIndex = currentCursorIndex + 1;
-            final int nodeCursor = nodeCursorsAndLengths[currentCursorIndex];
-            final int nodeLength = nodeCursorsAndLengths[currentLengthIndex];
-            if (nodeCursor < nodeLength) {
-                final Node<K, V> nextNode = nodes[nextStackLevel].getNode(nodeCursor);
-                nodeCursorsAndLengths[currentCursorIndex]++;
-                if (nextNode.hasNodes()) {
-                    // put node on next stack level for depth-first traversal
-                    final int nextStackLevel = ++this.nextStackLevel;
-                    final int nextCursorIndex = nextStackLevel * 2;
-                    final int nextLengthIndex = nextCursorIndex + 1;
-                    nodes[nextStackLevel] = nextNode;
-                    nodeCursorsAndLengths[nextCursorIndex] = 0;
-                    nodeCursorsAndLengths[nextLengthIndex] = nextNode.nodeArity();
-                }
-
-                if (nextNode.hasData()) {
-                    //found next node that contains values
-                    nextValueNode = nextNode;
-                    nextValueCursor = 0;
-                    nextValueLength = nextNode.dataArity();
-                    return true;
-                }
-            } else {
-                nextStackLevel--;
-            }
-        }
-        return false;
-    }
 
     @Override
     public void remove() {

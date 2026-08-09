@@ -16,8 +16,8 @@ public class ChampTrie {
     }
 
     static <K, V> BitmapIndexedNode<K, V> newBitmapIndexedNode(
-            @Nullable IdentityObject mutator, final int nodeMap,
-            final int dataMap, final Object[] nodes) {
+            @Nullable IdentityObject mutator, int nodeMap,
+            int dataMap, Object[] nodes) {
         return mutator == null
                 ? new BitmapIndexedNode<>(nodeMap, dataMap, nodes)
                 : new MutableBitmapIndexedNode<>(mutator, nodeMap, dataMap, nodes);

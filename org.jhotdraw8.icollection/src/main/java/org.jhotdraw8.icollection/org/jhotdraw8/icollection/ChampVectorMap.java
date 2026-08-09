@@ -209,7 +209,7 @@ public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Seria
 
     @Override
     public boolean containsKey(@Nullable Object o) {
-        @SuppressWarnings("unchecked") final K key = (K) o;
+        @SuppressWarnings("unchecked") K key = (K) o;
         return root.find(new SequencedEntry<>(key), SequencedEntry.keyHash(key), 0,
                 SequencedEntry::keyEquals) != Node.NO_DATA;
     }

@@ -28,6 +28,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     /// The sign bit encodes the color.
     /// The size is Math.abs(sizeAndColor).
     final int sizeAndColor;
+
     // This is no public API! The RedBlackTree takes care of passing the correct Comparator.
     Node(boolean color, RedBlackTree<K, V> left, K key, V value, RedBlackTree<K, V> right) {
         this.left = left;
@@ -50,23 +51,23 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
                                                  V value, RedBlackTree<K, V> right) {
         if (color == Color.BLACK) {
             if (!left.isEmpty()) {
-                final Node<K, V> ln = (Node<K, V>) left;
+                Node<K, V> ln = (Node<K, V>) left;
                 if (ln.color() == Color.RED) {
                     if (!ln.left.isEmpty()) {
-                        final Node<K, V> lln = (Node<K, V>) ln.left;
+                        Node<K, V> lln = (Node<K, V>) ln.left;
                         if (lln.color() == Color.RED) {
-                            final Node<K, V> newLeft = new Node<>(Color.BLACK, lln.left, lln.key, lln.value, lln.right
+                            Node<K, V> newLeft = new Node<>(Color.BLACK, lln.left, lln.key, lln.value, lln.right
                             );
-                            final Node<K, V> newRight = new Node<>(Color.BLACK, ln.right, key, value, right);
+                            Node<K, V> newRight = new Node<>(Color.BLACK, ln.right, key, value, right);
                             return new Node<>(Color.RED, newLeft, ln.key, ln.value, newRight);
                         }
                     }
                     if (!ln.right.isEmpty()) {
-                        final Node<K, V> lrn = (Node<K, V>) ln.right;
+                        Node<K, V> lrn = (Node<K, V>) ln.right;
                         if (lrn.color() == Color.RED) {
-                            final Node<K, V> newLeft = new Node<>(Color.BLACK, ln.left, ln.key, ln.value, lrn.left
+                            Node<K, V> newLeft = new Node<>(Color.BLACK, ln.left, ln.key, ln.value, lrn.left
                             );
-                            final Node<K, V> newRight = new Node<>(Color.BLACK, lrn.right, key, value, right);
+                            Node<K, V> newRight = new Node<>(Color.BLACK, lrn.right, key, value, right);
                             return new Node<>(Color.RED, newLeft, lrn.key, lrn.value, newRight);
                         }
                     }
@@ -80,22 +81,22 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
                                                   V value, RedBlackTree<K, V> right) {
         if (color == Color.BLACK) {
             if (!right.isEmpty()) {
-                final Node<K, V> rn = (Node<K, V>) right;
+                Node<K, V> rn = (Node<K, V>) right;
                 if (rn.color() == Color.RED) {
                     if (!rn.right.isEmpty()) {
-                        final Node<K, V> rrn = (Node<K, V>) rn.right;
+                        Node<K, V> rrn = (Node<K, V>) rn.right;
                         if (rrn.color() == Color.RED) {
-                            final Node<K, V> newLeft = new Node<>(Color.BLACK, left, key, value, rn.left);
-                            final Node<K, V> newRight = new Node<>(Color.BLACK, rrn.left, rrn.key, rrn.value, rrn.right
+                            Node<K, V> newLeft = new Node<>(Color.BLACK, left, key, value, rn.left);
+                            Node<K, V> newRight = new Node<>(Color.BLACK, rrn.left, rrn.key, rrn.value, rrn.right
                             );
                             return new Node<>(Color.RED, newLeft, rn.key, rn.value, newRight);
                         }
                     }
                     if (!rn.left.isEmpty()) {
-                        final Node<K, V> rln = (Node<K, V>) rn.left;
+                        Node<K, V> rln = (Node<K, V>) rn.left;
                         if (rln.color() == Color.RED) {
-                            final Node<K, V> newLeft = new Node<>(Color.BLACK, left, key, value, rln.left);
-                            final Node<K, V> newRight = new Node<>(Color.BLACK, rln.right, rn.key, rn.value, rn.right
+                            Node<K, V> newLeft = new Node<>(Color.BLACK, left, key, value, rln.left);
+                            Node<K, V> newRight = new Node<>(Color.BLACK, rln.right, rn.key, rn.value, rn.right
                             );
                             return new Node<>(Color.RED, newLeft, rln.key, rln.value, newRight);
                         }
@@ -123,29 +124,29 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
         if (tree.isEmpty()) {
             return Tuple.of(tree, false);
         } else {
-            final Node<K, V> node = (Node<K, V>) tree;
-            final int comparison = comparator.compare(key, node.key);
+            Node<K, V> node = (Node<K, V>) tree;
+            int comparison = comparator.compare(key, node.key);
             if (comparison < 0) {
-                final Tuple2<? extends RedBlackTree<K, V>, Boolean> deleted = delete(node.left, key, comparator);
-                final RedBlackTree<K, V> l = deleted._1();
-                final boolean d = deleted._2();
+                Tuple2<? extends RedBlackTree<K, V>, Boolean> deleted = delete(node.left, key, comparator);
+                RedBlackTree<K, V> l = deleted._1();
+                boolean d = deleted._2();
                 if (d) {
                     return Node.unbalancedRight(node.color(), l, node.key, node.value, node.right
                     );
                 } else {
-                    final Node<K, V> newNode = new Node<>(node.color(), l, node.key, node.value, node.right
+                    Node<K, V> newNode = new Node<>(node.color(), l, node.key, node.value, node.right
                     );
                     return Tuple.of(newNode, false);
                 }
             } else if (comparison > 0) {
-                final Tuple2<? extends RedBlackTree<K, V>, Boolean> deleted = delete(node.right, key, comparator);
-                final RedBlackTree<K, V> r = deleted._1();
-                final boolean d = deleted._2();
+                Tuple2<? extends RedBlackTree<K, V>, Boolean> deleted = delete(node.right, key, comparator);
+                RedBlackTree<K, V> r = deleted._1();
+                boolean d = deleted._2();
                 if (d) {
                     return Node.unbalancedLeft(node.color(), node.left, node.key, node.value, r,
                             Empty.empty());
                 } else {
-                    final Node<K, V> newNode = new Node<>(node.color(), node.left, node.key, node.value, r
+                    Node<K, V> newNode = new Node<>(node.color(), node.left, node.key, node.value, r
                     );
                     return Tuple.of(newNode, false);
                 }
@@ -157,16 +158,16 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
                         return Tuple.of(node.left, false);
                     }
                 } else {
-                    final Node<K, V> nodeRight = (Node<K, V>) node.right;
-                    final var newRight = deleteMin(nodeRight);
-                    final RedBlackTree<K, V> r = newRight._1();
-                    final boolean d = newRight._2();
-                    final K m = newRight._3();
-                    final V mv = newRight._4();
+                    Node<K, V> nodeRight = (Node<K, V>) node.right;
+                    var newRight = deleteMin(nodeRight);
+                    RedBlackTree<K, V> r = newRight._1();
+                    boolean d = newRight._2();
+                    K m = newRight._3();
+                    V mv = newRight._4();
                     if (d) {
                         return Node.unbalancedLeft(node.color(), node.left, m, mv, r, Empty.empty());
                     } else {
-                        final RedBlackTree<K, V> newNode = new Node<>(node.color(), node.left, m, mv, r
+                        RedBlackTree<K, V> newNode = new Node<>(node.color(), node.left, m, mv, r
                         );
                         return Tuple.of(newNode, false);
                     }
@@ -183,18 +184,18 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
         } else if (node.color() == Color.RED && node.left().isEmpty()) {
             return Tuple.of(node.right(), false, node.getKey(), node.getValue());
         } else {
-            final Node<K, V> nodeLeft = (Node<K, V>) node.left;
-            final var newNode = deleteMin(nodeLeft);
-            final RedBlackTree<K, V> l = newNode._1();
-            final boolean deleted = newNode._2();
-            final K m = newNode._3();
-            final V mv = newNode._4();
+            Node<K, V> nodeLeft = (Node<K, V>) node.left;
+            var newNode = deleteMin(nodeLeft);
+            RedBlackTree<K, V> l = newNode._1();
+            boolean deleted = newNode._2();
+            K m = newNode._3();
+            V mv = newNode._4();
             if (deleted) {
-                final Tuple2<Node<K, V>, Boolean> tD = Node.unbalancedRight(node.color(), l,
+                Tuple2<Node<K, V>, Boolean> tD = Node.unbalancedRight(node.color(), l,
                         node.key, node.value, node.right);
                 return Tuple.of(tD._1(), tD._2(), m, mv);
             } else {
-                final Node<K, V> tD = new Node<>(node.color(), l, node.key, node.value, node.right);
+                Node<K, V> tD = new Node<>(node.color(), l, node.key, node.value, node.right);
                 return Tuple.of(tD, false, m, mv);
             }
         }
@@ -210,19 +211,19 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     /// @return the same tree instance if the element value is already in the tree, otherwise a new tree instance
     static <K, V> Node<K, V> insert(RedBlackTree<K, V> tree, K key, V value, Comparator<? super K> comparator) {
         if (tree.isEmpty()) {
-            final Empty<K, V> empty = (Empty<K, V>) tree;
+            Empty<K, V> empty = (Empty<K, V>) tree;
             return new Node<>(Color.RED, empty, key, value, empty);
         } else {
-            final Node<K, V> node = (Node<K, V>) tree;
-            final int comparison = comparator.compare(key, node.key);
+            Node<K, V> node = (Node<K, V>) tree;
+            int comparison = comparator.compare(key, node.key);
             if (comparison < 0) {
-                final Node<K, V> newLeft = insert(node.left, key, value, comparator);
+                Node<K, V> newLeft = insert(node.left, key, value, comparator);
                 return (newLeft == node.left)
                         ? node
                         : Node.balanceLeft(node.color(), newLeft, node.key, node.value, node.right
                 );
             } else if (comparison > 0) {
-                final Node<K, V> newRight = insert(node.right, key, value, comparator);
+                Node<K, V> newRight = insert(node.right, key, value, comparator);
                 return (newRight == node.right)
                         ? node
                         : Node.balanceRight(node.color(), node.left, node.key, node.value, newRight
@@ -243,8 +244,6 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
 
-
-
     static <K, V> Node<K, V> minimum(Node<K, V> node) {
         Node<K, V> curr = node;
         while (!curr.left.isEmpty()) {
@@ -258,14 +257,14 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
         if (tree.isEmpty()) {
             return "";
         } else {
-            final Node<?, ?> node = (Node<?, ?>) tree;
-            final String value = (node.color() ? 'R' : 'B') + ":" + node.key +
+            Node<?, ?> node = (Node<?, ?>) tree;
+            String value = (node.color() ? 'R' : 'B') + ":" + node.key +
                     (node.value == null ? "" : "=" + node.value);
             if (node.isLeaf()) {
                 return value;
             } else {
-                final String left = node.left.isEmpty() ? "" : " " + toLispString(node.left);
-                final String right = node.right.isEmpty() ? "" : " " + toLispString(node.right);
+                String left = node.left.isEmpty() ? "" : " " + toLispString(node.left);
+                String right = node.right.isEmpty() ? "" : " " + toLispString(node.right);
                 return "(" + value + "," + left + "," + right + ")";
             }
         }
@@ -274,16 +273,16 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     private static <K, V> Tuple2<Node<K, V>, Boolean> unbalancedLeft(boolean color, RedBlackTree<K, V> left,
                                                                      K key, V value, RedBlackTree<K, V> right, Empty<K, V> empty) {
         if (!left.isEmpty()) {
-            final Node<K, V> ln = (Node<K, V>) left;
+            Node<K, V> ln = (Node<K, V>) left;
             if (ln.color() == Color.BLACK) {
-                final Node<K, V> newNode = Node.balanceLeft(Color.BLACK, ln.color(Color.RED), key, value, right);
+                Node<K, V> newNode = Node.balanceLeft(Color.BLACK, ln.color(Color.RED), key, value, right);
                 return Tuple.of(newNode, color == Color.BLACK);
             } else if (color == Color.BLACK && !ln.right.isEmpty()) {
-                final Node<K, V> lrn = (Node<K, V>) ln.right;
+                Node<K, V> lrn = (Node<K, V>) ln.right;
                 if (lrn.color() == Color.BLACK) {
-                    final Node<K, V> newRightNode = Node.balanceLeft(Color.BLACK, lrn.color(Color.RED), key, value, right
+                    Node<K, V> newRightNode = Node.balanceLeft(Color.BLACK, lrn.color(Color.RED), key, value, right
                     );
-                    final Node<K, V> newNode = new Node<>(Color.BLACK, ln.left, ln.key, ln.value, newRightNode
+                    Node<K, V> newNode = new Node<>(Color.BLACK, ln.left, ln.key, ln.value, newRightNode
                     );
                     return Tuple.of(newNode, false);
                 }
@@ -295,16 +294,16 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     private static <K, V> Tuple2<Node<K, V>, Boolean> unbalancedRight(boolean color, RedBlackTree<K, V> left,
                                                                       K key, V value, RedBlackTree<K, V> right) {
         if (!right.isEmpty()) {
-            final Node<K, V> rn = (Node<K, V>) right;
+            Node<K, V> rn = (Node<K, V>) right;
             if (rn.color() == Color.BLACK) {
-                final Node<K, V> newNode = Node.balanceRight(Color.BLACK, left, key, value, rn.color(Color.RED));
+                Node<K, V> newNode = Node.balanceRight(Color.BLACK, left, key, value, rn.color(Color.RED));
                 return Tuple.of(newNode, color == Color.BLACK);
             } else if (color == Color.BLACK && !rn.left.isEmpty()) {
-                final Node<K, V> rln = (Node<K, V>) rn.left;
+                Node<K, V> rln = (Node<K, V>) rn.left;
                 if (rln.color() == Color.BLACK) {
-                    final Node<K, V> newLeftNode = Node.balanceRight(Color.BLACK, left, key, value, rln.color(Color.RED)
+                    Node<K, V> newLeftNode = Node.balanceRight(Color.BLACK, left, key, value, rln.color(Color.RED)
                     );
-                    final Node<K, V> newNode = new Node<>(Color.BLACK, newLeftNode, rn.key, rn.value, rn.right
+                    Node<K, V> newNode = new Node<>(Color.BLACK, newLeftNode, rn.key, rn.value, rn.right
                     );
                     return Tuple.of(newNode, false);
                 }
@@ -315,7 +314,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public RedBlackTree<K, V> ceiling(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(value, this.key);
+        int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.ceiling(value, comparator);
         } else if (result > 0) {
@@ -336,7 +335,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public boolean contains(K key, Comparator<? super K> comparator) {
-        final int result = comparator.compare(key, this.key);
+        int result = comparator.compare(key, this.key);
         if (result < 0) {
             return left.contains(key, comparator);
         }
@@ -360,7 +359,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public RedBlackTree<K, V> find(K key, Comparator<? super K> comparator) {
-        final int result = comparator.compare(key, this.key);
+        int result = comparator.compare(key, this.key);
         if (result < 0) {
             return left.find(key, comparator);
         } else if (result > 0) {
@@ -372,7 +371,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public RedBlackTree<K, V> floor(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(value, this.key);
+        int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.floor(value, comparator).orElse(this);
         } else if (result > 0) {
@@ -400,7 +399,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public RedBlackTree<K, V> higher(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(value, this.key);
+        int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.higher(value, comparator);
         } else if (result > 0) {
@@ -436,7 +435,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public RedBlackTree<K, V> lower(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(value, this.key);
+        int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.lower(value, comparator).orElse(this);
         } else if (result > 0) {
@@ -474,8 +473,8 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     @Override
     public String toLispString() {
         return isLeaf() ? "(" + (color() ? 'R' : 'B') + ":" + key +
-                (value == null ? "" : "=" + value)
-                + ")" : toLispString(this);
+                          (value == null ? "" : "=" + value)
+                          + ")" : toLispString(this);
     }
 
     public String toString() {

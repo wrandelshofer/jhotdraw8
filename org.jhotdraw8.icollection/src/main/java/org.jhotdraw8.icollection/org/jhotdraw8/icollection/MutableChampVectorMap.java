@@ -346,7 +346,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
         return oldData == null ? null : oldData.getValue();
     }
 
-    ChangeEvent<SequencedEntry<K, V>> putLast(final K key, V value, boolean moveToLast) {
+    ChangeEvent<SequencedEntry<K, V>> putLast(K key, V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
         root = root.put(getOrCreateOwner(), newEntry,
@@ -388,7 +388,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
 
     @Override
     public @Nullable V remove(Object o) {
-        @SuppressWarnings("unchecked") final K key = (K) o;
+        @SuppressWarnings("unchecked") K key = (K) o;
         ChangeEvent<SequencedEntry<K, V>> details = removeAndGiveDetails(key);
         if (details.isModified()) {
             return details.getOldData().getValue();

@@ -8,9 +8,9 @@ import org.jhotdraw8.icollection.facade.ReadableSetFacade;
 import org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champmap.ChangeEvent;
 import org.jhotdraw8.icollection.impl.champmap.EntryIterator;
+import org.jhotdraw8.icollection.impl.champmap.KeyIterator;
 import org.jhotdraw8.icollection.impl.champmap.Node;
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
-import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jhotdraw8.icollection.readable.ReadableSet;
@@ -181,7 +181,7 @@ public class ChampMap<K, V>
     /// {@inheritDoc}
     @Override
     public boolean containsKey(@Nullable Object o) {
-        @SuppressWarnings("unchecked") final K key = (K) o;
+        @SuppressWarnings("unchecked") K key = (K) o;
         return root.findByKey(key, keyHash(key), 0) != Node.NO_DATA;
     }
 
@@ -287,7 +287,7 @@ public class ChampMap<K, V>
     @Override
     public ReadableSet<K> readableKeySet() {
         return new ReadableSetFacade<>(
-                () -> new MappedIterator<>(new EntryIterator<>(root, null, null), Map.Entry::getKey),
+                () -> new KeyIterator<>(root, null),
                 this::size,
                 this::containsKey,
                 Spliterator.IMMUTABLE);

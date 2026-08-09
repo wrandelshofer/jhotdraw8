@@ -30,7 +30,6 @@ import java.util.function.BiFunction;
 /// [vavr RedBlackTree.java](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/RedBlackTree.java)
 /// [vavr MIT-License](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE)
 ///
-///
 /// @param <K> the key type
 /// @param <V> the value type
 public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
@@ -42,7 +41,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
 
     static <K, V> RedBlackTree<K, V> of(Comparator<? super K> comparator, K key, V value) {
         Objects.requireNonNull(comparator, "comparator is null");
-        final Empty<K, V> empty = Empty.empty();
+        Empty<K, V> empty = Empty.empty();
         return new Node<>(Color.BLACK, empty, key, value, empty);
     }
 
@@ -102,11 +101,11 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
 
     /// Deletes a value from this RedBlackTree.
     ///
-    /// @param key      A value
+    /// @param key        A value
     /// @param comparator
     /// @return A new RedBlackTree if the value is present, otherwise this.
     default RedBlackTree<K, V> delete(K key, Comparator<? super K> comparator) {
-        final RedBlackTree<K, V> tree = Node.delete(this, key, comparator)._1();
+        RedBlackTree<K, V> tree = Node.delete(this, key, comparator)._1();
         return tree.size() == this.size() ? this : Node.color(tree, Color.BLACK);
     }
 
@@ -117,7 +116,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
     /// Especially the value returned may differ from the given value, even if the underlying comparator states that
     /// both are equal.
     ///
-    /// @param key      A value
+    /// @param key        A value
     /// @param comparator
     /// @return Some value, if this tree contains a value equal to the given value according to the underlying comparator. Otherwise None.
     RedBlackTree<K, V> find(K key, Comparator<? super K> comparator);
@@ -164,10 +163,9 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
     ///
     /// @param tree       The RedBlackTree to form the union with.
     /// @param comparator
+    /// @param tree       the given tree
     /// @return A new RedBlackTree that contains all distinct elements of this and the given `tree`.
     /// Returns true if the given tree has the same size and the same elements in the same sequence as this tree.
-    ///
-    /// @param tree the given tree
     /// @return true if equal
     default boolean equals(RedBlackTree<K, V> tree) {
         if (this == tree) {
@@ -220,7 +218,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
         if (isEmpty()) {
             return VectorList.<Node<K, V>>of().iterator();
         } else {
-            final Node<K, V> that = (Node<K, V>) this;
+            Node<K, V> that = (Node<K, V>) this;
             return new Iterator<>() {
 
                 final Deque<Node<K, V>> stack = pushLeftChildren(new ArrayDeque<>(), that);
@@ -245,7 +243,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
                 private Deque<Node<K, V>> pushLeftChildren(Deque<Node<K, V>> stack, Node<K, V> that) {
                     RedBlackTree<K, V> tree = that;
                     while (!tree.isEmpty()) {
-                        final Node<K, V> node = (Node<K, V>) tree;
+                        Node<K, V> node = (Node<K, V>) tree;
                         stack.push(node);
                         tree = node.left;
                     }
@@ -275,7 +273,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
         if (isEmpty()) {
             return VectorList.<Node<K, V>>of().iterator();
         } else {
-            final Node<K, V> that = (Node<K, V>) this;
+            Node<K, V> that = (Node<K, V>) this;
             return new Iterator<>() {
 
                 final Deque<Node<K, V>> stack = pushRightChildren(new ArrayDeque<>(), that);
@@ -300,7 +298,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
                 private Deque<Node<K, V>> pushRightChildren(Deque<Node<K, V>> stack, Node<K, V> that) {
                     RedBlackTree<K, V> tree = that;
                     while (!tree.isEmpty()) {
-                        final Node<K, V> node = (Node<K, V>) tree;
+                        Node<K, V> node = (Node<K, V>) tree;
                         stack.push(node);
                         tree = node.right;
                     }

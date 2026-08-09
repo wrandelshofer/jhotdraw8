@@ -28,10 +28,10 @@ public interface PersistentSequencedSet<E> extends PersistentSet<E>, ReadableSeq
     }
 
     @Override
-    PersistentSequencedSet<E> addFirst(final @Nullable E element);
+    PersistentSequencedSet<E> addFirst(@Nullable E element);
 
     @Override
-    PersistentSequencedSet<E> addLast(final @Nullable E element);
+    PersistentSequencedSet<E> addLast(@Nullable E element);
 
     @Override
     <T> PersistentSequencedSet<T> empty();

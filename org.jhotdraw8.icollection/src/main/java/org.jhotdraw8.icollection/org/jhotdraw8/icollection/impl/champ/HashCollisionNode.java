@@ -187,7 +187,7 @@ class HashCollisionNode<D> extends Node<D> {
                     this.data[i] = updatedData;
                     return this;
                 }
-                final Object[] newKeys = ListHelper.copySet(this.data, i, updatedData);
+                Object[] newKeys = ListHelper.copySet(this.data, i, updatedData);
                 return newHashCollisionNode(owner, dataHash, newKeys);
             }
         }
@@ -224,8 +224,8 @@ class HashCollisionNode<D> extends Node<D> {
         // Buffer content:
         // 0..unprocessedSize-1 = unprocessed data elements from this node
         // unprocessedSize..resultSize-1 = data elements that we have updated from that node, or that we have added from that node.
-        final int thisSize = this.dataArity();
-        final int thatSize = that.dataArity();
+        int thisSize = this.dataArity();
+        int thatSize = that.dataArity();
         Object[] buffer = Arrays.copyOf(this.data, thisSize + thatSize);
         System.arraycopy(this.data, 0, buffer, 0, this.data.length);
         Object[] thatArray = that.data;
@@ -266,8 +266,8 @@ class HashCollisionNode<D> extends Node<D> {
         // result part of the buffer, and reduce resultSize by 1.
         // Buffer content:
         // 0..resultSize-1 = data elements from this node that have not been removed
-        final int thisSize = this.dataArity();
-        final int thatSize = that.dataArity();
+        int thisSize = this.dataArity();
+        int thatSize = that.dataArity();
         int resultSize = thisSize;
         Object[] buffer = this.data.clone();
         Object[] thatArray = that.data;
@@ -309,8 +309,8 @@ class HashCollisionNode<D> extends Node<D> {
         // Every time we find a data element that must be retained, we swap it into the result-part of the buffer.
         // 0..resultSize-1 = data elements from this node that must be retained
         // resultSize..thisSize-1 = data elements that might need to be retained
-        final int thisSize = this.dataArity();
-        final int thatSize = that.dataArity();
+        int thisSize = this.dataArity();
+        int thatSize = that.dataArity();
         int resultSize = 0;
         Object[] buffer = this.data.clone();
         Object[] thatArray = that.data;
@@ -334,7 +334,7 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     protected Node<D> filterAll(@Nullable IdentityObject owner, Predicate<? super D> predicate, int shift, BulkChangeEvent bulkChange) {
-        final int thisSize = this.dataArity();
+        int thisSize = this.dataArity();
         int resultSize = 0;
         Object[] buffer = new Object[thisSize];
         Object[] thisArray = this.data;

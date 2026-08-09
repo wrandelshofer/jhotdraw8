@@ -141,7 +141,7 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
     /// @param <K> the key type
     /// @param <V> the value type
     /// @return a string representation
-    static <K, V> String mapToString(final ReadableMap<K, V> map) {
+    static <K, V> String mapToString(ReadableMap<K, V> map) {
         Iterator<Map.Entry<K, V>> i = map.iterator();
         if (!i.hasNext()) {
             return "{}";

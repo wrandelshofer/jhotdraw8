@@ -63,7 +63,6 @@ import java.util.stream.Stream;
 /// [vavr Vector.java](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Vector.java)
 /// [vavr MIT-License](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE)
 ///
-///
 /// @param <E> the element type
 public class VectorList<E> implements PersistentList<E>, Serializable {
     @Serial
@@ -81,7 +80,7 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
     ///
     /// @param iterable an iterable
     @SuppressWarnings("unchecked")
-    protected VectorList(final @Nullable Iterable<? extends E> iterable) {
+    protected VectorList(@Nullable Iterable<? extends E> iterable) {
         if (iterable == null) {
             this.trie = BitMappedTrie.empty();
         } else if (iterable instanceof Collection<?> c && c.isEmpty()
@@ -226,8 +225,8 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
     public VectorList<E> addAll(int index, Iterable<? extends E> c) {
         Objects.requireNonNull(c, "c is null");
         if (index >= 0 && index <= size()) {
-            final VectorList<E> begin = this.readableSubList(0, index).addAll(c);
-            final VectorList<E> end = this.readableSubList(index, size());
+            VectorList<E> begin = this.readableSubList(0, index).addAll(c);
+            VectorList<E> end = this.readableSubList(index, size());
             return begin.addAll(end);
         } else {
             throw new IndexOutOfBoundsException("addAll(" + index + ", c) on Vector of size " + size());
@@ -273,7 +272,7 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
         if (isEmpty()) {
             return this;
         }
-        final Collection<E> set;
+        Collection<E> set;
         if (c instanceof Collection<?> cc) {
             set = (Collection<E>) cc;
         } else if (c instanceof ReadableCollection<?> rc) {

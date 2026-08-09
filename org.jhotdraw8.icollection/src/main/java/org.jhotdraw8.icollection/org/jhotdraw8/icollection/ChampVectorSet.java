@@ -292,8 +292,8 @@ public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E
     }
 
     @Override
-    public boolean contains(@Nullable final Object o) {
-        @SuppressWarnings("unchecked") final E key = (E) o;
+    public boolean contains(@Nullable Object o) {
+        @SuppressWarnings("unchecked") E key = (E) o;
         return root.find(new SequencedElement<>(key), SequencedElement.keyHash(key), 0, Objects::equals) != Node.NO_DATA;
     }
 

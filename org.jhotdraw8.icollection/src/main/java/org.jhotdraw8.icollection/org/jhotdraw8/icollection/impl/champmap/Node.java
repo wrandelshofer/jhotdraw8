@@ -49,7 +49,7 @@ public abstract class Node<K, V> {
     ///
     /// @param mask masked key hash
     /// @return bit position
-    static int bitpos(final int mask) {
+    static int bitpos(int mask) {
         return 1 << mask;
     }
 
@@ -62,18 +62,18 @@ public abstract class Node<K, V> {
     /// @param bitmap a bit-map
     /// @param bitpos a bit-position
     /// @return the array index
-    static int index(final int bitmap, final int bitpos) {
+    static int index(int bitmap, int bitpos) {
         return Integer.bitCount(bitmap & (bitpos - 1));
     }
 
-    static int mask(final int keyHash, final int shift) {
+    static int mask(int keyHash, int shift) {
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
     Node<K, V> mergeTwoDataEntriesIntoNode(IdentityObject mutator,
-                                                    final K k0, final V v0, final int keyHash0,
-                                                    final K k1, final V v1, final int keyHash1,
-                                                    final int shift) {
+                                           K k0, V v0, int keyHash0,
+                                           K k1, V v1, int keyHash1,
+                                           int shift) {
         assert !Objects.equals(k0, k1);
 
         if (shift >= HASH_CODE_LENGTH) {
@@ -87,12 +87,12 @@ public abstract class Node<K, V> {
             return ChampTrie.newHashCollisionNode(mutator, keyHash0, entries, ENTRY_LENGTH);
         }
 
-        final int mask0 = mask(keyHash0, shift);
-        final int mask1 = mask(keyHash1, shift);
+        int mask0 = mask(keyHash0, shift);
+        int mask1 = mask(keyHash1, shift);
 
         if (mask0 != mask1) {
             // both nodes fit on same level
-            final int dataMap = bitpos(mask0) | bitpos(mask1);
+            int dataMap = bitpos(mask0) | bitpos(mask1);
 
             Object[] entries = new Object[ENTRY_LENGTH * 2];
             if (mask0 < mask1) {
@@ -112,14 +112,14 @@ public abstract class Node<K, V> {
             }
             return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries);
         } else {
-            final Node<K, V> node = mergeTwoDataEntriesIntoNode(mutator,
+            Node<K, V> node = mergeTwoDataEntriesIntoNode(mutator,
                     k0, v0, keyHash0,
                     k1, v1, keyHash1,
                     shift + BIT_PARTITION_SIZE
             );
             // values fit on next level
 
-            final int nodeMap = bitpos(mask0);
+            int nodeMap = bitpos(mask0);
             return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, (0), new Object[]{node});
         }
     }
@@ -132,7 +132,7 @@ public abstract class Node<K, V> {
     ///
     /// @param other the other trie
     /// @return true if equivalent
-    abstract boolean equivalent(final Object other);
+    abstract boolean equivalent(Object other);
 
     /// Finds a value by a key.
     ///
@@ -140,22 +140,22 @@ public abstract class Node<K, V> {
     /// @param keyHash the hash code of the key
     /// @param shift   the shift for this node
     /// @return the value, returns [#NO_DATA] if the value is not present.
-    abstract Object findByKey(final K key, final int keyHash, final int shift);
+    abstract Object findByKey(K key, int keyHash, int shift);
 
 
-    abstract Object[] getDataEntry(final int index);
+    abstract Object[] getDataEntry(int index);
 
-    public abstract K getKey(final int index);
+    public abstract K getKey(int index);
 
-    abstract EditableMapEntry<K, V> getMapEntry(final int index);
+    abstract EditableMapEntry<K, V> getMapEntry(int index);
 
     @Nullable IdentityObject getMutator() {
         return null;
     }
 
-    abstract Node<K, V> getNode(final int index);
+    abstract Node<K, V> getNode(int index);
 
-    public abstract V getValue(final int index);
+    public abstract @Nullable V getValue(int index);
 
     abstract boolean hasData();
 
@@ -168,11 +168,11 @@ public abstract class Node<K, V> {
 
     abstract int nodeArity();
 
-    abstract Node<K, V> remove(final @Nullable IdentityObject mutator, final K key,
-                               final int keyHash, final int shift, final ChangeEvent<V> details);
+    abstract Node<K, V> remove(@Nullable IdentityObject mutator, K key,
+                               int keyHash, int shift, ChangeEvent<V> details);
 
-    abstract Node<K, V> put(final @Nullable IdentityObject mutator, final K key, final V val,
-                            final int keyHash, final int shift, final ChangeEvent<V> details, ToIntFunction<K> hashFunction);
+    abstract Node<K, V> put(@Nullable IdentityObject mutator, K key, V val,
+                            int keyHash, int shift, ChangeEvent<V> details, ToIntFunction<K> hashFunction);
 
 
 }

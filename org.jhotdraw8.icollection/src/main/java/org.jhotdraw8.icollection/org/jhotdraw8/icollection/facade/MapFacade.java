@@ -82,7 +82,7 @@ public class MapFacade<K, V> extends AbstractMap<K, V> {
         return sizeFunction.getAsInt();
     }
 
-    public boolean containsEntry(final @Nullable Object o) {
+    public boolean containsEntry(@Nullable Object o) {
         if (o instanceof Entry) {
             @SuppressWarnings("unchecked") Entry<K, V> entry = (Entry<K, V>) o;
             K key = entry.getKey();
@@ -91,7 +91,7 @@ public class MapFacade<K, V> extends AbstractMap<K, V> {
         return false;
     }
 
-    boolean removeEntry(final @Nullable Object o) {
+    boolean removeEntry(@Nullable Object o) {
         if (containsEntry(o)) {
             assert o != null;
             @SuppressWarnings("unchecked") Entry<K, V> entry = (Entry<K, V>) o;

@@ -21,6 +21,47 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
+/// # JMH version: 1.37
+/// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
+/// # Mac Mini M4 Pro, 4.40 GHz
+/// # org.scala-lang:scala-library:3.9.0-RC4
+///
+/// Benchmark                          (mask)   (size)  Mode  Cnt          Score   Error  Units
+/// ScalaHashMapJmh.mAddOneByOne          -65       10  avgt    2        204.563          ns/op
+/// ScalaHashMapJmh.mAddOneByOne          -65     1000  avgt    2      39373.131          ns/op
+/// ScalaHashMapJmh.mAddOneByOne          -65  1000000  avgt    2  316267579.438          ns/op
+/// ScalaHashMapJmh.mContainsFound        -65       10  avgt    2          2.406          ns/op
+/// ScalaHashMapJmh.mContainsFound        -65     1000  avgt    2          6.201          ns/op
+/// ScalaHashMapJmh.mContainsFound        -65  1000000  avgt    2         84.503          ns/op
+/// ScalaHashMapJmh.mContainsNotFound     -65       10  avgt    2          2.628          ns/op
+/// ScalaHashMapJmh.mContainsNotFound     -65     1000  avgt    2          6.427          ns/op
+/// ScalaHashMapJmh.mContainsNotFound     -65  1000000  avgt    2         75.253          ns/op
+/// ScalaHashMapJmh.mCopyOf               -65       10  avgt    2        163.336          ns/op
+/// ScalaHashMapJmh.mCopyOf               -65     1000  avgt    2      33850.684          ns/op
+/// ScalaHashMapJmh.mCopyOf               -65  1000000  avgt    2  184351799.627          ns/op
+/// ScalaHashMapJmh.mHead                 -65       10  avgt    2          1.113          ns/op
+/// ScalaHashMapJmh.mHead                 -65     1000  avgt    2          1.556          ns/op
+/// ScalaHashMapJmh.mHead                 -65  1000000  avgt    2          9.592          ns/op
+/// ScalaHashMapJmh.mIterate              -65       10  avgt    2          4.032          ns/op
+/// ScalaHashMapJmh.mIterate              -65     1000  avgt    2       1441.451          ns/op
+/// ScalaHashMapJmh.mIterate              -65  1000000  avgt    2    8711273.607          ns/op
+/// ScalaHashMapJmh.mPut                  -65       10  avgt    2          5.637          ns/op
+/// ScalaHashMapJmh.mPut                  -65     1000  avgt    2         28.905          ns/op
+/// ScalaHashMapJmh.mPut                  -65  1000000  avgt    2        253.571          ns/op
+/// ScalaHashMapJmh.mRemoveAll            -65       10  avgt    2        127.876          ns/op
+/// ScalaHashMapJmh.mRemoveAll            -65     1000  avgt    2      39567.810          ns/op
+/// ScalaHashMapJmh.mRemoveAll            -65  1000000  avgt    2  347888534.483          ns/op
+/// ScalaHashMapJmh.mRemoveOneByOne       -65       10  avgt    2        147.005          ns/op
+/// ScalaHashMapJmh.mRemoveOneByOne       -65     1000  avgt    2      39972.128          ns/op
+/// ScalaHashMapJmh.mRemoveOneByOne       -65  1000000  avgt    2  338093713.900          ns/op
+/// ScalaHashMapJmh.mRemoveThenAdd        -65       10  avgt    2         28.924          ns/op
+/// ScalaHashMapJmh.mRemoveThenAdd        -65     1000  avgt    2         80.566          ns/op
+/// ScalaHashMapJmh.mRemoveThenAdd        -65  1000000  avgt    2        391.115          ns/op
+/// ScalaHashMapJmh.mTail                 -65       10  avgt    2         13.174          ns/op
+/// ScalaHashMapJmh.mTail                 -65     1000  avgt    2         22.447          ns/op
+/// ScalaHashMapJmh.mTail                 -65  1000000  avgt    2         51.296          ns/op
+///
+///
 /// <pre>
 /// # JMH version: 1.36
 /// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
@@ -55,9 +96,12 @@ import java.util.concurrent.TimeUnit;
 /// ScalaHashMapJmh.mHead                 -65      1000  avgt               11.732          ns/op
 /// ScalaHashMapJmh.mHead                 -65    100000  avgt               19.463          ns/op
 /// ScalaHashMapJmh.mHead                 -65  10000000  avgt               32.496          ns/op
-/// ScalaHashMapJmh.mIterate              -65        10  avgt                9.484          ns/op
-/// ScalaHashMapJmh.mIterate              -65      1000  avgt             3135.325          ns/op
-/// ScalaHashMapJmh.mIterate              -65    100000  avgt           934525.883          ns/op
+/// ScalaHashMapJmh.mIterateEntry         -65        10  avgt    2           4.113          ns/op
+/// ScalaHashMapJmh.mIterateEntry         -65      1000  avgt    2        1449.925          ns/op
+/// ScalaHashMapJmh.mIterateEntry         -65   1000000  avgt    2     9828021.104          ns/op
+/// ScalaHashMapJmh.mIterateKey           -65        10  avgt    2           4.042          ns/op
+/// ScalaHashMapJmh.mIterateKey           -65      1000  avgt    2        1489.129          ns/op
+/// ScalaHashMapJmh.mIterateKey           -65   1000000  avgt    2    10417747.001          ns/op
 /// ScalaHashMapJmh.mIterate              -65  10000000  avgt        372202721.630          ns/op
 /// ScalaHashMapJmh.mPut                  -65        10  avgt               14.998          ns/op
 /// ScalaHashMapJmh.mPut                  -65      1000  avgt               61.352          ns/op
@@ -80,15 +124,15 @@ import java.util.concurrent.TimeUnit;
 /// ScalaHashMapJmh.mTail                 -65    100000  avgt               92.645          ns/op
 /// ScalaHashMapJmh.mTail                 -65  10000000  avgt              143.238          ns/op
 /// </pre>
-@SuppressWarnings("unchecked")
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
+@Measurement(iterations = 2)
 @Warmup(iterations = 1)
-@Fork(value = 1, jvmArgsAppend = {"-ea", "-Xmx28g", "-XX:-Inline"})
+@Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
+@SuppressWarnings("unchecked")
 public class ScalaHashMapJmh {
-    @Param({/*"10", "1000",*/ "100000"/*, "10000000"*/})
+    @Param({"10", "1000", "1000000"})
     private int size;
 
     @Param({"-65"})
@@ -127,38 +171,39 @@ public class ScalaHashMapJmh {
 
     }
 
+    /*
 
-    @Benchmark
-    public HashMap<Key, Boolean> mCopyOf() {
-        return HashMap.from(listA);
-    }
-
-    @Benchmark
-    public HashMap<Key, Boolean> mAddOneByOne() {
-        HashMap<Key, Boolean> set = HashMap.<Key, Boolean>newBuilder().result();
-        for (Key key : data.listA) {
-            set = set.updated(key, Boolean.TRUE);
+        @Benchmark
+        public HashMap<Key, Boolean> mCopyOf() {
+            return HashMap.from(listA);
         }
-        return set;
-    }
 
-    @Benchmark
-    public HashMap<Key, Boolean> mRemoveOneByOne() {
-        HashMap<Key, Boolean> set = mapA;
-        for (Key key : data.listA) {
-            set = set.removed(key);
+        @Benchmark
+        public HashMap<Key, Boolean> mAddOneByOne() {
+            HashMap<Key, Boolean> set = HashMap.<Key, Boolean>newBuilder().result();
+            for (Key key : data.listA) {
+                set = set.updated(key, Boolean.TRUE);
+            }
+            return set;
         }
-        return set;
-    }
 
-    @Benchmark
-    public HashMap<Key, Boolean> mRemoveAll() {
-        HashMap<Key, Boolean> set = mapA;
-        return set.removedAll(listAKeys);
-    }
+        @Benchmark
+        public HashMap<Key, Boolean> mRemoveOneByOne() {
+            HashMap<Key, Boolean> set = mapA;
+            for (Key key : data.listA) {
+                set = set.removed(key);
+            }
+            return set;
+        }
 
+        @Benchmark
+        public HashMap<Key, Boolean> mRemoveAll() {
+            HashMap<Key, Boolean> set = mapA;
+            return set.removedAll(listAKeys);
+        }
+    */
     @Benchmark
-    public int mIterate() {
+    public int mIterateKey() {
         int sum = 0;
         for (Iterator<Key> i = mapA.keysIterator(); i.hasNext(); ) {
             sum += i.next().value;
@@ -166,6 +211,15 @@ public class ScalaHashMapJmh {
         return sum;
     }
 
+    @Benchmark
+    public int mIterateEntry() {
+        int sum = 0;
+        for (var i = mapA.iterator(); i.hasNext(); ) {
+            sum += i.next()._1.value;
+        }
+        return sum;
+    }
+/*
     @Benchmark
     public void mRemoveThenAdd() {
         Key key = data.nextKeyInA();
@@ -199,5 +253,5 @@ public class ScalaHashMapJmh {
     public HashMap<Key, Boolean> mTail() {
         return mapA.tail();
     }
-
+*/
 }

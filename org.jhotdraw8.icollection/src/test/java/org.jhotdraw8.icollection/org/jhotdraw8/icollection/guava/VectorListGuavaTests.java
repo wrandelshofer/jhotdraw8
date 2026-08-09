@@ -31,11 +31,11 @@ public class VectorListGuavaTests {
 
     public Test allTests() {
         TestSuite suite = new TestSuite(MutableVectorList.class.getSimpleName());
-        suite.addTest(testsForTrieList());
+        suite.addTest(testsForVectorList());
         return suite;
     }
 
-    public Test testsForTrieList() {
+    public Test testsForVectorList() {
         return ListTestSuiteBuilder.using(
                         new TestStringListGenerator() {
                             @Override
@@ -49,7 +49,7 @@ public class VectorListGuavaTests {
                         CollectionFeature.ALLOWS_NULL_VALUES,
                         CollectionFeature.ALLOWS_NULL_QUERIES,
                         CollectionFeature.SUPPORTS_ITERATOR_REMOVE,
-                        // CollectionFeature.SERIALIZABLE,
+                        CollectionFeature.SERIALIZABLE,
                         CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
                         CollectionSize.ANY)
                 .suppressing(suppressForTrieSet())

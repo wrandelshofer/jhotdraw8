@@ -71,7 +71,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
     }
 
     BitmapIndexedNode<D> copyAndInsertData(@Nullable IdentityObject owner, int bitpos,
-                                                    D data) {
+                                           D data) {
         int idx = dataMixedIndex(dataIndex(bitpos), mixed);
         if (!DATA_FIRST) {
             idx++;
@@ -82,7 +82,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
     }
 
     BitmapIndexedNode<D> copyAndMigrateFromDataToNode(@Nullable IdentityObject owner,
-                                                               int bitpos, Node<D> node) {
+                                                      int bitpos, Node<D> node) {
 
         int idxOld = dataMixedIndex(dataIndex(bitpos), mixed);
         int idxNew = nodeMixedIndex(nodeIndex(bitpos), mixed);
@@ -132,7 +132,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
     }
 
     BitmapIndexedNode<D> copyAndSetNode(@Nullable IdentityObject owner, int bitpos,
-                                                 Node<D> node) {
+                                        Node<D> node) {
 
         int idx = nodeMixedIndex(nodeIndex(bitpos), mixed);
         if (isAllowedToUpdate(owner)) {
@@ -141,7 +141,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
             return this;
         } else {
             // copy 'src' and set 1 element(s) at position 'idx'
-            final Object[] dst = ListHelper.copySet(this.mixed, idx, node);
+            Object[] dst = ListHelper.copySet(this.mixed, idx, node);
             return newBitmapIndexedNode(owner, nodeMap, dataMap, dst);
         }
     }
@@ -222,7 +222,6 @@ public class BitmapIndexedNode<D> extends Node<D> {
     }
 
     @Override
-
     Object getNodeRaw(int index) {
         return mixed[nodeMixedIndex(index, mixed)];
     }
@@ -318,8 +317,8 @@ public class BitmapIndexedNode<D> extends Node<D> {
         int mask = mask(dataHash, shift);
         int bitpos = bitpos(mask);
         if ((dataMap & bitpos) != 0) {
-            final int dataIndex = dataIndex(bitpos);
-            final D oldData = getData(dataIndex);
+            int dataIndex = dataIndex(bitpos);
+            D oldData = getData(dataIndex);
             if (equalsFunction.test(oldData, newData)) {
                 D updatedData = updateFunction.apply(oldData, newData);
                 if (updatedData == oldData) {

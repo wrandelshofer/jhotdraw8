@@ -71,7 +71,7 @@ public class ReadableMapFacade<K, V> implements ReadableMap<K, V> {
         return sizeFunction.getAsInt();
     }
 
-    public boolean containsEntry(final @Nullable Object o) {
+    public boolean containsEntry(@Nullable Object o) {
         if (o instanceof Map.Entry) {
             @SuppressWarnings("unchecked") Map.Entry<K, V> entry = (Map.Entry<K, V>) o;
             K key = entry.getKey();

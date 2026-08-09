@@ -113,7 +113,7 @@ public interface ReadableCollection<E> extends Iterable<E> {
     /// @param c   an iterable
     /// @param <E> the element type
     /// @return a string representation of the iterable
-    static <E> String iterableToString(final Iterable<E> c) {
+    static <E> String iterableToString(Iterable<E> c) {
         Iterator<E> it = c.iterator();
         if (!it.hasNext()) {
             return "[]";

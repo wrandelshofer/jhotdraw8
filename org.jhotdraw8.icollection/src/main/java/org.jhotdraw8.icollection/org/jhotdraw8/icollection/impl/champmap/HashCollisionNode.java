@@ -20,7 +20,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     private final int hash;
     Object[] entries;
 
-    HashCollisionNode(final int hash, final Object[] entries) {
+    HashCollisionNode(int hash, Object[] entries) {
         this.entries = entries;
         this.hash = hash;
     }
@@ -52,9 +52,9 @@ class HashCollisionNode<K, V> extends Node<K, V> {
         int remainingLength = thatEntriesCloned.length;
         outerLoop:
         for (int i = 0; i < entries.length; i += ENTRY_LENGTH) {
-            final Object key = entries[i];
+            Object key = entries[i];
             for (int j = 0; j < remainingLength; j += ENTRY_LENGTH) {
-                final Object todoKey = thatEntriesCloned[j];
+                Object todoKey = thatEntriesCloned[j];
                 if (Objects.equals(todoKey, key)) {
                     for (int f = 1; f < ENTRY_LENGTH; f++) {
                         if (!Objects.equals(thatEntriesCloned[j + f], entries[i + f])) {
@@ -79,7 +79,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    Object findByKey(final K key, final int keyHash, final int shift) {
+    Object findByKey(K key, int keyHash, int shift) {
         for (int i = 0; i < entries.length; i += ENTRY_LENGTH) {
             if (Objects.equals(key, entries[i])) {
                 return entries[i + 1];
@@ -97,13 +97,13 @@ class HashCollisionNode<K, V> extends Node<K, V> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public K getKey(final int index) {
+    public K getKey(int index) {
         return (K) entries[index * ENTRY_LENGTH];
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    EditableMapEntry<K, V> getMapEntry(final int index) {
+    EditableMapEntry<K, V> getMapEntry(int index) {
         return new EditableMapEntry<>(
                 (K) entries[index * ENTRY_LENGTH],
                 (V) entries[index * ENTRY_LENGTH + 1],
@@ -119,7 +119,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    public V getValue(final int index) {
+    public V getValue(int index) {
         return (V) entries[index * ENTRY_LENGTH + 1];
     }
 
@@ -140,11 +140,11 @@ class HashCollisionNode<K, V> extends Node<K, V> {
 
     @Override
     @Nullable
-    Node<K, V> remove(final @Nullable IdentityObject mutator, final K key,
-                      final int keyHash, final int shift, final ChangeEvent<V> details) {
+    Node<K, V> remove(@Nullable IdentityObject mutator, K key,
+                      int keyHash, int shift, ChangeEvent<V> details) {
         for (int idx = 0, i = 0; i < entries.length; i += ENTRY_LENGTH, idx++) {
             if (Objects.equals(entries[i], key)) {
-                @SuppressWarnings("unchecked") final V currentVal = ENTRY_LENGTH > 1 ? (V) entries[i + 1] : null;
+                @SuppressWarnings("unchecked") V currentVal = ENTRY_LENGTH > 1 ? (V) entries[i + 1] : null;
                 details.updated(currentVal);
 
                 if (entries.length == ENTRY_LENGTH) {
@@ -153,11 +153,11 @@ class HashCollisionNode<K, V> extends Node<K, V> {
                     // Create root node with singleton element.
                     // This node will be a) either be the new root
                     // returned, or b) unwrapped and inlined.
-                    final Object[] theOtherEntry = getDataEntry(idx ^ 1);
+                    Object[] theOtherEntry = getDataEntry(idx ^ 1);
                     return ChampTrie.newBitmapIndexedNode(mutator, 0, bitpos(mask(keyHash, 0)), theOtherEntry);
                 } else {
                     // copy keys and vals and remove entryLength elements at position idx
-                    final Object[] entriesNew = ArrayHelper.copyComponentRemove(this.entries, idx * ENTRY_LENGTH, ENTRY_LENGTH);
+                    Object[] entriesNew = ArrayHelper.copyComponentRemove(this.entries, idx * ENTRY_LENGTH, ENTRY_LENGTH);
                     if (isAllowedToEdit(mutator)) {
                         this.entries = entriesNew;
                         return this;
@@ -171,13 +171,13 @@ class HashCollisionNode<K, V> extends Node<K, V> {
 
     @Override
     @Nullable
-    Node<K, V> put(final @Nullable IdentityObject mutator, final K key, final V val,
-                   final int keyHash, final int shift, final ChangeEvent<V> details, ToIntFunction<K> hashFunction) {
+    Node<K, V> put(@Nullable IdentityObject mutator, K key, V val,
+                   int keyHash, int shift, ChangeEvent<V> details, ToIntFunction<K> hashFunction) {
         assert this.hash == keyHash;
 
         for (int idx = 0, i = 0; i < entries.length; i += ENTRY_LENGTH, idx++) {
             if (Objects.equals(entries[i], key)) {
-                @SuppressWarnings("unchecked") final V currentVal = (V) entries[i + 1];
+                @SuppressWarnings("unchecked") V currentVal = (V) entries[i + 1];
                 if (Objects.equals(currentVal, val)) {
                     details.found(currentVal);
                     return this;
@@ -187,14 +187,14 @@ class HashCollisionNode<K, V> extends Node<K, V> {
                         entries[i + 1] = val;
                         return this;
                     }
-                    final Object[] dst = ArrayHelper.copySet(this.entries, i + 1, val);
+                    Object[] dst = ArrayHelper.copySet(this.entries, i + 1, val);
                     return ChampTrie.newHashCollisionNode(mutator, this.hash, dst, ENTRY_LENGTH);
                 }
             }
         }
 
         // copy entries and add 1 more at the end
-        final Object[] entriesNew = ArrayHelper.copyComponentAdd(this.entries, this.entries.length, ENTRY_LENGTH);
+        Object[] entriesNew = ArrayHelper.copyComponentAdd(this.entries, this.entries.length, ENTRY_LENGTH);
         entriesNew[this.entries.length] = key;
         entriesNew[this.entries.length + 1] = val;
         details.modified();

@@ -74,18 +74,18 @@ public interface ArrayType<T> {
 
     /// System.arrayCopy with same source and destination
     default Object copyRange(Object array, int from, int to) {
-        final int length = to - from;
+        int length = to - from;
         return copy(array, length, from, 0, length);
     }
 
     /// Repeatedly group an array into equal sized sub-trees
     default Object grouped(Object array, int groupSize) {
-        final int arrayLength = lengthOf(array);
-        final Object results = obj().newInstance(1 + ((arrayLength - 1) / groupSize));
+        int arrayLength = lengthOf(array);
+        Object results = obj().newInstance(1 + ((arrayLength - 1) / groupSize));
         obj().setAt(results, 0, copyRange(array, 0, groupSize));
 
         for (int start = groupSize, i = 1; start < arrayLength; i++) {
-            final int nextLength = Math.min(groupSize, arrayLength - (i * groupSize));
+            int nextLength = Math.min(groupSize, arrayLength - (i * groupSize));
             obj().setAt(results, i, copyRange(array, start, start + nextLength));
             start += nextLength;
         }
@@ -95,20 +95,20 @@ public interface ArrayType<T> {
 
     /// clone the source and set the value at the given position
     default Object copyUpdate(Object array, int index, T element) {
-        final Object copy = copy(array, index + 1);
+        Object copy = copy(array, index + 1);
         setAt(copy, index, element);
         return copy;
     }
 
     default Object copy(Object array, int minLength) {
-        final int arrayLength = lengthOf(array);
-        final int length = Math.max(arrayLength, minLength);
+        int arrayLength = lengthOf(array);
+        int length = Math.max(arrayLength, minLength);
         return copy(array, length, 0, 0, arrayLength);
     }
 
     /// clone the source and keep everything after the index (pre-padding the values with null)
     default Object copyDrop(Object array, int index) {
-        final int length = lengthOf(array);
+        int length = lengthOf(array);
         return copy(array, length, index, index, length - index);
     }
 
@@ -119,14 +119,14 @@ public interface ArrayType<T> {
 
     /// Create a single element array
     default Object asArray(T element) {
-        final Object result = newInstance(1);
+        Object result = newInstance(1);
         setAt(result, 0, element);
         return result;
     }
 
     /// Store the content of an iterator in an array
     static Object[] asArray(Iterator<?> it, int length) {
-        final Object[] array = new Object[length];
+        Object[] array = new Object[length];
         for (int i = 0; i < length; i++) {
             array[i] = it.next();
         }
@@ -181,7 +181,7 @@ public interface ArrayType<T> {
         }
 
         private static Object copyNonEmpty(Object array, int arraySize, int sourceFrom, int destinationFrom, int size) {
-            final boolean[] result = new boolean[arraySize];
+            boolean[] result = new boolean[arraySize];
             System.arraycopy(array, sourceFrom, result, destinationFrom, size); /* has to be near the object allocation to avoid zeroing out the array */
             return result;
         }
@@ -234,7 +234,7 @@ public interface ArrayType<T> {
         }
 
         private static Object copyNonEmpty(Object array, int arraySize, int sourceFrom, int destinationFrom, int size) {
-            final byte[] result = new byte[arraySize];
+            byte[] result = new byte[arraySize];
             System.arraycopy(array, sourceFrom, result, destinationFrom, size); /* has to be near the object allocation to avoid zeroing out the array */
             return result;
         }
@@ -287,7 +287,7 @@ public interface ArrayType<T> {
         }
 
         private static Object copyNonEmpty(Object array, int arraySize, int sourceFrom, int destinationFrom, int size) {
-            final char[] result = new char[arraySize];
+            char[] result = new char[arraySize];
             System.arraycopy(array, sourceFrom, result, destinationFrom, size); /* has to be near the object allocation to avoid zeroing out the array */
             return result;
         }
@@ -340,7 +340,7 @@ public interface ArrayType<T> {
         }
 
         private static Object copyNonEmpty(Object array, int arraySize, int sourceFrom, int destinationFrom, int size) {
-            final double[] result = new double[arraySize];
+            double[] result = new double[arraySize];
             System.arraycopy(array, sourceFrom, result, destinationFrom, size); /* has to be near the object allocation to avoid zeroing out the array */
             return result;
         }
@@ -393,7 +393,7 @@ public interface ArrayType<T> {
         }
 
         private static Object copyNonEmpty(Object array, int arraySize, int sourceFrom, int destinationFrom, int size) {
-            final float[] result = new float[arraySize];
+            float[] result = new float[arraySize];
             System.arraycopy(array, sourceFrom, result, destinationFrom, size); /* has to be near the object allocation to avoid zeroing out the array */
             return result;
         }
@@ -446,7 +446,7 @@ public interface ArrayType<T> {
         }
 
         private static Object copyNonEmpty(Object array, int arraySize, int sourceFrom, int destinationFrom, int size) {
-            final int[] result = new int[arraySize];
+            int[] result = new int[arraySize];
             System.arraycopy(array, sourceFrom, result, destinationFrom, size); /* has to be near the object allocation to avoid zeroing out the array */
             return result;
         }
@@ -499,7 +499,7 @@ public interface ArrayType<T> {
         }
 
         private static Object copyNonEmpty(Object array, int arraySize, int sourceFrom, int destinationFrom, int size) {
-            final long[] result = new long[arraySize];
+            long[] result = new long[arraySize];
             System.arraycopy(array, sourceFrom, result, destinationFrom, size); /* has to be near the object allocation to avoid zeroing out the array */
             return result;
         }
@@ -552,7 +552,7 @@ public interface ArrayType<T> {
         }
 
         private static Object copyNonEmpty(Object array, int arraySize, int sourceFrom, int destinationFrom, int size) {
-            final short[] result = new short[arraySize];
+            short[] result = new short[arraySize];
             System.arraycopy(array, sourceFrom, result, destinationFrom, size); /* has to be near the object allocation to avoid zeroing out the array */
             return result;
         }
@@ -601,7 +601,7 @@ public interface ArrayType<T> {
         }
 
         private static Object copyNonEmpty(Object array, int arraySize, int sourceFrom, int destinationFrom, int size) {
-            final Object[] result = new Object[arraySize];
+            Object[] result = new Object[arraySize];
             System.arraycopy(array, sourceFrom, result, destinationFrom, size); /* has to be near the object allocation to avoid zeroing out the array */
             return result;
         }

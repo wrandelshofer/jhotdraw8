@@ -64,7 +64,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadableLis
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(@Nullable Object o) {
         PersistentList<E> oldList = backingList;
         backingList = backingList.remove((E) o);
         modCount++;

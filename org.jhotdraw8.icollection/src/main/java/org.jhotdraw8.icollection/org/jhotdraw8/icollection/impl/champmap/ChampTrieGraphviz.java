@@ -73,7 +73,7 @@ public class ChampTrieGraphviz<K, V> {
 
             if ((nodeMap & bitpos) != 0) { // node (not value)
                 // Print the sub-node
-                final Node<K, V> subNode = node.nodeAt(bitpos);
+                Node<K, V> subNode = node.nodeAt(bitpos);
                 dumpSubTrie(a, subNode, entryLength, printValue, printSequenceNumber, shift + Node.BIT_PARTITION_SIZE, subNodeKeyHash);
 
                 // Print an arrow to the sub-node

@@ -44,11 +44,11 @@ public class ReadableNavigableSetFacade<E> extends ReadableSetFacade<E>
                                       Predicate<Object> containsFunction,
                                       Supplier<E> getFirstFunction,
                                       Supplier<E> getLastFunction,
-                                      final Function<E, E> ceilingFunction,
-                                      final Function<E, E> floorFunction,
-                                      final Function<E, E> higherFunction,
-                                      final Function<E, E> lowerFunction,
-                                      final Supplier<Comparator<? super E>> comparatorSupplier,
+                                      Function<E, E> ceilingFunction,
+                                      Function<E, E> floorFunction,
+                                      Function<E, E> higherFunction,
+                                      Function<E, E> lowerFunction,
+                                      Supplier<Comparator<? super E>> comparatorSupplier,
                                       int characteristics) {
         super(iteratorFunction, sizeFunction, containsFunction, characteristics);
         this.getFirstFunction = getFirstFunction;

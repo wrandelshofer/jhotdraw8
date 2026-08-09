@@ -55,10 +55,10 @@ public class ReadableNavigableMapFacade<K, V> extends ReadableMapFacade<K, V>
             Function<K, V> getFunction,
             Supplier<Map.Entry<K, V>> firstEntryFunction,
             Supplier<Map.Entry<K, V>> lastEntryFunction,
-            final Function<K, Map.Entry<K, V>> ceilingFunction,
-            final Function<K, Map.Entry<K, V>> floorFunction,
-            final Function<K, Map.Entry<K, V>> higherFunction,
-            final Function<K, Map.Entry<K, V>> lowerFunction,
+            Function<K, Map.Entry<K, V>> ceilingFunction,
+            Function<K, Map.Entry<K, V>> floorFunction,
+            Function<K, Map.Entry<K, V>> higherFunction,
+            Function<K, Map.Entry<K, V>> lowerFunction,
             int characteristics, @Nullable Supplier<Comparator<? super K>> comparator) {
         super(iteratorFunction, sizeFunction, containsKeyFunction, getFunction);
         this.firstEntryFunction = firstEntryFunction;

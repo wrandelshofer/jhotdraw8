@@ -26,10 +26,10 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     <T> PersistentList<T> empty();
 
     @Override
-    PersistentList<E> addFirst(@Nullable final E element);
+    PersistentList<E> addFirst(@Nullable E element);
 
     @Override
-    PersistentList<E> addLast(@Nullable final E element);
+    PersistentList<E> addLast(@Nullable E element);
 
     @Override
     default PersistentList<E> removeFirst() {
@@ -84,7 +84,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// @return this list instance if it already does not contain the element, or
     /// a different list instance with the element removed
     @Override
-    PersistentList<E> remove(E element);
+    PersistentList<E> remove(@Nullable E element);
 
     /// Returns a copy of this list that contains all elements
     /// of this list except the element at the specified index

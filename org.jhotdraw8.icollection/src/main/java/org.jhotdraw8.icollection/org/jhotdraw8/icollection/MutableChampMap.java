@@ -183,7 +183,6 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
     }
 
 
-
     @Override
     public @Nullable V put(K key, V value) {
         return putEntry(key, value).getOldValue();
@@ -233,7 +232,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
 
     @Override
     public V remove(Object o) {
-        @SuppressWarnings("unchecked") final K key = (K) o;
+        @SuppressWarnings("unchecked") K key = (K) o;
         return removeKey(key).getOldValue();
     }
 
