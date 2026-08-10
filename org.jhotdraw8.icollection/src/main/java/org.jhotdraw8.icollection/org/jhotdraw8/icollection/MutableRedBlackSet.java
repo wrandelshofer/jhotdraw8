@@ -112,9 +112,8 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return modified;
     }
 
-    @Nullable
     @Override
-    public E ceiling(E e) {
+    public @Nullable E ceiling(E e) {
         return root.ceiling(e, comparator).keyOrNull();
     }
 
@@ -136,9 +135,8 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         }
     }
 
-    @Nullable
     @Override
-    public Comparator<? super E> comparator() {
+    public @Nullable Comparator<? super E> comparator() {
         return comparator == NaturalComparator.instance() ? null : comparator;
     }
 
@@ -166,9 +164,8 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return root.min().getKey();
     }
 
-    @Nullable
     @Override
-    public E floor(E e) {
+    public @Nullable E floor(E e) {
         return root.floor(e, comparator).keyOrNull();
     }
 
@@ -200,9 +197,8 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return headSet(toElement, false);
     }
 
-    @Nullable
     @Override
-    public E higher(E e) {
+    public @Nullable E higher(E e) {
         return root.higher(e, comparator).keyOrNull();
     }
 
@@ -228,23 +224,20 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return root.max().getKey();
     }
 
-    @Nullable
     @Override
-    public E lower(E e) {
+    public @Nullable E lower(E e) {
         return root.lower(e, comparator).keyOrNull();
     }
 
-    @Nullable
     @Override
-    public E pollFirst() {
+    public @Nullable E pollFirst() {
         E value = root.min().keyOrNull();
         root = root.delete(value, comparator);
         return value;
     }
 
-    @Nullable
     @Override
-    public E pollLast() {
+    public @Nullable E pollLast() {
         E value = root.max().keyOrNull();
         root = root.delete(value, comparator);
         return value;

@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 ///
 /// Parses an attribute value of type double.
 public class DoubleCssConverter extends AbstractCssConverter<Double> {
-    private final static DoubleConverter doubleConverter = new DoubleConverter();
+    private static final DoubleConverter doubleConverter = new DoubleConverter();
 
     public DoubleCssConverter() {
         this(false);

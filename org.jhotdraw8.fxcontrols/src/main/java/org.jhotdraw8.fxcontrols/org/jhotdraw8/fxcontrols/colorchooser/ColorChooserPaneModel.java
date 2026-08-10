@@ -77,9 +77,9 @@ public class ColorChooserPaneModel {
     public static final ParametricLchColorSpace CIE_LCH_COLOR_SPACE = new ParametricLchColorSpace("CIE LCH", CIE_LAB_COLOR_SPACE);
     public static final OKLabColorSpace OK_LAB_COLOR_SPACE = new OKLabColorSpace();
     public static final OKLchColorSpace OK_LCH_COLOR_SPACE = new OKLchColorSpace();
-    private final static FloatConverter number = new FloatConverter();
+    private static final FloatConverter number = new FloatConverter();
 
-    private final static FloatConverter percentageNumber = new FloatConverter();
+    private static final FloatConverter percentageNumber = new FloatConverter();
 
     @SuppressWarnings("this-escape")
     public final FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
@@ -416,9 +416,9 @@ public class ColorChooserPaneModel {
         this.targetColorSyntaxes.set(targetColorSyntaxes);
     }
 
-    private final static SrgbColorSpace SRGB_COLOR_SPACE = new SrgbColorSpace();
-    private final static ParametricHlsColorSpace HLS_COLOR_SPACE = new ParametricHlsColorSpace("HSL", SRGB_COLOR_SPACE);
-    private final static ParametricHsvColorSpace HSV_COLOR_SPACE = new ParametricHsvColorSpace("HSV", SRGB_COLOR_SPACE);
+    private static final SrgbColorSpace SRGB_COLOR_SPACE = new SrgbColorSpace();
+    private static final ParametricHlsColorSpace HLS_COLOR_SPACE = new ParametricHlsColorSpace("HSL", SRGB_COLOR_SPACE);
+    private static final ParametricHsvColorSpace HSV_COLOR_SPACE = new ParametricHsvColorSpace("HSV", SRGB_COLOR_SPACE);
 
     public void initWithDefaultValues() {
         DisplayP3ColorSpace displayP3ColorSpace = new DisplayP3ColorSpace();
@@ -563,7 +563,7 @@ public class ColorChooserPaneModel {
         }
     }
 
-    private final static Map<String, String> colorSpaceNameMap = Map.of(
+    private static final Map<String, String> colorSpaceNameMap = Map.of(
             "Display P3", "display-p3",
 
             "sRGB", "srgb",

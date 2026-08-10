@@ -973,7 +973,7 @@ public class StreamCssTokenizer implements CssTokenizer {
     }
 
 
-    private final static boolean[] safeUriChars;
+    private static final boolean[] safeUriChars;
 
     static {
         safeUriChars = new boolean[128];
@@ -993,7 +993,7 @@ public class StreamCssTokenizer implements CssTokenizer {
         Arrays.fill(safeUriChars, ',', ',' + 1, true);
     }
 
-    private final static char[] hexChars;
+    private static final char[] hexChars;
 
     static {
         hexChars = new char[16];

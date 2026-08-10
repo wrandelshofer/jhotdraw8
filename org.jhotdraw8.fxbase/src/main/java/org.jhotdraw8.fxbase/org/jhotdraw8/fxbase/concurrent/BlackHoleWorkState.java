@@ -108,9 +108,8 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
         return state.getReadOnlyProperty();
     }
 
-    @Nullable
     @Override
-    public V getValue() {
+    public @Nullable V getValue() {
         return value.get();
     }
 

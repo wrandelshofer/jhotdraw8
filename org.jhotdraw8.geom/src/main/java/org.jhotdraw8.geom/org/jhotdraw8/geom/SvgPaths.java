@@ -294,7 +294,7 @@ public class SvgPaths {
     }
 
 
-    private final static DoubleConverter nb = new DoubleConverter();
+    private static final DoubleConverter nb = new DoubleConverter();
 
     /// Converts a Java Path iterator to a SVG path with double precision.
     ///
@@ -465,7 +465,7 @@ public class SvgPaths {
         return buf.toString();
     }
 
-    private final static FloatConverter nbf = new FloatConverter();
+    private static final FloatConverter nbf = new FloatConverter();
 
     /// Converts a Java Path iterator to a SVG path with double precision.
     ///

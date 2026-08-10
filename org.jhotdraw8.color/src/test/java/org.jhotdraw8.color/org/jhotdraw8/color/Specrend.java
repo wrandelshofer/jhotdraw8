@@ -105,11 +105,11 @@ public class Specrend {
     }
 
     /// White point chromaticities for NTSC television.
-    private final static double[] IlluminantC = {0.3101, 0.3162};
+    private static final double[] IlluminantC = {0.3101, 0.3162};
     /// White point chromaticities for EBU and SMPTE.
-    private final static double[] IlluminantD65 = {0.3127, 0.3291};
+    private static final double[] IlluminantD65 = {0.3127, 0.3291};
     /// White point chromaticities for CIE equal-energy illuminant.
-    private final static double[] IlluminantE = {0.33333333, 0.33333333};
+    private static final double[] IlluminantE = {0.33333333, 0.33333333};
     /// Gamma of nonlinear correction.
     ///
     /// See Charles Poynton's ColorFAQ Item 45 and GammaFAQ Item 6 at:
@@ -118,8 +118,8 @@ public class Specrend {
     /// http://www.poynton.com/GammaFAQ.html
     ///
     /// Rec. 709
-    private final static double GAMMA_REC709 = 0;
-    public final static ColourSystem /* Name                  xRed    yRed    xGreen  yGreen  xBlue  yBlue    White point        Gamma   */ NTSCsystem = new ColourSystem("NTSC", 0.67, 0.33, 0.21, 0.71, 0.14, 0.08, IlluminantC, GAMMA_REC709),
+    private static final double GAMMA_REC709 = 0;
+    public static final ColourSystem /* Name                  xRed    yRed    xGreen  yGreen  xBlue  yBlue    White point        Gamma   */ NTSCsystem = new ColourSystem("NTSC", 0.67, 0.33, 0.21, 0.71, 0.14, 0.08, IlluminantC, GAMMA_REC709),
             EBUsystem = new ColourSystem("EBU (PAL/SECAM)", 0.64, 0.33, 0.29, 0.60, 0.15, 0.06, IlluminantD65, GAMMA_REC709),
             SMPTEsystem = new ColourSystem("SMPTE", 0.630, 0.340, 0.310, 0.595, 0.155, 0.070, IlluminantD65, GAMMA_REC709),
             HDTVsystem = new ColourSystem("HDTV", 0.670, 0.330, 0.210, 0.710, 0.150, 0.060, IlluminantD65, GAMMA_REC709),
@@ -333,7 +333,7 @@ public class Specrend {
     as a double here to avoid warnings about "conversion
     between floating-point types" from certain persnickety
     compilers. */
-    private final static double[][] cie_colour_match = {
+    private static final double[][] cie_colour_match = {
             {0.0014, 0.0000, 0.0065}, {0.0022, 0.0001, 0.0105}, {0.0042, 0.0001, 0.0201},
             {0.0076, 0.0002, 0.0362}, {0.0143, 0.0004, 0.0679}, {0.0232, 0.0006, 0.1102},
             {0.0435, 0.0012, 0.2074}, {0.0776, 0.0022, 0.3713}, {0.1344, 0.0040, 0.6456},

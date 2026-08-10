@@ -68,6 +68,7 @@ public abstract class Node<D> {
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
     static final int MAX_SHIFT = HASH_CODE_LENGTH - HASH_CODE_LENGTH % BIT_PARTITION_SIZE;
 
+    Object[] array;
 
     Node() {
     }
@@ -131,9 +132,9 @@ public abstract class Node<D> {
     }
 
     static <K> Node<K> mergeTwoDataEntriesIntoNode(IdentityObject owner,
-                                                            K k0, int keyHash0,
-                                                            K k1, int keyHash1,
-                                                            int shift) {
+                                                   K k0, int keyHash0,
+                                                   K k1, int keyHash1,
+                                                   int shift) {
         if (shift >= HASH_CODE_LENGTH) {
             Object[] entries = new Object[2];
             entries[0] = k0;
@@ -149,22 +150,12 @@ public abstract class Node<D> {
             int dataMap = bitpos(mask0) | bitpos(mask1);
 
             Object[] entries = new Object[2];
-            if (BitmapIndexedNode.DATA_FIRST) {
-                if (mask0 < mask1) {
-                    entries[0] = k0;
-                    entries[1] = k1;
-                } else {
-                    entries[0] = k1;
-                    entries[1] = k0;
-                }
+            if (mask0 < mask1) {
+                entries[0] = k0;
+                entries[1] = k1;
             } else {
-                if (mask0 < mask1) {
-                    entries[0] = k1;
-                    entries[1] = k0;
-                } else {
-                    entries[0] = k0;
-                    entries[1] = k1;
-                }
+                entries[0] = k1;
+                entries[1] = k0;
             }
             return NodeFactory.newBitmapIndexedNode(owner, (0), dataMap, entries);
         } else {
@@ -198,16 +189,28 @@ public abstract class Node<D> {
     /// matches the provided data.
     abstract Object find(D data, int dataHash, int shift, BiPredicate<D, D> equalsFunction);
 
-    abstract @Nullable D getData(int index);
 
     @Nullable IdentityObject getOwner() {
         return null;
     }
 
-    abstract Node<D> getNode(int index);
+    protected final int dataArrayIndex(int dataIndex, Object[] mx) {
+        return dataIndex;
+    }
 
-    /// Gets the node without de-referencing it.
-    abstract Object getNodeRaw(int index);
+    protected final int nodeArrayIndex(int nodeIndex, Object[] mx) {
+        return mx.length - 1 - nodeIndex;
+    }
+
+    @SuppressWarnings("unchecked")
+    final Node<D> getNode(int index) {
+        return (Node<D>) array[nodeArrayIndex(index, array)];
+    }
+
+    @SuppressWarnings("unchecked")
+    final D getData(int index) {
+        return (D) array[dataArrayIndex(index, array)];
+    }
 
     abstract boolean hasData();
 
@@ -246,7 +249,7 @@ public abstract class Node<D> {
     /// @param equalsFunction a function that tests data objects for equality
     /// @return the updated trie
     abstract Node<D> remove(@Nullable IdentityObject owner, D data,
-                                     int dataHash, int shift,
+                            int dataHash, int shift,
                             ChangeEvent<D> details,
                             BiPredicate<D, D> equalsFunction);
 

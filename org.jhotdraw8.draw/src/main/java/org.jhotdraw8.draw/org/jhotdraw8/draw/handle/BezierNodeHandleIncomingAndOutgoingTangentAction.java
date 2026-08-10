@@ -13,7 +13,7 @@ import static org.jhotdraw8.geom.shape.BezierNode.IN_OUT_MASK;
 /// [BezierNode#OUT_MASK] to `true`, `true` in
 /// the specified [BezierNode].
 public class BezierNodeHandleIncomingAndOutgoingTangentAction extends AbstractBezierNodeHandleAction {
-    public final static String ID = "handle.bezierNode.incomingAndOutgoingTangent";
+    public static final String ID = "handle.bezierNode.incomingAndOutgoingTangent";
 
     public BezierNodeHandleIncomingAndOutgoingTangentAction(Figure owner, MapAccessor<BezierPath> pathKey, int nodeIndex, DrawingView view) {
         super(ID, owner, pathKey, nodeIndex, view);

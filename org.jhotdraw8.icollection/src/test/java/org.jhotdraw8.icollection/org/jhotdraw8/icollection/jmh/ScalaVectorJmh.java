@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 /// ScalaVectorJmh.mContainsNotFound  1000000  avgt    2   4137814.057          ns/op
 /// ScalaVectorJmh.mGet                    10  avgt    2         1.632          ns/op
 /// ScalaVectorJmh.mGet                  1000  avgt    2         2.317          ns/op
-/// ScalaVectorJmh.mGet               1000000  avgt    2         26.716          ns/op
+/// ScalaVectorJmh.mGet               1000000  avgt    2        26.716          ns/op
 /// ScalaVectorJmh.mHead                   10  avgt    2         0.691          ns/op
 /// ScalaVectorJmh.mHead                 1000  avgt    2         0.721          ns/op
 /// ScalaVectorJmh.mHead              1000000  avgt    2         0.690          ns/op

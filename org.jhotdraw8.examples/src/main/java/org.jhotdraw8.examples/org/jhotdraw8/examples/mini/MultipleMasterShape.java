@@ -15,8 +15,8 @@ import java.util.List;
 /// A shape that can have multiple style-dimensions like a multiple-master font.
 public class MultipleMasterShape extends AbstractShape {
     private PathData defaultShape;
-    final private List<double[]> deltas = new ArrayList<>();
-    final private List<Double> weights = new ArrayList<>();
+    private final List<double[]> deltas = new ArrayList<>();
+    private final List<Double> weights = new ArrayList<>();
 
     /// Creates a new instance from the given shapes.
     ///

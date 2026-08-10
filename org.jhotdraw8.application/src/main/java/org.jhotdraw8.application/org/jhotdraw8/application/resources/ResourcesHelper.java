@@ -30,7 +30,7 @@ class ResourcesHelper {
     /// The global map of property name modifiers. The key of this map is the
     /// name of the property name modifier, the value of this map is a fallback
     /// chain.
-    final static Map<String, String[]> propertyNameModifiers = Collections.synchronizedMap(new HashMap<>());
+    static final Map<String, String[]> propertyNameModifiers = Collections.synchronizedMap(new HashMap<>());
 
 
     static {
@@ -50,7 +50,7 @@ class ResourcesHelper {
             Arrays.asList("shift", "control", "ctrl", "meta", "alt", "altGraph")));
     /// List of decoders. The first decoder which can decode a resource value is
     /// will be used to convert the resource value to an object.
-    final static List<ResourceDecoder> decoders = Collections.synchronizedList(new ArrayList<>());
+    static final List<ResourceDecoder> decoders = Collections.synchronizedList(new ArrayList<>());
 
     /// Generates fallback keys by processing all property name modifiers in the
     /// key.

@@ -379,7 +379,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
 
         private final double epsilon = 0.125;
         private State state;
-        final private boolean endsAtSegment;
+        private final boolean endsAtSegment;
 
         public SubPathIterator(double s0, double s1, SimplePathMetrics m, @Nullable AffineTransform tt) {
             double totalArcLength = m.arcLength();

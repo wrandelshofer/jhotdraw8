@@ -119,15 +119,13 @@ public class ReversedSequencedMapView<K, V> extends AbstractMap<K, V> implements
         return src.sequencedEntrySet().reversed();
     }
 
-    @Nullable
     @Override
-    public Entry<K, V> firstEntry() {
+    public @Nullable Entry<K, V> firstEntry() {
         return src.lastEntry();
     }
 
-    @Nullable
     @Override
-    public Entry<K, V> lastEntry() {
+    public @Nullable Entry<K, V> lastEntry() {
         return src.firstEntry();
     }
 

@@ -14,7 +14,7 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ComputeTestcommon {
-    private final static ColorCssConverter colorConverter = new ColorCssConverter();
+    private static final ColorCssConverter colorConverter = new ColorCssConverter();
 
     public static void test_computed_value(String property, String specified, String computed) {
         test_computed_value(property, specified, computed, null);
@@ -42,7 +42,7 @@ public class ComputeTestcommon {
         }
     }
 
-    private final static NumberConverter number = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
+    private static final NumberConverter number = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
             new DecimalFormat("#################0.###", new DecimalFormatSymbols(Locale.ENGLISH)),
             new DecimalFormat("0.0###E0", new DecimalFormatSymbols(Locale.ENGLISH)));
 

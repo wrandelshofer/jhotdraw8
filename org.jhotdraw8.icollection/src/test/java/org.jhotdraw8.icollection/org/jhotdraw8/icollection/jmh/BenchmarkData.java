@@ -18,6 +18,7 @@ public class BenchmarkData {
     /// The elements have been shuffled, so that they
     /// are not in contiguous memory addresses.
     public final List<Key> listA;
+    public final Key[] arrayA;
     private final List<Integer> indicesA;
     /// Set 'a'.
     public final Set<Key> setA;
@@ -55,6 +56,7 @@ public class BenchmarkData {
         Collections.shuffle(keysInSet);
         Collections.shuffle(keysNotInSet);
         this.listA = Collections.unmodifiableList(keysInSet);
+        this.arrayA = keysInSet.toArray(new Key[0]);
         this.listB = Collections.unmodifiableList(keysNotInSet);
         indicesA = new ArrayList<>(keysInSet.size());
         for (var k : keysInSet) {

@@ -19,7 +19,7 @@ import java.util.Set;
 /// {@value #REQUIRED_VM_OPTIONS}
 /// </pre>
 public class AbstractJol {
-    private final static String REQUIRED_VM_OPTIONS = "-Djdk.attach.allowAttachSelf -XX:+EnableDynamicAgentLoading --add-modules jol.core,jdk.attach --add-reads org.jhotdraw8.icollection=jol.core";
+    private static final String REQUIRED_VM_OPTIONS = "-Djdk.attach.allowAttachSelf -XX:+EnableDynamicAgentLoading --add-modules jol.core,jdk.attach --add-reads org.jhotdraw8.icollection=jol.core";
 
     private static final boolean PRINT = true;
 

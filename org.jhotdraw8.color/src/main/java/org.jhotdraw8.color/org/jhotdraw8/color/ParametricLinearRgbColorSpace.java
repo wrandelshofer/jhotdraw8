@@ -34,18 +34,18 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
     /// The Bradford XYZ to Cone Response Domain Matrix \[M<sub>A</sub>\].
     ///
     /// [brucelindbloom.com](http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html)
-    public final static Matrix3Double BRADFORD_XYZ_TO_CONE_RESPONSE_DOMAIN = new Matrix3Double(
+    public static final Matrix3Double BRADFORD_XYZ_TO_CONE_RESPONSE_DOMAIN = new Matrix3Double(
             0.8951000, 0.2664000, -0.1614000,
             -0.7502000, 1.7135000, 0.0367000,
             0.0389000, -0.0685000, 1.0296000);
     /// The inverse Bradford XYZ to Cone Response Domain Matrix \[M<sub>A</sub>\]<sup>-1</sup>`.
     ///
     /// [brucelindbloom.com](http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html)
-    public final static Matrix3Double BRADFORD_CONE_RESPONSE_DOMAIN_TO_XYZ = BRADFORD_XYZ_TO_CONE_RESPONSE_DOMAIN.inv();
+    public static final Matrix3Double BRADFORD_CONE_RESPONSE_DOMAIN_TO_XYZ = BRADFORD_XYZ_TO_CONE_RESPONSE_DOMAIN.inv();
 
 
     /// Bradford chromatic adaptation from D50 to D65.
-    public final static Matrix3Double FROM_D50_XYZ_TO_D65_XYZ = new Matrix3Double(
+    public static final Matrix3Double FROM_D50_XYZ_TO_D65_XYZ = new Matrix3Double(
             0.9554734527042182, -0.023098536874261423, 0.0632593086610217,
             -0.028369706963208136, 1.0099954580058226, 0.021041398966943008,
             0.012314001688319899, -0.020507696433477912, 1.3303659366080753
@@ -60,15 +60,15 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
     public static final Matrix3Double FROM_D65_TO_D50 = FROM_D50_XYZ_TO_D65_XYZ.inv();
 
     /// The XYZ coordinates of the D50 white illuminant.
-    public final static Point3D ILLUMINANT_D50_XYZ = new Point3D(0.96422, 1.00000, 0.82521);
+    public static final Point3D ILLUMINANT_D50_XYZ = new Point3D(0.96422, 1.00000, 0.82521);
     /// The XYZ coordinates of the D65 white illuminant.
-    public final static Point3D ILLUMINANT_D65_XYZ = new Point3D(0.95047, 1.00000, 1.08883);
+    public static final Point3D ILLUMINANT_D65_XYZ = new Point3D(0.95047, 1.00000, 1.08883);
     /// The XYZ coordinates of the E white illuminant.
-    public final static Point3D ILLUMINANT_E_XYZ = new Point3D(1.0, 1.0, 1.0);
+    public static final Point3D ILLUMINANT_E_XYZ = new Point3D(1.0, 1.0, 1.0);
     /// The XYZ coordinates of the C white illuminant.
-    public final static Point3D ILLUMINANT_C_XYZ = new Point3D(0.98074, 1.00000, 1.18232);
+    public static final Point3D ILLUMINANT_C_XYZ = new Point3D(0.98074, 1.00000, 1.18232);
     /// The chromaticity coordinates (x,y) of the D65 white illuminant.
-    public final static Point2D ILLUMINANT_D65 = new Point2D(0.3127, 0.3290);
+    public static final Point2D ILLUMINANT_D65 = new Point2D(0.3127, 0.3290);
 
     private static final Matrix3Double FROM_LINEAR_SRGB_TO_D65_XYZ_MATRIX = computeToXyzMatrix(new Point2D(0.64, 0.33),
             new Point2D(0.3, 0.6),

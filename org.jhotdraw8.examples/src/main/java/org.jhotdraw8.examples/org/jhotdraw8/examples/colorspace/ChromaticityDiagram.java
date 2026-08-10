@@ -62,8 +62,7 @@ public class ChromaticityDiagram extends Pane {
 
     private final ImageView imageView = new ImageView();
     private final Group overlay = new Group();
-    @Nullable
-    protected PixelBuffer<IntBuffer> pixelBuffer;
+    protected @Nullable PixelBuffer<IntBuffer> pixelBuffer;
 
     @SuppressWarnings("this-escape")
     public ChromaticityDiagram() {

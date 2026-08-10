@@ -96,7 +96,7 @@ public class ChampTrieGraphviz<K, V> {
         a.append(" [color=red;label=\"");
         boolean first = true;
 
-        Object[] nodes = node.entries;
+        Object[] nodes = node.array;
         for (int i = 0, index = 0; i < nodes.length; i += entryLength, index++) {
             if (first) {
                 first = false;

@@ -39,16 +39,15 @@ import static org.jhotdraw8.icollection.impl.champ.NodeFactory.newHashCollisionN
 class HashCollisionNode<D> extends Node<D> {
     private static final HashCollisionNode<?> EMPTY = new HashCollisionNode<>(0, new Object[0]);
     private final int hash;
-    Object[] data;
 
     HashCollisionNode(int hash, Object[] data) {
-        this.data = data;
+        this.array = data;
         this.hash = hash;
     }
 
     @Override
     int dataArity() {
-        return data.length;
+        return array.length;
     }
 
     @Override
@@ -63,8 +62,8 @@ class HashCollisionNode<D> extends Node<D> {
             return true;
         }
         HashCollisionNode<?> that = (HashCollisionNode<?>) other;
-        Object[] thatEntries = that.data;
-        if (hash != that.hash || thatEntries.length != data.length) {
+        Object[] thatEntries = that.array;
+        if (hash != that.hash || thatEntries.length != array.length) {
             return false;
         }
 
@@ -72,7 +71,7 @@ class HashCollisionNode<D> extends Node<D> {
         Object[] thatEntriesCloned = thatEntries.clone();
         int remainingLength = thatEntriesCloned.length;
         outerLoop:
-        for (Object key : data) {
+        for (Object key : array) {
             for (int j = 0; j < remainingLength; j += 1) {
                 Object todoKey = thatEntriesCloned[j];
                 if (Objects.equals(todoKey, key)) {
@@ -95,7 +94,7 @@ class HashCollisionNode<D> extends Node<D> {
     @Override
     @Nullable
     Object find(D key, int dataHash, int shift, BiPredicate<D, D> equalsFunction) {
-        for (Object entry : data) {
+        for (Object entry : array) {
             if (equalsFunction.test(key, (D) entry)) {
                 return entry;
             }
@@ -103,26 +102,10 @@ class HashCollisionNode<D> extends Node<D> {
         return NO_DATA;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    D getData(int index) {
-        return (D) data[index];
-    }
-
-    @Override
-    Node<D> getNode(int index) {
-        throw new IllegalStateException("Is leaf node.");
-    }
-
-    @Override
-    Object getNodeRaw(int index) {
-        throw new IllegalStateException("Is leaf node.");
-    }
-
 
     @Override
     boolean hasData() {
-        return data.length > 0;
+        return array.length > 0;
     }
 
     @Override
@@ -140,14 +123,14 @@ class HashCollisionNode<D> extends Node<D> {
     @Override
     Node<D> remove(@Nullable IdentityObject owner, D data,
                    int dataHash, int shift, ChangeEvent<D> details, BiPredicate<D, D> equalsFunction) {
-        for (int idx = 0, i = 0; i < this.data.length; i += 1, idx++) {
-            if (equalsFunction.test((D) this.data[i], data)) {
-                @SuppressWarnings("unchecked") D currentVal = (D) this.data[i];
+        for (int idx = 0, i = 0; i < this.array.length; i += 1, idx++) {
+            if (equalsFunction.test((D) this.array[i], data)) {
+                @SuppressWarnings("unchecked") D currentVal = (D) this.array[i];
                 details.setRemoved(currentVal);
 
-                if (this.data.length == 1) {
+                if (this.array.length == 1) {
                     return BitmapIndexedNode.emptyNode();
-                } else if (this.data.length == 2) {
+                } else if (this.array.length == 2) {
                     // Create root node with singleton element.
                     // This node will either be the new root
                     // returned, or be unwrapped and inlined.
@@ -155,9 +138,9 @@ class HashCollisionNode<D> extends Node<D> {
                             new Object[]{getData(idx ^ 1)});
                 }
                 // copy keys and remove 1 element at position idx
-                Object[] entriesNew = ListHelper.copyComponentRemove(this.data, idx, 1);
+                Object[] entriesNew = ListHelper.copyComponentRemove(this.array, idx, 1);
                 if (isAllowedToUpdate(owner)) {
-                    this.data = entriesNew;
+                    this.array = entriesNew;
                     return this;
                 }
                 return newHashCollisionNode(owner, dataHash, entriesNew);
@@ -174,8 +157,8 @@ class HashCollisionNode<D> extends Node<D> {
                 ToIntFunction<D> hashFunction) {
         assert this.hash == dataHash;
 
-        for (int i = 0; i < this.data.length; i++) {
-            D oldData = (D) this.data[i];
+        for (int i = 0; i < this.array.length; i++) {
+            D oldData = (D) this.array[i];
             if (equalsFunction.test(oldData, newData)) {
                 D updatedData = updateFunction.apply(oldData, newData);
                 if (updatedData == oldData) {
@@ -184,20 +167,20 @@ class HashCollisionNode<D> extends Node<D> {
                 }
                 details.setReplaced(oldData, updatedData);
                 if (isAllowedToUpdate(owner)) {
-                    this.data[i] = updatedData;
+                    this.array[i] = updatedData;
                     return this;
                 }
-                Object[] newKeys = ListHelper.copySet(this.data, i, updatedData);
+                Object[] newKeys = ListHelper.copySet(this.array, i, updatedData);
                 return newHashCollisionNode(owner, dataHash, newKeys);
             }
         }
 
         // copy entries and add 1 more at the end
-        Object[] entriesNew = ListHelper.copyComponentAdd(this.data, this.data.length, 1);
-        entriesNew[this.data.length] = newData;
+        Object[] entriesNew = ListHelper.copyComponentAdd(this.array, this.array.length, 1);
+        entriesNew[this.array.length] = newData;
         details.setAdded(newData);
         if (isAllowedToUpdate(owner)) {
-            this.data = entriesNew;
+            this.array = entriesNew;
             return this;
         }
         return newHashCollisionNode(owner, dataHash, entriesNew);
@@ -226,9 +209,9 @@ class HashCollisionNode<D> extends Node<D> {
         // unprocessedSize..resultSize-1 = data elements that we have updated from that node, or that we have added from that node.
         int thisSize = this.dataArity();
         int thatSize = that.dataArity();
-        Object[] buffer = Arrays.copyOf(this.data, thisSize + thatSize);
-        System.arraycopy(this.data, 0, buffer, 0, this.data.length);
-        Object[] thatArray = that.data;
+        Object[] buffer = Arrays.copyOf(this.array, thisSize + thatSize);
+        System.arraycopy(this.array, 0, buffer, 0, this.array.length);
+        Object[] thatArray = that.array;
         int resultSize = thisSize;
         int unprocessedSize = thisSize;
         boolean updated = false;
@@ -269,8 +252,8 @@ class HashCollisionNode<D> extends Node<D> {
         int thisSize = this.dataArity();
         int thatSize = that.dataArity();
         int resultSize = thisSize;
-        Object[] buffer = this.data.clone();
-        Object[] thatArray = that.data;
+        Object[] buffer = this.array.clone();
+        Object[] thatArray = that.array;
         outer:
         for (int i = 0; i < thatSize && resultSize > 0; i++) {
             D thatData = (D) thatArray[i];
@@ -312,8 +295,8 @@ class HashCollisionNode<D> extends Node<D> {
         int thisSize = this.dataArity();
         int thatSize = that.dataArity();
         int resultSize = 0;
-        Object[] buffer = this.data.clone();
-        Object[] thatArray = that.data;
+        Object[] buffer = this.array.clone();
+        Object[] thatArray = that.array;
         outer:
         for (int i = 0; i < thatSize && thisSize != resultSize; i++) {
             D thatData = (D) thatArray[i];
@@ -337,7 +320,7 @@ class HashCollisionNode<D> extends Node<D> {
         int thisSize = this.dataArity();
         int resultSize = 0;
         Object[] buffer = new Object[thisSize];
-        Object[] thisArray = this.data;
+        Object[] thisArray = this.array;
         for (int i = 0; i < thisSize; i++) {
             D thisData = (D) thisArray[i];
             if (predicate.test(thisData)) {

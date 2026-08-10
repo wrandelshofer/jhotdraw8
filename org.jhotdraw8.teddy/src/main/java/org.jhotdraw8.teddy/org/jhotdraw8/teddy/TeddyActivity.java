@@ -45,7 +45,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     @FXML
     private TextArea textArea;
 
-    final private FXUndoManager undoManager = new FXUndoManager();
+    private final FXUndoManager undoManager = new FXUndoManager();
 
     @Override
     public CompletionStage<Void> clear() {

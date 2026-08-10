@@ -34,6 +34,7 @@ public abstract class Node<K, V> {
 
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
     static final int ENTRY_LENGTH = 2;
+    Object[] array;
 
     Node() {
 
@@ -143,19 +144,40 @@ public abstract class Node<K, V> {
     abstract Object findByKey(K key, int keyHash, int shift);
 
 
-    abstract Object[] getDataEntry(int index);
+    public final Object[] getDataEntry(int index) {
+        Object[] entry = new Object[ENTRY_LENGTH];
+        System.arraycopy(array, ENTRY_LENGTH * index, entry, 0, ENTRY_LENGTH);
+        return entry;
+    }
 
-    public abstract K getKey(int index);
+    @SuppressWarnings("unchecked")
+    public final K getKey(int index) {
+        return (K) array[index * ENTRY_LENGTH];
+    }
 
-    abstract EditableMapEntry<K, V> getMapEntry(int index);
+
+    @SuppressWarnings("unchecked")
+    public final EditableMapEntry<K, V> getMapEntry(int index) {
+        return new EditableMapEntry<>(
+                (K) array[index * ENTRY_LENGTH],
+                (V) array[index * ENTRY_LENGTH + 1],
+                0
+        );
+    }
 
     @Nullable IdentityObject getMutator() {
         return null;
     }
 
-    abstract Node<K, V> getNode(int index);
+    @SuppressWarnings("unchecked")
+    final Node<K, V> getNode(int index) {
+        return (Node<K, V>) array[array.length - 1 - index];
+    }
 
-    public abstract @Nullable V getValue(int index);
+    @SuppressWarnings("unchecked")
+    public final @Nullable V getValue(int index) {
+        return (V) array[index * ENTRY_LENGTH + 1];
+    }
 
     abstract boolean hasData();
 

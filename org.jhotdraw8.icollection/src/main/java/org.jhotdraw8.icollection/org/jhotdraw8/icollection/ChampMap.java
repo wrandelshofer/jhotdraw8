@@ -211,8 +211,7 @@ public class ChampMap<K, V>
     /// @param <K>  the key type
     /// @param <V>  the value type
     /// @return the old or the new entry
-    @Nullable
-    static <K, V> SimpleImmutableEntry<K, V> updateEntry(@Nullable SimpleImmutableEntry<K, V> oldv, @Nullable SimpleImmutableEntry<K, V> newv) {
+    static @Nullable <K, V> SimpleImmutableEntry<K, V> updateEntry(@Nullable SimpleImmutableEntry<K, V> oldv, @Nullable SimpleImmutableEntry<K, V> newv) {
         return Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 

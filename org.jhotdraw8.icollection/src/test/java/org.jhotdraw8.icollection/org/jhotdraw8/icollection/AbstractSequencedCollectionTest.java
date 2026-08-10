@@ -46,6 +46,34 @@ public abstract class AbstractSequencedCollectionTest {
         assertEquals(expected, instance);
     }
 
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldRemoveFirst(SetData data) throws Exception {
+        SequencedCollection<Key> instance = newInstance();
+        instance.addAll(data.b.asCollection());
+        instance.removeFirst();
+
+        List<Key> expected = new ArrayList<>();
+        expected.addAll(data.b.asCollection());
+        expected.removeFirst();
+
+        assertEquals(expected, instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldRemoveLast(SetData data) throws Exception {
+        SequencedCollection<Key> instance = newInstance();
+        instance.addAll(data.b.asCollection());
+        instance.removeLast();
+
+        List<Key> expected = new ArrayList<>();
+        expected.addAll(data.b.asCollection());
+        expected.removeLast();
+
+        assertEquals(expected, instance);
+    }
+
     protected abstract SequencedCollection<Key> newInstance();
 
     @ParameterizedTest

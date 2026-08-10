@@ -31,9 +31,8 @@ public class DescendingNavigableSetView<E> extends AbstractSet<E> implements Nav
         return src.add(e);
     }
 
-    @Nullable
     @Override
-    public E ceiling(E e) {
+    public @Nullable E ceiling(E e) {
         return src.floor(e);
     }
 
@@ -42,9 +41,8 @@ public class DescendingNavigableSetView<E> extends AbstractSet<E> implements Nav
         src.clear();
     }
 
-    @Nullable
     @Override
-    public Comparator<? super E> comparator() {
+    public @Nullable Comparator<? super E> comparator() {
         return reverseComparator;
     }
 
@@ -68,9 +66,8 @@ public class DescendingNavigableSetView<E> extends AbstractSet<E> implements Nav
         return src.last();
     }
 
-    @Nullable
     @Override
-    public E floor(E e) {
+    public @Nullable E floor(E e) {
         return src.ceiling(e);
     }
 
@@ -85,9 +82,8 @@ public class DescendingNavigableSetView<E> extends AbstractSet<E> implements Nav
         return headSet(toElement, false);
     }
 
-    @Nullable
     @Override
-    public E higher(E e) {
+    public @Nullable E higher(E e) {
         return src.lower(e);
     }
 
@@ -106,21 +102,18 @@ public class DescendingNavigableSetView<E> extends AbstractSet<E> implements Nav
         return src.first();
     }
 
-    @Nullable
     @Override
-    public E lower(E e) {
+    public @Nullable E lower(E e) {
         return src.higher(e);
     }
 
-    @Nullable
     @Override
-    public E pollFirst() {
+    public @Nullable E pollFirst() {
         return src.pollLast();
     }
 
-    @Nullable
     @Override
-    public E pollLast() {
+    public @Nullable E pollLast() {
         return src.pollFirst();
     }
 

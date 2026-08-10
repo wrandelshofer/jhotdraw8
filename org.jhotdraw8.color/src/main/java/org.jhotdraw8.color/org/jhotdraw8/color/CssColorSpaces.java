@@ -19,7 +19,7 @@ public class CssColorSpaces {
     }
 
     /// Map of CSS color spaces.
-    public final static Map<String, NamedColorSpace> COLOR_SPACES;
+    public static final Map<String, NamedColorSpace> COLOR_SPACES;
 
     static {
         D65XyzColorSpace d65XyzColorSpace = new D65XyzColorSpace();

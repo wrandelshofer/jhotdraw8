@@ -35,9 +35,9 @@ public class TreeModelUndoAdapter<E> {
         UndoableEdit edit = switch (event.getEventType()) {
             case ROOT_CHANGED -> new RootChangedEdit<>(event.getSource(), event.getOldRoot(), event.getNewRoot());
             case SUBTREE_NODES_CHANGED,
-                    NODE_ADDED_TO_TREE,
-                    NODE_REMOVED_FROM_TREE,
-                    NODE_CHANGED -> null;
+                 NODE_ADDED_TO_TREE,
+                 NODE_REMOVED_FROM_TREE,
+                 NODE_CHANGED -> null;
             case NODE_ADDED_TO_PARENT ->
                     new NodeAddedEdit<>(event.getSource(), event.getParent(), event.getChildIndex(), event.getChild());
             case NODE_REMOVED_FROM_PARENT ->
@@ -49,7 +49,7 @@ public class TreeModelUndoAdapter<E> {
         }
     };
     @SuppressWarnings("this-escape")
-    final private NonNullObjectProperty<ResourceBundle> resourceBundle = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new ResourceBundleStub());
+    private final NonNullObjectProperty<ResourceBundle> resourceBundle = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new ResourceBundleStub());
 
     public TreeModelUndoAdapter() {
     }

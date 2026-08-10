@@ -165,15 +165,13 @@ public class DescendingNavigableMapView<K, V> extends AbstractMap<K, V> implemen
         return src.lowerKey(key);
     }
 
-    @Nullable
     @Override
-    public Entry<K, V> firstEntry() {
+    public @Nullable Entry<K, V> firstEntry() {
         return src.lastEntry();
     }
 
-    @Nullable
     @Override
-    public Entry<K, V> lastEntry() {
+    public @Nullable Entry<K, V> lastEntry() {
         return src.firstEntry();
     }
 

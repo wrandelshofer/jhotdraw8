@@ -35,11 +35,11 @@ import java.util.Spliterators;
 
 public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements NavigableMap<K, V>, ReadableNavigableMap<K, V>, Cloneable, Serializable {
     @Serial
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     transient RedBlackTree<K, V> root;
     @SuppressWarnings({"serial", "RedundantSuppression"})//Conditionally serializable
     final Comparator<? super K> comparator;
-    transient private int modCount;
+    private transient int modCount;
 
     @SuppressWarnings("unchecked")
     @Override

@@ -18,6 +18,48 @@ import scala.collection.mutable.ReusableBuilder;
 
 import java.util.concurrent.TimeUnit;
 
+/// # JMH version: 1.37
+/// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
+/// # Mac Mini M4 Pro, 4.40 GHz
+/// # org.scala-lang:scala-library:3.9.0-RC4
+///
+/// Benchmark                                           (mask)   (size)  Mode  Cnt          Score   Error  Units
+/// ScalaHashSetJmh.mContainsFound                         -65       10  avgt    2          2.590          ns/op
+/// ScalaHashSetJmh.mContainsFound                         -65     1000  avgt    2          6.226          ns/op
+/// ScalaHashSetJmh.mContainsFound                         -65  1000000  avgt    2         74.249          ns/op
+/// ScalaHashSetJmh.mContainsNotFound                      -65       10  avgt    2          2.577          ns/op
+/// ScalaHashSetJmh.mContainsNotFound                      -65     1000  avgt    2          6.121          ns/op
+/// ScalaHashSetJmh.mContainsNotFound                      -65  1000000  avgt    2         70.332          ns/op
+/// ScalaHashSetJmh.mCopyOf                                -65       10  avgt    2        129.882          ns/op
+/// ScalaHashSetJmh.mCopyOf                                -65     1000  avgt    2      37467.436          ns/op
+/// ScalaHashSetJmh.mCopyOf                                -65  1000000  avgt    2  220793679.804          ns/op
+/// ScalaHashSetJmh.mCopyOnyByOne                          -65       10  avgt    2        228.293          ns/op
+/// ScalaHashSetJmh.mCopyOnyByOne                          -65     1000  avgt    2      36711.522          ns/op
+/// ScalaHashSetJmh.mCopyOnyByOne                          -65  1000000  avgt    2  271402385.135          ns/op
+/// ScalaHashSetJmh.mHead                                  -65       10  avgt    2          1.112          ns/op
+/// ScalaHashSetJmh.mHead                                  -65     1000  avgt    2          1.589          ns/op
+/// ScalaHashSetJmh.mHead                                  -65  1000000  avgt    2          9.730          ns/op
+/// ScalaHashSetJmh.mIterate                               -65       10  avgt    2          3.829          ns/op
+/// ScalaHashSetJmh.mIterate                               -65     1000  avgt    2       1399.518          ns/op
+/// ScalaHashSetJmh.mIterate                               -65  1000000  avgt    2    9109568.426          ns/op
+/// ScalaHashSetJmh.mRemoveAllFromSameType                 -65       10  avgt    2         23.106          ns/op
+/// ScalaHashSetJmh.mRemoveAllFromSameType                 -65     1000  avgt    2       5200.002          ns/op
+/// ScalaHashSetJmh.mRemoveAllFromSameType                 -65  1000000  avgt    2   11175346.758          ns/op
+/// ScalaHashSetJmh.mRemoveOneByOne                        -65       10  avgt    2        143.467          ns/op
+/// ScalaHashSetJmh.mRemoveOneByOne                        -65     1000  avgt    2      44132.586          ns/op
+/// ScalaHashSetJmh.mRemoveOneByOne                        -65  1000000  avgt    2  346660932.466          ns/op
+/// ScalaHashSetJmh.mRemoveThenAdd                         -65       10  avgt    2         33.488          ns/op
+/// ScalaHashSetJmh.mRemoveThenAdd                         -65     1000  avgt    2         81.460          ns/op
+/// ScalaHashSetJmh.mRemoveThenAdd                         -65  1000000  avgt    2        386.668          ns/op
+/// ScalaHashSetJmh.mRetainAllFromSameTypeAllRetained      -65       10  avgt    2         25.241          ns/op
+/// ScalaHashSetJmh.mRetainAllFromSameTypeAllRetained      -65     1000  avgt    2      11088.832          ns/op
+/// ScalaHashSetJmh.mRetainAllFromSameTypeAllRetained      -65  1000000  avgt    2   30986386.935          ns/op
+/// ScalaHashSetJmh.mRetainAllFromSameTypeNoneRetained     -65       10  avgt    2         21.346          ns/op
+/// ScalaHashSetJmh.mRetainAllFromSameTypeNoneRetained     -65     1000  avgt    2       6002.350          ns/op
+/// ScalaHashSetJmh.mRetainAllFromSameTypeNoneRetained     -65  1000000  avgt    2   35631559.609          ns/op
+/// ScalaHashSetJmh.mTail                                  -65       10  avgt    2         12.754          ns/op
+/// ScalaHashSetJmh.mTail                                  -65     1000  avgt    2         22.612          ns/op
+/// ScalaHashSetJmh.mTail                                  -65  1000000  avgt    2         51.526          ns/op
 /// <pre>
 /// # JMH version: 1.36
 /// # VM version: JDK 1.8.0_345, OpenJDK 64-Bit Server VM, 25.345-b01
@@ -76,13 +118,13 @@ import java.util.concurrent.TimeUnit;
 /// </pre>
 @SuppressWarnings("unchecked")
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
+@Measurement(iterations = 2)
 @Warmup(iterations = 1)
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ScalaHashSetJmh {
-    @Param({"10", "1000", "100000", "10000000"})
+    @Param({"10", "1000", "1000000"})
     private int size;
 
     @Param({"-65"})

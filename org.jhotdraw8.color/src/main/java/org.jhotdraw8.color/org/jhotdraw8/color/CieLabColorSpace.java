@@ -46,11 +46,11 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
     /// The X coordinate of the reference white.
-    final private double Xw;
+    private final double Xw;
     /// The Y coordinate of the reference white.
-    final private double Yw;
+    private final double Yw;
     /// The Z coordinate of the reference white.
-    final private double Zw;
+    private final double Zw;
     /// Epsilon
     private static final double eps = 216d / 24389d;
     private static final double k = 24389d / 27d;

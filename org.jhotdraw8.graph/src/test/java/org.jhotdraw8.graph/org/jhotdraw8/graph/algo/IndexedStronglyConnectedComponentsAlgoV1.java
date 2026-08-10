@@ -60,7 +60,7 @@ public class IndexedStronglyConnectedComponentsAlgoV1 {
         int vertexVisits;
         int arrowVisits;
         /// This time value is used to indicate that a vertex has not yet been visited.
-        final static int UNVISITED = 0;
+        static final int UNVISITED = 0;
         /// Visit time of a vertex.
         ///
         /// This array is initialized with [#UNVISITED].

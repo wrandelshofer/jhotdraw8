@@ -75,9 +75,8 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
         }
     }
 
-    @Nullable
     @Override
-    public Comparator<? super K> comparator() {
+    public @Nullable Comparator<? super K> comparator() {
         return src.comparator();
     }
 

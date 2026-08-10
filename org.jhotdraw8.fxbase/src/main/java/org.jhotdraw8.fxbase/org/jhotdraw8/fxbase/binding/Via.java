@@ -77,7 +77,7 @@ public class Via<T> {
         private final ObjectProperty<U> next = new SimpleObjectProperty<>();
         private final Function<T, Property<U>> viaFunction;
         private final WeakReference<Property<?>> weakReferenceToRoot;
-        final private Property<T> intermediate;
+        private final Property<T> intermediate;
 
         private ViaChangeListener(WeakReference<Property<?>> weakReferenceToRoot, Property<T> intermediate, Function<T, Property<U>> viaFunction) {
             this.viaFunction = viaFunction;

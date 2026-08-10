@@ -37,7 +37,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
     }
 
 
-    private final static OKLabColorSpace oklab = new OKLabColorSpace();
+    private static final OKLabColorSpace oklab = new OKLabColorSpace();
 
     public OKHlsColorSpace() {
         super(ColorSpace.TYPE_HLS, 3);

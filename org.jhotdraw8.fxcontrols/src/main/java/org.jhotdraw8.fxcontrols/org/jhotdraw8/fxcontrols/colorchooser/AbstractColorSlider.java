@@ -89,8 +89,7 @@ public abstract class AbstractColorSlider extends Pane {
     protected final BooleanProperty snapToTicks = new SimpleBooleanProperty(this, "snapToTicks", true);
     @FXML // fx:id="sliderThumb"
     protected Region thumb; // Value injected by FXMLLoader
-    @Nullable
-    private PixelBuffer<IntBuffer> pixelBuffer;
+    private @Nullable PixelBuffer<IntBuffer> pixelBuffer;
     private @Nullable CompletableFuture<Void> fillFuture;
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -405,8 +404,8 @@ public abstract class AbstractColorSlider extends Pane {
     public record FillTaskRecord(PixelBuffer<IntBuffer> pixelBuffer,
                                  NamedColorSpace sourceColorSpace, NamedColorSpace targetColorSpace,
                                  NamedColorSpace displayColorSpace,
-                          float c0, float c1, float c2, float c3,
-                          int xIndex, int yIndex,
+                                 float c0, float c1, float c2, float c3,
+                                 int xIndex, int yIndex,
                                  float alpha, ToIntFunction<Integer> rgbFilter
     ) {
     }

@@ -11,7 +11,7 @@ import java.awt.color.ColorSpace;
 
 /// An XYZ color space with a linear transformation matrix from/to XYZ D50.
 public class ParametricXyzColorSpace extends AbstractNamedColorSpace {
-    private final static SrgbColorSpace SRGB_COLOR_SPACE = new SrgbColorSpace();
+    private static final SrgbColorSpace SRGB_COLOR_SPACE = new SrgbColorSpace();
 
     private final Matrix3 toXyzMatrix;
     private final Matrix3 fromXyzMatrix;

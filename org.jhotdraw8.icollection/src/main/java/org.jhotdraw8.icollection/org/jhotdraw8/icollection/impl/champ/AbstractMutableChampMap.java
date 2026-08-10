@@ -36,8 +36,7 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
     /// by this map, and therefore can be mutated without affecting other map.
     ///
     /// If this owner id is null, then this map does not own any nodes.
-    @Nullable
-    protected IdentityObject owner;
+    protected @Nullable IdentityObject owner;
 
     /// The root of this CHAMP trie.
     protected transient BitmapIndexedNode<D> root;

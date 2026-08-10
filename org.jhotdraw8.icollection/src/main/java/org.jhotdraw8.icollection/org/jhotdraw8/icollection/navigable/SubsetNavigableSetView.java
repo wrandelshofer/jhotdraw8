@@ -88,9 +88,8 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         return (e == null || tooLow(e)) ? null : e;
     }
 
-    @Nullable
     @Override
-    public E lower(E e) {
+    public @Nullable E lower(E e) {
         if (tooHigh(e)) {
             return highest();
         }
@@ -98,9 +97,8 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         return (e == null || tooLow(e)) ? null : e;
     }
 
-    @Nullable
     @Override
-    public E floor(E e) {
+    public @Nullable E floor(E e) {
         if (tooHigh(e)) {
             return highest();
         }
@@ -108,9 +106,8 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         return (e == null || tooLow(e)) ? null : e;
     }
 
-    @Nullable
     @Override
-    public E ceiling(E e) {
+    public @Nullable E ceiling(E e) {
         if (tooLow(e)) {
             return lowest();
         }
@@ -118,9 +115,8 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         return (e == null || tooHigh(e)) ? null : e;
     }
 
-    @Nullable
     @Override
-    public E higher(E e) {
+    public @Nullable E higher(E e) {
         if (tooLow(e)) {
             return lowest();
         }
@@ -128,15 +124,13 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         return (e == null || tooHigh(e)) ? null : e;
     }
 
-    @Nullable
     @Override
-    public E pollFirst() {
+    public @Nullable E pollFirst() {
         return lowest();
     }
 
-    @Nullable
     @Override
-    public E pollLast() {
+    public @Nullable E pollLast() {
         return highest();
     }
 
@@ -169,6 +163,7 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
                 src.lower(fromElement) :
                 src.floor(fromElement)));
     }
+
     @Override
     public boolean contains(Object o) {
         return inRange(o) && src.contains(o);
@@ -222,6 +217,7 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     private boolean inRange(E e, boolean inclusive) {
         return inclusive ? inRange(e) : inClosedRange(e);
     }
+
     @Override
     public NavigableSet<E> subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive) {
         if (!inRange(fromElement, fromInclusive)) {
@@ -258,9 +254,8 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
                 nullFirst);
     }
 
-    @Nullable
     @Override
-    public Comparator<? super E> comparator() {
+    public @Nullable Comparator<? super E> comparator() {
         return src.comparator();
     }
 

@@ -64,13 +64,13 @@ import java.util.Set;
 /// Does not preserve whitespace in the XML file.
 public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     protected FigureFactory figureFactory;
-    final protected IdFactory idFactory;
-    final protected String namespaceQualifier;
+    protected final IdFactory idFactory;
+    protected final String namespaceQualifier;
     protected String namespaceURI;
     private PersistentMap<Key<?>, Object> options = ChampMap.of();
 
     /// Specifies the number of characters that should be used for indentation.
-    final public static SimpleNonNullKey<Integer> INDENT_AMOUNT = new SimpleNonNullKey<>("indent-amount", Integer.class, 2);
+    public static final SimpleNonNullKey<Integer> INDENT_AMOUNT = new SimpleNonNullKey<>("indent-amount", Integer.class, 2);
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);

@@ -97,15 +97,13 @@ public class NavigableSetFacade<E> extends SequencedSetFacade<E> implements Navi
         );
     }
 
-    @Nullable
     @Override
-    public E ceiling(E e) {
+    public @Nullable E ceiling(E e) {
         return ceilingFunction.apply(e);
     }
 
-    @Nullable
     @Override
-    public Comparator<? super E> comparator() {
+    public @Nullable Comparator<? super E> comparator() {
         return comparatorSupplier.get();
     }
 
@@ -124,9 +122,8 @@ public class NavigableSetFacade<E> extends SequencedSetFacade<E> implements Navi
         return getFirst();
     }
 
-    @Nullable
     @Override
-    public E floor(E e) {
+    public @Nullable E floor(E e) {
         return floorFunction.apply(e);
     }
 
@@ -141,9 +138,8 @@ public class NavigableSetFacade<E> extends SequencedSetFacade<E> implements Navi
         return headSet(toElement, false);
     }
 
-    @Nullable
     @Override
-    public E higher(E e) {
+    public @Nullable E higher(E e) {
         return higherFunction.apply(e);
     }
 
@@ -152,21 +148,18 @@ public class NavigableSetFacade<E> extends SequencedSetFacade<E> implements Navi
         return getLast();
     }
 
-    @Nullable
     @Override
-    public E lower(E e) {
+    public @Nullable E lower(E e) {
         return lowerFunction.apply(e);
     }
 
-    @Nullable
     @Override
-    public E pollFirst() {
+    public @Nullable E pollFirst() {
         return isEmpty() ? null : getFirst();
     }
 
-    @Nullable
     @Override
-    public E pollLast() {
+    public @Nullable E pollLast() {
         return isEmpty() ? null : getLast();
     }
 

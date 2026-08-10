@@ -20,9 +20,9 @@ import java.lang.reflect.Type;
 public class ReadOnlyMapEntryProperty<K, V, T extends V> extends ReadOnlyObjectPropertyBase<T>
         implements MapChangeListener<K, V> {
 
-    final protected K key;
-    final protected ObservableMap<K, V> map;
-    final private @Nullable WeakMapChangeListener<K, V> weakListener;
+    protected final K key;
+    protected final ObservableMap<K, V> map;
+    private final @Nullable WeakMapChangeListener<K, V> weakListener;
     /// Here char is used as an uint16.
     private char changing;
 

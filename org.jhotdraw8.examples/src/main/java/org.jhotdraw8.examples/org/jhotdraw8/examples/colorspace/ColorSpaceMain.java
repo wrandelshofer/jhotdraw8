@@ -20,12 +20,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.color.CieLabColorSpace;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.NamedColorSpaceAdapter;
 import org.jhotdraw8.color.ParametricHsvColorSpace;
 import org.jhotdraw8.color.SrgbColorSpace;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.color.ColorSpace;
 import java.util.Arrays;
@@ -151,8 +151,7 @@ public class ColorSpaceMain extends Application {
         }
     }
 
-    @Nullable
-    private static ComboBox<NamedColorSpace> createColorSpaceBox() {
+    private static @Nullable ComboBox<NamedColorSpace> createColorSpaceBox() {
         var colorSpaceBox = new ComboBox<NamedColorSpace>();
         ObservableList<NamedColorSpace> list = FXCollections.observableArrayList();
         list.addAll(

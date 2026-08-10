@@ -24,7 +24,7 @@ public class D50XyzColorSpace extends AbstractNamedColorSpace {
     }
 
 
-    private final static SrgbColorSpace SRGB_COLOR_SPACE = new SrgbColorSpace();
+    private static final SrgbColorSpace SRGB_COLOR_SPACE = new SrgbColorSpace();
 
     public D50XyzColorSpace() {
         super(ColorSpace.TYPE_XYZ, 3);

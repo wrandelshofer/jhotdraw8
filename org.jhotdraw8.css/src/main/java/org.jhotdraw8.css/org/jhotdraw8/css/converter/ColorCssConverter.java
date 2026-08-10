@@ -96,7 +96,7 @@ import java.util.function.Consumer;
 public class ColorCssConverter implements CssConverter<CssColor> {
     /// Configure the number convert so that it preserves 32-bit float values,
     /// which have a precision of 8 decimal digits.
-    private final static FloatConverter number = new FloatConverter();
+    private static final FloatConverter number = new FloatConverter();
 
     final boolean nullable;
 
@@ -251,11 +251,11 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         };
     }
 
-    private final static NamedColorSpace CSS_SRGB_COLOR_SPACE = new SrgbColorSpace();
-    private final static NamedColorSpace CSS_LEGACY_SRGB_COLOR_SPACE = new ParametricScaledColorSpace("CSS sRGB*255",
+    private static final NamedColorSpace CSS_SRGB_COLOR_SPACE = new SrgbColorSpace();
+    private static final NamedColorSpace CSS_LEGACY_SRGB_COLOR_SPACE = new ParametricScaledColorSpace("CSS sRGB*255",
             255f, CSS_SRGB_COLOR_SPACE);
-    private final static NamedColorSpace CSS_HLS_COLOR_SPACE = new ParametricHlsColorSpace("CSS HSL", CSS_SRGB_COLOR_SPACE);
-    private final static NamedColorSpace JAVAFX_HSB_COLOR_SPACE = new ParametricHsvColorSpace("HSB", CSS_SRGB_COLOR_SPACE);
+    private static final NamedColorSpace CSS_HLS_COLOR_SPACE = new ParametricHlsColorSpace("CSS HSL", CSS_SRGB_COLOR_SPACE);
+    private static final NamedColorSpace JAVAFX_HSB_COLOR_SPACE = new ParametricHsvColorSpace("HSB", CSS_SRGB_COLOR_SPACE);
 
     private CssColor parseRgbFunction(CssTokenizer tt) throws ParseException, IOException {
         List<CssSize> params = parseParams(tt, CSS_LEGACY_SRGB_COLOR_SPACE);

@@ -4,7 +4,7 @@ public class Color {
     private Color() {
     }
 
-    public final static boolean RED = true;
-    public final static boolean BLACK = false;
+    public static final boolean RED = true;
+    public static final boolean BLACK = false;
 
 }

@@ -18,10 +18,9 @@ import java.util.function.BiFunction;
 /// [vavr RedBlackTree.java](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/RedBlackTree.java)
 /// [vavr MIT-License](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE)
 ///
-///
 /// @param <K> Component type
 public final class Empty<K, V> implements RedBlackTree<K, V> {
-    public final static Empty<?, ?> EMPTY = new Empty<>();
+    public static final Empty<?, ?> EMPTY = new Empty<>();
 
     @SuppressWarnings("unchecked")
     public static <K, V> Empty<K, V> empty() {

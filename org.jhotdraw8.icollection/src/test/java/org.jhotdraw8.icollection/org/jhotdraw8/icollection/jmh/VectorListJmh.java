@@ -19,108 +19,60 @@ import java.util.concurrent.TimeUnit;
 
 /// # JMH version: 1.37
 /// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
-/// # Mac Mini M4 Pro
+/// # Mac Mini M4 Pro, 4.40 GHz
 ///
 /// Benchmark                         (size)  Mode  Cnt         Score   Error  Units
-/// VectorListJmh.mAddAll                 10  avgt    2        19.055          ns/op
-/// VectorListJmh.mAddAll               1000  avgt    2      1961.997          ns/op
-/// VectorListJmh.mAddAll            1000000  avgt    2   6940017.149          ns/op
-/// VectorListJmh.mAddAllArray            10  avgt    2        20.152          ns/op
-/// VectorListJmh.mAddAllArray          1000  avgt    2      2027.454          ns/op
-/// VectorListJmh.mAddAllArray       1000000  avgt    2   7118018.180          ns/op
-/// VectorListJmh.mAddOneByOne            10  avgt    2       110.645          ns/op
-/// VectorListJmh.mAddOneByOne          1000  avgt    2     15814.154          ns/op
-/// VectorListJmh.mAddOneByOne       1000000  avgt    2  45808943.018          ns/op
-///
-/// VectorListJmh.mAddFirst               10  avgt    2        15.596          ns/op
-/// VectorListJmh.mAddFirst             1000  avgt    2        16.859          ns/op
-/// VectorListJmh.mAddFirst          1000000  avgt    2        54.892          ns/op
-/// VectorListJmh.mAddLast                10  avgt    2         8.469          ns/op
-/// VectorListJmh.mAddLast              1000  avgt    2        14.440          ns/op
-/// VectorListJmh.mAddLast           1000000  avgt    2        37.381          ns/op
-/// VectorListJmh.mContainsNotFound       10  avgt    2        14.659          ns/op
-/// VectorListJmh.mContainsNotFound     1000  avgt    2      1244.560          ns/op
-/// VectorListJmh.mContainsNotFound  1000000  avgt    2   2330092.960          ns/op
-/// VectorListJmh.mGet                    10  avgt    2         2.078          ns/op
-/// VectorListJmh.mGet                  1000  avgt    2         2.668          ns/op
-/// VectorListJmh.mGet               1000000  avgt    2        25.608          ns/op
-/// VectorListJmh.mHead                   10  avgt    2         1.294          ns/op
-/// VectorListJmh.mHead                 1000  avgt    2         1.577          ns/op
-/// VectorListJmh.mHead              1000000  avgt    2         2.292          ns/op
-/// VectorListJmh.mIterate                10  avgt    2         5.297          ns/op
-/// VectorListJmh.mIterate              1000  avgt    2      1758.457          ns/op
-/// VectorListJmh.mIterate           1000000  avgt    2   3946697.972          ns/op
-/// VectorListJmh.mListIterate            10  avgt    2        10.619          ns/op
-/// VectorListJmh.mListIterate          1000  avgt    2      1433.092          ns/op
-/// VectorListJmh.mListIterate       1000000  avgt    2   3066237.895          ns/op
-/// VectorListJmh.mRemoveAtIndex          10  avgt    2        18.269          ns/op
-/// VectorListJmh.mRemoveAtIndex        1000  avgt    2      1834.944          ns/op
-/// VectorListJmh.mRemoveAtIndex     1000000  avgt    2   1623983.618          ns/op
-/// VectorListJmh.mRemoveLast             10  avgt    2         3.626          ns/op
-/// VectorListJmh.mRemoveLast           1000  avgt    2         4.312          ns/op
-/// VectorListJmh.mRemoveLast        1000000  avgt    2         4.361          ns/op
-/// VectorListJmh.mReversedIterate        10  avgt    2         6.615          ns/op
-/// VectorListJmh.mReversedIterate      1000  avgt    2       754.507          ns/op
-/// VectorListJmh.mReversedIterate   1000000  avgt    2   5513777.637          ns/op
-/// VectorListJmh.mSet                    10  avgt    2         9.575          ns/op
-/// VectorListJmh.mSet                  1000  avgt    2        19.629          ns/op
-/// VectorListJmh.mSet               1000000  avgt    2        73.030          ns/op
-/// VectorListJmh.mTail                   10  avgt    2        15.343          ns/op
-/// VectorListJmh.mTail                 1000  avgt    2      2536.618          ns/op
-/// VectorListJmh.mTail              1000000  avgt    2   3243621.286          ns/op
-///
-/// # JMH version: 1.36
-/// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
-/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
-///
-/// Benchmark           (size)  Mode  Cnt          Score   Error  Units
-/// mAddAll                 10  avgt              52.805          ns/op
-/// mAddAll               1000  avgt            3875.245          ns/op
-/// mAddAll            1000000  avgt        11166047.498          ns/op
-/// mAddAllArray            10  avgt              36.627          ns/op
-/// mAddAllArray          1000  avgt            3831.702          ns/op
-/// mAddAllArray       1000000  avgt        18233901.719          ns/op
-/// mAddFirst               10  avgt              43.874          ns/op
-/// mAddFirst             1000  avgt              50.507          ns/op
-/// mAddFirst          1000000  avgt             140.191          ns/op
-/// mAddLast                10  avgt              22.597          ns/op
-/// mAddLast              1000  avgt              34.994          ns/op
-/// mAddLast           1000000  avgt             127.617          ns/op
-/// mAddOneByOne            10  avgt             211.522          ns/op
-/// mAddOneByOne          1000  avgt           43554.723          ns/op
-/// mAddOneByOne       1000000  avgt       134181586.813          ns/op
-/// mContainsNotFound       10  avgt              27.532          ns/op
-/// mContainsNotFound     1000  avgt            2794.591          ns/op
-/// mContainsNotFound  1000000  avgt         5675693.984          ns/op
-/// mGet                    10  avgt               3.691          ns/op
-/// mGet                  1000  avgt               7.463          ns/op
-/// mGet               1000000  avgt              86.203          ns/op
-/// mHead                   10  avgt               1.747          ns/op
-/// mHead                 1000  avgt               2.236          ns/op
-/// mHead              1000000  avgt               5.083          ns/op
-/// mIterate                10  avgt              12.636          ns/op
-/// mIterate              1000  avgt            1426.097          ns/op
-/// mIterate           1000000  avgt        12576434.361          ns/op
-/// mListIterate            10  avgt              23.463          ns/op
-/// mListIterate          1000  avgt            2973.783          ns/op
-/// mListIterate       1000000  avgt        23631687.953          ns/op
-/// mRemoveAtIndex          10  avgt              40.534          ns/op
-/// mRemoveAtIndex        1000  avgt            3046.037          ns/op
-/// mRemoveAtIndex     1000000  avgt         3367569.843          ns/op
-/// mRemoveLast             10  avgt              11.158          ns/op
-/// mRemoveLast           1000  avgt              12.521          ns/op
-/// mRemoveLast        1000000  avgt              10.877          ns/op
-/// mReversedIterate        10  avgt              10.123          ns/op
-/// mReversedIterate      1000  avgt            1841.430          ns/op
-/// mReversedIterate   1000000  avgt        12294983.693          ns/op
-/// mSet                    10  avgt              19.737          ns/op
-/// mSet                  1000  avgt              40.689          ns/op
-/// mSet               1000000  avgt             221.233          ns/op
-/// mTail                   10  avgt               6.223          ns/op
-/// mTail                 1000  avgt               6.307          ns/op
-/// mTail              1000000  avgt               6.358          ns/op
-///
-/// Process finished with exit code 0
+/// VectorListJmh.mAddAll                 10  avgt    2        19.688          ns/op
+/// VectorListJmh.mAddAll               1000  avgt    2      1868.943          ns/op
+/// VectorListJmh.mAddAll            1000000  avgt    2   7229218.112          ns/op
+/// VectorListJmh.mAddAllArray            10  avgt    2         2.752          ns/op
+/// VectorListJmh.mAddAllArray          1000  avgt    2       172.668          ns/op
+/// VectorListJmh.mAddAllArray       1000000  avgt    2    177198.346          ns/op
+/// VectorListJmh.mAddAllSameType         10  avgt    2        23.574          ns/op
+/// VectorListJmh.mAddAllSameType       1000  avgt    2      2721.626          ns/op
+/// VectorListJmh.mAddAllSameType    1000000  avgt    2   3210672.504          ns/op
+/// VectorListJmh.mAddAt0                 10  avgt    2        15.957          ns/op
+/// VectorListJmh.mAddAt0               1000  avgt    2        16.917          ns/op
+/// VectorListJmh.mAddAt0            1000000  avgt    2        63.090          ns/op
+/// VectorListJmh.mAddFirst               10  avgt    2        15.759          ns/op
+/// VectorListJmh.mAddFirst             1000  avgt    2        17.048          ns/op
+/// VectorListJmh.mAddFirst          1000000  avgt    2        40.046          ns/op
+/// VectorListJmh.mAddLast                10  avgt    2         8.386          ns/op
+/// VectorListJmh.mAddLast              1000  avgt    2        14.149          ns/op
+/// VectorListJmh.mAddLast           1000000  avgt    2        40.153          ns/op
+/// VectorListJmh.mAddOneByOne            10  avgt    2       112.025          ns/op
+/// VectorListJmh.mAddOneByOne          1000  avgt    2     15797.886          ns/op
+/// VectorListJmh.mAddOneByOne       1000000  avgt    2  50197440.257          ns/op
+/// VectorListJmh.mContainsNotFound       10  avgt    2        14.545          ns/op
+/// VectorListJmh.mContainsNotFound     1000  avgt    2      1220.544          ns/op
+/// VectorListJmh.mContainsNotFound  1000000  avgt    2   1373999.225          ns/op
+/// VectorListJmh.mGet                    10  avgt    2         2.085          ns/op
+/// VectorListJmh.mGet                  1000  avgt    2         2.620          ns/op
+/// VectorListJmh.mGet               1000000  avgt    2        29.706          ns/op
+/// VectorListJmh.mHead                   10  avgt    2         1.290          ns/op
+/// VectorListJmh.mHead                 1000  avgt    2         1.562          ns/op
+/// VectorListJmh.mHead              1000000  avgt    2         2.306          ns/op
+/// VectorListJmh.mIterate                10  avgt    2         5.306          ns/op
+/// VectorListJmh.mIterate              1000  avgt    2      1383.979          ns/op
+/// VectorListJmh.mIterate           1000000  avgt    2   2292078.397          ns/op
+/// VectorListJmh.mListIterate            10  avgt    2        10.770          ns/op
+/// VectorListJmh.mListIterate          1000  avgt    2      1425.512          ns/op
+/// VectorListJmh.mListIterate       1000000  avgt    2   4348326.834          ns/op
+/// VectorListJmh.mRemoveAtIndex          10  avgt    2        18.807          ns/op
+/// VectorListJmh.mRemoveAtIndex        1000  avgt    2      1836.652          ns/op
+/// VectorListJmh.mRemoveAtIndex     1000000  avgt    2   1713120.061          ns/op
+/// VectorListJmh.mRemoveLast             10  avgt    2         2.539          ns/op
+/// VectorListJmh.mRemoveLast           1000  avgt    2         3.022          ns/op
+/// VectorListJmh.mRemoveLast        1000000  avgt    2         3.041          ns/op
+/// VectorListJmh.mReversedIterate        10  avgt    2         6.620          ns/op
+/// VectorListJmh.mReversedIterate      1000  avgt    2       758.719          ns/op
+/// VectorListJmh.mReversedIterate   1000000  avgt    2   2805240.591          ns/op
+/// VectorListJmh.mSet                    10  avgt    2         9.558          ns/op
+/// VectorListJmh.mSet                  1000  avgt    2        20.376          ns/op
+/// VectorListJmh.mSet               1000000  avgt    2       142.574          ns/op
+/// VectorListJmh.mTail                   10  avgt    2         2.512          ns/op
+/// VectorListJmh.mTail                 1000  avgt    2         3.079          ns/op
+/// VectorListJmh.mTail              1000000  avgt    2         3.100          ns/op
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 1)
@@ -163,7 +115,7 @@ public class VectorListJmh {
 
     @Benchmark
     public VectorList<Key> mAddAllArray() {
-        return VectorList.<Key>of(data.setA.toArray(new Key[0]));
+        return VectorList.<Key>of(data.arrayA);
     }
 
     @Benchmark
@@ -190,7 +142,7 @@ public class VectorListJmh {
     //  @Benchmark
     public VectorList<Key> mRemoveAll() {
         VectorList<Key> l = listA;
-        return l.removeAll(data.listA);
+        return l.removeAll(data.setA);
     }
 
     @Benchmark
@@ -234,6 +186,12 @@ public class VectorListJmh {
     @Benchmark
     public VectorList<Key> mAddFirst() {
         Key key = data.nextKeyInB();
+        return (listA).addFirst(key);
+    }
+
+    @Benchmark
+    public VectorList<Key> mAddAt0() {
+        Key key = data.nextKeyInB();
         return (listA).add(0, key);
     }
 
@@ -271,6 +229,4 @@ public class VectorListJmh {
         Key key = data.nextKeyInB();
         return listA.set(index, key);
     }
-
-
 }

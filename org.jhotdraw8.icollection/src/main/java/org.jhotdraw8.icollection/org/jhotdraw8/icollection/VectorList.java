@@ -17,6 +17,7 @@ import org.jspecify.annotations.Nullable;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -258,12 +259,12 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
 
     @Override
     public VectorList<E> removeFirst() {
-        return (VectorList<E>) PersistentList.super.removeFirst();
+        return removeAt(0);
     }
 
     @Override
     public VectorList<E> removeLast() {
-        return (VectorList<E>) PersistentList.super.removeLast();
+        return removeAt(size() - 1);
     }
 
     @SuppressWarnings("unchecked")
@@ -284,21 +285,32 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
         if (set.isEmpty()) {
             return of();
         }
-        var t = this.toMutable();
+        var t = new ArrayList<E>(size());
         boolean modified = false;
-        for (E key : this) {
-            if (!set.contains(key)) {
-                t.remove(key);
+        for (var o : this) {
+            if (set.contains(o)) {
+                t.add(o);
                 modified = true;
             }
         }
-        return modified ? t.toPersistent() : this;
+        return modified ? copyOf(t) : this;
     }
 
     @Override
     public VectorList<E> removeRange(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
         Objects.checkIndex(toIndex, size() + 1);
+        if (fromIndex == 0 && toIndex == size()) {
+            return empty();
+        }
+        if (fromIndex == 0) {
+            var end = trie.drop(toIndex);
+            return newInstance(end);
+        }
+        if (toIndex == size()) {
+            var begin = trie.take(fromIndex);
+            return newInstance(begin);
+        }
         var begin = trie.take(fromIndex);
         var end = trie.drop(toIndex);
         return newInstance(begin.append(end.iterator(), end.length));
@@ -314,21 +326,32 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public VectorList<E> removeAll(Iterable<?> c) {
         if (isEmpty()) {
             return this;
         }
-        VectorList<E> result = this;
-        Outer:
-        for (Object e : c) {
-            for (int index = result.indexOf(e); index >= 0; index = result.indexOf(e, index)) {
-                result = result.removeAt(index);
-                if (result.isEmpty()) {
-                    break Outer;
-                }
+        Collection<E> set;
+        if (c instanceof Collection<?> cc) {
+            set = (Collection<E>) cc;
+        } else if (c instanceof ReadableCollection<?> rc) {
+            set = (Collection<E>) rc.asCollection();
+        } else {
+            set = new HashSet<>();
+            c.forEach(e -> set.add((E) e));
+        }
+        if (set.isEmpty()) {
+            return of();
+        }
+        var t = new ArrayList<E>(size());
+        boolean modified = false;
+        for (var o : this) {
+            if (!set.contains(o)) {
+                t.add(o);
+                modified = true;
             }
         }
-        return result;
+        return modified ? copyOf(t) : this;
     }
 
 
@@ -348,13 +371,13 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
     public VectorList<E> readableSubList(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
         Objects.checkIndex(toIndex, size() + 1);
-        BitMappedTrie<E> newRoot = this.trie;
-        if (toIndex < size()) {
-            newRoot = newRoot.take(toIndex);
+        if (toIndex - fromIndex <= 1) {
+            return empty();
         }
-        if (fromIndex > 0) {
-            newRoot = newRoot.drop(fromIndex);
+        if (fromIndex == 0 && toIndex == size()) {
+            return this;
         }
+        BitMappedTrie<E> newRoot = this.trie.take(toIndex).drop(fromIndex);
         return newRoot == this.trie ? this : newInstance(newRoot);
     }
 

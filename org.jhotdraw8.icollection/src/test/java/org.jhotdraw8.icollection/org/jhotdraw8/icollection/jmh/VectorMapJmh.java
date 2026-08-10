@@ -82,12 +82,12 @@ import java.util.concurrent.TimeUnit;
 /// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
-@Warmup(iterations = 2)
-@Fork(value = 1, jvmArgsAppend = {"-ea", "-Xmx28g"})
+@Warmup(iterations = 1)
+@Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class VectorMapJmh {
-    @Param({"10", "1000", "100000", "10000000"})
+    @Param({"10", "1000", "1000000"})
     private int size;
 
     private int mask = -65;
