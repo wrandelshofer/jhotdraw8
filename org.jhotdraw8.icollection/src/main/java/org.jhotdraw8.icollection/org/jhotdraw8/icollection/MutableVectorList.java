@@ -57,7 +57,8 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Serial
     private static final long serialVersionUID = 0L;
 
-    private transient BitMappedTrie<E> root;
+    @SuppressWarnings("TransientFieldNotInitialized")
+    transient BitMappedTrie<E> root;
 
     /// Constructs a new empty list.
     public MutableVectorList() {
@@ -102,6 +103,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public E get(int index) {
         Objects.checkIndex(index, root.length);
+        //noinspection DataFlowIssue
         return root.get(index);
     }
 
@@ -126,7 +128,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         int oldSize = root.length;
         VectorList<E> persistent = toPersistent().addAll(index, c);
         if (oldSize != persistent.size()) {
-            root = persistent.trie;
+            root = persistent.root;
             modCount++;
             return true;
         }
@@ -143,7 +145,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         int oldSize = root.length;
         VectorList<E> persistent = toPersistent().addAll(index, c);
         if (oldSize != persistent.size()) {
-            root = persistent.trie;
+            root = persistent.root;
             modCount++;
             return true;
         }
@@ -163,7 +165,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         int oldSize = root.length;
         VectorList<E> persistent = toPersistent().removeAll(c);
         if (oldSize != persistent.size()) {
-            root = persistent.trie;
+            root = persistent.root;
             modCount++;
             return true;
         }
@@ -175,7 +177,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         int oldSize = root.length;
         VectorList<E> persistent = toPersistent().retainAll(c);
         if (oldSize != persistent.size()) {
-            root = persistent.trie;
+            root = persistent.root;
             modCount++;
             return true;
         }
@@ -192,7 +194,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         }
         if (c instanceof VectorList<?>) {
             VectorList<E> that = (VectorList<E>) c;
-            this.root = that.trie;
+            this.root = that.root;
         } else {
             this.root = BitMappedTrie.empty();
             addAll(0, c);
@@ -258,16 +260,16 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     protected void removeRange(int fromIndex, int toIndex) {
-        root = toPersistent().removeRange(fromIndex, toIndex).trie;
+        root = toPersistent().removeRange(fromIndex, toIndex).root;
         modCount++;
     }
 
+    @SuppressWarnings("FinalMethod")
     @Override
-    public MutableVectorList<E> clone() {
+    public final MutableVectorList<E> clone() {
         try {
             @SuppressWarnings("unchecked")
             MutableVectorList<E> clone = (MutableVectorList<E>) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

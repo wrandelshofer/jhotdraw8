@@ -217,7 +217,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     @Override
     @SuppressWarnings("unchecked")
     public Iterator<E> iterator() {
-        return new FailFastIterator<>(Spliterators.iterator(new TombSkippingVectorSpliterator<>(vector.trie,
+        return new FailFastIterator<>(Spliterators.iterator(new TombSkippingVectorSpliterator<>(vector.root,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
                 0, size, vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED)),
                 this::iteratorRemove, () -> modCount);
@@ -316,7 +316,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     @SuppressWarnings("unchecked")
     @Override
     public Spliterator<E> spliterator() {
-        return new FailFastSpliterator<>(new TombSkippingVectorSpliterator<>(vector.trie,
+        return new FailFastSpliterator<>(new TombSkippingVectorSpliterator<>(vector.root,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
                 0, size(), vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount, null);
     }
@@ -367,7 +367,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     /// Renumbers the sequence numbers if they have overflown.
     private void renumber() {
         if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
-            var result = SequencedData.vecRenumber(makeOwner(), size, vector.size(), root, vector.trie,
+            var result = SequencedData.vecRenumber(makeOwner(), size, vector.size(), root, vector.root,
                     SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             root = result.first();

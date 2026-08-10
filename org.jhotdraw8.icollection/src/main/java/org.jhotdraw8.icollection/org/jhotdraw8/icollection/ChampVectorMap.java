@@ -404,7 +404,7 @@ public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Seria
         if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var owner = new IdentityObject();
             var result = SequencedData.vecRenumber(
-                    owner, size, vector.size(), root, vector.trie, SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
+                    owner, size, vector.size(), root, vector.root, SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             return newInstance(
                     result.first(), result.second(),
@@ -438,7 +438,7 @@ public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Seria
 
     @SuppressWarnings("unchecked")
     public Spliterator<Map.Entry<K, V>> spliterator() {
-        return new TombSkippingVectorSpliterator<>(vector.trie,
+        return new TombSkippingVectorSpliterator<>(vector.root,
                 e -> ((Map.Entry<K, V>) e),
                 0, size(), vector.size(),
                 Spliterator.NONNULL | characteristics());

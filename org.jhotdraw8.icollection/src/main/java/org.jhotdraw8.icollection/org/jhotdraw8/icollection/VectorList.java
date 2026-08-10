@@ -17,7 +17,6 @@ import org.jspecify.annotations.Nullable;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractList;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -69,11 +68,11 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
     private static final VectorList<?> EMPTY = new VectorList<>();
-    final transient BitMappedTrie<E> trie;
+    final transient BitMappedTrie<E> root;
 
     /// Constructs a new empty list.
     protected VectorList() {
-        this.trie = BitMappedTrie.empty();
+        this.root = BitMappedTrie.empty();
     }
 
     /// Constructs a new list that contains all the elements of
@@ -83,26 +82,26 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
     @SuppressWarnings("unchecked")
     protected VectorList(@Nullable Iterable<? extends E> iterable) {
         if (iterable == null) {
-            this.trie = BitMappedTrie.empty();
+            this.root = BitMappedTrie.empty();
         } else if (iterable instanceof Collection<?> c && c.isEmpty()
                 || iterable instanceof ReadableCollection<?> rc && rc.isEmpty()) {
-            this.trie = BitMappedTrie.empty();
+            this.root = BitMappedTrie.empty();
         } else if (iterable instanceof VectorList<? extends E> that) {
-            this.trie = (BitMappedTrie<E>) that.trie;
+            this.root = (BitMappedTrie<E>) that.root;
         } else if (iterable instanceof MutableVectorList<? extends E> mc) {
             VectorList<? extends E> that = mc.toPersistent();
-            this.trie = (BitMappedTrie<E>) that.trie;
+            this.root = (BitMappedTrie<E>) that.root;
         } else if (iterable instanceof Collection<?> c) {
-            this.trie = BitMappedTrie.ofAll(c.toArray());
+            this.root = BitMappedTrie.ofAll(c.toArray());
         } else {
             BitMappedTrie<E> root = BitMappedTrie.<E>empty().appendAll(iterable);
-            this.trie = root.length() == 0 ? BitMappedTrie.empty() : root;
+            this.root = root.length() == 0 ? BitMappedTrie.empty() : root;
         }
     }
 
 
     VectorList(BitMappedTrie<E> trie) {
-        this.trie = trie;
+        this.root = trie;
     }
 
     /// Creates a new instance with the provided privateData data object.
@@ -112,7 +111,7 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
     ///
     /// @param privateData an privateData data object
     protected VectorList(PrivateData privateData) {
-        this.trie = privateData.get();
+        this.root = privateData.get();
     }
 
     /// Creates a new instance with the provided privateData object as its internal data structure.
@@ -177,14 +176,14 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
 
     @Override
     public VectorList<E> add(E element) {
-        return newInstance(trie.append(element));
+        return newInstance(root.append(element));
     }
 
 
     @Override
     public VectorList<E> add(int index, E element) {
         if (index == 0) {
-            return newInstance(trie.prepend(element));
+            return newInstance(root.prepend(element));
         }
         return index == size() ? add(element) : addAll(index, Collections.singleton(element));
     }
@@ -201,7 +200,7 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
             return this;
         }
         if (cSize < 0) {
-            BitMappedTrie<E> newRoot = this.trie;
+            BitMappedTrie<E> newRoot = this.root;
             int newSize = size();
             for (E e : c) {
                 newRoot = newRoot.append(e);
@@ -209,7 +208,7 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
             }
             return newInstance(newRoot);
         }
-        return newInstance(trie.appendAll(c));
+        return newInstance(root.appendAll(c));
     }
 
     @Override
@@ -219,18 +218,18 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
 
     @Override
     public VectorList<E> addLast(@Nullable E element) {
-        return newInstance(trie.append(element));
+        return newInstance(root.append(element));
     }
 
     @Override
     public VectorList<E> addAll(int index, Iterable<? extends E> c) {
         Objects.requireNonNull(c, "c is null");
-        if (index >= 0 && index <= size()) {
-            VectorList<E> begin = this.readableSubList(0, index).addAll(c);
-            VectorList<E> end = this.readableSubList(index, size());
-            return begin.addAll(end);
+        int size = size();
+        if (index >= 0 && index <= size) {
+            var newTrie = root.take(index).appendAll(c).append(root.iterator(index, size), size - index);
+            return newInstance(newTrie);
         } else {
-            throw new IndexOutOfBoundsException("addAll(" + index + ", c) on Vector of size " + size());
+            throw new IndexOutOfBoundsException("addAll(" + index + ", c) on Vector of size " + size);
         }
     }
 
@@ -285,35 +284,28 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
         if (set.isEmpty()) {
             return of();
         }
-        var t = new ArrayList<E>(size());
-        boolean modified = false;
-        for (var o : this) {
-            if (set.contains(o)) {
-                t.add(o);
-                modified = true;
-            }
-        }
-        return modified ? copyOf(t) : this;
+        var newRoot = root.filter(set::contains);
+        return newRoot == root ? this : newInstance(newRoot);
     }
 
     @Override
     public VectorList<E> removeRange(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
-        Objects.checkIndex(toIndex, size() + 1);
-        if (fromIndex == 0 && toIndex == size()) {
+        int size = size();
+        Objects.checkIndex(toIndex, size + 1);
+        if (fromIndex == 0 && toIndex == size) {
             return empty();
         }
         if (fromIndex == 0) {
-            var end = trie.drop(toIndex);
+            var end = root.drop(toIndex);
             return newInstance(end);
         }
-        if (toIndex == size()) {
-            var begin = trie.take(fromIndex);
+        if (toIndex == size) {
+            var begin = root.take(fromIndex);
             return newInstance(begin);
         }
-        var begin = trie.take(fromIndex);
-        var end = trie.drop(toIndex);
-        return newInstance(begin.append(end.iterator(), end.length));
+        var newTrie = root.take(fromIndex).append(root.iterator(toIndex, size), size - toIndex);
+        return newInstance(newTrie);
 
         // The following code does not work as expected, because prepend inserts
         // elements in reverse sequence.
@@ -343,28 +335,21 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
         if (set.isEmpty()) {
             return of();
         }
-        var t = new ArrayList<E>(size());
-        boolean modified = false;
-        for (var o : this) {
-            if (!set.contains(o)) {
-                t.add(o);
-                modified = true;
-            }
-        }
-        return modified ? copyOf(t) : this;
+        var newRoot = root.filter(o -> !set.contains(o));
+        return newRoot == root ? this : newInstance(newRoot);
     }
 
 
     @Override
     public VectorList<E> set(int index, E element) {
-        BitMappedTrie<E> newRoot = trie.update(index, element);
-        return newRoot == this.trie ? this : newInstance(newRoot);
+        BitMappedTrie<E> newRoot = root.update(index, element);
+        return newRoot == this.root ? this : newInstance(newRoot);
     }
 
     @Override
     public E get(int index) {
         Objects.checkIndex(index, size());
-        return trie.get(index);
+        return root.get(index);
     }
 
     @Override
@@ -377,18 +362,18 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
         if (fromIndex == 0 && toIndex == size()) {
             return this;
         }
-        BitMappedTrie<E> newRoot = this.trie.take(toIndex).drop(fromIndex);
-        return newRoot == this.trie ? this : newInstance(newRoot);
+        BitMappedTrie<E> newRoot = this.root.take(toIndex).drop(fromIndex);
+        return newRoot == this.root ? this : newInstance(newRoot);
     }
 
     @Override
     public int size() {
-        return trie.length;
+        return root.length;
     }
 
     public int indexOf(Object o, int fromIndex) {
         if (fromIndex < size()) {
-            for (Iterator<E> i = trie.iterator(fromIndex, size()); i.hasNext(); fromIndex++) {
+            for (Iterator<E> i = root.iterator(fromIndex, size()); i.hasNext(); fromIndex++) {
                 E e = i.next();
                 if (Objects.equals(o, e)) {
                     return fromIndex;
@@ -425,7 +410,7 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
 
     @Override
     public Iterator<E> iterator() {
-        return trie.iterator(0, size());
+        return root.iterator(0, size());
     }
 
     @Override
@@ -435,7 +420,7 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
 
     @Override
     public Spliterator<E> spliterator() {
-        return trie.spliterator(0, size(), Spliterator.SIZED | Spliterator.ORDERED | Spliterator.SUBSIZED);
+        return root.spliterator(0, size(), Spliterator.SIZED | Spliterator.ORDERED | Spliterator.SUBSIZED);
     }
 
     @Override

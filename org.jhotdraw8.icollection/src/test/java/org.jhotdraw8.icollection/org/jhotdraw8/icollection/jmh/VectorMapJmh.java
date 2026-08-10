@@ -15,6 +15,51 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
+/// # JMH version: 1.37
+/// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
+/// # Mac Mini M4 Pro, 4.40 GHz
+///
+/// Benchmark                             (size)  Mode  Cnt          Score   Error  Units
+/// VectorMapJmh.mContainsFound               10  avgt    2          2.306          ns/op
+/// VectorMapJmh.mContainsFound             1000  avgt    2          7.372          ns/op
+/// VectorMapJmh.mContainsFound          1000000  avgt    2         77.190          ns/op
+/// VectorMapJmh.mContainsNotFound            10  avgt    2          2.306          ns/op
+/// VectorMapJmh.mContainsNotFound          1000  avgt    2          7.294          ns/op
+/// VectorMapJmh.mContainsNotFound       1000000  avgt    2         71.574          ns/op
+/// VectorMapJmh.mCopyOf                      10  avgt    2        293.319          ns/op
+/// VectorMapJmh.mCopyOf                    1000  avgt    2      51391.317          ns/op
+/// VectorMapJmh.mCopyOf                 1000000  avgt    2  222008399.913          ns/op
+/// VectorMapJmh.mCopyOnyByOne                10  avgt    2        270.860          ns/op
+/// VectorMapJmh.mCopyOnyByOne              1000  avgt    2      53735.821          ns/op
+/// VectorMapJmh.mCopyOnyByOne           1000000  avgt    2  423568359.375          ns/op
+/// VectorMapJmh.mHead                        10  avgt    2          1.648          ns/op
+/// VectorMapJmh.mHead                      1000  avgt    2          2.089          ns/op
+/// VectorMapJmh.mHead                   1000000  avgt    2          3.138          ns/op
+/// VectorMapJmh.mIterate                     10  avgt    2          8.059          ns/op
+/// VectorMapJmh.mIterate                   1000  avgt    2       2091.059          ns/op
+/// VectorMapJmh.mIterate                1000000  avgt    2    9182677.816          ns/op
+/// VectorMapJmh.mPut                         10  avgt    2         24.542          ns/op
+/// VectorMapJmh.mPut                       1000  avgt    2         59.770          ns/op
+/// VectorMapJmh.mPut                    1000000  avgt    2        357.168          ns/op
+/// VectorMapJmh.mRemoveAll                   10  avgt    2        251.129          ns/op
+/// VectorMapJmh.mRemoveAll                 1000  avgt    2      54772.822          ns/op
+/// VectorMapJmh.mRemoveAll              1000000  avgt    2  227823450.129          ns/op
+/// VectorMapJmh.mRemoveOneByOne              10  avgt    2        335.259          ns/op
+/// VectorMapJmh.mRemoveOneByOne            1000  avgt    2     113540.808          ns/op
+/// VectorMapJmh.mRemoveOneByOne         1000000  avgt    2  840973690.958          ns/op
+/// VectorMapJmh.mRemoveThenAdd               10  avgt    2         51.918          ns/op
+/// VectorMapJmh.mRemoveThenAdd             1000  avgt    2        140.445          ns/op
+/// VectorMapJmh.mRemoveThenAdd          1000000  avgt    2        666.683          ns/op
+/// VectorMapJmh.mRetainAllAllRetained        10  avgt    2         68.330          ns/op
+/// VectorMapJmh.mRetainAllAllRetained      1000  avgt    2       7993.817          ns/op
+/// VectorMapJmh.mRetainAllAllRetained   1000000  avgt    2   18593305.362          ns/op
+/// VectorMapJmh.mRetainAllNoneRetained       10  avgt    2        362.519          ns/op
+/// VectorMapJmh.mRetainAllNoneRetained     1000  avgt    2      70947.929          ns/op
+/// VectorMapJmh.mRetainAllNoneRetained  1000000  avgt    2  289822210.714          ns/op
+/// VectorMapJmh.mTail                        10  avgt    2         18.779          ns/op
+/// VectorMapJmh.mTail                      1000  avgt    2         34.790          ns/op
+/// VectorMapJmh.mTail                   1000000  avgt    2         74.329          ns/op
+///
 /// <pre>
 /// # JMH version: 1.36
 /// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724

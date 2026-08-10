@@ -173,7 +173,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     @SuppressWarnings("unchecked")
     @Override
     public Spliterator<Entry<K, V>> spliterator() {
-        return new TombSkippingVectorSpliterator<>(vector.trie,
+        return new TombSkippingVectorSpliterator<>(vector.root,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
                 0, size(), vector.size(), characteristics() | Spliterator.NONNULL);
@@ -418,7 +418,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     /// 4 times the size of the set.
     private void renumber() {
         if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
-            var result = SequencedData.vecRenumber(getOrCreateOwner(), size, vector.size(), root, vector.trie,
+            var result = SequencedData.vecRenumber(getOrCreateOwner(), size, vector.size(), root, vector.root,
                     SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             root = result.first();

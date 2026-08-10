@@ -188,6 +188,35 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
     }
 
     @Test
+    public void listIteratorShouldSupportAddAddPreviousAdd() {
+        List<Key> initialList = List.of(new Key(1), new Key(2), new Key(3), new Key(4));
+
+        List<Key> expected = new ArrayList<>();
+        expected.addAll(initialList);
+        ListIterator<Key> j = expected.listIterator();
+        j.add(new Key(10));
+        j.add(new Key(20));
+        var p = j.previous();
+        assertEquals(new Key(20), p);
+        j.add(new Key(30));
+        var next = j.next();
+        assertEquals(new Key(20), next);
+
+        List<Key> actual = newListInstance();
+        actual.addAll(initialList);
+        ListIterator<Key> i = actual.listIterator();
+        i.add(new Key(10));
+        i.add(new Key(20));
+        var q = i.previous();
+        assertEquals(new Key(20), q);
+        i.add(new Key(30));
+        next = i.next();
+        assertEquals(new Key(20), next);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void addShouldSupportConsecutiveInsertionInTheMiddleWithIncreasingIndex() {
         List<Key> actual = newListInstance();
         actual.addAll(List.of(new Key(1), new Key(2), new Key(7), new Key(8)));

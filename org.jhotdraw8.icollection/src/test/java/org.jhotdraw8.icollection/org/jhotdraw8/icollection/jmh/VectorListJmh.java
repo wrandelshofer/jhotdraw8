@@ -14,7 +14,6 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
 import java.math.BigInteger;
-import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /// # JMH version: 1.37
@@ -58,9 +57,12 @@ import java.util.concurrent.TimeUnit;
 /// VectorListJmh.mListIterate            10  avgt    2        10.770          ns/op
 /// VectorListJmh.mListIterate          1000  avgt    2      1425.512          ns/op
 /// VectorListJmh.mListIterate       1000000  avgt    2   4348326.834          ns/op
-/// VectorListJmh.mRemoveAtIndex          10  avgt    2        18.807          ns/op
-/// VectorListJmh.mRemoveAtIndex        1000  avgt    2      1836.652          ns/op
-/// VectorListJmh.mRemoveAtIndex     1000000  avgt    2   1713120.061          ns/op
+/// VectorListJmh.mRemoveAll              10  avgt    2        36.665          ns/op
+/// VectorListJmh.mRemoveAll            1000  avgt    2      3439.487          ns/op
+/// VectorListJmh.mRemoveAll         1000000  avgt    2   7409836.508          ns/op
+/// VectorListJmh.mRemoveAtIndex          10  avgt    2        16.490          ns/op
+/// VectorListJmh.mRemoveAtIndex        1000  avgt    2      1823.176          ns/op
+/// VectorListJmh.mRemoveAtIndex     1000000  avgt    2   1612455.922          ns/op
 /// VectorListJmh.mRemoveLast             10  avgt    2         2.539          ns/op
 /// VectorListJmh.mRemoveLast           1000  avgt    2         3.022          ns/op
 /// VectorListJmh.mRemoveLast        1000000  avgt    2         3.041          ns/op
@@ -102,7 +104,7 @@ public class VectorListJmh {
         index = Math.min(listA.size() - 1, BigInteger.valueOf(listA.size() / 2).nextProbablePrime().intValue());
     }
 
-
+/*
     @Benchmark
     public VectorList<Key> mAddAll() {
         return VectorList.copyOf(data.setA);
@@ -126,9 +128,10 @@ public class VectorListJmh {
         }
         return l;
     }
+*/
 
     /// This appears to be broken!
-    //  @Benchmark
+    @Benchmark
     public VectorList<Key> mRemoveOneByOne() {
         var l = listA;
         for (var e : data.listA) {
@@ -138,74 +141,75 @@ public class VectorListJmh {
         return l;
     }
 
-    /// This appears to be broken!
-    //  @Benchmark
+    /*
+    @Benchmark
     public VectorList<Key> mRemoveAll() {
         VectorList<Key> l = listA;
         return l.removeAll(data.setA);
     }
 
-    @Benchmark
-    public int mIterate() {
-        int sum = 0;
-        for (Iterator<Key> i = listA.iterator(); i.hasNext(); ) {
-            sum += i.next().value;
+
+        @Benchmark
+        public int mIterate() {
+            int sum = 0;
+            for (Iterator<Key> i = listA.iterator(); i.hasNext(); ) {
+                sum += i.next().value;
+            }
+            return sum;
         }
-        return sum;
-    }
 
-    @Benchmark
-    public int mListIterate() {
-        int sum = 0;
-        for (Iterator<Key> i = listA.listIterator(); i.hasNext(); ) {
-            sum += i.next().value;
+        @Benchmark
+        public int mListIterate() {
+            int sum = 0;
+            for (Iterator<Key> i = listA.listIterator(); i.hasNext(); ) {
+                sum += i.next().value;
+            }
+            return sum;
         }
-        return sum;
-    }
 
-    @Benchmark
-    public int mReversedIterate() {
-        int sum = 0;
-        for (int i = listA.size() - 1; i >= 0; i--) {
-            sum += listA.get(i).value;
+        @Benchmark
+        public int mReversedIterate() {
+            int sum = 0;
+            for (int i = listA.size() - 1; i >= 0; i--) {
+                sum += listA.get(i).value;
+            }
+            return sum;
         }
-        return sum;
-    }
 
-    @Benchmark
-    public VectorList<Key> mTail() {
-        return listA.removeAt(0);
-    }
+        @Benchmark
+        public VectorList<Key> mTail() {
+            return listA.removeAt(0);
+        }
 
-    @Benchmark
-    public VectorList<Key> mAddLast() {
-        Key key = data.nextKeyInB();
-        return (listA).add(key);
-    }
+        @Benchmark
+        public VectorList<Key> mAddLast() {
+            Key key = data.nextKeyInB();
+            return (listA).add(key);
+        }
 
-    @Benchmark
-    public VectorList<Key> mAddFirst() {
-        Key key = data.nextKeyInB();
-        return (listA).addFirst(key);
-    }
+        @Benchmark
+        public VectorList<Key> mAddFirst() {
+            Key key = data.nextKeyInB();
+            return (listA).addFirst(key);
+        }
 
-    @Benchmark
-    public VectorList<Key> mAddAt0() {
-        Key key = data.nextKeyInB();
-        return (listA).add(0, key);
-    }
+        @Benchmark
+        public VectorList<Key> mAddAt0() {
+            Key key = data.nextKeyInB();
+            return (listA).add(0, key);
+        }
 
 
-    @Benchmark
-    public VectorList<Key> mRemoveLast() {
-        return listA.removeAt(listA.size() - 1);
-    }
-
+        @Benchmark
+        public VectorList<Key> mRemoveLast() {
+            return listA.removeAt(listA.size() - 1);
+        }
+    */
     @Benchmark
     public VectorList<Key> mRemoveAtIndex() {
         return listA.removeAt(index);
     }
-
+/*
     @Benchmark
     public Key mGet() {
         int index = data.nextIndexInA();
@@ -228,5 +232,5 @@ public class VectorListJmh {
         int index = data.nextIndexInA();
         Key key = data.nextKeyInB();
         return listA.set(index, key);
-    }
+    }*/
 }

@@ -54,6 +54,7 @@ public class BitMappedTrie<T> {
 
     static final int BRANCHING_BASE = 5;
     static final int BRANCHING_FACTOR = 1 << BRANCHING_BASE;
+    @SuppressWarnings("ShiftOutOfRange")
     static final int BRANCHING_MASK = -1 >>> -BRANCHING_BASE;
     private static final BitMappedTrie<?> EMPTY = new BitMappedTrie<>(obj(), obj().empty(), 0, 0, 0);
     public final ArrayType<T> type;
@@ -214,13 +215,13 @@ public class BitMappedTrie<T> {
         } else {
             int index = offset + n;
             Object root = arePointingToSameLeaf(0, n)
-                    ? array
+                    ? array // XXX we should not keep references the removed elements in the trie
                     : modify(array, depthShift, index, obj()::copyDrop, NodeModifier.IDENTITY);
             return collapsed(type, root, index, length - n, depthShift);
         }
     }
 
-    BitMappedTrie<T> filter(Predicate<? super T> predicate) {
+    public BitMappedTrie<T> filter(Predicate<? super T> predicate) {
         Object results = type.newInstance(length());
         int length = this.<T>visit((index, leaf, start, end) -> filter(predicate, results, index, leaf, start, end));
         return (this.length == length)
@@ -302,7 +303,7 @@ public class BitMappedTrie<T> {
         return index;
     }
 
-    /* descend the tree from root to leaf, applying the given modifications along the way, returning the new root */
+    /// descend the tree from root to leaf, applying the given modifications along the way, returning the new root
     private Object modify(Object root, int depthShift, int index, NodeModifier node, NodeModifier leaf) {
         return (depthShift == 0)
                 ? leaf.apply(root, index)
@@ -422,7 +423,7 @@ public class BitMappedTrie<T> {
         } else {
             int index = n - 1;
             Object root = arePointingToSameLeaf(index, length - 1)
-                    ? array
+                    ? array // XXX we should not keep references the removed elements in the trie
                     : modify(array, depthShift, offset + index, obj()::copyTake, NodeModifier.IDENTITY);
             return collapsed(type, root, offset, n, depthShift);
         }

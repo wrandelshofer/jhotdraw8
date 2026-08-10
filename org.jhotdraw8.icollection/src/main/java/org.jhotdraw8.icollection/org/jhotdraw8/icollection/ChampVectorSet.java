@@ -401,7 +401,7 @@ public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E
         if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var owner = new IdentityObject();
             var result = SequencedData.vecRenumber(
-                    new IdentityObject(), size, vector.size(), root, vector.trie, SequencedElement::elementKeyHash, Objects::equals,
+                    new IdentityObject(), size, vector.size(), root, vector.root, SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             return newInstance(
                     result.first(), result.second(),
@@ -436,7 +436,7 @@ public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E
     @SuppressWarnings("unchecked")
     @Override
     public Spliterator<E> spliterator() {
-        return new TombSkippingVectorSpliterator<>(vector.trie,
+        return new TombSkippingVectorSpliterator<>(vector.root,
                 e -> ((SequencedElement<E>) e).getElement(),
                 0, size(), vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
