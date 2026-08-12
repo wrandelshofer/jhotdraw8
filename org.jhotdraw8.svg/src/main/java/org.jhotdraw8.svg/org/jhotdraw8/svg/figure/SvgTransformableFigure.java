@@ -197,14 +197,14 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
             PersistentList<Transform> ts = getNonNull(TRANSFORMS);
             if (ts.isEmpty()) {
-                set(TRANSFORMS, ts.add(transform));
+                set(TRANSFORMS, ts.adding(transform));
             } else {
                 int last = ts.size() - 1;
                 Transform concatenatedWithLast = FXTransforms.concat(ts.get(last), transform);
                 if (concatenatedWithLast instanceof Affine) {
-                    set(TRANSFORMS, ts.add(transform));
+                    set(TRANSFORMS, ts.adding(transform));
                 } else {
-                    set(TRANSFORMS, ts.set(last, concatenatedWithLast));
+                    set(TRANSFORMS, ts.replacingAt(last, concatenatedWithLast));
                 }
             }
             return;
@@ -234,16 +234,16 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
                     PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
                     Transform lastTransform = transforms.get(transforms.size() - 1);
                     if (lastTransform instanceof Translate) {
-                        set(TRANSFORMS, transforms.set(transforms.size() - 1,
+                        set(TRANSFORMS, transforms.replacingAt(transforms.size() - 1,
                                 lastTransform.createConcatenation(translate)));
                     } else {
-                        set(TRANSFORMS, transforms.add(0, translate));
+                        set(TRANSFORMS, transforms.addingAt(0, translate));
                     }
                 }
             } else {
                 flattenTransforms();
                 PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
-                set(TRANSFORMS, transforms.add(0, transform));
+                set(TRANSFORMS, transforms.addingAt(0, transform));
             }
         } else {
             reshapeInLocal(FXTransforms.concat(parentToLocal, transform));
@@ -266,7 +266,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     default void transformInLocal(Transform t) {
         flattenTransforms();
         PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
-        set(TRANSFORMS, transforms.add(t));
+        set(TRANSFORMS, transforms.adding(t));
     }
 
     @Override
@@ -282,16 +282,16 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
             } else {
                 Transform lastTransform = transforms.get(transforms.size() - 1);
                 if (lastTransform instanceof Translate) {
-                    set(TRANSFORMS, transforms.set(transforms.size() - 1,
+                    set(TRANSFORMS, transforms.replacingAt(transforms.size() - 1,
                             lastTransform.createConcatenation(t)));
                 } else {
-                    set(TRANSFORMS, transforms.add(0, t));
+                    set(TRANSFORMS, transforms.addingAt(0, t));
                 }
             }
         } else {
             flattenTransforms();
             PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
-            set(TRANSFORMS, transforms.add(0, t));
+            set(TRANSFORMS, transforms.addingAt(0, t));
         }
     }
 }

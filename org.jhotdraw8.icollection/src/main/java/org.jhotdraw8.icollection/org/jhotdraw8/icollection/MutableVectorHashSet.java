@@ -59,7 +59,7 @@ import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
 ///
 /// Implementation details:
 ///
-/// See description at [PersistentHashVectorSet].
+/// See description at [PersistentVectorHashSet].
 ///
 /// References:
 /// <dl>
@@ -74,7 +74,7 @@ import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
 ///
 /// @param <E> the element type
 @SuppressWarnings("exports")
-public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadableSequencedSet<E>,
+public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadableSequencedSet<E>,
         SequencedSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -86,7 +86,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     private PersistentVectorList<Object> vector;
 
     /// Constructs a new empty set.
-    public MutableChampVectorSet() {
+    public MutableVectorHashSet() {
         root = BitmapIndexedNode.emptyNode();
         vector = PersistentVectorList.of();
     }
@@ -96,12 +96,12 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     ///
     /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
-    public MutableChampVectorSet(Iterable<? extends E> c) {
-        if (c instanceof MutableChampVectorSet<?>) {
-            c = ((MutableChampVectorSet<? extends E>) c).toPersistent();
+    public MutableVectorHashSet(Iterable<? extends E> c) {
+        if (c instanceof MutableVectorHashSet<?>) {
+            c = ((MutableVectorHashSet<? extends E>) c).toPersistent();
         }
-        if (c instanceof PersistentHashVectorSet<?>) {
-            PersistentHashVectorSet<E> that = (PersistentHashVectorSet<E>) c;
+        if (c instanceof PersistentVectorHashSet<?>) {
+            PersistentVectorHashSet<E> that = (PersistentVectorHashSet<E>) c;
             this.root = that.root;
             this.size = that.size;
             this.offset = that.offset;
@@ -142,7 +142,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
             }
             offset++;
             modCount++;
-            vector = vector.addFirst(newElem);
+            vector = vector.addingFirst(newElem);
             renumber();
         }
         return modified;
@@ -172,7 +172,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
                 modCount++;
                 size++;
             }
-            vector = vector.add(newElem);
+            vector = vector.adding(newElem);
             renumber();
         }
         return modified;
@@ -190,8 +190,8 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
 
     /// Returns a shallow copy of this set.
     @Override
-    public MutableChampVectorSet<E> clone() {
-        return (MutableChampVectorSet<E>) super.clone();
+    public MutableVectorHashSet<E> clone() {
+        return (MutableVectorHashSet<E>) super.clone();
     }
 
     @Override
@@ -385,11 +385,11 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     /// Returns an persistent copy of this set.
     ///
     /// @return an persistent copy
-    public PersistentHashVectorSet<E> toPersistent() {
+    public PersistentVectorHashSet<E> toPersistent() {
         owner = null;
         return size == 0
-                ? PersistentHashVectorSet.of()
-                : new PersistentHashVectorSet<>(root, vector, size, offset);
+                ? PersistentVectorHashSet.of()
+                : new PersistentVectorHashSet<>(root, vector, size, offset);
     }
 
     @Serial
@@ -408,7 +408,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
         @Serial
         @Override
         protected Object readResolve() {
-            return new MutableChampVectorSet<>(deserializedElements);
+            return new MutableVectorHashSet<>(deserializedElements);
         }
     }
 }

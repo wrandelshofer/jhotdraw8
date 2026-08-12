@@ -218,13 +218,13 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
         // Update start and end positions of the path
         if (path.size() < 2) {
-            path = path.add(new BezierNode(start)).add(new BezierNode(end));
+            path = path.adding(new BezierNode(start)).adding(new BezierNode(end));
         }
         BezierNode first = path.getFirst();
-        path = path.set(0,
+        path = path.replacingAt(0,
                 first.transform(Transform.translate(start.getX() - first.pointX(), start.getY() - first.pointY())));
         BezierNode last = path.getLast();
-        path = path.set(path.size() - 1,
+        path = path.replacingAt(path.size() - 1,
                 last.transform(Transform.translate(end.getX() - last.pointX(), end.getY() - last.pointY())));
 
         // Store the path
@@ -238,7 +238,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         if (path != null) {
             for (int i = 0, n = path.size(); i < n; i++) {
                 var node = path.get(i);
-                path = path.set(i, node.transform(tx));
+                path = path.replacingAt(i, node.transform(tx));
             }
             set(PATH, path);
         }
@@ -252,7 +252,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         if (path != null) {
             for (int i = 0, n = path.size(); i < n; i++) {
                 var node = path.get(i);
-                path = path.set(i, node.transform(tx));
+                path = path.replacingAt(i, node.transform(tx));
             }
             set(PATH, path);
         }
@@ -268,7 +268,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             Translate tx = new Translate(tc.getX(), tc.getY());
             for (int i = 0, n = path.size(); i < n; i++) {
                 var node = path.get(i);
-                path = path.set(i, node.transform(tx));
+                path = path.replacingAt(i, node.transform(tx));
             }
             set(PATH, path);
         }

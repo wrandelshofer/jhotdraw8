@@ -66,7 +66,7 @@ public class PersistentHashMapJol extends AbstractJol {
         var data = generateMap(size, mask, size * 10);
         PersistentHashMap<Key, Value> mapA = PersistentHashMap.of();
         for (var e : data.entrySet()) {
-            mapA = mapA.put(e.getKey(), e.getValue());
+            mapA = mapA.putting(e.getKey(), e.getValue());
         }
         estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
     }
@@ -91,7 +91,7 @@ public class PersistentHashMapJol extends AbstractJol {
         var data = generateMap(size, mask, size * 10L);
         PersistentHashMap<Key, Value> mapA = PersistentHashMap.copyOf(data);
         Key updatedKey = data.keySet().iterator().next();
-        PersistentHashMap<Key, Value> mapB = mapA.put(updatedKey, new Value(mapA.get(updatedKey).value + 1, -1));
+        PersistentHashMap<Key, Value> mapB = mapA.putting(updatedKey, new Value(mapA.get(updatedKey).value + 1, -1));
         AbstractMap.SimpleImmutableEntry<PersistentHashMap<Key, Value>, PersistentHashMap<Key, Value>> twoVersions = new AbstractMap.SimpleImmutableEntry<>(mapA, mapB);
         System.out.println("\nboth versions:");
         estimateMemoryUsage(twoVersions, mapA.iterator().next(), mapA.size());
@@ -128,7 +128,7 @@ public class PersistentHashMapJol extends AbstractJol {
 
         ArrayList<Key> keys = new ArrayList<>(data.keySet());
         Collections.shuffle(keys);
-        mapA = mapA.removeAll(keys.subList(0, (int) (keys.size() * 0.75)));
+        mapA = mapA.removingAll(keys.subList(0, (int) (keys.size() * 0.75)));
 
         estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
     }

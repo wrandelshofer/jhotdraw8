@@ -155,11 +155,10 @@ public abstract class AbstractImmutableSetTest {
     public void emptyShouldYieldEmptySet(SetData data) {
         PersistentSet<Key> actual = newInstance(data.a());
         assertNotEqualSet(Collections.emptySet(), actual);
-        PersistentSet<Key> actual2 = actual.empty();
+        PersistentSet<Key> actual2 = actual.cleared();
         assertNotSame(actual, actual2);
         assertEqualSet(Collections.emptySet(), actual2);
     }
-
 
 
     @ParameterizedTest
@@ -273,7 +272,7 @@ public abstract class AbstractImmutableSetTest {
         PersistentSet<Key> instance = newInstance();
         var expected = new LinkedHashSet<Key>();
         expected.add(null);
-        var actual = instance.add(null);
+        var actual = instance.adding(null);
         assertFalse(instance.contains(null));
         assertTrue(actual.contains(null));
         assertEqualSet(expected, actual);
@@ -285,7 +284,7 @@ public abstract class AbstractImmutableSetTest {
         PersistentSet<Key> instance = newInstance();
         var expected = new LinkedHashSet<Key>();
         expected.addAll(Collections.singleton(null));
-        var actual = instance.addAll(Collections.singleton(null));
+        var actual = instance.addingAll(Collections.singleton(null));
         assertFalse(instance.contains(null));
         assertTrue(actual.contains(null));
         assertEqualSet(expected, actual);
@@ -297,7 +296,7 @@ public abstract class AbstractImmutableSetTest {
         PersistentSet<Key> instance = newInstance(data.a);
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         for (Key e : data.c) {
-            PersistentSet<Key> instance2 = instance.add(e);
+            PersistentSet<Key> instance2 = instance.adding(e);
             assertNotSame(instance, instance2);
             instance = instance2;
             expected.add(e);
@@ -311,7 +310,7 @@ public abstract class AbstractImmutableSetTest {
         PersistentSet<Key> instance = newInstance(data.a);
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         for (Key e : data.a) {
-            PersistentSet<Key> instance2 = instance.add(e);
+            PersistentSet<Key> instance2 = instance.adding(e);
             assertSame(instance, instance2);
             assertEqualSet(expected, instance);
         }
@@ -321,7 +320,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void addAllWithNewElementsShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> instance2 = instance.addAll(data.c);
+        PersistentSet<Key> instance2 = instance.addingAll(data.c);
         assertNotSame(instance, instance2);
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         expected.addAll(data.c.asSet());
@@ -332,7 +331,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void addAllWithContainedElementsShouldReturnSameInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> instance2 = instance.addAll(data.a.asSet());
+        PersistentSet<Key> instance2 = instance.addingAll(data.a.asSet());
         assertSame(instance, instance2);
         assertEquals(data.a.asSet(), instance2.asSet());
     }
@@ -341,7 +340,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void addAllWithSelfShouldReturnSameInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> instance2 = instance.addAll(instance);
+        PersistentSet<Key> instance2 = instance.addingAll(instance);
         assertSame(instance, instance2);
         assertEquals(data.a.asSet(), instance2.asSet());
     }
@@ -352,7 +351,7 @@ public abstract class AbstractImmutableSetTest {
         PersistentSet<Key> instance = newInstance(data.a);
         PersistentSet<Key> clone = toClonedInstance(instance);
         assertNotSame(instance, clone);
-        PersistentSet<Key> instance3 = instance.addAll(clone);
+        PersistentSet<Key> instance3 = instance.addingAll(clone);
         assertSame(instance, instance3);
         assertEquals(data.a.asSet(), instance3.asSet());
     }
@@ -362,7 +361,7 @@ public abstract class AbstractImmutableSetTest {
     public void addAllWithCloneToMutableShouldReturnSameInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
         PersistentSet<Key> instance2 = toClonedInstance(instance);
-        PersistentSet<Key> instance3 = instance.addAll(instance2.toMutable());
+        PersistentSet<Key> instance3 = instance.addingAll(instance2.toMutable());
         assertSame(instance, instance3);
         assertEquals(data.a.asSet(), instance3.asSet());
     }
@@ -379,7 +378,7 @@ public abstract class AbstractImmutableSetTest {
     public void removeWithNewElementShouldReturnSameInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
         for (Key e : data.c) {
-            PersistentSet<Key> instance2 = instance.remove(e);
+            PersistentSet<Key> instance2 = instance.removing(e);
             assertSame(instance, instance2);
             assertEqualSet(data.a, instance);
         }
@@ -392,7 +391,7 @@ public abstract class AbstractImmutableSetTest {
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         for (Key e : data.a) {
             expected.remove(e);
-            PersistentSet<Key> instance2 = instance.remove(e);
+            PersistentSet<Key> instance2 = instance.removing(e);
             assertNotSame(instance, instance2);
             instance = instance2;
             assertEqualSet(expected, instance);
@@ -403,7 +402,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void removeAllWithNewKeyShouldReturnSameInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> instance2 = instance.removeAll(data.c.asSet());
+        PersistentSet<Key> instance2 = instance.removingAll(data.c.asSet());
         assertSame(instance, instance2);
         assertEqualSet(data.a, instance);
     }
@@ -412,7 +411,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void removeAllWithContainedKeyShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> instance2 = instance.removeAll(data.a.asSet());
+        PersistentSet<Key> instance2 = instance.removingAll(data.a.asSet());
         assertNotSame(instance, instance2);
         assertEqualSet(Collections.emptySet(), instance2);
     }
@@ -423,7 +422,7 @@ public abstract class AbstractImmutableSetTest {
         PersistentSet<Key> instance = newInstance(data.a);
         PersistentSet<Key> clone = toClonedInstance(instance);
         assertNotSame(instance, clone);
-        PersistentSet<Key> instance2 = instance.removeAll(clone);
+        PersistentSet<Key> instance2 = instance.removingAll(clone);
         assertNotSame(instance, instance2);
         assertEqualSet(Collections.emptySet(), instance2);
     }
@@ -432,7 +431,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void removeAllWithReadOnlySetWithSomeContainedKeyShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> instance2 = instance.removeAll(data.someAPlusSomeB);
+        PersistentSet<Key> instance2 = instance.removingAll(data.someAPlusSomeB);
         assertNotSame(instance, instance2);
         assertEqualSet(data.a, instance);
     }
@@ -441,7 +440,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void removeAllWithSetWithSomeContainedKeyShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> instance2 = instance.removeAll(data.someAPlusSomeB.asSet());
+        PersistentSet<Key> instance2 = instance.removingAll(data.someAPlusSomeB.asSet());
         assertNotSame(instance, instance2);
         assertEqualSet(data.a, instance);
     }
@@ -450,7 +449,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void removeAllWithSameTypeWithSomeContainedKeyShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> instance2 = instance.removeAll(newInstance(data.someAPlusSomeB));
+        PersistentSet<Key> instance2 = instance.removingAll(newInstance(data.someAPlusSomeB));
         assertNotSame(instance, instance2);
         assertEqualSet(data.a, instance);
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
@@ -462,7 +461,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void addAllWithSomeNewKeysShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> instance2 = instance.addAll(data.someAPlusSomeB());
+        PersistentSet<Key> instance2 = instance.addingAll(data.someAPlusSomeB());
         assertNotSame(instance, instance2);
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         assertEqualSet(expected, instance);
@@ -479,8 +478,8 @@ public abstract class AbstractImmutableSetTest {
         ArrayList<Key> listC = new ArrayList<>(data.c.asSet());
 
         PersistentSet<Key> instance2 = newInstance();
-        instance2 = instance2.addAll(listA.subList(0, listA.size() / 2));
-        instance2 = instance2.addAll(listC.subList(0, listC.size() / 2));
+        instance2 = instance2.addingAll(listA.subList(0, listA.size() / 2));
+        instance2 = instance2.addingAll(listC.subList(0, listC.size() / 2));
 
         LinkedHashSet<Key> expected = new LinkedHashSet<>(listA);
         LinkedHashSet<Key> expected2 = new LinkedHashSet<>();
@@ -488,7 +487,7 @@ public abstract class AbstractImmutableSetTest {
         expected2.addAll(listC.subList(0, listC.size() / 2));
         assertEqualSet(expected2, instance2);
 
-        PersistentSet<Key> instance3 = instance.addAll(instance2);
+        PersistentSet<Key> instance3 = instance.addingAll(instance2);
         assertNotSame(instance2, instance3);
         expected.addAll(expected2);
         assertEqualSet(expected, instance3);
@@ -499,7 +498,7 @@ public abstract class AbstractImmutableSetTest {
     public void addAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
         PersistentSet<Key> instance2 = newInstance(data.c);
-        PersistentSet<Key> instance3 = instance.addAll(instance2);
+        PersistentSet<Key> instance3 = instance.addingAll(instance2);
         assertNotSame(instance2, instance3);
 
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
@@ -512,7 +511,7 @@ public abstract class AbstractImmutableSetTest {
     public void addAllWithSameTypeToMutableAndAllNewKeysShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
         PersistentSet<Key> instance2 = newInstance(data.c);
-        PersistentSet<Key> instance3 = instance.addAll(instance2.toMutable());
+        PersistentSet<Key> instance3 = instance.addingAll(instance2.toMutable());
         assertNotSame(instance2, instance3);
 
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
@@ -539,7 +538,7 @@ public abstract class AbstractImmutableSetTest {
         PersistentSet<Key> instance = newInstance();
         assertEquals("[]", instance.toString());
 
-        instance = instance.addAll(data.a.asSet());
+        instance = instance.addingAll(data.a.asSet());
         String str = instance.toString();
         assertEquals('[', str.charAt(0));
         assertEquals(']', str.charAt(str.length() - 1));
@@ -555,7 +554,7 @@ public abstract class AbstractImmutableSetTest {
         PersistentSet<Key> instance = newInstance(data.a);
         PersistentSet<Key> clone = toClonedInstance(instance);
         assertNotSame(instance, clone);
-        PersistentSet<Key> actual = instance.retainAll(clone);
+        PersistentSet<Key> actual = instance.retainingAll(clone);
         assertSame(instance, actual);
         assertEqualSet(data.a, actual);
     }
@@ -564,7 +563,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void retainAllWithContainedElementsShouldReturnThis(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> actual = instance.retainAll(data.a.asSet());
+        PersistentSet<Key> actual = instance.retainingAll(data.a.asSet());
         assertSame(instance, actual);
         assertEqualSet(data.a, actual);
     }
@@ -574,7 +573,7 @@ public abstract class AbstractImmutableSetTest {
     public void retainAllWithSomeContainedElementsShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
-        PersistentSet<Key> actual = instance.retainAll(data.someAPlusSomeB.asSet());
+        PersistentSet<Key> actual = instance.retainingAll(data.someAPlusSomeB.asSet());
         assertNotSame(instance, actual);
         assertEqualSet(expected, instance);
         assertTrue(expected.retainAll(data.someAPlusSomeB.asSet()));
@@ -585,7 +584,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void retainAllWithNewElementsShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> instance2 = instance.retainAll(data.c.asSet());
+        PersistentSet<Key> instance2 = instance.retainingAll(data.c.asSet());
         assertNotSame(instance, instance2);
         assertEqualSet(data.a, instance);
         assertEqualSet(Collections.emptySet(), instance2);
@@ -596,7 +595,7 @@ public abstract class AbstractImmutableSetTest {
     public void retainAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
         PersistentSet<Key> instance2 = newInstance(data.c);
-        PersistentSet<Key> instance3 = instance.retainAll(instance2);
+        PersistentSet<Key> instance3 = instance.retainingAll(instance2);
         assertNotSame(instance, instance3);
         assertEqualSet(data.a, instance);
         assertEqualSet(data.c, instance2);
@@ -612,8 +611,8 @@ public abstract class AbstractImmutableSetTest {
         ArrayList<Key> listC = new ArrayList<>(data.c.asSet());
 
         PersistentSet<Key> instance2 = newInstance();
-        instance2 = instance2.addAll(listA.subList(0, listA.size() / 2));
-        instance2 = instance2.addAll(listC.subList(0, listC.size() / 2));
+        instance2 = instance2.addingAll(listA.subList(0, listA.size() / 2));
+        instance2 = instance2.addingAll(listC.subList(0, listC.size() / 2));
 
         LinkedHashSet<Key> expected = new LinkedHashSet<>(listA);
         LinkedHashSet<Key> expected2 = new LinkedHashSet<>();
@@ -621,7 +620,7 @@ public abstract class AbstractImmutableSetTest {
         expected2.addAll(listC.subList(0, listC.size() / 2));
         assertEqualSet(expected2, instance2);
 
-        PersistentSet<Key> instance3 = instance.retainAll(instance2);
+        PersistentSet<Key> instance3 = instance.retainingAll(instance2);
         assertNotSame(instance2, instance3);
         expected.retainAll(expected2);
         assertEqualSet(expected, instance3);
@@ -631,7 +630,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void retainAllWithSelfShouldReturnThis(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        assertSame(instance, instance.retainAll(instance));
+        assertSame(instance, instance.retainingAll(instance));
         assertEqualSet(data.a, instance);
     }
 
@@ -639,7 +638,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void retainAllWithSomeNewKeysShouldReturnNewInstance(org.jhotdraw8.icollection.SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
-        PersistentSet<Key> instance2 = instance.retainAll(data.someAPlusSomeB.asSet());
+        PersistentSet<Key> instance2 = instance.retainingAll(data.someAPlusSomeB.asSet());
         assertNotSame(instance, instance2);
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         assertEqualSet(expected, instance);
@@ -651,7 +650,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void retainAllOfEmptySetShouldReturnThis(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance();
-        assertSame(instance, instance.retainAll(data.c.asSet()));
+        assertSame(instance, instance.retainingAll(data.c.asSet()));
         assertEqualSet(Collections.emptySet(), instance);
     }
 
@@ -659,7 +658,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void retainAllWithEmptySetShouldReturnNewInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a.asSet());
-        PersistentSet<Key> instance2 = instance.retainAll(Collections.emptySet());
+        PersistentSet<Key> instance2 = instance.retainingAll(Collections.emptySet());
         assertNotSame(instance, instance2);
         assertEqualSet(Collections.emptySet(), instance2);
     }

@@ -73,7 +73,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             if (createdFigure != null) {
                 for (int i = path.size() - 1; i > 0; i--) {
                     if (Objects.equals(path.get(i), path.get(i - 1))) {
-                        path = path.removeAt(i);
+                        path = path.removingAt(i);
                     }
                 }
                 DrawingModel dm = dv.getModel();
@@ -100,10 +100,10 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             Point2D c2 = createdFigure.worldToParent(dv.viewToWorld(x2, y2));
             DrawingModel dm = dv.getModel();
             if (dragStartIndex < 0) {
-                path = path.add(new BezierNode(c2.getX(), c2.getY()));
+                path = path.adding(new BezierNode(c2.getX(), c2.getY()));
                 dragStartIndex = path.size() - 1;
             } else {
-                path = path.add(new BezierNode(c2.getX(), c2.getY()));
+                path = path.adding(new BezierNode(c2.getX(), c2.getY()));
             }
             dm.set(createdFigure, key, path);
         }
@@ -152,7 +152,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         assert path != null;
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
                 createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1)))));
-        path = path.add(new BezierNode(c.getConvertedValue()));
+        path = path.adding(new BezierNode(c.getConvertedValue()));
         dm.set(createdFigure, key, path);
 
         rubberBand.setVisible(false);
@@ -177,17 +177,17 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
             BezierPath newList = BezierPath.of();
             for (int i = 0; i < dragStartIndex; i++) {
-                newList = newList.add(path.get(i));
+                newList = newList.adding(path.get(i));
             }
 
             for (int i = 0, n = built.size(); i < n; i++) {
                 if (i == 0) {
-                    newList = newList.add(built.get(i).withMask(built.get(i).getMask() & (~BezierNode.MOVE_MASK)));
+                    newList = newList.adding(built.get(i).withMask(built.get(i).getMask() & (~BezierNode.MOVE_MASK)));
                 } else {
-                    newList = newList.add(built.get(i));
+                    newList = newList.adding(built.get(i));
                 }
             }
-            newList = newList.add(path.getLast());
+            newList = newList.adding(path.getLast());
             path = newList;
 
             DrawingModel dm = dv.getModel();
@@ -209,14 +209,14 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     @Override
     public String getHelpText() {
         return """
-               BezierCreationTool
-                 Click on the drawing view. The tool will create a new bezier curve with a point at that location.
-                 Continue clicking on the drawing view. The tool will add each clicked point to the created bezier curve.
-                 Press enter or escape, when you are done.
-               Or
-                 Press and drag the mouse over the drawing view to draw a curve. The tool will create a new bezier curve with a curve fitted to your drawing.
-                 Continue pressing and dragging on the drawing view. The tool will add additional fitted curves to the bezier curve.
-                 Press enter or escape when you are done.""";
+                BezierCreationTool
+                  Click on the drawing view. The tool will create a new bezier curve with a point at that location.
+                  Continue clicking on the drawing view. The tool will add each clicked point to the created bezier curve.
+                  Press enter or escape, when you are done.
+                Or
+                  Press and drag the mouse over the drawing view to draw a curve. The tool will create a new bezier curve with a curve fitted to your drawing.
+                  Continue pressing and dragging on the drawing view. The tool will add additional fitted curves to the bezier curve.
+                  Press enter or escape when you are done.""";
     }
 
 }

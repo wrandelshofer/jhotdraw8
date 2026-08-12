@@ -44,7 +44,7 @@ public class FigureTest {
         PersistentSet<MapAccessor<?>> figureKeys = Figure.getDeclaredAndInheritedMapAccessors(Figure.class);
         PersistentSet<MapAccessor<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedMapAccessors(RectangleFigure.class);
         //System.out.println("rr:" + rectangleFigureKeys.asSet());
-        PersistentSet<MapAccessor<?>> intersection = figureKeys.retainAll(rectangleFigureKeys.asSet());
+        PersistentSet<MapAccessor<?>> intersection = figureKeys.retainingAll(rectangleFigureKeys.asSet());
         //System.out.println("ri:" + intersection);
         assertEquals(figureKeys, intersection);
     }

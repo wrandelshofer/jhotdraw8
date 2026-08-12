@@ -33,7 +33,7 @@ public class BezierNodeHandleIncomingTangentAction extends AbstractBezierNodeHan
             return;
         }
         BezierNode changedNode = bnode.withMaskBitsClears(IN_OUT_MASK).withMaskBitsSet(IN_MASK);
-        path = path.set(nodeIndex, changedNode);
+        path = path.replacingAt(nodeIndex, changedNode);
         view.getModel().set(owner, pathKey, path);
         view.recreateHandles();
     }

@@ -47,7 +47,7 @@ public class PersistentHashSetJol extends AbstractJol {
     /// </pre>
     @Test
     @Disabled
-    public void estimateMemoryUsageAddAll() {
+    public void estimateMemoryUsageAddingAll() {
         int size = 1_000;
         final int mask = -1;//~64;
         var data = generateSet(size, mask);
@@ -73,13 +73,13 @@ public class PersistentHashSetJol extends AbstractJol {
     /// </pre>
     @Test
     @Disabled
-    public void estimateMemoryUsageAddOneByOne() {
+    public void estimateMemoryUsageAddingOneByOne() {
         int size = 1_000;
         final int mask = -1;//~64;
         var data = generateSet(size, mask);
         PersistentHashSet<Key> setA = PersistentHashSet.of();
         for (var d : data) {
-            setA = setA.add(d);
+            setA = setA.adding(d);
         }
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
@@ -111,7 +111,7 @@ public class PersistentHashSetJol extends AbstractJol {
 
         ArrayList<Key> keys = new ArrayList<>(data);
         Collections.shuffle(keys);
-        setA = setA.removeAll(keys.subList(0, (int) (keys.size() * 0.75)));
+        setA = setA.removingAll(keys.subList(0, (int) (keys.size() * 0.75)));
 
 
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());

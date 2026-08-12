@@ -45,7 +45,7 @@ public class PersistentHashSetTest extends AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testToMutableAddAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(SetData data) throws Exception {
+    public void testToMutableAddingAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
         PersistentSet<Key> instance2 = newInstance(data.c);
         MutableHashSet<Key> mutableInstance = (MutableHashSet<Key>) instance.toMutable();

@@ -114,8 +114,8 @@ import java.util.Spliterators;
 ///
 /// @param <E> the element type
 @SuppressWarnings("exports")
-public class PersistentHashVectorSet<E> implements Serializable, PersistentSequencedSet<E> {
-    private static final PersistentHashVectorSet<?> EMPTY = new PersistentHashVectorSet<>(
+public class PersistentVectorHashSet<E> implements Serializable, PersistentSequencedSet<E> {
+    private static final PersistentVectorHashSet<?> EMPTY = new PersistentVectorHashSet<>(
             BitmapIndexedNode.emptyNode(), PersistentVectorList.of(), 0, 0);
     @Serial
     private static final long serialVersionUID = 0L;
@@ -141,11 +141,11 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
     ///
     /// @param privateData an privateData data object
     @SuppressWarnings("unchecked")
-    protected PersistentHashVectorSet(PrivateData privateData) {
-        this(((PersistentHashVectorSet.OpaqueRecord<E>) privateData.get()).root,
-                ((PersistentHashVectorSet.OpaqueRecord<E>) privateData.get()).vector,
-                ((PersistentHashVectorSet.OpaqueRecord<E>) privateData.get()).size,
-                ((PersistentHashVectorSet.OpaqueRecord<E>) privateData.get()).offset);
+    protected PersistentVectorHashSet(PrivateData privateData) {
+        this(((PersistentVectorHashSet.OpaqueRecord<E>) privateData.get()).root,
+                ((PersistentVectorHashSet.OpaqueRecord<E>) privateData.get()).vector,
+                ((PersistentVectorHashSet.OpaqueRecord<E>) privateData.get()).size,
+                ((PersistentVectorHashSet.OpaqueRecord<E>) privateData.get()).offset);
     }
 
     /// Creates a new instance with the provided privateData object as its internal data structure.
@@ -154,17 +154,17 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
     ///
     /// @param privateData the internal data structure needed by this class for creating the instance.
     /// @return a new instance of the subclass
-    protected PersistentHashVectorSet<E> newInstance(PrivateData privateData) {
-        return new PersistentHashVectorSet<>(privateData);
+    protected PersistentVectorHashSet<E> newInstance(PrivateData privateData) {
+        return new PersistentVectorHashSet<>(privateData);
     }
 
-    private PersistentHashVectorSet<E> newInstance(BitmapIndexedNode<SequencedElement<E>> root,
+    private PersistentVectorHashSet<E> newInstance(BitmapIndexedNode<SequencedElement<E>> root,
                                                    PersistentVectorList<Object> vector,
                                                    int size, int offset) {
-        return new PersistentHashVectorSet<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
+        return new PersistentVectorHashSet<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
     }
 
-    PersistentHashVectorSet(
+    PersistentVectorHashSet(
             BitmapIndexedNode<SequencedElement<E>> root,
             PersistentVectorList<Object> vector,
             int size, int offset) {
@@ -181,8 +181,8 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
     /// @param <E> the element type
     /// @return an persistent set of the provided elements
     @SuppressWarnings("unchecked")
-    public static <E> PersistentHashVectorSet<E> copyOf(Iterable<? extends E> c) {
-        return PersistentHashVectorSet.<E>of().addAll(c);
+    public static <E> PersistentVectorHashSet<E> copyOf(Iterable<? extends E> c) {
+        return PersistentVectorHashSet.<E>of().addingAll(c);
     }
 
 
@@ -191,8 +191,8 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
     /// @param <E> the element type
     /// @return an empty persistent set
     @SuppressWarnings("unchecked")
-    public static <E> PersistentHashVectorSet<E> of() {
-        return ((PersistentHashVectorSet<E>) PersistentHashVectorSet.EMPTY);
+    public static <E> PersistentVectorHashSet<E> of() {
+        return ((PersistentVectorHashSet<E>) PersistentVectorHashSet.EMPTY);
     }
 
 
@@ -203,31 +203,31 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
     /// @return an persistent set of the provided elements
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> PersistentHashVectorSet<E> of(E @Nullable ... elements) {
+    public static <E> PersistentVectorHashSet<E> of(E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
-        return PersistentHashVectorSet.<E>of().addAll(Arrays.asList(elements));
+        return PersistentVectorHashSet.<E>of().addingAll(Arrays.asList(elements));
     }
 
     @Override
-    public PersistentHashVectorSet<E> add(@Nullable E key) {
+    public PersistentVectorHashSet<E> adding(@Nullable E key) {
         return addLast(key, false);
     }
 
     @Override
     @SuppressWarnings({"unchecked"})
-    public PersistentHashVectorSet<E> addAll(Iterable<? extends E> c) {
-        if (isEmpty() && c instanceof PersistentHashVectorSet<? extends E> s) {
-            return (PersistentHashVectorSet<E>) s;
+    public PersistentVectorHashSet<E> addingAll(Iterable<? extends E> c) {
+        if (isEmpty() && c instanceof PersistentVectorHashSet<? extends E> s) {
+            return (PersistentVectorHashSet<E>) s;
         }
         var m = toMutable();
         return m.addAll(c) ? m.toPersistent() : this;
     }
 
-    public PersistentHashVectorSet<E> addFirst(@Nullable E element) {
+    public PersistentVectorHashSet<E> addingFirst(@Nullable E element) {
         return addFirst(element, true);
     }
 
-    private PersistentHashVectorSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
+    private PersistentVectorHashSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
         var newRoot = root.put(null, newElem,
@@ -247,17 +247,17 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
                 newSize++;
             }
             int newOffset = offset + 1;
-            newVector = newVector.addFirst(newElem);
+            newVector = newVector.addingFirst(newElem);
             return renumber(newRoot, newVector, newSize, newOffset);
         }
         return this;
     }
 
-    public PersistentHashVectorSet<E> addLast(@Nullable E element) {
+    public PersistentVectorHashSet<E> addingLast(@Nullable E element) {
         return addLast(element, true);
     }
 
-    private PersistentHashVectorSet<E> addLast(@Nullable E e,
+    private PersistentVectorHashSet<E> addLast(@Nullable E e,
                                                boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, vector.size() - offset);
@@ -279,7 +279,7 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
             } else {
                 newSize++;
             }
-            newVector = newVector.addLast(newElem);
+            newVector = newVector.addingLast(newElem);
             return renumber(newRoot, newVector, newSize, newOffset);
         }
         return this;
@@ -287,7 +287,7 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
 
     /// {@inheritDoc}
     @Override
-    public <T> PersistentHashVectorSet<T> empty() {
+    public <T> PersistentVectorHashSet<T> cleared() {
         return of();
     }
 
@@ -305,7 +305,7 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
         if (other == null) {
             return false;
         }
-        if (other instanceof PersistentHashVectorSet<?> that) {
+        if (other instanceof PersistentVectorHashSet<?> that) {
             return size == that.size && root.equivalent(that.root);
         } else {
             return ReadableSet.setEquals(this, other);
@@ -352,7 +352,7 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
     }
 
     @Override
-    public PersistentHashVectorSet<E> remove(@Nullable E key) {
+    public PersistentVectorHashSet<E> removing(@Nullable E key) {
         int keyHash = SequencedElement.keyHash(key);
         var details = new ChangeEvent<SequencedElement<E>>();
         BitmapIndexedNode<SequencedElement<E>> newRoot = root.remove(null,
@@ -361,7 +361,7 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
         if (details.isModified()) {
             var removedElem = details.getOldDataNonNull();
             var result = SequencedData.vecRemove(vector, removedElem, offset);
-            return size == 1 ? PersistentHashVectorSet.of() : renumber(newRoot, result.first(), size - 1,
+            return size == 1 ? PersistentVectorHashSet.of() : renumber(newRoot, result.first(), size - 1,
                     result.second());
         }
         return this;
@@ -369,21 +369,21 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
 
 
     @Override
-    public PersistentHashVectorSet<E> removeAll(Iterable<?> c) {
+    public PersistentVectorHashSet<E> removingAll(Iterable<?> c) {
         var m = toMutable();
         return m.removeAll(c) ? m.toPersistent() : this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashVectorSet<E> removeFirst() {
-        return remove(getFirst());
+    public PersistentVectorHashSet<E> removingFirst() {
+        return this.removing(getFirst());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashVectorSet<E> removeLast() {
-        return remove(getLast());
+    public PersistentVectorHashSet<E> removingLast() {
+        return this.removing(getLast());
     }
 
     /// Renumbers the sequenced elements in the trie if necessary.
@@ -392,8 +392,8 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
     /// @param vector the root of the vector
     /// @param size   the size of the trie
     /// @param offset the offset that must be added to a sequence number to get the index into the vector
-    /// @return a new [PersistentHashVectorSet] instance
-    private PersistentHashVectorSet<E> renumber(
+    /// @return a new [PersistentVectorHashSet] instance
+    private PersistentVectorHashSet<E> renumber(
             BitmapIndexedNode<SequencedElement<E>> root,
             PersistentVectorList<Object> vector,
             int size, int offset) {
@@ -412,7 +412,7 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashVectorSet<E> retainAll(Iterable<?> c) {
+    public PersistentVectorHashSet<E> retainingAll(Iterable<?> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toPersistent() : this;
     }
@@ -442,8 +442,8 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
     }
 
     @Override
-    public MutableChampVectorSet<E> toMutable() {
-        return new MutableChampVectorSet<>(this);
+    public MutableVectorHashSet<E> toMutable() {
+        return new MutableVectorHashSet<>(this);
     }
 
     /// Returns a string representation of this set.
@@ -473,7 +473,7 @@ public class PersistentHashVectorSet<E> implements Serializable, PersistentSeque
         @Serial
         @Override
         protected Object readResolve() {
-            return PersistentHashVectorSet.copyOf(deserializedElements);
+            return PersistentVectorHashSet.copyOf(deserializedElements);
         }
     }
 

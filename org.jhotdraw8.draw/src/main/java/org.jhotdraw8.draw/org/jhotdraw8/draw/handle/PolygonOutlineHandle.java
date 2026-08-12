@@ -145,7 +145,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
             }
         }
         if (insertAt != -1) {
-            view.getModel().set(owner, key, owner.getNonNull(key).add(insertAt, insertLocation));
+            view.getModel().set(owner, key, owner.getNonNull(key).addingAt(insertAt, insertLocation));
             view.recreateHandles();
         }
     }
@@ -161,7 +161,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getLayoutBounds();
         double[] points = PolylineFigure.toPointArray(f, key);
-FXTransforms.transform2DPoints(t, points, 0, points, 0, points.length / 2);
+        FXTransforms.transform2DPoints(t, points, 0, points, 0, points.length / 2);
         ObservableList<Double> pp1 = poly1.getPoints();
         ObservableList<Double> pp2 = poly2.getPoints();
         pp2.clear();

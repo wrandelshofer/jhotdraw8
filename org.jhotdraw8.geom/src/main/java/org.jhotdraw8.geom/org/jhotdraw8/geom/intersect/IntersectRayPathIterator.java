@@ -98,7 +98,7 @@ public class IntersectRayPathIterator {
             }
 
             if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {
-                lineIntersections = lineIntersections.addAll(rayCheck.intersections());
+                lineIntersections = lineIntersections.addingAll(rayCheck.intersections());
             }
         }
         return new IntersectionResultEx(lineIntersections.toMutable());

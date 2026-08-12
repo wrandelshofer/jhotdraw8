@@ -82,7 +82,7 @@ public class PersistentTreeSetJol extends AbstractJol {
 
         ArrayList<Key> keys = new ArrayList<>(data);
         Collections.shuffle(keys);
-        setA = setA.removeAll(keys.subList(0, (int) (keys.size() * 0.75)));
+        setA = setA.removingAll(keys.subList(0, (int) (keys.size() * 0.75)));
 
 
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());

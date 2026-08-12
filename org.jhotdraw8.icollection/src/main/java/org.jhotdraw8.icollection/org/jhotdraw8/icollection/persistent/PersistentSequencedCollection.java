@@ -10,21 +10,25 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.NoSuchElementException;
 
-/// An interface to an persistent collection with a well-defined iteration order;
-/// the implementation guarantees that the state of the collection does not
-/// change.
+/// This interface provides copy-returning operations for a sequenced collection.
 ///
-/// An interface to an persistent sequenced collection provides methods for creating a new
-/// persistent sequenced collection with added or removed elements, without
-/// changing the original persistent sequenced collection.
+/// A sequenced collection is a sequence of elements.
+/// The elements are ordered in a sequence from first to last.
+/// The sequence can be established implicitly, by insertion operations,
+/// or by sequence-altering operations.
+/// (However, this interface only provides read operations).
+///
+/// A copy-returning operation returns a new copy of the collection
+/// with changes applied to it. The operation does not change the original
+/// collection.
 ///
 /// @param <E> the element type
 public interface PersistentSequencedCollection<E> extends PersistentCollection<E>, ReadableSequencedCollection<E> {
     @Override
-    PersistentSequencedCollection<E> add(E element);
+    PersistentSequencedCollection<E> adding(E element);
 
     @Override
-    PersistentSequencedCollection<E> addAll(Iterable<? extends E> c);
+    PersistentSequencedCollection<E> addingAll(Iterable<? extends E> c);
 
     /// Returns a copy of this collection that contains all elements
     /// of this collection and also the specified element as the first
@@ -43,7 +47,7 @@ public interface PersistentSequencedCollection<E> extends PersistentCollection<E
     /// as the first in the iteration order, or
     /// a different collection instance with the element added as the first
     /// in the iteration order
-    PersistentSequencedCollection<E> addFirst(@Nullable E element);
+    PersistentSequencedCollection<E> addingFirst(@Nullable E element);
 
     /// Returns a copy of this collection that contains all elements
     /// of this collection and also the specified element as the last
@@ -62,24 +66,24 @@ public interface PersistentSequencedCollection<E> extends PersistentCollection<E
     /// as the last in the iteration order, or
     /// a different collection instance with the element added as the last
     /// in the iteration order
-    PersistentSequencedCollection<E> addLast(@Nullable E element);
+    PersistentSequencedCollection<E> addingLast(@Nullable E element);
 
     @Override
-    <T> PersistentSequencedCollection<T> empty();
+    <T> PersistentSequencedCollection<T> cleared();
 
     @Override
-    PersistentSequencedCollection<E> remove(@Nullable E element);
+    PersistentSequencedCollection<E> removing(@Nullable E element);
 
     @Override
-    PersistentSequencedCollection<E> removeAll(Iterable<?> c);
+    PersistentSequencedCollection<E> removingAll(Iterable<?> c);
 
     /// Returns a copy of this set that contains all elements
     /// of this set except the first.
     ///
     /// @return a new set instance with the first element removed
     /// @throws NoSuchElementException if this set is empty
-    default PersistentSequencedCollection<E> removeFirst() {
-        return remove(getFirst());
+    default PersistentSequencedCollection<E> removingFirst() {
+        return removing(getFirst());
     }
 
     /// Returns a copy of this set that contains all elements
@@ -87,11 +91,11 @@ public interface PersistentSequencedCollection<E> extends PersistentCollection<E
     ///
     /// @return a new set instance with the last element removed
     /// @throws NoSuchElementException if this set is empty
-    default PersistentSequencedCollection<E> removeLast() {
-        return remove(getLast());
+    default PersistentSequencedCollection<E> removingLast() {
+        return removing(getLast());
     }
 
     @Override
-    PersistentSequencedCollection<E> retainAll(Iterable<?> c);
+    PersistentSequencedCollection<E> retainingAll(Iterable<?> c);
 
 }

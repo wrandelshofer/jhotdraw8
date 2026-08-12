@@ -34,13 +34,13 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadableLis
 
     @Override
     public void addFirst(E e) {
-        backingList = backingList.add(0, e);
+        backingList = backingList.addingAt(0, e);
         modCount++;
     }
 
     @Override
     public void addLast(E e) {
-        backingList = backingList.add(e);
+        backingList = backingList.adding(e);
         modCount++;
     }
 
@@ -66,7 +66,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadableLis
     @Override
     public boolean remove(@Nullable Object o) {
         PersistentList<E> oldList = backingList;
-        backingList = backingList.remove((E) o);
+        backingList = backingList.removing((E) o);
         modCount++;
         return oldList != backingList;
     }
@@ -74,7 +74,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadableLis
     @Override
     public E remove(int index) {
         E removed = backingList.get(index);
-        backingList = backingList.removeAt(index);
+        backingList = backingList.removingAt(index);
         modCount++;
         return removed;
     }
@@ -83,7 +83,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadableLis
     @Override
     public void clear() {
         PersistentList<E> oldList = backingList;
-        backingList = backingList.empty();
+        backingList = backingList.cleared();
         if (oldList != backingList) {
             modCount++;
         }
@@ -167,7 +167,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadableLis
     @Override
     public boolean add(E e) {
         PersistentList<E> oldList = backingList;
-        backingList = backingList.add(e);
+        backingList = backingList.adding(e);
         if (oldList != backingList) {
             modCount++;
             return true;
@@ -177,14 +177,14 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadableLis
 
     @Override
     public void add(int index, E e) {
-        backingList = backingList.add(index, e);
+        backingList = backingList.addingAt(index, e);
         modCount++;
     }
 
     @Override
     public E set(int index, E e) {
         E oldValue = backingList.get(index);
-        backingList = backingList.set(index, e);
+        backingList = backingList.replacingAt(index, e);
         return oldValue;
     }
 

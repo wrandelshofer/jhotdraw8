@@ -77,7 +77,7 @@ public interface SequencedData {
         for (var i = Spliterators.iterator(new TombSkippingVectorSpliterator<>(vector, o -> (K) o, 0, size, sizeWithTombstones, 0)); i.hasNext(); ) {
             K current = i.next();
             K data = factoryFunction.apply(current, seq++);
-            renumberedVector = renumberedVector.add(data);
+            renumberedVector = renumberedVector.adding(data);
             renumberedRoot = renumberedRoot.put(owner, data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
         }
 
@@ -93,19 +93,19 @@ public interface SequencedData {
             if (size > 1) {
                 Object o = vector.get(1);
                 if (o instanceof Tombstone t) {
-                    return new OrderedPair<>(vector.removeRange(0, 2 + t.skip()), offset - 2 - t.skip());
+                    return new OrderedPair<>(vector.removingRange(0, 2 + t.skip()), offset - 2 - t.skip());
                 }
             }
-            return new OrderedPair<>(vector.removeFirst(), offset - 1);
+            return new OrderedPair<>(vector.removingFirst(), offset - 1);
         }
 
         // If the element is the last, we can remove it and its neighboring tombstones from the vector.
         if (index == size - 1) {
             Object o = vector.get(size - 2);
             if (o instanceof Tombstone t) {
-                return new OrderedPair<>(vector.removeRange(size - 2 - t.skip(), size), offset);
+                return new OrderedPair<>(vector.removingRange(size - 2 - t.skip(), size), offset);
             }
-            return new OrderedPair<>(vector.removeLast(), offset);
+            return new OrderedPair<>(vector.removingLast(), offset);
         }
 
         // Otherwise, we replace the element with a tombstone. If the elements before or after are
@@ -115,19 +115,19 @@ public interface SequencedData {
         Object after = vector.get(index + 1);
         if (before instanceof Tombstone tb && after instanceof Tombstone ta) {
             Tombstone boundaryStones = Tombstone.create(2 + tb.skip() + ta.skip());
-            vector = vector.set(index - 1 - tb.skip(), boundaryStones);
-            vector = vector.set(index, Tombstone.create(0));
-            vector = vector.set(index + 1 + ta.skip(), boundaryStones);
+            vector = vector.replacingAt(index - 1 - tb.skip(), boundaryStones);
+            vector = vector.replacingAt(index, Tombstone.create(0));
+            vector = vector.replacingAt(index + 1 + ta.skip(), boundaryStones);
         } else if (before instanceof Tombstone tb) {
             Tombstone boundaryStones = Tombstone.create(1 + tb.skip());
-            vector = vector.set(index - 1 - tb.skip(), boundaryStones);
-            vector = vector.set(index, boundaryStones);
+            vector = vector.replacingAt(index - 1 - tb.skip(), boundaryStones);
+            vector = vector.replacingAt(index, boundaryStones);
         } else if (after instanceof Tombstone ta) {
             Tombstone boundaryStones = Tombstone.create(1 + ta.skip());
-            vector = vector.set(index, boundaryStones);
-            vector = vector.set(index + 1 + ta.skip(), boundaryStones);
+            vector = vector.replacingAt(index, boundaryStones);
+            vector = vector.replacingAt(index + 1 + ta.skip(), boundaryStones);
         } else {
-            vector = vector.set(index, Tombstone.create(0));
+            vector = vector.replacingAt(index, Tombstone.create(0));
         }
         assert !(vector.getFirst() instanceof Tombstone) && !(vector.getLast() instanceof Tombstone);
         return new OrderedPair<>(vector, offset);

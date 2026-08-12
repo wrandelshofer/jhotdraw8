@@ -5,7 +5,6 @@
 package org.jhotdraw8.icollection.readable;
 
 import org.jhotdraw8.icollection.facade.ListFacade;
-import org.jhotdraw8.icollection.facade.ReadableListFacade;
 import org.jhotdraw8.icollection.impl.iteration.ReadableListSpliterator;
 import org.jspecify.annotations.Nullable;
 
@@ -16,11 +15,12 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Spliterator;
 
-/// A readable interface to a set. A set is a collection that contains no duplicate elements.
+/// This interface provides read operations for a list.
 ///
-/// Note: To compare a ReadableList to a [List], you must either
-/// wrap the ReadableList into a List using [ListFacade],
-/// or wrap the List into a ReadableList using [ReadableListFacade].
+/// A list is an indexed sequence of elements.
+///
+/// A read operation returns data about the list.
+/// The operation does not change the original list.
 ///
 /// @param <E> the element type
 public interface ReadableList<E> extends ReadableSequencedCollection<E> {

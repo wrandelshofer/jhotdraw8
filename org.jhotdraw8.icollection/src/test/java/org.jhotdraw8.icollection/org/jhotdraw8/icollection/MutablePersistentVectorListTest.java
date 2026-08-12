@@ -21,7 +21,7 @@ public class MutablePersistentVectorListTest extends AbstractListTest {
     }
 
     @Test
-    public void reverseListIteratorShouldSupportAddAddNextRemove() {
+    public void reversedListIteratorShouldSupportAddingAtAddingNextRemoving() {
         List<Key> expected = new ArrayList<>();
         expected.add(new Key(1));
         expected.add(new Key(2));

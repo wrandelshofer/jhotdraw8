@@ -43,7 +43,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         assertEqualSequence(expected, instance, "initial");
         for (Map.Entry<Key, Value> e : data.a()) {
-            instance = instance.putFirst(e.getKey(), e.getValue());
+            instance = instance.puttingFirst(e.getKey(), e.getValue());
             expected.remove(e);
             expected.add(0, e);
             assertEqualSequence(expected, instance, "putFirst");
@@ -57,7 +57,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         PersistentSequencedMap<Key, Value> instance = newInstance(data.a());
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<Key, Value> e : data.c()) {
-            instance = instance.putFirst(e.getKey(), e.getValue());
+            instance = instance.puttingFirst(e.getKey(), e.getValue());
             Map.Entry<Key, Value> firstEntry = instance.firstEntry();
             assertEquals(e, firstEntry);
             assertNotNull(firstEntry);
@@ -74,7 +74,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         PersistentSequencedMap<Key, Value> instance = newInstance(data.a());
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<Key, Value> e : data.a()) {
-            instance = instance.putLast(e.getKey(), e.getValue());
+            instance = instance.puttingLast(e.getKey(), e.getValue());
             Map.Entry<Key, Value> lastEntry = instance.lastEntry();
             assertEquals(e, lastEntry);
             assertNotNull(lastEntry);
@@ -91,7 +91,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         PersistentSequencedMap<Key, Value> instance = newInstance(data.a());
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<Key, Value> e : data.c()) {
-            instance = instance.putLast(e.getKey(), e.getValue());
+            instance = instance.puttingLast(e.getKey(), e.getValue());
             assertEquals(e, instance.lastEntry());
             expected.remove(e);
             expected.add(e);
@@ -105,7 +105,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         PersistentSequencedMap<Key, Value> instance = newInstance(data.a());
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<Key, Value> e : data.a()) {
-            instance = instance.put(e.getKey(), e.getValue());
+            instance = instance.putting(e.getKey(), e.getValue());
             assertEquals(expected.get(expected.size() - 1), instance.lastEntry());
             assertEqualSequence(expected, instance, "put");
         }
@@ -118,7 +118,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
             Map.Entry<Key, Value> e = expected.remove(expected.size() - 1);
-            instance = instance.remove(e.getKey());
+            instance = instance.removing(e.getKey());
             assertEqualSequence(expected, instance, "remove(lastElement)");
         }
     }
@@ -130,7 +130,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
             Map.Entry<Key, Value> e = expected.remove(0);
-            instance = instance.removeFirst();
+            instance = instance.removingFirst();
             assertEqualSequence(expected, instance, "removeFirst");
         }
     }
@@ -143,7 +143,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
             expected.remove(expected.size() - 1);
-            instance = instance.removeLast();
+            instance = instance.removingLast();
             assertEqualSequence(expected, instance, "removeLast");
         }
     }
@@ -155,7 +155,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
             Map.Entry<Key, Value> e = expected.remove(0);
-            instance = instance.remove(e.getKey());
+            instance = instance.removing(e.getKey());
             assertEqualSequence(expected, instance, "remove(firstElement)");
         }
     }
@@ -167,7 +167,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
             Map.Entry<Key, Value> e = expected.remove(expected.size() / 2);
-            instance = instance.remove(e.getKey());
+            instance = instance.removing(e.getKey());
             assertEqualSequence(expected, instance, "removeMiddle");
         }
     }
@@ -178,7 +178,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         PersistentSequencedMap<Key, Value> instance = newInstance(data.a());
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<Key, Value> e : data.c()) {
-            instance = instance.put(e.getKey(), e.getValue());
+            instance = instance.putting(e.getKey(), e.getValue());
             assertEquals(e, instance.lastEntry());
             expected.remove(e);
             expected.add(e);
@@ -201,7 +201,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
             Map.Entry<Key, Value> oldEntry = expected.get(i);
             var newEntry = (AbstractMap.SimpleImmutableEntry<Key, Value>) new AbstractMap.SimpleImmutableEntry<>(oldEntry.getKey(), newValue);
 
-            instance = instance.put(oldEntry.getKey(), newValue);
+            instance = instance.putting(oldEntry.getKey(), newValue);
             expected.set(i, newEntry);
             assertEqualSequence(expected, instance, "put " + i + " oldValue: " + oldEntry + " newValue: " + newEntry);
         }

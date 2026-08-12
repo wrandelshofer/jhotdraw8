@@ -158,7 +158,7 @@ public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> imp
             if (u.getDepth() < maxDepth) {
                 PersistentSet<V> uAncestors = u.removeAncestors();
                 for (final Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
-                    final PersistentSet<V> vAncestors = uAncestors.add(v.getEnd());
+                    final PersistentSet<V> vAncestors = uAncestors.adding(v.getEnd());
                     if (vAncestors != uAncestors) {//the sequence does not intersect with itself (it is a path!)
                         if (visitedCount.merge(v.getEnd(), 1, Integer::sum) == 1) {
                             final ArcBackLinkWithAncestorSet<V, A> backLink = new ArcBackLinkWithAncestorSet<>(v.getEnd(), v.getArrow(), u, vAncestors);

@@ -68,7 +68,7 @@ public class PersistentTreeMapJol extends AbstractJol {
 
         ArrayList<Key> keys = new ArrayList<>(data.keySet());
         Collections.shuffle(keys);
-        mapA = mapA.removeAll(keys.subList(0, (int) (keys.size() * 0.75)));
+        mapA = mapA.removingAll(keys.subList(0, (int) (keys.size() * 0.75)));
 
         estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
     }

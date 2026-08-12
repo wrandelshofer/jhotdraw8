@@ -126,7 +126,7 @@ public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> imp
             if (u.getDepth() < maxDepth) {
                 PersistentSet<V> uAncestors = u.removeAncestors();
                 for (final V v : nextVerticesFunction.apply(u.getVertex())) {
-                    final PersistentSet<V> vAncestors = uAncestors.add(v);
+                    final PersistentSet<V> vAncestors = uAncestors.adding(v);
                     if (vAncestors != uAncestors) {//the sequence does not intersect with itself (it is a path!)
                         if (visitedCount.merge(v, 1, Integer::sum) == 1) {
                             queue.add(new VertexBackLinkWithAncestorSet<>(v, u, vAncestors));

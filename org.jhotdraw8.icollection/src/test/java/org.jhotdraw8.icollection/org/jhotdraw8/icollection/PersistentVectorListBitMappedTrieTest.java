@@ -23,7 +23,7 @@ public class PersistentVectorListBitMappedTrieTest {
     }
 
     @Test
-    public void shouldRemoveFirst() {
+    public void shouldRemovingFirst() {
         var actual = new MutableVectorList<Integer>();
         List<Integer> expected = IntStream.range(0, 10).boxed().collect(Collectors.toList());
         actual.addAll(expected);
@@ -34,7 +34,7 @@ public class PersistentVectorListBitMappedTrieTest {
     }
 
     @Test
-    public void shouldRemoveFirstThenAddFirst() {
+    public void shouldRemovingFirstThenAddingFirst() {
         var actual = new MutableVectorList<Integer>();
         List<Integer> expected = IntStream.range(0, 10).boxed().collect(Collectors.toList());
         actual.addAll(expected);
@@ -47,7 +47,7 @@ public class PersistentVectorListBitMappedTrieTest {
     }
 
     @Test
-    public void shouldRemoveFirstThenAddLast() {
+    public void shouldRemovingFirstThenAddingLast() {
         var actual = new MutableVectorList<Integer>();
         List<Integer> expected = IntStream.range(0, 10).boxed().collect(Collectors.toList());
         actual.addAll(expected);
@@ -60,7 +60,7 @@ public class PersistentVectorListBitMappedTrieTest {
     }
 
     @Test
-    public void shouldRemoveLast() {
+    public void shouldRemovingLast() {
         var actual = new MutableVectorList<Integer>();
         List<Integer> expected = IntStream.range(0, 10).boxed().collect(Collectors.toList());
         actual.addAll(expected);
@@ -71,7 +71,7 @@ public class PersistentVectorListBitMappedTrieTest {
     }
 
     @Test
-    public void shouldRemoveRangeAtBeginning() {
+    public void shouldRemovingRangeAtBeginning() {
         var actual = new MutableVectorList<Integer>();
         List<Integer> expected = IntStream.range(0, 1_000_000).boxed().collect(Collectors.toList());
         actual.addAll(expected);
@@ -82,7 +82,7 @@ public class PersistentVectorListBitMappedTrieTest {
     }
 
     @Test
-    public void shouldRemoveRangeFirstOneByOne() {
+    public void shouldRemovingRangeFirstOneByOne() {
         var actual = new MutableVectorList<Integer>();
         List<Integer> expected = IntStream.range(0, 1_000_000).boxed().collect(Collectors.toList());
         actual.addAll(expected);
@@ -95,7 +95,7 @@ public class PersistentVectorListBitMappedTrieTest {
     }
 
     @Test
-    public void shouldRemoveOneByOne() {
+    public void shouldRemovingOneByOne() {
         // Performance: This is fast because we remove the first element in each iteration
         var actual = new MutableVectorList<Integer>();
         List<Integer> expected = IntStream.range(0, 1_000_000).boxed().collect(Collectors.toList());
@@ -109,15 +109,15 @@ public class PersistentVectorListBitMappedTrieTest {
     }
 
     @Test
-    public void shouldRemoveOneByOneImmutableShuffled() {
+    public void shouldRemovingOneByOneImmutableShuffled() {
         // Performance: This is quadratic and will take forever if the array is larger than a few thousand
         var actual = new PersistentVectorList<Integer>();
         List<Integer> expected = IntStream.range(0, 100).boxed().collect(Collectors.toList());
-        actual = actual.addAll(expected);
+        actual = actual.addingAll(expected);
         List<Integer> expectedShuffled = new ArrayList<>(expected);
         Collections.shuffle(expectedShuffled);
         for (var e : expectedShuffled) {
-            actual = actual.remove(e);
+            actual = actual.removing(e);
         }
         expected.clear();
         IO.println(new GraphvizBitMappedTrie().toGraphviz(actual.root));

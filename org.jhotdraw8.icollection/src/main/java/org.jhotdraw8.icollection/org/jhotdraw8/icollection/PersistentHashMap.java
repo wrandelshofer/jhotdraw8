@@ -137,7 +137,7 @@ public class PersistentHashMap<K, V>
     /// @return an persistent copy
     @SuppressWarnings("unchecked")
     public static <K, V> PersistentHashMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
-        return PersistentHashMap.<K, V>of().putAll(c);
+        return PersistentHashMap.<K, V>of().puttingAll(c);
     }
 
     /// Returns an persistent copy of the provided map.
@@ -147,7 +147,7 @@ public class PersistentHashMap<K, V>
     /// @param <V> the value type
     /// @return an persistent copy
     public static <K, V> PersistentHashMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
-        return PersistentHashMap.<K, V>of().putAll(map);
+        return PersistentHashMap.<K, V>of().puttingAll(map);
     }
 
     static <V, K> boolean entryKeyEquals(SimpleImmutableEntry<K, V> a, SimpleImmutableEntry<K, V> b) {
@@ -174,7 +174,7 @@ public class PersistentHashMap<K, V>
 
     /// {@inheritDoc}
     @Override
-    public PersistentHashMap<K, V> clear() {
+    public PersistentHashMap<K, V> cleared() {
         return isEmpty() ? this : of();
     }
 
@@ -236,7 +236,7 @@ public class PersistentHashMap<K, V>
     }
 
     @Override
-    public PersistentHashMap<K, V> put(K key, @Nullable V value) {
+    public PersistentHashMap<K, V> putting(K key, @Nullable V value) {
         var details = new ChangeEvent<V>();
         var newRootNode = root.put(null, key, value,
                 keyHash(key), 0, details, PersistentHashMap::keyHash);
@@ -247,19 +247,19 @@ public class PersistentHashMap<K, V>
     }
 
     @Override
-    public PersistentHashMap<K, V> putAll(Map<? extends K, ? extends V> m) {
-        return (PersistentHashMap<K, V>) PersistentMap.super.putAll(m);
+    public PersistentHashMap<K, V> puttingAll(Map<? extends K, ? extends V> m) {
+        return (PersistentHashMap<K, V>) PersistentMap.super.puttingAll(m);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public PersistentHashMap<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         var m = toMutable();
         return m.putAll(c) ? m.toPersistent() : this;
     }
 
     @Override
-    public PersistentHashMap<K, V> remove(K key) {
+    public PersistentHashMap<K, V> removing(K key) {
         int keyHash = keyHash(key);
         var details = new ChangeEvent<V>();
         var newRootNode = root.remove(null, key, keyHash, 0, details);
@@ -271,14 +271,14 @@ public class PersistentHashMap<K, V>
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashMap<K, V> removeAll(Iterable<? extends K> c) {
+    public PersistentHashMap<K, V> removingAll(Iterable<? extends K> c) {
         var m = toMutable();
         return m.removeAll(c) ? m.toPersistent() : this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashMap<K, V> retainAll(Iterable<? extends K> c) {
+    public PersistentHashMap<K, V> retainingAll(Iterable<? extends K> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toPersistent() : this;
     }
@@ -341,7 +341,7 @@ public class PersistentHashMap<K, V>
         @Serial
         @Override
         protected Object readResolve() {
-            return PersistentHashMap.of().putAll(deserializedEntries);
+            return PersistentHashMap.of().puttingAll(deserializedEntries);
         }
     }
 }

@@ -122,7 +122,7 @@ public interface Key<T> extends MapAccessor<T> {
     /// @return The updated map
     @Override
     default PersistentMap<Key<?>, Object> put(PersistentMap<Key<?>, Object> a, @Nullable T value) {
-        return a.put(this, value);
+        return a.putting(this, value);
     }
 
     /// Use this method to perform a type-safe remove operation of an attribute
@@ -146,7 +146,7 @@ public interface Key<T> extends MapAccessor<T> {
     /// @return The old value.
     @Override
     default PersistentMap<Key<?>, Object> remove(PersistentMap<Key<?>, Object> a) {
-        return a.remove(this);
+        return a.removing(this);
     }
 
     /// Use this method to perform a type-safe put operation of an attribute into

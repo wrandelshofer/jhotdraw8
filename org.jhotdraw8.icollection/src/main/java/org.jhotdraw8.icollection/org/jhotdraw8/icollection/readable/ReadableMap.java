@@ -17,7 +17,12 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
-/// A readable interface to a map. A map is an object that maps keys to values.
+/// This interface provides read operations for a map.
+///
+/// A map is a group of entries. An entry maps a key to a value.
+///
+/// A read operation returns data about the map.
+/// The operation does not change the original map.
 ///
 /// @param <K> the key type
 /// @param <V> the value type

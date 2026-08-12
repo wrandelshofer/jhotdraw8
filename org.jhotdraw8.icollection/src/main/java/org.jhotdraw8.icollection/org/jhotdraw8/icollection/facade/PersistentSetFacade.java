@@ -33,18 +33,18 @@ public class PersistentSetFacade<E> extends AbstractReadableSet<E> implements Pe
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> PersistentSet<T> empty() {
+    public <T> PersistentSet<T> cleared() {
         return new PersistentSetFacade<>(new LinkedHashSet<>(), k -> (Set<T>) ((LinkedHashSet<?>) k).clone());
     }
 
     @Override
-    public PersistentSet<E> add(E element) {
+    public PersistentSet<E> adding(E element) {
         Set<E> clone = cloneFunction.apply(target);
         return clone.add(element) ? new PersistentSetFacade<>(clone, cloneFunction) : this;
     }
 
     @Override
-    public PersistentSet<E> addAll(Iterable<? extends E> c) {
+    public PersistentSet<E> addingAll(Iterable<? extends E> c) {
         Set<E> clone = cloneFunction.apply(target);
         boolean changed = false;
         for (E e : c) {
@@ -54,13 +54,13 @@ public class PersistentSetFacade<E> extends AbstractReadableSet<E> implements Pe
     }
 
     @Override
-    public PersistentSet<E> remove(E element) {
+    public PersistentSet<E> removing(E element) {
         Set<E> clone = cloneFunction.apply(target);
         return clone.remove(element) ? new PersistentSetFacade<>(clone, cloneFunction) : this;
     }
 
     @Override
-    public PersistentSet<E> removeAll(Iterable<?> c) {
+    public PersistentSet<E> removingAll(Iterable<?> c) {
         Set<E> clone = cloneFunction.apply(target);
         boolean changed = false;
         for (Object e : c) {
@@ -71,7 +71,7 @@ public class PersistentSetFacade<E> extends AbstractReadableSet<E> implements Pe
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentSet<E> retainAll(Iterable<?> c) {
+    public PersistentSet<E> retainingAll(Iterable<?> c) {
         if (isEmpty()) {
             return this;
         }

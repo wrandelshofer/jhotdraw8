@@ -50,7 +50,7 @@ public class BezierPathTest {
         var path = SvgPaths.buildSvgString(new BezierPathBuilder(), input).build();
         var actualFirst = path.evalFirst();
         var actualLastInReverse = path.evalLastInReverse();
-        var actualReverseFirst = path.reverse().evalFirst();
+        var actualReverseFirst = path.reversed().evalFirst();
         assertEquals(expectedFirst, actualFirst);
         assertEquals(expectedLastInReverse, actualLastInReverse);
         assertEquals(expectedLastInReverse, actualReverseFirst);

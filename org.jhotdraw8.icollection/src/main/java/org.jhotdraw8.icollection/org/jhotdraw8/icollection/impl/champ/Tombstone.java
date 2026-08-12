@@ -5,9 +5,9 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.icollection.PersistentHashVectorSet;
+import org.jhotdraw8.icollection.PersistentVectorHashSet;
 
-/// A tombstone is used by [PersistentHashVectorSet] to mark a deleted slot in its Vector.
+/// A tombstone is used by [PersistentVectorHashSet] to mark a deleted slot in its Vector.
 ///
 /// A tombstone stores the minimal number of neighbors 'before' and 'after' it in the
 /// Vector.

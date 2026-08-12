@@ -11,7 +11,7 @@ import org.jhotdraw8.icollection.readable.ReadableSet;
 import java.util.SequencedSet;
 import java.util.Set;
 
-public class ReversedMutablePersistentHashVectorSetTest extends AbstractSequencedSetTest {
+public class ReversedMutablePersistentVectorHashSetTest extends AbstractSequencedSetTest {
     @Override
     protected boolean supportsNullKeys() {
         return true;
@@ -19,22 +19,22 @@ public class ReversedMutablePersistentHashVectorSetTest extends AbstractSequence
 
     @Override
     protected <E> SequencedSet<E> newInstance() {
-        return new MutableChampVectorSet<E>().reversed();
+        return new MutableVectorHashSet<E>().reversed();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(int numElements, float loadFactor) {
-        return new MutableChampVectorSet<E>().reversed();
+        return new MutableVectorHashSet<E>().reversed();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(Set<E> m) {
-        return new MutableChampVectorSet<>(m).reversed();
+        return new MutableVectorHashSet<>(m).reversed();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(ReadableSet<E> m) {
-        MutableChampVectorSet<E> es = new MutableChampVectorSet<>();
+        MutableVectorHashSet<E> es = new MutableVectorHashSet<>();
         SequencedSet<E> es1 = es.reversed();
         es1.addAll(m.asSet());
         return es1;
@@ -42,12 +42,12 @@ public class ReversedMutablePersistentHashVectorSetTest extends AbstractSequence
 
     @Override
     protected <E> SequencedSet<E> toClonedInstance(Set<E> m) {
-        return ((MutableChampVectorSet<E>) m).clone();
+        return ((MutableVectorHashSet<E>) m).clone();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(SequencedSet<E> m) {
-        MutableChampVectorSet<E> es = new MutableChampVectorSet<>();
+        MutableVectorHashSet<E> es = new MutableVectorHashSet<>();
         SequencedSet<E> es1 = es.reversed();
         es1.addAll(m);
         return es1;
@@ -55,7 +55,7 @@ public class ReversedMutablePersistentHashVectorSetTest extends AbstractSequence
 
     @Override
     protected <E> SequencedSet<E> newInstance(ReadableSequencedSet<E> m) {
-        MutableChampVectorSet<E> es = new MutableChampVectorSet<>();
+        MutableVectorHashSet<E> es = new MutableVectorHashSet<>();
         SequencedSet<E> es1 = es.reversed();
         es1.addAll(m.asSet());
         return es1;
@@ -64,12 +64,12 @@ public class ReversedMutablePersistentHashVectorSetTest extends AbstractSequence
 
     @Override
     protected <E> SequencedSet<E> toClonedInstance(SequencedSet<E> m) {
-        return ((MutableChampVectorSet<E>) m).clone();
+        return ((MutableVectorHashSet<E>) m).clone();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(Iterable<E> m) {
-        MutableChampVectorSet<E> es = new MutableChampVectorSet<>();
+        MutableVectorHashSet<E> es = new MutableVectorHashSet<>();
         SequencedSet<E> es1 = es.reversed();
         m.forEach(es1::add);
         return es1;

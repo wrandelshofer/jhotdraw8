@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jol;
 
-import org.jhotdraw8.icollection.PersistentHashVectorMap;
+import org.jhotdraw8.icollection.PersistentVectorHashMap;
 import org.jhotdraw8.icollection.jmh.Key;
 import org.jhotdraw8.icollection.jmh.Value;
 import org.junit.jupiter.api.Disabled;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /// SimpleImmutableSequencedMapJol.
-public class PersistentHashVectorMapJol extends AbstractJol {
+public class PersistentVectorHashMapJol extends AbstractJol {
 
     /// <pre>
     /// class org.jhotdraw8.icollection.ChampVectorMap with 1000 elements.
@@ -40,7 +40,7 @@ public class PersistentHashVectorMapJol extends AbstractJol {
         int size = 1_000;
         final int mask = -1;
         var data = generateMap(size, mask, size * 10);
-        PersistentHashVectorMap<Key, Value> mapA = PersistentHashVectorMap.copyOf(data);
+        PersistentVectorHashMap<Key, Value> mapA = PersistentVectorHashMap.copyOf(data);
         estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
     }
 
@@ -74,11 +74,11 @@ public class PersistentHashVectorMapJol extends AbstractJol {
         int size = 1000;
         final int mask = ~64;
         var data = generateMap(size, mask, size * 10);
-        PersistentHashVectorMap<Key, Value> mapA = PersistentHashVectorMap.copyOf(data);
+        PersistentVectorHashMap<Key, Value> mapA = PersistentVectorHashMap.copyOf(data);
 
         ArrayList<Key> keys = new ArrayList<>(data.keySet());
         Collections.shuffle(keys);
-        mapA = mapA.removeAll(keys.subList(0, (int) (keys.size() * 0.75)));
+        mapA = mapA.removingAll(keys.subList(0, (int) (keys.size() * 0.75)));
 
         estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
     }

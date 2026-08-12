@@ -10,10 +10,13 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-/// An interface to an persistent list; the implementation guarantees that the state of the collection does not change.
+/// This interface provides copy-returning operations for a list.
 ///
-/// An interface to an persistent list provides methods for creating a new persistent list with
-/// added or removed elements, without changing the original persistent list.
+/// A list is an indexed sequence of elements.
+///
+/// A copy-returning operation returns a new copy of the list
+/// with changes applied to it. The operation does not change the original
+/// list.
 ///
 /// @param <E> the element type
 public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedCollection<E> {
@@ -23,22 +26,22 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// instance that is empty.
     @SuppressWarnings("unchecked")
     @Override
-    <T> PersistentList<T> empty();
+    <T> PersistentList<T> cleared();
 
     @Override
-    PersistentList<E> addFirst(@Nullable E element);
+    PersistentList<E> addingFirst(@Nullable E element);
 
     @Override
-    PersistentList<E> addLast(@Nullable E element);
+    PersistentList<E> addingLast(@Nullable E element);
 
     @Override
-    default PersistentList<E> removeFirst() {
-        return (PersistentList<E>) PersistentSequencedCollection.super.removeFirst();
+    default PersistentList<E> removingFirst() {
+        return (PersistentList<E>) PersistentSequencedCollection.super.removingFirst();
     }
 
     @Override
-    default PersistentList<E> removeLast() {
-        return (PersistentList<E>) PersistentSequencedCollection.super.removeLast();
+    default PersistentList<E> removingLast() {
+        return (PersistentList<E>) PersistentSequencedCollection.super.removingLast();
     }
 
     /// Returns a copy of this list that contains all elements
@@ -48,7 +51,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// @param element an element
     /// @return a different list instance with the element added
     @Override
-    PersistentList<E> add(E element);
+    PersistentList<E> adding(E element);
 
     /// Returns a copy of this list that contains all elements
     /// of this list and the specified element appended to the
@@ -57,7 +60,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// @param index   the insertion index
     /// @param element an element
     /// @return a different list instance with the element added
-    PersistentList<E> add(int index, E element);
+    PersistentList<E> addingAt(int index, E element);
 
     /// Returns a copy of this list that contains all elements
     /// of this list and all elements of the specified
@@ -66,7 +69,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// @param c a collection to be added to this list
     /// @return a different list instance with the elements added
     @Override
-    PersistentList<E> addAll(Iterable<? extends E> c);
+    PersistentList<E> addingAll(Iterable<? extends E> c);
 
     /// Returns a copy of this list that contains all elements
     /// of this list and all elements of the specified
@@ -75,7 +78,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// @param index the insertion index
     /// @param c     a collection to be added to this list
     /// @return a different list instance with the elements added
-    PersistentList<E> addAll(int index, Iterable<? extends E> c);
+    PersistentList<E> addingAllAt(int index, Iterable<? extends E> c);
 
     /// Returns a copy of this list that contains all elements
     /// of this list except the specified element.
@@ -84,14 +87,14 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// @return this list instance if it already does not contain the element, or
     /// a different list instance with the element removed
     @Override
-    PersistentList<E> remove(@Nullable E element);
+    PersistentList<E> removing(@Nullable E element);
 
     /// Returns a copy of this list that contains all elements
     /// of this list except the element at the specified index
     ///
     /// @param index an index
     /// @return a different list instance with the element removed
-    PersistentList<E> removeAt(int index);
+    PersistentList<E> removingAt(int index);
 
     /// Returns a copy of this list that contains all elements
     /// of this list except the elements in the specified range.
@@ -99,7 +102,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// @param fromIndex from index (inclusive) of the sub-list
     /// @param toIndex   to index (exclusive) of the sub-list
     /// @return a different list instance with the element removed
-    PersistentList<E> removeRange(int fromIndex, int toIndex);
+    PersistentList<E> removingRange(int fromIndex, int toIndex);
 
     /// Returns a copy of this list that contains all elements
     /// of this list except the elements of the specified
@@ -109,7 +112,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// @return this list instance if it already does not contain the elements, or
     /// a different list instance with the elements removed
     @Override
-    PersistentList<E> removeAll(Iterable<?> c);
+    PersistentList<E> removingAll(Iterable<?> c);
 
     /// Returns a copy of this list that contains only elements
     /// that are in this list and in the specified collection.
@@ -118,7 +121,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// @return this list instance if it has not changed, or
     /// a different list instance with elements removed
     @Override
-    PersistentList<E> retainAll(Iterable<?> c);
+    PersistentList<E> retainingAll(Iterable<?> c);
 
     /// Returns a reversed copy of this list.
     ///
@@ -128,7 +131,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// need to iterate in the reversed sequence over this list.
     ///
     /// @return a reversed copy of this list.
-    PersistentList<E> reverse();
+    PersistentList<E> reversed();
 
     /// Returns a copy of this list that contains all elements
     /// of this list and the specified element replaced.
@@ -136,7 +139,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// @param element an element
     /// @return this list instance if it has not changed, or
     /// a different list instance with the element changed
-    PersistentList<E> set(int index, E element);
+    PersistentList<E> replacingAt(int index, E element);
 
     /// Returns a copy of this list that contains only
     /// the elements in the given index range.

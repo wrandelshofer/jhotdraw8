@@ -11,37 +11,42 @@ import org.jspecify.annotations.Nullable;
 import java.util.NoSuchElementException;
 import java.util.SequencedSet;
 
-/// An interface to an persistent set with a well-defined iteration order; the
-/// implementation guarantees that the state of the collection does not change.
+/// This interface provides copy-returning operations for a sequenced set.
 ///
-/// An interface to an persistent sequenced set provides methods for creating a new persistent sequenced set with
-/// added or removed elements, without changing the original persistent sequenced set.
+/// A sequenced set is a sequence of distinct elements.
+/// The elements are ordered in a sequence from first to last.
+/// The sequence can be established implicitly, by insertion operations,
+/// or by sequence-altering operations.
+///
+/// A copy-returning operation returns a new copy of the set
+/// with changes applied to it. The operation does not change the original
+/// set.
 ///
 /// @param <E> the element type
 public interface PersistentSequencedSet<E> extends PersistentSet<E>, ReadableSequencedSet<E>, PersistentSequencedCollection<E> {
     @Override
-    PersistentSequencedSet<E> add(E element);
+    PersistentSequencedSet<E> adding(E element);
 
     @Override
-    default PersistentSequencedSet<E> addAll(Iterable<? extends E> c) {
-        return (PersistentSequencedSet<E>) PersistentSet.super.addAll(c);
+    default PersistentSequencedSet<E> addingAll(Iterable<? extends E> c) {
+        return (PersistentSequencedSet<E>) PersistentSet.super.addingAll(c);
     }
 
     @Override
-    PersistentSequencedSet<E> addFirst(@Nullable E element);
+    PersistentSequencedSet<E> addingFirst(@Nullable E element);
 
     @Override
-    PersistentSequencedSet<E> addLast(@Nullable E element);
+    PersistentSequencedSet<E> addingLast(@Nullable E element);
 
     @Override
-    <T> PersistentSequencedSet<T> empty();
+    <T> PersistentSequencedSet<T> cleared();
 
     @Override
-    PersistentSequencedSet<E> remove(E element);
+    PersistentSequencedSet<E> removing(E element);
 
     @Override
-    default PersistentSequencedSet<E> removeAll(Iterable<?> c) {
-        return (PersistentSequencedSet<E>) PersistentSet.super.removeAll(c);
+    default PersistentSequencedSet<E> removingAll(Iterable<?> c) {
+        return (PersistentSequencedSet<E>) PersistentSet.super.removingAll(c);
     }
 
     /// Returns a copy of this set that contains all elements
@@ -50,8 +55,8 @@ public interface PersistentSequencedSet<E> extends PersistentSet<E>, ReadableSeq
     /// @return a new set instance with the first element removed
     /// @throws NoSuchElementException if this set is empty
     @Override
-    default PersistentSequencedSet<E> removeFirst() {
-        return remove(getFirst());
+    default PersistentSequencedSet<E> removingFirst() {
+        return this.removing(getFirst());
     }
 
     /// Returns a copy of this set that contains all elements
@@ -60,13 +65,13 @@ public interface PersistentSequencedSet<E> extends PersistentSet<E>, ReadableSeq
     /// @return a new set instance with the last element removed
     /// @throws NoSuchElementException if this set is empty
     @Override
-    default PersistentSequencedSet<E> removeLast() {
-        return remove(getLast());
+    default PersistentSequencedSet<E> removingLast() {
+        return this.removing(getLast());
     }
 
     @Override
-    default PersistentSequencedSet<E> retainAll(Iterable<?> c) {
-        return (PersistentSequencedSet<E>) PersistentSet.super.retainAll(c);
+    default PersistentSequencedSet<E> retainingAll(Iterable<?> c) {
+        return (PersistentSequencedSet<E>) PersistentSet.super.retainingAll(c);
     }
 
     @Override
@@ -80,10 +85,10 @@ public interface PersistentSequencedSet<E> extends PersistentSet<E>, ReadableSeq
     /// need to iterate in the reversed sequence over this set.
     ///
     /// @return a reversed copy of this set.
-    default PersistentSequencedSet<E> reverse() {
+    default PersistentSequencedSet<E> reversed() {
         if (size() < 2) {
             return this;
         }
-        return this.<E>empty().addAll(readableReversed());
+        return this.<E>cleared().addingAll(readableReversed());
     }
 }

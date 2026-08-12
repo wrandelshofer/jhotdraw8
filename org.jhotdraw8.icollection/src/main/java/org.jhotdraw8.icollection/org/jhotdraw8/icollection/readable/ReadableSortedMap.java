@@ -9,7 +9,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
 
-/// A readable interface to a sorted map. A sorted map is a map that  provides a total ordering on its keys.
+/// This interface provides read operations for a sorted map.
+///
+/// A sorted map is a sorted sequence of distinct entries.
+/// An entry maps a key to a value.
+/// The entries are sorted by key from first to last.
+///
+/// A read operation returns data about the map.
+/// The operation does not change the original map.
 ///
 /// @param <K> the key type
 /// @param <V> the value type

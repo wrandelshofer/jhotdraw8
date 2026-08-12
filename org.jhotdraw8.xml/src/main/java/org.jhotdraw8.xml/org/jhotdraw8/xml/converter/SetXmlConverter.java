@@ -7,7 +7,7 @@ package org.jhotdraw8.xml.converter;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.icollection.PersistentHashVectorSet;
+import org.jhotdraw8.icollection.PersistentVectorHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
 
@@ -72,12 +72,12 @@ public class SetXmlConverter<T> implements Converter<PersistentSequencedSet<T>> 
             str = str.substring(0, str.length() - suffix.length());
         }
 
-        var set = PersistentHashVectorSet.<T>of();
+        var set = PersistentVectorHashSet.<T>of();
         for (var elem : delimiterPattern.split(str)) {
             if (elem.isEmpty()) {
                 continue;
             }
-            set = set.add(elementConverter.fromString(elem, idResolver));
+            set = set.adding(elementConverter.fromString(elem, idResolver));
         }
         in.position(in.length());
         return set;

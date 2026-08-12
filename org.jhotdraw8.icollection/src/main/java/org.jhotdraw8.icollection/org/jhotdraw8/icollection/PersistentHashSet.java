@@ -129,7 +129,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     /// @return an persistent set of the provided elements
     @SuppressWarnings("unchecked")
     public static <E> PersistentHashSet<E> copyOf(Iterable<? extends E> c) {
-        return PersistentHashSet.<E>of().addAll(c);
+        return PersistentHashSet.<E>of().addingAll(c);
     }
 
     /// Returns an empty persistent set.
@@ -143,7 +143,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
 
     @SuppressWarnings("unchecked")
     public static <T> PersistentHashSet<T> ofIterator(Iterator<T> iterator) {
-        return PersistentHashSet.<T>of().addAll(() -> iterator);
+        return PersistentHashSet.<T>of().addingAll(() -> iterator);
     }
 
     /// Returns an persistent set that contains the provided elements.
@@ -155,7 +155,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     @SafeVarargs
     public static <E> PersistentHashSet<E> of(E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
-        return PersistentHashSet.<E>of().addAll(Arrays.asList(elements));
+        return PersistentHashSet.<E>of().addingAll(Arrays.asList(elements));
     }
 
     /// Update function for a set: we always keep the old element.
@@ -173,7 +173,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     }
 
     @Override
-    public PersistentHashSet<E> add(@Nullable E element) {
+    public PersistentHashSet<E> adding(@Nullable E element) {
         int keyHash = keyHash(element);
         ChangeEvent<E> details = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = root.put(null, element, keyHash, 0, details, PersistentHashSet::updateElement, Objects::equals, PersistentHashSet::keyHash);
@@ -185,7 +185,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
 
     @Override
     @SuppressWarnings("unchecked")
-    public PersistentHashSet<E> addAll(Iterable<? extends E> c) {
+    public PersistentHashSet<E> addingAll(Iterable<? extends E> c) {
         if (isEmpty() && c instanceof PersistentHashSet<? extends E> s) {
             return (PersistentHashSet<E>) s;
         }
@@ -195,7 +195,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
 
     /// {@inheritDoc}
     @Override
-    public <T> PersistentHashSet<T> empty() {
+    public <T> PersistentHashSet<T> cleared() {
         return of();
     }
 
@@ -235,7 +235,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     }
 
     @Override
-    public PersistentHashSet<E> remove(E key) {
+    public PersistentHashSet<E> removing(E key) {
         int keyHash = keyHash(key);
         ChangeEvent<E> details = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = root.remove(null, key, keyHash, 0, details, Objects::equals);
@@ -247,7 +247,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashSet<E> removeAll(Iterable<?> c) {
+    public PersistentHashSet<E> removingAll(Iterable<?> c) {
         var m = toMutable();
         return m.removeAll(c) ? m.toPersistent() : this;
     }
@@ -255,7 +255,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashSet<E> retainAll(Iterable<?> c) {
+    public PersistentHashSet<E> retainingAll(Iterable<?> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toPersistent() : this;
     }

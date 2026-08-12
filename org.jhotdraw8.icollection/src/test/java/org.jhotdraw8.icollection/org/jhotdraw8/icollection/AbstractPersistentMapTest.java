@@ -89,7 +89,7 @@ public abstract class AbstractPersistentMapTest {
     }
 
     @Test
-    public void newInstanceNoArgsShouldBeEmpty() {
+    public void newInstanceNoArgsShouldBeCleared() {
         PersistentMap<Key, Value> actual = newInstance();
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>();
         assertEqualMap(expected, actual);
@@ -126,22 +126,22 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyClearShouldYieldEmptyMap(MapData data) {
+    public void copyEmptyShouldYieldClearedMap(MapData data) {
         PersistentMap<Key, Value> instance = newInstance(data.a());
         assertNotEqualMap(Collections.emptyMap(), instance);
-        PersistentMap<Key, Value> instance2 = instance.clear();
+        PersistentMap<Key, Value> instance2 = instance.cleared();
         assertNotSame(instance, instance2);
         assertEqualMap(Collections.emptyMap(), instance2);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyClearShouldBeIdempotent(MapData data) {
+    public void copyClearedShouldBeIdempotent(MapData data) {
         PersistentMap<Key, Value> instance = newInstance(data.a());
         assertNotEqualMap(Collections.emptyMap(), instance);
-        instance = instance.clear();
+        instance = instance.cleared();
         assertEqualMap(Collections.emptyMap(), instance);
-        PersistentMap<Key, Value> instance2 = instance.clear();
+        PersistentMap<Key, Value> instance2 = instance.cleared();
         assertSame(instance, instance2);
         assertEqualMap(Collections.emptyMap(), instance2);
     }
@@ -189,7 +189,7 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void iteratorRemoveShouldThrowException(MapData data) {
+    public void iteratorRemovingShouldThrowException(MapData data) {
         PersistentMap<Key, Value> instance = newInstance(data.a());
         Iterator<Key> i = instance.readableKeySet().iterator();
         assertThrows(Exception.class, i::remove);
@@ -247,7 +247,7 @@ public abstract class AbstractPersistentMapTest {
         assertEquals(instance, instance2);
 
         // WHEN instance3 has not the same size as instance2
-        PersistentMap<Key, Value> instance3 = instance2.putAll(data.b().asMap());
+        PersistentMap<Key, Value> instance3 = instance2.puttingAll(data.b().asMap());
         assertNotEquals(instance2.size(), instance3.size());
         assertNotSame(instance2, instance3);
         assertNotEquals(instance, instance3);
@@ -261,11 +261,11 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyPutWithNewKeyShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyPuttingWithNewKeyShouldReturnNewInstance(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a);
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> e : data.c) {
-            PersistentMap<Key, Value> instance2 = instance.put(e.getKey(), e.getValue());
+            PersistentMap<Key, Value> instance2 = instance.putting(e.getKey(), e.getValue());
             assertNotSame(instance, instance2);
             expected.put(e.getKey(), e.getValue());
             assertEqualMap(expected, instance2);
@@ -275,11 +275,11 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyPutWithContainedKeyButNewValueShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyPuttingWithContainedKeyButNewValueShouldReturnNewInstance(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a());
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> e : data.b) {
-            PersistentMap<Key, Value> instance2 = instance.put(e.getKey(), e.getValue());
+            PersistentMap<Key, Value> instance2 = instance.putting(e.getKey(), e.getValue());
             assertNotSame(instance, instance2);
             assertEqualMap(expected, instance);
             expected.put(e.getKey(), e.getValue());
@@ -290,21 +290,21 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRemoveWithNewKeyShouldReturnThis(MapData data) throws Exception {
+    public void copyRemovingWithNewKeyShouldReturnThis(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a);
         for (Map.Entry<Key, Value> e : data.c) {
-            assertSame(instance, instance.remove(e.getKey()));
+            assertSame(instance, instance.removing(e.getKey()));
             assertEqualMap(data.a.asMap(), instance);
         }
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRemoveWithContainedKeyShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyRemovingWithContainedKeyShouldReturnNewInstance(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a);
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> e : data.a) {
-            PersistentMap<Key, Value> instance2 = instance.remove(e.getKey());
+            PersistentMap<Key, Value> instance2 = instance.removing(e.getKey());
             assertNotSame(instance, instance2);
             assertEqualMap(expected, instance);
             expected.remove(e.getKey());
@@ -350,11 +350,11 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyPutWithContainedEntryShouldReturnThis(MapData data) throws Exception {
+    public void copyPuttingWithContainedEntryShouldReturnThis(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a());
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> e : data.a) {
-            PersistentMap<Key, Value> instance2 = instance.put(e.getKey(), e.getValue());
+            PersistentMap<Key, Value> instance2 = instance.putting(e.getKey(), e.getValue());
             assertSame(instance, instance2);
             assertEqualMap(expected, instance2);
         }
@@ -362,18 +362,18 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyPutAllWithContainedEntriesShouldReturnThis(MapData data) throws Exception {
+    public void copyPuttingAllWithContainedEntriesShouldReturnThis(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a());
-        PersistentMap<Key, Value> instance2 = instance.putAll(data.a().asMap());
+        PersistentMap<Key, Value> instance2 = instance.puttingAll(data.a().asMap());
         assertSame(instance, instance2);
         assertEqualMap(data.a(), instance);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyPutAllWithNewEntriesShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyPuttingAllWithNewEntriesShouldReturnNewInstance(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a());
-        PersistentMap<Key, Value> instance2 = instance.putAll(data.c().asMap());
+        PersistentMap<Key, Value> instance2 = instance.puttingAll(data.c().asMap());
         assertNotSame(instance, instance2);
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         assertEqualMap(expected, instance);
@@ -383,9 +383,9 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyPutAllWithContainedKeysButNewValuesShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyPuttingAllWithContainedKeysButNewValuesShouldReturnNewInstance(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a());
-        PersistentMap<Key, Value> instance2 = instance.putAll(data.b().asMap());
+        PersistentMap<Key, Value> instance2 = instance.puttingAll(data.b().asMap());
         assertNotSame(instance, instance2);
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         assertEqualMap(expected, instance);
@@ -395,9 +395,9 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyPutAllWithSelfShouldReturnThis(MapData data) throws Exception {
+    public void copyPuttingAllWithSelfShouldReturnThis(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a());
-        PersistentMap<Key, Value> instance2 = instance.putAll(instance);
+        PersistentMap<Key, Value> instance2 = instance.puttingAll(instance);
         assertSame(instance, instance2);
         assertEqualMap(data.a, instance);
     }
@@ -431,7 +431,7 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyPutAllWithSomeNewKeyShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyPuttingAllWithSomeNewKeyShouldReturnNewInstance(MapData data) throws Exception {
         ArrayList<Map.Entry<Key, Value>> listB = new ArrayList<>(data.b.readableEntrySet().asSet());
         ArrayList<Map.Entry<Key, Value>> listC = new ArrayList<>(data.c.readableEntrySet().asSet());
         SequencedMap<Key, Value> m = new LinkedHashMap<>(data.a.asMap());
@@ -442,7 +442,7 @@ public abstract class AbstractPersistentMapTest {
             m.put(entry.getKey(), entry.getValue());
         }
         PersistentMap<Key, Value> instance = newInstance(data.a);
-        PersistentMap<Key, Value> instance2 = instance.putAll(m);
+        PersistentMap<Key, Value> instance2 = instance.puttingAll(m);
         assertNotSame(instance, instance2);
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a.asMap());
         assertEqualMap(expected, instance);
@@ -465,7 +465,7 @@ public abstract class AbstractPersistentMapTest {
         PersistentMap<Key, Value> instance = newInstance();
         assertEquals("{}", instance.toString());
 
-        instance = instance.putAll(data.a.asMap());
+        instance = instance.puttingAll(data.a.asMap());
         String str = instance.toString();
         assertEquals('{', str.charAt(0));
         assertEquals('}', str.charAt(str.length() - 1));
@@ -478,18 +478,18 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRetainAllWithContainedKeysShouldReturnThis(MapData data) throws Exception {
+    public void copyRetainingAllWithContainedKeysShouldReturnThis(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a());
-        PersistentMap<Key, Value> instance2 = instance.retainAll(data.a().asMap().keySet());
+        PersistentMap<Key, Value> instance2 = instance.retainingAll(data.a().asMap().keySet());
         assertSame(instance, instance2);
         assertEqualMap(data.a(), instance2);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRetainAllWithSomeContainedKeysShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyRetainingAllWithSomeContainedKeysShouldReturnNewInstance(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a());
-        PersistentMap<Key, Value> instance2 = instance.retainAll(data.someAPlusSomeB().asMap().keySet());
+        PersistentMap<Key, Value> instance2 = instance.retainingAll(data.someAPlusSomeB().asMap().keySet());
         assertNotSame(instance, instance2);
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         expected.keySet().retainAll(data.someAPlusSomeB().asMap().keySet());
@@ -498,9 +498,9 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRetainAllWithEmptySetShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyRetainingAllWithClearedSetShouldReturnNewInstance(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a());
-        PersistentMap<Key, Value> instance2 = instance.retainAll(Collections.emptySet());
+        PersistentMap<Key, Value> instance2 = instance.retainingAll(Collections.emptySet());
         assertNotSame(instance, instance2);
         assertEqualMap(data.a(), instance);
         assertEqualMap(Collections.emptyMap(), instance2);
@@ -508,34 +508,34 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRetainAllOfEmptyMapShouldReturnThis(MapData data) throws Exception {
+    public void copyRetainingAllOfClearedMapShouldReturnThis(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance();
-        PersistentMap<Key, Value> instance2 = instance.retainAll(data.a().asMap().keySet());
+        PersistentMap<Key, Value> instance2 = instance.retainingAll(data.a().asMap().keySet());
         assertSame(instance, instance2);
         assertEqualMap(Collections.emptyMap(), instance2);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRemoveAllOfEmptyMapShouldReturnThis(MapData data) throws Exception {
+    public void copyRemovingAllOfClearedMapShouldReturnThis(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance();
-        assertSame(instance, instance.removeAll(data.a.readableKeySet().asSet()));
+        assertSame(instance, instance.removingAll(data.a.readableKeySet().asSet()));
         assertEqualMap(Collections.emptyMap(), instance);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRemoveAllWithEmptyMapShouldReturnThis(MapData data) throws Exception {
+    public void copyRemovingAllWithClearedMapShouldReturnThis(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a);
-        assertSame(instance, instance.removeAll(Collections.emptySet()));
+        assertSame(instance, instance.removingAll(Collections.emptySet()));
         assertEqualMap(data.a(), instance);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRemoveAllWithContainedKeyShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyRemovingAllWithContainedKeyShouldReturnNewInstance(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a);
-        PersistentMap<Key, Value> instance2 = instance.removeAll(data.a.readableKeySet().asSet());
+        PersistentMap<Key, Value> instance2 = instance.removingAll(data.a.readableKeySet().asSet());
         assertNotSame(instance, instance2);
         assertEqualMap(data.a, instance);
         assertEqualMap(Collections.emptyMap(), instance2);
@@ -543,9 +543,9 @@ public abstract class AbstractPersistentMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRemoveAllWithSomeContainedKeyShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyRemovingAllWithSomeContainedKeyShouldReturnNewInstance(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a);
-        PersistentMap<Key, Value> instance2 = instance.removeAll(data.someAPlusSomeB().readableKeySet().asSet());
+        PersistentMap<Key, Value> instance2 = instance.removingAll(data.someAPlusSomeB().readableKeySet().asSet());
         assertNotSame(instance, instance2);
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a.asMap());
         assertEqualMap(expected, instance);
@@ -559,7 +559,7 @@ public abstract class AbstractPersistentMapTest {
         PersistentMap<Key, Value> instance = newInstance(data.a());
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a.asMap());
         Key key = new Key(42, -1);
-        PersistentMap<Key, Value> instance2 = instance.put(key, null);
+        PersistentMap<Key, Value> instance2 = instance.putting(key, null);
         assertNotSame(instance, instance2);
         expected.put(key, null);
         assertTrue(instance2.containsKey(key));

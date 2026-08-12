@@ -210,7 +210,7 @@ public class TransformHandleKit {
                 Point2D pivot = new Point2D(bounds.getMinX() + bounds.getWidth() * relativePivot.getX(),
                         bounds.getMinY() + bounds.getHeight() * relativePivot.getY());
                 pivot = FXTransforms.transform(((TransformableFigure) o).getLocalToParent(false), pivot);
-                startTransforms = startTransforms.addFirst(
+                startTransforms = startTransforms.addingFirst(
                         new FXPreciseRotate(rotate, pivot.getX(), pivot.getY())
                 );
             }
@@ -229,11 +229,11 @@ public class TransformHandleKit {
             }
             PersistentList<Transform> newTransforms;
             if (oldTransforms.isEmpty() || (oldTransforms.getLast() instanceof Rotate)) {
-                newTransforms = oldTransforms.add(transform);
+                newTransforms = oldTransforms.adding(transform);
             } else {
                 int last = oldTransforms.size() - 1;
                 Transform concat = FXTransforms.concat(oldTransforms.get(last), transform);
-                newTransforms = concat.isIdentity() ? oldTransforms.removeLast() : oldTransforms.set(last, concat);
+                newTransforms = concat.isIdentity() ? oldTransforms.removingLast() : oldTransforms.replacingAt(last, concat);
             }
             model.set(owner, TRANSFORMS, newTransforms);
         }

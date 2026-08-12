@@ -11,7 +11,12 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Spliterator;
 
-/// A readable interface to a set. A set is a collection that contains no duplicate elements.
+/// This interface provides read operations for a set.
+///
+/// A set is a group of distinct elements.
+///
+/// A read operation returns data about the set.
+/// The operation does not change the original set.
 ///
 /// @param <E> the element type
 public interface ReadableSet<E> extends ReadableCollection<E> {

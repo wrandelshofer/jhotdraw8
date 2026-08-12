@@ -19,12 +19,12 @@ public class PersistentHashMapTest extends AbstractPersistentMapTest {
 
     @Override
     protected <K, V> PersistentMap<K, V> newInstance(Map<K, V> map) {
-        return PersistentHashMap.<K, V>of().putAll(map);
+        return PersistentHashMap.<K, V>of().puttingAll(map);
     }
 
     @Override
     protected <K, V> PersistentMap<K, V> newInstance(ReadableMap<K, V> map) {
-        return PersistentHashMap.<K, V>of().putAll(map);
+        return PersistentHashMap.<K, V>of().puttingAll(map);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class PersistentHashMapTest extends AbstractPersistentMapTest {
 
     @Override
     protected <K, V> PersistentMap<K, V> newInstance(Iterable<Map.Entry<K, V>> entries) {
-        return PersistentHashMap.<K, V>of().putAll(entries);
+        return PersistentHashMap.<K, V>of().puttingAll(entries);
     }
 
     @Override

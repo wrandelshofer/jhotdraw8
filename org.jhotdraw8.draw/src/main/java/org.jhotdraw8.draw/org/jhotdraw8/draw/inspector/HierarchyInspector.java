@@ -289,7 +289,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
                     @Override
                     public void commitEdit(PersistentSet<String> newValue) {
-                        PersistentSet<String> newValueSet = newValue.removeAll(syntheticClasses);
+                        PersistentSet<String> newValueSet = newValue.removingAll(syntheticClasses);
                         super.commitEdit(newValueSet);
                     }
 

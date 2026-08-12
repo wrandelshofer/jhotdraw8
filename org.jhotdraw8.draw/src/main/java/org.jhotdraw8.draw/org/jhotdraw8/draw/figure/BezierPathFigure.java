@@ -131,7 +131,7 @@ public class BezierPathFigure extends AbstractLeafFigure
     public void reshapeInLocal(Transform transform) {
         BezierPath newP = getNonNull(PATH);
         for (int i = 0, n = newP.size(); i < n; i++) {
-            newP = newP.set(i, newP.get(i).transform(transform));
+            newP = newP.replacingAt(i, newP.get(i).transform(transform));
         }
         set(PATH, newP);
     }

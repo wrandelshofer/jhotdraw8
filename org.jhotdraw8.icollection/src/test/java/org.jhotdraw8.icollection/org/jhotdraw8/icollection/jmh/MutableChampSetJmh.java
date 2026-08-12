@@ -53,7 +53,7 @@ public class MutableChampSetJmh {
         Random rng = new Random(7);
         PersistentHashSet<Integer> set = PersistentHashSet.of();
         for (int i = 0; i < size; i++) {
-            set = set.add(rng.nextInt());
+            set = set.adding(rng.nextInt());
         }
         return set;
     }

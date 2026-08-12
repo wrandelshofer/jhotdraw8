@@ -11,20 +11,26 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-/// An interface to an persistent map with a well-defined iteration order; the
-/// implementation guarantees that the state of the collection does not change.
+/// This interface provides copy-returning operations for a sequenced map.
 ///
-/// An interface to an persistent sequenced map provides methods for creating a new persistent sequenced map with
-/// added, updated or removed entries, without changing the original persistent sequenced map.
+/// A sequenced map is a sequence of distinct entries.
+/// An entry maps a key to a value.
+/// The entries are ordered in a sequence from first to last.
+/// The sequence can be established implicitly, by insertion operations,
+/// or by sequence-altering operations.
+///
+/// A copy-returning operation returns a new copy of the map
+/// with changes applied to it. The operation does not change the original
+/// map.
 ///
 /// @param <K> the key type
 /// @param <V> the value type
 public interface PersistentSequencedMap<K, V> extends PersistentMap<K, V>, ReadableSequencedMap<K, V> {
     @Override
-    PersistentSequencedMap<K, V> clear();
+    PersistentSequencedMap<K, V> cleared();
 
     @Override
-    PersistentSequencedMap<K, V> put(K key, @Nullable V value);
+    PersistentSequencedMap<K, V> putting(K key, @Nullable V value);
 
     /// Creates an entry for the specified key and value and adds it to the front
     /// of the map if an entry for the specified key is not already present.
@@ -35,7 +41,7 @@ public interface PersistentSequencedMap<K, V> extends PersistentMap<K, V>, Reada
     /// @param value the value
     /// @return this map instance if no changes are needed, or a different map
     /// instance with the applied changes.
-    PersistentSequencedMap<K, V> putFirst(K key, @Nullable V value);
+    PersistentSequencedMap<K, V> puttingFirst(K key, @Nullable V value);
 
     /// Creates an entry for the specified key and value and adds it to the end
     /// of the map if an entry for the specified key is not already present.
@@ -46,31 +52,31 @@ public interface PersistentSequencedMap<K, V> extends PersistentMap<K, V>, Reada
     /// @param value the value
     /// @return this map instance if no changes are needed, or a different map
     /// instance with the applied changes.
-    PersistentSequencedMap<K, V> putLast(K key, @Nullable V value);
+    PersistentSequencedMap<K, V> puttingLast(K key, @Nullable V value);
 
 
     @Override
-    PersistentSequencedMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c);
+    PersistentSequencedMap<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c);
 
     @Override
-    default PersistentSequencedMap<K, V> putKeyValues(Object... kv) {
-        return (PersistentSequencedMap<K, V>) PersistentMap.super.putKeyValues(kv);
+    default PersistentSequencedMap<K, V> puttingKeyValues(Object... kv) {
+        return (PersistentSequencedMap<K, V>) PersistentMap.super.puttingKeyValues(kv);
     }
 
     @Override
-    PersistentSequencedMap<K, V> remove(K key);
+    PersistentSequencedMap<K, V> removing(K key);
 
     @Override
-    PersistentSequencedMap<K, V> removeAll(Iterable<? extends K> c);
+    PersistentSequencedMap<K, V> removingAll(Iterable<? extends K> c);
 
     /// Returns a copy of this map that contains all entries
     /// of this map except the first.
     ///
     /// @return a new map instance with the first element removed
     /// @throws NoSuchElementException if this map is empty
-    default PersistentSequencedMap<K, V> removeFirst() {
+    default PersistentSequencedMap<K, V> removingFirst() {
         Map.Entry<K, V> e = firstEntry();
-        return e == null ? this : remove(e.getKey());
+        return e == null ? this : removing(e.getKey());
     }
 
     /// Returns a copy of this map that contains all entries
@@ -78,13 +84,13 @@ public interface PersistentSequencedMap<K, V> extends PersistentMap<K, V>, Reada
     ///
     /// @return a new map instance with the last element removed
     /// @throws NoSuchElementException if this set is empty
-    default PersistentSequencedMap<K, V> removeLast() {
+    default PersistentSequencedMap<K, V> removingLast() {
         Map.Entry<K, V> e = lastEntry();
-        return e == null ? this : remove(e.getKey());
+        return e == null ? this : removing(e.getKey());
     }
 
     @Override
-    PersistentSequencedMap<K, V> retainAll(Iterable<? extends K> c);
+    PersistentSequencedMap<K, V> retainingAll(Iterable<? extends K> c);
 
     @Override
     Map<K, V> toMutable();
@@ -97,10 +103,10 @@ public interface PersistentSequencedMap<K, V> extends PersistentMap<K, V>, Reada
     /// need to iterate in the reversed sequence over this set.
     ///
     /// @return a reversed copy of this set.
-    default PersistentSequencedMap<K, V> reverse() {
+    default PersistentSequencedMap<K, V> reversed() {
         if (size() < 2) {
             return this;
         }
-        return clear().putAll(readableReversed());
+        return cleared().puttingAll(readableReversed());
     }
 }

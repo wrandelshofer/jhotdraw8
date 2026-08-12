@@ -150,45 +150,45 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
                 if (nc1) {
                     // cubic curve
                     middle = new BezierNode(BezierNode.IN_OUT_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
-                    result[0] = result[0].add(segment, middle);
+                    result[0] = result[0].addingAt(segment, middle);
                     CubicCurves.splitCubicCurveTo(prev.pointX(), prev.pointY(), prev.outX(), prev.outY(),
                             next.inX(), next.inY(), next.pointX(), next.pointY(), t,
                             (x1, y1, x2, y2, x3, y3) -> {
-                                result[0] = result[0].set(prevSegment, prev.withOx(x1).withOy(y1));
-                                result[0] = result[0].set(segment, result[0].get(segment).withIx(x2).withIy(y2));
+                                result[0] = result[0].replacingAt(prevSegment, prev.withOx(x1).withOy(y1));
+                                result[0] = result[0].replacingAt(segment, result[0].get(segment).withIx(x2).withIy(y2));
                             },
                             (x1, y1, x2, y2, x3, y3) -> {
-                                result[0] = result[0].set(segment, result[0].get(segment).withOx(x1).withOy(y1));
-                                result[0] = result[0].set(segment + 1, next.withIx(x2).withIy(y2));
+                                result[0] = result[0].replacingAt(segment, result[0].get(segment).withOx(x1).withOy(y1));
+                                result[0] = result[0].replacingAt(segment + 1, next.withIx(x2).withIy(y2));
                             }
                     );
                 } else {
                     // quadratic curve controlled by prev
                     middle = new BezierNode(BezierNode.OUT_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
                     prev.withCollinear(true);
-                    result[0] = result[0].add(segment, middle);
+                    result[0] = result[0].addingAt(segment, middle);
                     QuadCurves.split(prev.pointX(), prev.pointY(),
                             next.inX(), next.inY(), next.pointX(), next.pointY(), t,
                             (x1, y1, x2, y2) -> {
-                                result[0] = result[0].set(prevSegment, middle.withOx(x1).withOy(y1));
-                                result[0] = result[0].set(segment, result[0].get(segment).withPx(x2).withPointY(y2));
+                                result[0] = result[0].replacingAt(prevSegment, middle.withOx(x1).withOy(y1));
+                                result[0] = result[0].replacingAt(segment, result[0].get(segment).withPx(x2).withPointY(y2));
                             },
-                            (x1, y1, x2, y2) -> result[0] = result[0].set(segment, result[0].get(segment).withOx(x1).withOy(y1))
+                            (x1, y1, x2, y2) -> result[0] = result[0].replacingAt(segment, result[0].get(segment).withOx(x1).withOy(y1))
                     );
                 }
             } else if (nc1) {
                 // quadratic curve controlled by next
                 middle = new BezierNode(BezierNode.IN_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
-                result[0] = result[0].add(segment, middle);
+                result[0] = result[0].addingAt(segment, middle);
                 QuadCurves.split(prev.pointX(), prev.pointY(),
                         next.inX(), next.inY(), next.pointX(), next.pointY(), t,
-                        (x1, y1, x2, y2) -> result[0] = result[0].set(segment, middle.withIx(x1).withIy(y1).withPx(x2).withPointY(y2)),
-                        (x1, y1, x2, y2) -> result[0] = result[0].set(segment + 1, next.withIx(x1).withIy(y1).withCollinear(true))
+                        (x1, y1, x2, y2) -> result[0] = result[0].replacingAt(segment, middle.withIx(x1).withIy(y1).withPx(x2).withPointY(y2)),
+                        (x1, y1, x2, y2) -> result[0] = result[0].replacingAt(segment + 1, next.withIx(x1).withIy(y1).withCollinear(true))
                 );
             } else {
                 // line
                 middle = new BezierNode(BezierNode.POINT_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
-                result[0] = result[0].add(segment, middle);
+                result[0] = result[0].addingAt(segment, middle);
             }
         }
         return (BezierPath) result[0];
@@ -212,25 +212,25 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
                     prev.pointX(), prev.pointY(), middle.inX(), middle.inY(), middle.pointX(), middle.pointY(),
                     next.inX(), next.inY(), next.pointX(), next.pointY(), tolerance);
             if (p != null) {
-                result[0] = result[0].set(nextSegment, next.withIx(p[2]).withIy(p[3]));
+                result[0] = result[0].replacingAt(nextSegment, next.withIx(p[2]).withIy(p[3]));
             }
         } else if (pc2 && mc2 && !nc1) {
             double[] p = QuadCurves.merge(
                     prev.pointX(), prev.pointY(), prev.outX(), prev.outY(), middle.pointX(), middle.pointY(),
                     middle.outX(), middle.outY(), next.pointX(), next.pointY(), tolerance);
             if (p != null) {
-                result[0] = result[0].set(prevSegment, prev.withOx(p[2]).withOy(p[3]));
+                result[0] = result[0].replacingAt(prevSegment, prev.withOx(p[2]).withOy(p[3]));
             }
         } else if (pc2 && mc1 && mc2) {
             double[] p = CubicCurves.merge(
                     prev.pointX(), prev.pointY(), prev.outX(), prev.outY(), middle.inX(), middle.inY(), middle.pointX(), middle.pointY(),
                     middle.outX(), middle.outY(), next.inX(), next.inY(), next.pointX(), next.pointY(), tolerance);
             if (p != null) {
-                result[0] = result[0].set(prevSegment, prev.withOx(p[2]).withOy(p[3]));
-                result[0] = result[0].set(nextSegment, next.withIx(p[4]).withIy(p[5]));
+                result[0] = result[0].replacingAt(prevSegment, prev.withOx(p[2]).withOy(p[3]));
+                result[0] = result[0].replacingAt(nextSegment, next.withIx(p[4]).withIy(p[5]));
             }
         }
-        result[0] = result[0].removeAt(segment);
+        result[0] = result[0].removingAt(segment);
         return (BezierPath) result[0];
     }
 
@@ -257,7 +257,7 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
 
     /// Reverses the direction of the path.
     @Override
-    public BezierPath reverse() {
+    public BezierPath reversed() {
         return AwtShapes.buildPathIterator(new BezierPathBuilder(), new ReversePathIterator(getPathIterator(null), windingRule)).build();
     }
 
@@ -270,7 +270,7 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
 
     @Override
     @SuppressWarnings("unchecked")
-    public BezierPath empty() {
+    public BezierPath cleared() {
         return isEmpty() ? this : new BezierPath(windingRule);
     }
 
@@ -280,74 +280,74 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
     }
 
     @Override
-    public BezierPath add(BezierNode element) {
-        return (BezierPath) super.add(element);
+    public BezierPath adding(BezierNode element) {
+        return (BezierPath) super.adding(element);
     }
 
     @Override
-    public BezierPath add(int index, BezierNode element) {
-        return (BezierPath) super.add(index, element);
+    public BezierPath addingAt(int index, BezierNode element) {
+        return (BezierPath) super.addingAt(index, element);
     }
 
     @Override
-    public BezierPath addAll(Iterable<? extends BezierNode> c) {
-        return (BezierPath) super.addAll(c);
+    public BezierPath addingAll(Iterable<? extends BezierNode> c) {
+        return (BezierPath) super.addingAll(c);
     }
 
     @Override
-    public BezierPath addFirst(@Nullable BezierNode element) {
-        return (BezierPath) super.addFirst(element);
+    public BezierPath addingFirst(@Nullable BezierNode element) {
+        return (BezierPath) super.addingFirst(element);
     }
 
     @Override
-    public BezierPath addLast(@Nullable BezierNode element) {
-        return (BezierPath) super.addLast(element);
+    public BezierPath addingLast(@Nullable BezierNode element) {
+        return (BezierPath) super.addingLast(element);
     }
 
     @Override
-    public BezierPath addAll(int index, Iterable<? extends BezierNode> c) {
-        return (BezierPath) super.addAll(index, c);
+    public BezierPath addingAllAt(int index, Iterable<? extends BezierNode> c) {
+        return (BezierPath) super.addingAllAt(index, c);
     }
 
 
     @Override
-    public BezierPath remove(BezierNode element) {
-        return (BezierPath) super.remove(element);
+    public BezierPath removing(BezierNode element) {
+        return (BezierPath) super.removing(element);
     }
 
     @Override
-    public BezierPath removeAt(int index) {
-        return (BezierPath) super.removeAt(index);
+    public BezierPath removingAt(int index) {
+        return (BezierPath) super.removingAt(index);
     }
 
     @Override
-    public BezierPath removeFirst() {
-        return (BezierPath) super.removeFirst();
+    public BezierPath removingFirst() {
+        return (BezierPath) super.removingFirst();
     }
 
     @Override
-    public BezierPath removeLast() {
-        return (BezierPath) super.removeLast();
+    public BezierPath removingLast() {
+        return (BezierPath) super.removingLast();
     }
 
     @Override
-    public BezierPath retainAll(Iterable<?> c) {
-        return (BezierPath) super.retainAll(c);
+    public BezierPath retainingAll(Iterable<?> c) {
+        return (BezierPath) super.retainingAll(c);
     }
 
     @Override
-    public BezierPath removeRange(int fromIndex, int toIndex) {
-        return (BezierPath) super.removeRange(fromIndex, toIndex);
+    public BezierPath removingRange(int fromIndex, int toIndex) {
+        return (BezierPath) super.removingRange(fromIndex, toIndex);
     }
 
     @Override
-    public BezierPath removeAll(Iterable<?> c) {
-        return (BezierPath) super.removeAll(c);
+    public BezierPath removingAll(Iterable<?> c) {
+        return (BezierPath) super.removingAll(c);
     }
 
     @Override
-    public BezierPath set(int index, BezierNode element) {
-        return (BezierPath) super.set(index, element);
+    public BezierPath replacingAt(int index, BezierNode element) {
+        return (BezierPath) super.replacingAt(index, element);
     }
 
     @Override

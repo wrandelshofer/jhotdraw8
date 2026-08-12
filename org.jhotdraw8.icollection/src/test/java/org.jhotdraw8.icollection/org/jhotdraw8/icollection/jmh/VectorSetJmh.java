@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.PersistentHashVectorSet;
+import org.jhotdraw8.icollection.PersistentVectorHashSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -51,16 +51,16 @@ public class VectorSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private PersistentHashVectorSet<Key> setA;
-    private PersistentHashVectorSet<Key> setAA;
-    private PersistentHashVectorSet<Key> setB;
+    private PersistentVectorHashSet<Key> setA;
+    private PersistentVectorHashSet<Key> setAA;
+    private PersistentVectorHashSet<Key> setB;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = PersistentHashVectorSet.copyOf(data.setA);
-        setB = PersistentHashVectorSet.copyOf(data.listB);
-        setAA = PersistentHashVectorSet.copyOf(data.listA);
+        setA = PersistentVectorHashSet.copyOf(data.setA);
+        setB = PersistentVectorHashSet.copyOf(data.listB);
+        setAA = PersistentVectorHashSet.copyOf(data.listA);
     }
 
     /*
@@ -93,51 +93,51 @@ public class VectorSetJmh {
         }
     */
     @Benchmark
-    public PersistentHashVectorSet<Key> mRemoveAllFromDifferentType() {
-        PersistentHashVectorSet<Key> set = setA;
-        PersistentHashVectorSet<Key> updated = set.removeAll(data.setA);
+    public PersistentVectorHashSet<Key> mRemoveAllFromDifferentType() {
+        PersistentVectorHashSet<Key> set = setA;
+        PersistentVectorHashSet<Key> updated = set.removingAll(data.setA);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public PersistentHashVectorSet<Key> mRemoveAllFromSameType() {
-        PersistentHashVectorSet<Key> set = setA;
-        PersistentHashVectorSet<Key> updated = set.removeAll(setAA);
+    public PersistentVectorHashSet<Key> mRemoveAllFromSameType() {
+        PersistentVectorHashSet<Key> set = setA;
+        PersistentVectorHashSet<Key> updated = set.removingAll(setAA);
         assert updated.isEmpty();
         return updated;
     }
 
 
     @Benchmark
-    public PersistentHashVectorSet<Key> mRetainAllFromDifferentTypeAllRetained() {
-        PersistentHashVectorSet<Key> set = setA;
-        PersistentHashVectorSet<Key> updated = set.retainAll(data.setA);
+    public PersistentVectorHashSet<Key> mRetainAllFromDifferentTypeAllRetained() {
+        PersistentVectorHashSet<Key> set = setA;
+        PersistentVectorHashSet<Key> updated = set.retainingAll(data.setA);
         assert updated == setA;
         return updated;
     }
 
     @Benchmark
-    public PersistentHashVectorSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
-        PersistentHashVectorSet<Key> set = setA;
-        PersistentHashVectorSet<Key> updated = set.retainAll(data.setB);
+    public PersistentVectorHashSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
+        PersistentVectorHashSet<Key> set = setA;
+        PersistentVectorHashSet<Key> updated = set.retainingAll(data.setB);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public PersistentHashVectorSet<Key> mRetainAllFromSameTypeAllRetained() {
-        PersistentHashVectorSet<Key> set = setA;
-        PersistentHashVectorSet<Key> updated = set.retainAll(setAA);
+    public PersistentVectorHashSet<Key> mRetainAllFromSameTypeAllRetained() {
+        PersistentVectorHashSet<Key> set = setA;
+        PersistentVectorHashSet<Key> updated = set.retainingAll(setAA);
         assert updated == setA;
         return updated;
     }
 
 
     @Benchmark
-    public PersistentHashVectorSet<Key> mRetainAllFromSameTypeNoneRetained() {
-        PersistentHashVectorSet<Key> set = setA;
-        PersistentHashVectorSet<Key> updated = set.retainAll(setB);
+    public PersistentVectorHashSet<Key> mRetainAllFromSameTypeNoneRetained() {
+        PersistentVectorHashSet<Key> set = setA;
+        PersistentVectorHashSet<Key> updated = set.retainingAll(setB);
         assert updated.isEmpty();
         return updated;
     }

@@ -126,7 +126,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     public boolean addAll(int index, Collection<? extends E> c) {
         Objects.checkIndex(index, root.length + 1);
         int oldSize = root.length;
-        PersistentVectorList<E> persistent = toPersistent().addAll(index, c);
+        PersistentVectorList<E> persistent = toPersistent().addingAllAt(index, c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
             modCount++;
@@ -143,7 +143,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     public boolean addAll(int index, Iterable<? extends E> c) {
         Objects.checkIndex(index, root.length + 1);
         int oldSize = root.length;
-        PersistentVectorList<E> persistent = toPersistent().addAll(index, c);
+        PersistentVectorList<E> persistent = toPersistent().addingAllAt(index, c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
             modCount++;
@@ -163,7 +163,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public boolean removeAll(Collection<?> c) {
         int oldSize = root.length;
-        PersistentVectorList<E> persistent = toPersistent().removeAll(c);
+        PersistentVectorList<E> persistent = toPersistent().removingAll(c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
             modCount++;
@@ -175,7 +175,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public boolean retainAll(Collection<?> c) {
         int oldSize = root.length;
-        PersistentVectorList<E> persistent = toPersistent().retainAll(c);
+        PersistentVectorList<E> persistent = toPersistent().retainingAll(c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
             modCount++;
@@ -260,7 +260,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     protected void removeRange(int fromIndex, int toIndex) {
-        root = toPersistent().removeRange(fromIndex, toIndex).root;
+        root = toPersistent().removingRange(fromIndex, toIndex).root;
         modCount++;
     }
 

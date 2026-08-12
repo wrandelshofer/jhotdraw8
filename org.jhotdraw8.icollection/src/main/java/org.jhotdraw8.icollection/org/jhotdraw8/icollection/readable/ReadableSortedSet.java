@@ -4,7 +4,13 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 
-/// A readable interface to a sorted set. A sorted set is a set that  provides a total ordering on its elements.
+/// This interface provides read operations for a sorted set.
+///
+/// A sorted set is a sequence of distinct elements.
+/// The elements are sorted from first to last.
+///
+/// A read operation returns data about the set.
+/// The operation does not change the original set.
 ///
 /// @param <E> the element type
 public interface ReadableSortedSet<E> extends ReadableSequencedSet<E> {

@@ -102,7 +102,7 @@ public class RedBlackSetJmh {
     public PersistentTreeSet<Key> mCopyOnyByOne() {
         PersistentTreeSet<Key> set = PersistentTreeSet.of();
         for (Key key : data.listA) {
-            set = set.add(key);
+            set = set.adding(key);
         }
         assert set.size() == data.listA.size();
         return set;
@@ -112,7 +112,7 @@ public class RedBlackSetJmh {
     public PersistentTreeSet<Key> mRemoveOneByOne() {
         PersistentTreeSet<Key> set = setA;
         for (Key key : data.listA) {
-            set = set.remove(key);
+            set = set.removing(key);
         }
         assert set.isEmpty();
         return set;
@@ -121,7 +121,7 @@ public class RedBlackSetJmh {
     @Benchmark
     public PersistentTreeSet<Key> mRemoveAllFromDifferentType() {
         PersistentTreeSet<Key> set = setA;
-        PersistentTreeSet<Key> updated = set.removeAll(data.setA);
+        PersistentTreeSet<Key> updated = set.removingAll(data.setA);
         assert updated.isEmpty();
         return updated;
     }
@@ -129,7 +129,7 @@ public class RedBlackSetJmh {
     @Benchmark
     public PersistentTreeSet<Key> mRemoveAllFromSameType() {
         PersistentTreeSet<Key> set = setA;
-        PersistentTreeSet<Key> updated = set.removeAll(setAA);
+        PersistentTreeSet<Key> updated = set.removingAll(setAA);
         assert updated.isEmpty();
         return updated;
     }
@@ -138,7 +138,7 @@ public class RedBlackSetJmh {
     @Benchmark
     public PersistentTreeSet<Key> mRetainAllFromDifferentTypeAllRetained() {
         PersistentTreeSet<Key> set = setA;
-        PersistentTreeSet<Key> updated = set.retainAll(data.setA);
+        PersistentTreeSet<Key> updated = set.retainingAll(data.setA);
         assert updated == setA;
         return updated;
     }
@@ -146,7 +146,7 @@ public class RedBlackSetJmh {
     @Benchmark
     public PersistentTreeSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
         PersistentTreeSet<Key> set = setA;
-        PersistentTreeSet<Key> updated = set.retainAll(data.setB);
+        PersistentTreeSet<Key> updated = set.retainingAll(data.setB);
         assert updated.isEmpty();
         return updated;
     }
@@ -154,7 +154,7 @@ public class RedBlackSetJmh {
     @Benchmark
     public PersistentTreeSet<Key> mRetainAllFromSameTypeAllRetained() {
         PersistentTreeSet<Key> set = setA;
-        PersistentTreeSet<Key> updated = set.retainAll(setAA);
+        PersistentTreeSet<Key> updated = set.retainingAll(setAA);
         assert updated == setA;
         return updated;
     }
@@ -163,7 +163,7 @@ public class RedBlackSetJmh {
     @Benchmark
     public PersistentTreeSet<Key> mRetainAllFromSameTypeNoneRetained() {
         PersistentTreeSet<Key> set = setA;
-        PersistentTreeSet<Key> updated = set.retainAll(setB);
+        PersistentTreeSet<Key> updated = set.retainingAll(setB);
         assert updated.isEmpty();
         return updated;
     }
@@ -186,13 +186,13 @@ public class RedBlackSetJmh {
     @Benchmark
     public PersistentTreeSet<Key> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
-        return setA.remove(key).add(key);
+        return setA.removing(key).adding(key);
     }
 
 
     @Benchmark
     public PersistentTreeSet<Key> mTail() {
-        return setA.remove(setA.iterator().next());
+        return setA.removing(setA.iterator().next());
     }
 
     @Benchmark

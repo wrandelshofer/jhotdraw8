@@ -34,7 +34,7 @@ public class PersistentMapFacade<K, V> extends AbstractReadableMap<K, V> impleme
     }
 
     @Override
-    public PersistentMapFacade<K, V> clear() {
+    public PersistentMapFacade<K, V> cleared() {
         if (isEmpty()) {
             return this;
         }
@@ -44,7 +44,7 @@ public class PersistentMapFacade<K, V> extends AbstractReadableMap<K, V> impleme
     }
 
     @Override
-    public PersistentMapFacade<K, V> put(K key, @Nullable V value) {
+    public PersistentMapFacade<K, V> putting(K key, @Nullable V value) {
         if (containsKey(key) && Objects.equals(get(key), value)) {
             return this;
         }
@@ -55,7 +55,7 @@ public class PersistentMapFacade<K, V> extends AbstractReadableMap<K, V> impleme
 
 
     @Override
-    public PersistentMapFacade<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public PersistentMapFacade<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         Map<K, V> clone = cloneFunction.apply(target);
         for (Map.Entry<? extends K, ? extends V> e : c) {
             clone.put(e.getKey(), e.getValue());
@@ -67,7 +67,7 @@ public class PersistentMapFacade<K, V> extends AbstractReadableMap<K, V> impleme
     }
 
     @Override
-    public PersistentMapFacade<K, V> remove(K key) {
+    public PersistentMapFacade<K, V> removing(K key) {
         if (!containsKey(key)) {
             return this;
         }
@@ -78,7 +78,7 @@ public class PersistentMapFacade<K, V> extends AbstractReadableMap<K, V> impleme
 
     @SuppressWarnings("SuspiciousMethodCalls")
     @Override
-    public PersistentMapFacade<K, V> removeAll(Iterable<? extends K> c) {
+    public PersistentMapFacade<K, V> removingAll(Iterable<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
@@ -103,7 +103,7 @@ public class PersistentMapFacade<K, V> extends AbstractReadableMap<K, V> impleme
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentMapFacade<K, V> retainAll(Iterable<? extends K> c) {
+    public PersistentMapFacade<K, V> retainingAll(Iterable<? extends K> c) {
         if (isEmpty()) {
             return this;
         }

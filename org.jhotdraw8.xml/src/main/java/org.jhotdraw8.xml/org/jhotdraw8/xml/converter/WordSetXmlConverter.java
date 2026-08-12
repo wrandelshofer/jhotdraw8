@@ -8,7 +8,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.icollection.PersistentHashSet;
-import org.jhotdraw8.icollection.PersistentHashVectorSet;
+import org.jhotdraw8.icollection.PersistentVectorHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jspecify.annotations.Nullable;
 
@@ -81,9 +81,9 @@ public class WordSetXmlConverter implements Converter<PersistentSet<String>> {
 
         // If there is a comparator, we do not need to use a sequenced set,
         // because we are going to sort the set in method toString() anyway.
-        PersistentSet<String> words = comparator == null ? PersistentHashVectorSet.of() : PersistentHashSet.of();
+        PersistentSet<String> words = comparator == null ? PersistentVectorHashSet.of() : PersistentHashSet.of();
         for (String str : strings) {
-            words = words.add(Normalizer.normalize(str, Normalizer.Form.NFC));
+            words = words.adding(Normalizer.normalize(str, Normalizer.Form.NFC));
         }
         buf.position(buf.length());// consume buffer
         return words;
@@ -91,6 +91,6 @@ public class WordSetXmlConverter implements Converter<PersistentSet<String>> {
 
     @Override
     public @Nullable PersistentSet<String> getDefaultValue() {
-        return PersistentHashVectorSet.of();
+        return PersistentVectorHashSet.of();
     }
 }

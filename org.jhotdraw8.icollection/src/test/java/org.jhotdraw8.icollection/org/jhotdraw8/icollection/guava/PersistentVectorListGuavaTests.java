@@ -52,11 +52,11 @@ public class PersistentVectorListGuavaTests {
                         //CollectionFeature.SERIALIZABLE,
                         CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
                         CollectionSize.ANY)
-                .suppressing(suppressForTrieSet())
+                .suppressing(suppressForTrieReplacingAt())
                 .createTestSuite();
     }
 
-    protected Collection<Method> suppressForTrieSet() {
+    protected Collection<Method> suppressForTrieReplacingAt() {
         return Collections.emptySet();
     }
 

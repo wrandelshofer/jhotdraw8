@@ -174,7 +174,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                     if (k == null) {
                         throw new RuntimeException(clazz + " has null value for key: " + f);
                     }
-                    keys = keys.add(k);
+                    keys = keys.adding(k);
                 }
             }
         } catch (IllegalArgumentException | IllegalAccessException ex) {

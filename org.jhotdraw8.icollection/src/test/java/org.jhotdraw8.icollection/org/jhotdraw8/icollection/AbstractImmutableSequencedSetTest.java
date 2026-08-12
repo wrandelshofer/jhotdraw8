@@ -40,8 +40,8 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
     @MethodSource("dataProvider")
     public void copyRemoveLastWithEmptySetShouldThrowNoSuchElementException(SetData data) throws Exception {
         PersistentSequencedSet<Key> instance = newInstance(data.a());
-        instance = instance.removeAll(data.a().asSet());
-        assertThrows(NoSuchElementException.class, instance::removeLast);
+        instance = instance.removingAll(data.a().asSet());
+        assertThrows(NoSuchElementException.class, instance::removingLast);
     }
 
     @ParameterizedTest
@@ -51,7 +51,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
         List<Key> expected = new ArrayList<>(data.a().asSet());
         assertEqualSequence(expected, instance, "new instance(data.a())");
         while (!expected.isEmpty()) {
-            PersistentSequencedSet<Key> instance2 = instance.removeLast();
+            PersistentSequencedSet<Key> instance2 = instance.removingLast();
             assertNotSame(instance, instance2);
             expected.remove(expected.size() - 1);
             assertEqualSequence(expected, instance2, "removeLast");
@@ -63,10 +63,10 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
     @MethodSource("dataProvider")
     public void removeLastStartingWithEmptySetShouldNotChangeSequence(SetData data) throws Exception {
         PersistentSequencedSet<Key> instance = newInstance();
-        instance = instance.addAll(data.a.asSet());
+        instance = instance.addingAll(data.a.asSet());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
-            PersistentSequencedSet<Key> instance2 = instance.removeLast();
+            PersistentSequencedSet<Key> instance2 = instance.removingLast();
             assertNotSame(instance, instance2);
             expected.remove(expected.size() - 1);
             assertEqualSequence(expected, instance2, "removeLast");

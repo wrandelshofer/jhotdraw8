@@ -8,7 +8,7 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.SetCssConverter;
 import org.jhotdraw8.draw.css.converter.IdentCssConverter;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
-import org.jhotdraw8.icollection.PersistentHashVectorSet;
+import org.jhotdraw8.icollection.PersistentVectorHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 
 /// WordSetStyleableKey.
@@ -20,7 +20,7 @@ public class WordSetStyleableKey extends NonNullSetStyleableKey<String> {
     ///
     /// @param name The name of the key.
     public WordSetStyleableKey(String name) {
-        this(name, PersistentHashVectorSet.of());
+        this(name, PersistentVectorHashSet.of());
     }
 
     /// Creates a new instance with the specified name, mask and default value.

@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jol;
 
-import org.jhotdraw8.icollection.PersistentHashVectorSet;
+import org.jhotdraw8.icollection.PersistentVectorHashSet;
 import org.jhotdraw8.icollection.jmh.Key;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /// SimpleImmutableSequencedSetJol.
-public class PersistentHashVectorSetJol extends AbstractJol {
+public class PersistentVectorHashSetJol extends AbstractJol {
 
     /// <pre>
     /// class org.jhotdraw8.icollection.SimpleImmutableSequencedSet with 1000 elements.
@@ -37,7 +37,7 @@ public class PersistentHashVectorSetJol extends AbstractJol {
         int size = 1_000;
         final int mask = -1;//~64;
         var data = generateSet(size, mask);
-        PersistentHashVectorSet<Key> setA = PersistentHashVectorSet.copyOf(data);
+        PersistentVectorHashSet<Key> setA = PersistentVectorHashSet.copyOf(data);
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
@@ -69,11 +69,11 @@ public class PersistentHashVectorSetJol extends AbstractJol {
         int size = 1_000;
         final int mask = ~64;
         var data = generateSet(size, mask);
-        PersistentHashVectorSet<Key> setA = PersistentHashVectorSet.copyOf(data);
+        PersistentVectorHashSet<Key> setA = PersistentVectorHashSet.copyOf(data);
 
         ArrayList<Key> keys = new ArrayList<>(data);
         Collections.shuffle(keys);
-        setA = setA.removeAll(keys.subList(0, (int) (keys.size() * 0.75)));
+        setA = setA.removingAll(keys.subList(0, (int) (keys.size() * 0.75)));
 
 
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());

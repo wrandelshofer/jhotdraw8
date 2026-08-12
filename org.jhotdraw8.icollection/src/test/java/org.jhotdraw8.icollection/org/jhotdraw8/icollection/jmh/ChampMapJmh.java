@@ -103,7 +103,7 @@ public class ChampMapJmh {
         data = new BenchmarkData(size, mask);
         mapA = PersistentHashMap.of();
         for (Key key : data.setA) {
-            mapA = mapA.put(key, Boolean.TRUE);
+            mapA = mapA.putting(key, Boolean.TRUE);
         }
     }
 

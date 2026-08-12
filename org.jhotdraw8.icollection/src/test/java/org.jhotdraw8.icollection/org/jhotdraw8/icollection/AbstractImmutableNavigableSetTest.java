@@ -39,8 +39,8 @@ public abstract class AbstractImmutableNavigableSetTest extends AbstractImmutabl
     @MethodSource("dataProvider")
     public void copyRemoveLastWithEmptySetShouldThrowNoSuchElementException(SetData data) throws Exception {
         PersistentNavigableSet<Key> instance = newInstance(data.a());
-        instance = instance.removeAll(data.a().asSet());
-        assertThrows(NoSuchElementException.class, instance::removeLast);
+        instance = instance.removingAll(data.a().asSet());
+        assertThrows(NoSuchElementException.class, instance::removingLast);
     }
 
 

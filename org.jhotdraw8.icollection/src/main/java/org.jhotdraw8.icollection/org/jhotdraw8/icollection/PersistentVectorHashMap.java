@@ -112,8 +112,8 @@ import java.util.Spliterators;
 /// @param <K> the key type
 /// @param <V> the value type
 @SuppressWarnings("exports")
-public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, V>, Serializable {
-    private static final PersistentHashVectorMap<?, ?> EMPTY = new PersistentHashVectorMap<>(
+public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, V>, Serializable {
+    private static final PersistentVectorHashMap<?, ?> EMPTY = new PersistentVectorHashMap<>(
             BitmapIndexedNode.emptyNode(), PersistentVectorList.of(), 0, 0);
     @Serial
     private static final long serialVersionUID = 0L;
@@ -138,7 +138,7 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
     ///
     /// @param privateData an privateData data object
     @SuppressWarnings("unchecked")
-    protected PersistentHashVectorMap(PrivateData privateData) {
+    protected PersistentVectorHashMap(PrivateData privateData) {
         this(((OpaqueRecord<K, V>) privateData.get()).root,
                 ((OpaqueRecord<K, V>) privateData.get()).vector,
                 ((OpaqueRecord<K, V>) privateData.get()).size,
@@ -151,17 +151,17 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
     ///
     /// @param privateData the internal data structure needed by this class for creating the instance.
     /// @return a new instance of the subclass
-    protected PersistentHashVectorMap<K, V> newInstance(PrivateData privateData) {
-        return new PersistentHashVectorMap<>(privateData);
+    protected PersistentVectorHashMap<K, V> newInstance(PrivateData privateData) {
+        return new PersistentVectorHashMap<>(privateData);
     }
 
-    private PersistentHashVectorMap<K, V> newInstance(BitmapIndexedNode<SequencedEntry<K, V>> root,
+    private PersistentVectorHashMap<K, V> newInstance(BitmapIndexedNode<SequencedEntry<K, V>> root,
                                                       PersistentVectorList<Object> vector,
                                                       int size, int offset) {
-        return new PersistentHashVectorMap<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
+        return new PersistentVectorHashMap<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
     }
 
-    PersistentHashVectorMap(BitmapIndexedNode<SequencedEntry<K, V>> root,
+    PersistentVectorHashMap(BitmapIndexedNode<SequencedEntry<K, V>> root,
                             PersistentVectorList<Object> vector,
                             int size, int offset) {
         this.root = root;
@@ -176,8 +176,8 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
     /// @param <K> the key type
     /// @param <V> the value type
     /// @return an persistent copy
-    public static <K, V> PersistentHashVectorMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
-        return PersistentHashVectorMap.<K, V>of().putAll(map);
+    public static <K, V> PersistentVectorHashMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
+        return PersistentVectorHashMap.<K, V>of().puttingAll(map);
     }
 
     /// Returns an persistent copy of the provided map.
@@ -186,8 +186,8 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
     /// @param <K> the key type
     /// @param <V> the value type
     /// @return an persistent copy
-    public static <K, V> PersistentHashVectorMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
-        return PersistentHashVectorMap.<K, V>of().putAll(map);
+    public static <K, V> PersistentVectorHashMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
+        return PersistentVectorHashMap.<K, V>of().puttingAll(map);
     }
 
     /// Returns an empty persistent map.
@@ -196,14 +196,14 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
     /// @param <V> the value type
     /// @return an empty persistent map
     @SuppressWarnings("unchecked")
-    public static <K, V> PersistentHashVectorMap<K, V> of() {
-        return (PersistentHashVectorMap<K, V>) PersistentHashVectorMap.EMPTY;
+    public static <K, V> PersistentVectorHashMap<K, V> of() {
+        return (PersistentVectorHashMap<K, V>) PersistentVectorHashMap.EMPTY;
     }
 
 
     /// {@inheritDoc}
     @Override
-    public PersistentHashVectorMap<K, V> clear() {
+    public PersistentVectorHashMap<K, V> cleared() {
         return isEmpty() ? this : of();
     }
 
@@ -219,7 +219,7 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
         if (other == this) {
             return true;
         }
-        if (other instanceof PersistentHashVectorMap<?, ?> that) {
+        if (other instanceof PersistentVectorHashMap<?, ?> that) {
             return size == that.size && root.equivalent(that.root);
         } else {
             return ReadableMap.mapEquals(this, other);
@@ -266,28 +266,28 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
     }
 
     @Override
-    public PersistentHashVectorMap<K, V> put(K key, @Nullable V value) {
+    public PersistentVectorHashMap<K, V> putting(K key, @Nullable V value) {
         return putLast(key, value, false);
     }
 
     @Override
-    public PersistentHashVectorMap<K, V> putAll(Map<? extends K, ? extends V> m) {
-        return (PersistentHashVectorMap<K, V>) PersistentSequencedMap.super.putAll(m);
+    public PersistentVectorHashMap<K, V> puttingAll(Map<? extends K, ? extends V> m) {
+        return (PersistentVectorHashMap<K, V>) PersistentSequencedMap.super.puttingAll(m);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashVectorMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public PersistentVectorHashMap<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         var m = toMutable();
         return m.putAll(c) ? m.toPersistent() : this;
     }
 
     @Override
-    public PersistentHashVectorMap<K, V> putFirst(K key, @Nullable V value) {
+    public PersistentVectorHashMap<K, V> puttingFirst(K key, @Nullable V value) {
         return putFirst(key, value, true);
     }
 
-    private PersistentHashVectorMap<K, V> putFirst(K key, @Nullable V value, boolean moveToFirst) {
+    private PersistentVectorHashMap<K, V> putFirst(K key, @Nullable V value, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, -offset - 1);
         var newRoot = root.put(null, newEntry,
@@ -298,7 +298,7 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
                 && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
             // If we have replaced the entry in the tree, but the sequence number is still the same.
             // Then we replace the entry in the vector.
-            var newVector = vector.set(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
+            var newVector = vector.replacingAt(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
             return newInstance(newRoot, newVector, size, offset);
         }
         if (details.isModified()) {
@@ -318,13 +318,13 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
             }
             // We insert the new entry at the start of the vector.
             int newOffset = offset + 1;
-            newVector = newVector.addFirst(newEntry);
+            newVector = newVector.addingFirst(newEntry);
             return renumber(newRoot, newVector, newSize, newOffset);
         }
         return this;
     }
 
-    private PersistentHashVectorMap<K, V> putLast(K key, @Nullable V value, boolean moveToLast) {
+    private PersistentVectorHashMap<K, V> putLast(K key, @Nullable V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
         var newRoot = root.put(null, newEntry,
@@ -333,7 +333,7 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
         if (details.isReplaced()
                 && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
-            var newVector = vector.set(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
+            var newVector = vector.replacingAt(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
             return newInstance(newRoot, newVector, size, offset);
         }
         if (details.isModified()) {
@@ -350,14 +350,14 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
             } else {
                 newSize++;
             }
-            newVector = newVector.addLast(newEntry);
+            newVector = newVector.addingLast(newEntry);
             return renumber(newRoot, newVector, newSize, newOffset);
         }
         return this;
     }
 
     @Override
-    public PersistentHashVectorMap<K, V> putLast(K key, @Nullable V value) {
+    public PersistentVectorHashMap<K, V> puttingLast(K key, @Nullable V value) {
         return putLast(key, value, true);
     }
 
@@ -375,7 +375,7 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
     }
 
     @Override
-    public PersistentHashVectorMap<K, V> remove(K key) {
+    public PersistentVectorHashMap<K, V> removing(K key) {
         int keyHash = SequencedEntry.keyHash(key);
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         BitmapIndexedNode<SequencedEntry<K, V>> newRoot = root.remove(null,
@@ -384,19 +384,19 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
         if (details.isModified()) {
             var oldElem = details.getOldDataNonNull();
             var result = SequencedData.vecRemove(vector, oldElem, offset);
-            return size == 1 ? PersistentHashVectorMap.of() : renumber(newRoot, result.first(), size - 1, result.second());
+            return size == 1 ? PersistentVectorHashMap.of() : renumber(newRoot, result.first(), size - 1, result.second());
         }
         return this;
     }
 
 
     @Override
-    public PersistentHashVectorMap<K, V> removeAll(Iterable<? extends K> c) {
+    public PersistentVectorHashMap<K, V> removingAll(Iterable<? extends K> c) {
         var t = toMutable();
         return t.removeAll(c) ? t.toPersistent() : this;
     }
 
-    private PersistentHashVectorMap<K, V> renumber(
+    private PersistentVectorHashMap<K, V> renumber(
             BitmapIndexedNode<SequencedEntry<K, V>> root,
             PersistentVectorList<Object> vector,
             int size, int offset) {
@@ -414,7 +414,7 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
     }
 
     @Override
-    public PersistentHashVectorMap<K, V> retainAll(Iterable<? extends K> c) {
+    public PersistentVectorHashMap<K, V> retainingAll(Iterable<? extends K> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toPersistent() : this;
     }
@@ -448,13 +448,13 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
     ///
     /// @return a mutable sequenced CHAMP map
     @Override
-    public MutableHashVectorMap<K, V> toMutable() {
-        return new MutableHashVectorMap<>(this);
+    public MutableVectorHashMap<K, V> toMutable() {
+        return new MutableVectorHashMap<>(this);
     }
 
     @Override
-    public MutableHashVectorMap<K, V> asMap() {
-        return new MutableHashVectorMap<>(this);
+    public MutableVectorHashMap<K, V> asMap() {
+        return new MutableVectorHashMap<>(this);
     }
 
     /// Returns a string representation of this map.
@@ -484,7 +484,7 @@ public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, 
         @Serial
         @Override
         protected Object readResolve() {
-            return PersistentHashVectorMap.of().putAll(deserializedEntries);
+            return PersistentVectorHashMap.of().puttingAll(deserializedEntries);
         }
     }
 

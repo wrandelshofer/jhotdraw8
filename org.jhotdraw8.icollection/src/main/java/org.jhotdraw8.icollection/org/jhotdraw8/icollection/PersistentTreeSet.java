@@ -91,7 +91,7 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
         if (c instanceof MutableTreeSet<? extends E> r && r.comparator.equals(comparator)) {
             return (PersistentTreeSet<E>) r.toPersistent();
         }
-        return PersistentTreeSet.sortedOf(comparator).addAll(c);
+        return PersistentTreeSet.sortedOf(comparator).addingAll(c);
     }
 
     /// Returns an persistent set that contains the provided elements sorted according to the
@@ -131,7 +131,7 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
         if (comparator == null) {
             comparator = NaturalComparator.instance();
         }
-        return PersistentTreeSet.sortedOf(comparator).addAll(Arrays.asList(elements));
+        return PersistentTreeSet.sortedOf(comparator).addingAll(Arrays.asList(elements));
     }
 
     /// Returns an empty persistent set, sorted according to the
@@ -156,7 +156,7 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
     }
 
     @Override
-    public PersistentTreeSet<E> add(E element) {
+    public PersistentTreeSet<E> adding(E element) {
         RedBlackTree<E, Void> newRoot = root.insert(element, null, comparator);
         return newRoot == root ? this : newInstance(comparator, newRoot);
     }
@@ -172,8 +172,8 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
     }
 
     @Override
-    public PersistentTreeSet<E> addAll(Iterable<? extends E> c) {
-        return (PersistentTreeSet<E>) PersistentNavigableSet.super.addAll(c);
+    public PersistentTreeSet<E> addingAll(Iterable<? extends E> c) {
+        return (PersistentTreeSet<E>) PersistentNavigableSet.super.addingAll(c);
     }
 
     @Override
@@ -182,12 +182,12 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
     }
 
     @Override
-    public <T> PersistentTreeSet<T> empty() {
+    public <T> PersistentTreeSet<T> cleared() {
         return of();
     }
 
     @Override
-    public <T> PersistentCollection<T> empty(@Nullable Comparator<T> comparator) {
+    public <T> PersistentCollection<T> cleared(@Nullable Comparator<T> comparator) {
         return sortedOf(comparator);
     }
 
@@ -261,19 +261,19 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
     }
 
     @Override
-    public PersistentTreeSet<E> remove(E element) {
+    public PersistentTreeSet<E> removing(E element) {
         RedBlackTree<E, Void> newRoot = root.delete(element, comparator);
         return newRoot.size() == root.size() ? this : newInstance(comparator, newRoot);
     }
 
     @Override
-    public PersistentTreeSet<E> removeAll(Iterable<?> c) {
-        return (PersistentTreeSet<E>) PersistentNavigableSet.super.removeAll(c);
+    public PersistentTreeSet<E> removingAll(Iterable<?> c) {
+        return (PersistentTreeSet<E>) PersistentNavigableSet.super.removingAll(c);
     }
 
     @Override
-    public PersistentTreeSet<E> retainAll(Iterable<?> c) {
-        return (PersistentTreeSet<E>) PersistentNavigableSet.super.retainAll(c);
+    public PersistentTreeSet<E> retainingAll(Iterable<?> c) {
+        return (PersistentTreeSet<E>) PersistentNavigableSet.super.retainingAll(c);
     }
 
     Iterator<E> reverseIterator() {

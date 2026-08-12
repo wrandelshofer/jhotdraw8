@@ -24,22 +24,22 @@ public class PersistentMapFacadeTest extends AbstractPersistentMapTest {
 
     @Override
     protected <K, V> PersistentMap<K, V> newInstance(Map<K, V> map) {
-        return this.<K, V>newInstance().putAll(map);
+        return this.<K, V>newInstance().puttingAll(map);
     }
 
     @Override
     protected <K, V> PersistentMap<K, V> newInstance(ReadableMap<K, V> map) {
-        return this.<K, V>newInstance().putAll(map);
+        return this.<K, V>newInstance().puttingAll(map);
     }
 
     @Override
     protected <K, V> PersistentMap<K, V> toClonedInstance(PersistentMap<K, V> m) {
-        return this.<K, V>newInstance().putAll(m);
+        return this.<K, V>newInstance().puttingAll(m);
     }
 
     @Override
     protected <K, V> PersistentMap<K, V> newInstance(Iterable<Map.Entry<K, V>> entries) {
-        return this.<K, V>newInstance().putAll(entries);
+        return this.<K, V>newInstance().puttingAll(entries);
     }
 
     @Override

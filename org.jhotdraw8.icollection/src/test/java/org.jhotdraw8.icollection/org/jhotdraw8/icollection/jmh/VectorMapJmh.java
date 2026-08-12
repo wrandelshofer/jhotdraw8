@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.PersistentHashVectorMap;
+import org.jhotdraw8.icollection.PersistentVectorHashMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -138,14 +138,14 @@ public class VectorMapJmh {
     private int mask = -65;
 
     private BenchmarkData data;
-    private PersistentHashVectorMap<Key, Boolean> mapA;
+    private PersistentVectorHashMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        mapA = PersistentHashVectorMap.of();
+        mapA = PersistentVectorHashMap.of();
         for (Key key : data.setA) {
-            mapA = mapA.put(key, Boolean.TRUE);
+            mapA = mapA.putting(key, Boolean.TRUE);
         }
     }
 
@@ -159,27 +159,27 @@ public class VectorMapJmh {
     }
 
     @Benchmark
-    public PersistentHashVectorMap<Key, Boolean> mRemoveThenAdd() {
+    public PersistentVectorHashMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
-        return mapA.remove(key).put(key, Boolean.TRUE);
+        return mapA.removing(key).putting(key, Boolean.TRUE);
     }
 
     @Benchmark
-    public PersistentHashVectorMap<Key, Boolean> mPut() {
+    public PersistentVectorHashMap<Key, Boolean> mPut() {
         Key key = data.nextKeyInA();
-        return mapA.put(key, Boolean.FALSE);
+        return mapA.putting(key, Boolean.FALSE);
     }
 
     @Benchmark
-    public PersistentHashVectorMap<Key, Boolean> mCopyOf() {
-        return PersistentHashVectorMap.copyOf(data.mapA);
+    public PersistentVectorHashMap<Key, Boolean> mCopyOf() {
+        return PersistentVectorHashMap.copyOf(data.mapA);
     }
 
     @Benchmark
-    public PersistentHashVectorMap<Key, Boolean> mCopyOnyByOne() {
-        PersistentHashVectorMap<Key, Boolean> set = PersistentHashVectorMap.of();
+    public PersistentVectorHashMap<Key, Boolean> mCopyOnyByOne() {
+        PersistentVectorHashMap<Key, Boolean> set = PersistentVectorHashMap.of();
         for (Key key : data.listA) {
-            set = set.put(key, Boolean.FALSE);
+            set = set.putting(key, Boolean.FALSE);
         }
         assert set.size() == data.listA.size();
         return set;
@@ -203,15 +203,15 @@ public class VectorMapJmh {
     }
 
     @Benchmark
-    public PersistentHashVectorMap<Key, Boolean> mTail() {
-        return mapA.remove(mapA.iterator().next().getKey());
+    public PersistentVectorHashMap<Key, Boolean> mTail() {
+        return mapA.removing(mapA.iterator().next().getKey());
     }
 
     @Benchmark
-    public PersistentHashVectorMap<Key, Boolean> mRemoveOneByOne() {
+    public PersistentVectorHashMap<Key, Boolean> mRemoveOneByOne() {
         var map = mapA;
         for (var e : data.listA) {
-            map = map.remove(e);
+            map = map.removing(e);
         }
         if (!map.isEmpty()) throw new AssertionError("map: " + map);
         return map;
@@ -219,24 +219,24 @@ public class VectorMapJmh {
 
 
     @Benchmark
-    public PersistentHashVectorMap<Key, Boolean> mRemoveAll() {
-        var updated = mapA.removeAll(data.setA);
+    public PersistentVectorHashMap<Key, Boolean> mRemoveAll() {
+        var updated = mapA.removingAll(data.setA);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public PersistentHashVectorMap<Key, Boolean> mRetainAllNoneRetained() {
+    public PersistentVectorHashMap<Key, Boolean> mRetainAllNoneRetained() {
         var set = mapA;
-        var updated = set.retainAll(data.setB);
+        var updated = set.retainingAll(data.setB);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public PersistentHashVectorMap<Key, Boolean> mRetainAllAllRetained() {
+    public PersistentVectorHashMap<Key, Boolean> mRetainAllAllRetained() {
         var set = mapA;
-        var updated = set.retainAll(data.setA);
+        var updated = set.retainingAll(data.setA);
         assert updated == mapA;
         return updated;
     }

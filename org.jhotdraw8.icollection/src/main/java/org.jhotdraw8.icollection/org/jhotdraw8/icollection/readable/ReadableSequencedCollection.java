@@ -9,9 +9,16 @@ import org.jhotdraw8.icollection.facade.SequencedCollectionFacade;
 
 import java.util.SequencedCollection;
 
-/// A readable interface to a sequenced collection.
-/// A sequenced collection has a well-defined encounter order,
-/// that supports operations at both ends, and that is reversible.
+/// This interface provides read operations for a sequenced collection.
+///
+/// A sequenced collection is a sequence of elements.
+/// The elements are ordered in a sequence from first to last.
+/// The sequence can be established implicitly, by insertion operations,
+/// or by sequence-altering operations.
+/// (However, this interface only provides read operations).
+///
+/// A read operation returns data about the collection.
+/// The operation does not change the original collection.
 ///
 /// @param <E> the element type
 public interface ReadableSequencedCollection<E> extends ReadableCollection<E> {

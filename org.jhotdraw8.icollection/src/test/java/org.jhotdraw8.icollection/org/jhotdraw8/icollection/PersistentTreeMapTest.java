@@ -19,12 +19,12 @@ public class PersistentTreeMapTest extends AbstractImmutableNavigableMapTest {
 
     @Override
     protected <K, V> PersistentTreeMap<K, V> newInstance(Map<K, V> map) {
-        return PersistentTreeMap.<K, V>of().putAll(map);
+        return PersistentTreeMap.<K, V>of().puttingAll(map);
     }
 
     @Override
     protected <K, V> PersistentTreeMap<K, V> newInstance(ReadableMap<K, V> map) {
-        return PersistentTreeMap.<K, V>of().putAll(map);
+        return PersistentTreeMap.<K, V>of().puttingAll(map);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class PersistentTreeMapTest extends AbstractImmutableNavigableMapTest {
 
     @Override
     protected <K, V> PersistentTreeMap<K, V> newInstance(Iterable<Map.Entry<K, V>> entries) {
-        return PersistentTreeMap.<K, V>of().putAll(entries);
+        return PersistentTreeMap.<K, V>of().puttingAll(entries);
     }
 
     @Override

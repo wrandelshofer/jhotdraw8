@@ -4,9 +4,15 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/// A readable interface to a navigable map. A navigable map is a SortedMap
-/// extended with navigation methods returning the closest matches for given search
-/// targets.
+/// This interface provides read operations for a navigable map.
+///
+/// A navigable map is an ordered group of entries.
+/// An entry maps a key to a value.
+/// The elements are ordered by height from a floor entry to a ceiling entry.
+/// The interface allows to navigate from an entry to a higher or a lower entry.
+///
+/// A read operation returns data about the map.
+/// The operation does not change the original map.
 ///
 /// @param <K> the key type
 /// @param <V> the value type

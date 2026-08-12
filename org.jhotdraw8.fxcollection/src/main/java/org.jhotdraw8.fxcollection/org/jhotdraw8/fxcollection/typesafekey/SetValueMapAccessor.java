@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.icollection.PersistentHashVectorSet;
+import org.jhotdraw8.icollection.PersistentVectorHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
@@ -62,7 +62,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
 
     @Override
     public PersistentSequencedSet<MapAccessor<?>> getSubAccessors() {
-        return PersistentHashVectorSet.of(setAccessor);
+        return PersistentVectorHashSet.of(setAccessor);
     }
 
     @Override
@@ -81,9 +81,9 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
         assert set != null;
         boolean oldValue = set.contains(this.value);
         if (value != null && value) {
-            set = set.add(this.value);
+            set = set.adding(this.value);
         } else {
-            set = set.remove(this.value);
+            set = set.removing(this.value);
         }
         setAccessor.put(a, set);
         return oldValue;
@@ -94,9 +94,9 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
         PersistentSet<E> set = setAccessor.get(a);
         assert set != null;
         if (value != null && value) {
-            set = set.add(this.value);
+            set = set.adding(this.value);
         } else {
-            set = set.remove(this.value);
+            set = set.removing(this.value);
         }
         return setAccessor.put(a, set);
     }

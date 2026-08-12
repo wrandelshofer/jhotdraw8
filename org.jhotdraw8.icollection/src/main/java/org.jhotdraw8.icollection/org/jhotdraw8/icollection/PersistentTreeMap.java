@@ -87,38 +87,38 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
         if (c instanceof MutableTreeMap<?, ?> r && r.comparator.equals(comparator)) {
             return (PersistentTreeMap<K, V>) r.toPersistent();
         }
-        return PersistentTreeMap.<K, V>sortedOf(comparator).putAll(c);
+        return PersistentTreeMap.<K, V>sortedOf(comparator).puttingAll(c);
     }
 
     @Override
-    public PersistentTreeMap<K, V> putAll(Map<? extends K, ? extends V> m) {
-        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.putAll(m);
+    public PersistentTreeMap<K, V> puttingAll(Map<? extends K, ? extends V> m) {
+        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.puttingAll(m);
     }
 
 
     @Override
-    public PersistentTreeMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
-        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.putAll(c);
+    public PersistentTreeMap<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.puttingAll(c);
     }
 
     @Override
-    public PersistentTreeMap<K, V> putKeyValues(Object... kv) {
-        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.putKeyValues(kv);
+    public PersistentTreeMap<K, V> puttingKeyValues(Object... kv) {
+        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.puttingKeyValues(kv);
     }
 
     @Override
-    public PersistentTreeMap<K, V> removeAll(Iterable<? extends K> c) {
-        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.removeAll(c);
+    public PersistentTreeMap<K, V> removingAll(Iterable<? extends K> c) {
+        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.removingAll(c);
     }
 
     @Override
-    public PersistentTreeMap<K, V> retainAll(Iterable<? extends K> c) {
-        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.retainAll(c);
+    public PersistentTreeMap<K, V> retainingAll(Iterable<? extends K> c) {
+        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.retainingAll(c);
     }
 
     @Override
-    public PersistentTreeMap<K, V> retainAll(ReadableCollection<? extends K> c) {
-        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.retainAll(c);
+    public PersistentTreeMap<K, V> retainingAll(ReadableCollection<? extends K> c) {
+        return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.retainingAll(c);
     }
 
     /// Returns an persistent map that contains the provided elements sorted according to the
@@ -140,7 +140,7 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
     /// @param <V> the value type
     /// @return an persistent copy
     public static <K, V> PersistentTreeMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
-        return PersistentTreeMap.<K, V>of().putAll(map);
+        return PersistentTreeMap.<K, V>of().puttingAll(map);
     }
 
     /// Returns an empty persistent map, sorted according to the
@@ -165,7 +165,7 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
     @SafeVarargs
     public static <K, V> PersistentTreeMap<K, V> sortedOf(@Nullable Comparator<? super K> comparator, Map.Entry<K, V> @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
-        return PersistentTreeMap.<K, V>sortedOf(comparator).putAll(Arrays.asList(elements));
+        return PersistentTreeMap.<K, V>sortedOf(comparator).puttingAll(Arrays.asList(elements));
     }
 
     /// Returns an empty persistent map, sorted according to the
@@ -228,7 +228,7 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
     }
 
     @Override
-    public PersistentTreeMap<K, V> clear() {
+    public PersistentTreeMap<K, V> cleared() {
         return isEmpty() ? this : sortedOf(comparator);
     }
 
@@ -279,13 +279,13 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
     }
 
     @Override
-    public PersistentTreeMap<K, V> put(K key, @Nullable V value) {
+    public PersistentTreeMap<K, V> putting(K key, @Nullable V value) {
         RedBlackTree<K, V> newRoot = root.insert(key, value, comparator);
         return newRoot == root ? this : newInstance(comparator, newRoot);
     }
 
     @Override
-    public PersistentTreeMap<K, V> remove(K key) {
+    public PersistentTreeMap<K, V> removing(K key) {
         RedBlackTree<K, V> newRoot = root.delete(key, comparator);
         return newRoot == root ? this : newInstance(comparator, newRoot);
     }
@@ -336,7 +336,7 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
         @Serial
         @Override
         protected Object readResolve() {
-            return PersistentTreeMap.sortedOf(deserializedComparator).putAll(deserializedEntries);
+            return PersistentTreeMap.sortedOf(deserializedComparator).puttingAll(deserializedEntries);
         }
     }
 

@@ -14,9 +14,12 @@ import java.util.Spliterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-/// A readable interface to a collection.
+/// This interface provides read operations for a collection.
 ///
-/// A collection represents a group of objects, known as its elements.
+/// A collection is a group of elements.
+///
+/// A read operation returns data about the collection.
+/// The operation does not change the original collection.
 ///
 /// @param <E> the element type
 public interface ReadableCollection<E> extends Iterable<E> {

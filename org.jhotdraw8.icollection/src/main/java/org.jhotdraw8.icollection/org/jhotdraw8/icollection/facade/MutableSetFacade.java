@@ -31,7 +31,7 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadableSet<E
     @Override
     public boolean remove(Object o) {
         PersistentSet<E> oldSet = backingSet;
-        backingSet = backingSet.remove((E) o);
+        backingSet = backingSet.removing((E) o);
         if (oldSet != backingSet) {
             modCount++;
             return true;
@@ -42,7 +42,7 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadableSet<E
     @Override
     public void clear() {
         PersistentSet<E> oldSet = backingSet;
-        backingSet = backingSet.empty();
+        backingSet = backingSet.cleared();
         if (oldSet != backingSet) {
             modCount++;
         }
@@ -105,7 +105,7 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadableSet<E
     @Override
     public boolean add(E e) {
         PersistentSet<E> oldSet = backingSet;
-        backingSet = backingSet.add(e);
+        backingSet = backingSet.adding(e);
         if (oldSet != backingSet) {
             modCount++;
             return true;

@@ -98,7 +98,7 @@ public class VectorListJmh {
         data = new BenchmarkData(size, mask);
         listA = PersistentVectorList.of();
         for (Key key : data.setA) {
-            listA = listA.add(key);
+            listA = listA.adding(key);
         }
         listB = PersistentVectorList.copyOf(data.setB);
         index = Math.min(listA.size() - 1, BigInteger.valueOf(listA.size() / 2).nextProbablePrime().intValue());
@@ -112,12 +112,12 @@ public class VectorListJmh {
 
     @Benchmark
     public PersistentVectorList<Key> mAddAll() {
-        return listA.addAll(data.listB);
+        return listA.addingAll(data.listB);
     }
 
     @Benchmark
     public PersistentVectorList<Key> mAddAllSameType() {
-        return listA.addAll(listB);
+        return listA.addingAll(listB);
     }
 
     @Benchmark
@@ -129,7 +129,7 @@ public class VectorListJmh {
     public PersistentVectorList<Key> mAddOneByOne() {
         PersistentVectorList<Key> l = PersistentVectorList.of();
         for (Key key : data.listA) {
-            l = l.add(key);
+            l = l.adding(key);
         }
         return l;
     }
@@ -140,7 +140,7 @@ public class VectorListJmh {
     public PersistentVectorList<Key> mRemoveOneByOne() {
         var l = listA;
         for (var e : data.listA) {
-            l = l.remove(e);
+            l = l.removing(e);
         }
         if (!l.isEmpty()) throw new AssertionError("map: " + l);
         return l;
@@ -212,7 +212,7 @@ public class VectorListJmh {
     */
     @Benchmark
     public PersistentVectorList<Key> mRemoveAtIndex() {
-        return listA.removeAt(index);
+        return listA.removingAt(index);
     }
 /*
     @Benchmark

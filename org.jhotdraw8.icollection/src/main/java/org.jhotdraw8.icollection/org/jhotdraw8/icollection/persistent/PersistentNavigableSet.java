@@ -5,27 +5,35 @@ import org.jhotdraw8.icollection.readable.ReadableNavigableSet;
 import java.util.NavigableSet;
 import java.util.NoSuchElementException;
 
-/// An interface to an persistent navigable set; the implementation guarantees that the state of the collection does not change.
+/// This interface provides copy-returning operations for a navigable set.
+///
+/// A navigable set is an ordered group of elements.
+/// The elements are ordered by height from a floor element to a ceiling element.
+/// The interface allows to navigate from an element to a higher or a lower element.
+///
+/// A copy-returning operation returns a new copy of the set
+/// with changes applied to it. The operation does not change the original
+/// set.
 ///
 /// @param <E> the element type
 public interface PersistentNavigableSet<E> extends ReadableNavigableSet<E>, PersistentSortedSet<E> {
     @Override
-    PersistentNavigableSet<E> add(E element);
+    PersistentNavigableSet<E> adding(E element);
 
     @Override
-    default PersistentNavigableSet<E> addAll(Iterable<? extends E> c) {
-        return (PersistentNavigableSet<E>) PersistentSortedSet.super.addAll(c);
+    default PersistentNavigableSet<E> addingAll(Iterable<? extends E> c) {
+        return (PersistentNavigableSet<E>) PersistentSortedSet.super.addingAll(c);
     }
 
     @Override
-    <T> PersistentNavigableSet<T> empty();
+    <T> PersistentNavigableSet<T> cleared();
 
     @Override
-    PersistentNavigableSet<E> remove(E element);
+    PersistentNavigableSet<E> removing(E element);
 
     @Override
-    default PersistentNavigableSet<E> removeAll(Iterable<?> c) {
-        return (PersistentNavigableSet<E>) PersistentSortedSet.super.removeAll(c);
+    default PersistentNavigableSet<E> removingAll(Iterable<?> c) {
+        return (PersistentNavigableSet<E>) PersistentSortedSet.super.removingAll(c);
     }
 
     /// Returns a copy of this set that contains all elements
@@ -34,8 +42,8 @@ public interface PersistentNavigableSet<E> extends ReadableNavigableSet<E>, Pers
     /// @return a new set instance with the first element removed
     /// @throws NoSuchElementException if this set is empty
     @Override
-    default PersistentNavigableSet<E> removeFirst() {
-        return remove(getFirst());
+    default PersistentNavigableSet<E> removingFirst() {
+        return this.removing(getFirst());
     }
 
     /// Returns a copy of this set that contains all elements
@@ -44,13 +52,13 @@ public interface PersistentNavigableSet<E> extends ReadableNavigableSet<E>, Pers
     /// @return a new set instance with the last element removed
     /// @throws NoSuchElementException if this set is empty
     @Override
-    default PersistentNavigableSet<E> removeLast() {
-        return remove(getLast());
+    default PersistentNavigableSet<E> removingLast() {
+        return this.removing(getLast());
     }
 
     @Override
-    default PersistentNavigableSet<E> retainAll(Iterable<?> c) {
-        return (PersistentNavigableSet<E>) PersistentSortedSet.super.retainAll(c);
+    default PersistentNavigableSet<E> retainingAll(Iterable<?> c) {
+        return (PersistentNavigableSet<E>) PersistentSortedSet.super.retainingAll(c);
     }
 
     @Override
@@ -60,7 +68,7 @@ public interface PersistentNavigableSet<E> extends ReadableNavigableSet<E>, Pers
         if (size() < 2) {
             return this;
         }
-        return this.<E>empty().addAll(readableReversed());
+        return this.<E>cleared().addingAll(readableReversed());
     }
-    
+
 }

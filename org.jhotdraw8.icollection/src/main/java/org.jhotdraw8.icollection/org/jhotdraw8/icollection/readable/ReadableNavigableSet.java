@@ -2,7 +2,14 @@ package org.jhotdraw8.icollection.readable;
 
 import org.jspecify.annotations.Nullable;
 
-/// A readable interface to a navigable set.
+/// This interface provides read operations for a navigable set.
+///
+/// A navigable set is an ordered group of elements.
+/// The elements are ordered by height from a floor element to a ceiling element.
+/// The interface allows to navigate from an element to a higher or a lower element.
+///
+/// A read operation returns data about the set.
+/// The operation does not change the original set.
 ///
 /// @param <E> the element type
 public interface ReadableNavigableSet<E> extends ReadableSortedSet<E> {

@@ -348,7 +348,7 @@ public class PageFigure extends AbstractCompositeFigure
 
         PersistentList<Transform> transforms = PersistentVectorList.of();
         if (!pageTransform.isIdentity()) {
-            transforms = transforms.add(pageTransform);
+            transforms = transforms.adding(pageTransform);
         }
 
         for (Figure child : getChildren()) {

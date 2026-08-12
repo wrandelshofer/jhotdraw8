@@ -85,7 +85,7 @@ public class ListXmlConverter<T> implements Converter<PersistentList<T>> {
             if (elem.isEmpty()) {
                 continue;
             }
-            list = list.add(elementConverter.fromString(elem, idResolver));
+            list = list.adding(elementConverter.fromString(elem, idResolver));
         }
         in.position(in.length());
         return list;

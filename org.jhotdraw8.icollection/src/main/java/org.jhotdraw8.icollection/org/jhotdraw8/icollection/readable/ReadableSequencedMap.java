@@ -16,8 +16,17 @@ import java.util.NoSuchElementException;
 import java.util.SequencedMap;
 import java.util.Spliterator;
 
-/// A readable interface to a sequenced map. A sequenced map has a well-defined encounter order, that supports
-/// operations at both ends, and that is reversible.
+/// This interface provides read operations for a sequenced map.
+///
+/// A sequenced map is a sequence of distinct entries.
+/// An entry maps a key to a value.
+/// The entries are ordered in a sequence from first to last.
+/// The sequence can be established implicitly, by insertion operations,
+/// or by sequence-altering operations.
+/// (However, this interface only provides read operations).
+///
+/// A read operation returns data about the map.
+/// The operation does not change the original map.
 ///
 /// References:
 /// <dl>

@@ -142,11 +142,11 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
     }
 
     public static <T> PersistentVectorList<T> ofIterator(Iterator<T> iterator) {
-        return PersistentVectorList.<T>of().addAll(() -> iterator);
+        return PersistentVectorList.<T>of().addingAll(() -> iterator);
     }
 
     public static <T> PersistentVectorList<T> ofStream(Stream<T> stream) {
-        return PersistentVectorList.<T>of().addAll(stream::iterator);
+        return PersistentVectorList.<T>of().addingAll(stream::iterator);
     }
 
     @SuppressWarnings("unchecked")
@@ -170,26 +170,26 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
     }
 
     @Override
-    public <T> PersistentVectorList<T> empty() {
+    public <T> PersistentVectorList<T> cleared() {
         return of();
     }
 
     @Override
-    public PersistentVectorList<E> add(E element) {
+    public PersistentVectorList<E> adding(E element) {
         return newInstance(root.append(element));
     }
 
 
     @Override
-    public PersistentVectorList<E> add(int index, E element) {
+    public PersistentVectorList<E> addingAt(int index, E element) {
         if (index == 0) {
             return newInstance(root.prepend(element));
         }
-        return index == size() ? add(element) : addAll(index, Collections.singleton(element));
+        return index == size() ? this.adding(element) : addingAllAt(index, Collections.singleton(element));
     }
 
     @Override
-    public PersistentVectorList<E> addAll(Iterable<? extends E> c) {
+    public PersistentVectorList<E> addingAll(Iterable<? extends E> c) {
         Objects.requireNonNull(c, "iterable is null");
         if (isEmpty()) {
             return copyOf(c);
@@ -212,17 +212,17 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
     }
 
     @Override
-    public PersistentVectorList<E> addFirst(@Nullable E element) {
-        return add(0, element);
+    public PersistentVectorList<E> addingFirst(@Nullable E element) {
+        return addingAt(0, element);
     }
 
     @Override
-    public PersistentVectorList<E> addLast(@Nullable E element) {
+    public PersistentVectorList<E> addingLast(@Nullable E element) {
         return newInstance(root.append(element));
     }
 
     @Override
-    public PersistentVectorList<E> addAll(int index, Iterable<? extends E> c) {
+    public PersistentVectorList<E> addingAllAt(int index, Iterable<? extends E> c) {
         Objects.requireNonNull(c, "c is null");
         int size = size();
         if (index >= 0 && index <= size) {
@@ -241,34 +241,34 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
                 () -> this);
     }
 
-    public PersistentVectorList<E> reverse() {
+    public PersistentVectorList<E> reversed() {
         return size() < 2 ? this : PersistentVectorList.copyOf(readableReversed());
     }
 
     @Override
-    public PersistentVectorList<E> remove(E element) {
+    public PersistentVectorList<E> removing(E element) {
         int index = indexOf(element);
-        return index < 0 ? this : removeAt(index);
+        return index < 0 ? this : removingAt(index);
     }
 
     @Override
-    public PersistentVectorList<E> removeAt(int index) {
-        return removeRange(index, index + 1);
+    public PersistentVectorList<E> removingAt(int index) {
+        return removingRange(index, index + 1);
     }
 
     @Override
-    public PersistentVectorList<E> removeFirst() {
-        return removeAt(0);
+    public PersistentVectorList<E> removingFirst() {
+        return removingAt(0);
     }
 
     @Override
-    public PersistentVectorList<E> removeLast() {
-        return removeAt(size() - 1);
+    public PersistentVectorList<E> removingLast() {
+        return removingAt(size() - 1);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentVectorList<E> retainAll(Iterable<?> c) {
+    public PersistentVectorList<E> retainingAll(Iterable<?> c) {
         if (isEmpty()) {
             return this;
         }
@@ -289,12 +289,12 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
     }
 
     @Override
-    public PersistentVectorList<E> removeRange(int fromIndex, int toIndex) {
+    public PersistentVectorList<E> removingRange(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
         int size = size();
         Objects.checkIndex(toIndex, size + 1);
         if (fromIndex == 0 && toIndex == size) {
-            return empty();
+            return this.cleared();
         }
         if (fromIndex == 0) {
             var end = root.drop(toIndex);
@@ -319,7 +319,7 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
 
     @Override
     @SuppressWarnings("unchecked")
-    public PersistentVectorList<E> removeAll(Iterable<?> c) {
+    public PersistentVectorList<E> removingAll(Iterable<?> c) {
         if (isEmpty()) {
             return this;
         }
@@ -341,7 +341,7 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
 
 
     @Override
-    public PersistentVectorList<E> set(int index, E element) {
+    public PersistentVectorList<E> replacingAt(int index, E element) {
         BitMappedTrie<E> newRoot = root.update(index, element);
         return newRoot == this.root ? this : newInstance(newRoot);
     }
@@ -357,7 +357,7 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
         Objects.checkIndex(fromIndex, toIndex + 1);
         Objects.checkIndex(toIndex, size() + 1);
         if (toIndex - fromIndex <= 1) {
-            return empty();
+            return this.cleared();
         }
         if (fromIndex == 0 && toIndex == size()) {
             return this;
@@ -450,7 +450,7 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
         @Serial
         @Override
         protected Object readResolve() {
-            return PersistentVectorList.of().addAll(deserializedElements);
+            return PersistentVectorList.of().addingAll(deserializedElements);
         }
     }
 

@@ -6,47 +6,55 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/// An interface to an persistent sorted map; the implementation guarantees that the state of the collection does not change.
+/// This interface provides copy-returning operations for a sorted map.
+///
+/// A sorted map is a sorted sequence of distinct entries.
+/// An entry maps a key to a value.
+/// The entries are sorted by key from first to last.
+///
+/// A copy-returning operation returns a new copy of the map
+/// with changes applied to it. The operation does not change the original
+/// map.
 ///
 /// @param <K> the key type
 /// @param <V> the value type
 public interface PersistentSortedMap<K, V> extends ReadableSortedMap<K, V>, PersistentMap<K, V> {
     @Override
-    PersistentSortedMap<K, V> clear();
+    PersistentSortedMap<K, V> cleared();
 
     @Override
-    PersistentSortedMap<K, V> put(K key, @Nullable V value);
+    PersistentSortedMap<K, V> putting(K key, @Nullable V value);
 
     @Override
-    default PersistentSortedMap<K, V> putAll(Map<? extends K, ? extends V> m) {
-        return (PersistentSortedMap<K, V>) PersistentMap.super.putAll(m);
+    default PersistentSortedMap<K, V> puttingAll(Map<? extends K, ? extends V> m) {
+        return (PersistentSortedMap<K, V>) PersistentMap.super.puttingAll(m);
     }
 
     @Override
-    default PersistentSortedMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
-        return (PersistentSortedMap<K, V>) PersistentMap.super.putAll(c);
+    default PersistentSortedMap<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+        return (PersistentSortedMap<K, V>) PersistentMap.super.puttingAll(c);
     }
 
     @Override
-    default PersistentSortedMap<K, V> putKeyValues(Object... kv) {
-        return (PersistentSortedMap<K, V>) PersistentMap.super.putKeyValues(kv);
+    default PersistentSortedMap<K, V> puttingKeyValues(Object... kv) {
+        return (PersistentSortedMap<K, V>) PersistentMap.super.puttingKeyValues(kv);
     }
 
     @Override
-    PersistentSortedMap<K, V> remove(K key);
+    PersistentSortedMap<K, V> removing(K key);
 
     @Override
-    default PersistentSortedMap<K, V> removeAll(Iterable<? extends K> c) {
-        return (PersistentSortedMap<K, V>) PersistentMap.super.removeAll(c);
+    default PersistentSortedMap<K, V> removingAll(Iterable<? extends K> c) {
+        return (PersistentSortedMap<K, V>) PersistentMap.super.removingAll(c);
     }
 
     @Override
-    default PersistentSortedMap<K, V> retainAll(Iterable<? extends K> c) {
-        return (PersistentSortedMap<K, V>) PersistentMap.super.retainAll(c);
+    default PersistentSortedMap<K, V> retainingAll(Iterable<? extends K> c) {
+        return (PersistentSortedMap<K, V>) PersistentMap.super.retainingAll(c);
     }
 
     @Override
-    default PersistentSortedMap<K, V> retainAll(ReadableCollection<? extends K> c) {
-        return (PersistentSortedMap<K, V>) PersistentMap.super.retainAll(c);
+    default PersistentSortedMap<K, V> retainingAll(ReadableCollection<? extends K> c) {
+        return (PersistentSortedMap<K, V>) PersistentMap.super.retainingAll(c);
     }
 }

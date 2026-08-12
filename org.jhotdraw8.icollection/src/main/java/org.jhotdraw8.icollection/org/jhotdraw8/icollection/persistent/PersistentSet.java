@@ -11,11 +11,13 @@ import org.jhotdraw8.icollection.readable.ReadableSet;
 import java.util.Collection;
 import java.util.Set;
 
-/// An interface to an persistent set; the implementation guarantees that the
-/// state of the collection does not change.
+/// This interface provides copy-returning operations for a set.
 ///
-/// An interface to an persistent set provides methods for creating a new persistent set with
-/// added or removed elements, without changing the original persistent set.
+/// A set is a group of distinct elements.
+///
+/// A copy-returning operation returns a new copy of the set
+/// with changes applied to it. The operation does not change the original
+/// set.
 ///
 /// @param <E> the element type
 public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E> {
@@ -25,7 +27,7 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
     /// @param <T> the element type of the returned set
     /// @return an empty set of the specified element type.
     @Override
-    <T> PersistentSet<T> empty();
+    <T> PersistentSet<T> cleared();
 
     /// Returns a copy of this set that contains all elements
     /// of this set and also the specified element.
@@ -33,7 +35,7 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
     /// @param element an element
     /// @return this set instance if it already contains the element, or
     /// a different set instance with the element added
-    PersistentSet<E> add(E element);
+    PersistentSet<E> adding(E element);
 
     /// Returns a copy of this set that contains all elements
     /// of this set and also all elements of the specified
@@ -43,9 +45,9 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
     /// @return this set instance if it already contains the elements, or
     /// a different set instance with the elements added
     @SuppressWarnings("unchecked")
-    default PersistentSet<E> addAll(Iterable<? extends E> c) {
+    default PersistentSet<E> addingAll(Iterable<? extends E> c) {
         if (c instanceof Collection<?> co && co.isEmpty()
-            || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
+                || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
             return this;
         }
         if (isEmpty() && c.getClass() == this.getClass()) {
@@ -53,7 +55,7 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
         }
         var s = this;
         for (var e : c) {
-            s = s.add(e);
+            s = s.adding(e);
         }
         return s;
     }
@@ -64,7 +66,7 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
     /// @param element an element
     /// @return this set instance if it already does not contain the element, or
     /// a different set instance with the element removed
-    PersistentSet<E> remove(E element);
+    PersistentSet<E> removing(E element);
 
     /// Returns a copy of this set that contains all elements
     /// of this set except the elements of the specified
@@ -74,15 +76,15 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
     /// @return this set instance if it already does not contain the elements, or
     /// a different set instance with the elements removed
     @SuppressWarnings("unchecked")
-    default PersistentSet<E> removeAll(Iterable<?> c) {
+    default PersistentSet<E> removingAll(Iterable<?> c) {
         if (isEmpty()
-            || c instanceof Collection<?> co && co.isEmpty()
-            || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
+                || c instanceof Collection<?> co && co.isEmpty()
+                || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
             return this;
         }
         var s = this;
         for (var e : c) {
-            s = s.remove((E) e);
+            s = s.removing((E) e);
         }
         return s;
     }
@@ -94,32 +96,32 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
     /// @return this set instance if it has not changed, or
     /// a different set instance with elements removed
     @SuppressWarnings("unchecked")
-    default PersistentSet<E> retainAll(Iterable<?> c) {
+    default PersistentSet<E> retainingAll(Iterable<?> c) {
         if (isEmpty()) {
             return this;
         }
         if (c instanceof Collection<?> co && co.isEmpty()
-            || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
-            return empty();
+                || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
+            return cleared();
         }
         if (c instanceof Collection<?> co) {
             var s = this;
             for (var e : this) {
                 if (!co.contains(e)) {
-                    s = s.remove(e);
+                    s = s.removing(e);
                 }
             }
             return s;
         }
         if (!(c instanceof ReadableCollection<?>)) {
-            PersistentSet<Object> clear = empty();
-            c = clear.addAll(c);
+            PersistentSet<Object> clear = cleared();
+            c = clear.addingAll(c);
         }
         var rc = (ReadableCollection<?>) c;
         var s = this;
         for (var e : this) {
             if (!rc.contains(e)) {
-                s = s.remove(e);
+                s = s.removing(e);
             }
         }
         return s;
