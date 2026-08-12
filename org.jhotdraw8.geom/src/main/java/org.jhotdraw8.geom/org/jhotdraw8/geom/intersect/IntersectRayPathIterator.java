@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.geom.Scalars;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.awt.geom.PathIterator;
@@ -45,7 +45,7 @@ public class IntersectRayPathIterator {
     /// @param maxT the maximal time of the line (1 = entire line)
     /// @return the intersection result
     public static IntersectionResultEx intersectRayPathIteratorEx(double aox, double aoy, double adx, double ady, PathIterator pit, double maxT) {
-        PersistentList<IntersectionPointEx> lineIntersections = VectorList.of();
+        PersistentList<IntersectionPointEx> lineIntersections = PersistentVectorList.of();
         final double[] coords = new double[6];
         double firstX = 0, firstY = 0;
         double lastX = 0, lastY = 0;

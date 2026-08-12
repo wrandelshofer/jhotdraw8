@@ -59,7 +59,7 @@ import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
 ///
 /// Implementation details:
 ///
-/// See description at [ChampVectorSet].
+/// See description at [PersistentHashVectorSet].
 ///
 /// References:
 /// <dl>
@@ -83,12 +83,12 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     /// <pre>vector index = sequence number + offset</pre>
     private int offset = 0;
     /// In this vector we store the elements in the order in which they were inserted.
-    private VectorList<Object> vector;
+    private PersistentVectorList<Object> vector;
 
     /// Constructs a new empty set.
     public MutableChampVectorSet() {
         root = BitmapIndexedNode.emptyNode();
-        vector = VectorList.of();
+        vector = PersistentVectorList.of();
     }
 
     /// Constructs a set containing the elements in the specified
@@ -100,15 +100,15 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
         if (c instanceof MutableChampVectorSet<?>) {
             c = ((MutableChampVectorSet<? extends E>) c).toPersistent();
         }
-        if (c instanceof ChampVectorSet<?>) {
-            ChampVectorSet<E> that = (ChampVectorSet<E>) c;
+        if (c instanceof PersistentHashVectorSet<?>) {
+            PersistentHashVectorSet<E> that = (PersistentHashVectorSet<E>) c;
             this.root = that.root;
             this.size = that.size;
             this.offset = that.offset;
             this.vector = that.vector;
         } else {
             this.root = BitmapIndexedNode.emptyNode();
-            this.vector = VectorList.of();
+            this.vector = PersistentVectorList.of();
             addAll(c);
         }
     }
@@ -182,7 +182,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
-        vector = VectorList.of();
+        vector = PersistentVectorList.of();
         size = 0;
         modCount++;
         offset = -1;
@@ -385,11 +385,11 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     /// Returns an persistent copy of this set.
     ///
     /// @return an persistent copy
-    public ChampVectorSet<E> toPersistent() {
+    public PersistentHashVectorSet<E> toPersistent() {
         owner = null;
         return size == 0
-                ? ChampVectorSet.of()
-                : new ChampVectorSet<>(root, vector, size, offset);
+                ? PersistentHashVectorSet.of()
+                : new PersistentHashVectorSet<>(root, vector, size, offset);
     }
 
     @Serial

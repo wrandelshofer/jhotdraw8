@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -88,15 +88,15 @@ public class AllWalksSpliteratorTest {
 
         return Arrays.asList(
                 dynamicTest("1", () -> testFindAllPaths(graph, 1, 5, 4, Arrays.asList(
-                        VectorList.of(1, 3, 5),
-                        VectorList.of(1, 2, 3, 5),
-                        VectorList.of(1, 3, 4, 5),
-                        VectorList.of(1, 2, 3, 4, 5)
+                        PersistentVectorList.of(1, 3, 5),
+                        PersistentVectorList.of(1, 2, 3, 5),
+                        PersistentVectorList.of(1, 3, 4, 5),
+                        PersistentVectorList.of(1, 2, 3, 4, 5)
                 ))),
                 dynamicTest("2", () -> testFindAllPaths(graph, 1, 5, 3, Arrays.asList(
-                        VectorList.of(1, 3, 5),
-                        VectorList.of(1, 2, 3, 5),
-                        VectorList.of(1, 3, 4, 5)
+                        PersistentVectorList.of(1, 3, 5),
+                        PersistentVectorList.of(1, 2, 3, 5),
+                        PersistentVectorList.of(1, 3, 4, 5)
                 )))
         );
     }

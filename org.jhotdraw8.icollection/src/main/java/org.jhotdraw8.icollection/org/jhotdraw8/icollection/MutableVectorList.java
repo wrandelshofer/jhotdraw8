@@ -126,7 +126,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     public boolean addAll(int index, Collection<? extends E> c) {
         Objects.checkIndex(index, root.length + 1);
         int oldSize = root.length;
-        VectorList<E> persistent = toPersistent().addAll(index, c);
+        PersistentVectorList<E> persistent = toPersistent().addAll(index, c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
             modCount++;
@@ -143,7 +143,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     public boolean addAll(int index, Iterable<? extends E> c) {
         Objects.checkIndex(index, root.length + 1);
         int oldSize = root.length;
-        VectorList<E> persistent = toPersistent().addAll(index, c);
+        PersistentVectorList<E> persistent = toPersistent().addAll(index, c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
             modCount++;
@@ -163,7 +163,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public boolean removeAll(Collection<?> c) {
         int oldSize = root.length;
-        VectorList<E> persistent = toPersistent().removeAll(c);
+        PersistentVectorList<E> persistent = toPersistent().removeAll(c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
             modCount++;
@@ -175,7 +175,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public boolean retainAll(Collection<?> c) {
         int oldSize = root.length;
-        VectorList<E> persistent = toPersistent().retainAll(c);
+        PersistentVectorList<E> persistent = toPersistent().retainAll(c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
             modCount++;
@@ -192,8 +192,8 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         if (c instanceof MutableVectorList<?>) {
             c = ((MutableVectorList<? extends E>) c).toPersistent();
         }
-        if (c instanceof VectorList<?>) {
-            VectorList<E> that = (VectorList<E>) c;
+        if (c instanceof PersistentVectorList<?>) {
+            PersistentVectorList<E> that = (PersistentVectorList<E>) c;
             this.root = that.root;
         } else {
             this.root = BitMappedTrie.empty();
@@ -201,8 +201,8 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         }
     }
 
-    public VectorList<E> toPersistent() {
-        return root.length == 0 ? VectorList.of() : new VectorList<>(root);
+    public PersistentVectorList<E> toPersistent() {
+        return root.length == 0 ? PersistentVectorList.of() : new PersistentVectorList<>(root);
     }
 
     @Serial

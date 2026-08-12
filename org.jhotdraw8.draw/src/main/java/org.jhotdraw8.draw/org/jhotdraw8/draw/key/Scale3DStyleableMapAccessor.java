@@ -10,7 +10,7 @@ import org.jhotdraw8.draw.css.converter.Scale3DCssConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
@@ -106,7 +106,7 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
 
     @Override
     public PersistentList<String> getExamples() {
-        return VectorList.of(
+        return PersistentVectorList.of(
                 converter.toString(new Point3D(0.5, 0.5, 1)),
                 converter.toString(new Point3D(0.5, 1, 1)),
                 converter.toString(new Point3D(1, 0.5, 1)),

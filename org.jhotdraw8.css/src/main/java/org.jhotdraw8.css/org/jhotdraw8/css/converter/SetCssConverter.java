@@ -10,8 +10,8 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
-import org.jhotdraw8.icollection.ChampVectorSet;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentHashVectorSet;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
@@ -118,9 +118,9 @@ public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T
                            @Nullable Comparator<T> comparatorForSorting
     ) {
         this.elementConverter = elementConverter;
-        this.delimiter = VectorList.copyOf(delimiter);
-        this.prefix = VectorList.copyOf(prefix);
-        this.suffix = VectorList.copyOf(suffix);
+        this.delimiter = PersistentVectorList.copyOf(delimiter);
+        this.prefix = PersistentVectorList.copyOf(prefix);
+        this.suffix = PersistentVectorList.copyOf(suffix);
         delimiterChars = new HashSet<>();
         for (CssToken cssToken : delimiter) {
             if (cssToken.getType() >= 0) {
@@ -134,7 +134,7 @@ public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T
     @Override
     public PersistentSequencedSet<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return ChampVectorSet.of();
+            return PersistentHashVectorSet.of();
         } else {
             tt.pushBack();
         }
@@ -170,7 +170,7 @@ public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T
         if (comparatorForSorting != null) {
             list.sort(comparatorForSorting);
         }
-        return ChampVectorSet.copyOf(list);
+        return PersistentHashVectorSet.copyOf(list);
     }
 
     @Override
@@ -179,39 +179,39 @@ public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;
         }
-            for (CssToken t : prefix) {
-                out.accept(t);
+        for (CssToken t : prefix) {
+            out.accept(t);
+        }
+        boolean first = true;
+        Iterable<T> ordered;
+        if (comparatorForSorting != null) {
+            ArrayList<T> ts = new ArrayList<>(value.asCollection());
+            ts.sort(comparatorForSorting);
+            ordered = ts;
+        } else {
+            ordered = value;
+        }
+        for (T elem : ordered) {
+            if (elem == null) {
+                continue;
             }
-            boolean first = true;
-            Iterable<T> ordered;
-            if (comparatorForSorting != null) {
-                ArrayList<T> ts = new ArrayList<>(value.asCollection());
-                ts.sort(comparatorForSorting);
-                ordered = ts;
+            if (first) {
+                first = false;
             } else {
-                ordered = value;
-            }
-            for (T elem : ordered) {
-                if (elem == null) {
-                    continue;
+                for (CssToken t : delimiter) {
+                    out.accept(t);
                 }
-                if (first) {
-                    first = false;
-                } else {
-                    for (CssToken t : delimiter) {
-                        out.accept(t);
-                    }
-                }
-                elementConverter.produceTokens(elem, idSupplier, out);
             }
-            for (CssToken t : suffix) {
-                out.accept(t);
-            }
+            elementConverter.produceTokens(elem, idSupplier, out);
+        }
+        for (CssToken t : suffix) {
+            out.accept(t);
+        }
     }
 
     @Override
     public @Nullable PersistentSequencedSet<T> getDefaultValue() {
-        return ChampVectorSet.of();
+        return PersistentHashVectorSet.of();
     }
 
     @Override

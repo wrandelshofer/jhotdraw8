@@ -9,7 +9,7 @@ import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.css.value.QualifiedName;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
@@ -98,12 +98,12 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     public ReadableSet<String> getStyleClasses(Element elem) {
         String value = elem.getAttribute("class");
         String[] clazzes = value.split(" +");
-        return ChampSet.copyOf(Arrays.asList(clazzes));
+        return PersistentHashSet.copyOf(Arrays.asList(clazzes));
     }
 
     @Override
     public ReadableSet<String> getPseudoClasses(Element elem) {
-        return ChampSet.of();
+        return PersistentHashSet.of();
     }
 
     /// Supports the following pseudo classes:
@@ -277,26 +277,26 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
         }
         String value1 = buf.toString();
         switch (origin) {
-        case USER:
-        case USER_AGENT:
-        case INLINE:
-        case AUTHOR:
-            if (TypeSelector.ANY_NAMESPACE.equals(namespace)) {
-                NamedNodeMap nnm = element.getAttributes();
-                for (int i = 0, n = nnm.getLength(); i < n; i++) {
-                    Node item = nnm.item(i);
-                    if (item.getLocalName().equals(name)) {
-                        item.setNodeValue(value1);
-                        return;
+            case USER:
+            case USER_AGENT:
+            case INLINE:
+            case AUTHOR:
+                if (TypeSelector.ANY_NAMESPACE.equals(namespace)) {
+                    NamedNodeMap nnm = element.getAttributes();
+                    for (int i = 0, n = nnm.getLength(); i < n; i++) {
+                        Node item = nnm.item(i);
+                        if (item.getLocalName().equals(name)) {
+                            item.setNodeValue(value1);
+                            return;
+                        }
                     }
+                    element.setAttribute(name, value1);
+                } else {
+                    element.setAttributeNS(namespace, name, value1);
                 }
-                element.setAttribute(name, value1);
-            } else {
-                element.setAttributeNS(namespace, name, value1);
-            }
-            break;
-        default:
-            throw new UnsupportedOperationException("Unsupported origin=" + origin);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported origin=" + origin);
         }
     }
 }

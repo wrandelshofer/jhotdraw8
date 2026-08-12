@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -162,16 +162,16 @@ public class ChampSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private ChampSet<Key> setA;
-    private ChampSet<Key> setB;
-    private ChampSet<Key> setAA;
+    private PersistentHashSet<Key> setA;
+    private PersistentHashSet<Key> setB;
+    private PersistentHashSet<Key> setAA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = ChampSet.copyOf(data.setA);
-        setB = ChampSet.copyOf(data.listB);
-        setAA = ChampSet.copyOf(data.listA);
+        setA = PersistentHashSet.copyOf(data.setA);
+        setB = PersistentHashSet.copyOf(data.listB);
+        setAA = PersistentHashSet.copyOf(data.listA);
         assert setA.size() == size;
         assert setB.size() == size;
         assert setAA.size() == size;
@@ -179,16 +179,16 @@ public class ChampSetJmh {
 
 
     @Benchmark
-    public ChampSet<Key> mCopyOf() {
-        ChampSet<Key> set = ChampSet.copyOf(data.listA);
+    public PersistentHashSet<Key> mCopyOf() {
+        PersistentHashSet<Key> set = PersistentHashSet.copyOf(data.listA);
         assert set.size() == data.listA.size();
         return set;
     }
 
 
     @Benchmark
-    public ChampSet<Key> mCopyOnyByOne() {
-        ChampSet<Key> set = ChampSet.of();
+    public PersistentHashSet<Key> mCopyOnyByOne() {
+        PersistentHashSet<Key> set = PersistentHashSet.of();
         for (Key key : data.listA) {
             set = set.add(key);
         }
@@ -197,8 +197,8 @@ public class ChampSetJmh {
     }
 
     @Benchmark
-    public ChampSet<Key> mRemoveOneByOne() {
-        ChampSet<Key> set = setA;
+    public PersistentHashSet<Key> mRemoveOneByOne() {
+        PersistentHashSet<Key> set = setA;
         for (Key key : data.listA) {
             set = set.remove(key);
         }
@@ -207,51 +207,51 @@ public class ChampSetJmh {
     }
 
     @Benchmark
-    public ChampSet<Key> mRemoveAllFromDifferentType() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.removeAll(data.setA);
+    public PersistentHashSet<Key> mRemoveAllFromDifferentType() {
+        PersistentHashSet<Key> set = setA;
+        PersistentHashSet<Key> updated = set.removeAll(data.setA);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public ChampSet<Key> mRemoveAllFromSameType() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.removeAll(setAA);
+    public PersistentHashSet<Key> mRemoveAllFromSameType() {
+        PersistentHashSet<Key> set = setA;
+        PersistentHashSet<Key> updated = set.removeAll(setAA);
         assert updated.isEmpty();
         return updated;
     }
 
 
     @Benchmark
-    public ChampSet<Key> mRetainAllFromDifferentTypeAllRetained() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.retainAll(data.setA);
+    public PersistentHashSet<Key> mRetainAllFromDifferentTypeAllRetained() {
+        PersistentHashSet<Key> set = setA;
+        PersistentHashSet<Key> updated = set.retainAll(data.setA);
         assert updated == setA;
         return updated;
     }
 
     @Benchmark
-    public ChampSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.retainAll(data.setB);
+    public PersistentHashSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
+        PersistentHashSet<Key> set = setA;
+        PersistentHashSet<Key> updated = set.retainAll(data.setB);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public ChampSet<Key> mRetainAllFromSameTypeAllRetained() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.retainAll(setAA);
+    public PersistentHashSet<Key> mRetainAllFromSameTypeAllRetained() {
+        PersistentHashSet<Key> set = setA;
+        PersistentHashSet<Key> updated = set.retainAll(setAA);
         assert updated == setA;
         return updated;
     }
 
 
     @Benchmark
-    public ChampSet<Key> mRetainAllFromSameTypeNoneRetained() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.retainAll(setB);
+    public PersistentHashSet<Key> mRetainAllFromSameTypeNoneRetained() {
+        PersistentHashSet<Key> set = setA;
+        PersistentHashSet<Key> updated = set.retainAll(setB);
         assert updated.isEmpty();
         return updated;
     }
@@ -272,14 +272,14 @@ public class ChampSetJmh {
 
 
     @Benchmark
-    public ChampSet<Key> mRemoveThenAdd() {
+    public PersistentHashSet<Key> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return setA.remove(key).add(key);
     }
 
 
     @Benchmark
-    public ChampSet<Key> mTail() {
+    public PersistentHashSet<Key> mTail() {
         return setA.remove(setA.iterator().next());
     }
 

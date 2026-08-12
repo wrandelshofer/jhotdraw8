@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.ChampVectorMap;
+import org.jhotdraw8.icollection.PersistentHashVectorMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -138,12 +138,12 @@ public class VectorMapJmh {
     private int mask = -65;
 
     private BenchmarkData data;
-    private ChampVectorMap<Key, Boolean> mapA;
+    private PersistentHashVectorMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        mapA = ChampVectorMap.of();
+        mapA = PersistentHashVectorMap.of();
         for (Key key : data.setA) {
             mapA = mapA.put(key, Boolean.TRUE);
         }
@@ -159,25 +159,25 @@ public class VectorMapJmh {
     }
 
     @Benchmark
-    public ChampVectorMap<Key, Boolean> mRemoveThenAdd() {
+    public PersistentHashVectorMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return mapA.remove(key).put(key, Boolean.TRUE);
     }
 
     @Benchmark
-    public ChampVectorMap<Key, Boolean> mPut() {
+    public PersistentHashVectorMap<Key, Boolean> mPut() {
         Key key = data.nextKeyInA();
         return mapA.put(key, Boolean.FALSE);
     }
 
     @Benchmark
-    public ChampVectorMap<Key, Boolean> mCopyOf() {
-        return ChampVectorMap.copyOf(data.mapA);
+    public PersistentHashVectorMap<Key, Boolean> mCopyOf() {
+        return PersistentHashVectorMap.copyOf(data.mapA);
     }
 
     @Benchmark
-    public ChampVectorMap<Key, Boolean> mCopyOnyByOne() {
-        ChampVectorMap<Key, Boolean> set = ChampVectorMap.of();
+    public PersistentHashVectorMap<Key, Boolean> mCopyOnyByOne() {
+        PersistentHashVectorMap<Key, Boolean> set = PersistentHashVectorMap.of();
         for (Key key : data.listA) {
             set = set.put(key, Boolean.FALSE);
         }
@@ -203,12 +203,12 @@ public class VectorMapJmh {
     }
 
     @Benchmark
-    public ChampVectorMap<Key, Boolean> mTail() {
+    public PersistentHashVectorMap<Key, Boolean> mTail() {
         return mapA.remove(mapA.iterator().next().getKey());
     }
 
     @Benchmark
-    public ChampVectorMap<Key, Boolean> mRemoveOneByOne() {
+    public PersistentHashVectorMap<Key, Boolean> mRemoveOneByOne() {
         var map = mapA;
         for (var e : data.listA) {
             map = map.remove(e);
@@ -219,14 +219,14 @@ public class VectorMapJmh {
 
 
     @Benchmark
-    public ChampVectorMap<Key, Boolean> mRemoveAll() {
+    public PersistentHashVectorMap<Key, Boolean> mRemoveAll() {
         var updated = mapA.removeAll(data.setA);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public ChampVectorMap<Key, Boolean> mRetainAllNoneRetained() {
+    public PersistentHashVectorMap<Key, Boolean> mRetainAllNoneRetained() {
         var set = mapA;
         var updated = set.retainAll(data.setB);
         assert updated.isEmpty();
@@ -234,7 +234,7 @@ public class VectorMapJmh {
     }
 
     @Benchmark
-    public ChampVectorMap<Key, Boolean> mRetainAllAllRetained() {
+    public PersistentHashVectorMap<Key, Boolean> mRetainAllAllRetained() {
         var set = mapA;
         var updated = set.retainAll(data.setA);
         assert updated == mapA;

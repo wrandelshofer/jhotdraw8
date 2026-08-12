@@ -22,7 +22,7 @@ import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.net.UriUtil;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.PersistentHashMap;
 import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
@@ -81,43 +81,43 @@ public class ExitAction extends AbstractApplicationAction {
 
         final Resources labels = ApplicationLabels.getResources();
         switch (unsavedViewsCount) {
-        case 0: {
-            doExit(workState);
-            break;
-        }
-        case 1: {
-            reviewNext(workState);
-            break;
-        }
-        default: {
-            ButtonType[] options = { //
-                    new ButtonType(labels.getString("application.exit.reviewChangesOption.text"), ButtonBar.ButtonData.YES),//
-                    new ButtonType(labels.getString("application.exit.cancelOption.text"), ButtonBar.ButtonData.CANCEL_CLOSE), //
-                    new ButtonType(labels.getString("application.exit.discardChangesOption.text"), ButtonBar.ButtonData.NO)//
-            };
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,//
-                    labels.getString("application.exit.doYouWantToReview.details"),
-                    options);
-            alert.setHeaderText(labels.getFormatted("application.exit.doYouWantToReview.message", unsavedViewsCount));
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent()) {
-                switch (result.get().getButtonData()) {
-                default:
-                case CANCEL_CLOSE:
-                    app.removeDisabler(workState);
-                    break;
-                case NO:
-                    app.exit();
-                    break;
-                case YES:
-                    unsavedView = documentToBeReviewed;
-                    reviewChanges(workState);
-                    break;
-                }
-            } else {
-                app.removeDisabler(workState);
+            case 0: {
+                doExit(workState);
+                break;
             }
-        }
+            case 1: {
+                reviewNext(workState);
+                break;
+            }
+            default: {
+                ButtonType[] options = { //
+                        new ButtonType(labels.getString("application.exit.reviewChangesOption.text"), ButtonBar.ButtonData.YES),//
+                        new ButtonType(labels.getString("application.exit.cancelOption.text"), ButtonBar.ButtonData.CANCEL_CLOSE), //
+                        new ButtonType(labels.getString("application.exit.discardChangesOption.text"), ButtonBar.ButtonData.NO)//
+                };
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,//
+                        labels.getString("application.exit.doYouWantToReview.details"),
+                        options);
+                alert.setHeaderText(labels.getFormatted("application.exit.doYouWantToReview.message", unsavedViewsCount));
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent()) {
+                    switch (result.get().getButtonData()) {
+                        default:
+                        case CANCEL_CLOSE:
+                            app.removeDisabler(workState);
+                            break;
+                        case NO:
+                            app.exit();
+                            break;
+                        case YES:
+                            unsavedView = documentToBeReviewed;
+                            reviewChanges(workState);
+                            break;
+                    }
+                } else {
+                    app.removeDisabler(workState);
+                }
+            }
         }
     }
 
@@ -154,19 +154,19 @@ public class ExitAction extends AbstractApplicationAction {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent()) {
                 switch (result.get().getButtonData()) {
-                default:
-                case CANCEL_CLOSE:
-                    unsavedViewLocalVariable.removeDisabler(workState);
-                    getApplication().removeDisabler(workState);
-                    break;
-                case NO:
-                    getApplication().getActivities().remove(unsavedViewLocalVariable);
-                    unsavedViewLocalVariable.removeDisabler(workState);
-                    reviewNext(workState);
-                    break;
-                case YES:
-                    saveChangesAndReviewNext(workState);
-                    break;
+                    default:
+                    case CANCEL_CLOSE:
+                        unsavedViewLocalVariable.removeDisabler(workState);
+                        getApplication().removeDisabler(workState);
+                        break;
+                    case NO:
+                        getApplication().getActivities().remove(unsavedViewLocalVariable);
+                        unsavedViewLocalVariable.removeDisabler(workState);
+                        reviewNext(workState);
+                        break;
+                    case YES:
+                        saveChangesAndReviewNext(workState);
+                        break;
                 }
             } else {
                 unsavedViewLocalVariable.removeDisabler(workState);
@@ -225,7 +225,7 @@ public class ExitAction extends AbstractApplicationAction {
         if (v == null) {
             return;
         }
-        v.write(uri, format, ChampMap.of(), workState).handle((result, exception) -> {
+        v.write(uri, format, PersistentHashMap.of(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -258,7 +258,7 @@ public class ExitAction extends AbstractApplicationAction {
         if (v == null) {
             return;
         }
-        v.write(uri, format, ChampMap.of(), workState).handle((result, exception) -> {
+        v.write(uri, format, PersistentHashMap.of(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
                 if (oldFocusOwner != null) {

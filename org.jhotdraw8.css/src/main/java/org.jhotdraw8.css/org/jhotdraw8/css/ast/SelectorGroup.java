@@ -7,7 +7,7 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
 
@@ -23,12 +23,12 @@ public class SelectorGroup extends Selector {
 
     public SelectorGroup(@Nullable SourceLocator sourceLocator, Selector selector) {
         super(sourceLocator);
-        this.selectors = VectorList.of(selector);
+        this.selectors = PersistentVectorList.of(selector);
     }
 
     public SelectorGroup(@Nullable SourceLocator sourceLocator, List<Selector> selectors) {
         super(sourceLocator);
-        this.selectors = VectorList.copyOf(selectors);
+        this.selectors = PersistentVectorList.copyOf(selectors);
     }
 
     @Override

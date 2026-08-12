@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
@@ -26,8 +26,8 @@ public class Stylesheet extends AbstractSyntaxTree {
     public Stylesheet(@Nullable URI uri, List<Rule> rules) {
         super(new SourceLocator(0, 1, uri));
         this.uri = uri;
-        this.rules = VectorList.copyOf(rules);
-        this.styleRules = VectorList.copyOf(
+        this.rules = PersistentVectorList.copyOf(rules);
+        this.styleRules = PersistentVectorList.copyOf(
                 rules.stream()
                         .filter(r -> r instanceof StyleRule)
                         .map(r -> (StyleRule) r)

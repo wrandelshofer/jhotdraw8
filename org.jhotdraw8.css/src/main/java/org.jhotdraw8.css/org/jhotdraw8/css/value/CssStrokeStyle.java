@@ -7,7 +7,7 @@ package org.jhotdraw8.css.value;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -23,7 +23,7 @@ public class CssStrokeStyle {
 
     public CssStrokeStyle() {
         this(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, CssSize.of(4.0),
-                CssSize.ZERO, VectorList.of());
+                CssSize.ZERO, PersistentVectorList.of());
     }
 
     public CssStrokeStyle(StrokeType type, StrokeLineCap lineCap, StrokeLineJoin lineJoin, CssSize miterLimit,

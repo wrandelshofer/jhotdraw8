@@ -21,7 +21,7 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.DoubleListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -100,7 +100,7 @@ public class SvgPolylineFigure extends AbstractLeafFigure
                 t.add(transformed.getX());
                 t.add(transformed.getY());
             }
-            set(POINTS, VectorList.copyOf(t));
+            set(POINTS, PersistentVectorList.copyOf(t));
         }
     }
 

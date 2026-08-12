@@ -5,7 +5,7 @@
 package org.jhotdraw8.css.parser;
 
 import org.jhotdraw8.css.ast.SourceLocator;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
@@ -26,11 +26,11 @@ public class ListCssTokenizer implements CssTokenizer {
     private static final CssToken EOF = new CssToken(CssTokenType.TT_EOF);
 
     public ListCssTokenizer(List<CssToken> in) {
-        this(VectorList.copyOf(in));
+        this(PersistentVectorList.copyOf(in));
     }
 
     public ListCssTokenizer(ReadableList<CssToken> in) {
-        this.in = VectorList.copyOf(in);
+        this.in = PersistentVectorList.copyOf(in);
         current = in.isEmpty() ? EOF : in.get(0);
     }
 

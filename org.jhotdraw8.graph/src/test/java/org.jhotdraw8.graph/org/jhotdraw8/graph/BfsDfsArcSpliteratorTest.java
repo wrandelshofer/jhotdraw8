@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.graph.iterator.BfsDfsArcSpliterator;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -100,7 +100,7 @@ public class BfsDfsArcSpliteratorTest {
                 } else if (path.get(path.size() - 1).equals(current.getStart())) {
                     path.add(current.getEnd());
                 } else {
-                    paths.add(VectorList.copyOf(path));
+                    paths.add(PersistentVectorList.copyOf(path));
                     path = new ArrayList<>();
                     path.add(current.getStart());
                     path.add(current.getEnd());
@@ -108,7 +108,7 @@ public class BfsDfsArcSpliteratorTest {
             }
         }
         if (path != null) {
-            paths.add(VectorList.copyOf(path));
+            paths.add(PersistentVectorList.copyOf(path));
         }
 
         String actual = paths.toString();

@@ -9,7 +9,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.geom.FXSvgPaths;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -38,7 +38,7 @@ public class FXPathElementsXmlConverter implements Converter<PersistentList<Path
         if ("none".equals(string)) {
             return null;
         }
-        return VectorList.copyOf(FXSvgPaths.svgStringToPathElements(string));
+        return PersistentVectorList.copyOf(FXSvgPaths.svgStringToPathElements(string));
     }
 
     @Override
@@ -49,6 +49,6 @@ public class FXPathElementsXmlConverter implements Converter<PersistentList<Path
 
     @Override
     public @Nullable PersistentList<PathElement> getDefaultValue() {
-        return VectorList.of();
+        return PersistentVectorList.of();
     }
 }

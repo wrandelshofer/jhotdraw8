@@ -10,7 +10,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
@@ -94,7 +94,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                 out.add(t);
             }
         }
-        return VectorList.copyOf(out);
+        return PersistentVectorList.copyOf(out);
     }
 
     @Override

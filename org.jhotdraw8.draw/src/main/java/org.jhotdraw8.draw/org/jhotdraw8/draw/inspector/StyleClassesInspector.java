@@ -26,7 +26,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jspecify.annotations.Nullable;
 
@@ -87,7 +87,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     }
 
     public void addTag(String wordList) {
-       undoHelper.startCompositeEdit(null);
+        undoHelper.startCompositeEdit(null);
         for (String tagName : wordList.split(" ")) {
             if (tagName != null && !tagName.trim().isEmpty()) {
                 tagName = tagName.trim();
@@ -104,7 +104,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                     }
                     if (!contains) {
                         newTags.add(tagName);
-                        getModel().set(f, tagsKey, ChampSet.copyOf(newTags));
+                        getModel().set(f, tagsKey, PersistentHashSet.copyOf(newTags));
                     }
                 }
                 updateList();
@@ -184,7 +184,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                         }
                     }
                     if (contains) {
-                        getModel().set(f, tagsKey, ChampSet.copyOf(newTags));
+                        getModel().set(f, tagsKey, PersistentHashSet.copyOf(newTags));
                     }
                 }
                 updateList();

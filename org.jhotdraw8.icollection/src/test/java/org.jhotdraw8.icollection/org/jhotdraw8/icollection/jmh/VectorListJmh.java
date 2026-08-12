@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -82,57 +82,62 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class VectorListJmh {
-    @Param({"10", "1000", "1000000"})
+    @Param({"10", "1000", "100000"})
     private int size;
 
     private int mask = -65;
 
     private BenchmarkData data;
-    private VectorList<Key> listA;
-    private VectorList<Key> listB;
+    private PersistentVectorList<Key> listA;
+    private PersistentVectorList<Key> listB;
 
     private int index;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        listA = VectorList.of();
+        listA = PersistentVectorList.of();
         for (Key key : data.setA) {
             listA = listA.add(key);
         }
-        listB = VectorList.copyOf(data.setB);
+        listB = PersistentVectorList.copyOf(data.setB);
         index = Math.min(listA.size() - 1, BigInteger.valueOf(listA.size() / 2).nextProbablePrime().intValue());
     }
 
-/*
+
     @Benchmark
-    public VectorList<Key> mAddAll() {
-        return VectorList.copyOf(data.setA);
+    public PersistentVectorList<Key> mCopyOf() {
+        return PersistentVectorList.copyOf(data.setA);
     }
 
     @Benchmark
-    public VectorList<Key> mAddAllSameType() {
+    public PersistentVectorList<Key> mAddAll() {
+        return listA.addAll(data.listB);
+    }
+
+    @Benchmark
+    public PersistentVectorList<Key> mAddAllSameType() {
         return listA.addAll(listB);
     }
 
     @Benchmark
-    public VectorList<Key> mAddAllArray() {
-        return VectorList.<Key>of(data.arrayA);
+    public PersistentVectorList<Key> mAddAllArray() {
+        return PersistentVectorList.<Key>of(data.arrayA);
     }
 
     @Benchmark
-    public VectorList<Key> mAddOneByOne() {
-        VectorList<Key> l = VectorList.of();
+    public PersistentVectorList<Key> mAddOneByOne() {
+        PersistentVectorList<Key> l = PersistentVectorList.of();
         for (Key key : data.listA) {
             l = l.add(key);
         }
         return l;
     }
-*/
+
 
     /// This appears to be broken!
     @Benchmark
-    public VectorList<Key> mRemoveOneByOne() {
+    public PersistentVectorList<Key> mRemoveOneByOne() {
         var l = listA;
         for (var e : data.listA) {
             l = l.remove(e);
@@ -206,7 +211,7 @@ public class VectorListJmh {
         }
     */
     @Benchmark
-    public VectorList<Key> mRemoveAtIndex() {
+    public PersistentVectorList<Key> mRemoveAtIndex() {
         return listA.removeAt(index);
     }
 /*

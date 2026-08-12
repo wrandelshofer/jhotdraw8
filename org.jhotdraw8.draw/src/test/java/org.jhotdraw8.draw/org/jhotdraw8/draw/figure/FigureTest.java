@@ -22,7 +22,7 @@ import org.jhotdraw8.fxbase.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.fxbase.styleable.StyleableBean;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
@@ -150,7 +150,7 @@ public class FigureTest {
 
         @Override
         public ReadableSet<Figure> getReadOnlyLayoutObservers() {
-            return ChampSet.of();
+            return PersistentHashSet.of();
         }
 
         @Override

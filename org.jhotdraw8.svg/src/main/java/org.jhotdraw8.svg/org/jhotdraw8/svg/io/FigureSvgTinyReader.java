@@ -27,7 +27,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.MapEntries;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.text.SvgDefaultablePaintConverter;
@@ -203,7 +203,7 @@ public class FigureSvgTinyReader {
     private String toLocationString(@Nullable Location location) {
         return location == null ? "" :
                 location.getSystemId()
-                        + " at [row,col]:[" + location.getLineNumber() + "," + location.getColumnNumber() + "]";
+                + " at [row,col]:[" + location.getLineNumber() + "," + location.getColumnNumber() + "]";
     }
 
     /// Performs error processing.
@@ -299,7 +299,7 @@ public class FigureSvgTinyReader {
                 secondPass.run();
             }
 
-            root.set(SvgDrawing.INLINE_STYLESHEETS, VectorList.copyOf(ctx.stylesheets));
+            root.set(SvgDrawing.INLINE_STYLESHEETS, PersistentVectorList.copyOf(ctx.stylesheets));
 
 
             if (!(root instanceof SvgDrawing)) {

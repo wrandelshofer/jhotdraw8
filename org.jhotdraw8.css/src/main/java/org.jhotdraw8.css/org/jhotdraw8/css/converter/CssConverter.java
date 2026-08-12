@@ -11,7 +11,7 @@ import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -143,7 +143,7 @@ public interface CssConverter<T> extends Converter<T> {
     @Nullable String getHelpText();
 
     default PersistentList<String> getExamples() {
-        return VectorList.of();
+        return PersistentVectorList.of();
     }
 
     boolean isNullable();

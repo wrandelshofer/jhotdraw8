@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.util.ArrayList;
@@ -99,6 +99,6 @@ public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<StartAndEn
             endPoints.add(new PointAndDerivative(endX, endY, endTangentX, endTangentY));
             startDone = false;
         }
-        return new StartAndEndPoints(VectorList.copyOf(startPoints), VectorList.copyOf(endPoints));
+        return new StartAndEndPoints(PersistentVectorList.copyOf(startPoints), PersistentVectorList.copyOf(endPoints));
     }
 }

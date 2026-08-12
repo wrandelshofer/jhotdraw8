@@ -5,7 +5,7 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.css.parser.CssToken;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -25,7 +25,7 @@ public class Declaration extends AbstractSyntaxTree {
         super(sourceLocator);
         this.namespace = namespace;
         this.propertyName = propertyName;
-        this.terms = VectorList.copyOf(terms);
+        this.terms = PersistentVectorList.copyOf(terms);
         this.startPos = startPos;
         this.endPos = endPos;
         this.lineNumber = lineNumber;

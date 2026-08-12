@@ -15,8 +15,8 @@ import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.PrivateData;
-import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -32,7 +32,7 @@ import java.awt.geom.Rectangle2D;
 /// C0, C1, C2. A mask defines which control points are in use. At a node, the path
 /// passes through C0. C1 controls the curve going towards C0. C2 controls the
 /// curve going away from C0.
-public class BezierPath extends VectorList<BezierNode> implements Shape {
+public class BezierPath extends PersistentVectorList<BezierNode> implements Shape {
     /// This field is used for memoizing PathMetrics that have been built fom this instance.
     private transient @Nullable PathMetrics pathMetrics;
     /// This field is used for memoizing Bounds that have been built fom this instance.
@@ -135,7 +135,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
         IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
         PersistentList<IntersectionPoint> intersections = isect.intersections();
         //noinspection RedundantSuppression
-        @SuppressWarnings({"unchecked", "rawtypes"}) VectorList<BezierNode>[] result = new VectorList[]{this};
+        @SuppressWarnings({"unchecked", "rawtypes"}) PersistentVectorList<BezierNode>[] result = new PersistentVectorList[]{this};
         if (intersections.size() == 1) {
             int segment = (int) intersections.getFirst().argumentA();
             final BezierNode middle;
@@ -196,7 +196,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
 
     public BezierPath join(int segment, double tolerance) {
         //noinspection RedundantSuppression
-        @SuppressWarnings({"unchecked", "rawtypes"}) VectorList<BezierNode>[] result = new VectorList[]{this};
+        @SuppressWarnings({"unchecked", "rawtypes"}) PersistentVectorList<BezierNode>[] result = new PersistentVectorList[]{this};
 
         final int prevSegment = (segment - 1 + size()) % size();
         final int nextSegment = (segment + 1) % size();
@@ -275,7 +275,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     @Override
-    protected VectorList<BezierNode> newInstance(PrivateData privateData) {
+    protected PersistentVectorList<BezierNode> newInstance(PrivateData privateData) {
         return new BezierPath(privateData, windingRule);
     }
 

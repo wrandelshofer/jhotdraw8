@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.lang.reflect.Type;
@@ -16,7 +16,7 @@ public class NonNullListKey<E> extends SimpleNonNullKey<PersistentList<E>> {
 
 
     public NonNullListKey(String key, Type elementType) {
-        super(key, new SimpleParameterizedType(PersistentList.class, elementType), VectorList.of());
+        super(key, new SimpleParameterizedType(PersistentList.class, elementType), PersistentVectorList.of());
     }
 
     public NonNullListKey(String key, Type elementType, PersistentList<E> defaultValue) {

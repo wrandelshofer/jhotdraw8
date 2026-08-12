@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -46,7 +46,7 @@ public class NullableObjectStyleableKey<T> extends AbstractReadableStyleableKey<
     /// @param converter    the CSS converter
     /// @param defaultValue The default value.
     public NullableObjectStyleableKey(String name, String cssName, Type type, Converter<T> converter, @Nullable T defaultValue) {
-        this(name, cssName, type, converter, defaultValue, VectorList.of());
+        this(name, cssName, type, converter, defaultValue, PersistentVectorList.of());
     }
 
     /// Creates a new instance.

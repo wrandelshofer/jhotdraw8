@@ -10,7 +10,7 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.SymmetricCssPoint2DCssConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
@@ -36,7 +36,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
     public SymmetricCssPoint2DStyleableMapAccessor(String name,
                                                    NonNullMapAccessor<CssSize> xKey,
                                                    NonNullMapAccessor<CssSize> yKey) {
-        this(name, xKey, yKey, VectorList.of());
+        this(name, xKey, yKey, PersistentVectorList.of());
     }
 
     /// Creates a new instance with the specified name.

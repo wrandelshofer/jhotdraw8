@@ -131,7 +131,7 @@ import org.jhotdraw8.fxcontrols.dock.SplitPaneTrack;
 import org.jhotdraw8.fxcontrols.dock.TabbedAccordionTrack;
 import org.jhotdraw8.fxcontrols.dock.Track;
 import org.jhotdraw8.fxcontrols.dock.VBoxTrack;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jhotdraw8.svg.gui.SvgDrawingExportOptionsPane;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
@@ -531,7 +531,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     private void applyUserAgentStylesheet(final Drawing d) {
         try {
             d.set(Drawing.USER_AGENT_STYLESHEETS,
-                    VectorList.of(
+                    PersistentVectorList.of(
                             GrapherActivity.class.getResource("user-agent.css").toURI()));
             d.updateStyleManager();
             final SimpleRenderContext ctx = new SimpleRenderContext();

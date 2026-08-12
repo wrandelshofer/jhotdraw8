@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 
 import java.util.Spliterators;
 import java.util.function.Consumer;
@@ -16,11 +16,11 @@ import java.util.function.Function;
 ///
 /// @param <E> the element type
 public class ReverseTombSkippingVectorSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
-    private final VectorList<Object> vector;
+    private final PersistentVectorList<Object> vector;
     private final Function<Object, E> mapper;
     private int index;
 
-    public ReverseTombSkippingVectorSpliterator(VectorList<Object> vector, Function<Object, E> mapper, long est, int additionalCharacteristics) {
+    public ReverseTombSkippingVectorSpliterator(PersistentVectorList<Object> vector, Function<Object, E> mapper, long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
         this.vector = vector;
         this.mapper = mapper;

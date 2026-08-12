@@ -41,7 +41,7 @@ import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
 import org.jhotdraw8.fxbase.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.fxbase.tree.SimpleTreePresentationModel;
 import org.jhotdraw8.fxbase.tree.TreePresentationModel;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.xml.converter.WordListXmlConverter;
 import org.jhotdraw8.xml.converter.WordSetXmlConverter;
@@ -198,7 +198,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     @Override
                     public @Nullable PersistentSet<String> getValue() {
                         Figure f = figure.get();
-                        return f == null ? null : ChampSet.copyOf(f.getStyleClasses());
+                        return f == null ? null : PersistentHashSet.copyOf(f.getStyleClasses());
                     }
                 }
         );
@@ -208,7 +208,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     @Override
                     public @Nullable PersistentSet<String> getValue() {
                         Figure f = figure.get();
-                        return f == null ? null : ChampSet.copyOf(f.getPseudoClassStates());
+                        return f == null ? null : PersistentHashSet.copyOf(f.getPseudoClassStates());
                     }
                 }
         );
@@ -316,7 +316,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             }
                             // show the computed  classes!
                             if (figure != null) {
-                                setText(wordSetConverter.toString(ChampSet.copyOf(figure.getStyleClasses())));
+                                setText(wordSetConverter.toString(PersistentHashSet.copyOf(figure.getStyleClasses())));
                             }
                         }
                         if (isEditable) {

@@ -11,7 +11,7 @@ import org.jhotdraw8.draw.css.converter.Point2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 
 /// Point2DListStyleableKey.
@@ -26,7 +26,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<PersistentList
     ///
     /// @param name The name of the key.
     public Point2DListStyleableKey(String name) {
-        this(name, VectorList.of());
+        this(name, PersistentVectorList.of());
     }
 
     /// Creates a new instance with the specified name, mask and default value.

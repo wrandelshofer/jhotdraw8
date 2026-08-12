@@ -11,7 +11,7 @@ import org.jhotdraw8.draw.key.EffectStyleableKey;
 import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.key.NonNullObjectStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 
 /// Provides properties for compositing a figure.
 ///
@@ -43,7 +43,7 @@ public interface CompositableFigure extends Figure {
     ///
     /// Default value: `1`.
     NonNullObjectStyleableKey<Double> OPACITY = new NonNullObjectStyleableKey<>("opacity", Double.class, new PercentageCssConverter(false), 1.0,
-            VectorList.of(
+            PersistentVectorList.of(
                     "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"
             ));
 

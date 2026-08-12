@@ -6,7 +6,7 @@
 package org.jhotdraw8.xml.converter;
 
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;
@@ -32,7 +32,7 @@ public class ListXmlConverterTest {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         ListXmlConverter<Double> instance = new ListXmlConverter<>(new DoubleXmlConverter(false), null);
-        instance.toString(out, idFactory, value == null ? null : VectorList.copyOf(value));
+        instance.toString(out, idFactory, value == null ? null : PersistentVectorList.copyOf(value));
         String actual = out.toString();
         Assertions.assertEquals(expected, actual);
     }

@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -56,7 +56,7 @@ public class ArcBackLinkWithCost<V, A, C extends Number & Comparable<C>> extends
         for (ArcBackLinkWithCost<VV, AA, CC> parent = node; parent != null; parent = parent.getParent()) {
             deque.addFirst(mappingFunction.apply(parent));
         }
-        return new SimpleOrderedPair<>(VectorList.copyOf(deque), node.getCost());
+        return new SimpleOrderedPair<>(PersistentVectorList.copyOf(deque), node.getCost());
     }
 
     /// Converts an [ArcBackLinkWithCost] into an arrow sequence.
@@ -81,7 +81,7 @@ public class ArcBackLinkWithCost<V, A, C extends Number & Comparable<C>> extends
             deque.addFirst(mappingFunction.apply(parent, prev));
             prev = parent;
         }
-        return new SimpleOrderedPair<>(VectorList.copyOf(deque), node.getCost());
+        return new SimpleOrderedPair<>(PersistentVectorList.copyOf(deque), node.getCost());
     }
 
     public @Nullable A getArrow() {

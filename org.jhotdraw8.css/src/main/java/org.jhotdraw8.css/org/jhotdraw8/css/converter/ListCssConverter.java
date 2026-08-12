@@ -10,7 +10,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -116,9 +116,9 @@ public class ListCssConverter<T> implements CssConverter<PersistentList<T>> {
                             @Nullable Comparator<T> comparatorForSorting
     ) {
         this.elementConverter = elementConverter;
-        this.delimiter = VectorList.copyOf(delimiter);
-        this.prefix = VectorList.copyOf(prefix);
-        this.suffix = VectorList.copyOf(suffix);
+        this.delimiter = PersistentVectorList.copyOf(delimiter);
+        this.prefix = PersistentVectorList.copyOf(prefix);
+        this.suffix = PersistentVectorList.copyOf(suffix);
         delimiterChars = new HashSet<>();
         for (CssToken cssToken : delimiter) {
             if (cssToken.getType() >= 0) {
@@ -132,7 +132,7 @@ public class ListCssConverter<T> implements CssConverter<PersistentList<T>> {
     @Override
     public PersistentList<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return VectorList.of();
+            return PersistentVectorList.of();
         } else {
             tt.pushBack();
         }
@@ -168,7 +168,7 @@ public class ListCssConverter<T> implements CssConverter<PersistentList<T>> {
         if (comparatorForSorting != null) {
             list.sort(comparatorForSorting);
         }
-        return VectorList.copyOf(list);
+        return PersistentVectorList.copyOf(list);
     }
 
     @Override
@@ -216,7 +216,7 @@ public class ListCssConverter<T> implements CssConverter<PersistentList<T>> {
 
     @Override
     public @Nullable PersistentList<T> getDefaultValue() {
-        return VectorList.of();
+        return PersistentVectorList.of();
     }
 
     @Override
@@ -227,6 +227,6 @@ public class ListCssConverter<T> implements CssConverter<PersistentList<T>> {
     @Override
     public @Nullable String getHelpText() {
         return "Format of ⟨List⟩: empty | ⟨Item⟩, ⟨Item⟩, ...\n"
-               + "With ⟨Item⟩:\n  " + elementConverter.getHelpText();
+                + "With ⟨Item⟩:\n  " + elementConverter.getHelpText();
     }
 }

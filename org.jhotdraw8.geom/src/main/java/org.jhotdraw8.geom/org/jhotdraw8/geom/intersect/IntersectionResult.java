@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentCollection;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 
@@ -16,12 +16,12 @@ public class IntersectionResult {
     private final PersistentList<IntersectionPoint> intersections;
 
     public IntersectionResult(IntersectionStatus status, Collection<? extends IntersectionPoint> copyItems) {
-        this.intersections = VectorList.copyOf(copyItems);
+        this.intersections = PersistentVectorList.copyOf(copyItems);
         this.status = status;
     }
 
     public IntersectionResult(IntersectionStatus status, PersistentCollection<? extends IntersectionPoint> copyItems) {
-        this.intersections = VectorList.copyOf(copyItems);
+        this.intersections = PersistentVectorList.copyOf(copyItems);
         this.status = status;
     }
 

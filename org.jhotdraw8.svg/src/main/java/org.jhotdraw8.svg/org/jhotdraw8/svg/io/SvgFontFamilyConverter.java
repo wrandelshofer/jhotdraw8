@@ -11,7 +11,7 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -88,7 +88,7 @@ public class SvgFontFamilyConverter implements CssConverter<PersistentList<Strin
             throw tt.createParseException("<font-family>: <font-family> or <generic-family> expected.");
         }
         tt.requireNextToken(CssTokenType.TT_EOF, "<font-family>: EOF expected.");
-        return VectorList.copyOf(list);
+        return PersistentVectorList.copyOf(list);
     }
 
     @Override
@@ -118,15 +118,15 @@ public class SvgFontFamilyConverter implements CssConverter<PersistentList<Strin
 
     @Override
     public @Nullable PersistentList<String> getDefaultValue() {
-        return VectorList.of("serif");
+        return PersistentVectorList.of("serif");
     }
 
     @Override
     public @Nullable String getHelpText() {
         return """
-               Format of ⟨font-family⟩: ｛⟨family-name｜generic-family⟩,｝⟨family-name｜generic-family⟩
-                 with ⟨family-name⟩: ⟨string⟩
-                 with ⟨generic-family⟩: serif｜sans-serif｜cursive｜fantasy｜monospace"""
+                Format of ⟨font-family⟩: ｛⟨family-name｜generic-family⟩,｝⟨family-name｜generic-family⟩
+                  with ⟨family-name⟩: ⟨string⟩
+                  with ⟨generic-family⟩: serif｜sans-serif｜cursive｜fantasy｜monospace"""
                 ;
     }
 

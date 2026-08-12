@@ -247,6 +247,19 @@
                         <arg>-Xlint</arg>
                     </compilerArgs>
                 </configuration>
+                <dependencies>
+                    <!-- Force a newer ASM version for this plugin's execution -->
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                        <version>9.10.1</version> <!-- Ensure this version supports Java 25 -->
+                    </dependency>
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm-commons</artifactId>
+                        <version>9.10.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>

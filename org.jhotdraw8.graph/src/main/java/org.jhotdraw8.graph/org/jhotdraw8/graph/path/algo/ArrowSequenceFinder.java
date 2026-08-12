@@ -8,7 +8,7 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToSet;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -95,7 +95,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
             V goal,
             int maxDepth,
             C costLimit, AddToSet<V> visited) {
-        return findArrowSequence(VectorList.of(start), goal::equals, maxDepth, costLimit, visited);
+        return findArrowSequence(PersistentVectorList.of(start), goal::equals, maxDepth, costLimit, visited);
     }
 
     /// Finds an arrow sequence from start to goal.
@@ -112,7 +112,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
             V goal,
             int maxDepth,
             C costLimit) {
-        return findArrowSequence(VectorList.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
+        return findArrowSequence(PersistentVectorList.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
     }
 
     /// Finds an arrow sequence from start to goal.
@@ -126,7 +126,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
             V start,
             V goal,
             C costLimit) {
-        return findArrowSequence(VectorList.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
+        return findArrowSequence(PersistentVectorList.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
     /// Finds an arrow sequence through the given waypoints.
@@ -202,10 +202,10 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
 
         if (count == 1) {
             // the set of waypoints is degenerate
-            return new SimpleOrderedPair<>(VectorList.of(), zero);
+            return new SimpleOrderedPair<>(PersistentVectorList.of(), zero);
         }
 
-        return new SimpleOrderedPair<>(VectorList.copyOf(sequence), sum);
+        return new SimpleOrderedPair<>(PersistentVectorList.copyOf(sequence), sum);
     }
 
 }

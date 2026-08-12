@@ -13,7 +13,7 @@ import org.jhotdraw8.draw.key.WordSetKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.fxcollection.facade.ObservableSetFacade;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
@@ -29,13 +29,13 @@ public interface StyleableFigure extends Figure {
     /// styling a figure with CSS.
     ///
     /// Default value: empty set.
-    WordSetKey STYLE_CLASS = new WordSetKey("class", ChampSet.of());
+    WordSetKey STYLE_CLASS = new WordSetKey("class", PersistentHashSet.of());
     /// Defines the pseudo class states of the figure. The pseudo class states
     /// are used for styling a figure with CSS.
     /// This property should not be made persistent because it is a computed value.
     ///
     /// Default value: empty set.
-    WordSetKey PSEUDO_CLASS = new WordSetKey("pseudoClass", ChampSet.of());
+    WordSetKey PSEUDO_CLASS = new WordSetKey("pseudoClass", PersistentHashSet.of());
     /// Defines the style of the figure. The style is used for styling a figure
     /// with CSS.
     ///

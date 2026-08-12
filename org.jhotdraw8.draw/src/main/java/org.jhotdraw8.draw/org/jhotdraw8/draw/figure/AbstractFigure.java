@@ -16,7 +16,7 @@ import org.jhotdraw8.fxbase.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.facade.ReadableSetFacade;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.icollection.readable.ReadableSet;
@@ -104,7 +104,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     @Override
     public ReadableSet<Figure> getReadOnlyLayoutObservers() {
         if (layoutObservers == null) {
-            return ChampSet.of();
+            return PersistentHashSet.of();
         }
         return new ReadableSetFacade<>(layoutObservers);
     }

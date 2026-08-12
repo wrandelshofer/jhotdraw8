@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 
 import java.lang.reflect.Type;
@@ -16,7 +16,7 @@ public class NonNullSetKey<E> extends SimpleNonNullKey<PersistentSet<E>> {
 
 
     public NonNullSetKey(String key, Type elementType) {
-        super(key, new SimpleParameterizedType(PersistentSet.class, elementType), ChampSet.of());
+        super(key, new SimpleParameterizedType(PersistentSet.class, elementType), PersistentHashSet.of());
     }
 
     public NonNullSetKey(String key, Type elementType, PersistentSet<E> defaultValue) {

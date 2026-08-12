@@ -23,7 +23,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -38,7 +38,7 @@ public class PolylineFigure extends AbstractLeafFigure
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure {
 
-    public static final Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", VectorList.of());
+    public static final Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", PersistentVectorList.of());
     /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Polyline";
 
@@ -47,12 +47,12 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     public PolylineFigure(double startX, double startY, double endX, double endY) {
-        set(POINTS, VectorList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
+        set(POINTS, PersistentVectorList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
         set(FILL, null);
     }
 
     public PolylineFigure(Point2D... points) {
-        set(POINTS, VectorList.of(points));
+        set(POINTS, PersistentVectorList.of(points));
         set(FILL, null);
     }
 
@@ -119,7 +119,7 @@ public class PolylineFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, FXTransforms.transform(transform, newP.get(i)));
         }
-        set(POINTS, VectorList.copyOf(newP));
+        set(POINTS, PersistentVectorList.copyOf(newP));
     }
 
     @Override
@@ -128,7 +128,7 @@ public class PolylineFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }
-        set(POINTS, VectorList.copyOf(newP));
+        set(POINTS, PersistentVectorList.copyOf(newP));
     }
 
 

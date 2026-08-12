@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.PersistentHashMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -96,12 +96,12 @@ public class ChampMapJmh {
     private int mask;
 
     private BenchmarkData data;
-    private ChampMap<Key, Boolean> mapA;
+    private PersistentHashMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        mapA = ChampMap.of();
+        mapA = PersistentHashMap.of();
         for (Key key : data.setA) {
             mapA = mapA.put(key, Boolean.TRUE);
         }

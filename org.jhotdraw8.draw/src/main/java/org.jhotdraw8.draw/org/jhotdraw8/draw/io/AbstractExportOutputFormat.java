@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.PersistentHashMap;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
@@ -35,7 +35,7 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 
 /// AbstractExportOutputFormat.
 public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
-    private PersistentMap<Key<?>, Object> options = ChampMap.of();
+    private PersistentMap<Key<?>, Object> options = PersistentHashMap.of();
 
     public AbstractExportOutputFormat() {
     }

@@ -1,0 +1,496 @@
+/*
+ * @(#)SequencedChampMap.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ */
+package org.jhotdraw8.icollection;
+
+import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
+import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
+import org.jhotdraw8.icollection.impl.champ.Node;
+import org.jhotdraw8.icollection.impl.champ.ReverseTombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.impl.champ.SequencedData;
+import org.jhotdraw8.icollection.impl.champ.SequencedEntry;
+import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.persistent.PersistentSequencedMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
+import org.jhotdraw8.icollection.readable.ReadableSequencedMap;
+import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
+import org.jspecify.annotations.Nullable;
+
+import java.io.ObjectStreamException;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.AbstractMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
+
+/// Implements the [PersistentSequencedMap] interface using a Compressed
+/// Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
+///
+/// Features:
+///
+///   - supports up to 2<sup>30</sup> entries
+///   - allows null keys and null values
+///   - is persistent
+///   - is thread-safe
+///   - iterates in the order, in which keys were inserted
+///
+///
+/// Performance characteristics:
+///
+///   - put, putFirst, putLast: O(log₃₂ N) in an amortized sense, because we sometimes have to
+///     renumber the elements.
+///   - remove: O(log₃₂ N) in an amortized sense, because we sometimes have to renumber the elements.
+///   - containsKey: O(log₃₂ N)
+///   - toMutable: O(1) + O(log₃₂ N) distributed across subsequent updates in
+///     the mutable copy
+///   - clone: O(1)
+///   - iterator creation: O(log₃₂ N)
+///   - iterator.next: O(1)
+///   - getFirst, getLast: O(log₃₂ N)
+///
+///
+/// Implementation details:
+///
+/// This map performs read and write operations of single elements in O(log N) time,
+/// and in O(log N) space, where N is the number of elements in the set.
+///
+/// The CHAMP trie contains nodes that may be shared with other maps.
+///
+/// If a write operation is performed on a node, then this set creates a
+/// copy of the node and of all parent nodes up to the root (copy-path-on-write).
+/// Since the CHAMP trie has a fixed maximal height, the cost is O(1).
+///
+/// This map can create a mutable copy of itself in O(1) time and O(1) space
+/// using method [#toMutable()]. The mutable copy shares its nodes
+/// with this map, until it has gradually replaced the nodes with exclusively
+/// owned nodes.
+///
+/// Insertion Order:
+///
+/// This map uses a counter to keep track of the insertion order.
+/// It stores the current value of the counter in the sequence number
+/// field of each data entry. If the counter wraps around, it must renumber all
+/// sequence numbers.
+///
+/// The renumbering is why the `add` and `remove` methods are O(1)
+/// only in an amortized sense.
+///
+/// To support iteration, we use a Vector. The Vector has the same contents
+/// as the CHAMP trie. However, its elements are stored in insertion order.
+///
+/// If an element is removed from the CHAMP trie that is not the first or the
+/// last element of the Vector, we replace its corresponding element in
+/// the Vector by a tombstone. If the element is at the start or end of the Vector,
+/// we remove the element and all its neighboring tombstones from the Vector.
+///
+/// A tombstone can store the number of neighboring tombstones in ascending and in descending
+/// direction. We use these numbers to skip tombstones when we iterate over the vector.
+/// Since we only allow iteration in ascending or descending order from one of the ends of
+/// the vector, we do not need to keep the number of neighbors in all tombstones up to date.
+/// It is sufficient, if we update the neighbor with the lowest index and the one with the
+/// highest index.
+///
+/// If the number of tombstones exceeds half of the size of the collection, we renumber all
+/// sequence numbers, and we create a new Vector.
+///
+/// References:
+///
+/// For a similar design, see 'SimplePersistentSequencedMap.scala'. Note, that this code is not a derivative
+/// of that code.
+/// <dl>
+///     <dt>The Scala library. SimplePersistentSequencedMap.scala. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
+///     <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/persistent/VectorMap.scala">github.com</a>
+///     </dd>
+/// </dl>
+///
+/// @param <K> the key type
+/// @param <V> the value type
+@SuppressWarnings("exports")
+public class PersistentHashVectorMap<K, V> implements PersistentSequencedMap<K, V>, Serializable {
+    private static final PersistentHashVectorMap<?, ?> EMPTY = new PersistentHashVectorMap<>(
+            BitmapIndexedNode.emptyNode(), PersistentVectorList.of(), 0, 0);
+    @Serial
+    private static final long serialVersionUID = 0L;
+    final transient BitmapIndexedNode<SequencedEntry<K, V>> root;
+    /// Offset of sequence numbers to vector indices.
+    /// <pre>vector index = sequence number + offset</pre>
+    final int offset;
+    /// The size of the map.
+    final int size;
+    /// In this vector we store the elements in the order in which they were inserted.
+    final PersistentVectorList<Object> vector;
+
+    private record OpaqueRecord<K, V>(BitmapIndexedNode<SequencedEntry<K, V>> root,
+                                      PersistentVectorList<Object> vector,
+                                      int size, int offset) {
+    }
+
+    /// Creates a new instance with the provided privateData data object.
+    ///
+    /// This constructor is intended to be called from a constructor
+    /// of the subclass, that is called from method [#newInstance(PrivateData)].
+    ///
+    /// @param privateData an privateData data object
+    @SuppressWarnings("unchecked")
+    protected PersistentHashVectorMap(PrivateData privateData) {
+        this(((OpaqueRecord<K, V>) privateData.get()).root,
+                ((OpaqueRecord<K, V>) privateData.get()).vector,
+                ((OpaqueRecord<K, V>) privateData.get()).size,
+                ((OpaqueRecord<K, V>) privateData.get()).offset);
+    }
+
+    /// Creates a new instance with the provided privateData object as its internal data structure.
+    ///
+    /// Subclasses must override this method, and return a new instance of their subclass!
+    ///
+    /// @param privateData the internal data structure needed by this class for creating the instance.
+    /// @return a new instance of the subclass
+    protected PersistentHashVectorMap<K, V> newInstance(PrivateData privateData) {
+        return new PersistentHashVectorMap<>(privateData);
+    }
+
+    private PersistentHashVectorMap<K, V> newInstance(BitmapIndexedNode<SequencedEntry<K, V>> root,
+                                                      PersistentVectorList<Object> vector,
+                                                      int size, int offset) {
+        return new PersistentHashVectorMap<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
+    }
+
+    PersistentHashVectorMap(BitmapIndexedNode<SequencedEntry<K, V>> root,
+                            PersistentVectorList<Object> vector,
+                            int size, int offset) {
+        this.root = root;
+        this.size = size;
+        this.offset = offset;
+        this.vector = Objects.requireNonNull(vector);
+    }
+
+    /// Returns an persistent copy of the provided map.
+    ///
+    /// @param map a map
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an persistent copy
+    public static <K, V> PersistentHashVectorMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
+        return PersistentHashVectorMap.<K, V>of().putAll(map);
+    }
+
+    /// Returns an persistent copy of the provided map.
+    ///
+    /// @param map a map
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an persistent copy
+    public static <K, V> PersistentHashVectorMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
+        return PersistentHashVectorMap.<K, V>of().putAll(map);
+    }
+
+    /// Returns an empty persistent map.
+    ///
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an empty persistent map
+    @SuppressWarnings("unchecked")
+    public static <K, V> PersistentHashVectorMap<K, V> of() {
+        return (PersistentHashVectorMap<K, V>) PersistentHashVectorMap.EMPTY;
+    }
+
+
+    /// {@inheritDoc}
+    @Override
+    public PersistentHashVectorMap<K, V> clear() {
+        return isEmpty() ? this : of();
+    }
+
+    @Override
+    public boolean containsKey(@Nullable Object o) {
+        @SuppressWarnings("unchecked") K key = (K) o;
+        return root.find(new SequencedEntry<>(key), SequencedEntry.keyHash(key), 0,
+                SequencedEntry::keyEquals) != Node.NO_DATA;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (other instanceof PersistentHashVectorMap<?, ?> that) {
+            return size == that.size && root.equivalent(that.root);
+        } else {
+            return ReadableMap.mapEquals(this, other);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map.@Nullable Entry<K, V> firstEntry() {
+        return isEmpty() ? null : (Map.Entry<K, V>) vector.getFirst();
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map.@Nullable Entry<K, V> lastEntry() {
+        return isEmpty() ? null : (Map.Entry<K, V>) vector.getLast();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @Nullable V get(Object o) {
+        Object result = root.find(
+                new SequencedEntry<>((K) o),
+                SequencedEntry.keyHash(o), 0, SequencedEntry::keyEquals);
+        return (V) ((result instanceof SequencedEntry<?, ?> entry) ? entry.getValue() : null);
+    }
+
+    @Override
+    public int hashCode() {
+        return ReadableMap.iteratorToHashCode(iterator());
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public Iterator<Map.Entry<K, V>> iterator() {
+        return Spliterators.iterator(spliterator());
+    }
+
+    @Override
+    public int maxSize() {
+        return 1 << 30;
+    }
+
+    @Override
+    public PersistentHashVectorMap<K, V> put(K key, @Nullable V value) {
+        return putLast(key, value, false);
+    }
+
+    @Override
+    public PersistentHashVectorMap<K, V> putAll(Map<? extends K, ? extends V> m) {
+        return (PersistentHashVectorMap<K, V>) PersistentSequencedMap.super.putAll(m);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public PersistentHashVectorMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+        var m = toMutable();
+        return m.putAll(c) ? m.toPersistent() : this;
+    }
+
+    @Override
+    public PersistentHashVectorMap<K, V> putFirst(K key, @Nullable V value) {
+        return putFirst(key, value, true);
+    }
+
+    private PersistentHashVectorMap<K, V> putFirst(K key, @Nullable V value, boolean moveToFirst) {
+        var details = new ChangeEvent<SequencedEntry<K, V>>();
+        var newEntry = new SequencedEntry<>(key, value, -offset - 1);
+        var newRoot = root.put(null, newEntry,
+                SequencedEntry.keyHash(key), 0, details,
+                moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
+                SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
+        if (details.isReplaced()
+                && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
+            // If we have replaced the entry in the tree, but the sequence number is still the same.
+            // Then we replace the entry in the vector.
+            var newVector = vector.set(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
+            return newInstance(newRoot, newVector, size, offset);
+        }
+        if (details.isModified()) {
+            var newVector = vector;
+            int newSize = size;
+            if (details.isReplaced()) {
+                // If we have replaced the entry in the tree, but the sequence number has changed.
+                // Then we remove the old entry from the vector (this may result in a new tombstone in the vector)
+                if (moveToFirst) {
+                    var result = SequencedData.vecRemove(newVector, details.getOldDataNonNull(), offset);
+                    newVector = result.first();
+                }
+            } else {
+                // If we have inserted the entry in the tree.
+                // Then we increase the size.
+                newSize++;
+            }
+            // We insert the new entry at the start of the vector.
+            int newOffset = offset + 1;
+            newVector = newVector.addFirst(newEntry);
+            return renumber(newRoot, newVector, newSize, newOffset);
+        }
+        return this;
+    }
+
+    private PersistentHashVectorMap<K, V> putLast(K key, @Nullable V value, boolean moveToLast) {
+        var details = new ChangeEvent<SequencedEntry<K, V>>();
+        var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
+        var newRoot = root.put(null, newEntry,
+                SequencedEntry.keyHash(key), 0, details,
+                moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
+                SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
+        if (details.isReplaced()
+                && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
+            var newVector = vector.set(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
+            return newInstance(newRoot, newVector, size, offset);
+        }
+        if (details.isModified()) {
+            var newVector = vector;
+            int newOffset = offset;
+            int newSize = size;
+            if (details.isReplaced()) {
+                if (moveToLast) {
+                    var oldElem = details.getOldDataNonNull();
+                    var result = SequencedData.vecRemove(newVector, oldElem, newOffset);
+                    newVector = result.first();
+                    newOffset = result.second();
+                }
+            } else {
+                newSize++;
+            }
+            newVector = newVector.addLast(newEntry);
+            return renumber(newRoot, newVector, newSize, newOffset);
+        }
+        return this;
+    }
+
+    @Override
+    public PersistentHashVectorMap<K, V> putLast(K key, @Nullable V value) {
+        return putLast(key, value, true);
+    }
+
+    @Override
+    public ReadableSequencedMap<K, V> readableReversed() {
+        return new ReadableSequencedMapFacade<>(
+                this::reverseIterator,
+                this::iterator,
+                this::size,
+                this::containsKey,
+                this::get,
+                this::lastEntry,
+                this::firstEntry,
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, null);
+    }
+
+    @Override
+    public PersistentHashVectorMap<K, V> remove(K key) {
+        int keyHash = SequencedEntry.keyHash(key);
+        var details = new ChangeEvent<SequencedEntry<K, V>>();
+        BitmapIndexedNode<SequencedEntry<K, V>> newRoot = root.remove(null,
+                new SequencedEntry<>(key),
+                keyHash, 0, details, SequencedEntry::keyEquals);
+        if (details.isModified()) {
+            var oldElem = details.getOldDataNonNull();
+            var result = SequencedData.vecRemove(vector, oldElem, offset);
+            return size == 1 ? PersistentHashVectorMap.of() : renumber(newRoot, result.first(), size - 1, result.second());
+        }
+        return this;
+    }
+
+
+    @Override
+    public PersistentHashVectorMap<K, V> removeAll(Iterable<? extends K> c) {
+        var t = toMutable();
+        return t.removeAll(c) ? t.toPersistent() : this;
+    }
+
+    private PersistentHashVectorMap<K, V> renumber(
+            BitmapIndexedNode<SequencedEntry<K, V>> root,
+            PersistentVectorList<Object> vector,
+            int size, int offset) {
+
+        if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
+            var owner = new IdentityObject();
+            var result = SequencedData.vecRenumber(
+                    owner, size, vector.size(), root, vector.root, SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
+                    (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
+            return newInstance(
+                    result.first(), result.second(),
+                    size, 0);
+        }
+        return newInstance(root, vector, size, offset);
+    }
+
+    @Override
+    public PersistentHashVectorMap<K, V> retainAll(Iterable<? extends K> c) {
+        var m = toMutable();
+        return m.retainAll(c) ? m.toPersistent() : this;
+    }
+
+    Iterator<Map.Entry<K, V>> reverseIterator() {
+        return Spliterators.iterator(reverseSpliterator());
+    }
+
+    @SuppressWarnings("unchecked")
+    Spliterator<Map.Entry<K, V>> reverseSpliterator() {
+        return new ReverseTombSkippingVectorSpliterator<>(vector,
+                e -> ((SequencedEntry<K, V>) e),
+                size(), Spliterator.NONNULL | characteristics());
+    }
+
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Spliterator<Map.Entry<K, V>> spliterator() {
+        return new TombSkippingVectorSpliterator<>(vector.root,
+                e -> ((Map.Entry<K, V>) e),
+                0, size(), vector.size(),
+                Spliterator.NONNULL | characteristics());
+    }
+
+    /// Creates a mutable copy of this map.
+    ///
+    /// @return a mutable sequenced CHAMP map
+    @Override
+    public MutableHashVectorMap<K, V> toMutable() {
+        return new MutableHashVectorMap<>(this);
+    }
+
+    @Override
+    public MutableHashVectorMap<K, V> asMap() {
+        return new MutableHashVectorMap<>(this);
+    }
+
+    /// Returns a string representation of this map.
+    ///
+    /// The string representation is consistent with the one produced
+    /// by [AbstractMap#toString()].
+    ///
+    /// @return a string representation
+    @Override
+    public String toString() {
+        return ReadableMap.mapToString(this);
+    }
+
+    @Serial
+    private Object writeReplace() throws ObjectStreamException {
+        return new SerializationProxy<>(this.toMutable());
+    }
+
+    private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
+        @Serial
+        private static final long serialVersionUID = 0L;
+
+        protected SerializationProxy(Map<K, V> target) {
+            super(target);
+        }
+
+        @Serial
+        @Override
+        protected Object readResolve() {
+            return PersistentHashVectorMap.of().putAll(deserializedEntries);
+        }
+    }
+
+    @Override
+    public int characteristics() {
+        return Spliterator.IMMUTABLE | Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED;
+    }
+
+}

@@ -26,7 +26,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssColor;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -87,7 +87,7 @@ import java.util.function.Consumer;
 ///     <dd><a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">oracle.com</a></dd>
 /// </dl>
 public class EffectCssConverter implements CssConverter<Effect> {
-    private static final PersistentList<String> examples = VectorList.of(
+    private static final PersistentList<String> examples = PersistentVectorList.of(
             "blend(hard-light)",
             "bloom(10%)",
             "box-blur(10,3,3)",
@@ -171,14 +171,14 @@ public class EffectCssConverter implements CssConverter<Effect> {
     private Effect parseBloom(CssTokenizer tt) throws ParseException, IOException {
         double threshold = 0.3;
         switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            threshold = tt.currentNumberNonNull().doubleValue();
-            break;
-        case CssTokenType.TT_PERCENTAGE:
-            threshold = tt.currentNumberNonNull().doubleValue() / 100;
-            break;
-        default:
-            tt.pushBack();
+            case CssTokenType.TT_NUMBER:
+                threshold = tt.currentNumberNonNull().doubleValue();
+                break;
+            case CssTokenType.TT_PERCENTAGE:
+                threshold = tt.currentNumberNonNull().doubleValue() / 100;
+                break;
+            default:
+                tt.pushBack();
         }
         if (tt.next() != ')') {
             throw tt.createParseException("CSS Effect: ')' expected.");
@@ -191,34 +191,34 @@ public class EffectCssConverter implements CssConverter<Effect> {
         double height = 5;
         int iterations = 1;
         switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            double value = tt.currentNumberNonNull().doubleValue();
-            width = Math.clamp(value, 0, 255);
-            break;
-        default:
-            tt.pushBack();
+            case CssTokenType.TT_NUMBER:
+                double value = tt.currentNumberNonNull().doubleValue();
+                width = Math.clamp(value, 0, 255);
+                break;
+            default:
+                tt.pushBack();
         }
         if (tt.next() != ',') {
             tt.pushBack();
         }
         switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            double value = tt.currentNumberNonNull().doubleValue();
-            height = Math.clamp(value, 0, 255);
-            break;
-        default:
-            tt.pushBack();
+            case CssTokenType.TT_NUMBER:
+                double value = tt.currentNumberNonNull().doubleValue();
+                height = Math.clamp(value, 0, 255);
+                break;
+            default:
+                tt.pushBack();
         }
         if (tt.next() != ',') {
             tt.pushBack();
         }
         switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            int value = tt.currentNumberNonNull().intValue();
-            iterations = Math.clamp(value, 0, 3);
-            break;
-        default:
-            tt.pushBack();
+            case CssTokenType.TT_NUMBER:
+                int value = tt.currentNumberNonNull().intValue();
+                iterations = Math.clamp(value, 0, 3);
+                break;
+            default:
+                tt.pushBack();
         }
         if (tt.next() != ')') {
             throw tt.createParseException("CSS Effect: ')' expected.");
@@ -235,31 +235,31 @@ public class EffectCssConverter implements CssConverter<Effect> {
             String ident = tt.currentStringNonNull();
             double adjust = 0.0;
             switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                adjust = tt.currentNumberNonNull().doubleValue();
-                break;
-            case CssTokenType.TT_PERCENTAGE:
-                adjust = tt.currentNumberNonNull().doubleValue() / 100;
-                break;
-            default:
-                tt.pushBack();
+                case CssTokenType.TT_NUMBER:
+                    adjust = tt.currentNumberNonNull().doubleValue();
+                    break;
+                case CssTokenType.TT_PERCENTAGE:
+                    adjust = tt.currentNumberNonNull().doubleValue() / 100;
+                    break;
+                default:
+                    tt.pushBack();
             }
             adjust = Math.clamp(adjust, 0, 1);
             switch (ident) {
-            case "hue":
-                hue = adjust;
-                break;
-            case "saturation":
-                saturation = adjust;
-                break;
-            case "brightness":
-                brightness = adjust;
-                break;
-            case "contrast":
-                contrast = adjust;
-                break;
-            default:
-                throw tt.createParseException("CSS \"hue\", \"saturation\", \"brightness\", or \"contrast\" expected.");
+                case "hue":
+                    hue = adjust;
+                    break;
+                case "saturation":
+                    saturation = adjust;
+                    break;
+                case "brightness":
+                    brightness = adjust;
+                    break;
+                case "contrast":
+                    contrast = adjust;
+                    break;
+                default:
+                    throw tt.createParseException("CSS \"hue\", \"saturation\", \"brightness\", or \"contrast\" expected.");
             }
             if (tt.next() != ',') {
                 tt.pushBack();
@@ -406,12 +406,12 @@ public class EffectCssConverter implements CssConverter<Effect> {
     private Effect parseGaussianBlur(CssTokenizer tt) throws ParseException, IOException {
         double radius = 5;
         switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            double value = tt.currentNumberNonNull().doubleValue();
-            radius = Math.clamp(value, 0, 63);
-            break;
-        default:
-            tt.pushBack();
+            case CssTokenType.TT_NUMBER:
+                double value = tt.currentNumberNonNull().doubleValue();
+                radius = Math.clamp(value, 0, 63);
+                break;
+            default:
+                tt.pushBack();
         }
         if (tt.next() != ')') {
             throw tt.createParseException("CSS Effect: ')' expected.");
@@ -422,14 +422,14 @@ public class EffectCssConverter implements CssConverter<Effect> {
     private Effect parseGlow(CssTokenizer tt) throws ParseException, IOException {
         double level = 0.3;
         switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            level = tt.currentNumberNonNull().doubleValue();
-            break;
-        case CssTokenType.TT_PERCENTAGE:
-            level = tt.currentNumberNonNull().doubleValue() / 100;
-            break;
-        default:
-            tt.pushBack();
+            case CssTokenType.TT_NUMBER:
+                level = tt.currentNumberNonNull().doubleValue();
+                break;
+            case CssTokenType.TT_PERCENTAGE:
+                level = tt.currentNumberNonNull().doubleValue() / 100;
+                break;
+            default:
+                tt.pushBack();
         }
         if (tt.next() != ')') {
             throw tt.createParseException("CSS Effect: ')' expected.");

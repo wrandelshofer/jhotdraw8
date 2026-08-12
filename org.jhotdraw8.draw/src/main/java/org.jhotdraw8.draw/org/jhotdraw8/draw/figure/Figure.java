@@ -36,7 +36,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
@@ -204,7 +204,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     static PersistentSet<MapAccessor<?>> getDeclaredAndInheritedMapAccessors(Class<?> clazz) {
         PersistentSet<MapAccessor<?>> keys = declaredAndInheritedKeys.get(clazz);
         if (keys == null) {
-            keys = ChampSet.of();
+            keys = PersistentHashSet.of();
             ArrayDeque<Class<?>> todo = new ArrayDeque<>();
             Set<Class<?>> done = new HashSet<>();
             todo.add(clazz);
@@ -666,7 +666,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     ///
     /// @return a list of layout subjects
     default ReadableSet<Figure> getLayoutSubjects() {
-        return ChampSet.of();
+        return PersistentHashSet.of();
     }
 
     /// Returns the root.

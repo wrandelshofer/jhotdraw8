@@ -13,7 +13,7 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.facade.ReadableSetFacade;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
@@ -130,7 +130,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         final Figure startTarget = get(START_TARGET);
         final Figure endTarget = get(END_TARGET);
         if (startTarget == null && endTarget == null) {
-            return ChampSet.of();
+            return PersistentHashSet.of();
         }
         SequencedSet<Figure> ctf = new LinkedHashSet<>();
         if (startTarget != null) {

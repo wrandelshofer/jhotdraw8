@@ -7,7 +7,7 @@ package org.jhotdraw8.xml.converter;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -68,11 +68,11 @@ public class WordListXmlConverter implements Converter<PersistentList<String>> {
         final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
         buf.position(buf.length());// consume buffer
-        return VectorList.copyOf(tree);
+        return PersistentVectorList.copyOf(tree);
     }
 
     @Override
     public @Nullable PersistentList<String> getDefaultValue() {
-        return VectorList.of();
+        return PersistentVectorList.of();
     }
 }

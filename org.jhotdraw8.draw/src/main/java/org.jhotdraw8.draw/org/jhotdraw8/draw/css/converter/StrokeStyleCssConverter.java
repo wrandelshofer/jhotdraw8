@@ -16,7 +16,7 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.CssStrokeStyle;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -66,7 +66,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         StrokeLineJoin lineJoin = StrokeLineJoin.MITER;
         CssSize miterLimit = CssSize.of(4);
         CssSize dashOffset = CssSize.of(0);
-        PersistentList<CssSize> dashArray = VectorList.of();
+        PersistentList<CssSize> dashArray = PersistentVectorList.of();
 
         while (tt.next() == CssTokenType.TT_FUNCTION) {
             tt.pushBack();
@@ -76,21 +76,21 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
                     break;
                 case LINECAP:
                     lineCap = parseLineCap(tt);
-                break;
-            case LINEJOIN:
-                lineJoin = parseLineJoin(tt);
-                break;
-            case MITERLIMIT:
-                miterLimit = parseNumericFunction(MITERLIMIT, CssSize.of(10), tt, idResolver);
-                break;
-            case DASHOFFSET:
-                dashOffset = parseNumericFunction(DASHOFFSET, CssSize.of(0), tt, idResolver);
-                break;
-            case DASHARRAY:
-                dashArray = parseDashArray(tt, idResolver);
-                break;
-            default:
-                throw new ParseException("⟨StrokeStyle⟩:: Unsupported function: " + tt.currentStringNonNull(), tt.getStartPosition());
+                    break;
+                case LINEJOIN:
+                    lineJoin = parseLineJoin(tt);
+                    break;
+                case MITERLIMIT:
+                    miterLimit = parseNumericFunction(MITERLIMIT, CssSize.of(10), tt, idResolver);
+                    break;
+                case DASHOFFSET:
+                    dashOffset = parseNumericFunction(DASHOFFSET, CssSize.of(0), tt, idResolver);
+                    break;
+                case DASHARRAY:
+                    dashArray = parseDashArray(tt, idResolver);
+                    break;
+                default:
+                    throw new ParseException("⟨StrokeStyle⟩:: Unsupported function: " + tt.currentStringNonNull(), tt.getStartPosition());
             }
         }
 
@@ -163,7 +163,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         }
         tt.pushBack();
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨StrokeStyle⟩: ⟨" + DASHARRAY + "⟩ right bracket expected.");
-        return VectorList.copyOf(list);
+        return PersistentVectorList.copyOf(list);
     }
 
     private CssSize parseNumericFunction(String functionName, CssSize defaultValue, CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
@@ -180,15 +180,15 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
     private CssSize parseSize(String name, CssSize defaultValue, CssTokenizer tt, IdResolver idResolver) throws IOException {
         CssSize value;
         switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            value = CssSize.of(tt.currentNumberNonNull().doubleValue());
-            break;
-        case CssTokenType.TT_DIMENSION:
-            value = CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
-            break;
-        default:
-            value = defaultValue;
-            tt.pushBack();
+            case CssTokenType.TT_NUMBER:
+                value = CssSize.of(tt.currentNumberNonNull().doubleValue());
+                break;
+            case CssTokenType.TT_DIMENSION:
+                value = CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
+                break;
+            default:
+                value = defaultValue;
+                tt.pushBack();
         }
         return value;
     }
@@ -207,7 +207,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
 
     @Override
     public PersistentList<String> getExamples() {
-        return VectorList.of(
+        return PersistentVectorList.of(
                 "type(inside)",
                 "type(centered)",
                 "type(outside)",
@@ -222,15 +222,15 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         if (printAllValues || type != StrokeType.CENTERED) {
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, TYPE));
             switch (type) {
-            case INSIDE:
-                out.accept(new CssToken(CssTokenType.TT_IDENT, INSIDE));
-                break;
-            case OUTSIDE:
-                out.accept(new CssToken(CssTokenType.TT_IDENT, OUTSIDE));
-                break;
-            case CENTERED:
-                out.accept(new CssToken(CssTokenType.TT_IDENT, CENTERED));
-                break;
+                case INSIDE:
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, INSIDE));
+                    break;
+                case OUTSIDE:
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, OUTSIDE));
+                    break;
+                case CENTERED:
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, CENTERED));
+                    break;
             }
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
         }
@@ -241,15 +241,15 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
             out.accept(new CssToken(CssTokenType.TT_S, " "));
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, LINECAP));
             switch (lineCap) {
-            case BUTT:
-                out.accept(new CssToken(CssTokenType.TT_IDENT, BUTT));
-                break;
-            case ROUND:
-                out.accept(new CssToken(CssTokenType.TT_IDENT, ROUND));
-                break;
-            case SQUARE:
-                out.accept(new CssToken(CssTokenType.TT_IDENT, SQUARE));
-                break;
+                case BUTT:
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, BUTT));
+                    break;
+                case ROUND:
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, ROUND));
+                    break;
+                case SQUARE:
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, SQUARE));
+                    break;
             }
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
         }
@@ -258,15 +258,15 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
             out.accept(new CssToken(CssTokenType.TT_S, " "));
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, LINEJOIN));
             switch (lineJoin) {
-            case BEVEL:
-                out.accept(new CssToken(CssTokenType.TT_IDENT, BUTT));
-                break;
-            case ROUND:
-                out.accept(new CssToken(CssTokenType.TT_IDENT, ROUND));
-                break;
-            case MITER:
-                out.accept(new CssToken(CssTokenType.TT_IDENT, MITER));
-                break;
+                case BEVEL:
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, BUTT));
+                    break;
+                case ROUND:
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, ROUND));
+                    break;
+                case MITER:
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, MITER));
+                    break;
             }
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
         }

@@ -8,7 +8,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.lang.reflect.Type;
@@ -38,7 +38,7 @@ public class NonNullObjectStyleableKey<T> extends AbstractReadableStyleableKey<T
     /// @param converter    the CSS converter
     /// @param defaultValue The default value.
     public NonNullObjectStyleableKey(String xmlName, String cssName, Type type, Converter<T> converter, T defaultValue) {
-        this(xmlName, cssName, type, converter, defaultValue, VectorList.of());
+        this(xmlName, cssName, type, converter, defaultValue, PersistentVectorList.of());
     }
 
     /// Creates a new instance.

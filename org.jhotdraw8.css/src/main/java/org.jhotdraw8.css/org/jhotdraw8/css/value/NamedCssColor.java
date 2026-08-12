@@ -6,7 +6,7 @@
 package org.jhotdraw8.css.value;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.PersistentHashMap;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
@@ -347,7 +347,7 @@ public class NamedCssColor extends CssColor {
         m.put(YELLOWGREEN.getName(), YELLOWGREEN);
 
         //FIXME move code below with Java SE 11
-        NAMED_COLORS = ChampMap.copyOf(m);
+        NAMED_COLORS = PersistentHashMap.copyOf(m);
         //NAMED_COLORS = new ImmutableHashMap<>(m, Map::copyOf);
     }
 

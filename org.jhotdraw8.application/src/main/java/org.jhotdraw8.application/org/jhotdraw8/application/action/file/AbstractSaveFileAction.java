@@ -22,7 +22,7 @@ import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.PersistentHashMap;
 import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
@@ -132,7 +132,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
     }
 
     protected void saveFileToUri(final FileBasedActivity view, final URI uri, final DataFormat format, Map<Key<?>, Object> options, WorkState<Void> workState) {
-        view.write(uri, format, ChampMap.copyOf(options), workState).handle((result, exception) -> {
+        view.write(uri, format, PersistentHashMap.copyOf(options), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(workState);
                 if (oldFocusOwner != null) {

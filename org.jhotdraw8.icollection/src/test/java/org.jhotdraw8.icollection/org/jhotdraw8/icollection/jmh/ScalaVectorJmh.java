@@ -12,10 +12,8 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import scala.collection.IterableOnce;
-import scala.collection.Iterator;
 import scala.collection.immutable.Vector;
 import scala.collection.mutable.ReusableBuilder;
-import scala.jdk.javaapi.CollectionConverters;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,16 +25,16 @@ import java.util.concurrent.TimeUnit;
 /// # Mac Mini M4 Pro, 4.40 GHz
 /// # org.scala-lang:scala-library:3.9.0-RC4
 ///
-/// Benchmark                          (size)  Mode  Cnt        Score   Error  Units
-/// ScalaVectorJmh.mAddAll                 10  avgt    2        64.129          ns/op
-/// ScalaVectorJmh.mAddAll               1000  avgt    2      4319.763          ns/op
-/// ScalaVectorJmh.mAddAll            1000000  avgt    2   9914816.403          ns/op
-/// ScalaVectorJmh.mAddOneByOne            10  avgt    2        88.176          ns/op
-/// ScalaVectorJmh.mAddOneByOne          1000  avgt    2     10040.637          ns/op
-/// ScalaVectorJmh.mAddOneByOne       1000000  avgt    2  24400253.610          ns/op
-/// ScalaVectorJmh.mAddAllSameType         10  avgt    2         7.668          ns/op
-/// ScalaVectorJmh.mAddAllSameType       1000  avgt    2         7.340          ns/op
-/// ScalaVectorJmh.mAddAllSameType    1000000  avgt    2        10.055          ns/op
+/// Benchmark                          (size)  Mode  Cnt         Score   Error  Units
+/// ScalaVectorJmh.mAddAllList             10  avgt    2        26.237          ns/op
+/// ScalaVectorJmh.mAddAllList           1000  avgt    2      2539.792          ns/op
+/// ScalaVectorJmh.mAddAllList         100000  avgt    2    245912.538          ns/op
+/// ScalaVectorJmh.mAddAllSameType         10  avgt    2        12.580          ns/op
+/// ScalaVectorJmh.mAddAllSameType       1000  avgt    2       504.331          ns/op
+/// ScalaVectorJmh.mAddAllSameType     100000  avgt    2      2184.817          ns/op
+/// ScalaVectorJmh.mCopyOf                 10  avgt    2        14.371          ns/op
+/// ScalaVectorJmh.mCopyOf               1000  avgt    2      2817.540          ns/op
+/// ScalaVectorJmh.mCopyOf             100000  avgt    2    254299.698          ns/op
 /// ScalaVectorJmh.mAddFirst               10  avgt    2         4.781          ns/op
 /// ScalaVectorJmh.mAddFirst             1000  avgt    2         7.352          ns/op
 /// ScalaVectorJmh.mAddFirst          1000000  avgt    2        55.746          ns/op
@@ -77,6 +75,18 @@ import java.util.concurrent.TimeUnit;
 /// # org.scala-lang:scala-library:2.13.8
 ///
 /// Benchmark                          (size)  Mode  Cnt        Score   Error  Units
+/// ScalaVectorJmh.mAddAll                 10  avgt    2        7.547          ns/op
+/// ScalaVectorJmh.mAddAll               1000  avgt    2        7.399          ns/op
+/// ScalaVectorJmh.mAddAll             100000  avgt    2       10.582          ns/op
+/// ScalaVectorJmh.mAddAllSameType         10  avgt    2        7.662          ns/op
+/// ScalaVectorJmh.mAddAllSameType       1000  avgt    2        7.472          ns/op
+/// ScalaVectorJmh.mAddAllSameType     100000  avgt    2       16.347          ns/op
+/// ScalaVectorJmh.mCopyOf                 10  avgt    2       63.498          ns/op
+/// ScalaVectorJmh.mCopyOf               1000  avgt    2     4313.732          ns/op
+/// ScalaVectorJmh.mCopyOf             100000  avgt    2   945124.630          ns/op
+/// ScalaVectorJmh.mCopyOfOneByOne         10  avgt    2       89.655          ns/op
+/// ScalaVectorJmh.mCopyOfOneByOne       1000  avgt    2    10119.308          ns/op
+/// ScalaVectorJmh.mCopyOfOneByOne     100000  avgt    2  1018462.414          ns/op
 /// ScalaVectorJmh.mAddFirst               10  avgt             5.627          ns/op
 /// ScalaVectorJmh.mAddFirst             1000  avgt             8.104          ns/op
 /// ScalaVectorJmh.mAddFirst          1000000  avgt            72.105          ns/op
@@ -149,7 +159,7 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @SuppressWarnings("unchecked")
 public class ScalaVectorJmh {
-    @Param({"10", "1000", "1000000"})
+    @Param({"10", "1000", "100000"})
     private int size;
 
     private int mask = -65;
@@ -206,30 +216,39 @@ public class ScalaVectorJmh {
             throw new RuntimeException(e);
         }
     }
-
-    //    @Benchmark
-    public Vector<Key> mAddAll() {
+/*
+    @Benchmark
+    public Vector<Key> mCopyOf() {
         ReusableBuilder<Key, Vector<Key>> builder = Vector.<Key>newBuilder();
-        builder.addAll(CollectionConverters.asScala(data.setA));
+        builder.addAll(CollectionConverters.asScala(data.listA));
         return builder.result();
     }
 
     @Benchmark
     public Vector<Key> mAddAllSameType() throws InvocationTargetException, IllegalAccessException {
-        return (Vector<Key>) appendedMethod.invoke(listA, listB);
+        return (Vector<Key>) appendedAllMethod.invoke(listA, listB);
     }
 
+    @Benchmark
+    public Vector<Key> mAddAllList() throws InvocationTargetException, IllegalAccessException {
+        return (Vector<Key>) appendedAllMethod.invoke(listA, CollectionConverters.asScala(data.listB));
+    }
 
     @Benchmark
-    public Vector<Key> mAddOneByOne() throws InvocationTargetException, IllegalAccessException {
+    public Vector<Key> mAddAllSet() throws InvocationTargetException, IllegalAccessException {
+        return (Vector<Key>) appendedAllMethod.invoke(listA, data.setB);
+    }
+*/
 
+    @Benchmark
+    public Vector<Key> mCopyOfOneByOne() throws InvocationTargetException, IllegalAccessException {
         Vector<Key> l = Vector.<Key>newBuilder().result();
         for (Key key : data.listA) {
             l = (Vector<Key>) appendedMethod.invoke(l, key);
         }
         return l;
     }
-
+/*
     //   @Benchmark
     //   public Vector<Key> mRemoveOneByOne() {
     //       var l = listA;
@@ -283,7 +302,7 @@ public class ScalaVectorJmh {
 
     @Benchmark
     public Vector<Key> mRemoveLast() {
-        return listA.dropRight(1);
+        return listA.init();
     }
 
     @Benchmark
@@ -315,5 +334,5 @@ public class ScalaVectorJmh {
 
         return (Vector<Key>) updated.invoke(listA, index, key);
     }
-
+*/
 }

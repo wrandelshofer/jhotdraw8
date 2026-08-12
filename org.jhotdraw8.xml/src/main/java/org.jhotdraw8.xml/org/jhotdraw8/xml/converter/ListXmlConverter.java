@@ -7,7 +7,7 @@ package org.jhotdraw8.xml.converter;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -80,7 +80,7 @@ public class ListXmlConverter<T> implements Converter<PersistentList<T>> {
             str = str.substring(0, str.length() - suffix.length());
         }
 
-        var list = VectorList.<T>of();
+        var list = PersistentVectorList.<T>of();
         for (var elem : delimiterPattern.split(str)) {
             if (elem.isEmpty()) {
                 continue;

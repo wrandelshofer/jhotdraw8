@@ -25,7 +25,7 @@ import org.jhotdraw8.draw.figure.TextFigure;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.draw.tool.SelectionTool;
 import org.jhotdraw8.draw.tool.Tool;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class CssExample extends Application {
 
         ArrayList<URI> stylesheets = new ArrayList<>();
         stylesheets.add(CssExample.class.getResource("CssExample.css").toURI());
-        drawing.set(Drawing.USER_AGENT_STYLESHEETS, VectorList.copyOf(stylesheets));
+        drawing.set(Drawing.USER_AGENT_STYLESHEETS, PersistentVectorList.copyOf(stylesheets));
 
         SimpleRenderContext ctx = new SimpleRenderContext();
         drawing.updateAllCss(ctx);

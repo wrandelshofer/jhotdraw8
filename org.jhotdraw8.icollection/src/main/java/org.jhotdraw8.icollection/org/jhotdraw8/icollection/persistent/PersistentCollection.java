@@ -45,15 +45,15 @@ public interface PersistentCollection<E> extends ReadableCollection<E> {
     /// @return an empty collection of the specified element type.
     <T> PersistentCollection<T> empty();
 
-    /// Retains all elements in this collection that satisfy the specified predicate.
+    /// Removes all elements in this collection that satisfy the specified predicate.
     ///
     /// @param p a predicate
-    /// @return a collection that only contains elements that satisfy the predicate
-    default PersistentCollection<E> filter(Predicate<E> p) {
-        PersistentCollection<E> result = this.empty();
-        for(E e:this){
+    /// @return a collection that only contains elements that do not satisfy the predicate
+    default PersistentCollection<E> removeIf(Predicate<E> p) {
+        PersistentCollection<E> result = this;
+        for (E e : this) {
             if (p.test(e)) {
-                result = result.add(e);
+                result = result.remove(e);
             }
         }
         return result;

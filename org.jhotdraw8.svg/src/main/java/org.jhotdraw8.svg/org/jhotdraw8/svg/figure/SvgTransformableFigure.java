@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.key.TransformListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -89,7 +89,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         if (p2l == null || p2l.isIdentity()) {
             remove(TRANSFORMS);
         } else {
-            set(TRANSFORMS, VectorList.of(p2l));
+            set(TRANSFORMS, PersistentVectorList.of(p2l));
         }
     }
 
@@ -256,9 +256,9 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     /// @param transforms new value
     default void setTransforms(Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
-            set(TRANSFORMS, VectorList.of());
+            set(TRANSFORMS, PersistentVectorList.of());
         } else {
-            set(TRANSFORMS, VectorList.of(transforms));
+            set(TRANSFORMS, PersistentVectorList.of(transforms));
         }
     }
 

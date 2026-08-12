@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
 import org.jspecify.annotations.Nullable;
@@ -59,7 +59,7 @@ public interface SequencedData {
     /// @param factoryFunction the factory function for data elements
     /// @return a new renumbered root and a new vector with matching entries
     @SuppressWarnings("unchecked")
-    static <K extends SequencedData> OrderedPair<BitmapIndexedNode<K>, VectorList<Object>> vecRenumber(
+    static <K extends SequencedData> OrderedPair<BitmapIndexedNode<K>, PersistentVectorList<Object>> vecRenumber(
             @Nullable IdentityObject owner, int size, int sizeWithTombstones,
             BitmapIndexedNode<K> root,
             BitMappedTrie<Object> vector,
@@ -70,7 +70,7 @@ public interface SequencedData {
             new OrderedPair<>(root, vector);
         }
         BitmapIndexedNode<K> renumberedRoot = root;
-        VectorList<Object> renumberedVector = VectorList.of();
+        PersistentVectorList<Object> renumberedVector = PersistentVectorList.of();
         ChangeEvent<K> details = new ChangeEvent<>();
         BiFunction<K, K, K> forceUpdate = (oldk, newk) -> newk;
         int seq = 0;
@@ -85,7 +85,7 @@ public interface SequencedData {
     }
 
 
-    static <K extends SequencedData> OrderedPair<VectorList<Object>, Integer> vecRemove(VectorList<Object> vector, K oldElem, int offset) {
+    static <K extends SequencedData> OrderedPair<PersistentVectorList<Object>, Integer> vecRemove(PersistentVectorList<Object> vector, K oldElem, int offset) {
         // If the element is the first, we can remove it and its neighboring tombstones from the vector.
         int size = vector.size();
         int index = oldElem.getSequenceNumber() + offset;

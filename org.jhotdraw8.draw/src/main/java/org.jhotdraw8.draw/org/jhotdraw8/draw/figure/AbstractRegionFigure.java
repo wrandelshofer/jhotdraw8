@@ -28,7 +28,7 @@ import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.FXTransformPathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -41,7 +41,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public static final CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
     public static final CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
     public static final NullableFXPathElementsStyleableKey SHAPE = new NullableFXPathElementsStyleableKey("shape",
-            VectorList.of(new MoveTo(0, 0), new HLineTo(1), new VLineTo(1), new HLineTo(0), new ClosePath()));
+            PersistentVectorList.of(new MoveTo(0, 0), new HLineTo(1), new VLineTo(1), new HLineTo(0), new ClosePath()));
     public static final CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
     public static final CssSizeStyleableKey X = RectangleFigure.X;
     public static final CssSizeStyleableKey Y = RectangleFigure.Y;
@@ -80,7 +80,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     @Override
     public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         if (pathElements == null) {
-            pathElements = VectorList.of();
+            pathElements = PersistentVectorList.of();
         }
         return FXShapes.fxPathElementsToAwtPathIterator(pathElements, PathIterator.WIND_EVEN_ODD, tx);
     }
@@ -111,7 +111,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
     protected void layoutPath() {
         if (pathElements == null) {
-            pathElements = VectorList.of();
+            pathElements = PersistentVectorList.of();
         }
 
         PersistentList<PathElement> shape = getStyled(SHAPE);
@@ -157,7 +157,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         } else {
             final var builder = new FXTransformPathBuilder<>(new FXPathElementsBuilder(), tx);
             FXShapes.buildPathElements(builder, shape);
-            this.pathElements = VectorList.copyOf(builder.build());
+            this.pathElements = PersistentVectorList.copyOf(builder.build());
         }
     }
 }

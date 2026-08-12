@@ -5,7 +5,7 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.css.parser.CssToken;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
@@ -29,8 +29,8 @@ public class AtRule extends Rule {
                   List<? extends CssToken> header, List<? extends CssToken> body) {
         super(sourceLocator);
         this.atKeyword = atKeyword;
-        this.header = VectorList.copyOf(header);
-        this.body = VectorList.copyOf(body);
+        this.header = PersistentVectorList.copyOf(header);
+        this.body = PersistentVectorList.copyOf(body);
     }
 
     @Override

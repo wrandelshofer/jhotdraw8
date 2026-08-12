@@ -23,7 +23,7 @@ import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXRectangles;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -103,7 +103,7 @@ public interface StrokableFigure extends Figure {
     /// </dl>
     NonNullListStyleableKey<CssSize> STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("stroke-dasharray",
             CssSize.class,
-            new SizeCssConverter(false), VectorList.of());
+            new SizeCssConverter(false), PersistentVectorList.of());
 
     /// Combined map accessor for all stroke style properties.
     ///

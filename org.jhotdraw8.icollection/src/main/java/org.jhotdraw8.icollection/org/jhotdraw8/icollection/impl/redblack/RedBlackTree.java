@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.icollection.impl.redblack;
 
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
@@ -216,7 +216,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
     /// See also <a href="http://n00tc0d3r.blogspot.de/2013/08/implement-iterator-for-binarytree-i-in.html">Implement Iterator for BinaryTree I (In-order)</a>.
     default Iterator<Node<K, V>> iterator() {
         if (isEmpty()) {
-            return VectorList.<Node<K, V>>of().iterator();
+            return PersistentVectorList.<Node<K, V>>of().iterator();
         } else {
             Node<K, V> that = (Node<K, V>) this;
             return new Iterator<>() {
@@ -271,7 +271,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
     /// See also <a href="http://n00tc0d3r.blogspot.de/2013/08/implement-iterator-for-binarytree-i-in.html">Implement Iterator for BinaryTree I (In-order)</a>.
     default Iterator<Node<K, V>> reverseIterator() {
         if (isEmpty()) {
-            return VectorList.<Node<K, V>>of().iterator();
+            return PersistentVectorList.<Node<K, V>>of().iterator();
         } else {
             Node<K, V> that = (Node<K, V>) this;
             return new Iterator<>() {

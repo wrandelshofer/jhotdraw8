@@ -9,7 +9,7 @@ import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.icollection.readable.ReadableList;
 
@@ -66,7 +66,7 @@ public interface CssFunctionProcessor<T> {
         } catch (IOException e) {
             throw new RuntimeException("Unexpected IOException.", e);
         }
-        return VectorList.copyOf(out);
+        return PersistentVectorList.copyOf(out);
     }
 
     /// Returns a localized help text describing the supported functions.

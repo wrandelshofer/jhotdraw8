@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.xml.XmlUtil;
 import org.jspecify.annotations.Nullable;
@@ -339,7 +339,7 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
                         PersistentList<URI> listOrNull = drawing.get(figureFactory.getStylesheetsKey());
                         List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull.asList());
                         stylesheets.add(uri);
-                        drawing.set(figureFactory.getStylesheetsKey(), VectorList.copyOf(stylesheets));
+                        drawing.set(figureFactory.getStylesheetsKey(), PersistentVectorList.copyOf(stylesheets));
                     }
                 });
             }

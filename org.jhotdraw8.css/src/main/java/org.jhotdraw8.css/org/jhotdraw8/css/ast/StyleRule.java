@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -19,7 +19,7 @@ public class StyleRule extends Rule {
     public StyleRule(@Nullable SourceLocator sourceLocator, SelectorGroup selectorGroup, List<Declaration> declarations) {
         super(sourceLocator);
         this.selectorList = selectorGroup;
-        this.declarations = VectorList.copyOf(declarations);
+        this.declarations = PersistentVectorList.copyOf(declarations);
     }
 
     @Override

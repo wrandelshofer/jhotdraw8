@@ -29,7 +29,7 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.NonNull;
 
@@ -60,7 +60,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     ///
     /// Default value: `0`.
     NonNullObjectStyleableKey<Double> ROTATE = new NonNullObjectStyleableKey<>("rotate", Double.class, new DoubleCssConverter(false), 0.0,
-            VectorList.of("0", "45", "90", "135", "180", "225", "270", "315"));
+            PersistentVectorList.of("0", "45", "90", "135", "180", "225", "270", "315"));
     /// Defines the pivot of the rotation.
     ///
     /// Default value: `0.5, 0.5`.
@@ -81,7 +81,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     /// Defines the scale factor by which coordinates are scaled on the axes
     /// about the center of the figure.
     Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
-    TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", VectorList.of());
+    TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", PersistentVectorList.of());
     /// Defines the translation on the x axis about the center of the figure.
     /// Default value: `0`.
     DoubleStyleableKey TRANSLATE_X = new DoubleStyleableKey("translateX", 0.0);
@@ -149,7 +149,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         if (p2l.isIdentity()) {
             remove(TRANSFORMS);
         } else {
-            set(TRANSFORMS, VectorList.of(p2l));
+            set(TRANSFORMS, PersistentVectorList.of(p2l));
         }
     }
 
@@ -308,7 +308,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
             PersistentList<Transform> ts = getNonNull(TRANSFORMS);
             if (ts.isEmpty()) {
-                set(TRANSFORMS, VectorList.of(transform));
+                set(TRANSFORMS, PersistentVectorList.of(transform));
             } else {
                 int last = ts.size() - 1;
                 Transform concatenatedWithLast = FXTransforms.concat(ts.get(last), transform);
@@ -335,7 +335,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         } else {
             // FIXME we do not want to reshape!
             Transform combined = FXTransforms.concat(transform, getTransform(true));
-            set(TRANSFORMS, VectorList.of(combined));
+            set(TRANSFORMS, PersistentVectorList.of(combined));
         }
     }
 
@@ -345,9 +345,9 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     /// @param transforms new value
     default void setTransforms(Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
-            set(TRANSFORMS, VectorList.of());
+            set(TRANSFORMS, PersistentVectorList.of());
         } else {
-            set(TRANSFORMS, VectorList.of(transforms));
+            set(TRANSFORMS, PersistentVectorList.of(transforms));
         }
     }
 
@@ -356,7 +356,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         flattenTransforms();
         PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
         if (transforms.isEmpty()) {
-            set(TRANSFORMS, VectorList.of(t));
+            set(TRANSFORMS, PersistentVectorList.of(t));
         } else {
             set(TRANSFORMS, transforms.add(t));
         }
@@ -380,7 +380,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
             flattenTransforms();
             PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
             if (transforms.isEmpty()) {
-                set(TRANSFORMS, VectorList.of(t));
+                set(TRANSFORMS, PersistentVectorList.of(t));
             } else {
                 set(TRANSFORMS, transforms.set(0, t));
             }

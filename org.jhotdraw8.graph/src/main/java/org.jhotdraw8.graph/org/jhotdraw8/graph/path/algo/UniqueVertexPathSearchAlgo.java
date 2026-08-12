@@ -8,7 +8,7 @@ import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jspecify.annotations.Nullable;
 
@@ -112,7 +112,7 @@ public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> imp
         final Queue<VertexBackLinkWithAncestorSet<V>> queue = new ArrayDeque<>(16);
         final SequencedMap<V, Integer> visitedCount = new LinkedHashMap<>(16);
         visitedCount.put(startVertex, 1);
-        queue.add(new VertexBackLinkWithAncestorSet<>(startVertex, null, ChampSet.of(startVertex)));
+        queue.add(new VertexBackLinkWithAncestorSet<>(startVertex, null, PersistentHashSet.of(startVertex)));
 
         VertexBackLinkWithAncestorSet<V> found = null;
         while (!queue.isEmpty()) {

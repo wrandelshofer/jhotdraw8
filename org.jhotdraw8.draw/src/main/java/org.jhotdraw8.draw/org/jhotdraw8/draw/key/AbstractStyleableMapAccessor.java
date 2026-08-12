@@ -9,7 +9,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.icollection.ChampVectorSet;
+import org.jhotdraw8.icollection.PersistentHashVectorSet;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
 
@@ -65,7 +65,7 @@ public abstract class AbstractStyleableMapAccessor<T>
         this.type = type;
         this.defaultValue = defaultValue;
 
-        this.subAccessors = ChampVectorSet.of(subAccessors);
+        this.subAccessors = PersistentHashVectorSet.of(subAccessors);
         cssName = ReadableStyleableMapAccessor.toCssName(name);
     }
 

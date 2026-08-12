@@ -30,7 +30,7 @@ import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.PointAndDerivative;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
@@ -160,7 +160,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @Override
     public ReadableSet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
-        return labelTarget == null ? ChampSet.of() : ChampSet.of(labelTarget);
+        return labelTarget == null ? PersistentHashSet.of() : PersistentHashSet.of(labelTarget);
     }
 
     public boolean isConnected() {

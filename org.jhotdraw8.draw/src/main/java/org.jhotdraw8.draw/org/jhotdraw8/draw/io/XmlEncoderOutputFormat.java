@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.io;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.PersistentHashMap;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
@@ -18,7 +18,7 @@ import java.net.URI;
 /// XMLEncoderOutputFormat.
 public class XmlEncoderOutputFormat implements OutputFormat {
     public static final String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
-    private PersistentMap<Key<?>, Object> options = ChampMap.of();
+    private PersistentMap<Key<?>, Object> options = PersistentHashMap.of();
 
     public XmlEncoderOutputFormat() {
     }

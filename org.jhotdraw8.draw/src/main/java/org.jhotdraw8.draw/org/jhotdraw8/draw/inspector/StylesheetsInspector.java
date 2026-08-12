@@ -30,7 +30,7 @@ import org.jhotdraw8.fxbase.clipboard.ClipboardIO;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.control.ListViewUtil;
 import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.xml.converter.UriXmlConverter;
 import org.jspecify.annotations.Nullable;
@@ -212,7 +212,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             // The drawing is currently being replaced by a new one. Don't fire events.
             return;
         }
-        getModel().set(getDrawing(), Drawing.AUTHOR_STYLESHEETS, VectorList.copyOf(listView.getItems()));
+        getModel().set(getDrawing(), Drawing.AUTHOR_STYLESHEETS, PersistentVectorList.copyOf(listView.getItems()));
         updateAllFigures();
     }
 

@@ -24,7 +24,7 @@ import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.net.UriUtil;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.PersistentHashMap;
 import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
@@ -103,29 +103,29 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
                     ButtonType result = alert.getResult();
                     if (result != null) {
                         switch (result.getButtonData()) {
-                        default:
-                        case CANCEL_CLOSE:
-                            v.removeDisabler(workState);
-                            if (oldFocusOwner != null) {
-                                oldFocusOwner.requestFocus();
-                            }
-                            break;
-                        case NO:
-                            doIt(v).whenComplete((r, e) -> {
-                                // FIXME check success
+                            default:
+                            case CANCEL_CLOSE:
                                 v.removeDisabler(workState);
                                 if (oldFocusOwner != null) {
                                     oldFocusOwner.requestFocus();
                                 }
-                            });
-                            break;
-                        case YES:
-                            // this is a little bit quirky.
-                            // saveView may start a worker thread
-                            // and thus will enable the view at
-                            // a later point in time.
-                            saveView(v, workState);
-                            break;
+                                break;
+                            case NO:
+                                doIt(v).whenComplete((r, e) -> {
+                                    // FIXME check success
+                                    v.removeDisabler(workState);
+                                    if (oldFocusOwner != null) {
+                                        oldFocusOwner.requestFocus();
+                                    }
+                                });
+                                break;
+                            case YES:
+                                // this is a little bit quirky.
+                                // saveView may start a worker thread
+                                // and thus will enable the view at
+                                // a later point in time.
+                                saveView(v, workState);
+                                break;
                         }
                     }
                 });
@@ -195,7 +195,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
     }
 
     protected void saveViewToURI(final FileBasedActivity v, final URI uri, final @Nullable URIChooser chooser, final DataFormat dataFormat, WorkState<Void> workState) {
-        v.write(uri, dataFormat, ChampMap.of(), workState).handle((result, exception) -> {
+        v.write(uri, dataFormat, PersistentHashMap.of(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
                 if (oldFocusOwner != null) {

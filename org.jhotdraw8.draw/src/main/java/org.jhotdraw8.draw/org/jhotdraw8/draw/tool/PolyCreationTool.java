@@ -17,7 +17,7 @@ import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.key.Point2DListStyleableKey;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
                     new CssPoint2D(createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1))))).getConvertedValue();
             points.add(c);
         }
-        dm.set(createdFigure, key, VectorList.copyOf(points));
+        dm.set(createdFigure, key, PersistentVectorList.copyOf(points));
 
         event.consume();
     }
@@ -103,7 +103,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
                     createdFigure.worldToParent(dv.viewToWorld(x2, y2)))).getConvertedValue();
             DrawingModel dm = dv.getModel();
             points.set(points.size() - 1, c2);
-            dm.set(createdFigure, key, VectorList.copyOf(points));
+            dm.set(createdFigure, key, PersistentVectorList.copyOf(points));
         }
         event.consume();
     }
@@ -121,7 +121,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
                 if (points.size() < 2) {
                     dm.removeFromParent(createdFigure);
                 } else {
-                    dm.set(createdFigure, key, VectorList.copyOf(points));
+                    dm.set(createdFigure, key, PersistentVectorList.copyOf(points));
                     dv.getSelectedFigures().clear();
                     dv.getEditor().setHandleType(HandleType.POINT);
                     dv.getSelectedFigures().add(createdFigure);
@@ -144,10 +144,10 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     @Override
     public String getHelpText() {
         return """
-               PolyCreationTool
-                 Click on the drawing view. The tool will create a new polygon with a point at that location.
-                 Continue clicking on the drawing view. The tool will add each clicked point to the created polygon.
-                 Press enter or escape, when you are done.""";
+                PolyCreationTool
+                  Click on the drawing view. The tool will create a new polygon with a point at that location.
+                  Continue clicking on the drawing view. The tool will add each clicked point to the created polygon.
+                  Press enter or escape, when you are done.""";
     }
 
 }
