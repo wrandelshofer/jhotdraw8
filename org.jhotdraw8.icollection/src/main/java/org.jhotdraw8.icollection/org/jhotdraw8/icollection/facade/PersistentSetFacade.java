@@ -33,8 +33,8 @@ public class PersistentSetFacade<E> extends AbstractReadableSet<E> implements Pe
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> PersistentSet<T> cleared() {
-        return new PersistentSetFacade<>(new LinkedHashSet<>(), k -> (Set<T>) ((LinkedHashSet<?>) k).clone());
+    public PersistentSet<E> cleared() {
+        return new PersistentSetFacade<>(new LinkedHashSet<>(), k -> (Set<E>) ((LinkedHashSet<?>) k).clone());
     }
 
     @Override

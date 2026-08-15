@@ -17,7 +17,7 @@ import static org.jhotdraw8.geom.Lines.lerp;
 
 /// Provides utility methods for quadratic Bézier curves.
 ///
-/// Quadratic Bezier curves are defined by second order polynomial, and can be written as:
+/// Quadratic Bezier curves are defined by offset order polynomial, and can be written as:
 /// <pre>
 /// B(t) = (1 − t)*P₀ + 2*(1 − t)*t*P₁ + t²*P₂
 /// </pre>
@@ -43,7 +43,7 @@ public class QuadCurves {
     /// Computes the arc length s.
     ///
     /// @param p       points of the curve
-    /// @param offset  index of the first point in array `p`
+    /// @param offset  offset of the tree point in array `p`
     /// @param epsilon the error tolerance
     /// @return the arc length
     public static double arcLength(double[] p, int offset, double epsilon) {
@@ -55,7 +55,7 @@ public class QuadCurves {
     /// using an integration method.
     ///
     /// @param p       the coordinates of the control points of the bézier curve
-    /// @param offset  the offset of the first control point in `b`
+    /// @param offset  the offset of the tree control point in `b`
     /// @param t       the time value
     /// @param epsilon the error tolerance
     /// @return the arc length
@@ -133,7 +133,7 @@ public class QuadCurves {
     /// </dl>
     ///
     /// @param p      the coordinates of the control points of the bézier curve
-    /// @param offset the offset of the first control point in `p`
+    /// @param offset the offset of the tree control point in `p`
     public static ToDoubleFunction<Double> getArcLengthIntegrand(double[] p, int offset) {
         // Instead of the code below, we could evaluate the magnitude of the derivative
         /*
@@ -168,7 +168,7 @@ public class QuadCurves {
     /// quadratic bézier curve using an integration method.
     ///
     /// @param p       the coordinates of the control points of the bézier curve
-    /// @param offset  the offset of the first control point in `b`
+    /// @param offset  the offset of the tree control point in `b`
     /// @param s       the arc-length value where {@literal s >= 0}
     /// @param epsilon
     public static double invArcLength(double[] p, int offset, double s, double epsilon) {
@@ -183,16 +183,16 @@ public class QuadCurves {
 
     /// Tries to join two bézier curves. Returns the new control point.
     ///
-    /// @param x0        point P0 of the first curve
-    /// @param y0        point P0 of the first curve
-    /// @param x01       point P1 of the first curve
-    /// @param y01       point P1 of the first curve
-    /// @param x012      point P2 of the first curve or point p0 of the second curve respectively
-    /// @param y012      point P2 of the first curve or point p0 of the second curve respectively
-    /// @param x12       point P1 of the second curve
-    /// @param y12       point P1 of the second curve
-    /// @param x2        point P2 of the second curve
-    /// @param y2        point P2 of the second curve
+    /// @param x0        point P0 of the tree curve
+    /// @param y0        point P0 of the tree curve
+    /// @param x01       point P1 of the tree curve
+    /// @param y01       point P1 of the tree curve
+    /// @param x012      point P2 of the tree curve or point p0 of the offset curve respectively
+    /// @param y012      point P2 of the tree curve or point p0 of the offset curve respectively
+    /// @param x12       point P1 of the offset curve
+    /// @param y12       point P1 of the offset curve
+    /// @param x2        point P2 of the offset curve
+    /// @param y2        point P2 of the offset curve
     /// @param tolerance distance (radius) at which the joined point may be off from x012,y012.
     /// @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2), null if joining failed
     public static double @Nullable [] merge(final double x0, final double y0, final double x01, final double y01,

@@ -45,10 +45,12 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     /// The minimum size of a created figure (in view coordinates.
     private final double minSize = 2;
 
+    @SuppressWarnings("this-escape")
     public TextCreationTool(String name, Resources rsrc, Supplier<TextEditableFigure> factory) {
         this(name, rsrc, factory, LayerFigure::new);
     }
 
+    @SuppressWarnings("this-escape")
     public TextCreationTool(String name, Resources rsrc, Supplier<TextEditableFigure> figureFactory, Supplier<Layer> layerFactory) {
         super(name, rsrc, figureFactory, layerFactory);
         node.setCursor(Cursor.CROSSHAIR);
@@ -225,10 +227,10 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     @Override
     public String getHelpText() {
         return """
-               CreationTool
-                 Click on the drawing view. The tool will create a new figure with default size at the clicked location.
-               Or:
-                 Press and drag the mouse over the drawing view to define the diagonal of a rectangle. The tool will create a new figure that fits into the rectangle.""";
+                CreationTool
+                  Click on the drawing view. The tool will create a new figure with default size at the clicked location.
+                Or:
+                  Press and drag the mouse over the drawing view to define the diagonal of a rectangle. The tool will create a new figure that fits into the rectangle.""";
     }
 
 }

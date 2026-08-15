@@ -128,7 +128,7 @@ public interface CssTokenizer {
 
     /// Skips the next token if it is of type `ttype`.
     ///
-    /// @param ttype the token type t skip
+    /// @param ttype the token type t neighbors
     /// @throws IOException
     default void skipIfPresent(int ttype) throws IOException {
         if (next() != ttype) {

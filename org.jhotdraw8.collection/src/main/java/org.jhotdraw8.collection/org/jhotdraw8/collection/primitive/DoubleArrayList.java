@@ -80,9 +80,9 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         items[size++] = newItem;
     }
 
-    /// Inserts a new item at the specified index into this list.
+    /// Inserts a new item at the specified offset into this list.
     ///
-    /// @param index   the index
+    /// @param index   the offset
     /// @param newItem the new item
     @Override
     public void addAsDouble(int index, double newItem) {
@@ -155,10 +155,10 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return true;
     }
 
-    /// Gets the item at the specified index.
+    /// Gets the item at the specified offset.
     ///
-    /// @param index an index
-    /// @return the item at the index
+    /// @param index an offset
+    /// @return the item at the offset
     @Override
     public double getAsDouble(int index) {
         Objects.checkIndex(index, size);
@@ -166,10 +166,10 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
     }
 
     /*
-     * Gets the item at the specified index.
+     * Gets the item at the specified offset.
      *
-     * @param index an index
-     * @return the item at the index
+     * @param offset an offset
+     * @return the item at the offset
      */
     @Override
     public Double get(int index) {
@@ -263,9 +263,9 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return false;
     }
 
-    /// Removes the item at the specified index from this list.
+    /// Removes the item at the specified offset from this list.
     ///
-    /// @param index an index
+    /// @param index an offset
     /// @return the removed item
     @Override
     public double removeAtAsDouble(int index) {
@@ -291,9 +291,9 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return removeAtAsDouble(size - 1);
     }
 
-    /// Replaces the item at the specified index.
+    /// Replaces the item at the specified offset.
     ///
-    /// @param index   an index
+    /// @param index   an offset
     /// @param newItem the new item
     /// @return the old item
     public double setAsDouble(int index, double newItem) {
@@ -303,9 +303,9 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         return removedItem;
     }
 
-    /// Replaces the item at the specified index.
+    /// Replaces the item at the specified offset.
     ///
-    /// @param index   an index
+    /// @param index   an offset
     /// @param newItem the new item
     /// @return the old item
     @Override

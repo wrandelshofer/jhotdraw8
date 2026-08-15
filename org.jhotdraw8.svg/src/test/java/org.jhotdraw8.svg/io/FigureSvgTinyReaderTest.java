@@ -32,7 +32,7 @@ public class FigureSvgTinyReaderTest {
                 dynamicTest("rect with fill value", () -> testDefaultable(
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
                                 "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
-                                "  <rect id=\"r\" fill=\"#ff0000\" height=\"200\" width=\"100\" x=\"10\" y=\"20\"/>\n" +
+                                "  <rect id=\"r\" fill=\"#ff0000\" height=\"200\" width=\"100\" element=\"10\" y=\"20\"/>\n" +
                                 "</svg>\n", "r", SvgRectFigure.FILL_KEY,
                         CssColor.valueOf("#ff0000"))),
                 dynamicTest("rect inherits fill value from svg element", () -> testDefaultable(
@@ -40,7 +40,7 @@ public class FigureSvgTinyReaderTest {
                                 "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"" +
                                 " baseProfile=\"tiny\" version=\"1.2\"" +
                                 " fill=\"#ff0000\">\n" +
-                                "  <rect id=\"r\" height=\"200\" width=\"100\" x=\"10\" y=\"20\"/>\n" +
+                                "  <rect id=\"r\" height=\"200\" width=\"100\" element=\"10\" y=\"20\"/>\n" +
                                 "</svg>\n", "r", SvgRectFigure.FILL_KEY,
                         CssColor.valueOf("#ff0000"))),
                 dynamicTest("rect inherits fill value from g element", () -> testDefaultable(
@@ -48,7 +48,7 @@ public class FigureSvgTinyReaderTest {
                                 "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"" +
                                 " baseProfile=\"tiny\" version=\"1.2\">\n" +
                                 " <g fill=\"#ff0000\">\n" +
-                                "  <rect id=\"r\" height=\"200\" width=\"100\" x=\"10\" y=\"20\"/>\n" +
+                                "  <rect id=\"r\" height=\"200\" width=\"100\" element=\"10\" y=\"20\"/>\n" +
                                 "</g>\n"
                                 + "</svg>\n",
                         "r", SvgRectFigure.FILL_KEY,

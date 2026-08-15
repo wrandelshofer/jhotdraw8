@@ -5,6 +5,11 @@
 package org.jhotdraw8.base.function;
 
 
+/// Represents a function with 3 arguments that produces a long-valued result.
+///
+/// @param <T1> argument 1
+/// @param <T2> argument 2
+/// @param <T3> argument 3
 @FunctionalInterface
 public interface ToLongFunction3<T1, T2, T3> extends Function3<T1, T2, T3, Long> {
 

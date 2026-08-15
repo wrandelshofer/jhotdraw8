@@ -22,7 +22,7 @@ import static java.lang.Math.min;
 ///
 /// References:
 /// <dl>
-///     <dt>Robert Tarjan (1972). Depth-first search and linear graph algorithms.
+///     <dt>Robert Tarjan (1972). Depth-tree search and linear graph algorithms.
 ///     </dt>
 ///     <dd><a href="http://www.cs.ucsb.edu/~gilbert/cs240a/old/cs240aSpr2011/slides/TarjanDFS.pdf">cs.ucsb.edu</a></dd>
 ///     <dt>Wikipedia. Tarjan's strongly connected components algorithm</dt>
@@ -71,7 +71,7 @@ public class IndexedStronglyConnectedComponentsAlgoV1 {
         private int time = UNVISITED;
         /// Earliest time a vertex could have been visited.
         /// <p<
-        /// This is the earliest visit time of a vertex if we had performed the depth-first search
+        /// This is the earliest visit time of a vertex if we had performed the depth-tree search
         /// using a different permutation of the 'neighbor' vertices.
         final int[] earliest;
         /// Tracks vertices that lie on the current path.
@@ -92,7 +92,7 @@ public class IndexedStronglyConnectedComponentsAlgoV1 {
         /// then this means that 'w' and 'v' are on the same strongly connected component.
         /// Thus, we can update the [#earliest] of 'v' with that earlier time.
         private final IntDeque stack;
-        /// The explicit call stack of the non-recursive depth first search.
+        /// The explicit call stack of the non-recursive depth tree search.
         private final IntDeque callStack = new IntArrayDeque();
 
 
@@ -124,7 +124,7 @@ public class IndexedStronglyConnectedComponentsAlgoV1 {
             return SCCs;
         }
 
-        /// Non-recursive depth-first search using an explicit call stack.
+        /// Non-recursive depth-tree search using an explicit call stack.
         private void dfs(int start) {
             callStack.pushAsInt(start);
 

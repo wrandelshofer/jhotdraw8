@@ -71,19 +71,23 @@ public class SelectionTool extends AbstractTool {
     // ---
     // Constructors
     // ---
+    @SuppressWarnings("this-escape")
     public SelectionTool() {
         this("tool.selectFigure", HandleType.RESIZE, ApplicationLabels.getResources());
     }
 
+    @SuppressWarnings("this-escape")
     public SelectionTool(String name, Resources rsrc) {
         this(name, HandleType.RESIZE, rsrc);
     }
 
+    @SuppressWarnings("this-escape")
     public SelectionTool(String name, HandleType handleType, Resources rsrc) {
         super(name, rsrc);
         this.handleType = handleType;
     }
 
+    @SuppressWarnings("this-escape")
     public SelectionTool(String name, HandleType handleType, HandleType anchorHandleType, HandleType leadHandleType, Resources rsrc) {
         super(name, rsrc);
         this.handleType = handleType;
@@ -157,7 +161,7 @@ public class SelectionTool extends AbstractTool {
                             break;
                         }
                     }
-                    // take first figure
+                    // take tree figure
                     if (pressedFigure == null) {
                         pressedFigure = firstFigure;
                     }
@@ -385,16 +389,16 @@ public class SelectionTool extends AbstractTool {
     @Override
     public String getHelpText() {
         return """
-               SelectionTool
-                 Click on the drawing view. The tool will select the figure at that location.
-               Or:
-                 Alt+Click on the drawing view. The tool will select the figure behind the currently selected figure at that location.
-               Or:
-                 Shift+Click on the drawing view. The tool will toggle the figure at that location to/from the selection.
-               Or:
-                 Shift+Command+Click on the drawing view. The tool will deselect all figures except the figure that is on that location.
-               Or:
-                 Press and drag the mouse over the drawing view to draw the diagonal of a rectangle. The tool will select all figures that fit into the rectangle.""";
+                SelectionTool
+                  Click on the drawing view. The tool will select the figure at that location.
+                Or:
+                  Alt+Click on the drawing view. The tool will select the figure behind the currently selected figure at that location.
+                Or:
+                  Shift+Click on the drawing view. The tool will toggle the figure at that location to/from the selection.
+                Or:
+                  Shift+Command+Click on the drawing view. The tool will deselect all figures except the figure that is on that location.
+                Or:
+                  Press and drag the mouse over the drawing view to draw the diagonal of a rectangle. The tool will select all figures that fit into the rectangle.""";
     }
 
 }

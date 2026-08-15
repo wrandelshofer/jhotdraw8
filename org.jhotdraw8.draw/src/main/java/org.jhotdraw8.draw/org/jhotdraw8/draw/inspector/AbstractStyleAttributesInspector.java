@@ -186,10 +186,12 @@ public abstract class AbstractStyleAttributesInspector<E> {
         });
     }
 
+    @SuppressWarnings("this-escape")
     public AbstractStyleAttributesInspector() {
         this(StyleAttributesInspector.class.getResource("StyleAttributesInspector.fxml"));
     }
 
+    @SuppressWarnings("this-escape")
     public AbstractStyleAttributesInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }
@@ -585,7 +587,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         //textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onTextAreaClicked);
         ContextMenu contextMenu = new ContextMenu() {
             @Nullable
-            Picker picker;
+            Picker<?> picker;
 
             @Override
             public void show(Node anchor, double screenX, double screenY) {
@@ -718,7 +720,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     protected abstract void setHelpText(String helpText);
 
-    private @Nullable Picker showPicker(int caretPosition, double screenX, double screenY) {
+    private @Nullable Picker<?> showPicker(int caretPosition, double screenX, double screenY) {
         LookupEntry entry = getLookupEntryAt(caretPosition);
         Declaration declaration = entry == null ? null : entry.declaration;
         StyleRule styleRule = entry == null ? null : entry.styleRule;

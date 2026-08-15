@@ -15,13 +15,13 @@ public class IntersectLineLine {
 
     /// Intersects line segment 'a' with line segment 'b'.
     ///
-    /// @param a0x start x coordinate of line 'a'
+    /// @param a0x start element coordinate of line 'a'
     /// @param a0y start y coordinate of line 'a'
-    /// @param a1x end x coordinate of line 'a'
+    /// @param a1x end element coordinate of line 'a'
     /// @param a1y end y coordinate of line 'a'
-    /// @param b0x start x coordinate of line 'b'
+    /// @param b0x start element coordinate of line 'b'
     /// @param b0y start y coordinate of line 'b'
-    /// @param b1x end x coordinate of line 'b'
+    /// @param b1x end element coordinate of line 'b'
     /// @param b1y end y coordinate of line 'b'
     /// @return computed intersection with parameters of line 'a' at the intersection point
     /// @see IntersectLineLine#intersectLineLineEx(double, double, double, double, double, double, double, double, double)
@@ -72,13 +72,13 @@ public class IntersectLineLine {
     ///     </dd>
     /// </dl>
     ///
-    /// @param a0x start x coordinate of line segment 'a'
+    /// @param a0x start element coordinate of line segment 'a'
     /// @param a0y start y coordinate of line segment 'a'
-    /// @param a1x end x coordinate of line segment 'a'
+    /// @param a1x end element coordinate of line segment 'a'
     /// @param a1y end y coordinate of line segment 'a'
-    /// @param b0x start x coordinate of line segment 'b'
+    /// @param b0x start element coordinate of line segment 'b'
     /// @param b0y start y coordinate of line segment 'b'
-    /// @param b1x end x coordinate of line segment 'b'
+    /// @param b1x end element coordinate of line segment 'b'
     /// @param b1y end y coordinate of line segment 'b'
     /// @return computed intersection with parameters t of 'a' at the intersection point
     public static IntersectionResultEx intersectLineLineEx(

@@ -64,7 +64,7 @@ public class MinimumSpanningTreeAlgo {
     /// @param <P>           the pair data type
     /// @param vertices      a directed graph
     /// @param orderedEdges  list of edges sorted by cost in ascending order
-    ///                      (lowest cost first, highest cost last).
+    ///                      (lowest cost tree, highest cost last).
     /// @param rejectedEdges optional, all excluded edges are added to this
     ///                      list, if it is provided.
     /// @return the arrows that are part of the minimum spanning tree.
@@ -145,7 +145,7 @@ public class MinimumSpanningTreeAlgo {
     /// @param <P>            the pair data type
     /// @param vertices       the list of vertices
     /// @param orderedArrows  list of arrows sorted by cost in ascending order
-    ///                       (lowest cost first, highest cost last)
+    ///                       (lowest cost tree, highest cost last)
     /// @param includedArrows optional, all included arrows are added to this
     ///                       list, if it is provided.
     /// @param rejectedArrows optional, all excluded arrows are added to this

@@ -32,6 +32,10 @@ public class SequencedElement<E> implements SequencedData {
         return oldK;
     }
 
+    public static <E> SequencedElement<E> insertOrFail(SequencedElement<E> oldK, SequencedElement<E> newK) {
+        throw new IllegalArgumentException("Element is already in set. elem=" + oldK);
+    }
+
     public static int keyHash(@Nullable Object a) {
         return Objects.hashCode(a);
     }
@@ -42,11 +46,11 @@ public class SequencedElement<E> implements SequencedData {
 
 
     public static <E> SequencedElement<E> putAndMoveToFirst(SequencedElement<E> oldK, SequencedElement<E> newK) {
-        return oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
+        return oldK.sequenceNumber() == newK.sequenceNumber() + 1 ? oldK : newK;
     }
 
     public static <E> SequencedElement<E> putAndMoveToLast(SequencedElement<E> oldK, SequencedElement<E> newK) {
-        return oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
+        return oldK.sequenceNumber() == newK.sequenceNumber() - 1 ? oldK : newK;
     }
 
     @Override
@@ -70,7 +74,7 @@ public class SequencedElement<E> implements SequencedData {
         return element;
     }
 
-    public int getSequenceNumber() {
+    public int sequenceNumber() {
         return sequenceNumber;
     }
 

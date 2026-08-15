@@ -21,10 +21,10 @@ import java.util.Collections;
 import java.util.Map;
 
 /// Tests [MutableVectorHashMap] with the Guava test suite.
-public class MutablePersistentVectorHashMapGuavaTests {
+public class MutableVectorHashMapGuavaTests {
 
     public static Test suite() {
-        return new MutablePersistentVectorHashMapGuavaTests().allTests();
+        return new MutableVectorHashMapGuavaTests().allTests();
     }
 
     public Test allTests() {

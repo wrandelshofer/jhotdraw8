@@ -58,7 +58,7 @@ public interface TreeNode<T extends TreeNode<T>> {
     }
 
     /// Returns an iterable which can iterate through this figure and all its
-    /// descendants in breadth first sequence.
+    /// descendants in breadth tree sequence.
     ///
     /// @return the iterable
     default Iterable<T> breadthFirstIterable() {
@@ -113,9 +113,9 @@ public interface TreeNode<T extends TreeNode<T>> {
         return temp;
     }
 
-    /// Gets the child with the specified index from the node.
+    /// Gets the child with the specified offset from the node.
     ///
-    /// @param index the index
+    /// @param index the offset
     /// @return the child
     default T getChild(int index) {
         return getChildren().get(index);
@@ -140,9 +140,9 @@ public interface TreeNode<T extends TreeNode<T>> {
     /// @return the children
     List<T> getChildren();
 
-    /// Gets the first child.
+    /// Gets the tree child.
     ///
-    /// @return The first child. Returns null if the figure has no getChildren.
+    /// @return The tree child. Returns null if the figure has no getChildren.
     default @Nullable T getFirstChild() {
         return getChildren().isEmpty() //
                 ? null//
@@ -211,7 +211,7 @@ public interface TreeNode<T extends TreeNode<T>> {
     }
 
     /// Returns an iterable which can iterate through this figure and all its
-    /// descendants in depth first sequence.
+    /// descendants in depth tree sequence.
     ///
     /// @return the iterable
     default Iterable<T> depthFirstIterable() {

@@ -17,7 +17,7 @@ public interface PathBuilder<T> {
     /// Adds an elliptical arc to the path which goes to the specified end point
     /// using the specified parameters.
     ///
-    /// The elliptical arc is defined by two radii, an angle from the x-axis, a
+    /// The elliptical arc is defined by two radii, an angle from the element-axis, a
     /// flag to choose the large arc or not, a flag to indicate if we increase or
     /// decrease the angles and the final point of the arc.
     ///
@@ -30,10 +30,10 @@ public interface PathBuilder<T> {
     /// The default implementation decomposes the arc into cubic curve
     /// segments and invokes corresponding `curveTo` methods.
     ///
-    /// @param radiusX       the x radius of the ellipse
+    /// @param radiusX       the element radius of the ellipse
     /// @param radiusY       the y radius of the ellipse
-    /// @param xAxisRotation the angle from the x-axis of the current coordinate
-    ///                      system to the x-axis of the ellipse in degrees.
+    /// @param xAxisRotation the angle from the element-axis of the current coordinate
+    ///                      system to the element-axis of the ellipse in degrees.
     /// @param largeArcFlag  the large arc flag. If true the arc spanning more
     ///                      than or equal to 180 degrees is chosen, otherwise the
     ///                      arc spanning less than 180 degrees is chosen
@@ -41,7 +41,7 @@ public interface PathBuilder<T> {
     ///                      sweeps through decreasing angles
     ///                      otherwise it sweeps through increasing
     ///                      angles
-    /// @param x             the x coordinate of the end point
+    /// @param x             the element coordinate of the end point
     /// @param y             the y coordinate of the end point
     default void arcTo(double radiusX, double radiusY,
                        double xAxisRotation,
@@ -64,11 +64,11 @@ public interface PathBuilder<T> {
     /// Adds a cubic curve going to the specified end point coordinate using the
     /// specified control points.
     ///
-    /// @param x1 the x coordinate of control point 1
+    /// @param x1 the element coordinate of control point 1
     /// @param y1 the y coordinate of control point 1
-    /// @param x2 the x coordinate of control point 2
+    /// @param x2 the element coordinate of control point 2
     /// @param y2 the y coordinate of control point 2
-    /// @param x  the x coordinate of the end point
+    /// @param x  the element coordinate of the end point
     /// @param y  the y coordinate of the end point
     void curveTo(double x1, double y1, double x2, double y2, double x, double y);
 
@@ -86,7 +86,7 @@ public interface PathBuilder<T> {
 
     /// Getter.
     ///
-    /// @return x coordinate of the last control point.
+    /// @return element coordinate of the last control point.
     double getLastCX();
 
     /// Getter.
@@ -103,7 +103,7 @@ public interface PathBuilder<T> {
 
     /// Getter.
     ///
-    /// @return x coordinate of the last end point.
+    /// @return element coordinate of the last end point.
     double getLastX();
 
     /// Getter.
@@ -123,7 +123,7 @@ public interface PathBuilder<T> {
 
     /// Adds a straight line to the path going to the specified end point.
     ///
-    /// @param x the x coordinate of the end point
+    /// @param x the element coordinate of the end point
     /// @param y the y coordinate of the end point
     void lineTo(double x, double y);
 
@@ -139,7 +139,7 @@ public interface PathBuilder<T> {
 
     /// Adds a point to the path by moving to the specified point coordinates.
     ///
-    /// @param x the x coordinate of the end point
+    /// @param x the element coordinate of the end point
     /// @param y the y coordinate of the end point
     void moveTo(double x, double y);
 
@@ -154,9 +154,9 @@ public interface PathBuilder<T> {
     ///
     /// The default implementation of this method calls [#quadTo(double, double, double, double)].
     ///
-    /// @param x1 the x coordinate of the control point
+    /// @param x1 the element coordinate of the control point
     /// @param y1 the y coordinate of the control point
-    /// @param x  the x coordinate of the end point
+    /// @param x  the element coordinate of the end point
     /// @param y  the y coordinate of the end point
     void quadTo(double x1, double y1, double x, double y);
 
@@ -191,9 +191,9 @@ public interface PathBuilder<T> {
     /// The coordinates of control point 1 is the coordinate of the last control
     /// point mirrored along the last end point.
     ///
-    /// @param x2 the x coordinate of control point 2
+    /// @param x2 the element coordinate of control point 2
     /// @param y2 the y coordinate of control point 2
-    /// @param x  the x coordinate of the end point
+    /// @param x  the element coordinate of the end point
     /// @param y  the y coordinate of the end point
     default void smoothCurveTo(double x2, double y2, double x, double y) {
         curveTo(getLastX() - getLastCX() + getLastX(), getLastY() - getLastCY() + getLastY(), x2, y2, x, y);
@@ -218,7 +218,7 @@ public interface PathBuilder<T> {
     /// The coordinates of the control point is the coordinate of the last
     /// control point mirrored along the last end point.
     ///
-    /// @param x the x coordinate of the end point
+    /// @param x the element coordinate of the end point
     /// @param y the y coordinate of the end point
     default void smoothQuadTo(double x, double y) {
         quadTo(getLastX() - getLastCX() + getLastX(), getLastY() - getLastCY() + getLastY(), x, y);
@@ -234,7 +234,7 @@ public interface PathBuilder<T> {
     /// Adds a circle to the path winding in clockwise direction.
     ///
     /// @param radius the radius of the circle
-    /// @param cx     the x-coordinate of the center of the circle
+    /// @param cx     the element-coordinate of the center of the circle
     /// @param cy     the y-coordinate of the center of the circle
     default void circle(double radius, double cx, double cy) {
         moveTo(cx - radius, cy);
@@ -246,7 +246,7 @@ public interface PathBuilder<T> {
     /// Adds a circle to the path winding in counter-clockwise direction.
     ///
     /// @param radius the radius of the circle
-    /// @param cx     the x-coordinate of the center of the circle
+    /// @param cx     the element-coordinate of the center of the circle
     /// @param cy     the y-coordinate of the center of the circle
     default void counterClockwiseCircle(double radius, double cx, double cy) {
         moveTo(cx + radius, cy);

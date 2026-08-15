@@ -40,7 +40,7 @@ public class Scale2DCssConverter extends AbstractCssConverter<Point2D> {
     @Override
     public Point2D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y;
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale2D⟩: ⟨x⟩ expected.");
+        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale2D⟩: ⟨element⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
         if (tt.next() == CssTokenType.TT_EOF) {
             y = x;
@@ -71,6 +71,6 @@ public class Scale2DCssConverter extends AbstractCssConverter<Point2D> {
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨Scale2D⟩: ⟨s⟩ ｜ ⟨xs⟩ ⟨ys⟩";
+        return "Format of ⟨Scale2D⟩: ⟨s⟩ ｜ ⟨tree⟩ ⟨ys⟩";
     }
 }

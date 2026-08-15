@@ -21,11 +21,11 @@ public class ArrayHelper {
     /// in the same order.
     ///
     /// @param a     array a
-    /// @param aFrom from-index
-    /// @param aTo   to-index
+    /// @param aFrom from-offset
+    /// @param aTo   to-offset
     /// @param b     array b (can be the same as array a)
-    /// @param bFrom from-index
-    /// @param bTo   to-index
+    /// @param bFrom from-offset
+    /// @param bTo   to-offset
     /// @return true if the two sub-arrays have the same length and
     /// if the elements are equal to one another in the same order
     public static <T> boolean equals(T[] a, int aFrom, int aTo,
@@ -37,11 +37,11 @@ public class ArrayHelper {
     /// in the same order.
     ///
     /// @param a     array a
-    /// @param aFrom from-index
-    /// @param aTo   to-index
+    /// @param aFrom from-offset
+    /// @param aTo   to-offset
     /// @param b     array b (can be the same as array a)
-    /// @param bFrom from-index
-    /// @param bTo   to-index
+    /// @param bFrom from-offset
+    /// @param bTo   to-offset
     /// @param cmp   the predicate that checks if two elements are equal
     /// @return true if the two sub-arrays have the same length and
     /// if the elements are equal to one another in the same order
@@ -65,10 +65,10 @@ public class ArrayHelper {
         return true;
     }
 
-    /// Copies 'src' and inserts 'value' at position 'index'.
+    /// Copies 'src' and inserts 'value' at position 'offset'.
     ///
     /// @param src   an array
-    /// @param index an index
+    /// @param index an offset
     /// @param value a value
     /// @param <T>   the array type
     /// @return a new array
@@ -78,10 +78,10 @@ public class ArrayHelper {
         return dst;
     }
 
-    /// Copies 'src' and inserts 'values' at position 'index'.
+    /// Copies 'src' and inserts 'values' at position 'offset'.
     ///
     /// @param src    an array
-    /// @param index  an index
+    /// @param index  an offset
     /// @param values the values
     /// @param <T>    the array type
     /// @return a new array
@@ -91,12 +91,12 @@ public class ArrayHelper {
         return dst;
     }
 
-    /// Copies 'src' and inserts 'numComponents' at position 'index'.
+    /// Copies 'src' and inserts 'numComponents' at position 'offset'.
     ///
     /// The new components will have a null value.
     ///
     /// @param src           an array
-    /// @param index         an index
+    /// @param index         an offset
     /// @param numComponents the number of array components to be added
     /// @param <T>           the array type
     /// @return a new array
@@ -110,10 +110,10 @@ public class ArrayHelper {
         return dst;
     }
 
-    /// Copies 'src' and removes 'numComponents' at position 'index'.
+    /// Copies 'src' and removes 'numComponents' at position 'offset'.
     ///
     /// @param src           an array
-    /// @param index         an index
+    /// @param index         an offset
     /// @param numComponents the number of array components to be removed
     /// @param <T>           the array type
     /// @return a new array
@@ -127,20 +127,20 @@ public class ArrayHelper {
         return dst;
     }
 
-    /// Copies 'src' and removes one component at position 'index'.
+    /// Copies 'src' and removes one component at position 'offset'.
     ///
     /// @param src   an array
-    /// @param index an index
+    /// @param index an offset
     /// @param <T>   the array type
     /// @return a new array
     public static <T> T[] copyRemove(T[] src, int index) {
         return copyComponentRemove(src, index, 1);
     }
 
-    /// Copies 'src' and sets 'value' at position 'index'.
+    /// Copies 'src' and sets 'value' at position 'offset'.
     ///
     /// @param src   an array
-    /// @param index an index
+    /// @param index an offset
     /// @param value a value
     /// @param <T>   the array type
     /// @return a new array

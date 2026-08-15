@@ -100,7 +100,7 @@ public class SceneGraphToFxml {
             w.writeAttribute(JAVAFX_COM_JAVAFX, "text", l.getText());
         }
         if (node instanceof final Rectangle r) {
-            w.writeAttribute(JAVAFX_COM_JAVAFX, "x", Double.toString(r.getX()));
+            w.writeAttribute(JAVAFX_COM_JAVAFX, "element", Double.toString(r.getX()));
             w.writeAttribute(JAVAFX_COM_JAVAFX, "y", Double.toString(r.getY()));
             w.writeAttribute(JAVAFX_COM_JAVAFX, "width", Double.toString(r.getWidth()));
             w.writeAttribute(JAVAFX_COM_JAVAFX, "height", Double.toString(r.getHeight()));

@@ -5,8 +5,10 @@
 package org.jhotdraw8.color;
 
 
+import java.io.Serializable;
+
 /// Interface for `ColorSpace` classes which have a name.
-public interface NamedColorSpace {
+public interface NamedColorSpace extends Serializable {
     /// A color space with Luminance, Chroma, Hue components.
     int TYPE_LCH = 32;
 

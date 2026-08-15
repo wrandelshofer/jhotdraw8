@@ -61,13 +61,13 @@ public class IntersectPointQuadCurve {
     ///
     /// </ol>
     ///
-    /// @param x0 x-coordinate of control point 0 of the bezier curve
+    /// @param x0 element-coordinate of control point 0 of the bezier curve
     /// @param y0 y-coordinate of control point 0 of the bezier curve
-    /// @param x1 x-coordinate of control point P0 of the bezier curve
+    /// @param x1 element-coordinate of control point P0 of the bezier curve
     /// @param y1 y-coordinate of control point P0 of the bezier curve
-    /// @param x2 x-coordinate of control point P1 of the bezier curve
+    /// @param x2 element-coordinate of control point P1 of the bezier curve
     /// @param y2 y-coordinate of control point P1 of the bezier curve
-    /// @param cx x-coordinate of the point
+    /// @param cx element-coordinate of the point
     /// @param cy y-coordinate of the point
     /// @param r  the tolerance radius
     /// @return the intersection

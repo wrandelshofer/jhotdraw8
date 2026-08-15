@@ -23,7 +23,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
     private int capacity;
     /// The free capacity for arrows in this chunk.
     private int free;
-    /// The local index of the vertex, that contains the gap.
+    /// The local offset of the vertex, that contains the gap.
     private int gapIndex;
     /// The size of the gap.
     private int gapSize;
@@ -44,10 +44,10 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
     ///                         // There are [#capacity] vertices in this array.
     ///                         //
     ///                         // The siblings of a vertex are stored in a consecutive sequence.
-    ///                         // The siblings of a vertex are sorted by index, so that a
+    ///                         // The siblings of a vertex are sorted by offset, so that a
     ///                         // binary search can be used to find a specific sibling.
     ///                         // There is one gap of size [#gapSize] after the vertex with
-    ///                         // index[#gapIndex].
+    ///                         // offset[#gapIndex].
     ///
     /// arrows: [data,...] // Stores the arrow data of the vertices.
     ///                       // There are [#capacity] vertices in this array.
@@ -69,11 +69,11 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         }
     }
 
-    /// Finds the index of vertex u in the sibling list of vertex v.
+    /// Finds the offset of vertex u in the sibling list of vertex v.
     ///
-    /// @param v index of vertex v
-    /// @param u index of vertex u
-    /// @return the index of u or (-index -1) if u is not in the index list.
+    /// @param v offset of vertex v
+    /// @param u offset of vertex u
+    /// @return the offset of u or (-offset -1) if u is not in the offset list.
     @Override
     public int indexOf(final int v, final int u) {
         final int from = getSiblingsFromOffset(v);
@@ -171,8 +171,8 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
     /// Adds an arrow from vertex v to vertex u with the provided arrow data.
     /// Optionally updates the arrow data if the arrow is present.
     ///
-    /// @param v               index of vertex v
-    /// @param u               index of vertex u
+    /// @param v               offset of vertex v
+    /// @param u               offset of vertex u
     /// @param data            the arrow data
     /// @param updateIfPresent sets the data if the arrow is present
     /// @return true if a new arrow was added
@@ -220,8 +220,8 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
 
     /// Removes an arrow from vertex v to vertex u, if it is present.
     ///
-    /// @param v index of vertex v
-    /// @param u index of vertex u
+    /// @param v offset of vertex v
+    /// @param u offset of vertex u
     /// @return true on success
     @Override
     public boolean tryRemoveArrow(final int v, final int u) {
@@ -235,7 +235,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
 
     /// Removes all arrows starting at vertex v.
     ///
-    /// @param v index of vertex v
+    /// @param v offset of vertex v
     @Override
     public void removeAllArrows(final int v) {
         final int vIndex = v & (vertexCount - 1);
@@ -295,10 +295,10 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
     }
 
     /// Removes an arrow from vertex v to the a vertex u at the specified
-    /// index.
+    /// offset.
     ///
-    /// @param v            index of vertex v
-    /// @param removalIndex index of vertex u
+    /// @param v            offset of vertex v
+    /// @param removalIndex offset of vertex u
     /// @return returns the removed arrow u
     @Override
     public int removeArrowAt(final int v, final int removalIndex) {
@@ -417,7 +417,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
             System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataFrom + insertionIndex + 1, length);
         }
 
-        // insert the element at insertion index
+        // insert the element at insertion offset
         chunk[from + insertionIndex] = u;
         chunk[arrowDataFrom + insertionIndex] = data;
     }
@@ -458,7 +458,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         System.arraycopy(chunk, from + insertionIndex, chunk, from + insertionIndex + 1, length);
         System.arraycopy(chunk, from + capacity + insertionIndex, chunk, from + capacity + insertionIndex + 1, length);
 
-        // insert the element at insertion index
+        // insert the element at insertion offset
         chunk[from + insertionIndex] = u;
         chunk[from + capacity + insertionIndex] = data;
 
@@ -504,7 +504,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
             System.arraycopy(chunk, arrowsGapFrom + free, chunk, arrowsGapFrom, length);
         }
 
-        // insert the element at insertion index
+        // insert the element at insertion offset
         int arrowDataFrom = from + capacity;
         chunk[from + insertionIndex - free] = u;
         chunk[arrowDataFrom + insertionIndex - free] = data;
@@ -528,7 +528,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
     /// @param to
     /// @param removalIndex
     void removeAtGap(final int from, final int to, final int removalIndex) {
-        // ÷ = index after removal index, u = element to be removed
+        // ÷ = offset after removal offset, u = element to be removed
         // ...,,,,::::;;;; = siblings list of different vertices
         //                       the list with the colons ':' is the sibling list of 'v'.
         //
@@ -562,7 +562,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
     /// @param to
     /// @param removalIndex
     void removeBeforeGap(final int from, final int to, final int removalIndex) {
-        // ÷ = index after removal index, u = element to be removed
+        // ÷ = offset after removal offset, u = element to be removed
         // ...,,,,::::;;;; = siblings list of different vertices
         //                       the list with the colons ':' is the sibling list of 'v'.
         // BEFORE:

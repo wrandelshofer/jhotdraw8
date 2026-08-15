@@ -5,6 +5,8 @@
 
 package org.jhotdraw8.color;
 
+import java.io.Serial;
+
 import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.FROM_D50_XYZ_TO_D65_XYZ;
 import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.FROM_D65_TO_D50;
 
@@ -18,6 +20,9 @@ import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.FROM_D65_TO_D50;
 ///     <dd>[w3.org](https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-conversion-code)</dd>
 /// </dl>
 public class D65XyzColorSpace extends ParametricXyzColorSpace {
+    @Serial
+    private static final long serialVersionUID = 0L;
+
     public static D65XyzColorSpace getInstance() {
         class Holder {
             private static final D65XyzColorSpace INSTANCE = new D65XyzColorSpace();

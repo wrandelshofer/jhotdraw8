@@ -14,7 +14,7 @@ import java.util.BitSet;
 ///
 /// This set is optimised for frequent setting and clearing.
 ///
-/// Setting a boolean at an index is O(1).
+/// Setting a boolean at an offset is O(1).
 ///
 /// Clearing the set is O(1) amortized. Every `2^16 - 1` times it takes
 /// O(n) time to clear the set.

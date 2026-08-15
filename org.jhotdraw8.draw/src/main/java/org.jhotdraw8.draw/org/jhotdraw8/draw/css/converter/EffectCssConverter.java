@@ -44,38 +44,38 @@ import java.util.function.Consumer;
 /// <pre>
 /// Effect = "none" | ( Blend | Bloom | BoxBlur | ColorAdjust | DropShadow | GaussianBlur | Glow | InnerShadow | Shadow ) , { Effect };
 /// Blend = "blend(" , [
-///blendType
-///] , ")";
+/// blendType
+/// ] , ")";
 /// Bloom = "bloom(" , [
-///threshold
-///] , ")";
+/// threshold
+/// ] , ")";
 /// BoxBlur = "box-blur(" , [
-///width,Sep,height,Sep,iterations
-///] , ")";
+/// width,Sep,height,Sep,iterations
+/// ] , ")";
 /// ColorAdjust = "color-adjust(" , [
-///"hue",S,hue,Sep,
+/// "hue",S,hue,Sep,
 ///                 "saturation",S,saturation,Sep,
 ///                 "brightness",S,brightness,Sep,
 ///                 "contrast",S,contrast
-///] , ")";
+/// ] , ")";
 /// DropShadow = "drop-shadow(" , [
-///blurType,Sep,color,Sep,
+/// blurType,Sep,color,Sep,
 ///                 radius,Sep,spread,Sep,xOffset,Sep,yOffset
-///] , ")";
+/// ] , ")";
 /// GaussianBlur = "gaussian-blur(" , [
-///radius
-///] , ")";
+/// radius
+/// ] , ")";
 /// Glow = "glow(" , [
-///level
-///] , ")";
+/// level
+/// ] , ")";
 /// InnerShadow = "inner-shadow(" , [
-///blurType,Sep,color,Sep,
+/// blurType,Sep,color,Sep,
 ///                 radius,Sep,choke,Sep,xOffset,Sep,yOffset
-///] , ")";
+/// ] , ")";
 /// Shadow = "shadow(" , [
-///blurType,Sep,color,Sep,
+/// blurType,Sep,color,Sep,
 ///                 radius
-///] , ")";
+/// ] , ")";
 ///
 /// Sep         = ( S , { S } | { S } , "," , { S } ) ;
 /// S           = (* white space character *)
@@ -287,7 +287,7 @@ public class EffectCssConverter implements CssConverter<Effect> {
 
         if (tt.next() != ')') {
             if (tt.current() != CssTokenType.TT_IDENT) {
-                throw tt.createParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-x,offset-y) expected.");
+                throw tt.createParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-element,offset-y) expected.");
             }
             tt.pushBack();
             blurType = blurTypeConverter.parseNonNull(tt, null);
@@ -326,7 +326,7 @@ public class EffectCssConverter implements CssConverter<Effect> {
                 tt.pushBack();
             }
             if (tt.next() != CssTokenType.TT_NUMBER) {
-                throw tt.createParseException("CSS Shadow-Effect: offset-x number expected.");
+                throw tt.createParseException("CSS Shadow-Effect: offset-element number expected.");
             }
             offsetX = tt.currentNumberNonNull().doubleValue();
             if (tt.next() != ',') {
@@ -449,7 +449,7 @@ public class EffectCssConverter implements CssConverter<Effect> {
 
         if (tt.next() != ')') {
             if (tt.current() != CssTokenType.TT_IDENT) {
-                throw tt.createParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-x,offset-y) expected.");
+                throw tt.createParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-element,offset-y) expected.");
             }
             tt.pushBack();
             blurType = blurTypeConverter.parseNonNull(tt, null);

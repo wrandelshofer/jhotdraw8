@@ -50,6 +50,7 @@ public class BezierPathFigure extends AbstractLeafFigure
     /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Bezier";
 
+    @SuppressWarnings("this-escape")
     public BezierPathFigure() {
         setStyled(StyleOrigin.USER_AGENT, FILL, null);
     }
@@ -131,7 +132,7 @@ public class BezierPathFigure extends AbstractLeafFigure
     public void reshapeInLocal(Transform transform) {
         BezierPath newP = getNonNull(PATH);
         for (int i = 0, n = newP.size(); i < n; i++) {
-            newP = newP.replacingAt(i, newP.get(i).transform(transform));
+            newP = newP.settingAt(i, newP.get(i).transform(transform));
         }
         set(PATH, newP);
     }

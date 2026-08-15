@@ -12,6 +12,7 @@ public class HBoxTrack extends AbstractDockParent implements Track {
     private final ScrollPane scrollPane = new ScrollPane();
     private final HBox hbox = new HBox();
 
+    @SuppressWarnings("this-escape")
     public HBoxTrack() {
         getChildren().add(scrollPane);
         scrollPane.setContent(hbox);

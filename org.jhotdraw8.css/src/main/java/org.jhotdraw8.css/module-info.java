@@ -9,11 +9,13 @@ import org.jspecify.annotations.NullMarked;
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.css {
-
+    requires transitive javafx.base;
+    requires transitive javafx.graphics;
     requires transitive org.jhotdraw8.base;
-    requires org.jhotdraw8.color;
-    requires org.jhotdraw8.fxcollection;
-    requires java.logging;
+    requires transitive org.jhotdraw8.color;
+    requires transitive org.jhotdraw8.fxcollection;
+    requires transitive org.jhotdraw8.icollection;
+    requires transitive java.logging;
 
     exports org.jhotdraw8.css.ast;
     exports org.jhotdraw8.css.converter;

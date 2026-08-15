@@ -20,6 +20,7 @@ public class IndexedHashObservableSet<E> extends AbstractIndexedArrayObservableS
     public IndexedHashObservableSet() {
     }
 
+    @SuppressWarnings("this-escape")
     public IndexedHashObservableSet(Collection<? extends E> col) {
         setAll(col);
     }

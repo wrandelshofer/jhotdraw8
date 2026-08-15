@@ -39,10 +39,12 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
         this(0, 0, 1, 1);
     }
 
+    @SuppressWarnings("this-escape")
     public ArcFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
     }
 
+    @SuppressWarnings("this-escape")
     public ArcFigure(Rectangle2D rect) {
         reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }

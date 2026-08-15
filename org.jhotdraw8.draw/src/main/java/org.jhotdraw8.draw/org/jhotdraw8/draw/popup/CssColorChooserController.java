@@ -3,7 +3,6 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-/// Sample Skeleton for 'CssColorChooser.fxml' Controller Class
 package org.jhotdraw8.draw.popup;
 
 import javafx.beans.property.ObjectProperty;
@@ -29,6 +28,7 @@ public class CssColorChooserController {
     private ColorPicker colorPicker; // Value injected by FXMLLoader
     private final ColorCssConverter converter = new ColorCssConverter();
 
+    @SuppressWarnings("this-escape")
     public CssColorChooserController() {
     }
 

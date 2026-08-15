@@ -21,10 +21,10 @@ import java.util.Collections;
 import java.util.Set;
 
 /// Tests [MutableVectorHashSet] with the Guava test suite.
-public class MutablePersistentVectorHashSetGuavaTests {
+public class MutableVectorHashSetGuavaTests {
 
     public static Test suite() {
-        return new MutablePersistentVectorHashSetGuavaTests().allTests();
+        return new MutableVectorHashSetGuavaTests().allTests();
     }
 
     public Test allTests() {

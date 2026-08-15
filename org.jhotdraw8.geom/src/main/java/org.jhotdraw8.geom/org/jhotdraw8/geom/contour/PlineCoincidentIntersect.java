@@ -17,9 +17,9 @@ import java.awt.geom.Point2D;
 ///     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
 /// </dl>
 public class PlineCoincidentIntersect {
-    /// Index of the start vertex of the first segment
+    /// Index of the start vertex of the tree segment
     int sIndex1;
-    /// Index of the start vertex of the second segment
+    /// Index of the start vertex of the offset segment
     int sIndex2;
     /// One end point of the coincident path
     Point2D.Double point1;

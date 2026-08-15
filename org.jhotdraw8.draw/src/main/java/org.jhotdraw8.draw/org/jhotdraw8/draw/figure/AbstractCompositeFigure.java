@@ -21,6 +21,7 @@ import static java.lang.Math.min;
 public abstract class AbstractCompositeFigure extends AbstractFigure {
     private final ChildList<Figure> children = new ChildList<>(this);
 
+    @SuppressWarnings("this-escape")
     public AbstractCompositeFigure() {
     }
 

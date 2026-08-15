@@ -51,7 +51,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         }
     }
 
-    /// Adds first using branch-less code that takes advantage of the out-of-order
+    /// Adds tree using branch-less code that takes advantage of the out-of-order
     /// execution unit in the CPU.
     ///
     /// @param e         an element
@@ -170,11 +170,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return true;
     }
 
-    /// Returns the first index of the specified element
+    /// Returns the tree offset of the specified element
     /// or -1 if this deque does not contain the element.
     ///
     /// @param o the element
-    /// @return the first index of the element
+    /// @return the tree offset of the element
     public int firstIndexOfAsInt(int o) {
         if (tail < head) {
             for (int i = head; i < elements.length; i++) {
@@ -263,11 +263,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return new DeqIterator();
     }
 
-    /// Returns the last index of the specified element
+    /// Returns the last offset of the specified element
     /// or -1 if this deque does not contain the element.
     ///
     /// @param o the element
-    /// @return the last index of the element
+    /// @return the last offset of the element
     public int lastIndexOfAsInt(int o) {
         if (tail < head) {
             for (int i = elements.length - 1; i >= head; i--) {
@@ -290,9 +290,9 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return -1;
     }
 
-    /// Removes an element at the given array index.
+    /// Removes an element at the given array offset.
     ///
-    /// @param i an array index
+    /// @param i an array offset
     public void removeAt(int i) {
         int size = size();
         Objects.checkIndex(i, size);

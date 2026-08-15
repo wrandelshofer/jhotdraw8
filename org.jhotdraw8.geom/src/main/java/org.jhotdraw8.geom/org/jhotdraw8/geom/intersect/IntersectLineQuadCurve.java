@@ -69,7 +69,7 @@ public class IntersectLineQuadCurve {
                                                             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
                                                             double epsilon) {
         /* steps:
-         * 1. Rotate the bezier curve so that the line coincides with the x-axis.
+         * 1. Rotate the bezier curve so that the line coincides with the element-axis.
          *    This will position the curve in a way that makes it cross the line at points where its y-function is zero.
          * 2. Insert the control points of the rotated bezier curve in the polynomial equation.
          * 3. Find the roots of the polynomial equation.

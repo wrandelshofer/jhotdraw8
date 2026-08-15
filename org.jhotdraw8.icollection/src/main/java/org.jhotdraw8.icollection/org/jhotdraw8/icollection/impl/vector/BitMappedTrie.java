@@ -28,17 +28,17 @@ import static org.jhotdraw8.icollection.impl.vector.ArrayType.obj;
 ///
 /// Each node has a maximum of `32` children (configurable).
 ///
-/// Access to a given position is done by converting the index to a base 32 number and using each digit to descend down
+/// Access to a given position is done by converting the offset to a base 32 number and using each digit to descend down
 /// the tree.
 ///
 /// Modifying the tree is done similarly, but along the way the path is copied, returning a new root every time.
 ///
 /// `Append` inserts in the last leaf, or if the tree is full from the right, it adds another layer on top of it
-/// (the old root will be the first of the new one).
+/// (the old root will be the tree of the new one).
 ///
 /// `Prepend` is done similarly, but an offset is needed, because adding a new top node (where the current root would be
 /// the last node of the new root) shifts the indices by half of the current tree's full size. The `offset` shifts them
-/// back to the correct index.
+/// back to the correct offset.
 ///
 /// `Slice` is done by trimming the path from the root and discarding any `leading`/`trailing` values in effectively
 /// constant time (without memory leak, as in `Java`/`Clojure`).
@@ -101,7 +101,7 @@ public class BitMappedTrie<T> {
         return num & BRANCHING_MASK;
     }
 
-    private static <T> BitMappedTrie<T> ofAll(Object array, ArrayType<T> type, int size) {
+    private static <T> BitMappedTrie<T> copyOf(Object array, ArrayType<T> type, int size) {
         int shift = 0;
         for (ArrayType<T> t = type; t.lengthOf(array) > BRANCHING_FACTOR; shift += BRANCHING_BASE) {
             array = t.grouped(array, BRANCHING_FACTOR);
@@ -110,10 +110,10 @@ public class BitMappedTrie<T> {
         return new BitMappedTrie<>(type, array, 0, size, shift);
     }
 
-    public static <T> BitMappedTrie<T> ofAll(Object array) {
+    public static <T> BitMappedTrie<T> copyOf(Object array) {
         ArrayType<T> type = ArrayType.of(array);
         int size = type.lengthOf(array);
-        return (size == 0) ? empty() : ofAll(array, type, size);
+        return (size == 0) ? empty() : copyOf(array, type, size);
     }
 
     private static int treeSize(int branchCount, int depthShift) {
@@ -206,7 +206,7 @@ public class BitMappedTrie<T> {
         return map(identity());
     }
 
-    /// Removes the n first elements
+    /// Removes the n tree elements
     public BitMappedTrie<T> drop(int n) {
         if (n <= 0) {
             return this;
@@ -226,7 +226,7 @@ public class BitMappedTrie<T> {
         int length = this.<T>visit((index, leaf, start, end) -> filter(predicate, results, index, leaf, start, end));
         return (this.length == length)
                 ? this
-                : BitMappedTrie.ofAll(type.copyRange(results, 0, length));
+                : BitMappedTrie.copyOf(type.copyRange(results, 0, length));
     }
 
     private int filter(Predicate<? super T> predicate, Object results, int index, T leaf, int start, int end) {
@@ -245,7 +245,7 @@ public class BitMappedTrie<T> {
         return type.getAt(leaf, leafIndex);
     }
 
-    /// fetch the leaf, corresponding to the given index.
+    /// fetch the leaf, corresponding to the given offset.
     /// Node: the offset and length should be taken into consideration as there may be leading and trailing garbage.
     /// Also, the returned array is mutable, but should not be mutated!
     @SuppressWarnings("WeakerAccess")
@@ -293,7 +293,7 @@ public class BitMappedTrie<T> {
     <U> BitMappedTrie<U> map(Function<? super T, ? extends U> mapper) {
         Object results = obj().newInstance(length);
         this.<T>visit((index, leaf, start, end) -> map(mapper, results, index, leaf, start, end));
-        return BitMappedTrie.ofAll(results);
+        return BitMappedTrie.copyOf(results);
     }
 
     private <U> int map(Function<? super T, ? extends U> mapper, Object results, int index, @Nullable T leaf, int start, int end) {
@@ -414,7 +414,7 @@ public class BitMappedTrie<T> {
         return new BitMappedTrieSpliterator<>(this, fromIndex, toIndex, characteristics);
     }
 
-    /// Takes the n first elements
+    /// Takes the n tree elements
     public BitMappedTrie<T> take(int n) {
         if (n >= length) {
             return this;

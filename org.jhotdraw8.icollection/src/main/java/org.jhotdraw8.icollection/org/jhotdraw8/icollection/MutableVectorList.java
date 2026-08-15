@@ -6,7 +6,8 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.facade.ReadableListFacade;
-import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTree;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jhotdraw8.icollection.readable.ReadableSequencedCollection;
 import org.jhotdraw8.icollection.sequenced.ReversedListView;
@@ -16,10 +17,10 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.stream.Stream;
 
 /// Implements the [List] interface using a bit-mapped trie (Vector).
@@ -58,22 +59,22 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     private static final long serialVersionUID = 0L;
 
     @SuppressWarnings("TransientFieldNotInitialized")
-    transient BitMappedTrie<E> root;
+    transient FingerTree<E> root;
 
     /// Constructs a new empty list.
     public MutableVectorList() {
-        root = BitMappedTrie.empty();
+        root = FingerTreeAPI.of();
     }
 
     @Override
     public void addFirst(E e) {
-        root = root.prepend(Collections.singleton(e).iterator(), 1);
+        root = FingerTreeAPI.addFirst(e, root);
         modCount++;
     }
 
     @Override
     public void addLast(E e) {
-        root = root.append(e);
+        root = FingerTreeAPI.addLast(root, e);
         modCount++;
     }
 
@@ -81,7 +82,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     public ReadableSequencedCollection<E> readableReversed() {
         return new ReadableListFacade<>(
                 this::size,
-                index -> get(root.length - 1 - index),
+                index -> get(root.size() - 1 - index),
                 () -> this
         );
     }
@@ -97,24 +98,25 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public int size() {
-        return root.length;
+        return root.size();
     }
 
     @Override
     public E get(int index) {
-        Objects.checkIndex(index, root.length);
         //noinspection DataFlowIssue
-        return root.get(index);
+        return FingerTreeAPI.get(root, index);
     }
 
     @Override
     public E getFirst() {
-        return ReadableList.super.getFirst();
+        //noinspection DataFlowIssue
+        return FingerTreeAPI.get(root, 0);
     }
 
     @Override
     public E getLast() {
-        return ReadableList.super.getLast();
+        //noinspection DataFlowIssue
+        return FingerTreeAPI.get(root, size() - 1);
     }
 
     @Override
@@ -124,8 +126,8 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        Objects.checkIndex(index, root.length + 1);
-        int oldSize = root.length;
+        Objects.checkIndex(index, root.size() + 1);
+        int oldSize = root.size();
         PersistentVectorList<E> persistent = toPersistent().addingAllAt(index, c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
@@ -141,8 +143,8 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     /// @param c     the collection to be added to ths list
     /// @return `true` if this list changed as a result of the call
     public boolean addAll(int index, Iterable<? extends E> c) {
-        Objects.checkIndex(index, root.length + 1);
-        int oldSize = root.length;
+        Objects.checkIndex(index, root.size() + 1);
+        int oldSize = root.size();
         PersistentVectorList<E> persistent = toPersistent().addingAllAt(index, c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
@@ -162,7 +164,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        int oldSize = root.length;
+        int oldSize = root.size();
         PersistentVectorList<E> persistent = toPersistent().removingAll(c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
@@ -174,7 +176,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        int oldSize = root.length;
+        int oldSize = root.size();
         PersistentVectorList<E> persistent = toPersistent().retainingAll(c);
         if (oldSize != persistent.size()) {
             root = persistent.root;
@@ -189,6 +191,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableVectorList(Iterable<? extends E> c) {
+        // FIXME Use Builder!
         if (c instanceof MutableVectorList<?>) {
             c = ((MutableVectorList<? extends E>) c).toPersistent();
         }
@@ -196,13 +199,13 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
             PersistentVectorList<E> that = (PersistentVectorList<E>) c;
             this.root = that.root;
         } else {
-            this.root = BitMappedTrie.empty();
+            this.root = FingerTreeAPI.of();
             addAll(0, c);
         }
     }
 
     public PersistentVectorList<E> toPersistent() {
-        return root.length == 0 ? PersistentVectorList.of() : new PersistentVectorList<>(root);
+        return root.size() == 0 ? PersistentVectorList.of() : new PersistentVectorList<>(root);
     }
 
     @Serial
@@ -212,7 +215,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public boolean add(E e) {
-        root = root.append(e);
+        root = FingerTreeAPI.addLast(root, e);
         modCount++;
         return true;
 
@@ -220,9 +223,9 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public E set(int index, E element) {
-        Objects.checkIndex(index, root.length);
+        Objects.checkIndex(index, root.size());
         E oldValue = get(index);
-        root = root.update(index, element);
+        root = FingerTreeAPI.setAt(root, index, element).tree();
 
         // According to Guava Tests, this method must not affect modCount!
         // modCount++;
@@ -232,17 +235,12 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public void add(int index, E element) {
-        Objects.checkIndex(index, root.length + 1);
-        if (index == root.length) {
-            add(element);
-        } else {
-            addAll(index, Collections.singleton(element));
-        }
+        root = FingerTreeAPI.addAt(root, index, element);
     }
 
     @Override
     public E remove(int index) {
-        Objects.checkIndex(index, root.length);
+        Objects.checkIndex(index, root.size());
         E removed = get(index);
         removeRange(index, index + 1);
         return removed;
@@ -250,7 +248,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public Spliterator<E> spliterator() {
-        return root.spliterator(0, size(), Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED);
+        return Spliterators.spliterator(FingerTreeAPI.iterator(root), size(), Spliterator.ORDERED);
     }
 
     @Override

@@ -69,7 +69,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     ///
     /// Default value: `Rotate.Z_AXIS`.
     SimpleNonNullKey<Point3D> ROTATION_AXIS = new SimpleNonNullKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
-    /// Defines the scale factor by which coordinates are scaled on the x axis
+    /// Defines the scale factor by which coordinates are scaled on the element axis
     /// about the center of the figure. Default value: `1`.
     DoubleStyleableKey SCALE_X = new DoubleStyleableKey("scaleX", 1.0);
     /// Defines the scale factor by which coordinates are scaled on the y axis
@@ -82,7 +82,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     /// about the center of the figure.
     Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
     TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", PersistentVectorList.of());
-    /// Defines the translation on the x axis about the center of the figure.
+    /// Defines the translation on the element axis about the center of the figure.
     /// Default value: `0`.
     DoubleStyleableKey TRANSLATE_X = new DoubleStyleableKey("translateX", 0.0);
     /// Defines the translation on the y axis about the center of the figure.
@@ -315,7 +315,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
                 if (concatenatedWithLast instanceof Affine) {
                     set(TRANSFORMS, ts.adding(transform));
                 } else {
-                    set(TRANSFORMS, ts.replacingAt(last, concatenatedWithLast));
+                    set(TRANSFORMS, ts.settingAt(last, concatenatedWithLast));
                 }
             }
             return;
@@ -382,7 +382,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
             if (transforms.isEmpty()) {
                 set(TRANSFORMS, PersistentVectorList.of(t));
             } else {
-                set(TRANSFORMS, transforms.replacingAt(0, t));
+                set(TRANSFORMS, transforms.settingAt(0, t));
             }
         }
     }

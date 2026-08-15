@@ -26,7 +26,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     /// Creates a new instance with the specified name.
     ///
     /// @param name the name of the accessor
-    /// @param xKey the key for the x coordinate of the point
+    /// @param xKey the key for the element coordinate of the point
     /// @param yKey the key for the y coordinate of the point
     public Point2DStyleableMapAccessor(String name, NonNullMapAccessor<Double> xKey, NonNullMapAccessor<Double> yKey) {
         this(name, xKey, yKey, new Point2DConverter(false));
@@ -35,7 +35,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     /// Creates a new instance with the specified name.
     ///
     /// @param name      the name of the accessor
-    /// @param xKey      the key for the x coordinate of the point
+    /// @param xKey      the key for the element coordinate of the point
     /// @param yKey      the key for the y coordinate of the point
     /// @param converter String converter for the point
     public Point2DStyleableMapAccessor(String name, NonNullMapAccessor<Double> xKey, NonNullMapAccessor<Double> yKey, Converter<Point2D> converter) {

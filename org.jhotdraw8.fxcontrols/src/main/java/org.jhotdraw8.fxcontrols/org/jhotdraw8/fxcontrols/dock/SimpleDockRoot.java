@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 
 /// A simple implementation of the [DockRoot] interface.
 ///
-/// This DockPane only shows the first child dock.
+/// This DockPane only shows the tree child dock.
 ///
 /// FIXME DockPane should allow to select which child that it shows, like a card pane.
 public class SimpleDockRoot
@@ -45,6 +45,7 @@ public class SimpleDockRoot
     private Supplier<Track> subYSupplier = VBoxTrack::new;
     private Supplier<Track> zSupplier = TabPaneTrack::new;
 
+    @SuppressWarnings("this-escape")
     public SimpleDockRoot() {
         getChildren().add(contentPane);
         dropRect.setOpacity(0.4);
@@ -127,14 +128,14 @@ public class SimpleDockRoot
 
         ObservableList<DockChild> children = parent.getDockChildren();
         switch (zone) {
-        case TOP:
-        case LEFT:
-            children.add(Math.max(insertionIndex, 0), child);
-            break;
-        case RIGHT:
-        case BOTTOM:
-        default:
-            children.add(insertionIndex < 0 ? children.size() : insertionIndex + 1, child);
+            case TOP:
+            case LEFT:
+                children.add(Math.max(insertionIndex, 0), child);
+                break;
+            case RIGHT:
+            case BOTTOM:
+            default:
+                children.add(insertionIndex < 0 ? children.size() : insertionIndex + 1, child);
         }
     }
 

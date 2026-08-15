@@ -121,15 +121,15 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         arrowCount++;
     }
 
-    /// Adds `addend` to every vertex index that is greater or
+    /// Adds `addend` to every vertex offset that is greater or
     /// equal `vidx`.
     ///
     /// @param src    the source arrow array
-    /// @param vsrc   the vertex index in the source
+    /// @param vsrc   the vertex offset in the source
     /// @param dest   the destination source arrow
-    /// @param vdst   the vertex index in the destination
+    /// @param vdst   the vertex offset in the destination
     /// @param length the number of vertices to change
-    /// @param vidx   the vertex index
+    /// @param vidx   the vertex offset
     /// @param addend the number to add
     private void addToVectorIndices(final short[] src, final int vsrc, final short[] dest, final int vdst, final int length, final int vidx, final int addend) {
         int srcOffset = vsrc * stride + VERTEX_DATA_SIZE;
@@ -457,7 +457,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
 
     /// Sets the vertex data for the specified vertex.
     ///
-    /// @param vidx the index of the vertex
+    /// @param vidx the offset of the vertex
     /// @param data the vertex data
     public void setVertexAsInt(final int vidx, final int data) {
         final int offset = vidx * stride;
@@ -490,10 +490,10 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         return (prev[offset] << 16) | prev[offset + 1];
     }
 
-    /// Returns a breadth first spliterator that starts at the specified vertex.
+    /// Returns a breadth tree spliterator that starts at the specified vertex.
     ///
-    /// @param vidx the index of the vertex
-    /// @param dfs  whether to search depth-first instead of breadth-first
+    /// @param vidx the offset of the vertex
+    /// @param dfs  whether to search depth-tree instead of breadth-tree
     /// @return the spliterator
     public Enumerator.OfInt seachNextVerticesAsInt(final int vidx, boolean dfs) {
         return seachNextVerticesAsInt(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
@@ -504,10 +504,10 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
                 VERTEX_DATA_SIZE, visited, dfs);
     }
 
-    /// Returns a backward breadth first spliterator that starts at the specified
+    /// Returns a backward breadth tree spliterator that starts at the specified
     /// vertex.
     ///
-    /// @param vidx the index of the vertex
+    /// @param vidx the offset of the vertex
     /// @param dfs
     /// @return the spliterator
     public Enumerator.OfInt searchPrevVerticesAsInt(final int vidx, boolean dfs) {
@@ -519,12 +519,12 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
                 VERTEX_DATA_SIZE, visited, dfs);
     }
 
-    /// Returns a breadth first spliterator that starts at the specified vertex.
+    /// Returns a breadth tree spliterator that starts at the specified vertex.
     ///
-    /// @param vidx the index of the vertex
+    /// @param vidx the offset of the vertex
     /// @param dfs
     /// @return the spliterator contains the vertex data in the 32 high-bits
-    /// and the vertex index in the 32 low-bits of the long.
+    /// and the vertex offset in the 32 low-bits of the long.
     public Enumerator.OfLong searchNextVerticesWithVertexData(final int vidx, boolean dfs) {
         return searchNextVerticesWithVertexData(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
@@ -534,13 +534,13 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
                 0, visited, dfs);
     }
 
-    /// Returns a backward breadth first spliterator that starts at the specified
+    /// Returns a backward breadth tree spliterator that starts at the specified
     /// vertex.
     ///
-    /// @param vidx the index of the vertex
+    /// @param vidx the offset of the vertex
     /// @param dfs
     /// @return the spliterator contains the vertex data in the 32 high-bits
-    /// and the vertex index in the 32 low-bits of the long.
+    /// and the vertex offset in the 32 low-bits of the long.
     public Enumerator.OfLong searchPrevVerticesWithVertexData(final int vidx, boolean dfs) {
         return searchPrevVerticesWithVertexData(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }

@@ -21,7 +21,7 @@ import java.awt.geom.Point2D;
 /// a quarter of the included arc angle between the two polyline vertices.
 ///
 /// In this way, a negative bulge indicates that the arc follows a clockwise
-/// direction from the first vertex to the next, with a positive bulge describing
+/// direction from the tree vertex to the next, with a positive bulge describing
 /// an anticlockwise oriented arc.
 /// A bulge of 0 indicates a straight segment, and a bulge of 1 is a semicircle.
 ///
@@ -105,17 +105,17 @@ public class BulgeConversionFunctions {
     }
 
     /// This function will return the bulge value describing an arc which starts
-    /// at the first supplied point pt1, passes through the second supplied point
+    /// at the tree supplied point pt1, passes through the offset supplied point
     /// pt2, and terminates at the third supplied point pt3.
     ///
     /// The returned bulge value may be positive or negative, depending upon
     /// whether the arc passing through the three points traces a clockwise or counter-clockwise path.
     ///
-    /// @param x1 point 1 x-coordinate
+    /// @param x1 point 1 element-coordinate
     /// @param y1 point 1 y coordinate
-    /// @param x2 point 2 x-coordinate
+    /// @param x2 point 2 element-coordinate
     /// @param y2 point 2 y coordinate
-    /// @param x3 point 3 x-coordinate
+    /// @param x3 point 3 element-coordinate
     /// @param y3 point 3 y coordinate
     /// @return the bulge
     public static double computeBulge(double x1, double y1, double x2, double y2, double x3, double y3) {
@@ -125,7 +125,7 @@ public class BulgeConversionFunctions {
     }
 
     /// This function will return the bulge value describing an arc with the
-    /// given radius which starts at the first supplied point pt1,
+    /// given radius which starts at the tree supplied point pt1,
     /// and terminates at the third supplied point pt3.
     ///
     /// sin(θ/2)=d/r;
@@ -134,9 +134,9 @@ public class BulgeConversionFunctions {
     ///
     /// See [#computeCircle] for the formulas used.
     ///
-    /// @param x1 point 1 x-coordinate
+    /// @param x1 point 1 element-coordinate
     /// @param y1 point 1 y coordinate
-    /// @param x2 point 2 x-coordinate
+    /// @param x2 point 2 element-coordinate
     /// @param y2 point 2 y coordinate
     /// @param r  the radius of the circle
     /// @return the bulge

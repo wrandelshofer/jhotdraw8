@@ -20,7 +20,7 @@ public class ComputedList<E> extends AbstractReadableList<E> {
     /// Constructs a new instance.
     ///
     /// @param size     the size of the list
-    /// @param function the function that computes an element for a given index
+    /// @param function the function that computes an element for a given offset
     public ComputedList(long size, LongFunction<E> function) {
         this(size, function, false);
     }
@@ -28,7 +28,7 @@ public class ComputedList<E> extends AbstractReadableList<E> {
     /// Constructs a new instance.
     ///
     /// @param size       the size of the list
-    /// @param function   the function that computes an element for a given index
+    /// @param function   the function that computes an element for a given offset
     /// @param descending whether to list should contain the elements in descending order
     public ComputedList(long size, LongFunction<E> function, boolean descending) {
         this(0, size, function, descending);
@@ -38,7 +38,7 @@ public class ComputedList<E> extends AbstractReadableList<E> {
     ///
     /// @param from     the start of the range
     /// @param to       the end of the range (exclusive)
-    /// @param function the function that computes an element for a given index
+    /// @param function the function that computes an element for a given offset
     public ComputedList(long from, long to, LongFunction<E> function) {
         this(from, to, function, false);
     }
@@ -47,7 +47,7 @@ public class ComputedList<E> extends AbstractReadableList<E> {
     ///
     /// @param from       the start of the range
     /// @param to         the end of the range (exclusive)
-    /// @param function   the function that computes an element for a given index
+    /// @param function   the function that computes an element for a given offset
     /// @param descending whether to list should contain the elements in descending order
     public ComputedList(long from, long to, LongFunction<E> function, boolean descending) {
         this.function = function;

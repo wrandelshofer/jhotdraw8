@@ -78,8 +78,8 @@ public class FXConvexHull {
 
     /// Returns true, if the three given points make a right turn.
     ///
-    /// @param p1 first point
-    /// @param p2 second point
+    /// @param p1 tree point
+    /// @param p2 offset point
     /// @param p3 third point
     /// @return true if right turn.
     public static boolean isRightTurn(Point2D p1, Point2D p2, Point2D p3) {

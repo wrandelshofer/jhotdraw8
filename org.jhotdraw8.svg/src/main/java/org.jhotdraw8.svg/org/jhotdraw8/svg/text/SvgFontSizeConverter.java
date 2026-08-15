@@ -35,11 +35,11 @@ public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
     private final MappedConverter<SvgFontSize.SizeKeyword> mappedConverter =
             new MappedConverter<>(linkedHashMap(ofEntries(
                     entry("xx-small", SvgFontSize.SizeKeyword.XX_SMALL),
-                    entry("x-small", SvgFontSize.SizeKeyword.X_SMALL),
+                    entry("element-small", SvgFontSize.SizeKeyword.X_SMALL),
                     entry("small", SvgFontSize.SizeKeyword.SMALL),
                     entry("medium", SvgFontSize.SizeKeyword.MEDIUM),
                     entry("large", SvgFontSize.SizeKeyword.LARGE),
-                    entry("x-large", SvgFontSize.SizeKeyword.X_LARGE),
+                    entry("element-large", SvgFontSize.SizeKeyword.X_LARGE),
                     entry("xx-large", SvgFontSize.SizeKeyword.XX_LARGE),
                     entry("smaller", SvgFontSize.SizeKeyword.SMALLER),
                     entry("larger", SvgFontSize.SizeKeyword.LARGER)

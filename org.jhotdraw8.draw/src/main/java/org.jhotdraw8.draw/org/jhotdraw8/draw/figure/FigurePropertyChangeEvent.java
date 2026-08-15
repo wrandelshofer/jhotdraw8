@@ -15,8 +15,11 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
 
     @Serial
     private static final long serialVersionUID = 1L;
+    @SuppressWarnings("serial")
     private final Key<?> key;
+    @SuppressWarnings("serial")
     private final @Nullable Object oldValue;
+    @SuppressWarnings("serial")
     private final @Nullable Object newValue;
     private final boolean wasAdded;
     private final boolean wasRemoved;

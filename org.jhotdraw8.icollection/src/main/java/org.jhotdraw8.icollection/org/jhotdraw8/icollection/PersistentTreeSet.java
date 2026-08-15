@@ -14,11 +14,9 @@ import org.jspecify.annotations.Nullable;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.SortedSet;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -68,9 +66,9 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
         return newInstance(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(comparator, root)));
     }
 
-    PersistentTreeSet(Comparator<E> comparator, RedBlackTree<E, Void> root) {
+    PersistentTreeSet(@Nullable Comparator<E> comparator, RedBlackTree<E, Void> root) {
         this.root = root;
-        this.comparator = comparator;
+        this.comparator = comparator == null ? NaturalComparator.<E>instance() : comparator;
     }
 
     /// Returns an persistent set that contains the provided elements, sorted according to the
@@ -82,16 +80,7 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
     /// @return an persistent set of the provided elements
     @SuppressWarnings("unchecked")
     public static <E> PersistentTreeSet<E> copyOf(@Nullable Comparator<E> comparator, Iterable<? extends E> c) {
-        if (comparator == null) {
-            comparator = NaturalComparator.instance();
-        }
-        if (c instanceof PersistentTreeSet<? extends E> r && r.comparator.equals(comparator)) {
-            return (PersistentTreeSet<E>) r;
-        }
-        if (c instanceof MutableTreeSet<? extends E> r && r.comparator.equals(comparator)) {
-            return (PersistentTreeSet<E>) r.toPersistent();
-        }
-        return PersistentTreeSet.sortedOf(comparator).addingAll(c);
+        return new PersistentTreeSetBuilder<>(comparator).addAll(c).build();
     }
 
     /// Returns an persistent set that contains the provided elements sorted according to the
@@ -101,37 +90,7 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
     /// @param <E> the element type
     /// @return an persistent set of the provided elements
     public static <E> PersistentTreeSet<E> copyOf(Iterable<? extends E> c) {
-        return PersistentTreeSet.copyOf(NaturalComparator.instance(), c);
-    }
-
-    /// Returns an empty persistent set, sorted according to the
-    /// specified comparator.
-    ///
-    /// @param comparator a comparator, if `null` the natural ordering of the elements is used
-    /// @param <E>        the element type
-    /// @return an empty persistent set
-    public static <E> PersistentTreeSet<E> sortedOf(@Nullable Comparator<E> comparator) {
-        if (comparator == null) {
-            comparator = NaturalComparator.instance();
-        }
-        return new PersistentTreeSet<>(comparator, RedBlackTree.of(comparator));
-    }
-
-    /// Returns an persistent set that contains the provided elements, sorted according to the
-    /// specified comparator.
-    ///
-    /// @param comparator a comparator, if `null` the natural ordering of the elements is used
-    /// @param elements   elements
-    /// @param <E>        the element type
-    /// @return an persistent set of the provided elements
-    @SuppressWarnings({"varargs"})
-    @SafeVarargs
-    public static <E> PersistentTreeSet<E> sortedOf(@Nullable Comparator<E> comparator, E @Nullable ... elements) {
-        Objects.requireNonNull(elements, "elements is null");
-        if (comparator == null) {
-            comparator = NaturalComparator.instance();
-        }
-        return PersistentTreeSet.sortedOf(comparator).addingAll(Arrays.asList(elements));
+        return new PersistentTreeSetBuilder<E>().initComparator(c).addAll(c).build();
     }
 
     /// Returns an empty persistent set, sorted according to the
@@ -152,7 +111,28 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
     @SuppressWarnings({"varargs"})
     @SafeVarargs
     public static <E> PersistentTreeSet<E> of(E @Nullable ... elements) {
-        return sortedOf(NaturalComparator.instance(), elements);
+        return new PersistentTreeSetBuilder<E>().addArray(elements).build();
+    }
+
+    /// Returns an empty persistent set, sorted according to the
+    /// _natural ordering_ of its elements.
+    ///
+    /// @param <E> the element type
+    /// @return an empty persistent set
+    public static <E> PersistentTreeSet<E> ofComparator(Comparator<E> comparator) {
+        return new PersistentTreeSet<>(comparator, RedBlackTree.of(NaturalComparator.instance()));
+    }
+
+    /// Returns an persistent set that contains the provided elements, sorted according to the
+    /// _natural ordering_ of its elements.
+    ///
+    /// @param elements elements
+    /// @param <E>      the element type
+    /// @return an iterable of elements
+    @SuppressWarnings({"varargs"})
+    @SafeVarargs
+    public static <E> PersistentTreeSet<E> ofComparator(Comparator<E> comparator, E @Nullable ... elements) {
+        return new PersistentTreeSetBuilder<E>(comparator).addArray(elements).build();
     }
 
     @Override
@@ -182,13 +162,13 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
     }
 
     @Override
-    public <T> PersistentTreeSet<T> cleared() {
+    public PersistentTreeSet<E> cleared() {
         return of();
     }
 
     @Override
     public <T> PersistentCollection<T> cleared(@Nullable Comparator<T> comparator) {
-        return sortedOf(comparator);
+        return ofComparator(comparator);
     }
 
     @Override

@@ -184,7 +184,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadableLis
     @Override
     public E set(int index, E e) {
         E oldValue = backingList.get(index);
-        backingList = backingList.replacingAt(index, e);
+        backingList = backingList.settingAt(index, e);
         return oldValue;
     }
 

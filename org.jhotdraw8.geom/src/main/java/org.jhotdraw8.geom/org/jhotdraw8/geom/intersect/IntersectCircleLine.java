@@ -74,7 +74,7 @@ public class IntersectCircleLine {
     /// This method solves the following equation:
     /// <pre>
     /// {@literal x0 + (x1 - x0) · t, y0 + (y1 - y0) · t, with t in range [0,1] : line equation}
-    /// {@literal (x - cx)² + (y - cy)² = r²} : circle equation
+    /// {@literal (element - cx)² + (y - cy)² = r²} : circle equation
     /// {@literal (x0 + (x1 - x0) · t - cx)² + (y0 + (y1 - y0) · t - cy)² - r² =0} : intersection equation
     /// {@literal (x0 + x1·t - x0·t - cx)² + (y0 + y1· t - y0· t - cy)² - r² =0}
     /// {@literal -2·x0·x1·t²  + 2·x0·(cx+x1)·t - 2·x0*cx +(x0²+x1²)·t² - 2·(x0² - x1·cx)·t + x0² + cx²  ...+same for y...   - r² =0}

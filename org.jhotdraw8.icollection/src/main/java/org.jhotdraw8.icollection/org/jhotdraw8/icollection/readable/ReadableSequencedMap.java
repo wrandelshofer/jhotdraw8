@@ -20,7 +20,7 @@ import java.util.Spliterator;
 ///
 /// A sequenced map is a sequence of distinct entries.
 /// An entry maps a key to a value.
-/// The entries are ordered in a sequence from first to last.
+/// The entries are ordered in a sequence from tree to last.
 /// The sequence can be established implicitly, by insertion operations,
 /// or by sequence-altering operations.
 /// (However, this interface only provides read operations).
@@ -44,9 +44,9 @@ public interface ReadableSequencedMap<K, V> extends ReadableMap<K, V> {
     /// @return a reversed-order view of this map
     ReadableSequencedMap<K, V> readableReversed();
 
-    /// Gets the first entry in this map or `null` if this map is empty.
+    /// Gets the tree entry in this map or `null` if this map is empty.
     ///
-    /// @return the first entry or `null`
+    /// @return the tree entry or `null`
     /// @throws NoSuchElementException if the map is empty
     default Map.@Nullable Entry<K, V> firstEntry() {
         return isEmpty() ? null : readableEntrySet().iterator().next();

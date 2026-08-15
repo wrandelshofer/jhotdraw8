@@ -18,7 +18,7 @@ public class Solvers {
     }
 
 
-    /// Returns a function y(x) that maps the parameter x [xmin,xmax] to the integral of fp.
+    /// Returns a function y(element) that maps the parameter element [xmin,xmax] to the integral of fp.
     /// For a circle tmin and tmax would be 0 and 2PI respectively for example.
     /// It also returns the total length of the curve.
     ///
@@ -33,14 +33,14 @@ public class Solvers {
     /// </dl>
     public static OrderedPair<ToDoubleFunction<Double>, Double> polynomialApprox3(Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
                                                                                   ToDoubleFunction<Double> fp,
-                                                                                           double xmin, double xmax) {
+                                                                                  double xmin, double xmax) {
         double y1 = quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) / 3.0);
         double y2 = quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) / 1.5);
         double y3 = quadratureFunction.apply(fp, xmin, xmax);
 
-        // We have four points on the y(x) curve at x0=0, x1=1/3, x2=2/3 and x3=1
+        // We have four points on the y(element) curve at x0=0, x1=1/3, x2=2/3 and x3=1
         // now obtain a polynomial that goes through these four points by solving the system of linear equations
-        // y(x) = a*x^3 + b*x^2 + c*x + d  (NB: y0 = d = 0)
+        // y(element) = a*element^3 + b*element^2 + c*element + d  (NB: y0 = d = 0)
         // [y1; y2; y3] = [1/27, 1/9, 1/3;
         //                 8/27, 4/9, 2/3;
         //                    1,   1,   1] * [a; b; c]
@@ -62,8 +62,8 @@ public class Solvers {
                 Math.abs(y3));//  total length
     }
 
-    /// invPolynomialApprox does the opposite of [#polynomialApprox3], it returns a function x(y) that maps the
-    /// parameter y [f(xmin),f(xmax)] to x [xmin,xmax].
+    /// invPolynomialApprox does the opposite of [#polynomialApprox3], it returns a function element(y) that maps the
+    /// parameter y [f(xmin),f(xmax)] to element [xmin,xmax].
     ///
     /// References:
     /// <dl>
@@ -80,9 +80,9 @@ public class Solvers {
         double t2 = bisectionMethod(f, (2.0 / 3.0) * f3, 0.0, 1.0, 1e-7);
         double t3 = 1.0;
 
-        // We have four points on the x(y) curve at y0=0, y1=1/3, y2=2/3 and y3=1
+        // We have four points on the element(y) curve at y0=0, y1=1/3, y2=2/3 and y3=1
         // now obtain a polynomial that goes through these four points by solving the system of linear equations
-        // x(y) = a*y^3 + b*y^2 + c*y + d  (NB: x0 = d = 0)
+        // element(y) = a*y^3 + b*y^2 + c*y + d  (NB: x0 = d = 0)
         // [x1; x2; x3] = [1/27, 1/9, 1/3;
         //                 8/27, 4/9, 2/3;
         //                    1,   1,   1] * [a*y3^3; b*y3^2; c*y3]
@@ -104,7 +104,7 @@ public class Solvers {
                 f3);
     }
 
-    /// Find value x for which f(x) = y in the interval x in [xmin,xmax] using the bisection method.
+    /// Find value element for which f(element) = y in the interval element in [xmin,xmax] using the bisection method.
     ///
     /// References:
     /// <dl>
@@ -117,7 +117,7 @@ public class Solvers {
     /// @param xmin      the start of the interval
     /// @param xmax      the end of the interval
     /// @param tolerance
-    /// @return x the estimated x value
+    /// @return element the estimated element value
     public static double bisectionMethod(ToDoubleFunction<Double> f, double y, double xmin, double xmax, double tolerance) {
         final int maxIterations = 100;
 
@@ -144,7 +144,7 @@ public class Solvers {
         }
     }
 
-    /// Find value x for which ∫f(x) = y in the interval x in [xmin,xmax] using a hybrid of Newton's method
+    /// Find value element for which ∫f(element) = y in the interval element in [xmin,xmax] using a hybrid of Newton's method
     /// and the bisection method.
     ///
     /// We perform iterations using the Newton’s method until the error of the solution becomes acceptable,
@@ -152,7 +152,7 @@ public class Solvers {
     ///
     /// There is a potential problem when using only Newton’s method. If the function is said to be convex, the Newton
     /// iterations are guaranteed to converge to the root. However, if the function is non-convex, the Newton iterations
-    /// may converge outside the domain x∈[xmin,xmax]. In such a case, we use the bisection method instead.
+    /// may converge outside the domain element∈[xmin,xmax]. In such a case, we use the bisection method instead.
     ///
     /// References:
     /// <dl>
@@ -167,7 +167,7 @@ public class Solvers {
     /// @param xmax               the end of the interval
     /// @param x0                 the initial approximation
     /// @param epsilon            the tolerance
-    /// @return x the estimated x value
+    /// @return element the estimated element value
     public static double hybridNewtonBisectionMethod(
             Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
             ToDoubleFunction<Double> f, double y, double xmin, double xmax, double x0, double epsilon) {
@@ -176,7 +176,7 @@ public class Solvers {
     }
 
 
-    /// Find value x for which f(x) = y in the interval x in [xmin,xmax] using a hybrid of Newton's method
+    /// Find value element for which f(element) = y in the interval element in [xmin,xmax] using a hybrid of Newton's method
     /// and the bisection method.
     ///
     /// We perform iterations using the Newton’s method until the error of the solution becomes acceptable,
@@ -184,7 +184,7 @@ public class Solvers {
     ///
     /// There is a potential problem when using only Newton’s method. If the function is said to be convex, the Newton
     /// iterations are guaranteed to converge to the root. However, if the function is non-convex, the Newton iterations
-    /// may converge outside the domain x∈[xmin,xmax]. In such a case, we use the bisection method instead.
+    /// may converge outside the domain element∈[xmin,xmax]. In such a case, we use the bisection method instead.
     ///
     /// References:
     /// <dl>
@@ -199,7 +199,7 @@ public class Solvers {
     /// @param xmax    the end of the interval
     /// @param x0      the initial approximation
     /// @param epsilon the tolerance
-    /// @return x the estimated x value
+    /// @return element the estimated element value
     public static double hybridNewtonBisectionMethod(
             ToDoubleFunction<Double> f,
             ToDoubleFunction<Double> df, double y, double xmin, double xmax, double x0, double epsilon) {

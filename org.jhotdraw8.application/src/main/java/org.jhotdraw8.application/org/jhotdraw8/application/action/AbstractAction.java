@@ -11,6 +11,7 @@ import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.application.AbstractDisableable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jspecify.annotations.Nullable;
 
 /// AbstractAction.
 public abstract class AbstractAction extends AbstractDisableable implements Action {
@@ -18,6 +19,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
     /// Holds the properties.
     protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
 
+    @SuppressWarnings("this-escape")
     private final BooleanProperty selected = new SimpleBooleanProperty(this, SELECTED_PROPERTY);
 
     /// Creates a new instance. Binds `disabled` to `disable`.
@@ -29,7 +31,8 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
     /// Creates a new instance. Binds `disabled` to `disable`.
     ///
     /// @param id the id of the action
-    public AbstractAction(String id) {
+    @SuppressWarnings("this-escape")
+    public AbstractAction(@Nullable String id) {
         set(Action.ID_KEY, id);
 
     }

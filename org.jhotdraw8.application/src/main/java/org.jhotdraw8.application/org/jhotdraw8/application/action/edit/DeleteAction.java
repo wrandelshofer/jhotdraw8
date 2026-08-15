@@ -18,6 +18,7 @@ public class DeleteAction extends AbstractSelectionAction {
     /// Creates a new instance which acts on the currently focused component.
     ///
     /// @param app the app
+    @SuppressWarnings("this-escape")
     public DeleteAction(Application app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);

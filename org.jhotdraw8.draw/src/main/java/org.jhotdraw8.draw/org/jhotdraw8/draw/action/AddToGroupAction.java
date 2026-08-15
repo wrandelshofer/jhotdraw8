@@ -26,6 +26,7 @@ public class AddToGroupAction extends AbstractDrawingViewAction {
     /// Creates a new instance.
     ///
     /// @param editor the drawing editor
+    @SuppressWarnings("this-escape")
     public AddToGroupAction(DrawingEditor editor) {
         super(editor);
         Resources labels = DrawLabels.getResources();

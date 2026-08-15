@@ -36,7 +36,7 @@ import java.util.Spliterators;
 public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements NavigableMap<K, V>, ReadableNavigableMap<K, V>, Cloneable, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
-    transient RedBlackTree<K, V> root;
+    transient RedBlackTree<K, V> tree;
     @SuppressWarnings({"serial", "RedundantSuppression"})//Conditionally serializable
     final Comparator<? super K> comparator;
     private transient int modCount;
@@ -58,7 +58,7 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
     /// Constructs a new empty map, using the natural ordering of its
     /// keys.
     public MutableTreeMap() {
-        root = RedBlackTree.empty();
+        tree = RedBlackTree.empty();
         comparator = NaturalComparator.instance();
     }
 
@@ -68,7 +68,7 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
     /// @param comparator the comparator that will be used to order this map.
     ///                   If null, the natural ordering of the keys is used.
     public MutableTreeMap(@Nullable Comparator<? super K> comparator) {
-        root = RedBlackTree.empty();
+        tree = RedBlackTree.empty();
         this.comparator = comparator == null ? NaturalComparator.instance() : comparator;
     }
 
@@ -83,9 +83,9 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
         if (m instanceof MutableTreeMap<?, ?> r && r.comparator() == null) {
             @SuppressWarnings("unchecked")
             MutableTreeMap<K, V> that = (MutableTreeMap<K, V>) m;
-            this.root = that.root;
+            this.tree = that.tree;
         } else {
-            this.root = RedBlackTree.empty();
+            this.tree = RedBlackTree.empty();
             this.putAll(m);
         }
     }
@@ -99,9 +99,9 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
         this.comparator = m.comparator() == null ? NaturalComparator.instance() : (Comparator<? super K>) m.comparator();
         if (m instanceof MutableTreeMap<?, ?> r && r.comparator() == null) {
             MutableTreeMap<K, V> that = (MutableTreeMap<K, V>) m;
-            this.root = that.root;
+            this.tree = that.tree;
         } else {
-            this.root = RedBlackTree.empty();
+            this.tree = RedBlackTree.empty();
             this.putAll(m);
         }
     }
@@ -116,58 +116,58 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
         this.comparator = NaturalComparator.instance();
         if (m instanceof PersistentTreeMap) {
             PersistentTreeMap<K, V> that = (PersistentTreeMap<K, V>) m;
-            this.root = that.root;
+            this.tree = that.root;
         } else {
-            this.root = RedBlackTree.empty();
+            this.tree = RedBlackTree.empty();
             for (Entry<? extends K, ? extends V> e : m) {
                 this.put(e.getKey(), e.getValue());
             }
         }
     }
 
-    MutableTreeMap(RedBlackTree<K, V> root, Comparator<? super K> comparator) {
-        this.root = root;
+    MutableTreeMap(RedBlackTree<K, V> tree, Comparator<? super K> comparator) {
+        this.tree = tree;
         this.comparator = comparator;
     }
 
     @Override
     public Entry<K, V> lowerEntry(K key) {
-        return root.lower(key, comparator).entryOrNull();
+        return tree.lower(key, comparator).entryOrNull();
     }
 
     @Override
     public K lowerKey(K key) {
-        return root.lower(key, comparator).keyOrNull();
+        return tree.lower(key, comparator).keyOrNull();
     }
 
     @Override
     public Entry<K, V> floorEntry(K key) {
-        return root.floor(key, comparator).entryOrNull();
+        return tree.floor(key, comparator).entryOrNull();
     }
 
     @Override
     public K floorKey(K key) {
-        return root.floor(key, comparator).keyOrNull();
+        return tree.floor(key, comparator).keyOrNull();
     }
 
     @Override
     public Entry<K, V> ceilingEntry(K key) {
-        return root.ceiling(key, comparator).entryOrNull();
+        return tree.ceiling(key, comparator).entryOrNull();
     }
 
     @Override
     public K ceilingKey(K key) {
-        return root.ceiling(key, comparator).keyOrNull();
+        return tree.ceiling(key, comparator).keyOrNull();
     }
 
     @Override
     public Entry<K, V> higherEntry(K key) {
-        return root.higher(key, comparator).entryOrNull();
+        return tree.higher(key, comparator).entryOrNull();
     }
 
     @Override
     public K higherKey(K key) {
-        return root.higher(key, comparator).keyOrNull();
+        return tree.higher(key, comparator).keyOrNull();
     }
 
     @Override
@@ -185,28 +185,28 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
 
     @Override
     public Map.@Nullable Entry<K, V> firstEntry() {
-        return root.min().entryOrNull();
+        return tree.min().entryOrNull();
     }
 
     @Override
     public Map.@Nullable Entry<K, V> lastEntry() {
-        return root.max().entryOrNull();
+        return tree.max().entryOrNull();
     }
 
     @Override
     public @Nullable Entry<K, V> pollFirstEntry() {
-        var min = root.min();
+        var min = tree.min();
         if (!min.isEmpty()) {
-            root = root.delete(min.getKey(), comparator);
+            tree = tree.delete(min.getKey(), comparator);
         }
         return min.entryOrNull();
     }
 
     @Override
     public @Nullable Entry<K, V> pollLastEntry() {
-        var max = root.max();
+        var max = tree.max();
         if (max.isEmpty()) {
-            root = root.delete(max.getKey(), comparator);
+            tree = tree.delete(max.getKey(), comparator);
         }
         return max.entryOrNull();
     }
@@ -284,19 +284,19 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
 
     @Override
     public int size() {
-        return root.size();
+        return tree.size();
     }
 
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean containsKey(Object key) {
-        return root.contains((K) key, comparator);
+        return tree.contains((K) key, comparator);
     }
 
     @Override
     public boolean containsValue(Object value) {
-        for (var node : root) {
+        for (var node : tree) {
             if (Objects.equals(value, node.getValue())) {
                 return true;
             }
@@ -307,19 +307,19 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
     @SuppressWarnings("unchecked")
     @Override
     public @Nullable V get(Object key) {
-        return root.find((K) key, comparator).valueOrNull();
+        return tree.find((K) key, comparator).valueOrNull();
     }
 
 
     @Override
     public @Nullable V put(K key, V value) {
-        var newRoot = root.insert(key, value, comparator);
-        if (newRoot != root) {
-            if (newRoot.size() != root.size()) {
+        var newRoot = tree.insert(key, value, comparator);
+        if (newRoot != tree) {
+            if (newRoot.size() != tree.size()) {
                 modCount++;
             }
-            V oldValue = newRoot.size() == root.size() ? root.find(key, comparator).getValue() : null;
-            root = newRoot;
+            V oldValue = newRoot.size() == tree.size() ? tree.find(key, comparator).getValue() : null;
+            tree = newRoot;
             return oldValue;
         }
         return null;
@@ -328,11 +328,11 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable V remove(Object key) {
-        var newRoot = root.delete((K) key, comparator);
-        if (newRoot != root) {
+        var newRoot = tree.delete((K) key, comparator);
+        if (newRoot != tree) {
             modCount++;
-            V oldValue = root.find((K) key, comparator).getValue();
-            root = newRoot;
+            V oldValue = tree.find((K) key, comparator).getValue();
+            tree = newRoot;
             return oldValue;
         }
         return null;
@@ -342,7 +342,7 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
     @Override
     public void clear() {
         if (!isEmpty()) {
-            root = RedBlackTree.empty();
+            tree = RedBlackTree.empty();
         }
     }
 
@@ -358,12 +358,12 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
 
 
     public PersistentTreeMap<K, V> toPersistent() {
-        return new PersistentTreeMap<>(root, comparator);
+        return new PersistentTreeMap<>(tree, comparator);
     }
 
     public Iterator<Entry<K, V>> iterator() {
         return new FailFastIterator<>(
-                new MappedIterator<>(root.iterator(),
+                new MappedIterator<>(tree.iterator(),
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
                 this::iteratorRemove, this::getModCount
         );
@@ -371,7 +371,7 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
 
     Iterator<Entry<K, V>> reverseIterator() {
         return new FailFastIterator<>(
-                new MappedIterator<>(root.reverseIterator(),
+                new MappedIterator<>(tree.reverseIterator(),
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
                 this::iteratorRemove, this::getModCount
         );
@@ -379,7 +379,7 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
 
     public Spliterator<Entry<K, V>> spliterator() {
         //noinspection MagicConstant
-        Spliterator<Entry<K, V>> spliterator = Spliterators.spliterator(root.iterator(), size(),
+        Spliterator<Entry<K, V>> spliterator = Spliterators.spliterator(tree.iterator(), size(),
                 Spliterator.NONNULL | characteristics());
         return new FailFastSpliterator<>(
                 spliterator,

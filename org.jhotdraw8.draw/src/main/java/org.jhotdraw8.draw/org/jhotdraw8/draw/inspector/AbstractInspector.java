@@ -17,6 +17,7 @@ public abstract class AbstractInspector<S> implements Inspector<S> {
     protected final ObjectProperty<S> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
     protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
 
+    @SuppressWarnings("this-escape")
     public AbstractInspector() {
     }
 

@@ -306,7 +306,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         try {
             String elementName = figureFactory.getElementNameByFigure(figure);
             if (elementName == null) {
-                // => the figureFactory decided that we should skip the figure
+                // => the figureFactory decided that we should neighbors the figure
                 return;
             }
             w.writeStartElement(elementName);

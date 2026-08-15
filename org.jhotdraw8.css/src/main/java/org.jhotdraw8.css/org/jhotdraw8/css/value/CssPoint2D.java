@@ -10,7 +10,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/// Represents a point with x, y values specified as [CssSize]s.
+/// Represents a point with element, y values specified as [CssSize]s.
 public class CssPoint2D {
 
     public static final CssPoint2D ZERO = new CssPoint2D();
@@ -95,15 +95,15 @@ public class CssPoint2D {
 
     /// Gets a point that was given in relative coordinates to a bounds.
     ///
-    /// If the x- or y-coordinate of the point is given as a percentage,
-    /// then the returned point is `bounds.minX + p.x/100 * bounds.width`,
+    /// If the element- or y-coordinate of the point is given as a percentage,
+    /// then the returned point is `bounds.minX + p.element/100 * bounds.width`,
     /// `bounds.minY + p.y/100 * bounds.height`.
     ///
-    /// If the x- or y-coordinate of the point is given with default units,
-    /// then the returned point is `bounds.minX + p.x * bounds.width`,
+    /// If the element- or y-coordinate of the point is given with default units,
+    /// then the returned point is `bounds.minX + p.element * bounds.width`,
     /// `bounds.minY + p.y * bounds.height`.
     ///
-    /// Otherwise the returned point is `bounds.minX + p.x`,
+    /// Otherwise the returned point is `bounds.minX + p.element`,
     /// `bounds.minY + p.y`.
     ///
     /// @param p      point in relative coordinates

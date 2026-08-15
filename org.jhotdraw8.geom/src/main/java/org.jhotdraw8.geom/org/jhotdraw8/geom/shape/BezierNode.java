@@ -226,6 +226,7 @@ public class BezierNode {
     }
 
     /// Gets the outgoing tangent point.
+    ///
     /// @return outgoing tangent point
     public <T> T getOut(BiFunction<Double, Double, T> f) {
         return f.apply(outX, outY);
@@ -258,7 +259,7 @@ public class BezierNode {
     }
 
     public boolean hasMask(int probe) {
-        return (mask & probe)==probe;
+        return (mask & probe) == probe;
     }
 
     public double getMaxX() {
@@ -314,7 +315,7 @@ public class BezierNode {
     }
 
 
-    /// Gets the x-coordinate of a control point given the specified mask.
+    /// Gets the element-coordinate of a control point given the specified mask.
     ///
     /// @param mask a mask, one of [#POINT_MASK],[#IN_MASK],[#OUT_MASK].
     /// @return the point

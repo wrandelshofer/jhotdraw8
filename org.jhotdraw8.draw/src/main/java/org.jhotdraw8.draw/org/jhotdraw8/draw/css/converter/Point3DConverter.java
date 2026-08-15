@@ -35,13 +35,13 @@ public class Point3DConverter extends AbstractCssConverter<Point3D> {
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨Point3D⟩: ⟨x⟩ ⟨y⟩ ｜ ⟨x⟩ ⟨y⟩ ⟨z⟩";
+        return "Format of ⟨Point3D⟩: ⟨element⟩ ⟨y⟩ ｜ ⟨element⟩ ⟨y⟩ ⟨z⟩";
     }
 
     @Override
     public Point3D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, z;
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Point3D⟩: ⟨x⟩ expected.");
+        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Point3D⟩: ⟨element⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Point3D⟩: ⟨y⟩ expected.");

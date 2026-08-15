@@ -6,6 +6,8 @@
 package org.jhotdraw8.color.trc;
 
 
+import java.io.Serial;
+
 /// Gamma tone curve mapper.
 /// ```
 /// f(x) = { ((x + b) / a)^gamma : when x >= d
@@ -16,6 +18,8 @@ package org.jhotdraw8.color.trc;
 ///        { c * y                : when y < c * d
 /// ```
 public final class GammaToneMapper implements ToneMapper {
+    @Serial
+    private static final long serialVersionUID = 0L;
     private final float gamma;
     private final float a;
     private final float b;

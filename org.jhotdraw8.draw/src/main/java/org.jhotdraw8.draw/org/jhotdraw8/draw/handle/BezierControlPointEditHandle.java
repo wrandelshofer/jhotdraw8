@@ -171,7 +171,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                     newbn = bn.withCollinear(true).withEquidistant(false);
                 }
                 dv.getModel().set(owner, pathKey,
-                        path.replacingAt(nodeIndex, newbn));
+                        path.settingAt(nodeIndex, newbn));
             }
         }
     }
@@ -198,7 +198,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                 // move control point independently
                 BezierNode newBezierNode = bn.withC(controlPointMask, p.getX(), p.getY());
                 view.getModel().set(f, pathKey,
-                        list.replacingAt(nodeIndex, newBezierNode));
+                        list.settingAt(nodeIndex, newBezierNode));
             } else {
                 // move control point and opposite control point to same distance
                 BezierNode newBezierNode = bn.withC(controlPointMask, p.getX(), p.getY());
@@ -231,7 +231,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                 }
 
                 view.getModel().set(f, pathKey,
-                        list.replacingAt(nodeIndex, newBezierNode));
+                        list.settingAt(nodeIndex, newBezierNode));
             }
         } else {
             Point2D c0 = bn.getPoint(Point2D::new);
@@ -270,7 +270,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                 newBezierNode = bn.withOut(p.getX(), p.getY()).withIn(p2.getX(), p2.getY());
             }
             view.getModel().set(f, pathKey,
-                    list.replacingAt(nodeIndex, newBezierNode));
+                    list.settingAt(nodeIndex, newBezierNode));
         }
     }
 
@@ -308,25 +308,25 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         }
         noneRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.withCollinear(false).withEquidistant(false);
-            path[0] = path[0].replacingAt(nodeIndex, changedNode);
+            path[0] = path[0].settingAt(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, path[0]);
             view.recreateHandles();
         });
         collinearRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.withCollinear(true).withEquidistant(false);
-            path[0] = path[0].replacingAt(nodeIndex, changedNode);
+            path[0] = path[0].settingAt(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, path[0]);
             view.recreateHandles();
         });
         equidistantRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.withCollinear(false).withEquidistant(true);
-            path[0] = path[0].replacingAt(nodeIndex, changedNode);
+            path[0] = path[0].settingAt(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, path[0]);
             view.recreateHandles();
         });
         bothRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.withCollinear(true).withEquidistant(true);
-            path[0] = path[0].replacingAt(nodeIndex, changedNode);
+            path[0] = path[0].settingAt(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, path[0]);
             view.recreateHandles();
         });

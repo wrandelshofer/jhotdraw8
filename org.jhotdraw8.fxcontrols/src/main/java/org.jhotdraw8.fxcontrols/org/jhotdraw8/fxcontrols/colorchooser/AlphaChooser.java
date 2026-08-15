@@ -3,7 +3,6 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-/// Sample Skeleton for 'ColorChooserPane.fxml' Controller Class
 package org.jhotdraw8.fxcontrols.colorchooser;
 
 import javafx.beans.property.ObjectProperty;
@@ -24,6 +23,7 @@ import java.util.ResourceBundle;
 
 import static org.jhotdraw8.fxcontrols.colorchooser.CheckerboardFactory.createCheckerboardPattern;
 
+/// Sample Skeleton for 'ColorChooserPane.fxml' Controller Class
 public class AlphaChooser extends VBox {
     @SuppressWarnings("this-escape")
     private final ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
@@ -40,6 +40,7 @@ public class AlphaChooser extends VBox {
         this.model.set(model);
     }
 
+    @SuppressWarnings("this-escape")
     public AlphaChooser() {
         load();
     }

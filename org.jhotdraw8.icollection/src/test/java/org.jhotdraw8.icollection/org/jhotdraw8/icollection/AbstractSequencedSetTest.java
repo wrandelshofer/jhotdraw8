@@ -53,6 +53,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     public void addFirstWithContainedElementShouldMoveElementToFirst(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
+        assertEqualSequence(expected, instance, "new instance");
         ArrayList<Key> shuffled = new ArrayList<>(data.a().asSet());
         Collections.shuffle(shuffled, new Random(0));
         for (Key e : shuffled) {
@@ -61,7 +62,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
             assertEquals(e, instance.reversed().getLast());
             assertEquals(e, instance.reversed().reversed().getFirst());
             expected.remove(e);
-            expected.add(0, e);
+            expected.addFirst(e);
             assertEqualSequence(expected, instance, "addFirst");
         }
     }

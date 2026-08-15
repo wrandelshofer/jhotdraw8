@@ -54,9 +54,9 @@ public interface Connector {
     /// @param ctx        the render context
     /// @param connection a connection figure
     /// @param target     the target
-    /// @param sx         x-coordinate at the start of the line
-    /// @param sy         x-coordinate at the start of the line
-    /// @param ex         x-coordinate at the end of the line
+    /// @param sx         element-coordinate at the start of the line
+    /// @param sy         element-coordinate at the start of the line
+    /// @param ex         element-coordinate at the end of the line
     /// @param ey         y-coordinate at the end of the line
     /// @return the new start point in world coordinates
     default IntersectionPointEx chopStart(RenderContext ctx, Figure connection, Figure target, double sx, double sy, double ex, double ey) {

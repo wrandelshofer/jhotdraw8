@@ -33,6 +33,7 @@ public abstract class AbstractDockParent
     protected final ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>(this, DOCK_PARENT_PROPERTY);
     protected final ObservableList<DockChild> dockChildren = FXCollections.observableArrayList();
 
+    @SuppressWarnings("this-escape")
     public AbstractDockParent() {
         dockChildren.addListener((ListChangeListener.Change<? extends DockChild> change) -> {
             while (change.next()) {

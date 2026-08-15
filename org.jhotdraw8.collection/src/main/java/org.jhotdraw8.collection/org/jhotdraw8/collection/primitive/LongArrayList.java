@@ -77,9 +77,9 @@ public class LongArrayList extends AbstractList<Long> {
         items[size++] = newItem;
     }
 
-    /// Inserts a new item at the specified index into this list.
+    /// Inserts a new item at the specified offset into this list.
     ///
-    /// @param index   the index
+    /// @param index   the offset
     /// @param newItem the new item
     public void addAsLong(int index, long newItem) {
         Objects.checkIndex(index, size + 1);
@@ -151,20 +151,20 @@ public class LongArrayList extends AbstractList<Long> {
         return true;
     }
 
-    /// Gets the item at the specified index.
+    /// Gets the item at the specified offset.
     ///
-    /// @param index an index
-    /// @return the item at the index
+    /// @param index an offset
+    /// @return the item at the offset
     public long getAsLong(int index) {
         Objects.checkIndex(index, size);
         return items[index];
     }
 
     /*
-     * Gets the item at the specified index.
+     * Gets the item at the specified offset.
      *
-     * @param index an index
-     * @return the item at the index
+     * @param offset an offset
+     * @return the item at the offset
      */
     @Override
     public Long get(int index) {
@@ -210,11 +210,11 @@ public class LongArrayList extends AbstractList<Long> {
         }
     }
 
-    /// Returns the last index of the item, or -1 if this list does not contain
+    /// Returns the last offset of the item, or -1 if this list does not contain
     /// the item.
     ///
     /// @param item the item
-    /// @return the index of the item, or -1.
+    /// @return the offset of the item, or -1.
     public int indexOfAsLong(long item) {
         return indexOfAsLong(item, 0);
     }
@@ -259,9 +259,9 @@ public class LongArrayList extends AbstractList<Long> {
         return false;
     }
 
-    /// Removes the item at the specified index from this list.
+    /// Removes the item at the specified offset from this list.
     ///
-    /// @param index an index
+    /// @param index an offset
     /// @return the removed item
     public long removeAtAsLong(int index) {
         Objects.checkIndex(index, size);
@@ -285,9 +285,9 @@ public class LongArrayList extends AbstractList<Long> {
         return removeAtAsLong(size - 1);
     }
 
-    /// Replaces the item at the specified index.
+    /// Replaces the item at the specified offset.
     ///
-    /// @param index   an index
+    /// @param index   an offset
     /// @param newItem the new item
     /// @return the old item
     public long setAsLong(int index, long newItem) {

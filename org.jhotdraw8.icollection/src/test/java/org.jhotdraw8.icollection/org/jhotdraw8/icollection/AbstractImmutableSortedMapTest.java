@@ -13,6 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public abstract class AbstractImmutableSortedMapTest extends AbstractPersistentMapTest {
 
+    public AbstractImmutableSortedMapTest() {
+    }
+
     /// Creates a new empty instance.
     protected abstract <K, V> PersistentSortedMap<K, V> newInstance();
 

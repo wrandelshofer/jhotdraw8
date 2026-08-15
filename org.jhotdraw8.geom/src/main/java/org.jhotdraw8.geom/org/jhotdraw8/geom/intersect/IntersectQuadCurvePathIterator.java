@@ -31,11 +31,11 @@ public class IntersectQuadCurvePathIterator {
     ///     </dd>
     /// </dl>
     ///
-    /// @param a0x the x-coordinate of control point 0
+    /// @param a0x the element-coordinate of control point 0
     /// @param a0y the y-coordinate of control point 0
-    /// @param a1x the x-coordinate of control point 1
+    /// @param a1x the element-coordinate of control point 1
     /// @param a1y the y-coordinate of control point 1
-    /// @param a2x the x-coordinate of control point 2
+    /// @param a2x the element-coordinate of control point 2
     /// @param a2y the y-coordinate of control point 2
     /// @param pit the path iterator
     /// @return the intersection result

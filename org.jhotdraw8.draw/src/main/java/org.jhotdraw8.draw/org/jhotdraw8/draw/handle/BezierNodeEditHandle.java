@@ -159,7 +159,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         BezierNode node = path.get(nodeIndex);
 
         // If the oldNode was a MOVE_TO, convert it into a LINE_TO
-        path = path.replacingAt(nodeIndex, node.withMaskBitsClears(MOVE_MASK));
+        path = path.settingAt(nodeIndex, node.withMaskBitsClears(MOVE_MASK));
 
         // Remove the CLOSE path mask from the new node
         path = path.addingAt(nodeIndex, node.withMaskBitsClears(CLOSE_MASK));
@@ -183,7 +183,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         }
         BezierNode p = list.get(nodeIndex);
         view.getModel().set(getOwner(), pathKey,
-                list.replacingAt(nodeIndex, p.withPointAndTranslatedInOut(getOwner().worldToLocal(newPoint))));
+                list.settingAt(nodeIndex, p.withPointAndTranslatedInOut(getOwner().worldToLocal(newPoint))));
     }
 
     @Override
@@ -239,19 +239,19 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
         moveToRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.withMaskBitsClears(CLOSE_MASK).withMaskBitsSet(MOVE_MASK);
-            finalPath[0] = finalPath[0].replacingAt(nodeIndex, changedNode);
+            finalPath[0] = finalPath[0].settingAt(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, finalPath[0]);
             view.recreateHandles();
         });
         closePathRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.withMaskBitsSet(CLOSE_MASK).withMaskBitsClears(MOVE_MASK);
-            finalPath[0] = finalPath[0].replacingAt(nodeIndex, changedNode);
+            finalPath[0] = finalPath[0].settingAt(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, finalPath[0]);
             view.recreateHandles();
         });
         lineToRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.withMaskBitsClears(MOVE_MASK | CLOSE_MASK);
-            finalPath[0] = finalPath[0].replacingAt(nodeIndex, changedNode);
+            finalPath[0] = finalPath[0].settingAt(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, finalPath[0]);
             view.recreateHandles();
         });

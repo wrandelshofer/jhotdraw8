@@ -42,7 +42,7 @@ public class AlphaSlider extends AbstractColorSlider {
     /// The major unit distance between tick marks.
     private final DoubleProperty majorTickUnit = new SimpleDoubleProperty(this, "majorTickUnit", 0.01);
 
-
+    @SuppressWarnings("this-escape")
     public AlphaSlider() {
         load();
     }

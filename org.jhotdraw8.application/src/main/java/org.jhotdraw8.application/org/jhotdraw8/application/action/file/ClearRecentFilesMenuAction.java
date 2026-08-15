@@ -26,6 +26,7 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
     /// Creates a new instance.
     ///
     /// @param app the application
+    @SuppressWarnings("this-escape")
     public ClearRecentFilesMenuAction(Application app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);

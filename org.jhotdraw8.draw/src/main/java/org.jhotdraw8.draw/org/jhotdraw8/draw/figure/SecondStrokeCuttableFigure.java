@@ -13,9 +13,9 @@ import org.jspecify.annotations.Nullable;
 /// A figure which supports cutting off the start and end of a stroked path.
 public interface SecondStrokeCuttableFigure extends Figure {
     /// Cuts off the specified number of pixels from the start of the stroked path.
-    @Nullable CssSizeStyleableKey SECOND_STROKE_CUT_START = new CssSizeStyleableKey("second-stroke-cut-start", CssSize.ZERO);
+    @Nullable CssSizeStyleableKey SECOND_STROKE_CUT_START = new CssSizeStyleableKey("offset-stroke-cut-start", CssSize.ZERO);
     /// Cuts off the specified number of pixels from the end of the stroked path.
-    @Nullable CssSizeStyleableKey SECOND_STROKE_CUT_END = new CssSizeStyleableKey("second-stroke-cut-end", CssSize.ZERO);
+    @Nullable CssSizeStyleableKey SECOND_STROKE_CUT_END = new CssSizeStyleableKey("offset-stroke-cut-end", CssSize.ZERO);
     /// Cuts off the specified number of pixels from the start and the end of the stroked path.
-    @Nullable SymmetricCssPoint2DStyleableMapAccessor SECOND_STROKE_CUT = new SymmetricCssPoint2DStyleableMapAccessor("second-stroke-cut", SECOND_STROKE_CUT_START, SECOND_STROKE_CUT_END);
+    @Nullable SymmetricCssPoint2DStyleableMapAccessor SECOND_STROKE_CUT = new SymmetricCssPoint2DStyleableMapAccessor("offset-stroke-cut", SECOND_STROKE_CUT_START, SECOND_STROKE_CUT_END);
 }

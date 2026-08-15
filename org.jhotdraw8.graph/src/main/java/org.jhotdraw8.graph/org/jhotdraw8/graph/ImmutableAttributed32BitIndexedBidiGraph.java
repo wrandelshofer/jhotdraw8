@@ -30,7 +30,7 @@ import java.util.Set;
 ///     `nextOffset[v + 1]` (exclusive).</dd>
 ///     <dt>`next`</dt>
 ///     <dd>Holds for each arrow from a vertex `v` to a vertex `u`
-///     the index of `u`.</dd>
+///     the offset of `u`.</dd>
 ///     <dt>`nextArrows`</dt>
 ///     <dd>Holds for each arrow from a vertex `v` to a vertex `u`
 ///     the data associated to the arrow.</dd>
@@ -52,12 +52,12 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     /// The indices are stored in consecutive runs for each vertex,
     /// starting at the offset given by `nextOffset`.
     ///
-    /// Given vertex index `vi < nextOffset.length - 1`
+    /// Given vertex offset `vi < nextOffset.length - 1`
     /// then
     /// `offset = nextOffset[vi]`
     /// `count = nextOffset[vi+1] - offset`
     ///
-    /// Given vertex index `vi == nextOffset.length - 1`
+    /// Given vertex offset `vi == nextOffset.length - 1`
     /// then
     /// `offset = nextOffset[vi]`
     /// `count = nextOffset.length - offset`
@@ -67,15 +67,15 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     /// Holds offsets into the [#next] table and the
     /// [#nextArrows] table.
     ///
-    /// Given vertex index `vi`,
+    /// Given vertex offset `vi`,
     /// `nextOffset[vi]` yields the offset `ai`
     /// in the tables [#next] table and the [#nextArrows].
     ///
-    /// Given vertex index `vi < nextOffset.length - 1`,
+    /// Given vertex offset `vi < nextOffset.length - 1`,
     /// `nextOffset[vi+1]) - nextOffset[vi]` yields the
     /// number of outgoing arrows of that vertex.
     ///
-    /// Given vertex index `vi == nextOffset.length - 1`,
+    /// Given vertex offset `vi == nextOffset.length - 1`,
     /// `nextOffset.length - nextOffset[vi]` yields the
     /// number of outgoing arrows of that vertex.
     protected final int[] nextOffset;
@@ -91,13 +91,13 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     protected final A[] prevArrows;
     /// Holds the vertex objects.
     ///
-    /// Given vertex index `vi`,
+    /// Given vertex offset `vi`,
     /// `vertices[vi|` yields the vertex `v`.
     protected final V[] vertices;
     /// Maps vertices the vertex indices.
     ///
     /// Given vertex `v`,
-    /// `vertexToIndexMap.get(v)` yields the vertex index `vi`.
+    /// `vertexToIndexMap.get(v)` yields the vertex offset `vi`.
     protected final Map<V, Integer> vertexToIndexMap;
 
     /// Creates a new instance from the specified graph.

@@ -21,6 +21,9 @@ public class OKLabGamutMapper implements GamutMapper {
     private OKLabColorSpace okLabColorSpace = new OKLabColorSpace();
     private SrgbColorSpace srgbColorSpace = new SrgbColorSpace();
 
+    public OKLabGamutMapper() {
+    }
+
     @Override
     public float[] map(float[] oklab, float[] srgb) {
         float[] lrgb = new float[3];

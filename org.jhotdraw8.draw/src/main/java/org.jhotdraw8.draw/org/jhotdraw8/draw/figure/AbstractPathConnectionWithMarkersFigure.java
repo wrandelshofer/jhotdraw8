@@ -221,10 +221,10 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             path = path.adding(new BezierNode(start)).adding(new BezierNode(end));
         }
         BezierNode first = path.getFirst();
-        path = path.replacingAt(0,
+        path = path.settingAt(0,
                 first.transform(Transform.translate(start.getX() - first.pointX(), start.getY() - first.pointY())));
         BezierNode last = path.getLast();
-        path = path.replacingAt(path.size() - 1,
+        path = path.settingAt(path.size() - 1,
                 last.transform(Transform.translate(end.getX() - last.pointX(), end.getY() - last.pointY())));
 
         // Store the path
@@ -238,7 +238,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         if (path != null) {
             for (int i = 0, n = path.size(); i < n; i++) {
                 var node = path.get(i);
-                path = path.replacingAt(i, node.transform(tx));
+                path = path.settingAt(i, node.transform(tx));
             }
             set(PATH, path);
         }
@@ -252,7 +252,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         if (path != null) {
             for (int i = 0, n = path.size(); i < n; i++) {
                 var node = path.get(i);
-                path = path.replacingAt(i, node.transform(tx));
+                path = path.settingAt(i, node.transform(tx));
             }
             set(PATH, path);
         }
@@ -268,7 +268,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             Translate tx = new Translate(tc.getX(), tc.getY());
             for (int i = 0, n = path.size(); i < n; i++) {
                 var node = path.get(i);
-                path = path.replacingAt(i, node.transform(tx));
+                path = path.settingAt(i, node.transform(tx));
             }
             set(PATH, path);
         }

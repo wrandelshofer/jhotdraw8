@@ -137,7 +137,7 @@ public class PersistentHashMap<K, V>
     /// @return an persistent copy
     @SuppressWarnings("unchecked")
     public static <K, V> PersistentHashMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
-        return PersistentHashMap.<K, V>of().puttingAll(c);
+        return new PersistentHashMapBuilder<K, V>().addEntries(c).build();
     }
 
     /// Returns an persistent copy of the provided map.

@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.icollection;
 
+import de.sandec.jmemorybuddy.JMemoryBuddy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -30,6 +31,40 @@ public abstract class AbstractSequencedCollectionTest {
     }
 
     public AbstractSequencedCollectionTest() {
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void removeFirstShouldMakeElementCollectable(SetData data) throws Exception {
+        JMemoryBuddy.memoryTest(checker -> {
+            var a = data.a.stream().map(Key::clone).toList();
+            var b = data.b.stream().map(Key::clone).toList();
+
+            var instance = newInstance();
+            instance.addAll(a);
+            var removed = instance.removeFirst();
+
+            checker.setAsReferenced(instance);
+
+            checker.assertCollectable(removed); // notReferenced should be collectable
+        });
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void removeLastShouldMakeElementCollectable(SetData data) throws Exception {
+        JMemoryBuddy.memoryTest(checker -> {
+            var a = data.a.stream().map(Key::clone).toList();
+            var b = data.b.stream().map(Key::clone).toList();
+
+            var instance = newInstance();
+            instance.addAll(a);
+            var removed = instance.removeFirst();
+
+            checker.setAsReferenced(instance);
+
+            checker.assertCollectable(removed); // notReferenced should be collectable
+        });
     }
 
     @ParameterizedTest

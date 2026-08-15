@@ -9,7 +9,7 @@ import java.util.Comparator;
 /// This class is similar to [Comparator#naturalOrder()] but it also supports null objects.
 ///
 /// @param <T> the object type
-class NaturalComparator<T> implements Comparator<T>, Serializable {
+public class NaturalComparator<T> implements Comparator<T>, Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -20,7 +20,7 @@ class NaturalComparator<T> implements Comparator<T>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    static <T> NaturalComparator<T> instance() {
+    public static <T> NaturalComparator<T> instance() {
         return (NaturalComparator<T>) INSTANCE;
     }
 

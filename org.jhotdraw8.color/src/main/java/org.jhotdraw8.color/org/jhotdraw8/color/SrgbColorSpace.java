@@ -8,6 +8,8 @@ package org.jhotdraw8.color;
 
 import org.jhotdraw8.color.trc.GammaToneMapper;
 
+import java.io.Serial;
+
 /// The `sRGB` color space.
 ///
 /// sRGB is a standard RGB (red, green, blue) color space that HP and Microsoft created cooperatively in 1996 to use
@@ -79,6 +81,9 @@ import org.jhotdraw8.color.trc.GammaToneMapper;
 /// CSS Color Module Level 4. 18. Sample code for Color Conversions
 /// : [w3.org](https://www.w3.org/TR/2025/CRD-css-color-4-20250424/#color-conversion-code)
 public class SrgbColorSpace extends ParametricNonLinearRgbColorSpace {
+    @Serial
+    private static final long serialVersionUID = 0L;
+
     public static SrgbColorSpace getInstance() {
         class Holder {
             private static final SrgbColorSpace INSTANCE = new SrgbColorSpace();

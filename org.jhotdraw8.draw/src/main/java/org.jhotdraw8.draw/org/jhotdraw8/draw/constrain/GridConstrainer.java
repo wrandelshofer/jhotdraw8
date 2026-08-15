@@ -81,15 +81,15 @@ public class GridConstrainer extends AbstractConstrainer {
     };
 
     private final Path majorNode = new Path();
-    /// The x-factor for the major grid of the grid.
-    private final IntegerProperty majorX = new SimpleIntegerProperty(this, "major-x", 5) {
+    /// The element-factor for the major grid of the grid.
+    private final IntegerProperty majorX = new SimpleIntegerProperty(this, "major-element", 5) {
 
         @Override
         public void invalidated() {
             fireInvalidated();
         }
     };
-    /// The x-factor for the major grid of the grid.
+    /// The element-factor for the major grid of the grid.
     private final IntegerProperty majorY = new SimpleIntegerProperty(this, "major-y", 5) {
 
         @Override
@@ -117,8 +117,8 @@ public class GridConstrainer extends AbstractConstrainer {
             fireInvalidated();
         }
     };
-    /// The x-origin of the grid.
-    private final ObjectProperty<CssSize> x = new SimpleObjectProperty<>(this, "x") {
+    /// The element-origin of the grid.
+    private final ObjectProperty<CssSize> x = new SimpleObjectProperty<>(this, "element") {
 
         @Override
         public void invalidated() {
@@ -139,10 +139,10 @@ public class GridConstrainer extends AbstractConstrainer {
         this(0, 0, 10, 10, 22.5, 5, 5);
     }
 
-    /// Creates a grid of width x height pixels at origin 0,0 and 22.5 degree
+    /// Creates a grid of width element height pixels at origin 0,0 and 22.5 degree
     /// rotations.
     ///
-    /// @param width  The width of the grid. 0 turns the grid of for the x-axis.
+    /// @param width  The width of the grid. 0 turns the grid of for the element-axis.
     /// @param height The width of the grid. 0 turns the grid of for the y-axis.
     public GridConstrainer(double width, double height) {
         this(0, 0, width, height, 22.5, 5, 5);
@@ -150,13 +150,13 @@ public class GridConstrainer extends AbstractConstrainer {
 
     /// Creates a grid with the specified constraints.
     ///
-    /// @param x      The x-origin of the grid
+    /// @param x      The element-origin of the grid
     /// @param y      The y-origin of the grid
-    /// @param width  The width of the grid. 0 turns the grid of for the x-axis.
+    /// @param width  The width of the grid. 0 turns the grid of for the element-axis.
     /// @param height The width of the grid. 0 turns the grid of for the y-axis.
     /// @param angle  The angular grid (in degrees). 0 turns the grid off for
     ///               rotations.
-    /// @param majorx the interval for major grid lines on the x-axis
+    /// @param majorx the interval for major grid lines on the element-axis
     /// @param majory the interval for major grid lines on the y-axis
     public GridConstrainer(double x, double y, double width, double height, double angle, int majorx, int majory) {
         this(CssSize.of(x), CssSize.of(y), CssSize.of(width), CssSize.of(height), angle, majorx, majory);
@@ -376,8 +376,8 @@ public class GridConstrainer extends AbstractConstrainer {
             dx = 0;
             dy = 0;
         }
-            dw = drawing.getNonNull(Drawing.WIDTH).getConvertedValue();
-            dh = drawing.getNonNull(Drawing.HEIGHT).getConvertedValue();
+        dw = drawing.getNonNull(Drawing.WIDTH).getConvertedValue();
+        dh = drawing.getNonNull(Drawing.HEIGHT).getConvertedValue();
         Bounds visibleRect = drawingView.viewToWorld(drawingView.getVisibleRect());
 
         if (drawGrid.get()) {

@@ -8,6 +8,8 @@ package org.jhotdraw8.color;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.color.trc.GammaToneMapper;
 
+import java.io.Serial;
+
 import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65_XYZ;
 
 /// Display P3 Color Space.
@@ -23,6 +25,9 @@ import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65_X
 ///     <dd>[w3.org](https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-conversion-code)</dd>
 /// </dl>
 public class DisplayP3ColorSpace extends ParametricNonLinearRgbColorSpace {
+    @Serial
+    private static final long serialVersionUID = 0L;
+
     public static DisplayP3ColorSpace getInstance() {
         class Holder {
             private static final DisplayP3ColorSpace INSTANCE = new DisplayP3ColorSpace();

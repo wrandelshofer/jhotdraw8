@@ -39,7 +39,7 @@ public class Dimension2DCssConverter extends AbstractCssConverter<CssDimension2D
     @Override
     public CssDimension2D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y;
-        x = parseSize(tt, "x");
+        x = parseSize(tt, "element");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         y = parseSize(tt, "y");
 
@@ -62,6 +62,6 @@ public class Dimension2DCssConverter extends AbstractCssConverter<CssDimension2D
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨CssDimension2D⟩: ⟨x⟩ ⟨y⟩";
+        return "Format of ⟨CssDimension2D⟩: ⟨element⟩ ⟨y⟩";
     }
 }

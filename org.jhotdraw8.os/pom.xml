@@ -3,74 +3,84 @@
   ~ Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>ch.randelshofer</groupId>
-    <artifactId>org.jhotdraw8</artifactId>
-    <version>${revision}</version>
-  </parent>
-  <artifactId>org.jhotdraw8.os</artifactId>
-  <packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <artifactId>org.jhotdraw8.os</artifactId>
+    <packaging>jar</packaging>
 
-  <name>JHotDraw8 Operating System Classes</name>
-  <description>JHotDraw8 Operating System Classes</description>
-  <developers>
-    <developer>
-      <name>Werner Randelshofer</name>
-      <email>werner.randelshofer@bluewin.ch</email>
-      <organization>ch.randelshofer</organization>
-      <organizationUrl>http://www.randelshofer.ch</organizationUrl>
-    </developer>
-  </developers>
+    <name>JHotDraw8 Operating System Classes</name>
+    <description>JHotDraw8 Operating System Classes</description>
+    <developers>
+        <developer>
+            <name>Werner Randelshofer</name>
+            <email>werner.randelshofer@bluewin.ch</email>
+            <organization>ch.randelshofer</organization>
+            <organizationUrl>http://www.randelshofer.ch</organizationUrl>
+        </developer>
+    </developers>
 
-  <build>
-    <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.os</sourceDirectory>
-    <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.os</testSourceDirectory>
-    <resources>
-      <resource>
-        <directory>${basedir}/src/main/java/org.jhotdraw8.os</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
+    <build>
+        <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.os</sourceDirectory>
+        <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.os</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/java/org.jhotdraw8.os</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
 
-    </resources>
-    <testResources>
-      <testResource>
-        <directory>${basedir}/src/test/java/org.jhotdraw8.os</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </testResource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>${basedir}/src/test/java/org.jhotdraw8.os</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
 
-    </testResources>
+        </testResources>
 
-    <plugins></plugins>
-  </build>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.jspecify</groupId>
-      <artifactId>jspecify</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.collection</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.icollection</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-graphics</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>
+                        --add-reads org.jhotdraw8.os=org.junit.jupiter.api
+                    </argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.jspecify</groupId>
+            <artifactId>jspecify</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.randelshofer</groupId>
+            <artifactId>org.jhotdraw8.collection</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.randelshofer</groupId>
+            <artifactId>org.jhotdraw8.icollection</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

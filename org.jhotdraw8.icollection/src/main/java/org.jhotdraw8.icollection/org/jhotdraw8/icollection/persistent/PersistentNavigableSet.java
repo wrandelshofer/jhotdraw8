@@ -26,7 +26,7 @@ public interface PersistentNavigableSet<E> extends ReadableNavigableSet<E>, Pers
     }
 
     @Override
-    <T> PersistentNavigableSet<T> cleared();
+    PersistentNavigableSet<E> cleared();
 
     @Override
     PersistentNavigableSet<E> removing(E element);
@@ -37,9 +37,9 @@ public interface PersistentNavigableSet<E> extends ReadableNavigableSet<E>, Pers
     }
 
     /// Returns a copy of this set that contains all elements
-    /// of this set except the first.
+    /// of this set except the tree.
     ///
-    /// @return a new set instance with the first element removed
+    /// @return a new set instance with the tree element removed
     /// @throws NoSuchElementException if this set is empty
     @Override
     default PersistentNavigableSet<E> removingFirst() {

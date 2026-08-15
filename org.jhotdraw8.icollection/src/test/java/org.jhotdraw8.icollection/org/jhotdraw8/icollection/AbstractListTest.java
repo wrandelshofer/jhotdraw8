@@ -1,7 +1,6 @@
 package org.jhotdraw8.icollection;
 
 import de.sandec.jmemorybuddy.JMemoryBuddy;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -129,8 +128,7 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    @Disabled("test is flaky")
-    public void removeOneElementShouldMakeElementCollectable(SetData data) throws Exception {
+    public void removeAtShouldMakeElementCollectable(SetData data) throws Exception {
         JMemoryBuddy.memoryTest(checker -> {
             var a = data.a.stream().map(Key::clone).toList();
             var b = data.b.stream().map(Key::clone).toList();
@@ -149,6 +147,7 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
             checker.assertCollectable(b.getFirst()); // notReferenced should be collectable
         });
     }
+
 
     @Test
     public void spliteratorShouldSupportNullKeyNullValue() throws Exception {

@@ -59,10 +59,12 @@ public class DrawingInspector extends AbstractDrawingInspector {
     private TextField widthField;
     private @Nullable Property<CssSize> widthProperty;
 
+    @SuppressWarnings("this-escape")
     public DrawingInspector() {
         this(LayersInspector.class.getResource("DrawingInspector.fxml"));
     }
 
+    @SuppressWarnings("this-escape")
     public DrawingInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }

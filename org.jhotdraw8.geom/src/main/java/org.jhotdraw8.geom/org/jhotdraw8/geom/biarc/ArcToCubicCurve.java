@@ -59,12 +59,12 @@ public class ArcToCubicCurve {
     ///     <a href="https://github.com/fontello/svgpath/blob/master/lib/a2c.js">github.com</a></dd>
     /// </dl>
     ///
-    /// @param lastX         the last x coordinate
+    /// @param lastX         the last element coordinate
     /// @param lastY         the last y coordinate
-    /// @param radiusX       the x radius of the arc
+    /// @param radiusX       the element radius of the arc
     /// @param radiusY       the y radius of the arc
-    /// @param xAxisRotation the x-axis rotation of the arc in degrees
-    /// @param x             the x to coordinate
+    /// @param xAxisRotation the element-axis rotation of the arc in degrees
+    /// @param x             the element to coordinate
     /// @param y             the y to coordinate
     /// @param largeArcFlag  the large-arc flag
     /// @param sweepFlag     the sweep-arc flag
@@ -159,7 +159,7 @@ public class ArcToCubicCurve {
                 curve[i + 1] = yp + cc.cy;
             }
             if (k == n - 1) {
-                // Make sure that we get to x,y despite rounding errors.
+                // Make sure that we get to element,y despite rounding errors.
                 curveTo.accept(curve[2], curve[3], curve[4], curve[5], x, y);
             } else {
                 curveTo.accept(curve[2], curve[3], curve[4], curve[5], curve[6], curve[7]);
@@ -242,9 +242,9 @@ public class ArcToCubicCurve {
     /// Since we measure angle between radii of circular arcs,
     /// we can use simplified math (without length normalization).
     ///
-    /// @param ux x-coordinate of unit vector u
+    /// @param ux element-coordinate of unit vector u
     /// @param uy y-coordinate of unit vector u
-    /// @param vx x-coordinate of unit vector v
+    /// @param vx element-coordinate of unit vector v
     /// @param vy y-coordinate of unit vector v
     /// @return angle in radians
     private static double unitVectorAngle(double ux, double uy, double vx, double vy) {

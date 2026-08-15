@@ -39,7 +39,7 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
     protected @Nullable IdentityObject owner;
 
     /// The root of this CHAMP trie.
-    protected transient BitmapIndexedNode<D> root;
+    protected transient BitmapIndexedNode<D> hashMap;
 
     /// The number of entries in this map.
     protected int size;
@@ -79,7 +79,7 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
             return true;
         }
         if (o instanceof AbstractMutableChampMap<?, ?, ?> that) {
-            return size == that.size && root.equivalent(that.root);
+            return size == that.size && hashMap.equivalent(that.hashMap);
         }
         return super.equals(o);
     }

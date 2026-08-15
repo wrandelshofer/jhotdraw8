@@ -58,8 +58,8 @@ public class StreamCssTokenizerTest {
         return Arrays.asList(
                 dynamicTest("1", () -> testTokenizer("<!-", "<:< !:! -:-")),
                 dynamicTest("2", () -> testTokenizer("func(", "-18:func")),
-                dynamicTest("3", () -> testTokenizer("x[]()", "-2:x [:[ ]:] (:( ):)")),
-                dynamicTest("4", () -> testTokenizer("x{a:b}", "-2:x {:{ -2:a ::: -2:b }:}")),
+                dynamicTest("3", () -> testTokenizer("element[]()", "-2:element [:[ ]:] (:( ):)")),
+                dynamicTest("4", () -> testTokenizer("element{a:b}", "-2:element {:{ -2:a ::: -2:b }:}")),
                 dynamicTest("5", () -> testTokenizer("<!--", "-14:<!--")),
                 dynamicTest("6", () -> testTokenizer("<!", "<:< !:!")),
                 dynamicTest("7", () -> testTokenizer("<!--", "-14:<!--")),

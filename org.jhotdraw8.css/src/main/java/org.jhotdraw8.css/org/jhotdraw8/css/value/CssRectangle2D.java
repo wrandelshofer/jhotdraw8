@@ -11,7 +11,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/// Represents a rectangle with x, y, width and height values specified as [CssSize]s.
+/// Represents a rectangle with element, y, width and height values specified as [CssSize]s.
 public class CssRectangle2D {
 
     public static final CssRectangle2D ZERO = new CssRectangle2D();

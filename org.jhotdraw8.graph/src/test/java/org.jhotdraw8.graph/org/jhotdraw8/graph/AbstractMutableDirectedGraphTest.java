@@ -41,7 +41,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
 
     /// Example graph:
     /// <pre>
-    ///            x
+    ///            element
     ///           ⟲
     ///     0 ─a→ 1 ─c→ 2
     ///     │     │

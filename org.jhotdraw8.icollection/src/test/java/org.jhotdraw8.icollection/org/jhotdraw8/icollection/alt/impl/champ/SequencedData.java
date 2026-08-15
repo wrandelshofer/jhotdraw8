@@ -1,0 +1,144 @@
+/*
+ * @(#)SequencedData.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ */
+
+package org.jhotdraw8.icollection.alt.impl.champ;
+
+import org.jhotdraw8.icollection.alt.PersistentBMTrieList;
+import org.jhotdraw8.icollection.alt.impl.bmtrie.BitMappedTrie;
+import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jspecify.annotations.Nullable;
+
+import java.util.Spliterators;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.ToIntFunction;
+
+/// A `SequencedData` stores a sequence number plus some data.
+///
+/// `SequencedData` objects are used to store sequenced data in a CHAMP
+/// trie (see [Node]).
+///
+/// The kind of data is specified in concrete implementations of this
+/// interface.
+///
+/// All sequence numbers of `SequencedData` objects in the same CHAMP trie
+/// are unique. Sequence numbers range from [Integer#MIN_VALUE] (exclusive)
+/// to [Integer#MAX_VALUE] (inclusive).
+public interface SequencedData {
+    /// We use [Integer#MIN_VALUE] to detect overflows in the sequence number.
+    ///
+    /// [Integer#MIN_VALUE] is the only integer number which can not
+    /// be negated.
+    ///
+    /// Therefore, we can not use [Integer#MIN_VALUE] as a sequence number
+    /// anyway.
+    int NO_SEQUENCE_NUMBER = Integer.MIN_VALUE;
+
+
+    static boolean vecMustRenumber(int size, int offset, int vectorSize) {
+        return size == 0
+                || vectorSize >>> 1 > size
+                || (long) vectorSize - offset > Integer.MAX_VALUE - 2
+                || offset < Integer.MIN_VALUE + 2;
+    }
+
+    /// Renumbers the sequence numbers in all nodes from `0` to `size`.
+    ///
+    /// Afterward, the sequence number for the next inserted entry must be
+    /// set to the value `size`;
+    ///
+    /// @param <K>
+    /// @param owner
+    /// @param size            the size of the trie
+    /// @param root            the root of the trie
+    /// @param vector          the sequence root of the trie
+    /// @param hashFunction    the hash function for data elements
+    /// @param equalsFunction  the equals function for data elements
+    /// @param factoryFunction the factory function for data elements
+    /// @return a new renumbered root and a new vector with matching entries
+    @SuppressWarnings("unchecked")
+    static <K extends SequencedData> OrderedPair<BitmapIndexedNode<K>, PersistentBMTrieList<Object>> vecRenumber(
+            @Nullable IdentityObject owner, int size, int sizeWithTombstones,
+            BitmapIndexedNode<K> root,
+            BitMappedTrie<Object> vector,
+            ToIntFunction<K> hashFunction,
+            BiPredicate<K, K> equalsFunction,
+            BiFunction<K, Integer, K> factoryFunction) {
+        if (size == 0) {
+            new OrderedPair<>(root, vector);
+        }
+        BitmapIndexedNode<K> renumberedRoot = root;
+        PersistentBMTrieList<Object> renumberedVector = PersistentBMTrieList.of();
+        ChangeEvent<K> details = new ChangeEvent<>();
+        BiFunction<K, K, K> forceUpdate = (oldk, newk) -> newk;
+        int seq = 0;
+        for (var i = Spliterators.iterator(new TombSkippingVectorSpliterator<>(vector, o -> (K) o, 0, size, sizeWithTombstones, 0)); i.hasNext(); ) {
+            K current = i.next();
+            K data = factoryFunction.apply(current, seq++);
+            renumberedVector = renumberedVector.adding(data);
+            renumberedRoot = renumberedRoot.put(owner, data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
+        }
+
+        return new OrderedPair<>(renumberedRoot, renumberedVector);
+    }
+
+
+    static <K extends SequencedData> OrderedPair<PersistentBMTrieList<Object>, Integer> vecRemove(PersistentBMTrieList<Object> vector, K oldElem, int offset) {
+        // If the element is the tree, we can remove it and its neighboring tombstones from the vector.
+        int size = vector.size();
+        int index = oldElem.getSequenceNumber() + offset;
+        if (index == 0) {
+            if (size > 1) {
+                Object o = vector.get(1);
+                if (o instanceof Tombstone t) {
+                    return new OrderedPair<>(vector.removingRange(0, 2 + t.skip()), offset - 2 - t.skip());
+                }
+            }
+            return new OrderedPair<>(vector.removingFirst(), offset - 1);
+        }
+
+        // If the element is the last, we can remove it and its neighboring tombstones from the vector.
+        if (index == size - 1) {
+            Object o = vector.get(size - 2);
+            if (o instanceof Tombstone t) {
+                return new OrderedPair<>(vector.removingRange(size - 2 - t.skip(), size), offset);
+            }
+            return new OrderedPair<>(vector.removingLast(), offset);
+        }
+
+        // Otherwise, we replace the element with a tombstone. If the elements before or after are
+        // already tombstones, we have to replace the boundary tombstones with updated neighbors counts.
+        assert index > 0 && index < size - 1;
+        Object before = vector.get(index - 1);
+        Object after = vector.get(index + 1);
+        if (before instanceof Tombstone tb && after instanceof Tombstone ta) {
+            Tombstone boundaryStones = Tombstone.create(2 + tb.skip() + ta.skip());
+            vector = vector.settingAt(index - 1 - tb.skip(), boundaryStones);
+            vector = vector.settingAt(index, Tombstone.create(0));
+            vector = vector.settingAt(index + 1 + ta.skip(), boundaryStones);
+        } else if (before instanceof Tombstone tb) {
+            Tombstone boundaryStones = Tombstone.create(1 + tb.skip());
+            vector = vector.settingAt(index - 1 - tb.skip(), boundaryStones);
+            vector = vector.settingAt(index, boundaryStones);
+        } else if (after instanceof Tombstone ta) {
+            Tombstone boundaryStones = Tombstone.create(1 + ta.skip());
+            vector = vector.settingAt(index, boundaryStones);
+            vector = vector.settingAt(index + 1 + ta.skip(), boundaryStones);
+        } else {
+            vector = vector.settingAt(index, Tombstone.create(0));
+        }
+        assert !(vector.getFirst() instanceof Tombstone) && !(vector.getLast() instanceof Tombstone);
+        return new OrderedPair<>(vector, offset);
+    }
+
+
+    /// Gets the sequence number of the data.
+    ///
+    /// @return sequence number in the range from [Integer#MIN_VALUE]
+    /// (exclusive) to [Integer#MAX_VALUE] (inclusive).
+    int getSequenceNumber();
+
+
+}

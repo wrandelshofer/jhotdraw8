@@ -22,10 +22,10 @@ import java.util.Collections;
 import java.util.List;
 
 /// Tests [MutableVectorList] with the Guava test suite.
-public class MutablePersistentVectorListGuavaTests {
+public class MutableVectorListGuavaTests {
 
     public static Test suite() {
-        return new MutablePersistentVectorListGuavaTests().allTests();
+        return new MutableVectorListGuavaTests().allTests();
     }
 
     public Test allTests() {

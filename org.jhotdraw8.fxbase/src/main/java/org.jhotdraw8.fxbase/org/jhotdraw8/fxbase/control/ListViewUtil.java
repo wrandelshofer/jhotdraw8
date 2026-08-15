@@ -281,8 +281,8 @@ public class ListViewUtil {
     /// Adds drag and drop support to the list view
     ///
     /// FIXME should also add support for cut, copy and paste keys
-    ///  @param <T>         the data type of the list view
     ///
+    /// @param <T>                       the data type of the list view
     /// @param listView                  the list view
     /// @param cellFactory               the cell factory of the list view
     /// @param clipboardIO               a reader/writer for the clipboard.
@@ -333,8 +333,8 @@ public class ListViewUtil {
     /// FIXME should also add support for cut, copy and paste keys.
     ///
     /// FIXME only supports lists with single item selection (no multiple item selection yet!).
-    ///  @param <T>         the data type of the list view
     ///
+    /// @param <T>                       the data type of the list view
     /// @param listView                  the list view
     /// @param cellFactory               the cell factory of the list view
     /// @param clipboardIO               a reader/writer for the clipboard. You can provide null if you don't want cut/copy/paste functionality.
@@ -344,7 +344,7 @@ public class ListViewUtil {
             clipboardIO = new ClipboardIO<>() {
                 @Override
                 public void write(Clipboard clipboard, List<T> items) {
-                    // We just write the index of the selected item in the clipboard.
+                    // We just write the offset of the selected item in the clipboard.
                     if (items.size() != 1) {
                         throw new UnsupportedOperationException("Not supported yet.");
                     }

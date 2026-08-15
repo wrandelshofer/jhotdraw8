@@ -22,6 +22,7 @@ public abstract class AbstractDockable implements Dockable {
     protected final StringProperty text = new SimpleStringProperty(this, TEXT_PROPERTY);
     protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
 
+    @SuppressWarnings("this-escape")
     public AbstractDockable() {
     }
 

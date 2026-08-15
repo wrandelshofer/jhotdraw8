@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Spliterators;
@@ -17,15 +17,15 @@ import java.util.function.Function;
 ///
 /// @param <K> the key type
 public class TombSkippingVectorSpliterator<K> extends Spliterators.AbstractSpliterator<K> implements Consumer<Object> {
-    private final BitMappedTrie.BitMappedTrieSpliterator<Object> vector;
+    private final FingerTreeSpliterator<Object> vector;
     private final Function<Object, K> mapper;
     private @Nullable Object current;
 
-    public TombSkippingVectorSpliterator(BitMappedTrie<Object> vector, Function<Object, K> mapper, int fromIndex,
+    public TombSkippingVectorSpliterator(FingerTreeSpliterator<Object> vector, Function<Object, K> mapper, int fromIndex,
                                          int size, int sizeWithTombstones,
                                          int additionalCharacteristics) {
         super(size, additionalCharacteristics);
-        this.vector = new BitMappedTrie.BitMappedTrieSpliterator<>(vector, fromIndex, sizeWithTombstones, 0);
+        this.vector = vector;
         this.mapper = mapper;
     }
 
@@ -36,7 +36,7 @@ public class TombSkippingVectorSpliterator<K> extends Spliterators.AbstractSplit
             return false;
         }
         if (current instanceof Tombstone t) {
-            vector.skip(t.skip());
+            vector.skip(t.neighbors());
             vector.tryAdvance(this);
         }
         action.accept(mapper.apply(current));

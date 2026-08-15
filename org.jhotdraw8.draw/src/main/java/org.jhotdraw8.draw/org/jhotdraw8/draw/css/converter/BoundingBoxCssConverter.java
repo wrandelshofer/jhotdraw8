@@ -36,7 +36,7 @@ public class BoundingBoxCssConverter extends AbstractCssConverter<BoundingBox> {
     @Override
     public BoundingBox parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, width, height;
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨BoundingBox⟩: ⟨min-x⟩ expected.");
+        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨BoundingBox⟩: ⟨min-element⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨BoundingBox⟩: ⟨min-y⟩ expected.");
@@ -79,6 +79,6 @@ public class BoundingBoxCssConverter extends AbstractCssConverter<BoundingBox> {
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨BoundingBox⟩: ⟨min-x⟩ ⟨min-y⟩ ⟨width⟩ ⟨height⟩";
+        return "Format of ⟨BoundingBox⟩: ⟨min-element⟩ ⟨min-y⟩ ⟨width⟩ ⟨height⟩";
     }
 }

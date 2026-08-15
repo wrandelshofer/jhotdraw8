@@ -18,7 +18,7 @@ public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> 
     private final MapAccessor<V> accessor;
 
     public KeyMapEntryProperty(ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
-        super(map, (key instanceof Key<?>) ? (Key<?>) key : null, key.getRawValueType());
+        super(map, (Key<?>) key, key.getRawValueType());
         this.accessor = key;
     }
 

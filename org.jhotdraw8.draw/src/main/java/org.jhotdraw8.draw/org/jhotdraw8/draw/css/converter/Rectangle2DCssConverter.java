@@ -40,7 +40,7 @@ public class Rectangle2DCssConverter extends AbstractCssConverter<CssRectangle2D
     @Override
     public CssRectangle2D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y, width, height;
-        x = parseSize(tt, "x");
+        x = parseSize(tt, "element");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         y = parseSize(tt, "y");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
@@ -77,6 +77,6 @@ public class Rectangle2DCssConverter extends AbstractCssConverter<CssRectangle2D
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨CssRectangle2D⟩: ⟨x⟩ ⟨y⟩ ⟨width⟩ ⟨height⟩";
+        return "Format of ⟨CssRectangle2D⟩: ⟨element⟩ ⟨y⟩ ⟨width⟩ ⟨height⟩";
     }
 }

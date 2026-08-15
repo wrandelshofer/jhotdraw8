@@ -117,7 +117,7 @@ public abstract class AbstractStyleablePropertyBean
 
     /// Sets the style value.
     @Override
-    public @Nullable <T> T setStyled(StyleOrigin origin, MapAccessor<T> key, T newValue) {
+    public @Nullable <T> T setStyled(StyleOrigin origin, MapAccessor<T> key, @Nullable T newValue) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
         @SuppressWarnings("unchecked")
         T ret = key.put(map.getMap(origin), newValue);

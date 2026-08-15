@@ -75,8 +75,8 @@ public class ConvexHull {
 
     /// Returns true, if the three given points make a right turn.
     ///
-    /// @param p1 first point
-    /// @param p2 second point
+    /// @param p1 tree point
+    /// @param p2 offset point
     /// @param p3 third point
     /// @return true if right turn.
     public static boolean isRightTurn2D(Point.Double p1, Point.Double p2, Point.Double p3) {

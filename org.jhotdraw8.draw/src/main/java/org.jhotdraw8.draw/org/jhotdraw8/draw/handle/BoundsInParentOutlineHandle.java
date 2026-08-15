@@ -25,6 +25,7 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     private final Polygon node;
     private final double[] points;
 
+    @SuppressWarnings("this-escape")
     public BoundsInParentOutlineHandle(Figure figure) {
         super(figure);
 

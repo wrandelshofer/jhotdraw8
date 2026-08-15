@@ -15,6 +15,7 @@ public class SplitPaneTrack
         extends AbstractDockParent implements Track {
     private final SplitPane splitPane = new SplitPane();
 
+    @SuppressWarnings("this-escape")
     public SplitPaneTrack(Orientation orientation) {
         splitPane.setOrientation(orientation);
         getStyleClass().add("track");

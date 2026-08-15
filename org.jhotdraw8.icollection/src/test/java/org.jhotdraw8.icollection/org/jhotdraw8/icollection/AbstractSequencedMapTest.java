@@ -215,7 +215,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
         for (int i : indices) {
             Value newValue = new Value(i, -1);
             Map.Entry<Key, Value> oldEntry = expected.get(i);
-            var newEntry = (AbstractMap.SimpleImmutableEntry<Key, Value>) new AbstractMap.SimpleImmutableEntry<>(oldEntry.getKey(), newValue);
+            var newEntry = new AbstractMap.SimpleImmutableEntry<>(oldEntry.getKey(), newValue);
 
             instance.put(oldEntry.getKey(), newValue);
             expected.set(i, newEntry);

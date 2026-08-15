@@ -18,10 +18,10 @@ import org.jhotdraw8.collection.enumerator.IntRangeEnumerator;
 ///
 ///   - The vertex count `vertexCount`.
 ///   - The arrow count `arrowCount`.
-///   - The index `i` of each vertex `v_i ∈ V`.
-///   - The index `k` of each arrow `a_k ∈ A`.
-///   - The next count `nextCount_i` of the vertex with index `i`.
-///   - The index of the `k`-th next vertex of the vertex with index `i`, and with `k ∈{0, ..., nextCount_i - 1}`.
+///   - The offset `i` of each vertex `v_i ∈ V`.
+///   - The offset `k` of each arrow `a_k ∈ A`.
+///   - The next count `nextCount_i` of the vertex with offset `i`.
+///   - The offset of the `k`-th next vertex of the vertex with offset `i`, and with `k ∈{0, ..., nextCount_i - 1}`.
 ///
 public interface IndexedDirectedGraph {
 
@@ -32,15 +32,15 @@ public interface IndexedDirectedGraph {
 
     /// Returns the `i`-th next vertex of `v`.
     ///
-    /// @param v a vertex index
-    /// @param i the index of the desired next vertex, `i ∈{0, ..., getNextCount(v) -1}`.
-    /// @return the vertex index of the i-th next vertex of v.
+    /// @param v a vertex offset
+    /// @param i the offset of the desired next vertex, `i ∈{0, ..., getNextCount(v) -1}`.
+    /// @return the vertex offset of the i-th next vertex of v.
     int getNextAsInt(int v, int i);
 
     /// Returns the `i`-th next arrow of `v`.
     ///
-    /// @param v a vertex index
-    /// @param i the index of the desired arrow, `i ∈{0, ..., getNextCount(v) -1}`.
+    /// @param v a vertex offset
+    /// @param i the offset of the desired arrow, `i ∈{0, ..., getNextCount(v) -1}`.
     /// @return the arrow data of the i-th next vertex of v.
     int getNextArrowAsInt(int v, int i);
 
@@ -56,11 +56,11 @@ public interface IndexedDirectedGraph {
     /// @return vertex count
     int getVertexCount();
 
-    /// Returns the index of vertex b.
+    /// Returns the offset of vertex b.
     ///
     /// @param v a vertex
     /// @param u another vertex
-    /// @return index of vertex b. Returns a value {@literal < 0}
+    /// @return offset of vertex b. Returns a value {@literal < 0}
     /// if b is not a next vertex of a.
     default int findIndexOfNextAsInt(int v, int u) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {
@@ -82,7 +82,7 @@ public interface IndexedDirectedGraph {
 
     /// Returns the direct successor vertices of the specified vertex.
     ///
-    /// @param v a vertex index
+    /// @param v a vertex offset
     /// @return a collection view on the direct successor vertices of vertex
     default Enumerator.OfInt nextVerticesEnumerator(int v) {
         return new IntRangeEnumerator(i -> getNextAsInt(v, i), 0, getNextCount(v));

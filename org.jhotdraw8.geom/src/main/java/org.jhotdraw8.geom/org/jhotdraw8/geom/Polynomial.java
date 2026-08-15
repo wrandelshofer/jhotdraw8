@@ -41,12 +41,12 @@ public class Polynomial implements ToDoubleFunction<Double> {
     private static final double EPSILON = 1.0 / (1L << 33);
 
     /// Holds the coefficients from lowest to highest degree, that is
-    /// {@literal coefs[i]*x^i}.
+    /// {@literal coefs[i]*element^i}.
     private final double[] coefs;
 
     /// Creates a new polynomial.
     ///
-    /// The coefficients are in order by highest degree monomial first. For
+    /// The coefficients are in order by highest degree monomial tree. For
     /// example, the following example initializes a Polynomial object for:
     /// <code>3x^4 + 2x^2 + 5</code>.
     /// <pre>
@@ -181,11 +181,11 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return new Polynomial(false, result);
     }
 
-    /// Evaluates the polynomial at the specified x value.
+    /// Evaluates the polynomial at the specified element value.
     ///
     /// @param x is a number that is "plugged into" the polynomial to evaluate
     ///          it.
-    /// @return the value of the polynomial at x
+    /// @return the value of the polynomial at element
     public double eval(double x) {
         double result = 0;
         for (int i = this.coefs.length - 1; i >= 0; i--) {
@@ -580,7 +580,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
             }
             b.append(coefs[i]);
             if (i > 0) {
-                b.append("*x");
+                b.append("*element");
                 if (i > 1) {
                     b.append('^').append(i);
                 }
@@ -611,7 +611,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
 
     /// Estimates the arc length of the polynomial in the interval [min,max].
     ///
-    /// Computes {@literal  ∫_min‾max sqrt(1 + (f'(x))^2 ) }
+    /// Computes {@literal  ∫_min‾max sqrt(1 + (f'(element))^2 ) }
     ///
     /// @param min the lower bound of the interval
     /// @param max the upper bound of the interval

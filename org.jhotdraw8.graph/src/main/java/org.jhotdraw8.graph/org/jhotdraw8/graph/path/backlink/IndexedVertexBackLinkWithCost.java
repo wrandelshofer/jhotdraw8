@@ -23,7 +23,7 @@ public class IndexedVertexBackLinkWithCost<C extends Number & Comparable<C>> ext
 
     /// Creates a new instance.
     ///
-    /// @param vertex the vertex index
+    /// @param vertex the vertex offset
     /// @param parent the parent back link
     /// @param cost   the cumulated cost of this back link. Must be zero if parent is null.
     public IndexedVertexBackLinkWithCost(int vertex, @Nullable IndexedVertexBackLinkWithCost<C> parent, C cost) {

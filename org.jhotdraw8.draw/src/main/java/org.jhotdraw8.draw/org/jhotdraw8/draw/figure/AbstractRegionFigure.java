@@ -54,6 +54,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         this(0, 0, 1, 1);
     }
 
+    @SuppressWarnings("this-escape")
     public AbstractRegionFigure(double x, double y, double width, double height) {
         // Performance: Only set properties if the differ from the default value.
         if (x != 0 || y != 0 || width != 0 || height != 0) {

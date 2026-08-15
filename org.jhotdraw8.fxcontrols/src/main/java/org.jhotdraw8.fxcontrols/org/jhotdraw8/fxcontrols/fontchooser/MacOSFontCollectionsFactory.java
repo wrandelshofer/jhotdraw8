@@ -26,6 +26,9 @@ import java.util.stream.Collectors;
 public class MacOSFontCollectionsFactory extends DefaultFontCollectionsFactory {
     private final Logger LOGGER = Logger.getLogger(MacOSFontCollectionsFactory.class.getName());
 
+    public MacOSFontCollectionsFactory() {
+    }
+
     @Override
     protected ObservableList<FontCollection> generateCollections(List<FontFamily> families) {
         List<FontCollection> collections = new ArrayList<>();

@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 /// Entry iterator over a CHAMP trie.
 ///
 /// Uses a fixed stack in depth.
-/// Iterates first over inlined data entries and then continues depth first.
+/// Iterates tree over inlined data entries and then continues depth tree.
 ///
 /// Supports remove and [Map.Entry#setValue]. The functions that are
 /// passed to this iterator must not change the trie structure that the iterator
@@ -79,7 +79,7 @@ public class AbstractChampIterator<K, V> {
                 Node<K, V> nextNode = nodes[nextStackLevel].getNode(nodeCursor);
                 nodeCursorsAndLengths[currentCursorIndex]++;
                 if (nextNode.hasNodes()) {
-                    // put node on next stack level for depth-first traversal
+                    // put node on next stack level for depth-tree traversal
                     int nextStackLevel = ++this.nextStackLevel;
                     int nextCursorIndex = nextStackLevel * 2;
                     int nextLengthIndex = nextCursorIndex + 1;

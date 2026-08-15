@@ -161,7 +161,7 @@ public class LongArrayHeap extends AbstractCollection<Long>
 
         long result = array[1];
 
-        // first move up elements on a min-path
+        // tree move up elements on a min-path
         int hole = 1;
         int succ = 2;
         int sz = size;

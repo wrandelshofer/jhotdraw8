@@ -68,13 +68,13 @@ public abstract class AbstractColorSlider extends Pane {
     ///
     /// For example, when the user is pressing the mouse button in a slider in another control.
     protected final BooleanProperty adjusting = new SimpleBooleanProperty(this, "adjusting");
-    /// The value of the color component with index 0.
+    /// The value of the color component with offset 0.
     protected final FloatProperty c0 = new SimpleFloatProperty(this, "c0");
-    /// The value of the color component with index 1.
+    /// The value of the color component with offset 1.
     protected final FloatProperty c1 = new SimpleFloatProperty(this, "c1");
-    /// The value of the color component with index 2.
+    /// The value of the color component with offset 2.
     protected final FloatProperty c2 = new SimpleFloatProperty(this, "c2");
-    /// The value of the color component with index 3.
+    /// The value of the color component with offset 3.
     protected final FloatProperty c3 = new SimpleFloatProperty(this, "c3");
     protected final FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
     /// The color space of the components.
@@ -101,6 +101,7 @@ public abstract class AbstractColorSlider extends Pane {
     private ImageView colorRect; // Value injected by FXMLLoader
     private boolean invalid;
 
+    @SuppressWarnings("this-escape")
     public AbstractColorSlider() {
 
     }

@@ -66,6 +66,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
 
     private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
 
+    @SuppressWarnings("this-escape")
     public AbstractDrawingView() {
     }
 
@@ -104,26 +105,26 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
         Drawing drawing = getDrawing();
         if (out == null || drawing == null) {
             return;
-        } 
-            SequencedMap<DataFormat, Object> content = new LinkedHashMap<>() {
-                @Serial
-                private static final long serialVersionUID = 0L;
+        }
+        SequencedMap<DataFormat, Object> content = new LinkedHashMap<>() {
+            @Serial
+            private static final long serialVersionUID = 0L;
 
-                @Override
-                public Object put(@Nullable DataFormat key, Object value) {
-                    Objects.requireNonNull(key, "key");
-                    return super.put(key, value);
-                }
-
-            };
-            try {
-                final ObservableSet<Figure> selectedFigures = getSelectedFigures();
-
-                out.write(content, drawing, selectedFigures.isEmpty() ? FXCollections.singletonObservableList(drawing) : selectedFigures);
-                Clipboard.getSystemClipboard().setContent(content);
-            } catch (IOException ex) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not copy to clipboard.", ex);
+            @Override
+            public Object put(@Nullable DataFormat key, Object value) {
+                Objects.requireNonNull(key, "key");
+                return super.put(key, value);
             }
+
+        };
+        try {
+            final ObservableSet<Figure> selectedFigures = getSelectedFigures();
+
+            out.write(content, drawing, selectedFigures.isEmpty() ? FXCollections.singletonObservableList(drawing) : selectedFigures);
+            Clipboard.getSystemClipboard().setContent(content);
+        } catch (IOException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not copy to clipboard.", ex);
+        }
 
     }
 

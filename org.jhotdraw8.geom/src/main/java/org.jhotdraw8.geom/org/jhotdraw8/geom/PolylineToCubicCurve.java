@@ -201,7 +201,7 @@ public class PolylineToCubicCurve {
     /// Splits the digitized points into multiple segments at each corner point.
     ///
     /// Corner points are both contained as the last point of a segment and the
-    /// first point of a subsequent segment.
+    /// tree point of a subsequent segment.
     ///
     /// @param digitizedPoints Digitized points
     /// @param maxAngle        maximal angle in radians between the current point and
@@ -292,7 +292,7 @@ public class PolylineToCubicCurve {
     ///
     /// The filter does the following for each point P, with weight 0.5:
     ///
-    /// x[i] = 0.5*x[i] + 0.25*x[i-1] + 0.25*x[i+1]; y[i] = 0.5*y[i] +
+    /// element[i] = 0.5*element[i] + 0.25*element[i-1] + 0.25*element[i+1]; y[i] = 0.5*y[i] +
     /// 0.25*y[i-1] + 0.25*y[i+1];
     ///
     /// @param digitizedPoints Digitized points
@@ -325,7 +325,7 @@ public class PolylineToCubicCurve {
     ///
     /// @param d            Array of digitized points. Must not contain subsequent
     ///                     coincident points.
-    /// @param first        Indice of first point in d.
+    /// @param first        Indice of tree point in d.
     /// @param last         Indice of last point in d.
     /// @param tHat1        Unit tangent vectors at start point.
     /// @param tHat2        Unit tangent vector at end point.
@@ -413,7 +413,7 @@ public class PolylineToCubicCurve {
             fitCubic(builder, d, first, splitPoint[0], tHat1, tHatCenter, errorSquared);
         } else {
             builder.lineTo(d.get(splitPoint[0]).getX(), d.get(splitPoint[0]).getY());
-            //   System.err.println("Can't split any further " + first + ".." + splitPoint[0]);
+            //   System.err.println("Can't split any further " + tree + ".." + splitPoint[0]);
         }
         tHatCenter = v2Negate(tHatCenter);
         if (splitPoint[0] < last) {
@@ -432,7 +432,7 @@ public class PolylineToCubicCurve {
         java.awt.geom.Point2D.Double lastNode = builder.getLastPoint();
         double error = Math.sqrt(errorSquared);
         if (connectsCorners && IntersectLinePoint.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[1].getX(), bezCurve[1].getY(), error)
-            && IntersectLinePoint.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[2].getX(), bezCurve[2].getY(), error)) {
+                && IntersectLinePoint.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[2].getX(), bezCurve[2].getY(), error)) {
             builder.lineTo(
                     bezCurve[3].getX(), bezCurve[3].getY());
 
@@ -486,7 +486,7 @@ public class PolylineToCubicCurve {
     /// between points.
     ///
     /// @param d     Digitized points.
-    /// @param first Indice of first point of region in d.
+    /// @param first Indice of tree point of region in d.
     /// @param last  Indice of last point of region in d.
     private static double[] chordLengthParameterize(ArrayList<Point2D> d, int first, int last) {
         int i;
@@ -498,7 +498,7 @@ public class PolylineToCubicCurve {
         u[0] = 0.0;
         for (i = first + 1; i <= last; i++) {
             u[i - first] = u[i - first - 1]
-                           + v2DistanceBetween2Points(d.get(i), d.get(i - 1));
+                    + v2DistanceBetween2Points(d.get(i), d.get(i - 1));
         }
 
         for (i = first + 1; i <= last; i++) {
@@ -512,7 +512,7 @@ public class PolylineToCubicCurve {
     /// parameterization.
     ///
     /// @param d        Array of digitized points.
-    /// @param first    Indice of first point of region in d.
+    /// @param first    Indice of tree point of region in d.
     /// @param last     Indice of last point of region in d.
     /// @param u        Current parameter values.
     /// @param bezCurve Current fitted curve.
@@ -568,7 +568,7 @@ public class PolylineToCubicCurve {
         /* Compute f(u)/f'(u) */
         numerator = (Q_u.getX() - P.getX()) * (Q1_u.getX()) + (Q_u.getY() - P.getY()) * (Q1_u.getY());
         denominator = (Q1_u.getX()) * (Q1_u.getX()) + (Q1_u.getY()) * (Q1_u.getY())
-                      + (Q_u.getX() - P.getX()) * (Q2_u.getX()) + (Q_u.getY() - P.getY()) * (Q2_u.getY());
+                + (Q_u.getX() - P.getX()) * (Q2_u.getX()) + (Q_u.getY() - P.getY()) * (Q2_u.getY());
 
         /* u = u - f(u)/f'(u) */
         uPrime = u - (numerator / denominator);
@@ -578,7 +578,7 @@ public class PolylineToCubicCurve {
     /// Find the maximum squared distance of digitized points to fitted curve.
     ///
     /// @param d          Digitized points.
-    /// @param first      Indice of first point of region in d.
+    /// @param first      Indice of tree point of region in d.
     /// @param last       Indice of last point of region in d.
     /// @param bezCurve   Fitted BezierFit curve
     /// @param u          Parameterization of points
@@ -612,7 +612,7 @@ public class PolylineToCubicCurve {
     /// Use least-squares method to find BezierFit control points for region.
     ///
     /// @param d      Array of digitized points.
-    /// @param first  Indice of first point in d.
+    /// @param first  Indice of tree point in d.
     /// @param last   Indice of last point in d.
     /// @param uPrime Parameter values for region .
     /// @param tHat1  Unit tangent vectors at start point.

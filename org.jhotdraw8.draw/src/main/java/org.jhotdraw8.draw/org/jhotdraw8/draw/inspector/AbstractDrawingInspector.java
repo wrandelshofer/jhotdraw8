@@ -26,6 +26,7 @@ public abstract class AbstractDrawingInspector extends AbstractInspector<Drawing
         subject.addListener(this::onDrawingViewChanged);
     }
 
+    @SuppressWarnings("this-escape")
     public AbstractDrawingInspector() {
     }
 

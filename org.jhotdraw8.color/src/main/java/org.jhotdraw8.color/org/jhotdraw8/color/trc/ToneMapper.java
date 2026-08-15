@@ -5,10 +5,12 @@
 
 package org.jhotdraw8.color.trc;
 
-/// Interface for tone reprduction curve mappers.
+import java.io.Serializable;
+
+/// Interface for tone reproduction curve mappers.
 /// Tone curve mappers map between a (curved) device space `x`
 /// from/to a linear space `y`.
-public interface ToneMapper {
+public interface ToneMapper extends Serializable {
     /// Maps from the linear space to the (curved) device space
     ///
     /// @param y a value in the linear space

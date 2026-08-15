@@ -18,7 +18,6 @@ import org.jspecify.annotations.Nullable;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -141,11 +140,6 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
         return ((PersistentHashSet<E>) PersistentHashSet.EMPTY);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> PersistentHashSet<T> ofIterator(Iterator<T> iterator) {
-        return PersistentHashSet.<T>of().addingAll(() -> iterator);
-    }
-
     /// Returns an persistent set that contains the provided elements.
     ///
     /// @param elements elements
@@ -155,7 +149,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     @SafeVarargs
     public static <E> PersistentHashSet<E> of(E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
-        return PersistentHashSet.<E>of().addingAll(Arrays.asList(elements));
+        return new PersistentHashSetBuilder<E>().addArray(elements).build();
     }
 
     /// Update function for a set: we always keep the old element.
@@ -168,6 +162,10 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
         return oldElement;
     }
 
+    public static <E> E insertOrFail(E oldElement, E newElement) {
+        throw new IllegalArgumentException("Element is already in the set. elem=" + oldElement);
+    }
+
     static int keyHash(Object e) {
         return SALT ^ Objects.hashCode(e);
     }
@@ -176,7 +174,8 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     public PersistentHashSet<E> adding(@Nullable E element) {
         int keyHash = keyHash(element);
         ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = root.put(null, element, keyHash, 0, details, PersistentHashSet::updateElement, Objects::equals, PersistentHashSet::keyHash);
+        BitmapIndexedNode<E> newRootNode = root.put(null, element, keyHash, 0, details,
+                PersistentHashSet::updateElement, Objects::equals, PersistentHashSet::keyHash);
         if (details.isModified()) {
             return newInstance(newRootNode, size + 1);
         }
@@ -195,7 +194,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
 
     /// {@inheritDoc}
     @Override
-    public <T> PersistentHashSet<T> cleared() {
+    public PersistentHashSet<E> cleared() {
         return of();
     }
 

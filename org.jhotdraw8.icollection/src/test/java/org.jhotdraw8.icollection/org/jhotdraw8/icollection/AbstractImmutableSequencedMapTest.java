@@ -168,6 +168,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         while (!expected.isEmpty()) {
             Map.Entry<Key, Value> e = expected.remove(expected.size() / 2);
             instance = instance.removing(e.getKey());
+            assertEquals(expected.size(), instance.size(), "removeMiddle");
             assertEqualSequence(expected, instance, "removeMiddle");
         }
     }
@@ -199,7 +200,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         for (int i : indices) {
             Value newValue = new Value(i, -1);
             Map.Entry<Key, Value> oldEntry = expected.get(i);
-            var newEntry = (AbstractMap.SimpleImmutableEntry<Key, Value>) new AbstractMap.SimpleImmutableEntry<>(oldEntry.getKey(), newValue);
+            var newEntry = new AbstractMap.SimpleImmutableEntry<>(oldEntry.getKey(), newValue);
 
             instance = instance.putting(oldEntry.getKey(), newValue);
             expected.set(i, newEntry);

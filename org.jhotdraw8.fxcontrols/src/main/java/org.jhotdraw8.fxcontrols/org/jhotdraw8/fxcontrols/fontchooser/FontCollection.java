@@ -28,6 +28,7 @@ public class FontCollection {
         this(name, false, families);
     }
 
+    @SuppressWarnings("this-escape")
     public FontCollection(String name, boolean isSmart, List<FontFamily> families) {
         setName(name);
         setSmartCollection(isSmart);

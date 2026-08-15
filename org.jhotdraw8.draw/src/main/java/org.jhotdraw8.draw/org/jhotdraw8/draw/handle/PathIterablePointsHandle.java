@@ -30,6 +30,7 @@ public class PathIterablePointsHandle extends AbstractHandle {
     private final Path node;
     private final boolean selectable;
 
+    @SuppressWarnings("this-escape")
     public PathIterablePointsHandle(PathIterableFigure figure, boolean selectable) {
         super(figure);
         node = new Path();

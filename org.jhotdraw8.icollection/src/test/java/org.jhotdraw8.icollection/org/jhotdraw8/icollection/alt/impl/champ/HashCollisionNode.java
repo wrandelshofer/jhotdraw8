@@ -1,0 +1,334 @@
+/*
+ * @(#)HashCollisionNode.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ */
+
+package org.jhotdraw8.icollection.alt.impl.champ;
+
+import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.util.ListHelper;
+import org.jspecify.annotations.Nullable;
+
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+
+import static org.jhotdraw8.icollection.alt.impl.champ.NodeFactory.newHashCollisionNode;
+
+/// Represents a hash-collision node in a CHAMP trie.
+///
+/// XXX hash-collision nodes may become huge performance bottlenecks.
+/// If the trie contains keys that implement [Comparable] then a hash-collision
+/// nodes should be a sorted tree structure (for example a red-black tree).
+/// Otherwise, hash-collision node should be a vector (for example a bit mapped trie).
+///
+/// References:
+///
+/// This class has been derived from 'The Capsule Hash Trie Collections Library'.
+/// <dl>
+///      <dt>The Capsule Hash Trie Collections Library.
+///
+/// Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+///      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+/// </dl>
+///
+/// @param <D> the data type
+class HashCollisionNode<D> extends Node<D> {
+    private static final HashCollisionNode<?> EMPTY = new HashCollisionNode<>(0, new Object[0]);
+    private final int hash;
+
+    HashCollisionNode(int hash, Object[] data) {
+        this.array = data;
+        this.hash = hash;
+    }
+
+    @Override
+    int dataArity() {
+        return array.length;
+    }
+
+    @Override
+    boolean hasDataArityOne() {
+        return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    boolean equivalent(Object other) {
+        if (this == other) {
+            return true;
+        }
+        HashCollisionNode<?> that = (HashCollisionNode<?>) other;
+        Object[] thatEntries = that.array;
+        if (hash != that.hash || thatEntries.length != array.length) {
+            return false;
+        }
+
+        // Linear scan for each key, because of arbitrary element order.
+        Object[] thatEntriesCloned = thatEntries.clone();
+        int remainingLength = thatEntriesCloned.length;
+        outerLoop:
+        for (Object key : array) {
+            for (int j = 0; j < remainingLength; j += 1) {
+                Object todoKey = thatEntriesCloned[j];
+                if (Objects.equals(todoKey, key)) {
+                    // We have found an equal entry. We do not need to compare
+                    // this entry again. So we replace it with the last entry
+                    // from the array and reduce the remaining length.
+                    System.arraycopy(thatEntriesCloned, remainingLength - 1, thatEntriesCloned, j, 1);
+                    remainingLength -= 1;
+
+                    continue outerLoop;
+                }
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    @Nullable
+    Object find(D key, int dataHash, int shift, BiPredicate<D, D> equalsFunction) {
+        for (Object entry : array) {
+            if (equalsFunction.test(key, (D) entry)) {
+                return entry;
+            }
+        }
+        return NO_DATA;
+    }
+
+
+    @Override
+    boolean hasData() {
+        return array.length > 0;
+    }
+
+    @Override
+    boolean hasNodes() {
+        return false;
+    }
+
+    @Override
+    int nodeArity() {
+        return 0;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @Override
+    Node<D> remove(@Nullable IdentityObject owner, D data,
+                   int dataHash, int shift, ChangeEvent<D> details, BiPredicate<D, D> equalsFunction) {
+        for (int idx = 0, i = 0; i < this.array.length; i += 1, idx++) {
+            if (equalsFunction.test((D) this.array[i], data)) {
+                @SuppressWarnings("unchecked") D currentVal = (D) this.array[i];
+                details.setRemoved(currentVal);
+
+                if (this.array.length == 1) {
+                    return BitmapIndexedNode.emptyNode();
+                } else if (this.array.length == 2) {
+                    // Create root node with singleton element.
+                    // This node will either be the new root
+                    // returned, or be unwrapped and inlined.
+                    return NodeFactory.newBitmapIndexedNode(owner, 0, bitpos(mask(dataHash, 0)),
+                            new Object[]{getData(idx ^ 1)});
+                }
+                // copy keys and remove 1 element at position idx
+                Object[] entriesNew = ListHelper.copyComponentRemove(this.array, idx, 1);
+                if (isAllowedToUpdate(owner)) {
+                    this.array = entriesNew;
+                    return this;
+                }
+                return newHashCollisionNode(owner, dataHash, entriesNew);
+            }
+        }
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    Node<D> put(@Nullable IdentityObject owner, D newData,
+                int dataHash, int shift, ChangeEvent<D> details,
+                BiFunction<D, D, D> updateFunction, BiPredicate<D, D> equalsFunction,
+                ToIntFunction<D> hashFunction) {
+        assert this.hash == dataHash;
+
+        for (int i = 0; i < this.array.length; i++) {
+            D oldData = (D) this.array[i];
+            if (equalsFunction.test(oldData, newData)) {
+                D updatedData = updateFunction.apply(oldData, newData);
+                if (updatedData == oldData) {
+                    details.found(oldData);
+                    return this;
+                }
+                details.setReplaced(oldData, updatedData);
+                if (isAllowedToUpdate(owner)) {
+                    this.array[i] = updatedData;
+                    return this;
+                }
+                Object[] newKeys = ListHelper.copySet(this.array, i, updatedData);
+                return newHashCollisionNode(owner, dataHash, newKeys);
+            }
+        }
+
+        // copy entries and add 1 more at the end
+        Object[] entriesNew = ListHelper.copyComponentAdd(this.array, this.array.length, 1);
+        entriesNew[this.array.length] = newData;
+        details.setAdded(newData);
+        if (isAllowedToUpdate(owner)) {
+            this.array = entriesNew;
+            return this;
+        }
+        return newHashCollisionNode(owner, dataHash, entriesNew);
+    }
+
+    @Override
+    protected int calculateSize() {
+        return dataArity();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Node<D> putAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift, BulkChangeEvent bulkChange, BiFunction<D, D, D> updateFunction, BiPredicate<D, D> equalsFunction, ToIntFunction<D> hashFunction, ChangeEvent<D> details) {
+        if (otherNode == this) {
+            bulkChange.inBoth += dataArity();
+            return this;
+        }
+        HashCollisionNode<D> that = (HashCollisionNode<D>) otherNode;
+
+        // The buffer initially contains all data elements from this node.
+        // Every time we find a matching data element in both nodes, we do not need to ever look at that data element again.
+        // So, we swap it out with a data element from the end of unprocessed data elements, and subtract 1 from unprocessedSize.
+        // If that node contains a data element that is not in this node, we add it to the end, and add 1 to bufferSize.
+        // Buffer content:
+        // 0..unprocessedSize-1 = unprocessed data elements from this node
+        // unprocessedSize..resultSize-1 = data elements that we have updated from that node, or that we have added from that node.
+        int thisSize = this.dataArity();
+        int thatSize = that.dataArity();
+        Object[] buffer = Arrays.copyOf(this.array, thisSize + thatSize);
+        System.arraycopy(this.array, 0, buffer, 0, this.array.length);
+        Object[] thatArray = that.array;
+        int resultSize = thisSize;
+        int unprocessedSize = thisSize;
+        boolean updated = false;
+        outer:
+        for (int i = 0; i < thatSize; i++) {
+            D thatData = (D) thatArray[i];
+            for (int j = 0; j < unprocessedSize; j++) {
+                D thisData = (D) buffer[j];
+                if (equalsFunction.test(thatData, thisData)) {
+                    D swap = (D) buffer[--unprocessedSize];
+                    D updatedData = updateFunction.apply(thisData, thatData);
+                    updated |= updatedData != thisData;
+                    buffer[unprocessedSize] = updatedData;
+                    buffer[j] = swap;
+                    bulkChange.inBoth++;
+                    continue outer;
+                }
+            }
+            buffer[resultSize++] = thatData;
+        }
+        return newCroppedHashCollisionNode(updated | resultSize != thisSize, buffer, resultSize);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Node<D> removeAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift, BulkChangeEvent bulkChange, BiFunction<D, D, D> updateFunction, BiPredicate<D, D> equalsFunction, ToIntFunction<D> hashFunction, ChangeEvent<D> details) {
+        if (otherNode == this) {
+            bulkChange.removed += dataArity();
+            return (Node<D>) EMPTY;
+        }
+        HashCollisionNode<D> that = (HashCollisionNode<D>) otherNode;
+
+        // The buffer initially contains all data elements from this node.
+        // Every time we find a data element that must be removed, we replace it with the last element from the
+        // result part of the buffer, and reduce resultSize by 1.
+        // Buffer content:
+        // 0..resultSize-1 = data elements from this node that have not been removed
+        int thisSize = this.dataArity();
+        int thatSize = that.dataArity();
+        int resultSize = thisSize;
+        Object[] buffer = this.array.clone();
+        Object[] thatArray = that.array;
+        outer:
+        for (int i = 0; i < thatSize && resultSize > 0; i++) {
+            D thatData = (D) thatArray[i];
+            for (int j = 0; j < resultSize; j++) {
+                D thisData = (D) buffer[j];
+                if (equalsFunction.test(thatData, thisData)) {
+                    buffer[j] = buffer[--resultSize];
+                    bulkChange.removed++;
+                    continue outer;
+                }
+            }
+        }
+        return newCroppedHashCollisionNode(thisSize != resultSize, buffer, resultSize);
+    }
+
+    private HashCollisionNode<D> newCroppedHashCollisionNode(boolean changed, Object[] buffer, int size) {
+        if (changed) {
+            if (buffer.length != size) {
+                buffer = Arrays.copyOf(buffer, size);
+            }
+            return new HashCollisionNode<>(hash, buffer);
+        }
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Node<D> retainAll(IdentityObject owner, Node<D> otherNode, int shift, BulkChangeEvent bulkChange, BiFunction<D, D, D> updateFunction, BiPredicate<D, D> equalsFunction, ToIntFunction<D> hashFunction, ChangeEvent<D> details) {
+        if (otherNode == this) {
+            bulkChange.removed += dataArity();
+            return (Node<D>) EMPTY;
+        }
+        HashCollisionNode<D> that = (HashCollisionNode<D>) otherNode;
+
+        // The buffer initially contains all data elements from this node.
+        // Every time we find a data element that must be retained, we swap it into the result-part of the buffer.
+        // 0..resultSize-1 = data elements from this node that must be retained
+        // resultSize..thisSize-1 = data elements that might need to be retained
+        int thisSize = this.dataArity();
+        int thatSize = that.dataArity();
+        int resultSize = 0;
+        Object[] buffer = this.array.clone();
+        Object[] thatArray = that.array;
+        outer:
+        for (int i = 0; i < thatSize && thisSize != resultSize; i++) {
+            D thatData = (D) thatArray[i];
+            for (int j = resultSize; j < thisSize; j++) {
+                D thisData = (D) buffer[j];
+                if (equalsFunction.test(thatData, thisData)) {
+                    D swap = (D) buffer[resultSize];
+                    buffer[resultSize++] = thisData;
+                    buffer[j] = swap;
+                    continue outer;
+                }
+            }
+            bulkChange.removed++;
+        }
+        return newCroppedHashCollisionNode(thisSize != resultSize, buffer, resultSize);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Node<D> filterAll(@Nullable IdentityObject owner, Predicate<? super D> predicate, int shift, BulkChangeEvent bulkChange) {
+        int thisSize = this.dataArity();
+        int resultSize = 0;
+        Object[] buffer = new Object[thisSize];
+        Object[] thisArray = this.array;
+        for (int i = 0; i < thisSize; i++) {
+            D thisData = (D) thisArray[i];
+            if (predicate.test(thisData)) {
+                buffer[resultSize++] = thisData;
+            } else {
+                bulkChange.removed++;
+            }
+        }
+        return newCroppedHashCollisionNode(thisSize != resultSize, buffer, resultSize);
+    }
+}

@@ -18,10 +18,10 @@ public class IntersectEllipseEllipse {
     /// Computes the intersection between two ellipses.
     ///
     /// @param c1  the center of ellipse 1
-    /// @param rx1 the x-radius of ellipse 1
+    /// @param rx1 the element-radius of ellipse 1
     /// @param ry1 the y-radius of ellipse 1
     /// @param c2  the center of ellipse 2
-    /// @param rx2 the x-radius of ellipse 2
+    /// @param rx2 the element-radius of ellipse 2
     /// @param ry2 the y-radius of ellipse 2
     /// @return computed intersection
     public static IntersectionResult intersectEllipseEllipse(Point2D c1, double rx1, double ry1, Point2D c2, double rx2, double ry2) {
@@ -32,11 +32,11 @@ public class IntersectEllipseEllipse {
     ///
     /// @param cx1 the center of ellipse 1
     /// @param cy1 the center of ellipse 1
-    /// @param rx1 the x-radius of ellipse 1
+    /// @param rx1 the element-radius of ellipse 1
     /// @param ry1 the y-radius of ellipse 1
     /// @param cx2 the center of ellipse 2
     /// @param cy2 the center of ellipse 2
-    /// @param rx2 the x-radius of ellipse 2
+    /// @param rx2 the element-radius of ellipse 2
     /// @param ry2 the y-radius of ellipse 2
     /// @return computed intersection
     public static IntersectionResult intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2) {

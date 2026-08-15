@@ -5,7 +5,8 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.icollection.PersistentVectorList;
+
+import org.jhotdraw8.icollection.impl.fingertree.FingerTree;
 
 import java.util.Spliterators;
 import java.util.function.Consumer;
@@ -16,11 +17,11 @@ import java.util.function.Function;
 ///
 /// @param <E> the element type
 public class ReverseTombSkippingVectorSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
-    private final PersistentVectorList<Object> vector;
+    private final FingerTree<Object> vector;
     private final Function<Object, E> mapper;
     private int index;
 
-    public ReverseTombSkippingVectorSpliterator(PersistentVectorList<Object> vector, Function<Object, E> mapper, long est, int additionalCharacteristics) {
+    public ReverseTombSkippingVectorSpliterator(FingerTree<Object> vector, Function<Object, E> mapper, long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
         this.vector = vector;
         this.mapper = mapper;
@@ -34,7 +35,7 @@ public class ReverseTombSkippingVectorSpliterator<E> extends Spliterators.Abstra
         }
         Object o = vector.get(index--);
         if (o instanceof Tombstone t) {
-            index -= t.skip();
+            index -= t.neighbors();
             o = vector.get(index--);
         }
         action.accept(mapper.apply(o));

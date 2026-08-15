@@ -14,6 +14,9 @@ import org.jhotdraw8.icollection.impl.champ.ReverseTombSkippingVectorSpliterator
 import org.jhotdraw8.icollection.impl.champ.SequencedData;
 import org.jhotdraw8.icollection.impl.champ.SequencedElement;
 import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTree;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
@@ -80,15 +83,15 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
     private static final long serialVersionUID = 0L;
 
     /// Offset of sequence numbers to vector indices.
-    /// <pre>vector index = sequence number + offset</pre>
+    /// <pre>vector offset = sequence number + offset</pre>
     private int offset = 0;
     /// In this vector we store the elements in the order in which they were inserted.
-    private PersistentVectorList<Object> vector;
+    private FingerTree<Object> vector;
 
     /// Constructs a new empty set.
     public MutableVectorHashSet() {
-        root = BitmapIndexedNode.emptyNode();
-        vector = PersistentVectorList.of();
+        hashSet = BitmapIndexedNode.emptyNode();
+        vector = FingerTreeAPI.of();
     }
 
     /// Constructs a set containing the elements in the specified
@@ -97,20 +100,13 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
     /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableVectorHashSet(Iterable<? extends E> c) {
-        if (c instanceof MutableVectorHashSet<?>) {
-            c = ((MutableVectorHashSet<? extends E>) c).toPersistent();
-        }
-        if (c instanceof PersistentVectorHashSet<?>) {
-            PersistentVectorHashSet<E> that = (PersistentVectorHashSet<E>) c;
-            this.root = that.root;
-            this.size = that.size;
-            this.offset = that.offset;
-            this.vector = that.vector;
-        } else {
-            this.root = BitmapIndexedNode.emptyNode();
-            this.vector = PersistentVectorList.of();
-            addAll(c);
-        }
+        var b = new PersistentVectorHashSetBuilder<E>();
+        b.addAll(c);
+        var cc = b.build();
+        hashSet = cc.hashSet;
+        vector = cc.vector;
+        offset = cc.offset;
+        size = cc.size;
     }
 
     @Override
@@ -126,7 +122,7 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
-        root = root.put(makeOwner(), newElem,
+        hashSet = hashSet.put(makeOwner(), newElem,
                 SequencedElement.keyHash(e), 0, details,
                 moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
                 Objects::equals, SequencedElement::elementKeyHash);
@@ -135,14 +131,14 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
             if (details.isReplaced()) {
                 if (moveToFirst) {
                     var result = vecRemove(vector, details.getOldDataNonNull(), offset);
-                    vector = result.first();
+                    vector = result.tree();
                 }
             } else {
                 size++;
             }
             offset++;
             modCount++;
-            vector = vector.addingFirst(newElem);
+            vector = FingerTreeAPI.addFirst(newElem, vector);
             renumber();
         }
         return modified;
@@ -156,7 +152,7 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, offset + vector.size());
-        root = root.put(makeOwner(),
+        hashSet = hashSet.put(makeOwner(),
                 newElem, SequencedElement.keyHash(e), 0,
                 details,
                 moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
@@ -166,13 +162,13 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
             var oldElem = details.getOldData();
             if (details.isReplaced()) {
                 var result = vecRemove(vector, oldElem, offset);
-                vector = result.first();
-                offset = result.second();
+                vector = result.tree();
+                offset = result.offset();
             } else {
                 modCount++;
                 size++;
             }
-            vector = vector.adding(newElem);
+            vector = FingerTreeAPI.addLast(vector, newElem);
             renumber();
         }
         return modified;
@@ -181,8 +177,8 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
     /// Removes all elements from this set.
     @Override
     public void clear() {
-        root = BitmapIndexedNode.emptyNode();
-        vector = PersistentVectorList.of();
+        hashSet = BitmapIndexedNode.emptyNode();
+        vector = FingerTreeAPI.of();
         size = 0;
         modCount++;
         offset = -1;
@@ -197,7 +193,7 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return Node.NO_DATA != root.find(new SequencedElement<>((E) o),
+        return Node.NO_DATA != hashSet.find(new SequencedElement<>((E) o),
                 SequencedElement.keyHash(o), 0, Objects::equals);
     }
 
@@ -217,9 +213,8 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
     @Override
     @SuppressWarnings("unchecked")
     public Iterator<E> iterator() {
-        return new FailFastIterator<>(Spliterators.iterator(new TombSkippingVectorSpliterator<>(vector.root,
-                (Object o) -> ((SequencedElement<E>) o).getElement(),
-                0, size, vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED)),
+        // FIXME - must implement iterator directly to obtain a good performance
+        return new FailFastIterator<>(Spliterators.iterator(spliterator()),
                 this::iteratorRemove, () -> modCount);
     }
 /*
@@ -276,8 +271,8 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
             public boolean test(SequencedElement<E> e) {
                 if (!predicate.test(e.getElement())) {
                     OrderedPair<SimplePersistentList<Object>, Integer> result = vecRemove(newVector, e, newOffset);
-                    newVector = result.first();
-                    newOffset = result.second();
+                    newVector = result.tree();
+                    newOffset = result.offset();
                     return false;
                 }
                 return true;
@@ -298,29 +293,6 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
     }
 */
 
-    @SuppressWarnings("unchecked")
-    private Iterator<E> reverseIterator() {
-        return new FailFastIterator<>(Spliterators.iterator(new ReverseTombSkippingVectorSpliterator<>(vector,
-                (Object o) -> ((SequencedElement<E>) o).getElement(), size(),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED)),
-                this::iteratorRemove, () -> modCount);
-    }
-
-    @SuppressWarnings("unchecked")
-    private Spliterator<E> reverseSpliterator() {
-        return new FailFastSpliterator<>(new ReverseTombSkippingVectorSpliterator<>(vector,
-                (Object o) -> ((SequencedElement<E>) o).getElement(), size(),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount, null);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Spliterator<E> spliterator() {
-        return new FailFastSpliterator<>(new TombSkippingVectorSpliterator<>(vector.root,
-                (Object o) -> ((SequencedElement<E>) o).getElement(),
-                0, size(), vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount, null);
-    }
-
     private void iteratorRemove(E element) {
         owner = null;
         remove(element);
@@ -335,7 +307,7 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
     @Override
     public boolean remove(Object o) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        root = root.remove(makeOwner(),
+        hashSet = hashSet.remove(makeOwner(),
                 new SequencedElement<>((E) o),
                 SequencedElement.keyHash(o), 0, details, Objects::equals);
         boolean modified = details.isModified();
@@ -343,8 +315,8 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
             var result = vecRemove(vector, details.getOldDataNonNull(), offset);
             size--;
             modCount++;
-            vector = result.first();
-            offset = result.second();
+            vector = result.tree();
+            offset = result.offset();
             renumber();
         }
         return modified;
@@ -367,19 +339,44 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
     /// Renumbers the sequence numbers if they have overflown.
     private void renumber() {
         if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
-            var result = SequencedData.vecRenumber(makeOwner(), size, vector.size(), root, vector.root,
-                    SequencedElement::elementKeyHash, Objects::equals,
-                    (e, seq) -> new SequencedElement<>(e.getElement(), seq));
-            root = result.first();
-            vector = result.second();
-            offset = 0;
+            var b = new PersistentVectorHashSetBuilder<E>(size / -2);
+            b.addAll(this);
+            var tmp = b.build();
+            hashSet = tmp.hashSet;
+            vector = tmp.vector;
+            offset = tmp.offset;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Iterator<E> reverseIterator() {
+        return new FailFastIterator<>(Spliterators.iterator(new ReverseTombSkippingVectorSpliterator<>(vector,
+                (Object o) -> ((SequencedElement<E>) o).getElement(), size(),
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED)),
+                this::iteratorRemove, () -> modCount);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Spliterator<E> reverseSpliterator() {
+        return new FailFastSpliterator<>(new ReverseTombSkippingVectorSpliterator<>(vector,
+                (Object o) -> ((SequencedElement<E>) o).getElement(), size(),
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount, null);
     }
 
     @Override
     public SequencedSet<E> reversed() {
         return new ReversedSequencedSetView<>(this, this::reverseIterator,
                 this::reverseSpliterator);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Spliterator<E> spliterator() {
+        //FIXME Only neighbors if we have tombstones
+        return new FailFastSpliterator<>(new TombSkippingVectorSpliterator<>(
+                new FingerTreeSpliterator<>(vector),
+                e -> ((SequencedElement<E>) e).getElement(),
+                0, size(), vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount, null);
     }
 
     /// Returns an persistent copy of this set.
@@ -389,7 +386,7 @@ public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, Sequence
         owner = null;
         return size == 0
                 ? PersistentVectorHashSet.of()
-                : new PersistentVectorHashSet<>(root, vector, size, offset);
+                : new PersistentVectorHashSet<>(hashSet, vector, size, offset);
     }
 
     @Serial

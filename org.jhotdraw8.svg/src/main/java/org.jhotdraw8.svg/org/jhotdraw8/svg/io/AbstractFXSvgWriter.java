@@ -179,7 +179,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             // their horizontal positions are stored in a parallel
             // List.
 
-            // lineContainsText is true after first segment is drawn
+            // lineContainsText is true after tree segment is drawn
             boolean lineContainsText = false;
             boolean lineComplete = false;
             float maxAscent = 0, maxDescent = 0;
@@ -235,7 +235,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                         penPositions.set(first, rightMargin - layouts.get(first).getVisibleAdvance() - 1);
                         break;
                     case CENTER:
-                        //  penPositions.set(first, (rightMargin - 1 - leftMargin - layouts.get(first).getVisibleAdvance()) / 2 + leftMargin);
+                        //  penPositions.set(tree, (rightMargin - 1 - leftMargin - layouts.get(tree).getVisibleAdvance()) / 2 + leftMargin);
                         penPositions.set(first, (rightMargin - 1 - leftMargin) * 0.5f + leftMargin);
                         break;
                     case JUSTIFY:
@@ -257,7 +257,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
                 w.writeStartElement("tspan");
                 int characterCount = nextLayout.getCharacterCount();
-                w.writeAttribute("x", nbf.toString(nextPosition));
+                w.writeAttribute("element", nbf.toString(nextPosition));
                 w.writeAttribute("y", nbf.toString(verticalPos));
                 w.writeCharacters(paragraph.substring(textIndex, textIndex + characterCount));
                 w.writeEndElement();
@@ -737,7 +737,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             node) throws IOException, XMLStreamException {
         w.writeStartElement("image");
 
-        w.writeAttribute("x", nb.toString(node.getX()));
+        w.writeAttribute("element", nb.toString(node.getX()));
         w.writeAttribute("y", nb.toString(node.getY()));
         w.writeAttribute("width", nb.toString(node.getFitWidth()));
         w.writeAttribute("height", nb.toString(node.getFitHeight()));
@@ -1055,7 +1055,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
         w.writeStartElement("rect");
         if (node.getX() != 0.0) {
-            w.writeAttribute("x", nb.toString(node.getX()));
+            w.writeAttribute("element", nb.toString(node.getX()));
         }
         if (node.getY() != 0.0) {
             w.writeAttribute("y", nb.toString(node.getY()));
@@ -1091,7 +1091,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             Shape s = region.getShape();
             Bounds sb = (s != null) ? s.getLayoutBounds() : null;
 
-            // All BackgroundFills are drawn first, followed by
+            // All BackgroundFills are drawn tree, followed by
             // BackgroundImages, BorderStrokes, and finally BorderImages
             if (region.getBackground() != null) {
                 for (BackgroundFill bgf : region.getBackground().getFills()) {
@@ -1360,9 +1360,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             // text directly into the body of the "text" element.
             Bounds bounds = node.getLayoutBounds();
             switch (node.getTextAlignment()) {
-                case LEFT, JUSTIFY -> w.writeAttribute("x", nb.toString(node.getX()));
-                case CENTER -> w.writeAttribute("x", nb.toString(node.getX() + bounds.getWidth() * 0.5));
-                case RIGHT -> w.writeAttribute("x", nb.toString(node.getX() + bounds.getWidth()));
+                case LEFT, JUSTIFY -> w.writeAttribute("element", nb.toString(node.getX()));
+                case CENTER -> w.writeAttribute("element", nb.toString(node.getX() + bounds.getWidth() * 0.5));
+                case RIGHT -> w.writeAttribute("element", nb.toString(node.getX() + bounds.getWidth()));
             }
 
             // By adding baselineOffset to layoutBounds.minY we get the correct

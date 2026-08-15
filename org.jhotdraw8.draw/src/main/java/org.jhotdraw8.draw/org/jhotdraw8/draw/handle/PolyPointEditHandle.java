@@ -114,7 +114,7 @@ public class PolyPointEditHandle extends AbstractHandle {
         }
 
         PersistentList<Point2D> list = owner.getNonNull(pointKey);
-        view.getModel().set(getOwner(), pointKey, list.replacingAt(pointIndex, getOwner().worldToLocal(newPoint)));
+        view.getModel().set(getOwner(), pointKey, list.settingAt(pointIndex, getOwner().worldToLocal(newPoint)));
     }
 
     @Override

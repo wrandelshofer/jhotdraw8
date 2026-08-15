@@ -109,7 +109,7 @@ public class KotlinPersistentListJmh {
     public PersistentList<Key> mRemoveOneByOne() {
         var map = listA;
         for (var e : data.listA) {
-            map = map.remove(e);
+            map = map.removing(e);
         }
         if (!map.isEmpty()) throw new AssertionError("map: " + map);
         return map;
@@ -118,7 +118,7 @@ public class KotlinPersistentListJmh {
     //@Benchmark
     public PersistentList<Key> mRemoveAll() {
         PersistentList<Key> set = listA;
-        return set.removeAll(data.listA);
+        return set.removingAll(data.listA);
     }
 
     @Benchmark

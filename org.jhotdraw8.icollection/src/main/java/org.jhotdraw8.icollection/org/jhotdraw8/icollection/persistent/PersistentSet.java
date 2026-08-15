@@ -9,7 +9,9 @@ import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
+
 
 /// This interface provides copy-returning operations for a set.
 ///
@@ -27,7 +29,7 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
     /// @param <T> the element type of the returned set
     /// @return an empty set of the specified element type.
     @Override
-    <T> PersistentSet<T> cleared();
+    PersistentSet<E> cleared();
 
     /// Returns a copy of this set that contains all elements
     /// of this set and also the specified element.
@@ -104,8 +106,18 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
                 || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
             return cleared();
         }
+        var s = this;
+        if ((c instanceof ReadableCollection<?>)) {
+            PersistentSet<E> clear = cleared();
+            var rc = (ReadableCollection<?>) c;
+            for (var e : this) {
+                if (!rc.contains(e)) {
+                    s = s.removing(e);
+                }
+            }
+            return s;
+        }
         if (c instanceof Collection<?> co) {
-            var s = this;
             for (var e : this) {
                 if (!co.contains(e)) {
                     s = s.removing(e);
@@ -113,14 +125,10 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
             }
             return s;
         }
-        if (!(c instanceof ReadableCollection<?>)) {
-            PersistentSet<Object> clear = cleared();
-            c = clear.addingAll(c);
-        }
-        var rc = (ReadableCollection<?>) c;
-        var s = this;
+        var co = new HashSet<E>();
+        c.forEach(e1 -> co.add((E) e1));
         for (var e : this) {
-            if (!rc.contains(e)) {
+            if (!co.contains(e)) {
                 s = s.removing(e);
             }
         }

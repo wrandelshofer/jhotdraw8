@@ -24,6 +24,7 @@ public class SendBackwardAction extends AbstractDrawingViewAction {
     /// Creates a new instance.
     ///
     /// @param editor the drawing editor
+    @SuppressWarnings("this-escape")
     public SendBackwardAction(DrawingEditor editor) {
         super(editor);
         Resources labels

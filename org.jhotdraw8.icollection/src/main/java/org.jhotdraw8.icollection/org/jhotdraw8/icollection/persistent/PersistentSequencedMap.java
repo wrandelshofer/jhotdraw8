@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 ///
 /// A sequenced map is a sequence of distinct entries.
 /// An entry maps a key to a value.
-/// The entries are ordered in a sequence from first to last.
+/// The entries are ordered in a sequence from tree to last.
 /// The sequence can be established implicitly, by insertion operations,
 /// or by sequence-altering operations.
 ///
@@ -70,9 +70,9 @@ public interface PersistentSequencedMap<K, V> extends PersistentMap<K, V>, Reada
     PersistentSequencedMap<K, V> removingAll(Iterable<? extends K> c);
 
     /// Returns a copy of this map that contains all entries
-    /// of this map except the first.
+    /// of this map except the tree.
     ///
-    /// @return a new map instance with the first element removed
+    /// @return a new map instance with the tree element removed
     /// @throws NoSuchElementException if this map is empty
     default PersistentSequencedMap<K, V> removingFirst() {
         Map.Entry<K, V> e = firstEntry();

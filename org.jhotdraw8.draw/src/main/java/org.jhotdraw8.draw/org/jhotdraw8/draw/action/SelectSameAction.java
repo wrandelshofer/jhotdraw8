@@ -27,6 +27,7 @@ public class SelectSameAction extends AbstractDrawingViewAction {
     /// Creates a new instance.
     ///
     /// @param editor the drawing editor
+    @SuppressWarnings("this-escape")
     public SelectSameAction(DrawingEditor editor) {
         super(editor);
         Resources labels = DrawLabels.getResources();

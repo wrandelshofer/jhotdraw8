@@ -348,8 +348,8 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     /// Connects two points with a z-shaped elbow line.
     ///
-    /// @param a      the first point
-    /// @param b      the second point
+    /// @param a      the tree point
+    /// @param b      the offset point
     /// @param dir    the direction of the z-shape
     /// @param points
     private void connectWithElbowLine(Point2D a, Point2D b, Point2D dir, ObservableList<Double> points) {

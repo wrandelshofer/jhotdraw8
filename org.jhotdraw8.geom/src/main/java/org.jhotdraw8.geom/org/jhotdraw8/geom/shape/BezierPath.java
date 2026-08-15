@@ -154,12 +154,12 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
                     CubicCurves.splitCubicCurveTo(prev.pointX(), prev.pointY(), prev.outX(), prev.outY(),
                             next.inX(), next.inY(), next.pointX(), next.pointY(), t,
                             (x1, y1, x2, y2, x3, y3) -> {
-                                result[0] = result[0].replacingAt(prevSegment, prev.withOx(x1).withOy(y1));
-                                result[0] = result[0].replacingAt(segment, result[0].get(segment).withIx(x2).withIy(y2));
+                                result[0] = result[0].settingAt(prevSegment, prev.withOx(x1).withOy(y1));
+                                result[0] = result[0].settingAt(segment, result[0].get(segment).withIx(x2).withIy(y2));
                             },
                             (x1, y1, x2, y2, x3, y3) -> {
-                                result[0] = result[0].replacingAt(segment, result[0].get(segment).withOx(x1).withOy(y1));
-                                result[0] = result[0].replacingAt(segment + 1, next.withIx(x2).withIy(y2));
+                                result[0] = result[0].settingAt(segment, result[0].get(segment).withOx(x1).withOy(y1));
+                                result[0] = result[0].settingAt(segment + 1, next.withIx(x2).withIy(y2));
                             }
                     );
                 } else {
@@ -170,10 +170,10 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
                     QuadCurves.split(prev.pointX(), prev.pointY(),
                             next.inX(), next.inY(), next.pointX(), next.pointY(), t,
                             (x1, y1, x2, y2) -> {
-                                result[0] = result[0].replacingAt(prevSegment, middle.withOx(x1).withOy(y1));
-                                result[0] = result[0].replacingAt(segment, result[0].get(segment).withPx(x2).withPointY(y2));
+                                result[0] = result[0].settingAt(prevSegment, middle.withOx(x1).withOy(y1));
+                                result[0] = result[0].settingAt(segment, result[0].get(segment).withPx(x2).withPointY(y2));
                             },
-                            (x1, y1, x2, y2) -> result[0] = result[0].replacingAt(segment, result[0].get(segment).withOx(x1).withOy(y1))
+                            (x1, y1, x2, y2) -> result[0] = result[0].settingAt(segment, result[0].get(segment).withOx(x1).withOy(y1))
                     );
                 }
             } else if (nc1) {
@@ -182,8 +182,8 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
                 result[0] = result[0].addingAt(segment, middle);
                 QuadCurves.split(prev.pointX(), prev.pointY(),
                         next.inX(), next.inY(), next.pointX(), next.pointY(), t,
-                        (x1, y1, x2, y2) -> result[0] = result[0].replacingAt(segment, middle.withIx(x1).withIy(y1).withPx(x2).withPointY(y2)),
-                        (x1, y1, x2, y2) -> result[0] = result[0].replacingAt(segment + 1, next.withIx(x1).withIy(y1).withCollinear(true))
+                        (x1, y1, x2, y2) -> result[0] = result[0].settingAt(segment, middle.withIx(x1).withIy(y1).withPx(x2).withPointY(y2)),
+                        (x1, y1, x2, y2) -> result[0] = result[0].settingAt(segment + 1, next.withIx(x1).withIy(y1).withCollinear(true))
                 );
             } else {
                 // line
@@ -212,22 +212,22 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
                     prev.pointX(), prev.pointY(), middle.inX(), middle.inY(), middle.pointX(), middle.pointY(),
                     next.inX(), next.inY(), next.pointX(), next.pointY(), tolerance);
             if (p != null) {
-                result[0] = result[0].replacingAt(nextSegment, next.withIx(p[2]).withIy(p[3]));
+                result[0] = result[0].settingAt(nextSegment, next.withIx(p[2]).withIy(p[3]));
             }
         } else if (pc2 && mc2 && !nc1) {
             double[] p = QuadCurves.merge(
                     prev.pointX(), prev.pointY(), prev.outX(), prev.outY(), middle.pointX(), middle.pointY(),
                     middle.outX(), middle.outY(), next.pointX(), next.pointY(), tolerance);
             if (p != null) {
-                result[0] = result[0].replacingAt(prevSegment, prev.withOx(p[2]).withOy(p[3]));
+                result[0] = result[0].settingAt(prevSegment, prev.withOx(p[2]).withOy(p[3]));
             }
         } else if (pc2 && mc1 && mc2) {
             double[] p = CubicCurves.merge(
                     prev.pointX(), prev.pointY(), prev.outX(), prev.outY(), middle.inX(), middle.inY(), middle.pointX(), middle.pointY(),
                     middle.outX(), middle.outY(), next.inX(), next.inY(), next.pointX(), next.pointY(), tolerance);
             if (p != null) {
-                result[0] = result[0].replacingAt(prevSegment, prev.withOx(p[2]).withOy(p[3]));
-                result[0] = result[0].replacingAt(nextSegment, next.withIx(p[4]).withIy(p[5]));
+                result[0] = result[0].settingAt(prevSegment, prev.withOx(p[2]).withOy(p[3]));
+                result[0] = result[0].settingAt(nextSegment, next.withIx(p[4]).withIy(p[5]));
             }
         }
         result[0] = result[0].removingAt(segment);
@@ -235,7 +235,7 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
     }
 
     /// Gets the outgoing tangent point for the bezier node
-    /// at the specified index.
+    /// at the specified offset.
     ///
     /// @param index point of a bezier node
     /// @return outgoing tangent point
@@ -269,7 +269,6 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public BezierPath cleared() {
         return isEmpty() ? this : new BezierPath(windingRule);
     }
@@ -346,8 +345,8 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
     }
 
     @Override
-    public BezierPath replacingAt(int index, BezierNode element) {
-        return (BezierPath) super.replacingAt(index, element);
+    public BezierPath settingAt(int index, BezierNode element) {
+        return (BezierPath) super.settingAt(index, element);
     }
 
     @Override
@@ -372,9 +371,9 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
         return super.size();
     }
 
-    /// Evaluates the first point of the bezier path.
+    /// Evaluates the tree point of the bezier path.
     ///
-    /// @return the point and derivative of the first point in the path
+    /// @return the point and derivative of the tree point in the path
     /// @throws java.util.NoSuchElementException if the path is empty
     public PointAndDerivative evalFirst() {
         BezierNode first = getFirst();
@@ -398,7 +397,7 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
     /// Evaluates the reverse derivative of the last point.
     ///
     /// The result is the same as reversing the path, and then
-    /// evaluating its first point.
+    /// evaluating its tree point.
     ///
     /// @return the reverse derivative
     /// @throws java.util.NoSuchElementException if the path is empty

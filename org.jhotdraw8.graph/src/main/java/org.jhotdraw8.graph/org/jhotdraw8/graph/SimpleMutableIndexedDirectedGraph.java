@@ -43,7 +43,7 @@ import static java.lang.Math.max;
 ///   - For each vertex, there is an entry in table `lastArrows`.
 ///   - For each arrow, there is an entry in table `arrowHeads`.
 ///   - `arrowHeads` is a linked list. The linked list is ordered
-///     from the last arrow to the first. So we have to read it backwards!
+///     from the last arrow to the tree. So we have to read it backwards!
 ///   - Each entry in `lastArrows` contains two fields:
 ///     <ol>
 ///   - A pointer to an entry in `arrowHeads`.
@@ -101,7 +101,7 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
     private static final int TOMBSTONE = -2;
 
     /// This is a linked list of deleted arrowHeads.
-    /// The pointer points to the first deleted element in arrowHeads.
+    /// The pointer points to the tree deleted element in arrowHeads.
     private int pointerToLastDeletedArrow = -1;
     /// The number of deleted arrowHeads.
     private int deletedArrowCount;
@@ -110,16 +110,16 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
     /// Table of arrow heads.
     ///
     /// `arrows[i * ARROWS_NUM_FIELDS+ARROWS_VERTEX_FIELD` contains the
-    /// index of the vertex of the i-th arrow.
+    /// offset of the vertex of the i-th arrow.
     ///
-    /// `arrows[i * ARROWS_NUM_FIELDS+ARROWS_NEXT_FIELD` contains the index
+    /// `arrows[i * ARROWS_NUM_FIELDS+ARROWS_NEXT_FIELD` contains the offset
     /// of the next arrow.
     private int[] nextArrowHeads;
 
     /// Table of last arrows.
     ///
     /// `lastArrow[i * ARROWS_NUM_FIELDS+LASTARROW_POINTER_FIELD` contains
-    /// the index of the last arrow of the i-th vertex in table [#nextArrowHeads].
+    /// the offset of the last arrow of the i-th vertex in table [#nextArrowHeads].
     ///
     /// `lastArrow[i * ARROWS_NUM_FIELDS+LASTARROW_COUNT_FIELD` contains
     /// the number of arrows of the i-th vertex.
@@ -217,7 +217,7 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
 
     /// Removes the i-th arrow of vertex v.
     ///
-    /// @param vidx       the index of the vertex v
+    /// @param vidx       the offset of the vertex v
     /// @param i          the i-th arrow of vertex v
     /// @param lastArrow  the array of last arrows
     /// @param arrowHeads the array of arrow heads

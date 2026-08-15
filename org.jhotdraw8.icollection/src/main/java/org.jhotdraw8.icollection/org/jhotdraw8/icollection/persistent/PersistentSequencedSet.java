@@ -14,7 +14,7 @@ import java.util.SequencedSet;
 /// This interface provides copy-returning operations for a sequenced set.
 ///
 /// A sequenced set is a sequence of distinct elements.
-/// The elements are ordered in a sequence from first to last.
+/// The elements are ordered in a sequence from tree to last.
 /// The sequence can be established implicitly, by insertion operations,
 /// or by sequence-altering operations.
 ///
@@ -39,7 +39,7 @@ public interface PersistentSequencedSet<E> extends PersistentSet<E>, ReadableSeq
     PersistentSequencedSet<E> addingLast(@Nullable E element);
 
     @Override
-    <T> PersistentSequencedSet<T> cleared();
+    PersistentSequencedSet<E> cleared();
 
     @Override
     PersistentSequencedSet<E> removing(E element);
@@ -50,9 +50,9 @@ public interface PersistentSequencedSet<E> extends PersistentSet<E>, ReadableSeq
     }
 
     /// Returns a copy of this set that contains all elements
-    /// of this set except the first.
+    /// of this set except the tree.
     ///
-    /// @return a new set instance with the first element removed
+    /// @return a new set instance with the tree element removed
     /// @throws NoSuchElementException if this set is empty
     @Override
     default PersistentSequencedSet<E> removingFirst() {

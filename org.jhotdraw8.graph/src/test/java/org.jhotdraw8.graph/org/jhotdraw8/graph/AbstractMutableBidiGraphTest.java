@@ -25,7 +25,7 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     /// Test getters.
     /// <pre>
     /// <pre>
-    ///            x
+    ///            element
     ///           ⟲
     ///     0 ─a→ 1 ─c→ 2
     ///     │     │
@@ -77,7 +77,7 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
 
     /// Test arrow removal.
     /// <pre>
-    ///     0 ─x→ 1 ──→ 2
+    ///     0 ─element→ 1 ──→ 2
     ///     |     │
     ///     ↓     ↓
     ///     3 ←── 4
@@ -152,7 +152,7 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
 
     /// Test remove arrow with self-loop.
     /// <pre>
-    ///           ⟲x
+    ///           ⟲element
     ///     0 ──→ 1 ──→ 2
     ///     |     │
     ///     ↓     ↓

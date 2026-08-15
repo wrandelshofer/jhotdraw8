@@ -36,13 +36,13 @@ public class Point2DConverter extends AbstractCssConverter<Point2D> {
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨Point2D⟩: ⟨x⟩, ⟨y⟩";
+        return "Format of ⟨Point2D⟩: ⟨element⟩, ⟨y⟩";
     }
 
     @Override
     public Point2D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y;
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Point2D⟩: ⟨x⟩ expected.");
+        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Point2D⟩: ⟨element⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Point2D⟩: ⟨y⟩ expected.");

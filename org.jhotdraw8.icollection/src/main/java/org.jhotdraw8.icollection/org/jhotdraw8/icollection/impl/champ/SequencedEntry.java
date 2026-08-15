@@ -45,7 +45,11 @@ public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
 
     public static <K, V> SequencedEntry<K, V> update(SequencedEntry<K, V> oldK, SequencedEntry<K, V> newK) {
         return Objects.equals(oldK.getValue(), newK.getValue()) ? oldK :
-                new SequencedEntry<>(oldK.getKey(), newK.getValue(), oldK.getSequenceNumber());
+                new SequencedEntry<>(oldK.getKey(), newK.getValue(), oldK.sequenceNumber());
+    }
+
+    public static <K, V> SequencedEntry<K, V> failIfKeyExists(SequencedEntry<K, V> oldK, SequencedEntry<K, V> newK) {
+        throw new IllegalStateException("The map already contains an entry with key=" + oldK.getKey());
     }
 
     public static <K, V> SequencedEntry<K, V> updateAndMoveToFirst(SequencedEntry<K, V> oldK, SequencedEntry<K, V> newK) {
@@ -64,7 +68,7 @@ public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
                 ? new SequencedEntry<>(oldK.getKey(), newK.getValue(), oldK.sequenceNumber) : newK;
     }
 
-    public int getSequenceNumber() {
+    public int sequenceNumber() {
         return sequenceNumber;
     }
 }

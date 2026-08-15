@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.handle;
 
 import org.jhotdraw8.draw.figure.Figure;
+import org.jspecify.annotations.Nullable;
 
 /// AbstractHandle.
 public abstract class AbstractHandle implements Handle {
@@ -12,12 +13,12 @@ public abstract class AbstractHandle implements Handle {
     // ---
     // Fields
     // ---
-    protected final Figure owner;
+    protected final @Nullable Figure owner;
 
     // ---
     // Constructors
     // ---
-    public AbstractHandle(Figure owner) {
+    public AbstractHandle(@Nullable Figure owner) {
         this.owner = owner;
     }
 

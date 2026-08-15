@@ -78,10 +78,10 @@ public interface TreeModel<N> extends ObservableMixin {
     /// @return the number of getChildren
     int getChildCount(N node);
 
-    /// Gets the child at the given index from the parent.
+    /// Gets the child at the given offset from the parent.
     ///
     /// @param parent the parent.
-    /// @param index  the index.
+    /// @param index  the offset.
     /// @return the child
     N getChild(N parent, int index);
 
@@ -96,7 +96,7 @@ public interface TreeModel<N> extends ObservableMixin {
     ///
     /// @param child  the new child
     /// @param parent the parent.
-    /// @param index  the index
+    /// @param index  the offset
     void insertChildAt(N child, N parent, int index);
 
     /// Adds the specified child to a parent and fires appropriate

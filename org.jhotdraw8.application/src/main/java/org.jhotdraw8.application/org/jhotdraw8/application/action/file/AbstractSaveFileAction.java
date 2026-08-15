@@ -60,6 +60,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
     /// @param id        the id
     /// @param saveAs    whether to force a file dialog
     /// @param resources the resources are used for setting labels and icons for the action
+    @SuppressWarnings("this-escape")
     public AbstractSaveFileAction(FileBasedActivity activity, String id, boolean saveAs, Resources resources) {
         super(activity);
         this.saveAs = saveAs;

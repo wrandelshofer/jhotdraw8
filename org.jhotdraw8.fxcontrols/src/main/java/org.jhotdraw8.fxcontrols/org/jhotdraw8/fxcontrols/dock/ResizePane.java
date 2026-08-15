@@ -16,6 +16,7 @@ public class ResizePane extends BorderPane {
 
     private final ResizeButton rb = new ResizeButton();
 
+    @SuppressWarnings("this-escape")
     public ResizePane() {
         rb.setTarget(this);
         setBottom(rb);
@@ -24,18 +25,18 @@ public class ResizePane extends BorderPane {
 
     public void setResizeAxis(TrackAxis axis) {
         switch (axis) {
-        case X:
-            rb.setCursor(Cursor.H_RESIZE);
-            setBottom(null);
-            setRight(rb);
-            break;
-        case Y:
-        case Z:
-        default:
-            rb.setCursor(Cursor.V_RESIZE);
-            setRight(null);
-            setBottom(rb);
-            break;
+            case X:
+                rb.setCursor(Cursor.H_RESIZE);
+                setBottom(null);
+                setRight(rb);
+                break;
+            case Y:
+            case Z:
+            default:
+                rb.setCursor(Cursor.V_RESIZE);
+                setRight(null);
+                setBottom(rb);
+                break;
         }
     }
 

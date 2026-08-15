@@ -50,6 +50,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
 
     }
 
+    @SuppressWarnings("this-escape")
     public AbstractDrawing(CssSize width, CssSize height) {
         set(WIDTH, width);
         set(HEIGHT, height);

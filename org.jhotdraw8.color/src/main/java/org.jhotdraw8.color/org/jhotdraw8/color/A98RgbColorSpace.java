@@ -8,6 +8,8 @@ package org.jhotdraw8.color;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.color.trc.GammaToneMapper;
 
+import java.io.Serial;
+
 import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65_XYZ;
 
 /// A98 RGB Color Space.
@@ -24,6 +26,9 @@ import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65_X
 ///     <dd>[w3.org](https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#predefined-a98-rgb3)</dd>
 /// </dl>
 public class A98RgbColorSpace extends ParametricNonLinearRgbColorSpace {
+    @Serial
+    private static final long serialVersionUID = 0L;
+
     public static A98RgbColorSpace getInstance() {
         class Holder {
             private static final A98RgbColorSpace INSTANCE = new A98RgbColorSpace();

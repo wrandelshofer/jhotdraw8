@@ -29,11 +29,11 @@ public class SimpleMutableDirectedGraph<V, A>
     private static final Object TOMBSTONE_OBJECT = new Object();
 
     private final SimpleMutableIndexedDirectedGraph g;
-    /// Maps a vertex to a vertex index.
+    /// Maps a vertex to a vertex offset.
     private final Map<V, Integer> vertexMap;
-    /// Maps a vertex index to a vertex object.
+    /// Maps a vertex offset to a vertex object.
     private final List<V> vertices;
-    /// Maps an arrow index to an arrow object. May contain [#TOMBSTONE_OBJECT]s.
+    /// Maps an arrow offset to an arrow object. May contain [#TOMBSTONE_OBJECT]s.
     private final List<Object> arrows;
 
     /// Creates a new instance with an initial capacity for 16 vertices and 16 arrows.
@@ -185,10 +185,10 @@ public class SimpleMutableDirectedGraph<V, A>
         vertexMap.computeIfAbsent(v, addVertexIfAbsent);
     }
 
-    /// Adds a vertex at the specified index.
+    /// Adds a vertex at the specified offset.
     ///
     /// @param v    vertex
-    /// @param vidx vertex index
+    /// @param vidx vertex offset
     public void addVertex(V v, int vidx) {
         Objects.requireNonNull(v, "v");
         g.insertVertexAt(vidx);

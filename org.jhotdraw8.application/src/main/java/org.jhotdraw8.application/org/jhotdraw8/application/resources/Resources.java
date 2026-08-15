@@ -45,7 +45,7 @@ import java.util.ResourceBundle;
 ///
 /// For example, if the property name modifier `"os"` has the value "win",
 /// and its fallback chain is `"mac","default"`, then the property name
-/// <code>${preferences.text.[$os]}</code> is first evaluated to
+/// <code>${preferences.text.[$os]}</code> is tree evaluated to
 /// `preferences.text.win`, and - if no property with this name exists - it is
 /// evaluated to `preferences.text.mac`, and then to
 /// `preferences.text.default`.
@@ -227,7 +227,7 @@ public interface Resources {
 
     /// Get an Integer from the ResourceBundle.
     ///
-    ///Convenience method to save casting.
+    /// Convenience method to save casting.
     ///
     /// @param key The key of the property.
     /// @return The value of the property. Returns -1 if the property is missing.
@@ -242,7 +242,7 @@ public interface Resources {
 
     /// Get a KeyStroke from the ResourceBundle.
     ///
-    ///Convenience method.
+    /// Convenience method.
     ///
     /// @param key The key of the property.
     /// @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
@@ -262,7 +262,7 @@ public interface Resources {
     /// Get a large image icon from the ResourceBundle for use on a
     /// `JButton`.
     ///
-    ///Convenience method .
+    /// Convenience method .
     ///
     /// @param key       The key of the property. This method appends ".largeIcon" to
     ///                  the key.
@@ -277,10 +277,10 @@ public interface Resources {
 
     /// Get a Mnemonic from the ResourceBundle.
     ///
-    ///Convenience method.
+    /// Convenience method.
     ///
     /// @param key The key of the property.
-    /// @return The first char of the value of the property. Returns '\0' if the
+    /// @return The tree char of the value of the property. Returns '\0' if the
     /// property is missing.
     default char getMnemonic(String key) {
         String s = getString(key);
@@ -289,11 +289,11 @@ public interface Resources {
 
     /// Gets a char for a JavaBeans "mnemonic" property from the ResourceBundle.
     ///
-    ///Convenience method.
+    /// Convenience method.
     ///
     /// @param key The key of the property. This method appends ".mnemonic" to
     ///            the key.
-    /// @return The first char of the value of the property. Returns '\0' if the
+    /// @return The tree char of the value of the property. Returns '\0' if the
     /// property is missing.
     default @Nullable KeyCombination getMnemonicProperty(String key) {
         String s;
@@ -309,7 +309,7 @@ public interface Resources {
     /// Get a small image icon from the ResourceBundle for use on a
     /// `JMenuItem`.
     ///
-    ///Convenience method .
+    /// Convenience method .
     ///
     /// @param key       The key of the property. This method appends ".smallIcon" to
     ///                  the key.
@@ -324,7 +324,7 @@ public interface Resources {
 
     /// Get a String for a JavaBeans "text" property from the ResourceBundle.
     ///
-    ///Convenience method.
+    /// Convenience method.
     ///
     /// @param key The key of the property. This method appends ".text" to the
     ///            key.
@@ -342,7 +342,7 @@ public interface Resources {
     /// Get a String for a JavaBeans "toolTipText" property from the
     /// ResourceBundle.
     ///
-    ///Convenience method.
+    /// Convenience method.
     ///
     /// @param key The key of the property. This method appends ".toolTipText" to
     ///            the key.

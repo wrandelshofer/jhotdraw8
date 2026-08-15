@@ -17,8 +17,8 @@ public class IntArrayEnumerator extends AbstractIntEnumerator {
     /// array in the specified range.
     ///
     /// @param a    the array
-    /// @param from the start index of the range (inclusive)
-    /// @param to   the end index of the range (exclusive)
+    /// @param from the start offset of the range (inclusive)
+    /// @param to   the end offset of the range (exclusive)
     public IntArrayEnumerator(int[] a, int from, int to) {
         super(to - from, ORDERED | NONNULL | SIZED | SUBSIZED);
         limit = to;

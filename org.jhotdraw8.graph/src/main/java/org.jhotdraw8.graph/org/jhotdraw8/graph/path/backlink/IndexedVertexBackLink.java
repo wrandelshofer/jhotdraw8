@@ -18,7 +18,7 @@ public class IndexedVertexBackLink extends AbstractBackLink<IndexedVertexBackLin
 
     /// Creates a new instance.
     ///
-    /// @param vertex the vertex index
+    /// @param vertex the vertex offset
     /// @param parent the parent back link
     public IndexedVertexBackLink(int vertex, @Nullable IndexedVertexBackLink parent) {
         super(parent);

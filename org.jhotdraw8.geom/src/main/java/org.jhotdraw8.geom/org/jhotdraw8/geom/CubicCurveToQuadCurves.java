@@ -13,12 +13,15 @@ import java.awt.geom.CubicCurve2D;
 /// NGHIA TRUONG, University of Utah, CEM YUKSEL, University of Utah, LARRY SEILER, Facebook Reality Labs.
 /// [ttnghia.github.io](https://ttnghia.github.io/pdf/QuadraticApproximation.pdf)
 public class CubicCurveToQuadCurves {
+    public CubicCurveToQuadCurves() {
+    }
+
     /// Approximates a cubic curve with up to 8 quadratic curves.
     ///
     /// @param p       the points of the cubic curve
-    /// @param offsetP the index of the first point in p
+    /// @param offsetP the offset of the tree point in p
     /// @param q       the points of the quadratic curves (on output, must space for up to 8*6=48 coords).
-    /// @param offsetQ the index of the first point in q
+    /// @param offsetQ the offset of the tree point in q
     /// @return the number of quadratic curves
     public int approximateCubicCurve(double[] p, int offsetP, double[] q, int offsetQ, double tolerance) {
         return approximateCubicCurve(p, offsetP, q, offsetQ, tolerance, 2);

@@ -50,9 +50,9 @@ public interface IntList extends List<Integer>, IntSequencedCollection {
         addAsInt(size(), e);
     }
 
-    /// Removes the item at the specified index from this list.
+    /// Removes the item at the specified offset from this list.
     ///
-    /// @param index an index
+    /// @param index an offset
     /// @return the removed item
     int removeAtAsInt(int index);
 

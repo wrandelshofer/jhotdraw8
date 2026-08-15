@@ -113,10 +113,12 @@ import java.util.logging.Logger;
 /// DefaultFigureFactory.
 public class DefaultFigureFactory extends AbstractFigureFactory {
 
+    @SuppressWarnings("this-escape")
     public DefaultFigureFactory() {
         this(new SimpleFigureIdFactory());
     }
 
+    @SuppressWarnings("this-escape")
     public DefaultFigureFactory(IdFactory idFactory) {
         super(idFactory);
 

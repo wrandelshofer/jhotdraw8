@@ -30,26 +30,26 @@ import java.util.Map;
 public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGraph {
     /// Returns the data of the specified arrow.
     ///
-    /// @param index index of arrow
+    /// @param index offset of arrow
     /// @return arrow data
     A getArrow(int index);
 
     /// Returns the data of the specified vertex.
     ///
-    /// @param index index of vertex
+    /// @param index offset of vertex
     /// @return vertex data
     V getVertex(int index);
 
-    /// Returns the index of the vertex.
+    /// Returns the offset of the vertex.
     ///
     /// @param vertex a vertex
-    /// @return index of vertex
+    /// @return offset of vertex
     int getVertexIndex(V vertex);
 
     /// Returns the specified successor (next) arrow of the specified vertex.
     ///
     /// @param v     a vertex
-    /// @param index index of next arrow
+    /// @param index offset of next arrow
     /// @return the specified arrow
     A getNextArrow(int v, int index);
 
@@ -62,8 +62,8 @@ public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGra
      * @return the arrow or null if b is not next of a
      * /
         default A findArrow(int a, int b) {
-        int index = findIndexOfNext(a, b);
-        return index < 0 ? null : getArrow(a, index);
+        int offset = findIndexOfNext(a, b);
+        return offset < 0 ? null : getArrow(a, offset);
     }*/
 
     /// Returns the direct successor vertices of the specified vertex.

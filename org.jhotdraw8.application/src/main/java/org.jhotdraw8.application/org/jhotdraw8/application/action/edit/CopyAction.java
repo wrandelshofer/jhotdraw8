@@ -27,6 +27,7 @@ public class CopyAction extends AbstractSelectionAction {
     /// @param app    the application
     /// @param target The target of the action. Specify empty for the currently
     ///               focused component.
+    @SuppressWarnings("this-escape")
     public CopyAction(Application app, Node target) {
         super(app, target);
         ApplicationLabels.getResources().configureAction(this, ID);

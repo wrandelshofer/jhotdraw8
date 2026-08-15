@@ -111,9 +111,9 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         items[size++] = newItem;
     }
 
-    /// Inserts a new item at the specified index into this list.
+    /// Inserts a new item at the specified offset into this list.
     ///
-    /// @param index   the index
+    /// @param index   the offset
     /// @param newItem the new item
     @Override
     public void addAsInt(int index, int newItem) {
@@ -171,10 +171,10 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
     }
 
     /*
-     * Gets the item at the specified index.
+     * Gets the item at the specified offset.
      *
-     * @param index an index
-     * @return the item at the index
+     * @param offset an offset
+     * @return the item at the offset
      */
     @Override
     public Integer get(int index) {
@@ -189,10 +189,10 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         return items;
     }
 
-    /// Gets the item at the specified index.
+    /// Gets the item at the specified offset.
     ///
-    /// @param index an index
-    /// @return the item at the index
+    /// @param index an offset
+    /// @return the item at the offset
     @Override
     public int getAsInt(int index) {
         Objects.checkIndex(index, size);
@@ -305,9 +305,9 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         return false;
     }
 
-    /// Removes the item at the specified index from this list.
+    /// Removes the item at the specified offset from this list.
     ///
-    /// @param index an index
+    /// @param index an offset
     /// @return the removed item
     @Override
     public int removeAtAsInt(int index) {
@@ -359,9 +359,9 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         );
     }
 
-    /// Replaces the item at the specified index.
+    /// Replaces the item at the specified offset.
     ///
-    /// @param index   an index
+    /// @param index   an offset
     /// @param newItem the new item
     /// @return the old item
     @Override
@@ -372,9 +372,9 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         return removedItem;
     }
 
-    /// Replaces the item at the specified index.
+    /// Replaces the item at the specified offset.
     ///
-    /// @param index   an index
+    /// @param index   an offset
     /// @param newItem the new item
     /// @return the old item
     public int setAsInt(int index, int newItem) {

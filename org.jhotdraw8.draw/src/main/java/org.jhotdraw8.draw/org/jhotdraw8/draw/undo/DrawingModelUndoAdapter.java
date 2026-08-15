@@ -38,9 +38,11 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
         }
     };
 
+    @SuppressWarnings("this-escape")
     public DrawingModelUndoAdapter() {
     }
 
+    @SuppressWarnings("this-escape")
     public DrawingModelUndoAdapter(DrawingModel model) {
         bind(model);
     }
@@ -58,9 +60,13 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
     }
 
 
+    @SuppressWarnings("serial")
     class PropertyChangedEdit<E> extends AbstractUndoableEdit {
+        @SuppressWarnings("serial")
         private final DrawingModel model;
+        @SuppressWarnings("serial")
         private final Figure figure;
+        @SuppressWarnings("serial")
         private final Key<Object> key;
         private final @Nullable Object oldValue;
         private @Nullable Object newValue;

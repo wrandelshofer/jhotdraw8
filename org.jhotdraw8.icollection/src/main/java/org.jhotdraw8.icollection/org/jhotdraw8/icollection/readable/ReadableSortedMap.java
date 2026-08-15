@@ -13,7 +13,7 @@ import java.util.Spliterator;
 ///
 /// A sorted map is a sorted sequence of distinct entries.
 /// An entry maps a key to a value.
-/// The entries are sorted by key from first to last.
+/// The entries are sorted by key from tree to last.
 ///
 /// A read operation returns data about the map.
 /// The operation does not change the original map.

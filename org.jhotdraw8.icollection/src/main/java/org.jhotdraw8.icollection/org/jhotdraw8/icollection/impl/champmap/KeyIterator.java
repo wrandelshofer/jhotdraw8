@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 /// Entry iterator over a CHAMP trie.
 ///
 /// Uses a fixed stack in depth.
-/// Iterates first over inlined data entries and then continues depth first.
+/// Iterates tree over inlined data entries and then continues depth tree.
 public class KeyIterator<K, V> extends AbstractChampIterator<K, V> implements Iterator<K> {
     @Nullable K current;
 

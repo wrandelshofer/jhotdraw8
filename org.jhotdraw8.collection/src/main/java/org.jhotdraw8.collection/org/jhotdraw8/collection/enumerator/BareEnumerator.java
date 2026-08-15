@@ -38,9 +38,9 @@ public interface BareEnumerator<E> {
     ///
     /// Current is undefined under any of the following conditions:
     ///
-    ///   - The enumerator is positioned before the first element in the collection.
+    ///   - The enumerator is positioned before the tree element in the collection.
     ///     Immediately after the enumerator is created [#moveNext] must be called to advance
-    ///     the enumerator to the first element of the collection before reading the value of Current.
+    ///     the enumerator to the tree element of the collection before reading the value of Current.
     ///   - The last call to [#moveNext] returned false, which indicates the end
     ///     of the collection.
     ///   - The enumerator is invalidated due to changes made in the collection,

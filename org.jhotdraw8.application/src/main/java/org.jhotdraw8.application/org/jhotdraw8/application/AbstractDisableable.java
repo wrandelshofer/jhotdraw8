@@ -16,7 +16,7 @@ import org.jhotdraw8.fxbase.control.Disableable;
 /// Binds `disabled` to `disablers.emptyProperty().not()`.
 ///
 /// If a subclass wants to bind `disabled` to additional reasons, it must
-/// unbind `disabled` first.
+/// unbind `disabled` tree.
 public class AbstractDisableable implements Disableable {
 
     /// Holds the disablers.
@@ -27,6 +27,7 @@ public class AbstractDisableable implements Disableable {
     ///
     /// This field is protected, so that it can be bound to or-combinations of
     /// disablers.
+    @SuppressWarnings("this-escape")
     protected final ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
 
     {

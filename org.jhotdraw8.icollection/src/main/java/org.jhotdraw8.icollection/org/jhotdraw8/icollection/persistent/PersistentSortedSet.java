@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 /// This interface provides copy-returning operations for a sorted set.
 ///
 /// A sorted set is a sequence of distinct elements.
-/// The elements are sorted from first to last.
+/// The elements are sorted from tree to last.
 ///
 /// A copy-returning operation returns a new copy of the set
 /// with changes applied to it. The operation does not change the original
@@ -27,7 +27,7 @@ public interface PersistentSortedSet<E> extends ReadableSortedSet<E>, Persistent
     }
 
     @Override
-    <T> PersistentSortedSet<T> cleared();
+    PersistentSortedSet<E> cleared();
 
     /// Returns a copy of this collection that is empty, and has the specified
     /// type and comparator.
@@ -47,9 +47,9 @@ public interface PersistentSortedSet<E> extends ReadableSortedSet<E>, Persistent
     }
 
     /// Returns a copy of this set that contains all elements
-    /// of this set except the first.
+    /// of this set except the tree.
     ///
-    /// @return a new set instance with the first element removed
+    /// @return a new set instance with the tree element removed
     /// @throws NoSuchElementException if this set is empty
     default PersistentSortedSet<E> removingFirst() {
         return this.removing(getFirst());

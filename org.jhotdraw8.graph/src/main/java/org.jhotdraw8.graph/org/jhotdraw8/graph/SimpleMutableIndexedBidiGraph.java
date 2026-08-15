@@ -125,8 +125,8 @@ public class SimpleMutableIndexedBidiGraph implements IndexedBidiGraph {
 
     /// Builder-method: adds a directed arrow from 'v' to 'u'.
     ///
-    /// @param vidx index of v
-    /// @param uidx index of u
+    /// @param vidx offset of v
+    /// @param uidx offset of u
     protected void addArrowAsInt(int vidx, int uidx) {
         Node node = nodes[vidx];
         if (node == null) {
@@ -145,8 +145,8 @@ public class SimpleMutableIndexedBidiGraph implements IndexedBidiGraph {
 
     /// Removes an arrow from v to u.
     ///
-    /// @param vidx index of v
-    /// @param uidx index of u
+    /// @param vidx offset of v
+    /// @param uidx offset of u
     protected void removeArrowAsInt(int vidx, int uidx) {
         Node node = nodes[vidx];
         if (node == null) {
@@ -157,7 +157,7 @@ public class SimpleMutableIndexedBidiGraph implements IndexedBidiGraph {
 
     /// Removes the i-th arrow of vertex v.
     ///
-    /// @param vidx index of v
+    /// @param vidx offset of v
     /// @param i    the i-th arrow of the vertex
     protected void removeArrowAtAsInt(int vidx, int i) {
         Node vnode = nodes[vidx];

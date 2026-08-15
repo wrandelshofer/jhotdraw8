@@ -6,7 +6,8 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.facade.ReadableListFacade;
-import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTree;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableList;
@@ -18,18 +19,14 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Spliterator;
-import java.util.stream.Stream;
+import java.util.Spliterators;
 
-/// Implements the [PersistentList] interface using a bit-mapped trie
-/// (Vector).
-///
-/// The code has been derived from Vavr Vector.java.
+/// Implements the [PersistentList] interface using a finger tree.
 ///
 /// Features:
 ///
@@ -37,42 +34,39 @@ import java.util.stream.Stream;
 ///   - allows null elements
 ///   - is persistent
 ///   - is thread-safe
-///   - iterates in the order of the list
-///
 ///
 /// Performance characteristics:
 ///
-///   - addLast: O(log₃₂ N)
+///   - addFirst, addLast: O(log₃₂ N)
 ///   - set: O(log₃₂ N)
 ///   - removeAt: O(N)
 ///   - removeFirst,removeLast: O(log₃₂ N)
 ///   - contains: O(N)
 ///   - toMutable: O(1)
 ///   - clone: O(1)
-///   - iterator creation: O(log₃₂ N)
+///   - iterator creation: O(1)
 ///   - iterator.next: O(1)
-///   - getFirst, getLast: O(log₃₂ N)
+///   - getFirst, getLast: O(1)
 ///   - reversed: O(N)
-///
 ///
 /// References:
 ///
-/// For a similar design, see 'Vector.java' in vavr. The internal data structure of
-/// this class is licensed from vavr.
-///
-/// [vavr Vector.java](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Vector.java)
-/// [vavr MIT-License](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE)
+/// This code has been derived from
+/// [Scala 3, Vector.scala](https://github.com/scala/scala3/blob/18df09c05fa48fbb5bf5cd4b3728e9b7a0b3f6db/library/src/scala/collection/immutable/Vector.scala),
+/// EPFL and Lightbend, Inc. dba Akka,
+/// [Apache License 2.0](https://github.com/scala/scala3/blob/18df09c05fa48fbb5bf5cd4b3728e9b7a0b3f6db/LICENSE)
 ///
 /// @param <E> the element type
 public class PersistentVectorList<E> implements PersistentList<E>, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
     private static final PersistentVectorList<?> EMPTY = new PersistentVectorList<>();
-    final transient BitMappedTrie<E> root;
+    @SuppressWarnings("TransientFieldNotInitialized")
+    final transient FingerTree<E> root;
 
     /// Constructs a new empty list.
     protected PersistentVectorList() {
-        this.root = BitMappedTrie.empty();
+        this.root = FingerTreeAPI.of();
     }
 
     /// Constructs a new list that contains all the elements of
@@ -82,25 +76,22 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
     @SuppressWarnings("unchecked")
     protected PersistentVectorList(@Nullable Iterable<? extends E> iterable) {
         if (iterable == null) {
-            this.root = BitMappedTrie.empty();
+            this.root = FingerTreeAPI.of();
         } else if (iterable instanceof Collection<?> c && c.isEmpty()
                 || iterable instanceof ReadableCollection<?> rc && rc.isEmpty()) {
-            this.root = BitMappedTrie.empty();
+            this.root = FingerTreeAPI.of();
         } else if (iterable instanceof PersistentVectorList<? extends E> that) {
-            this.root = (BitMappedTrie<E>) that.root;
+            this.root = (FingerTree<E>) that.root;
         } else if (iterable instanceof MutableVectorList<? extends E> mc) {
             PersistentVectorList<? extends E> that = mc.toPersistent();
-            this.root = (BitMappedTrie<E>) that.root;
-        } else if (iterable instanceof Collection<?> c) {
-            this.root = BitMappedTrie.ofAll(c.toArray());
+            this.root = (FingerTree<E>) that.root;
         } else {
-            BitMappedTrie<E> root = BitMappedTrie.<E>empty().appendAll(iterable);
-            this.root = root.length() == 0 ? BitMappedTrie.empty() : root;
+            this.root = FingerTreeAPI.copyOf(iterable);
         }
     }
 
 
-    PersistentVectorList(BitMappedTrie<E> trie) {
+    PersistentVectorList(FingerTree<E> trie) {
         this.root = trie;
     }
 
@@ -124,8 +115,7 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
         return new PersistentVectorList<>(privateData);
     }
 
-    @SuppressWarnings("unchecked")
-    private PersistentVectorList<E> newInstance(BitMappedTrie<E> trie) {
+    private PersistentVectorList<E> newInstance(FingerTree<E> trie) {
         return newInstance(new PrivateData(trie));
     }
 
@@ -137,100 +127,59 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
     @SafeVarargs
     @SuppressWarnings("varargs")
     public static <T> PersistentVectorList<T> of(T... t) {
-        return new PersistentVectorList<>(BitMappedTrie.ofAll(t));
+        return new PersistentVectorListBuilder<T>().addArray(t).build();
 
-    }
-
-    public static <T> PersistentVectorList<T> ofIterator(Iterator<T> iterator) {
-        return PersistentVectorList.<T>of().addingAll(() -> iterator);
-    }
-
-    public static <T> PersistentVectorList<T> ofStream(Stream<T> stream) {
-        return PersistentVectorList.<T>of().addingAll(stream::iterator);
     }
 
     @SuppressWarnings("unchecked")
     public static <T> PersistentVectorList<T> copyOf(Iterable<? extends T> iterable) {
-        Objects.requireNonNull(iterable, "iterable is null");
-        if (iterable instanceof Collection<?> c && c.isEmpty()
-                || iterable instanceof ReadableCollection<?> rc && rc.isEmpty()) {
-            return of();
-        }
-        if (iterable instanceof PersistentVectorList) {
-            return (PersistentVectorList<T>) iterable;
-        }
-        if (iterable instanceof MutableVectorList<?> mc) {
-            return (PersistentVectorList<T>) mc.toPersistent();
-        }
-        if (iterable instanceof Collection<?> c) {
-            return new PersistentVectorList<>(BitMappedTrie.ofAll(c.toArray()));
-        }
-        BitMappedTrie<T> root = BitMappedTrie.<T>empty().appendAll(iterable);
-        return root.length() == 0 ? of() : new PersistentVectorList<>(root);
+        return new PersistentVectorListBuilder<T>().addAll(iterable).build();
     }
 
     @Override
-    public <T> PersistentVectorList<T> cleared() {
+    public PersistentVectorList<E> cleared() {
         return of();
     }
 
     @Override
     public PersistentVectorList<E> adding(E element) {
-        return newInstance(root.append(element));
+        return newInstance(FingerTreeAPI.addLast(root, element));
     }
 
 
     @Override
     public PersistentVectorList<E> addingAt(int index, E element) {
-        if (index == 0) {
-            return newInstance(root.prepend(element));
-        }
-        return index == size() ? this.adding(element) : addingAllAt(index, Collections.singleton(element));
+        return newInstance(FingerTreeAPI.addAt(root, index, element));
     }
 
     @Override
     public PersistentVectorList<E> addingAll(Iterable<? extends E> c) {
-        Objects.requireNonNull(c, "iterable is null");
-        if (isEmpty()) {
-            return copyOf(c);
+        if (c instanceof PersistentVectorList<? extends E> p) {
+            FingerTree<E> newRoot = FingerTreeAPI.addAll(root, p.root);
+            return newRoot == root ? this : newInstance(newRoot);
         }
-        int cSize = c instanceof Collection<?> cc ? cc.size() :
-                c instanceof ReadableCollection<?> rcc ? rcc.size() : -1;
-        if (cSize == 0) {
-            return this;
-        }
-        if (cSize < 0) {
-            BitMappedTrie<E> newRoot = this.root;
-            int newSize = size();
-            for (E e : c) {
-                newRoot = newRoot.append(e);
-                newSize++;
-            }
-            return newInstance(newRoot);
-        }
-        return newInstance(root.appendAll(c));
+        FingerTree<E> newRoot = FingerTreeAPI.addAll(root, c);
+        return newRoot == root ? this : newInstance(newRoot);
     }
 
     @Override
     public PersistentVectorList<E> addingFirst(@Nullable E element) {
-        return addingAt(0, element);
+        return newInstance(FingerTreeAPI.addFirst(element, root));
     }
 
     @Override
     public PersistentVectorList<E> addingLast(@Nullable E element) {
-        return newInstance(root.append(element));
+        return newInstance(FingerTreeAPI.addLast(root, element));
     }
 
     @Override
     public PersistentVectorList<E> addingAllAt(int index, Iterable<? extends E> c) {
-        Objects.requireNonNull(c, "c is null");
-        int size = size();
-        if (index >= 0 && index <= size) {
-            var newTrie = root.take(index).appendAll(c).append(root.iterator(index, size), size - index);
-            return newInstance(newTrie);
-        } else {
-            throw new IndexOutOfBoundsException("addAll(" + index + ", c) on Vector of size " + size);
+        if (c instanceof PersistentVectorList<? extends E> p) {
+            FingerTree<E> newRoot = FingerTreeAPI.addAllAt(root, index, p.root);
+            return newRoot == root ? this : newInstance(newRoot);
         }
+        FingerTree<E> newRoot = FingerTreeAPI.addAllAt(root, index, c);
+        return newRoot == root ? this : newInstance(newRoot);
     }
 
     @Override
@@ -242,7 +191,7 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
     }
 
     public PersistentVectorList<E> reversed() {
-        return size() < 2 ? this : PersistentVectorList.copyOf(readableReversed());
+        return size() < 2 ? this : new PersistentVectorListBuilder<E>().addAll(readableReversed()).build();
     }
 
     @Override
@@ -269,111 +218,67 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
     @SuppressWarnings("unchecked")
     @Override
     public PersistentVectorList<E> retainingAll(Iterable<?> c) {
-        if (isEmpty()) {
-            return this;
-        }
-        Collection<E> set;
-        if (c instanceof Collection<?> cc) {
-            set = (Collection<E>) cc;
-        } else if (c instanceof ReadableCollection<?> rc) {
-            set = (Collection<E>) rc.asCollection();
+        FingerTree<E> newRoot;
+        if (c instanceof ReadableCollection<?> cc) {
+            newRoot = FingerTreeAPI.removeIf(root, e -> !cc.contains(e));
+        } else if (c instanceof Collection<?> cc) {
+            newRoot = FingerTreeAPI.removeIf(root, e -> !cc.contains(e));
         } else {
-            set = new HashSet<>();
+            var set = new HashSet<E>();
             c.forEach(e -> set.add((E) e));
+            newRoot = FingerTreeAPI.removeIf(root, e -> !set.contains(e));
         }
-        if (set.isEmpty()) {
-            return of();
-        }
-        var newRoot = root.filter(set::contains);
         return newRoot == root ? this : newInstance(newRoot);
     }
 
     @Override
     public PersistentVectorList<E> removingRange(int fromIndex, int toIndex) {
-        Objects.checkIndex(fromIndex, toIndex + 1);
-        int size = size();
-        Objects.checkIndex(toIndex, size + 1);
-        if (fromIndex == 0 && toIndex == size) {
-            return this.cleared();
-        }
-        if (fromIndex == 0) {
-            var end = root.drop(toIndex);
-            return newInstance(end);
-        }
-        if (toIndex == size) {
-            var begin = root.take(fromIndex);
-            return newInstance(begin);
-        }
-        var newTrie = root.take(fromIndex).append(root.iterator(toIndex, size), size - toIndex);
-        return newInstance(newTrie);
-
-        // The following code does not work as expected, because prepend inserts
-        // elements in reverse sequence.
-        /*
-        return newInstance(begin.length > end.length
-                ? begin.append(end.iterator(), end.length)
-                : end.prepend(begin.iterator(), begin.length),
-                size - (toIndex - fromIndex));
-         */
+        if (fromIndex == toIndex) return this;
+        return newInstance(FingerTreeAPI.removeRange(root, fromIndex, toIndex));
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public PersistentVectorList<E> removingAll(Iterable<?> c) {
-        if (isEmpty()) {
-            return this;
-        }
-        Collection<E> set;
-        if (c instanceof Collection<?> cc) {
-            set = (Collection<E>) cc;
-        } else if (c instanceof ReadableCollection<?> rc) {
-            set = (Collection<E>) rc.asCollection();
+        FingerTree<E> newRoot;
+        if (c instanceof ReadableCollection<?> cc) {
+            newRoot = FingerTreeAPI.removeIf(root, cc::contains);
+        } else if (c instanceof Collection<?> cc) {
+            newRoot = FingerTreeAPI.removeIf(root, cc::contains);
         } else {
-            set = new HashSet<>();
+            var set = new HashSet<E>();
             c.forEach(e -> set.add((E) e));
+            newRoot = FingerTreeAPI.removeIf(root, set::contains);
         }
-        if (set.isEmpty()) {
-            return of();
-        }
-        var newRoot = root.filter(o -> !set.contains(o));
         return newRoot == root ? this : newInstance(newRoot);
     }
 
 
     @Override
-    public PersistentVectorList<E> replacingAt(int index, E element) {
-        BitMappedTrie<E> newRoot = root.update(index, element);
+    public PersistentVectorList<E> settingAt(int index, E element) {
+        FingerTree<E> newRoot = FingerTreeAPI.setAt(root, index, element).tree();
         return newRoot == this.root ? this : newInstance(newRoot);
     }
 
     @Override
     public E get(int index) {
-        Objects.checkIndex(index, size());
-        return root.get(index);
+        return FingerTreeAPI.get(root, index);
     }
 
     @Override
     public PersistentVectorList<E> readableSubList(int fromIndex, int toIndex) {
-        Objects.checkIndex(fromIndex, toIndex + 1);
-        Objects.checkIndex(toIndex, size() + 1);
-        if (toIndex - fromIndex <= 1) {
-            return this.cleared();
-        }
-        if (fromIndex == 0 && toIndex == size()) {
-            return this;
-        }
-        BitMappedTrie<E> newRoot = this.root.take(toIndex).drop(fromIndex);
+        FingerTree<E> newRoot = FingerTreeAPI.slice(root, fromIndex, toIndex);
         return newRoot == this.root ? this : newInstance(newRoot);
     }
 
     @Override
     public int size() {
-        return root.length;
+        return root.size();
     }
 
     public int indexOf(Object o, int fromIndex) {
         if (fromIndex < size()) {
-            for (Iterator<E> i = root.iterator(fromIndex, size()); i.hasNext(); fromIndex++) {
+            for (Iterator<E> i = FingerTreeAPI.iterator(root, fromIndex, size()); i.hasNext(); fromIndex++) {
                 E e = i.next();
                 if (Objects.equals(o, e)) {
                     return fromIndex;
@@ -410,7 +315,7 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
 
     @Override
     public Iterator<E> iterator() {
-        return root.iterator(0, size());
+        return FingerTreeAPI.iterator(root);
     }
 
     @Override
@@ -420,7 +325,7 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
 
     @Override
     public Spliterator<E> spliterator() {
-        return root.spliterator(0, size(), Spliterator.SIZED | Spliterator.ORDERED | Spliterator.SUBSIZED);
+        return Spliterators.spliterator(FingerTreeAPI.iterator(root), size(), Spliterator.ORDERED);
     }
 
     @Override
@@ -450,9 +355,7 @@ public class PersistentVectorList<E> implements PersistentList<E>, Serializable 
         @Serial
         @Override
         protected Object readResolve() {
-            return PersistentVectorList.of().addingAll(deserializedElements);
+            return new PersistentVectorListBuilder<>().addAll(deserializedElements);
         }
     }
-
-
 }

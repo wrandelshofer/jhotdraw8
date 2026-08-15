@@ -6,9 +6,9 @@ package org.jhotdraw8.geom;
 
 /// Axis aligned bounding box (AABB).
 ///
-/// @param minX the minimal x value
+/// @param minX the minimal element value
 /// @param minY the minimal y value
-/// @param maxX the maximal x value
+/// @param maxX the maximal element value
 /// @param maxY the maximal y value
 public record AABB(double minX, double minY, double maxX, double maxY) {
 

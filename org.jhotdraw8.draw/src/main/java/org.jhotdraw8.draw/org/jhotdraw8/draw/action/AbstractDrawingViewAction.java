@@ -31,6 +31,7 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
     /// of the specified editor.
     ///
     /// @param editor the drawing editor
+    @SuppressWarnings("this-escape")
     public AbstractDrawingViewAction(DrawingEditor editor) {
         this.editor = editor;
 

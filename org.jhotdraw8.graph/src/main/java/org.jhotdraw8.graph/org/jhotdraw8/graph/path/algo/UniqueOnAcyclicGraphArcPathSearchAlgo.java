@@ -20,7 +20,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /// Searches a globally unique vertex path from a set of start vertices to a
-/// set of goal vertices using a breadth-first search algorithm on a directed
+/// set of goal vertices using a breadth-tree search algorithm on a directed
 /// acyclic graph.
 ///
 /// Uniqueness is global up to (inclusive) the specified maximal depth.

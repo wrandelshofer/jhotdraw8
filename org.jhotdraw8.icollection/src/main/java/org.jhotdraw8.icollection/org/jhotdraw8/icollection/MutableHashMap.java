@@ -6,7 +6,6 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.facade.SetFacade;
-import org.jhotdraw8.icollection.impl.champmap.AbstractMutableChampMap;
 import org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champmap.ChangeEvent;
 import org.jhotdraw8.icollection.impl.champmap.EntryIterator;
@@ -80,6 +79,7 @@ public class MutableHashMap<K, V> extends AbstractMutableChampMap<K, V> {
     /// @param m a map
     @SuppressWarnings("this-escape")
     public MutableHashMap(Map<? extends K, ? extends V> m) {
+        // FIXME Use Builder!
         if (m instanceof MutableHashMap) {
             @SuppressWarnings("unchecked")
             MutableHashMap<K, V> that = (MutableHashMap<K, V>) m;

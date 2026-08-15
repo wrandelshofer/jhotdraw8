@@ -25,6 +25,7 @@ public class AlignTopAction extends AbstractDrawingViewAction {
     /// Creates a new instance.
     ///
     /// @param editor the drawing editor
+    @SuppressWarnings("this-escape")
     public AlignTopAction(DrawingEditor editor) {
         super(editor);
         Resources labels

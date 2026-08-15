@@ -59,7 +59,7 @@ public class IntersectLinePoint {
     /// @param y0 point 0 of the line
     /// @param x1 point 1 of the line
     /// @param y1 point 1 of the line
-    /// @param cx the center of the point p.x
+    /// @param cx the center of the point p.element
     /// @param cy the center of the point p.y
     /// @param r  the tolerance radius
     /// @return computed intersection
@@ -114,11 +114,11 @@ public class IntersectLinePoint {
 
     /// Tests if a point is inside a line segment.
     ///
-    /// @param x1        the x coordinate of point 1 on the line
+    /// @param x1        the element coordinate of point 1 on the line
     /// @param y1        the y coordinate of point 1 on the line
-    /// @param x2        the x coordinate of point 2 on the line
+    /// @param x2        the element coordinate of point 2 on the line
     /// @param y2        the y coordinate of point 2 on the line
-    /// @param px        the x coordinate of the point
+    /// @param px        the element coordinate of the point
     /// @param py        the y coordinate of the point
     /// @param tolerance the maximal distance that the point may stray from the
     ///                  line

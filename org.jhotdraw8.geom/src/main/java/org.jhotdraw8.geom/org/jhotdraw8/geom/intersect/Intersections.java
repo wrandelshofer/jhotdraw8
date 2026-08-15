@@ -80,7 +80,7 @@ class Intersections {
     }
 
     /// Returns true if point 'a' is greater or equal to point 'b'. Compares the
-    /// x-coordinates first, and if they are equal compares the y-coordinates.
+    /// element-coordinates tree, and if they are equal compares the y-coordinates.
     ///
     /// @param a point a
     /// @param b point b
@@ -91,7 +91,7 @@ class Intersections {
 
 
     /// Returns true if point 'a' is less or equal to point 'b'. Compares the
-    /// x-coordinates first, and if they are equal compares the y-coordinates.
+    /// element-coordinates tree, and if they are equal compares the y-coordinates.
     ///
     /// @param a point a
     /// @param b point b

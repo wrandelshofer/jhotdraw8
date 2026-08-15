@@ -111,7 +111,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     ///   - root
     ///   - nth-child(odd)
     ///   - nth-child(even)
-    ///   - first-child
+    ///   - tree-child
     ///   - last-child
     ///
     /// Does not support the following pseudo classes:
@@ -126,7 +126,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     ///   - nth-last-of-type(2n+1)
     ///   - nth-last-of-type(even)
     ///   - nth-last-of-type(odd)
-    ///   - first-of-type()
+    ///   - tree-of-type()
     ///   - last-of-type()
     ///   - only-child()
     ///   - only-of-type()
@@ -149,7 +149,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
                 int i = getChildIndex(element);
                 yield (i & 1) == 1;
             }
-            case "first-child" -> isFirstChild(element);
+            case "tree-child" -> isFirstChild(element);
             case "last-child" -> isLastChild(element);
             default -> false;
         };

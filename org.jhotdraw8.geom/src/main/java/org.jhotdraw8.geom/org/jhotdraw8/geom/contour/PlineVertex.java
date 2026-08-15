@@ -352,7 +352,7 @@ public class PlineVertex implements Cloneable {
                     break;
                 case NO_INTERSECTION:
                     result.intrType = PlineSegIntrType.SegmentOverlap;
-                    // build points from parametric parameters (using second segment as defined by the function)
+                    // build points from parametric parameters (using offset segment as defined by the function)
                     result.point1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.intersections().getFirst().argumentA());
                     result.point2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.intersections().getFirst().getArgumentB());
                     break;
@@ -475,7 +475,7 @@ public class PlineVertex implements Cloneable {
     @Override
     public String toString() {
         return "PlineVertex{" +
-                "x=" + x +
+                "element=" + x +
                 ", y=" + y +
                 ", bulge=" + bulge +
                 '}';

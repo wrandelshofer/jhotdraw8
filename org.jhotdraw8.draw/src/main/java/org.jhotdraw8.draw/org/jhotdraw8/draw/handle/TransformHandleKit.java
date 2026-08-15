@@ -233,7 +233,7 @@ public class TransformHandleKit {
             } else {
                 int last = oldTransforms.size() - 1;
                 Transform concat = FXTransforms.concat(oldTransforms.get(last), transform);
-                newTransforms = concat.isIdentity() ? oldTransforms.removingLast() : oldTransforms.replacingAt(last, concat);
+                newTransforms = concat.isIdentity() ? oldTransforms.removingLast() : oldTransforms.settingAt(last, concat);
             }
             model.set(owner, TRANSFORMS, newTransforms);
         }

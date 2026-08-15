@@ -44,10 +44,12 @@ import java.util.function.BiFunction;
 /// like `LineConnectionFigure`.
 public class SimpleDrawingModel extends AbstractDrawingModel {
 
+    @SuppressWarnings("this-escape")
     public SimpleDrawingModel() {
         this.listenOnDrawing = true;
     }
 
+    @SuppressWarnings("this-escape")
     public SimpleDrawingModel(boolean listenOnDrawing) {
         this.listenOnDrawing = listenOnDrawing;
     }
@@ -140,10 +142,10 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     private void onPropertyChanged(FigurePropertyChangeEvent event) {
-            fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
-                    event.getKey(), event.getOldValue(),
-                    event.getNewValue(), event.wasAdded(), event.wasRemoved()));
-            fireTreeModelEvent(TreeModelEvent.nodeChanged(this, event.getSource()));
+        fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
+                event.getKey(), event.getOldValue(),
+                event.getNewValue(), event.wasAdded(), event.wasRemoved()));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, event.getSource()));
     }
 
     private void markDirty(Figure figure) {
@@ -378,7 +380,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             final Set<Figure> subtrees = Collections.newSetFromMap(new IdentityHashMap<>(dirties.size() * 2));
             for (Figure f : dirties) {
                 if (subtrees.add(f) && !(f instanceof Layer)) {
-                   f.preorderSpliterator().forEachRemaining(subtrees::add);
+                    f.preorderSpliterator().forEachRemaining(subtrees::add);
                 }
             }
 

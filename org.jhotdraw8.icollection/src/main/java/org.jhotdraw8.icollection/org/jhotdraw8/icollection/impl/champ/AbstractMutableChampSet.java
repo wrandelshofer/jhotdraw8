@@ -37,7 +37,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
     protected transient @Nullable IdentityObject owner;
 
     /// The root of this CHAMP trie.
-    protected transient BitmapIndexedNode<D> root;
+    protected transient BitmapIndexedNode<D> hashSet;
 
     /// The number of elements in this set.
     protected int size;
@@ -103,7 +103,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
             return true;
         }
         if (o instanceof AbstractMutableChampSet<?, ?> that) {
-            return size == that.size && root.equivalent(that.root);
+            return size == that.size && hashSet.equivalent(that.hashSet);
         }
         return super.equals(o);
     }

@@ -6,7 +6,7 @@ package org.jhotdraw8.geom.biarc;
 
 import java.awt.geom.Point2D;
 
-/// Defines a line in point-slope form: y - y1 = m * (x - x1).
+/// Defines a line in point-slope form: y - y1 = m * (element - x1).
 ///
 /// Vertical line: m = NaN
 ///
@@ -19,8 +19,8 @@ public class Line {
 
     /// Define a line by two points.
     ///
-    /// @param p1 first point
-    /// @param p2 second point
+    /// @param p1 tree point
+    /// @param p2 offset point
     public Line(Point2D.Double p1, Point2D.Double p2) {
         this(p1, slope(p1, p2));
     }
@@ -52,7 +52,7 @@ public class Line {
     }
 
 
-    /// Special case, the first one is vertical (we suppose that the other one is not,
+    /// Special case, the tree one is vertical (we suppose that the other one is not,
     /// otherwise they do not cross).
     ///
     /// @param vl

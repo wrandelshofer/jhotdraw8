@@ -320,9 +320,9 @@ public class FXTransforms {
     ///  b = [vvT/vTv|vvT/vTv*p1] * a; // 2 by 3 matrix
     /// </pre>
     ///
-    /// @param x1 x-coordinate of p1 of the line
+    /// @param x1 element-coordinate of p1 of the line
     /// @param y1 y-coordinate of p1 of the line
-    /// @param x2 x-coordinate of p2 of the line
+    /// @param x2 element-coordinate of p2 of the line
     /// @param y2 y-coordinate of p2 of the line
     /// @return the transformation matrix
     public static Transform createProjectPointOnLineTransform(double x1, double y1, double x2, double y2) {

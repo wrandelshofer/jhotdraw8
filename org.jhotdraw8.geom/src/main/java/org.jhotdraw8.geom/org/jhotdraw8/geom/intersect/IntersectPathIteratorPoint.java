@@ -34,7 +34,7 @@ public class IntersectPathIteratorPoint {
     /// </dl>
     ///
     /// @param pit       the path iterator
-    /// @param px        the x-coordinate of the point
+    /// @param px        the element-coordinate of the point
     /// @param py        the y-coordinate of the point
     /// @param tolerance radius around the point which counts as a hit.
     /// @return the intersection

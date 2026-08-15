@@ -38,7 +38,7 @@ public class Point3DCssConverter extends AbstractCssConverter<CssPoint3D> {
     @Override
     public CssPoint3D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y, z;
-        x = SizeCssConverter.parseSize(tt, "x");
+        x = SizeCssConverter.parseSize(tt, "element");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         y = SizeCssConverter.parseSize(tt, "y");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
@@ -78,6 +78,6 @@ public class Point3DCssConverter extends AbstractCssConverter<CssPoint3D> {
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨CssPoint3D⟩: ⟨x⟩ ⟨y⟩ ｜ ⟨x⟩ ⟨y⟩ ⟨z⟩";
+        return "Format of ⟨CssPoint3D⟩: ⟨element⟩ ⟨y⟩ ｜ ⟨element⟩ ⟨y⟩ ⟨z⟩";
     }
 }

@@ -167,13 +167,13 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
 
         moveToRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.withMaskBitsClears(CLOSE_MASK).withMaskBitsSet(MOVE_MASK);
-            finalPath[0] = finalPath[0].replacingAt(nodeIndex, changedNode);
+            finalPath[0] = finalPath[0].settingAt(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, finalPath[0]);
             view.recreateHandles();
         });
         lineToRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.withMaskBitsClears(MOVE_MASK | CLOSE_MASK);
-            finalPath[0] = finalPath[0].replacingAt(nodeIndex, changedNode);
+            finalPath[0] = finalPath[0].settingAt(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, finalPath[0]);
             view.recreateHandles();
         });

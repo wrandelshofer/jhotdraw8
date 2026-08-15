@@ -94,6 +94,7 @@ public abstract class SortedMapSerializationProxy<K, V> implements Serializable 
         }
     }
 
+    @SuppressWarnings("serialization")
     @Serial
     protected abstract Object readResolve();
 }

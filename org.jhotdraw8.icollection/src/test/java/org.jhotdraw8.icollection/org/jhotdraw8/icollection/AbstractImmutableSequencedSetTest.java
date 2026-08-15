@@ -38,7 +38,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRemoveLastWithEmptySetShouldThrowNoSuchElementException(SetData data) throws Exception {
+    public void removeLastWithEmptySetShouldThrowNoSuchElementException(SetData data) throws Exception {
         PersistentSequencedSet<Key> instance = newInstance(data.a());
         instance = instance.removingAll(data.a().asSet());
         assertThrows(NoSuchElementException.class, instance::removingLast);
@@ -53,7 +53,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
         while (!expected.isEmpty()) {
             PersistentSequencedSet<Key> instance2 = instance.removingLast();
             assertNotSame(instance, instance2);
-            expected.remove(expected.size() - 1);
+            expected.removeLast();
             assertEqualSequence(expected, instance2, "removeLast");
             instance = instance2;
         }

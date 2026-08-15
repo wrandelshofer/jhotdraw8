@@ -140,9 +140,9 @@ public class TreeModelEvent<N> extends Event<TreeModel<N>> {
         return node;
     }
 
-    /// If the figure was added or removed, returns the child index.
+    /// If the figure was added or removed, returns the child offset.
     ///
-    /// @return an index. Returns -1 if the figure was neither added or removed.
+    /// @return an offset. Returns -1 if the figure was neither added or removed.
     public int getChildIndex() {
         return childIndex;
     }
@@ -159,7 +159,7 @@ public class TreeModelEvent<N> extends Event<TreeModel<N>> {
         return "TreeModelEvent{"
                 + "node=" + node
                 + ", parent=" + parentOrOldRoot
-                + ", index=" + childIndex + ", eventType="
+                + ", offset=" + childIndex + ", eventType="
                 + eventType + ", source=" + source + '}';
     }
 

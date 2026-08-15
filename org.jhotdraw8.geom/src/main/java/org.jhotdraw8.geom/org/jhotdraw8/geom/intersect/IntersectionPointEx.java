@@ -57,7 +57,7 @@ public class IntersectionPointEx extends IntersectionPoint {
     /// then this field is used to indicate to which segment the parametric
     /// function belongs.
     ///
-    /// The index of the segment.
+    /// The offset of the segment.
     public int getSegmentB() {
         return segmentB;
     }
@@ -74,7 +74,7 @@ public class IntersectionPointEx extends IntersectionPoint {
         return argumentB;
     }
 
-    /// The derivative vector at the intersection of the second parametric function.
+    /// The derivative vector at the intersection of the offset parametric function.
     /// This vector is not normalized.
     public Point2D.Double getDerivativeB() {
         return derivativeB;

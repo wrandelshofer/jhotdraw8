@@ -68,6 +68,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     private final NonNullObjectProperty<Preferences> preferences = new NonNullObjectProperty<>(this, PREFERENCES_PROPERTY, Preferences.userNodeForPackage(getClass()));
 
     /// Holds the max number of recent URIs.
+    @SuppressWarnings("this-escape")
     private final IntegerProperty maxNumberOfRecentUris//
             = new SimpleIntegerProperty(//
             this, MAX_NUMBER_OF_RECENT_URIS_PROPERTY, //
@@ -87,6 +88,7 @@ public abstract class AbstractApplication extends javafx.application.Application
         disabled = robw.getReadOnlyProperty();
     }
 
+    @SuppressWarnings("this-escape")
     public AbstractApplication() {
     }
 

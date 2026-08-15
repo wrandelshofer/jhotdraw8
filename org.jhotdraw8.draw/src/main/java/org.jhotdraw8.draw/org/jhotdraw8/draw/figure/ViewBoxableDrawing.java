@@ -10,15 +10,15 @@ import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 
 public interface ViewBoxableDrawing extends Drawing, Figure {
-    /// Defines the x-coordinate of the view-box.
+    /// Defines the element-coordinate of the view-box.
     ///
     /// FIXME This is currently a mix-up of the width and height of the bounds=(0,0,width,height)
-    /// with x- and y-coordinates of the viewBox=(viewbox-x,viewbox-y,viewbox-width,viewbox-height).
-    CssSizeStyleableKey VIEW_BOX_X = new CssSizeStyleableKey("x", CssSize.ZERO);
+    /// with element- and y-coordinates of the viewBox=(viewbox-element,viewbox-y,viewbox-width,viewbox-height).
+    CssSizeStyleableKey VIEW_BOX_X = new CssSizeStyleableKey("element", CssSize.ZERO);
     /// Defines the y-coordinate of the view-box.
     ///
     /// FIXME This is currently a mix-up of the width and height of the bounds=(0,0,width,height)
-    /// with x- and y-coordinates of the viewBox=(viewbox-x,viewbox-y,viewbox-width,viewbox-height).
+    /// with element- and y-coordinates of the viewBox=(viewbox-element,viewbox-y,viewbox-width,viewbox-height).
     CssSizeStyleableKey VIEW_BOX_Y = new CssSizeStyleableKey("y", CssSize.ZERO);
 
     /// Defines the view-box of the drawing.
@@ -26,7 +26,7 @@ public interface ViewBoxableDrawing extends Drawing, Figure {
     /// See <a href="https://www.w3.org/TR/SVG11/coords.html#ViewBoxAttribute">w3.org</a>.
     ///
     /// FIXME This is currently a mix-up of the width and height of the bounds=(0,0,width,height)
-    /// with x- and y-coordinates of the viewBox=(viewbox-x,viewbox-y,viewbox-width,viewbox-height).
+    /// with element- and y-coordinates of the viewBox=(viewbox-element,viewbox-y,viewbox-width,viewbox-height).
     CssRectangle2DStyleableMapAccessor VIEW_BOX = new CssRectangle2DStyleableMapAccessor("bounds",
             VIEW_BOX_X, VIEW_BOX_Y, WIDTH, HEIGHT);
 }

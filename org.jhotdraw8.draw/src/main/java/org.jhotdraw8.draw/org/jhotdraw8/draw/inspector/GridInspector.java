@@ -66,10 +66,12 @@ public class GridInspector extends AbstractDrawingViewInspector {
     @FXML
     private TextField yField;
 
+    @SuppressWarnings("this-escape")
     public GridInspector() {
         this(GridInspector.class.getResource("GridInspector.fxml"));
     }
 
+    @SuppressWarnings("this-escape")
     public GridInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }

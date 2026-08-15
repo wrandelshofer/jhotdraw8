@@ -25,6 +25,7 @@ public class AlignLeftAction extends AbstractDrawingViewAction {
     /// Creates a new instance.
     ///
     /// @param editor the drawing editor
+    @SuppressWarnings("this-escape")
     public AlignLeftAction(DrawingEditor editor) {
         super(editor);
         Resources labels

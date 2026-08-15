@@ -217,8 +217,8 @@ public class VectorListJmh {
 /*
     @Benchmark
     public Key mGet() {
-        int index = data.nextIndexInA();
-        return listA.get(index);
+        int offset = data.nextIndexInA();
+        return listA.get(offset);
     }
 
     @Benchmark
@@ -234,8 +234,8 @@ public class VectorListJmh {
 
     @Benchmark
     public VectorList<Key> mSet() {
-        int index = data.nextIndexInA();
+        int offset = data.nextIndexInA();
         Key key = data.nextKeyInB();
-        return listA.set(index, key);
+        return listA.set(offset, key);
     }*/
 }

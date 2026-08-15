@@ -48,11 +48,13 @@ public class LineFigure extends AbstractLeafFigure
         this(0, 0, 1, 1);
     }
 
+    @SuppressWarnings("this-escape")
     public LineFigure(double startX, double startY, double endX, double endY) {
         set(START, new CssPoint2D(startX, startY));
         set(END, new CssPoint2D(endX, endY));
     }
 
+    @SuppressWarnings("this-escape")
     public LineFigure(Point2D start, Point2D end) {
         set(START, new CssPoint2D(start));
         set(END, new CssPoint2D(end));

@@ -95,7 +95,7 @@ public interface UnitConverter {
         return 12;
     }
 
-    /// Gets the x-height of the font size.
+    /// Gets the element-height of the font size.
     ///
     /// @return ex
     default double getFontXHeight() {

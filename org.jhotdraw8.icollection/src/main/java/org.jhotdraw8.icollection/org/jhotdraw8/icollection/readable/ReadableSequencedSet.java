@@ -12,7 +12,7 @@ import java.util.SequencedSet;
 /// This interface provides read operations for a sequenced set.
 ///
 /// A sequenced set is a sequence of distinct elements.
-/// The elements are ordered in a sequence from first to last.
+/// The elements are ordered in a sequence from tree to last.
 /// The sequence can be established implicitly, by insertion operations,
 /// or by sequence-altering operations.
 /// (However, this interface only provides read operations).

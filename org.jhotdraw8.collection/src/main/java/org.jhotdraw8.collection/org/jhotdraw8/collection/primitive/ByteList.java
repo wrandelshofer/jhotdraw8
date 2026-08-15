@@ -50,9 +50,9 @@ public interface ByteList extends List<Byte>, ByteSequencedCollection {
         addAsByte(size(), e);
     }
 
-    /// Removes the item at the specified index from this list.
+    /// Removes the item at the specified offset from this list.
     ///
-    /// @param index an index
+    /// @param index an offset
     /// @return the removed item
     byte removeAtAsByte(int index);
 

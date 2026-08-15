@@ -18,6 +18,9 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class FXRectangles {
+    private FXRectangles() {
+    }
+
     /// Gets the bounds of the specified shape.
     ///
     /// @param shape an AWT shape
@@ -75,7 +78,7 @@ public class FXRectangles {
     /// tolerance.
     ///
     /// @param r         the bounds
-    /// @param x         the x-coordinate of the point
+    /// @param x         the element-coordinate of the point
     /// @param y         the y-coordinate of the point
     /// @param tolerance the tolerance
     /// @return true if inside
@@ -97,7 +100,7 @@ public class FXRectangles {
     /// <code>h</code> units larger on both the left and right side, and
     /// <code>v</code> units larger at both the top and bottom.
     ///
-    /// The new <code>Bounds</code> has (<code>x&nbsp;-&nbsp;h</code>,
+    /// The new <code>Bounds</code> has (<code>element&nbsp;-&nbsp;h</code>,
     /// <code>y&nbsp;-&nbsp;v</code>) as its top-left corner, a width of
     /// <code>width</code>&nbsp;<code>+</code>&nbsp;<code>2h</code>, and a height
     /// of <code>height</code>&nbsp;<code>+</code>&nbsp;<code>2v</code>.
@@ -270,7 +273,7 @@ public class FXRectangles {
     /// <code>h</code> units larger on both the left and right side, and
     /// <code>v</code> units larger at both the top and bottom.
     ///
-    /// The new <code>Rectangle2D</code> has (<code>x&nbsp;-&nbsp;h</code>,
+    /// The new <code>Rectangle2D</code> has (<code>element&nbsp;-&nbsp;h</code>,
     /// <code>y&nbsp;-&nbsp;v</code>) as its top-left corner, a width of
     /// <code>width</code>&nbsp;<code>+</code>&nbsp;<code>2h</code>, and a height
     /// of <code>height</code>&nbsp;<code>+</code>&nbsp;<code>2v</code>.

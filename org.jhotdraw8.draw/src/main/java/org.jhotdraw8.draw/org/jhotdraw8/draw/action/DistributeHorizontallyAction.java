@@ -28,6 +28,7 @@ public class DistributeHorizontallyAction extends AbstractDrawingViewAction {
     /// Creates a new instance.
     ///
     /// @param editor the drawing editor
+    @SuppressWarnings("this-escape")
     public DistributeHorizontallyAction(DrawingEditor editor) {
         super(editor);
         Resources labels
@@ -41,7 +42,7 @@ public class DistributeHorizontallyAction extends AbstractDrawingViewAction {
         distributeHorizontally(drawingView, figures);
     }
 
-    /// Distributes the given figure horizontally by their centers on the x-axis.
+    /// Distributes the given figure horizontally by their centers on the element-axis.
     ///
     /// @param view    the drawing view
     /// @param figures the figures to be distributed horizontally
@@ -71,7 +72,7 @@ public class DistributeHorizontallyAction extends AbstractDrawingViewAction {
             minX = Math.min(minX, cx);
         }
 
-        // Sort figures by their centers pn the x-axis
+        // Sort figures by their centers pn the element-axis
         // (Without sorting, we would distribute the list by the sequence
         // they were selected).
         list.sort(Comparator.comparingDouble(Map.Entry::getKey));

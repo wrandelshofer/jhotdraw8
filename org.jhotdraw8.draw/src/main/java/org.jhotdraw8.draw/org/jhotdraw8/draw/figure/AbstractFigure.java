@@ -43,6 +43,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     private Transform cachedLocalToParent;
     private Transform cachedWorldToLocal;
 
+    @SuppressWarnings("this-escape")
     public AbstractFigure() {
     }
 

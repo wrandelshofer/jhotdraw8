@@ -37,6 +37,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractImmutableSetTest {
 
+    public AbstractImmutableSetTest() {
+    }
+
     /// Creates a new empty instance.
     protected abstract <E> PersistentSet<E> newInstance();
 

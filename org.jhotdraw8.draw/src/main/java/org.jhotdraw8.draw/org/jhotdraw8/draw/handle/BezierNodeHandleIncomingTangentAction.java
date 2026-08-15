@@ -16,6 +16,7 @@ import static org.jhotdraw8.geom.shape.BezierNode.IN_OUT_MASK;
 public class BezierNodeHandleIncomingTangentAction extends AbstractBezierNodeHandleAction {
     public static final String ID = "handle.bezierNode.incomingTangent";
 
+    @SuppressWarnings("this-escape")
     public BezierNodeHandleIncomingTangentAction(Figure figure, MapAccessor<BezierPath> nodeListKey, int nodeIndex, DrawingView model) {
         super(ID, figure, nodeListKey, nodeIndex, model);
 
@@ -33,7 +34,7 @@ public class BezierNodeHandleIncomingTangentAction extends AbstractBezierNodeHan
             return;
         }
         BezierNode changedNode = bnode.withMaskBitsClears(IN_OUT_MASK).withMaskBitsSet(IN_MASK);
-        path = path.replacingAt(nodeIndex, changedNode);
+        path = path.settingAt(nodeIndex, changedNode);
         view.getModel().set(owner, pathKey, path);
         view.recreateHandles();
     }

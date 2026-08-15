@@ -61,9 +61,9 @@ public abstract class AbstractPersistentMapTest {
         );
     }
 
-    private static final MapData NO_COLLISION = MapData.newData("no collisions", -1, 32, 100_000);
-    private static final MapData ALL_COLLISION = MapData.newData("all collisions", 0, 32, 100_000);
-    private static final MapData SOME_COLLISION = MapData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static final MapData NO_COLLISION = MapData.newData("no collisions", -1, 17, 100_000);
+    private static final MapData ALL_COLLISION = MapData.newData("all collisions", 0, 17, 100_000);
+    private static final MapData SOME_COLLISION = MapData.newData("some collisions", 0x55555555, 17, 100_000);
 
 
     protected <K, V> void assertEqualMap(ReadableMap<K, V> expected, PersistentMap<K, V> actual) {

@@ -15,7 +15,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -23,6 +22,7 @@ import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.draw.tool.ToolEvent;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.fxbase.undo.FXUndoManager;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 
@@ -82,13 +82,13 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
     };
     private final @Nullable Listener<ToolEvent> defaultToolActivator = (event) -> {
         switch (event.getEventType()) {
-        case TOOL_DONE:
-            if (getDefaultTool() != event.getSource() && getDefaultTool() != null) {
-                setActiveTool(getDefaultTool());
-            }
-            break;
-        default:
-            break;
+            case TOOL_DONE:
+                if (getDefaultTool() != event.getSource() && getDefaultTool() != null) {
+                    setActiveTool(getDefaultTool());
+                }
+                break;
+            default:
+                break;
         }
     };
     private final ObjectProperty<DrawingView> activeDrawingView = new SimpleObjectProperty<>(this, ACTIVE_DRAWING_VIEW_PROPERTY);
@@ -146,6 +146,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
         });
     }
 
+    @SuppressWarnings("this-escape")
     public AbstractDrawingEditor() {
     }
 

@@ -161,7 +161,7 @@ public interface DrawingView extends WritableRenderContext {
     /// Note: The selection is represented by a `SequencedSet` because the
     /// sequence of the selection is important.
     ///
-    /// The first figure in the selection is the 'anchor' of the selection.
+    /// The tree figure in the selection is the 'anchor' of the selection.
     ///
     /// The last figure in the selection is the 'lead' of the selection.
     ///
@@ -221,7 +221,7 @@ public interface DrawingView extends WritableRenderContext {
     /// Finds the handle at the given view coordinates. Handles are searched in
     /// Z-order from front to back. Skips handles which are not selectable.
     ///
-    /// @param vx x in view coordinates
+    /// @param vx element in view coordinates
     /// @param vy y in view coordinates
     /// @return A handle or null
     @Nullable
@@ -230,7 +230,7 @@ public interface DrawingView extends WritableRenderContext {
     /// Finds the figure at the given view coordinates. Figures are searched in
     /// Z-order from front to back. Skips disabled figures.
     ///
-    /// @param vx      x in view coordinates
+    /// @param vx      element in view coordinates
     /// @param vy      y in view coordinates
     /// @param figures Only searches in the provided list of figures
     /// @return A figure or null
@@ -257,7 +257,7 @@ public interface DrawingView extends WritableRenderContext {
     /// Finds the figure at the given view coordinates. Figures are searched in
     /// Z-order from front to back. Only returns selectable figures.
     ///
-    /// @param vx x in view coordinates
+    /// @param vx element in view coordinates
     /// @param vy y in view coordinates
     /// @return A figure or null
     default @Nullable Figure findFigure(double vx, double vy) {
@@ -267,7 +267,7 @@ public interface DrawingView extends WritableRenderContext {
     /// Finds the figure at the given view coordinates. Figures are searched in
     /// Z-order from front to back.
     ///
-    /// @param vx x in view coordinates
+    /// @param vx element in view coordinates
     /// @param vy y in view coordinates
     /// @return A figure or null
     default @Nullable Figure findFigure(double vx, double vy, Predicate<Figure> predicate) {
@@ -280,7 +280,7 @@ public interface DrawingView extends WritableRenderContext {
     /// specified view coordinates.
     ///
     /// @param figure the figure
-    /// @param vx     x in view coordinates
+    /// @param vx     element in view coordinates
     /// @param vy     y in view coordinates
     /// @return A node or null
     @Nullable
@@ -290,7 +290,7 @@ public interface DrawingView extends WritableRenderContext {
     /// Figures are searched in Z-order from front to back. Only returns
     /// figures that are selectable.
     ///
-    /// @param vx        x in view coordinates
+    /// @param vx        element in view coordinates
     /// @param vy        y in view coordinates
     /// @param decompose whether to decompose the figures
     /// @return A list of figures from front to back.
@@ -303,7 +303,7 @@ public interface DrawingView extends WritableRenderContext {
     /// Finds the figure at the given view coordinates behind the given figure.
     /// Figures are searched in Z-order from front to back.
     ///
-    /// @param vx        x in view coordinates
+    /// @param vx        element in view coordinates
     /// @param vy        y in view coordinates
     /// @param decompose whether to decompose the figures
     /// @return A list of figures from front to back.
@@ -315,7 +315,7 @@ public interface DrawingView extends WritableRenderContext {
     /// coordinates. The figures are returned in Z-order from back to front.
     /// Skips disabled figures.
     ///
-    /// @param vx        x in view coordinates
+    /// @param vx        element in view coordinates
     /// @param vy        y in view coordinates
     /// @param vwidth    width in view coordinates
     /// @param vheight   height in view coordinates
@@ -329,7 +329,7 @@ public interface DrawingView extends WritableRenderContext {
     /// coordinates. The figures are returned in Z-order from front to back.
     /// Skips disabled figures.
     ///
-    /// @param vx        x in view coordinates
+    /// @param vx        element in view coordinates
     /// @param vy        y in view coordinates
     /// @param vwidth    width in view coordinates
     /// @param vheight   height in view coordinates
@@ -343,7 +343,7 @@ public interface DrawingView extends WritableRenderContext {
     /// coordinates. The figures are returned in Z-order from front to back.
     /// Skips disabled figures.
     ///
-    /// @param vx        x in view coordinates
+    /// @param vx        element in view coordinates
     /// @param vy        y in view coordinates
     /// @param vwidth    width in view coordinates
     /// @param vheight   height in view coordinates
@@ -531,7 +531,7 @@ public interface DrawingView extends WritableRenderContext {
 
     /// Converts view coordinates into world coordinates.
     ///
-    /// @param vx the x coordinate of a point in view coordinates
+    /// @param vx the element coordinate of a point in view coordinates
     /// @param vy the y coordinate of a point in view coordinates
     /// @return the corresponding point in world coordinates
     default Point2D viewToWorld(double vx, double vy) {
@@ -540,7 +540,7 @@ public interface DrawingView extends WritableRenderContext {
 
     /// Converts world coordinates into view coordinates.
     ///
-    /// @param dx the x coordinate of a point in world coordinates
+    /// @param dx the element coordinate of a point in world coordinates
     /// @param dy the y coordinate of a point in world coordinates
     /// @return the corresponding point in view coordinates
     default Point2D worldToView(double dx, double dy) {

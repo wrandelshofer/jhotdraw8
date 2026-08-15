@@ -62,7 +62,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
             int segment = intersectionPointEx.segmentA();
             BezierNode newNode = new BezierNode(intersectionPointEx.getX(), intersectionPointEx.getY());
             if (segment > 0 && path.get(segment - 1).isClosePath()) {
-                path = path.replacingAt(segment - 1, path.get(segment - 1).withMaskBitsClears(BezierNode.CLOSE_MASK));
+                path = path.settingAt(segment - 1, path.get(segment - 1).withMaskBitsClears(BezierNode.CLOSE_MASK));
                 newNode = newNode.withMaskBitsSet(BezierNode.CLOSE_MASK);
             }
             int inNodeIndex = (path.size() + segment - 1) % path.size();
@@ -96,7 +96,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
                 newNode = newNode.withIn(split[2], split[3]).withMaskBitsSet(BezierNode.IN_MASK);
                 outNode = outNode.withIn(split[6], split[7]);
             }
-            path = path.replacingAt(inNodeIndex, inNode).replacingAt(outNodeIndex, outNode)
+            path = path.settingAt(inNodeIndex, inNode).settingAt(outNodeIndex, outNode)
                     .addingAt(segment, newNode);
 
             CompoundEdit compoundEdit = new CompositeEdit(DrawLabels.getResources().getString("handle.addPoint.text"));

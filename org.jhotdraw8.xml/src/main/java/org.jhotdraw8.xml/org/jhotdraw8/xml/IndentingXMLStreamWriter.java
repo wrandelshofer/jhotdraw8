@@ -83,7 +83,7 @@ import java.util.TreeSet;
 ///
 /// Processing Instructions
 /// [16]  PI             ::=  '&lt;?' PITarget (S (Char* - (Char* '?&gt;' Char*)))? '?&gt;'
-/// [17]  PITarget       ::=  Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
+/// [17]  PITarget       ::=  Name - (('X' | 'element') ('M' | 'm') ('L' | 'l'))
 ///
 /// CDATA Sections
 /// [18]  CDSect         ::=  CDStart CData CDEnd
@@ -178,7 +178,7 @@ import java.util.TreeSet;
 ///
 /// Character Reference
 /// [66]  CharRef        ::=  '&amp;' '#' [0-9]+ ';'
-///                        |  '&amp;' '#' 'x' [0-9a-fA-F]+ ';'
+///                        |  '&amp;' '#' 'element' [0-9a-fA-F]+ ';'
 ///
 /// Entity Reference
 /// [67]  Reference      ::=  EntityRef | CharRef
@@ -237,7 +237,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     public static final String END_CHAR_REF = ";";
     public static final String END_ENTITY_REF = ";";
     public static final String END_PROCESSING_INSTRUCTION = "?>";
-    public static final String START_CHAR_REF = "&#x";
+    public static final String START_CHAR_REF = "&#element";
     public static final String START_ENTITY_REF = "&";
     public static final String START_PROCESSING_INSTRUCTION = "<?";
     private static final String CLOSE_EMPTY_ELEMENT = "/>";
@@ -834,11 +834,11 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
                 continue;
             }
             if (isDoubleQuoted &&
-                ((Character.isWhitespace(ch) && ch != ' ')
-                 || Character.isISOControl(ch)
-                 || index != end - 1
-                    && Character.isSurrogatePair(ch, content.charAt(index + 1))
-                    && Character.isISOControl(Character.toCodePoint(ch, content.charAt(index + 1))))
+                    ((Character.isWhitespace(ch) && ch != ' ')
+                            || Character.isISOControl(ch)
+                            || index != end - 1
+                            && Character.isSurrogatePair(ch, content.charAt(index + 1))
+                            && Character.isISOControl(Character.toCodePoint(ch, content.charAt(index + 1))))
             ) {
                 if (escapeLineBreak || ch != '\n') {
                     writeCharRef(ch);
@@ -855,8 +855,8 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
                     if (isComment) {
                         writeLineBreakAndIndentation();
                         while (index < end - 1
-                               && '\n' != content.charAt(index + 1)
-                               && Character.isWhitespace(content.charAt(index + 1))) {
+                                && '\n' != content.charAt(index + 1)
+                                && Character.isWhitespace(content.charAt(index + 1))) {
                             index++;
                         }
                     } else {

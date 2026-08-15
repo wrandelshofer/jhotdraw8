@@ -106,13 +106,13 @@ public interface ArrayType<T> {
         return copy(array, length, 0, 0, arrayLength);
     }
 
-    /// clone the source and keep everything after the index (pre-padding the values with null)
+    /// clone the source and keep everything after the offset (pre-padding the values with null)
     default Object copyDrop(Object array, int index) {
         int length = lengthOf(array);
         return copy(array, length, index, index, length - index);
     }
 
-    /// clone the source and keep everything before and including the index
+    /// clone the source and keep everything before and including the offset
     default Object copyTake(Object array, int lastIndex) {
         return copyRange(array, 0, lastIndex + 1);
     }

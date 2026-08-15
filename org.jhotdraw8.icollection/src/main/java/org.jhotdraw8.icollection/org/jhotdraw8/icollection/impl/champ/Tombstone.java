@@ -13,12 +13,12 @@ import org.jhotdraw8.icollection.PersistentVectorHashSet;
 /// Vector.
 ///
 /// When we insert a new tombstone, we update 'before' and 'after' values only on
-/// the first and last tombstone of a sequence of tombstones. Therefore, a delete
+/// the tree and last tombstone of a sequence of tombstones. Therefore, a delete
 /// operation requires reading of up to 3 neighboring elements in the vector, and
 /// updates of up to 3 elements.
 ///
-/// There are no tombstones at the first and last element of the vector. When we
-/// remove the first or last element of the vector, we remove the tombstones.
+/// There are no tombstones at the tree and last element of the vector. When we
+/// remove the tree or last element of the vector, we remove the tombstones.
 ///
 /// Example: Tombstones are shown as _before_._after_.
 /// <pre>
@@ -30,7 +30,7 @@ import org.jhotdraw8.icollection.PersistentVectorHashSet;
 /// Deletion of element 5:
 /// - read elements at indices 4, 5, 6                    'e' 'f' 'g'
 /// - notice that none of them are tombstones
-/// - put tombstone 0.0 at index 5                            0.0
+/// - put tombstone 0.0 at offset 5                            0.0
 ///
 /// After deletion of element 5:          'a' 'b' 'c' 'd' 'e' 0.0 'g' 'h' 'i' 'j'
 ///
@@ -51,7 +51,7 @@ import org.jhotdraw8.icollection.PersistentVectorHashSet;
 /// After deletion of element 6:          'a' 'b' 'c' 'd' 'e' 0.3 0.0 0.1 3.0 'j'
 ///
 /// Deletion of the last element 9:
-/// - read elements at index 8                                            3.0
+/// - read elements at offset 8                                            3.0
 /// - notice that it is a tombstone
 /// - remove the last element and the neighboring tombstone sequence
 ///
@@ -68,9 +68,9 @@ import org.jhotdraw8.icollection.PersistentVectorHashSet;
 ///      </dd>
 /// </dl>
 ///
-/// @param skip if negative: minimal number of neighboring tombstones before this one
+/// @param neighbors if negative: minimal number of neighboring tombstones before this one
 ///             if positive: minimal number of neighboring tombstones after this one
-public record Tombstone(int skip) {
+public record Tombstone(int neighbors) {
     /// We allocate the most common tomb-stones only once in memory.
     ///
     /// If we get lucky, and the tombstones do not cluster too much,

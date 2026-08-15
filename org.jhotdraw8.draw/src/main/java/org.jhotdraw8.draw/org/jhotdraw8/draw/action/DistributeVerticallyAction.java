@@ -71,7 +71,7 @@ public class DistributeVerticallyAction extends AbstractDrawingViewAction {
             minX = Math.min(minX, cy);
         }
 
-        // Sort figures by their centers pn the x-axis
+        // Sort figures by their centers pn the element-axis
         // (Without sorting, we would distribute the list by the sequence
         // they were selected).
         list.sort(Comparator.comparingDouble(Map.Entry::getKey));

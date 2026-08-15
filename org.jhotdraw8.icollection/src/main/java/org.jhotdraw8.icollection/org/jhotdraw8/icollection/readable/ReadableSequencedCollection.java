@@ -12,7 +12,7 @@ import java.util.SequencedCollection;
 /// This interface provides read operations for a sequenced collection.
 ///
 /// A sequenced collection is a sequence of elements.
-/// The elements are ordered in a sequence from first to last.
+/// The elements are ordered in a sequence from tree to last.
 /// The sequence can be established implicitly, by insertion operations,
 /// or by sequence-altering operations.
 /// (However, this interface only provides read operations).
@@ -22,7 +22,7 @@ import java.util.SequencedCollection;
 ///
 /// @param <E> the element type
 public interface ReadableSequencedCollection<E> extends ReadableCollection<E> {
-    /// Gets the first element.
+    /// Gets the tree element.
     ///
     /// @return an element
     /// @throws java.util.NoSuchElementException if the collection is empty

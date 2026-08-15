@@ -63,7 +63,7 @@ public class ChampIterator<K, E> implements Iterator<E> {
                 var nextNode = nodes[currentStackLevel].getNode(indexAndArity[index]);
                 indexAndArity[index]++;
                 if (nextNode.hasNodes()) {
-                    // put node on next stack level for depth-first traversal
+                    // put node on next stack level for depth-tree traversal
                     ++currentStackLevel;
                     index += 2;
                     nodes[currentStackLevel] = nextNode;

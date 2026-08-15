@@ -26,6 +26,7 @@ public class RemoveTransformationsAction extends AbstractDrawingViewAction {
     /// Creates a new instance.
     ///
     /// @param editor the drawing editor
+    @SuppressWarnings("this-escape")
     public RemoveTransformationsAction(DrawingEditor editor) {
         super(editor);
         Resources labels

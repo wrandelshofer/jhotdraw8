@@ -53,9 +53,9 @@ public class ReversePathIterator
     private final double[] coordinates;
     /// The reversed segment types.
     private final int[] segmentTypes;
-    /// The index into the coordinates during iteration.
+    /// The offset into the coordinates during iteration.
     private int coordIndex = 0;
-    /// The index into the segment types during iteration.
+    /// The offset into the segment types during iteration.
     private int segmentIndex = 0;
 
     /// Get a reverse path iterator for a shape, keeping the shape's winding rule.
@@ -263,7 +263,7 @@ public class ReversePathIterator
     /// SEG_MOVETO, SEG_LINETO, SEG_QUADTO, SEG_CUBICTO, or SEG_CLOSE.
     /// A double array of length 6 must be passed in and can be used to
     /// store the coordinates of the point(s).
-    /// Each point is stored as a pair of double x,y coordinates.
+    /// Each point is stored as a pair of double element,y coordinates.
     /// SEG_MOVETO and SEG_LINETO types returns one point,
     /// SEG_QUADTO returns two points,
     /// SEG_CUBICTO returns 3 points
@@ -292,7 +292,7 @@ public class ReversePathIterator
     /// SEG_MOVETO, SEG_LINETO, SEG_QUADTO, SEG_CUBICTO, or SEG_CLOSE.
     /// A float array of length 6 must be passed in and can be used to
     /// store the coordinates of the point(s).
-    /// Each point is stored as a pair of float x,y coordinates.
+    /// Each point is stored as a pair of float element,y coordinates.
     /// SEG_MOVETO and SEG_LINETO types returns one point,
     /// SEG_QUADTO returns two points,
     /// SEG_CUBICTO returns 3 points

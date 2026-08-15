@@ -1,4 +1,4 @@
-package org.jhotdraw8.icollection.impl.vector;
+package org.jhotdraw8.icollection.alt.impl.bmtrie;
 
 public class GraphvizBitMappedTrie {
     public <T> String toGraphviz(BitMappedTrie<T> trie) {

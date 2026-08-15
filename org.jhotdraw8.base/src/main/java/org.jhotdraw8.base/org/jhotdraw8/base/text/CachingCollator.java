@@ -12,8 +12,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-/// A [Comparator] that compares [String]s using a provided
-/// [Collator].
+/// A [Comparator] that compares [String]s using a provided [Collator].
 ///
 /// This comparator caches the collation keys.
 public class CachingCollator implements Comparator<String> {
@@ -21,6 +20,7 @@ public class CachingCollator implements Comparator<String> {
     private final Collator collator;
     private final Map<String, CollationKey> keyMap = new HashMap<>();
 
+    /// Creates a new instance.
     public CachingCollator(Collator collator) {
         this.collator = collator;
     }
@@ -32,6 +32,7 @@ public class CachingCollator implements Comparator<String> {
         return k1.compareTo(k2);
     }
 
+    /// Clears the cache.
     public void clearCache() {
         keyMap.clear();
     }

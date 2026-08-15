@@ -12,8 +12,8 @@ import java.util.Spliterator;
 
 public class ByteArraySpliterator implements SpliteratorOfByte {
     private final byte[] array;
-    private int index;        // current index, modified on advance/split
-    private final int fence;  // one past last index
+    private int index;        // current offset, modified on advance/split
+    private final int fence;  // one past last offset
     private final int characteristics;
 
     /// Creates a spliterator covering all of the given array.
@@ -29,8 +29,8 @@ public class ByteArraySpliterator implements SpliteratorOfByte {
     /// Creates a spliterator covering the given array and range
     ///
     /// @param array                     the array, assumed to be unmodified during use
-    /// @param origin                    the least index (inclusive) to cover
-    /// @param fence                     one past the greatest index to cover
+    /// @param origin                    the least offset (inclusive) to cover
+    /// @param fence                     one past the greatest offset to cover
     /// @param additionalCharacteristics Additional spliterator characteristics
     ///                                  of this spliterator's source or elements beyond `SIZED` and
     ///                                  `SUBSIZED` which are always reported

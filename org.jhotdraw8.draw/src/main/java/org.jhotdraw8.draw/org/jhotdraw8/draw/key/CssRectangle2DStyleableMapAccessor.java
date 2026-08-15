@@ -28,7 +28,7 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
     /// Creates a new instance with the specified name.
     ///
     /// @param name      the name of the accessor
-    /// @param xKey      the key for the x coordinate of the rectangle
+    /// @param xKey      the key for the element coordinate of the rectangle
     /// @param yKey      the key for the y coordinate of the rectangle
     /// @param widthKey  the key for the width of the rectangle
     /// @param heightKey the key for the height of the rectangle

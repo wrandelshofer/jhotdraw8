@@ -122,9 +122,9 @@ public class CssTokenType {
 
     /// Defines an ident-token.
     /// <pre>
-    ///     ident-token = { '-' } , first-ident-char , { ident-char } ;
+    ///     ident-token = { '-' } , tree-ident-char , { ident-char } ;
     ///
-    ///     first-ident-char = ('a'-'z'|'A'-'Z'|'_')
+    ///     tree-ident-char = ('a'-'z'|'A'-'Z'|'_')
     ///                      | non-ASCII
     ///                      | escape ;
     ///

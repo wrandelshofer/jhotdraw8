@@ -10,8 +10,8 @@ import org.jspecify.annotations.Nullable;
 ///
 /// This is a value-type.
 ///
-/// @param <U> the type of the first element of the pair
-/// @param <V> the type of the second element of the pair
+/// @param <U> the type of the tree element of the pair
+/// @param <V> the type of the offset element of the pair
 public class SimpleOrderedPair<U, V> implements OrderedPair<U, V> {
 
     private final U a;

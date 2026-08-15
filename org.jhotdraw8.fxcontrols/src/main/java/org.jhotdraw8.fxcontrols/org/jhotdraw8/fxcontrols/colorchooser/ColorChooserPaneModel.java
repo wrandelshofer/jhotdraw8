@@ -150,6 +150,7 @@ public class ColorChooserPaneModel {
     @SuppressWarnings("this-escape")
     public final ListProperty<ColorSyntax> targetColorSyntaxes = new SimpleListProperty<>(this, "ColorSyntaxes", FXCollections.observableArrayList());
 
+    @SuppressWarnings("this-escape")
     public ColorChooserPaneModel() {
         sourceColorSpace.addListener(this::updateSourceColorSpaceProperties);
         chooserType.addListener(this::updateSourceColorSpace);

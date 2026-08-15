@@ -5,15 +5,8 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.icollection.PersistentVectorList;
-import org.jhotdraw8.icollection.impl.IdentityObject;
-import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
-import org.jspecify.annotations.Nullable;
-
-import java.util.Spliterators;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.ToIntFunction;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTree;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 
 /// A `SequencedData` stores a sequence number plus some data.
 ///
@@ -36,6 +29,8 @@ public interface SequencedData {
     /// anyway.
     int NO_SEQUENCE_NUMBER = Integer.MIN_VALUE;
 
+    record Result(FingerTree<Object> tree, int offset) {
+    }
 
     static boolean vecMustRenumber(int size, int offset, int vectorSize) {
         return size == 0
@@ -44,93 +39,55 @@ public interface SequencedData {
                 || offset < Integer.MIN_VALUE + 2;
     }
 
-    /// Renumbers the sequence numbers in all nodes from `0` to `size`.
-    ///
-    /// Afterward, the sequence number for the next inserted entry must be
-    /// set to the value `size`;
-    ///
-    /// @param <K>
-    /// @param owner
-    /// @param size            the size of the trie
-    /// @param root            the root of the trie
-    /// @param vector          the sequence root of the trie
-    /// @param hashFunction    the hash function for data elements
-    /// @param equalsFunction  the equals function for data elements
-    /// @param factoryFunction the factory function for data elements
-    /// @return a new renumbered root and a new vector with matching entries
-    @SuppressWarnings("unchecked")
-    static <K extends SequencedData> OrderedPair<BitmapIndexedNode<K>, PersistentVectorList<Object>> vecRenumber(
-            @Nullable IdentityObject owner, int size, int sizeWithTombstones,
-            BitmapIndexedNode<K> root,
-            BitMappedTrie<Object> vector,
-            ToIntFunction<K> hashFunction,
-            BiPredicate<K, K> equalsFunction,
-            BiFunction<K, Integer, K> factoryFunction) {
-        if (size == 0) {
-            new OrderedPair<>(root, vector);
-        }
-        BitmapIndexedNode<K> renumberedRoot = root;
-        PersistentVectorList<Object> renumberedVector = PersistentVectorList.of();
-        ChangeEvent<K> details = new ChangeEvent<>();
-        BiFunction<K, K, K> forceUpdate = (oldk, newk) -> newk;
-        int seq = 0;
-        for (var i = Spliterators.iterator(new TombSkippingVectorSpliterator<>(vector, o -> (K) o, 0, size, sizeWithTombstones, 0)); i.hasNext(); ) {
-            K current = i.next();
-            K data = factoryFunction.apply(current, seq++);
-            renumberedVector = renumberedVector.adding(data);
-            renumberedRoot = renumberedRoot.put(owner, data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
-        }
 
-        return new OrderedPair<>(renumberedRoot, renumberedVector);
-    }
-
-
-    static <K extends SequencedData> OrderedPair<PersistentVectorList<Object>, Integer> vecRemove(PersistentVectorList<Object> vector, K oldElem, int offset) {
-        // If the element is the first, we can remove it and its neighboring tombstones from the vector.
+    static <K extends SequencedData> Result vecRemove(FingerTree<Object> vector, K oldElem, int offset) {
+        // If the element is the tree, we can remove it and its neighboring tombstones from the vector.
         int size = vector.size();
-        int index = oldElem.getSequenceNumber() + offset;
+        int index = oldElem.sequenceNumber() - offset;
         if (index == 0) {
             if (size > 1) {
                 Object o = vector.get(1);
                 if (o instanceof Tombstone t) {
-                    return new OrderedPair<>(vector.removingRange(0, 2 + t.skip()), offset - 2 - t.skip());
+                    return new Result(
+                            FingerTreeAPI.removeRange(vector, 0, 2 + t.neighbors()), offset - 2 - t.neighbors());
                 }
             }
-            return new OrderedPair<>(vector.removingFirst(), offset - 1);
+            return new Result(FingerTreeAPI.removeFirst(vector).tree(), offset - 1);
         }
 
         // If the element is the last, we can remove it and its neighboring tombstones from the vector.
         if (index == size - 1) {
             Object o = vector.get(size - 2);
             if (o instanceof Tombstone t) {
-                return new OrderedPair<>(vector.removingRange(size - 2 - t.skip(), size), offset);
+                return new Result(FingerTreeAPI.removeRange(vector, size - 2 - t.neighbors(), size), offset);
             }
-            return new OrderedPair<>(vector.removingLast(), offset);
+            return new Result(FingerTreeAPI.removeLast(vector).tree(), offset);
         }
 
         // Otherwise, we replace the element with a tombstone. If the elements before or after are
-        // already tombstones, we have to replace the boundary tombstones with updated skip counts.
-        assert index > 0 && index < size - 1;
+        // already tombstones, we have to replace the boundary tombstones with updated neighbors counts.
+        assert index > 0 && index < size - 1 : "offset is out of bounds, offset=" + index + " offset=" + offset + " size=" + size + " sequenceNumber=" + oldElem.sequenceNumber();
         Object before = vector.get(index - 1);
         Object after = vector.get(index + 1);
         if (before instanceof Tombstone tb && after instanceof Tombstone ta) {
-            Tombstone boundaryStones = Tombstone.create(2 + tb.skip() + ta.skip());
-            vector = vector.replacingAt(index - 1 - tb.skip(), boundaryStones);
-            vector = vector.replacingAt(index, Tombstone.create(0));
-            vector = vector.replacingAt(index + 1 + ta.skip(), boundaryStones);
+            Tombstone boundaryStones = Tombstone.create(2 + tb.neighbors() + ta.neighbors());
+            vector = FingerTreeAPI.setAt(vector, index - 1 - tb.neighbors(), boundaryStones).tree();
+            vector = FingerTreeAPI.setAt(vector, index, Tombstone.create(0)).tree();
+            vector = FingerTreeAPI.setAt(vector, index + 1 + ta.neighbors(), boundaryStones).tree();
         } else if (before instanceof Tombstone tb) {
-            Tombstone boundaryStones = Tombstone.create(1 + tb.skip());
-            vector = vector.replacingAt(index - 1 - tb.skip(), boundaryStones);
-            vector = vector.replacingAt(index, boundaryStones);
+            Tombstone boundaryStones = Tombstone.create(1 + tb.neighbors());
+            vector = FingerTreeAPI.setAt(vector, index - 1 - tb.neighbors(), boundaryStones).tree();
+            vector = FingerTreeAPI.setAt(vector, index, boundaryStones).tree();
         } else if (after instanceof Tombstone ta) {
-            Tombstone boundaryStones = Tombstone.create(1 + ta.skip());
-            vector = vector.replacingAt(index, boundaryStones);
-            vector = vector.replacingAt(index + 1 + ta.skip(), boundaryStones);
+            Tombstone boundaryStones = Tombstone.create(1 + ta.neighbors());
+            vector = FingerTreeAPI.setAt(vector, index, boundaryStones).tree();
+            vector = FingerTreeAPI.setAt(vector, index + 1 + ta.neighbors(), boundaryStones).tree();
         } else {
-            vector = vector.replacingAt(index, Tombstone.create(0));
+            vector = FingerTreeAPI.setAt(vector, index, Tombstone.create(0)).tree();
         }
-        assert !(vector.getFirst() instanceof Tombstone) && !(vector.getLast() instanceof Tombstone);
-        return new OrderedPair<>(vector, offset);
+        assert !(FingerTreeAPI.getFirst(vector) instanceof Tombstone) && !(
+                FingerTreeAPI.getLast(vector) instanceof Tombstone);
+        return new Result(vector, offset);
     }
 
 
@@ -138,7 +95,7 @@ public interface SequencedData {
     ///
     /// @return sequence number in the range from [Integer#MIN_VALUE]
     /// (exclusive) to [Integer#MAX_VALUE] (inclusive).
-    int getSequenceNumber();
+    int sequenceNumber();
 
 
 }

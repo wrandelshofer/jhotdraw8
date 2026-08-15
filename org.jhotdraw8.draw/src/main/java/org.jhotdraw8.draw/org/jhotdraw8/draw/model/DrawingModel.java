@@ -125,10 +125,10 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
         return getChildren(figure).size();
     }
 
-    /// Gets the child at the given index from the parent.
+    /// Gets the child at the given offset from the parent.
     ///
     /// @param parent the parent.
-    /// @param index  the index.
+    /// @param index  the offset.
     /// @return the child
     @Override
     default Figure getChild(Figure parent, int index) {
@@ -146,7 +146,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
     /// `DrawingModelEvent`s.
     ///
     /// @param parent the parent figure
-    /// @param index  the index
+    /// @param index  the offset
     Figure removeFromParent(Figure parent, int index);
 
     /// Adds the specified child to a parent and fires appropriate
@@ -154,7 +154,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
     ///
     /// @param child  the new child
     /// @param parent the parent.
-    /// @param index  the index
+    /// @param index  the offset
     @Override
     void insertChildAt(Figure child, Figure parent, int index);
 
@@ -234,7 +234,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
     /// `DrawingModelEvent`s.
     ///
     /// @param f      the figure
-    /// @param x      desired x-position in the local coordinate system
+    /// @param x      desired element-position in the local coordinate system
     /// @param y      desired y-position in the local coordinate system
     /// @param width  desired width in the local coordinate system, may be
     ///               negative

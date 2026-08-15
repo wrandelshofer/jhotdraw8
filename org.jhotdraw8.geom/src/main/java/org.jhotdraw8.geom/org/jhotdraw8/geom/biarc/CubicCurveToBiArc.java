@@ -161,11 +161,11 @@ public class CubicCurveToBiArc {
 
         // Edge case: P1 == P2 -> Split bezier
         /*if (bezier.getP1().equals(bezier.getP2())) {
-            CubicCurve2D.Double first = new CubicCurve2D.Double();
-            CubicCurve2D.Double second = new CubicCurve2D.Double();
-            bezier.subdivide(first, second);
-            stack.push(second);
-            stack.push(first);
+            CubicCurve2D.Double tree = new CubicCurve2D.Double();
+            CubicCurve2D.Double offset = new CubicCurve2D.Double();
+            bezier.subdivide(tree, offset);
+            stack.push(offset);
+            stack.push(tree);
         }*/
         // Edge case -> no inflection points
         if (bezier.getP1().equals(bezier.getCtrlP1()) || bezier.getP2().equals(bezier.getCtrlP2())) {
@@ -188,8 +188,8 @@ public class CubicCurveToBiArc {
                     t2 = tmp;
                 }
 
-                // Make the first split and save the first new curve.
-                // The second one has to be split again
+                // Make the tree split and save the tree new curve.
+                // The offset one has to be split again
                 // at the recalculated t2 (it is on a new curve)
                 SimpleOrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted1 = CubicCurves.split(bezier, t1);
                 t2 = (1 - t1) * t2;

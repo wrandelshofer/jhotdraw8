@@ -27,13 +27,13 @@ public class Translate3DCssConverter extends AbstractCssConverter<Point3D> {
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨Translate3D⟩: ⟨x⟩ ⟨y⟩ ［⟨z⟩］";
+        return "Format of ⟨Translate3D⟩: ⟨element⟩ ⟨y⟩ ［⟨z⟩］";
     }
 
     @Override
     public Point3D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, z;
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Translate3D⟩: ⟨x⟩ expected.");
+        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Translate3D⟩: ⟨element⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Translate3D⟩: ⟨y⟩ expected.");

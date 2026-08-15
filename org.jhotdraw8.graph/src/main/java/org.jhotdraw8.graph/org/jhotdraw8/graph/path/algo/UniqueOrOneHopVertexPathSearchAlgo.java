@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 
 /// Builder for creating unique paths from a directed graph.
 ///
-/// The builder searches for unique paths using a breadth-first search.
+/// The builder searches for unique paths using a breadth-tree search.
 /// Returns only a path if it is unique or if there is only one hop
 /// from start to goal.
 ///

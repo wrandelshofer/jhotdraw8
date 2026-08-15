@@ -7,6 +7,7 @@ package org.jhotdraw8.color;
 
 
 import java.awt.color.ColorSpace;
+import java.io.Serial;
 
 /// The OK HLS Color Space.
 ///
@@ -29,6 +30,9 @@ import java.awt.color.ColorSpace;
 ///     <dd>[github.io](http://bottosson.github.io/misc/ok_color.h)</dd>
 /// </dl>
 public class OKHlsColorSpace extends AbstractNamedColorSpace {
+    @Serial
+    private static final long serialVersionUID = 0L;
+
     public static OKHlsColorSpace getInstance() {
         class Holder {
             private static final OKHlsColorSpace INSTANCE = new OKHlsColorSpace();

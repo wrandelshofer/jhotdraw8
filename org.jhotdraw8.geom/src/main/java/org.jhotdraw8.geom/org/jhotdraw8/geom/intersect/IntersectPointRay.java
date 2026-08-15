@@ -16,11 +16,11 @@ public class IntersectPointRay {
     /// The returned argument value is in range
     /// [[Double#NEGATIVE_INFINITY],[Double#POSITIVE_INFINITY]].
     ///
-    /// @param ox x origin of ray
+    /// @param ox element origin of ray
     /// @param oy y origin of ray
-    /// @param dx x direction of ray
+    /// @param dx element direction of ray
     /// @param dy y direction of ray
-    /// @param px x coordinate of point
+    /// @param px element coordinate of point
     /// @param py y coordinate of point
     /// @return argument 't' at point px,py on the ray.
     public static double projectedPointOnRay(double ox, double oy, double dx, double dy, double px, double py) {
@@ -32,9 +32,9 @@ public class IntersectPointRay {
     }
 
     public static @Nullable Double argumentOnRay(double ox, double oy,
-                                       double dx, double dy,
-                                       double amax,
-                                       double px, double py, double tolerance) {
+                                                 double dx, double dy,
+                                                 double amax,
+                                                 double px, double py, double tolerance) {
 
         // equations:
         // o + t * d = p

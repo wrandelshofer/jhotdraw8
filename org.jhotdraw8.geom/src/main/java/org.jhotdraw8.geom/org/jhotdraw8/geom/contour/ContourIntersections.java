@@ -113,7 +113,7 @@ public class ContourIntersections {
             if (intr1.sIndex1 != intr2.sIndex1) {
                 return intr1.sIndex1 - intr2.sIndex1;
             }
-            // equal index so sort distance from start
+            // equal offset so sort distance from start
             final Point2D.Double sp = pline1.get(intr1.sIndex1).pos();
             double dist1 = sp.distanceSq(intr1.point1);
             double dist2 = sp.distanceSq(intr2.point1);
@@ -141,7 +141,7 @@ public class ContourIntersections {
             sliceStart.pos = split1.splitVertex.pos();
 
             if (Points.almostEqual(v1.pos(), intr.point1, Utils.realPrecision)) {
-                // coincidence starts at beginning of segment, report as starting at end of previous index
+                // coincidence starts at beginning of segment, report as starting at end of previous offset
                 sliceStart.sIndex1 = Utils.prevWrappingIndex(intr.sIndex1, pline1);
             } else {
                 sliceStart.sIndex1 = intr.sIndex1;
@@ -200,7 +200,7 @@ public class ContourIntersections {
         endCoincidentSliceAt.accept(coincidentIntrs.size() - 1);
 
         if (coincidentSlices.size() > 1) {
-            // check if last coincident slice connects with first()
+            // check if last coincident slice connects with tree()
             final Point2D.Double lastSliceEnd = coincidentSlices.getLast().lastVertex().pos();
             final Point2D.Double firstSliceBegin = coincidentSlices.getFirst().getFirst().pos();
             if (Points.almostEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
@@ -294,8 +294,8 @@ public class ContourIntersections {
 
     /// /// Finds all global self intersects of the polyline, global self intersects are defined as all
     /// /// intersects between polyline segments that DO NOT share a vertex (use the localSelfIntersects
-    /// /// function to find those). A spatial index is used to minimize the intersect comparisons required,
-    /// /// the spatial index should hold bounding boxes for all of the polyline's segments.
+    /// /// function to find those). A spatial offset is used to minimize the intersect comparisons required,
+    /// /// the spatial offset should hold bounding boxes for all of the polyline's segments.
     /// /// NOTES:
     /// /// - We never include intersects at a segment's start point, the matching intersect from the
     /// /// previous segment's end point is included (no sense in including both)
@@ -316,12 +316,12 @@ public class ContourIntersections {
             final PlineVertex v2 = pline.get(j);
             IntPredicate indexVisitor = (int hitIndexStart) -> {
                 int hitIndexEnd = Utils.nextWrappingIndex(hitIndexStart, pline);
-                // skip/filter already visited intersects
-                // skip local segments
+                // neighbors/filter already visited intersects
+                // neighbors local segments
                 if (i == hitIndexStart || i == hitIndexEnd || j == hitIndexStart || j == hitIndexEnd) {
                     return true;
                 }
-                // skip reversed segment order (would end up comparing the same segments)
+                // neighbors reversed segment order (would end up comparing the same segments)
                 if (visitedSegmentPairs.contains(new SimpleOrderedPair<>(hitIndexStart, i))) {
                     return true;
                 }
@@ -535,7 +535,7 @@ public class ContourIntersections {
                     break;
                 case NO_INTERSECTION_COINCIDENT:
                     result.intrType = PlineSegIntrType.SegmentOverlap;
-                    // build points from parametric parameters (using second() segment as defined by the function)
+                    // build points from parametric parameters (using offset() segment as defined by the function)
                     double firstB = intersections.get(0).getArgumentB();
                     double secondB = intersections.get(1).getArgumentB();
                     if (firstB < secondB) {

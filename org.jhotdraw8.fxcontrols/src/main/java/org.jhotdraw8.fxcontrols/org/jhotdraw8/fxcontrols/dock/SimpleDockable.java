@@ -14,6 +14,7 @@ public class SimpleDockable extends AbstractDockable {
         this(null, content);
     }
 
+    @SuppressWarnings("this-escape")
     public SimpleDockable(String text, Node content) {
         this.node = content;
         setText(text);

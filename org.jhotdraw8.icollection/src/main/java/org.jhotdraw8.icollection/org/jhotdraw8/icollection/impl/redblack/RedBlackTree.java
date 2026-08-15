@@ -47,7 +47,6 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
 
     @SafeVarargs
     static <K, V> RedBlackTree<K, V> of(Comparator<? super K> comparator, K... keys) {
-        Objects.requireNonNull(comparator, "comparator is null");
         Objects.requireNonNull(keys, "values is null");
         RedBlackTree<K, V> tree = empty();
         for (K key : keys) {

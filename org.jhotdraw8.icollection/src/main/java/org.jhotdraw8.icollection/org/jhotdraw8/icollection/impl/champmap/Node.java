@@ -46,7 +46,7 @@ public abstract class Node<K, V> {
     /// For example, if the bit partition is 5 bits, then
     /// we 2^5 == 32 distinct bit-positions.
     /// If the masked keyHash is 3 then the bit-position is
-    /// the bit with index 3. That is, 1<<3 = 0b0100.
+    /// the bit with offset 3. That is, 1<<3 = 0b0100.
     ///
     /// @param mask masked key hash
     /// @return bit position
@@ -54,15 +54,15 @@ public abstract class Node<K, V> {
         return 1 << mask;
     }
 
-    /// Given a bitmap and a bit-position, returns the index
+    /// Given a bitmap and a bit-position, returns the offset
     /// in the array.
     ///
     /// For example, if the bitmap is 0b1101 and
-    /// bit-position is 0b0100, then the index is 1.
+    /// bit-position is 0b0100, then the offset is 1.
     ///
     /// @param bitmap a bit-map
     /// @param bitpos a bit-position
-    /// @return the array index
+    /// @return the array offset
     static int index(int bitmap, int bitpos) {
         return Integer.bitCount(bitmap & (bitpos - 1));
     }

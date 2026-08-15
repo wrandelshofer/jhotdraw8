@@ -16,7 +16,7 @@ public class IntersectEllipsePolygon {
     /// Computes the intersection between a circle and a polygon.
     ///
     /// @param c      the center of the ellipse
-    /// @param rx     the x-radius of the ellipse
+    /// @param rx     the element-radius of the ellipse
     /// @param ry     the y-radius of the ellipse
     /// @param points the points of the polygon
     /// @return computed intersection

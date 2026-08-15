@@ -29,6 +29,7 @@ public class UngroupAction extends AbstractDrawingViewAction {
     /// Creates a new instance.
     ///
     /// @param editor the drawing editor
+    @SuppressWarnings("this-escape")
     public UngroupAction(DrawingEditor editor) {
         super(editor);
         Resources labels

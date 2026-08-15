@@ -276,7 +276,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     /// StyleOrigin.
     ///
     /// @param ordinal the ordinal of the StyleOrigin or the negative ordinal.
-    /// @param index   the index of the Key
+    /// @param index   the offset of the Key
     /// @return rawValue: NO_VALUE means that no value is stored, NULL_VALUE means
     /// that the null value is stored, all other values are stored values.
     @SuppressWarnings("unchecked")

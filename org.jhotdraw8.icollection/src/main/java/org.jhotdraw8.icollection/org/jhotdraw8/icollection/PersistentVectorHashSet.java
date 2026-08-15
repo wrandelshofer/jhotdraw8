@@ -5,7 +5,6 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
-import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
 import org.jhotdraw8.icollection.impl.champ.Node;
@@ -13,6 +12,10 @@ import org.jhotdraw8.icollection.impl.champ.ReverseTombSkippingVectorSpliterator
 import org.jhotdraw8.icollection.impl.champ.SequencedData;
 import org.jhotdraw8.icollection.impl.champ.SequencedElement;
 import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTree;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
+import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
@@ -23,7 +26,6 @@ import org.jspecify.annotations.Nullable;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractSet;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -87,17 +89,17 @@ import java.util.Spliterators;
 /// To support iteration, we use a Vector. The Vector has the same contents
 /// as the CHAMP trie. However, its elements are stored in insertion order.
 ///
-/// If an element is removed from the CHAMP trie that is not the first or the
+/// If an element is removed from the CHAMP trie that is not the tree or the
 /// last element of the Vector, we replace its corresponding element in
 /// the Vector by a tombstone. If the element is at the start or end of the Vector,
 /// we remove the element and all its neighboring tombstones from the Vector.
 ///
 /// A tombstone can store the number of neighboring tombstones in ascending and in descending
-/// direction. We use these numbers to skip tombstones when we iterate over the vector.
+/// direction. We use these numbers to neighbors tombstones when we iterate over the vector.
 /// Since we only allow iteration in ascending or descending order from one of the ends of
 /// the vector, we do not need to keep the number of neighbors in all tombstones up to date.
-/// It is sufficient, if we update the neighbor with the lowest index and the one with the
-/// highest index.
+/// It is sufficient, if we update the neighbor with the lowest offset and the one with the
+/// highest offset.
 ///
 /// If the number of tombstones exceeds half of the size of the collection, we renumber all
 /// sequence numbers, and we create a new Vector.
@@ -116,22 +118,23 @@ import java.util.Spliterators;
 @SuppressWarnings("exports")
 public class PersistentVectorHashSet<E> implements Serializable, PersistentSequencedSet<E> {
     private static final PersistentVectorHashSet<?> EMPTY = new PersistentVectorHashSet<>(
-            BitmapIndexedNode.emptyNode(), PersistentVectorList.of(), 0, 0);
+            BitmapIndexedNode.emptyNode(), FingerTreeAPI.of(), 0, 0);
     @Serial
     private static final long serialVersionUID = 0L;
-    final transient BitmapIndexedNode<SequencedElement<E>> root;
+    @SuppressWarnings("TransientFieldNotInitialized")
+    final transient BitmapIndexedNode<SequencedElement<E>> hashSet;
     /// Offset of sequence numbers to vector indices.
-    /// <pre>vector index = sequence number + offset</pre>
+    /// <pre>vector offset = sequence number + offset</pre>
     final int offset;
     /// The size of the set.
     final int size;
 
     /// In this vector we store the elements in the order in which they were inserted.
-    final PersistentVectorList<Object> vector;
+    final FingerTree<Object> vector;
 
-    private record OpaqueRecord<E>(BitmapIndexedNode<SequencedElement<E>> root,
-                                   PersistentVectorList<Object> vector,
-                                   int size, int offset) {
+    record OpaqueRecord<E>(BitmapIndexedNode<SequencedElement<E>> root,
+                           FingerTree<Object> vector,
+                           int size, int offset) {
     }
 
     /// Creates a new instance with the provided privateData data object.
@@ -159,16 +162,16 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
     }
 
     private PersistentVectorHashSet<E> newInstance(BitmapIndexedNode<SequencedElement<E>> root,
-                                                   PersistentVectorList<Object> vector,
+                                                   FingerTree<Object> vector,
                                                    int size, int offset) {
         return new PersistentVectorHashSet<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
     }
 
     PersistentVectorHashSet(
-            BitmapIndexedNode<SequencedElement<E>> root,
-            PersistentVectorList<Object> vector,
+            BitmapIndexedNode<SequencedElement<E>> hashSet,
+            FingerTree<Object> vector,
             int size, int offset) {
-        this.root = root;
+        this.hashSet = hashSet;
         this.size = size;
         this.offset = offset;
         this.vector = Objects.requireNonNull(vector);
@@ -182,7 +185,8 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
     /// @return an persistent set of the provided elements
     @SuppressWarnings("unchecked")
     public static <E> PersistentVectorHashSet<E> copyOf(Iterable<? extends E> c) {
-        return PersistentVectorHashSet.<E>of().addingAll(c);
+        return new PersistentVectorHashSetBuilder<E>().addAll(c).build();
+
     }
 
 
@@ -195,7 +199,6 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
         return ((PersistentVectorHashSet<E>) PersistentVectorHashSet.EMPTY);
     }
 
-
     /// Returns an persistent set that contains the provided elements.
     ///
     /// @param elements elements
@@ -205,7 +208,7 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
     @SafeVarargs
     public static <E> PersistentVectorHashSet<E> of(E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
-        return PersistentVectorHashSet.<E>of().addingAll(Arrays.asList(elements));
+        return new PersistentVectorHashSetBuilder<E>().addArray(elements).build();
     }
 
     @Override
@@ -230,7 +233,7 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
     private PersistentVectorHashSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
-        var newRoot = root.put(null, newElem,
+        var newRoot = hashSet.put(null, newElem,
                 SequencedElement.keyHash(e), 0, details,
                 moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
                 Objects::equals, SequencedElement::elementKeyHash);
@@ -241,13 +244,13 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
             if (details.isReplaced()) {
                 if (moveToFirst) {
                     var result = SequencedData.vecRemove(newVector, details.getOldDataNonNull(), offset);
-                    newVector = result.first();
+                    newVector = result.tree();
                 }
             } else {
                 newSize++;
             }
             int newOffset = offset + 1;
-            newVector = newVector.addingFirst(newElem);
+            newVector = FingerTreeAPI.addFirst(newElem, newVector);
             return renumber(newRoot, newVector, newSize, newOffset);
         }
         return this;
@@ -261,7 +264,7 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
                                                boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, vector.size() - offset);
-        var newRoot = root.put(null, newElem,
+        var newRoot = hashSet.put(null, newElem,
                 SequencedElement.keyHash(e), 0, details,
                 moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
                 Objects::equals, SequencedElement::elementKeyHash);
@@ -273,13 +276,13 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
                 if (moveToLast) {
                     var oldElem = details.getOldData();
                     var result = SequencedData.vecRemove(newVector, oldElem, newOffset);
-                    newVector = result.first();
-                    newOffset = result.second();
+                    newVector = result.tree();
+                    newOffset = result.offset();
                 }
             } else {
                 newSize++;
             }
-            newVector = newVector.addingLast(newElem);
+            newVector = FingerTreeAPI.addLast(newVector, newElem);
             return renumber(newRoot, newVector, newSize, newOffset);
         }
         return this;
@@ -287,14 +290,14 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
 
     /// {@inheritDoc}
     @Override
-    public <T> PersistentVectorHashSet<T> cleared() {
-        return of();
+    public PersistentVectorHashSet<E> cleared() {
+        return PersistentVectorHashSet.<E>of();
     }
 
     @Override
     public boolean contains(@Nullable Object o) {
         @SuppressWarnings("unchecked") E key = (E) o;
-        return root.find(new SequencedElement<>(key), SequencedElement.keyHash(key), 0, Objects::equals) != Node.NO_DATA;
+        return hashSet.find(new SequencedElement<>(key), SequencedElement.keyHash(key), 0, Objects::equals) != Node.NO_DATA;
     }
 
     @Override
@@ -306,7 +309,7 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
             return false;
         }
         if (other instanceof PersistentVectorHashSet<?> that) {
-            return size == that.size && root.equivalent(that.root);
+            return size == that.size && hashSet.equivalent(that.hashSet);
         } else {
             return ReadableSet.setEquals(this, other);
         }
@@ -329,8 +332,17 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
         return ReadableSet.iteratorToHashCode(iterator());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Iterator<E> iterator() {
+        if (vector.size() == size) {
+            // No skipping iterator needed, because we have no tombstones.
+            return new MappedIterator<>(
+                    FingerTreeAPI.iterator((FingerTree<SequencedElement<E>>) (FingerTree<?>) vector),
+                    SequencedElement::getElement
+            );
+        }
+        // FIXME - must implement iterator directly to obtain a good performance
         return Spliterators.iterator(spliterator());
     }
 
@@ -355,14 +367,14 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
     public PersistentVectorHashSet<E> removing(@Nullable E key) {
         int keyHash = SequencedElement.keyHash(key);
         var details = new ChangeEvent<SequencedElement<E>>();
-        BitmapIndexedNode<SequencedElement<E>> newRoot = root.remove(null,
+        BitmapIndexedNode<SequencedElement<E>> newRoot = hashSet.remove(null,
                 new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
             var removedElem = details.getOldDataNonNull();
             var result = SequencedData.vecRemove(vector, removedElem, offset);
-            return size == 1 ? PersistentVectorHashSet.of() : renumber(newRoot, result.first(), size - 1,
-                    result.second());
+            return size == 1 ? PersistentVectorHashSet.of() : renumber(newRoot, result.tree(), size - 1,
+                    result.offset());
         }
         return this;
     }
@@ -391,21 +403,25 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
     /// @param root   the root of the trie
     /// @param vector the root of the vector
     /// @param size   the size of the trie
-    /// @param offset the offset that must be added to a sequence number to get the index into the vector
+    /// @param offset the offset that must be added to a sequence number to get the offset into the vector
     /// @return a new [PersistentVectorHashSet] instance
     private PersistentVectorHashSet<E> renumber(
             BitmapIndexedNode<SequencedElement<E>> root,
-            PersistentVectorList<Object> vector,
+            FingerTree<Object> vector,
             int size, int offset) {
 
         if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
-            var owner = new IdentityObject();
-            var result = SequencedData.vecRenumber(
-                    new IdentityObject(), size, vector.size(), root, vector.root, SequencedElement::elementKeyHash, Objects::equals,
-                    (e, seq) -> new SequencedElement<>(e.getElement(), seq));
-            return newInstance(
-                    result.first(), result.second(),
-                    size, 0);
+            // center the numbers around 0 so that we have the interval [-size/2,size]
+            int newOffset = size / -2;
+            var b = new PersistentVectorHashSetBuilder<E>(newOffset);
+            b.addSpliterator(new TombSkippingVectorSpliterator<>(
+                    new FingerTreeSpliterator<>(vector),
+                    e -> ((SequencedElement<E>) e).getElement(),
+                    0, size(), vector.size(),
+                    Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE));
+            var tmp = b.build();
+            assert tmp.size() == size;
+            return newInstance(tmp.hashSet, tmp.vector, tmp.size, newOffset);
         }
         return newInstance(root, vector, size, offset);
     }
@@ -436,7 +452,8 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
     @SuppressWarnings("unchecked")
     @Override
     public Spliterator<E> spliterator() {
-        return new TombSkippingVectorSpliterator<>(vector.root,
+        return new TombSkippingVectorSpliterator<>(
+                new FingerTreeSpliterator<>(vector),
                 e -> ((SequencedElement<E>) e).getElement(),
                 0, size(), vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }

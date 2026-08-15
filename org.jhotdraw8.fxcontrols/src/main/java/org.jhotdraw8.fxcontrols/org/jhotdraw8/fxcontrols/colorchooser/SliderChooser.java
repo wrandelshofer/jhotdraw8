@@ -3,7 +3,6 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-/// Sample Skeleton for 'ColorChooserPane.fxml' Controller Class
 package org.jhotdraw8.fxcontrols.colorchooser;
 
 import javafx.beans.property.ObjectProperty;
@@ -48,6 +47,7 @@ public class SliderChooser extends VBox {
         this.model.set(model);
     }
 
+    @SuppressWarnings("this-escape")
     public SliderChooser() {
         load();
     }

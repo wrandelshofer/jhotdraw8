@@ -31,10 +31,12 @@ public class StyleClassCell extends ListCell<StyleClassItem> {
     private Button removeButton;
     private final StyleClassesInspector inspector;
 
+    @SuppressWarnings("this-escape")
     public StyleClassCell(StyleClassesInspector inspector) {
         this(LayersInspector.class.getResource("StyleClassCell.fxml"), inspector);
     }
 
+    @SuppressWarnings("this-escape")
     public StyleClassCell(URL fxmlUrl, StyleClassesInspector inspector) {
         init(fxmlUrl);
         this.inspector = inspector;

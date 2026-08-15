@@ -44,14 +44,14 @@ public class LocatorCssConverter extends AbstractCssConverter<Locator> {
         x = switch (tt.next()) {
             case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull().doubleValue();
             case CssTokenType.TT_PERCENTAGE -> tt.currentNumberNonNull().doubleValue() / 100.0;
-            default -> throw tt.createParseException("BoundsLocator: x-value expected.");
+            default -> throw tt.createParseException("BoundsLocator: element-value expected.");
         };
         switch (tt.next()) {
-        case ',':
-            break;
-        default:
-            tt.pushBack();
-            break;
+            case ',':
+                break;
+            default:
+                tt.pushBack();
+                break;
         }
         y = switch (tt.next()) {
             case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull().doubleValue();
@@ -65,7 +65,7 @@ public class LocatorCssConverter extends AbstractCssConverter<Locator> {
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨Locator⟩: relative(⟨x⟩%,⟨y⟩%)";
+        return "Format of ⟨Locator⟩: relative(⟨element⟩%,⟨y⟩%)";
     }
 
     @Override

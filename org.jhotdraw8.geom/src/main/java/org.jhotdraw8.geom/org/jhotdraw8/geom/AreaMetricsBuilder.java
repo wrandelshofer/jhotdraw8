@@ -17,6 +17,9 @@ public class AreaMetricsBuilder extends AbstractPathBuilder<Double> {
     private final DoubleSummaryStatistics areaTimesTwo = new DoubleSummaryStatistics();
     double lastMoveToX, lastMoveToY;
 
+    public AreaMetricsBuilder() {
+    }
+
     @Override
     protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         addToArea(this.lastMoveToX, this.lastMoveToY, lastX, getLastY());

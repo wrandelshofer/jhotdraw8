@@ -44,7 +44,7 @@ public class SvgRectFigure extends AbstractLeafFigure
         SvgDefaultableFigure, SvgElementFigure {
     /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "rect";
-    public static final CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
+    public static final CssSizeStyleableKey X = new CssSizeStyleableKey("element", CssSize.ZERO);
     public static final CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
     public static final NullableCssSizeStyleableKey RX = new NullableCssSizeStyleableKey("rx", null);
     public static final NullableCssSizeStyleableKey RY = new NullableCssSizeStyleableKey("ry", null);

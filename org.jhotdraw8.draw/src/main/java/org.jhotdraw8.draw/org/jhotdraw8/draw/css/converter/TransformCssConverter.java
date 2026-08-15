@@ -48,7 +48,7 @@ import java.util.function.Consumer;
 /// Rotate        = "rotate(" , [S] ,
 ///                  rotate-angle , [ C , Pivot , [ C, Axis ] , [S], ")" ;
 ///
-/// Shear         = "shear(" , [S] , x , Sep , y , [Sep,Pivot2D], [S], ")" ;
+/// Shear         = "shear(" , [S] , element , Sep , y , [Sep,Pivot2D], [S], ")" ;
 ///
 /// Axis          =  axisX, Sep , axisY, Sep , axisZ ;
 /// Pivot         =  pivotX, Sep , pivotY, [Sep,pivotZ] ;
@@ -190,16 +190,16 @@ public class TransformCssConverter extends AbstractCssConverter<Transform> {
     @Override
     public @Nullable String getHelpText() {
         return """
-               Format of ⟨Transform⟩: ⟨Affine⟩｜⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨Shear⟩｜⟨Matrix⟩
-               Format of ⟨Affine⟩: affine(⟨xx⟩,⟨xy⟩,⟨tx⟩, ⟨yx⟩,⟨yy⟩,⟨ty⟩)
-                                 ｜affine(⟨xx⟩,⟨xy⟩,⟨xz⟩,⟨tx⟩, ⟨yx⟩,⟨yy⟩,⟨yz⟩,⟨ty⟩, ⟨zx⟩,⟨zy⟩,⟨zz⟩,⟨tz⟩)
-               Format of ⟨Translate⟩: translate(⟨tx⟩,⟨ty⟩)
-               Format of ⟨Scale⟩: scale(⟨sx⟩,⟨sy⟩［,⟨pivotx⟩,⟨pivoty⟩］)
-               Format of ⟨Rotate⟩: rotate(⟨angle⟩［,⟨pivotx⟩,⟨pivoty⟩］)
-               Format of ⟨Shear⟩: shear(⟨shx⟩,⟨shy⟩［,⟨pivotx⟩,⟨pivoty⟩］)
-                                | skew(⟨shx⟩,⟨shy⟩［,⟨pivotx⟩,⟨pivoty⟩］)
-               Format of ⟨Matrix⟩: matrix(⟨xx⟩,⟨yx⟩, ⟨xy⟩,⟨yy⟩, ⟨tx⟩,⟨ty⟩)
-                                 ｜matrix(⟨xx⟩,⟨yx⟩,⟨zx⟩, ⟨xy⟩,⟨yy⟩,⟨zy⟩, ⟨xz⟩,⟨yz⟩,⟨zz⟩, ⟨tx⟩,⟨zx⟩,⟨tz⟩)"""
+                Format of ⟨Transform⟩: ⟨Affine⟩｜⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨Shear⟩｜⟨Matrix⟩
+                Format of ⟨Affine⟩: affine(⟨xx⟩,⟨xy⟩,⟨tx⟩, ⟨yx⟩,⟨yy⟩,⟨ty⟩)
+                                  ｜affine(⟨xx⟩,⟨xy⟩,⟨xz⟩,⟨tx⟩, ⟨yx⟩,⟨yy⟩,⟨yz⟩,⟨ty⟩, ⟨zx⟩,⟨zy⟩,⟨zz⟩,⟨tz⟩)
+                Format of ⟨Translate⟩: translate(⟨tx⟩,⟨ty⟩)
+                Format of ⟨Scale⟩: scale(⟨sx⟩,⟨sy⟩［,⟨pivotx⟩,⟨pivoty⟩］)
+                Format of ⟨Rotate⟩: rotate(⟨angle⟩［,⟨pivotx⟩,⟨pivoty⟩］)
+                Format of ⟨Shear⟩: shear(⟨shx⟩,⟨shy⟩［,⟨pivotx⟩,⟨pivoty⟩］)
+                                 | skew(⟨shx⟩,⟨shy⟩［,⟨pivotx⟩,⟨pivoty⟩］)
+                Format of ⟨Matrix⟩: matrix(⟨xx⟩,⟨yx⟩, ⟨xy⟩,⟨yy⟩, ⟨tx⟩,⟨ty⟩)
+                                  ｜matrix(⟨xx⟩,⟨yx⟩,⟨zx⟩, ⟨xy⟩,⟨yy⟩,⟨zy⟩, ⟨xz⟩,⟨yz⟩,⟨zz⟩, ⟨tx⟩,⟨zx⟩,⟨tz⟩)"""
                 ;
     }
 

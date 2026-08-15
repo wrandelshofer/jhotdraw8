@@ -25,6 +25,7 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.icollection.readable.ReadableSet;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
@@ -209,7 +210,7 @@ public class FigureTest {
         }
 
         @Override
-        public <T> T setStyled(StyleOrigin origin, MapAccessor<T> key, T value) {
+        public <T> T setStyled(StyleOrigin origin, @NonNull MapAccessor<T> key, T value) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

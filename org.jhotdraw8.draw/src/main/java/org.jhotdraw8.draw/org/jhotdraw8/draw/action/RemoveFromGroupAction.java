@@ -27,6 +27,7 @@ public class RemoveFromGroupAction extends AbstractDrawingViewAction {
     /// Creates a new instance.
     ///
     /// @param editor the drawing editor
+    @SuppressWarnings("this-escape")
     public RemoveFromGroupAction(DrawingEditor editor) {
         super(editor);
         Resources labels

@@ -26,7 +26,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// instance that is empty.
     @SuppressWarnings("unchecked")
     @Override
-    <T> PersistentList<T> cleared();
+    PersistentList<E> cleared();
 
     @Override
     PersistentList<E> addingFirst(@Nullable E element);
@@ -57,7 +57,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// of this list and the specified element appended to the
     /// end of the list.
     ///
-    /// @param index   the insertion index
+    /// @param index   the insertion offset
     /// @param element an element
     /// @return a different list instance with the element added
     PersistentList<E> addingAt(int index, E element);
@@ -75,7 +75,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// of this list and all elements of the specified
     /// collection appended.
     ///
-    /// @param index the insertion index
+    /// @param index the insertion offset
     /// @param c     a collection to be added to this list
     /// @return a different list instance with the elements added
     PersistentList<E> addingAllAt(int index, Iterable<? extends E> c);
@@ -90,17 +90,17 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     PersistentList<E> removing(@Nullable E element);
 
     /// Returns a copy of this list that contains all elements
-    /// of this list except the element at the specified index
+    /// of this list except the element at the specified offset
     ///
-    /// @param index an index
+    /// @param index an offset
     /// @return a different list instance with the element removed
     PersistentList<E> removingAt(int index);
 
     /// Returns a copy of this list that contains all elements
     /// of this list except the elements in the specified range.
     ///
-    /// @param fromIndex from index (inclusive) of the sub-list
-    /// @param toIndex   to index (exclusive) of the sub-list
+    /// @param fromIndex from offset (inclusive) of the sub-list
+    /// @param toIndex   to offset (exclusive) of the sub-list
     /// @return a different list instance with the element removed
     PersistentList<E> removingRange(int fromIndex, int toIndex);
 
@@ -139,13 +139,13 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
     /// @param element an element
     /// @return this list instance if it has not changed, or
     /// a different list instance with the element changed
-    PersistentList<E> replacingAt(int index, E element);
+    PersistentList<E> settingAt(int index, E element);
 
     /// Returns a copy of this list that contains only
-    /// the elements in the given index range.
+    /// the elements in the given offset range.
     ///
-    /// @param fromIndex from index (inclusive) of the sub-list
-    /// @param toIndex   to index (exclusive) of the sub-list
+    /// @param fromIndex from offset (inclusive) of the sub-list
+    /// @param toIndex   to offset (exclusive) of the sub-list
     /// @return this list instance if it has not changed, or
     /// a different list instance with the element changed
     @Override

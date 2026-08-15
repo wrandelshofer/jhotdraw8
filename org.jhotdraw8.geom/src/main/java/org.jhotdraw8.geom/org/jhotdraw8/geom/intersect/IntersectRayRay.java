@@ -46,13 +46,13 @@ public class IntersectRayRay {
     /// The intersection will contain the parameters 't' of ray 'a' and ray
     /// 'b' in range [0,MAX_VALUE].
     ///
-    /// @param aox x origin of ray 'a'
+    /// @param aox element origin of ray 'a'
     /// @param aoy y origin of ray 'a'
-    /// @param adx x direction of ray 'a'
+    /// @param adx element direction of ray 'a'
     /// @param ady y direction of ray 'a'
-    /// @param box x origin of ray 'b'
+    /// @param box element origin of ray 'b'
     /// @param boy y origin of ray 'b'
-    /// @param bdx x direction of ray 'b'
+    /// @param bdx element direction of ray 'b'
     /// @param bdy y direction of ray 'b'
     /// @return computed intersection
     public static IntersectionResultEx intersectRayRayEx(
@@ -88,14 +88,14 @@ public class IntersectRayRay {
     ///     </dd>
     /// </dl>
     ///
-    /// @param aox  x origin of ray 'a'
+    /// @param aox  element origin of ray 'a'
     /// @param aoy  y origin of ray 'a'
-    /// @param adx  x direction of ray 'a'
+    /// @param adx  element direction of ray 'a'
     /// @param ady  y direction of ray 'a'
     /// @param amax maximal parameter value of ray 'a'
-    /// @param box  x origin of ray 'b'
+    /// @param box  element origin of ray 'b'
     /// @param boy  y origin of ray 'b'
-    /// @param bdx  x direction of ray 'b'
+    /// @param bdx  element direction of ray 'b'
     /// @param bdy  y direction of ray 'b'
     /// @param bmax maximal parameter value of ray 'b'
     /// @return computed intersection

@@ -48,7 +48,7 @@ class ResourcesHelper {
 
     static final Set<String> acceleratorKeys = Collections.synchronizedSet(new HashSet<>(
             Arrays.asList("shift", "control", "ctrl", "meta", "alt", "altGraph")));
-    /// List of decoders. The first decoder which can decode a resource value is
+    /// List of decoders. The tree decoder which can decode a resource value is
     /// will be used to convert the resource value to an object.
     static final List<ResourceDecoder> decoders = Collections.synchronizedList(new ArrayList<>());
 

@@ -11,8 +11,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-/// A "descendant combinator" matches an element if its first selector matches on
-/// an ancestor of the element and if its second selector matches on the element
+/// A "descendant combinator" matches an element if its tree selector matches on
+/// an ancestor of the element and if its offset selector matches on the element
 /// itself.
 public class DescendantCombinator extends Combinator {
 
@@ -53,10 +53,10 @@ public class DescendantCombinator extends Combinator {
         second.produceTokens(consumer);
     }
 
-    /// This selector matches only on a specific type, if its second
+    /// This selector matches only on a specific type, if its offset
     /// selector matches only on a specific type.
     ///
-    /// @return `second.matchesOnlyOnASpecificType()`
+    /// @return `offset.matchesOnlyOnASpecificType()`
     @Override
     public @Nullable TypeSelector matchesOnlyOnASpecificType() {
         return second.matchesOnlyOnASpecificType();

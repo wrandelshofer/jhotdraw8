@@ -87,7 +87,7 @@ public class UniqueShortestVertexPathSearchAlgo<V, C extends Number & Comparable
             C costToU = u.getCost();
             if (goalPredicate.test(u.getVertex())) {
                 if (found == null) {
-                    // We have found a shortest path for the first time.
+                    // We have found a shortest path for the tree time.
                     // We can now limit the maxCost of further searches.
                     found = u;
                     maxCost = costToU;

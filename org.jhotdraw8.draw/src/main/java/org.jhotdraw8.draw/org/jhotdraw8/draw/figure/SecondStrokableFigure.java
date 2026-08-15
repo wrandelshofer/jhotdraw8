@@ -25,7 +25,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-/// Interface for figures which can render a second stroke.
+/// Interface for figures which can render a offset stroke.
 public interface SecondStrokableFigure extends Figure {
 
     /// Defines the distance in user coordinates for the dashing pattern. Default
@@ -36,7 +36,7 @@ public interface SecondStrokableFigure extends Figure {
     /// <dt>SVG Stroke Properties</dt>
     /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
     /// </dl>
-    @Nullable CssSizeStyleableKey SECOND_STROKE_DASH_OFFSET = new CssSizeStyleableKey("second-stroke-dashoffset", CssSize.ZERO);
+    @Nullable CssSizeStyleableKey SECOND_STROKE_DASH_OFFSET = new CssSizeStyleableKey("offset-stroke-dashoffset", CssSize.ZERO);
     /// Defines the end cap style. Default value: `SQUARE`.
     ///
     /// References:
@@ -44,7 +44,7 @@ public interface SecondStrokableFigure extends Figure {
     /// <dt>SVG Stroke Properties</dt>
     /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
     /// </dl>
-    NonNullEnumStyleableKey<StrokeLineCap> SECOND_STROKE_LINE_CAP = new NonNullEnumStyleableKey<>("second-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
+    NonNullEnumStyleableKey<StrokeLineCap> SECOND_STROKE_LINE_CAP = new NonNullEnumStyleableKey<>("offset-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
     /// Defines the style applied where path segments meet. Default value:
     /// `MITER`.
     ///
@@ -53,7 +53,7 @@ public interface SecondStrokableFigure extends Figure {
     /// <dt>SVG Stroke Properties</dt>
     /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
     /// </dl>
-    NonNullEnumStyleableKey<StrokeLineJoin> SECOND_STROKE_LINE_JOIN = new NonNullEnumStyleableKey<>("second-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
+    NonNullEnumStyleableKey<StrokeLineJoin> SECOND_STROKE_LINE_JOIN = new NonNullEnumStyleableKey<>("offset-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
     /// Defines the limit for the `StrokeLineJoin.MITER` style.
     ///
     /// Default value: `4.0`.
@@ -63,7 +63,7 @@ public interface SecondStrokableFigure extends Figure {
     /// <dt>SVG Stroke Properties</dt>
     /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
     /// </dl>
-    CssSizeStyleableKey SECOND_STROKE_MITER_LIMIT = new CssSizeStyleableKey("second-stroke-miterlimit", CssSize.of(4.0));
+    CssSizeStyleableKey SECOND_STROKE_MITER_LIMIT = new CssSizeStyleableKey("offset-stroke-miterlimit", CssSize.of(4.0));
     /// Defines the paint used for filling the outline of the figure. Default
     /// value: `Color.BLACK`.
     ///
@@ -72,11 +72,11 @@ public interface SecondStrokableFigure extends Figure {
     /// <dt>SVG Stroke Properties</dt>
     /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
     /// </dl>
-    NullablePaintableStyleableKey SECOND_STROKE = new NullablePaintableStyleableKey("second-stroke", null);
+    NullablePaintableStyleableKey SECOND_STROKE = new NullablePaintableStyleableKey("offset-stroke", null);
     /// Defines the stroke type used for drawing outline of the figure.
     ///
     /// Default value: `StrokeType.CENTERED`.
-    NonNullEnumStyleableKey<StrokeType> SECOND_STROKE_TYPE = new NonNullEnumStyleableKey<>("second-stroke-type", StrokeType.class, StrokeType.CENTERED);
+    NonNullEnumStyleableKey<StrokeType> SECOND_STROKE_TYPE = new NonNullEnumStyleableKey<>("offset-stroke-type", StrokeType.class, StrokeType.CENTERED);
     /// Defines the width of the outline of the figure.
     ///
     /// Default value: `1.0`.
@@ -86,7 +86,7 @@ public interface SecondStrokableFigure extends Figure {
     /// <dt>SVG Stroke Properties</dt>
     /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
     /// </dl>
-    CssSizeStyleableKey SECOND_STROKE_WIDTH = new CssSizeStyleableKey("second-stroke-width", CssSize.ONE);
+    CssSizeStyleableKey SECOND_STROKE_WIDTH = new CssSizeStyleableKey("offset-stroke-width", CssSize.ONE);
     /// Defines the opacity of the outline of the figure.
     ///
     /// Default value: `1.0`.
@@ -107,14 +107,14 @@ public interface SecondStrokableFigure extends Figure {
     /// <dt>SVG Stroke Properties</dt>
     /// <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
     /// </dl>
-    NonNullListStyleableKey<CssSize> SECOND_STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("second-stroke-dasharray",
+    NonNullListStyleableKey<CssSize> SECOND_STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("offset-stroke-dasharray",
             CssSize.class,
             new SizeCssConverter(false), PersistentVectorList.of());
 
     /// Combined map accessor for all stroke style properties.
     ///
     /// Note: this is a non-standard composite map accessor and thus transient!
-    @Nullable StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("second-stroke-style",
+    @Nullable StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("offset-stroke-style",
             SECOND_STROKE_TYPE, SECOND_STROKE_LINE_CAP, SECOND_STROKE_LINE_JOIN, SECOND_STROKE_MITER_LIMIT,
             SECOND_STROKE_DASH_OFFSET, SECOND_STROKE_DASH_ARRAY);
 
