@@ -204,7 +204,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
                 if (concatenatedWithLast instanceof Affine) {
                     set(TRANSFORMS, ts.adding(transform));
                 } else {
-                    set(TRANSFORMS, ts.replacingAt(last, concatenatedWithLast));
+                    set(TRANSFORMS, ts.settingAt(last, concatenatedWithLast));
                 }
             }
             return;
@@ -234,7 +234,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
                     PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
                     Transform lastTransform = transforms.get(transforms.size() - 1);
                     if (lastTransform instanceof Translate) {
-                        set(TRANSFORMS, transforms.replacingAt(transforms.size() - 1,
+                        set(TRANSFORMS, transforms.settingAt(transforms.size() - 1,
                                 lastTransform.createConcatenation(translate)));
                     } else {
                         set(TRANSFORMS, transforms.addingAt(0, translate));
@@ -282,7 +282,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
             } else {
                 Transform lastTransform = transforms.get(transforms.size() - 1);
                 if (lastTransform instanceof Translate) {
-                    set(TRANSFORMS, transforms.replacingAt(transforms.size() - 1,
+                    set(TRANSFORMS, transforms.settingAt(transforms.size() - 1,
                             lastTransform.createConcatenation(t)));
                 } else {
                     set(TRANSFORMS, transforms.addingAt(0, t));

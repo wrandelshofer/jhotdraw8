@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-
 /// This interface provides copy-returning operations for a set.
 ///
 /// A set is a group of distinct elements.
@@ -108,7 +107,6 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
         }
         var s = this;
         if ((c instanceof ReadableCollection<?>)) {
-            PersistentSet<E> clear = cleared();
             var rc = (ReadableCollection<?>) c;
             for (var e : this) {
                 if (!rc.contains(e)) {

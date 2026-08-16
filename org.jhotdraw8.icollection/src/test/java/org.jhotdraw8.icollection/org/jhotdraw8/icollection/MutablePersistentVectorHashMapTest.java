@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Map;
 import java.util.SequencedMap;
 
-public class MutableVectorHashMapTest extends AbstractSequencedMapTest {
+public class MutablePersistentVectorHashMapTest extends AbstractSequencedMapTest {
     @Override
     protected boolean supportsNullKeys() {
         return true;

@@ -49,9 +49,9 @@ import java.util.concurrent.TimeUnit;
 /// PersistentVectorListJmh.mGet                   10  avgt    2        1.870          ns/op
 /// PersistentVectorListJmh.mGet                 1000  avgt    2        2.180          ns/op
 /// PersistentVectorListJmh.mGet               100000  avgt    2        5.860          ns/op
-/// PersistentVectorListJmh.mHead                  10  avgt    2        0.781          ns/op
-/// PersistentVectorListJmh.mHead                1000  avgt    2        0.888          ns/op
-/// PersistentVectorListJmh.mHead              100000  avgt    2        0.866          ns/op
+/// PersistentVectorListJmh.mGetFirst             10  avgt    2        0.781          ns/op
+/// PersistentVectorListJmh.mGetFirst           1000  avgt    2        0.888          ns/op
+/// PersistentVectorListJmh.mGetFirst         100000  avgt    2        0.866          ns/op
 /// PersistentVectorListJmh.mIterate               10  avgt    2       16.426          ns/op
 /// PersistentVectorListJmh.mIterate             1000  avgt    2      926.852          ns/op
 /// PersistentVectorListJmh.mIterate           100000  avgt    2   134645.518          ns/op

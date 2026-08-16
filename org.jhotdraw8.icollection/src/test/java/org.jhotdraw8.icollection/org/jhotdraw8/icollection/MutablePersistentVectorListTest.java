@@ -9,7 +9,7 @@ import java.util.SequencedCollection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MutableVectorListTest extends AbstractListTest {
+public class MutablePersistentVectorListTest extends AbstractListTest {
     @Override
     protected SequencedCollection<Key> newInstance() {
         return new MutableVectorList<Key>();

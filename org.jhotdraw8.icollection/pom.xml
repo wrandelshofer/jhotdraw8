@@ -50,6 +50,7 @@
                     <exclude>**/*.java</exclude>
                 </excludes>
             </testResource>
+
         </testResources>
     </build>
 

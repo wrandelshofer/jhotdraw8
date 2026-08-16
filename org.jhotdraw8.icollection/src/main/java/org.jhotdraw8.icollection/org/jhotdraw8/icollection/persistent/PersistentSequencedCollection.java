@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 /// This interface provides copy-returning operations for a sequenced collection.
 ///
 /// A sequenced collection is a sequence of elements.
-/// The elements are ordered in a sequence from tree to last.
+/// The elements are ordered in a sequence from first to last.
 /// The sequence can be established implicitly, by insertion operations,
 /// or by sequence-altering operations.
 /// (However, this interface only provides read operations).
@@ -31,21 +31,21 @@ public interface PersistentSequencedCollection<E> extends PersistentCollection<E
     PersistentSequencedCollection<E> addingAll(Iterable<? extends E> c);
 
     /// Returns a copy of this collection that contains all elements
-    /// of this collection and also the specified element as the tree
+    /// of this collection and also the specified element as the first
     /// element in the iteration order.
     ///
     /// A collection may prevent that the same element can be
     /// added more than once.
     ///
     /// If the iteration order is based on an ordering relation of
-    /// the elements, then the element is only the tree in a sequence of elements
-    /// with the same ordering relation; which is not necessarily the tree in
+    /// the elements, then the element is only the first in a sequence of elements
+    /// with the same ordering relation; which is not necessarily the first in
     /// the total iteration order.
     ///
     /// @param element an element
     /// @return this collection instance if it already contains the element
-    /// as the tree in the iteration order, or
-    /// a different collection instance with the element added as the tree
+    /// as the first in the iteration order, or
+    /// a different collection instance with the element added as the first
     /// in the iteration order
     PersistentSequencedCollection<E> addingFirst(E element);
 
@@ -78,9 +78,9 @@ public interface PersistentSequencedCollection<E> extends PersistentCollection<E
     PersistentSequencedCollection<E> removingAll(Iterable<?> c);
 
     /// Returns a copy of this set that contains all elements
-    /// of this set except the tree.
+    /// of this set except the first.
     ///
-    /// @return a new set instance with the tree element removed
+    /// @return a new set instance with the first element removed
     /// @throws NoSuchElementException if this set is empty
     default PersistentSequencedCollection<E> removingFirst() {
         return removing(getFirst());
@@ -97,5 +97,11 @@ public interface PersistentSequencedCollection<E> extends PersistentCollection<E
 
     @Override
     PersistentSequencedCollection<E> retainingAll(Iterable<?> c);
+
+    /// Returns a reversed-order view of this collection.
+    /// Changes to the underlying collection are visible in the reversed view.
+    ///
+    /// @return a reversed-order view of this collection
+    PersistentSequencedCollection<E> reversed();
 
 }

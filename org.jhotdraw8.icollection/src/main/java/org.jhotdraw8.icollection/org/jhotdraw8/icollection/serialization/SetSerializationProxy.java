@@ -83,7 +83,6 @@ public abstract class SetSerializationProxy<E> implements Serializable {
         }
     }
 
-    @SuppressWarnings("Serialization")
     @Serial
     protected abstract Object readResolve();
 }

@@ -19,50 +19,69 @@ import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /// <pre>
-/// # JMH version: 1.36
-/// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
-/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+/// # JMH version: 1.37
+/// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
+/// # Mac Mini M4 Pro, 4.40 GHz
+/// org.jetbrains.kotlin:kotlinx-collections-immutable-jvm:0.5.1
 ///
-/// Benchmark                                   (size)  Mode  Cnt         Score   Error  Units
-/// mAddAll                 10  avgt             97.160          ns/op
-/// mAddAll               1000  avgt          10188.886          ns/op
-/// mAddAll            1000000  avgt       20908916.386          ns/op
-/// mAddFirst               10  avgt             23.522          ns/op
-/// mAddFirst             1000  avgt            861.836          ns/op
-/// mAddFirst          1000000  avgt         879627.244          ns/op
-/// mAddLast                10  avgt             15.656          ns/op
-/// mAddLast              1000  avgt             17.050          ns/op
-/// mAddLast           1000000  avgt            121.539          ns/op
-/// mAddOneByOne            10  avgt            134.930          ns/op
-/// mAddOneByOne          1000  avgt          17646.919          ns/op
-/// mAddOneByOne       1000000  avgt       54663359.929          ns/op
-/// mContainsNotFound       10  avgt              9.016          ns/op
-/// mContainsNotFound     1000  avgt           1932.576          ns/op
-/// mContainsNotFound  1000000  avgt        9304874.263          ns/op
-/// mGet                    10  avgt              4.035          ns/op
-/// mGet                  1000  avgt              9.014          ns/op
-/// mGet               1000000  avgt             86.176          ns/op
-/// mHead                   10  avgt              1.416          ns/op
-/// mHead                 1000  avgt              3.071          ns/op
-/// mHead              1000000  avgt              4.623          ns/op
-/// mIterate                10  avgt              8.479          ns/op
-/// mIterate              1000  avgt           2889.195          ns/op
-/// mIterate           1000000  avgt       16389335.173          ns/op
-/// mRemoveAtIndex          10  avgt             21.289          ns/op
-/// mRemoveAtIndex        1000  avgt            414.379          ns/op
-/// mRemoveAtIndex     1000000  avgt         383755.161          ns/op
-/// mRemoveLast             10  avgt             11.260          ns/op
-/// mRemoveLast           1000  avgt             14.001          ns/op
-/// mRemoveLast        1000000  avgt             14.021          ns/op
-/// mReversedIterate        10  avgt              9.135          ns/op
-/// mReversedIterate      1000  avgt           3529.019          ns/op
-/// mReversedIterate   1000000  avgt       21765132.591          ns/op
-/// mSet                    10  avgt             14.596          ns/op
-/// mSet                  1000  avgt             30.664          ns/op
-/// mSet               1000000  avgt            199.503          ns/op
-/// mTail                   10  avgt             20.860          ns/op
-/// mTail                 1000  avgt            746.861          ns/op
-/// mTail              1000000  avgt         760448.066          ns/op
+/// Benchmark                                  (size)  Mode  Cnt           Score   Error  Units
+/// KotlinPersistentListJmh.mAddAll                10  avgt               13.111          ns/op
+/// KotlinPersistentListJmh.mAddAll              1000  avgt              611.895          ns/op
+/// KotlinPersistentListJmh.mAddAll            100000  avgt            64386.547          ns/op
+/// KotlinPersistentListJmh.mAddAllSameType        10  avgt               20.086          ns/op
+/// KotlinPersistentListJmh.mAddAllSameType      1000  avgt             5597.727          ns/op
+/// KotlinPersistentListJmh.mAddAllSameType    100000  avgt           424630.770          ns/op
+/// KotlinPersistentListJmh.mAddFirst              10  avgt                8.043          ns/op
+/// KotlinPersistentListJmh.mAddFirst            1000  avgt              300.565          ns/op
+/// KotlinPersistentListJmh.mAddFirst          100000  avgt            28858.991          ns/op
+/// KotlinPersistentListJmh.mAddLast               10  avgt                5.998          ns/op
+/// KotlinPersistentListJmh.mAddLast             1000  avgt                7.628          ns/op
+/// KotlinPersistentListJmh.mAddLast           100000  avgt               22.403          ns/op
+/// KotlinPersistentListJmh.mAddOneByOne           10  avgt               64.078          ns/op
+/// KotlinPersistentListJmh.mAddOneByOne         1000  avgt             8650.419          ns/op
+/// KotlinPersistentListJmh.mAddOneByOne       100000  avgt           838244.928          ns/op
+/// KotlinPersistentListJmh.mContainsNotFound      10  avgt                3.656          ns/op
+/// KotlinPersistentListJmh.mContainsNotFound    1000  avgt             1044.319          ns/op
+/// KotlinPersistentListJmh.mContainsNotFound  100000  avgt           110674.669          ns/op
+/// KotlinPersistentListJmh.mCopyOf                10  avgt               43.164          ns/op
+/// KotlinPersistentListJmh.mCopyOf              1000  avgt             3852.093          ns/op
+/// KotlinPersistentListJmh.mCopyOf            100000  avgt           835146.953          ns/op
+/// KotlinPersistentListJmh.mGet                   10  avgt                1.665          ns/op
+/// KotlinPersistentListJmh.mGet                 1000  avgt                2.945          ns/op
+/// KotlinPersistentListJmh.mGet               100000  avgt                7.164          ns/op
+/// KotlinPersistentListJmh.mGetFirst              10  avgt                0.804          ns/op
+/// KotlinPersistentListJmh.mGetFirst            1000  avgt                1.340          ns/op
+/// KotlinPersistentListJmh.mGetFirst          100000  avgt                2.030          ns/op
+/// KotlinPersistentListJmh.mIterate               10  avgt                3.510          ns/op
+/// KotlinPersistentListJmh.mIterate             1000  avgt             1755.806          ns/op
+/// KotlinPersistentListJmh.mIterate           100000  avgt           213130.443          ns/op
+/// KotlinPersistentListJmh.mListIterate           10  avgt                3.462          ns/op
+/// KotlinPersistentListJmh.mListIterate         1000  avgt             2101.354          ns/op
+/// KotlinPersistentListJmh.mListIterate       100000  avgt           213100.092          ns/op
+/// KotlinPersistentListJmh.mOfArray               10  avgt               11.084          ns/op
+/// KotlinPersistentListJmh.mOfArray             1000  avgt              619.701          ns/op
+/// KotlinPersistentListJmh.mOfArray           100000  avgt            60960.484          ns/op
+/// KotlinPersistentListJmh.mRemoveAll             10  avgt               33.012          ns/op
+/// KotlinPersistentListJmh.mRemoveAll           1000  avgt             3149.606          ns/op
+/// KotlinPersistentListJmh.mRemoveAll         100000  avgt           651873.012          ns/op
+/// KotlinPersistentListJmh.mRemoveAtIndex         10  avgt                7.772          ns/op
+/// KotlinPersistentListJmh.mRemoveAtIndex       1000  avgt              158.889          ns/op
+/// KotlinPersistentListJmh.mRemoveAtIndex     100000  avgt            14191.018          ns/op
+/// KotlinPersistentListJmh.mRemoveFirst           10  avgt                7.754          ns/op
+/// KotlinPersistentListJmh.mRemoveFirst         1000  avgt              286.080          ns/op
+/// KotlinPersistentListJmh.mRemoveFirst       100000  avgt            27482.872          ns/op
+/// KotlinPersistentListJmh.mRemoveLast            10  avgt                6.228          ns/op
+/// KotlinPersistentListJmh.mRemoveLast          1000  avgt                7.521          ns/op
+/// KotlinPersistentListJmh.mRemoveLast        100000  avgt                7.406          ns/op
+/// KotlinPersistentListJmh.mRemoveOneByOne        10  avgt               94.591          ns/op
+/// KotlinPersistentListJmh.mRemoveOneByOne      1000  avgt           613414.449          ns/op
+/// KotlinPersistentListJmh.mRemoveOneByOne    100000  avgt       6051111020.500          ns/op
+/// KotlinPersistentListJmh.mReversedIterate       10  avgt                3.358          ns/op
+/// KotlinPersistentListJmh.mReversedIterate     1000  avgt             1272.305          ns/op
+/// KotlinPersistentListJmh.mReversedIterate   100000  avgt           237995.515          ns/op
+/// KotlinPersistentListJmh.mSet                   10  avgt                6.151          ns/op
+/// KotlinPersistentListJmh.mSet                 1000  avgt               16.005          ns/op
+/// KotlinPersistentListJmh.mSet               100000  avgt               39.772          ns/op
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)
@@ -70,7 +89,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class KotlinPersistentListJmh {
-    @Param({"10", "1000", "1000000"})
+    @Param({"10", "1000", "100000"})
     private int size;
 
     private int mask = -65;
@@ -79,52 +98,84 @@ public class KotlinPersistentListJmh {
     private PersistentList<Key> listA;
 
     private int index;
+    private PersistentList<Key> listB;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        listA = ExtensionsKt.persistentListOf();
-        for (Key key : data.setA) {
-            listA = listA.add(key);
-        }
+
+        PersistentList.Builder<Key> builder = ExtensionsKt.<Key>persistentListOf().builder();
+        builder.addAll(data.setA);
+        listA = builder.build();
+        builder.addAll(data.setB);
+        listB = builder.build();
         index = Math.min(listA.size() - 1, BigInteger.valueOf(listA.size() / 2).nextProbablePrime().intValue());
     }
 
+    @Benchmark
+    public PersistentList<Key> mCopyOf() {
+        PersistentList.Builder<Key> builder = ExtensionsKt.<Key>persistentListOf().builder();
+        builder.addAll(data.setA);
+        return builder.build();
+    }
 
     @Benchmark
     public PersistentList<Key> mAddAll() {
-        return ExtensionsKt.<Key>persistentListOf().addAll(data.setA);
+        return listA.addingAll(data.listB);
+    }
+
+    @Benchmark
+    public PersistentList<Key> mAddAllSameType() {
+        return listA.addingAll(listB);
+    }
+
+    @Benchmark
+    public PersistentList<Key> mOfArray() {
+        return ExtensionsKt.persistentListOf(data.arrayA);
     }
 
     @Benchmark
     public PersistentList<Key> mAddOneByOne() {
-        PersistentList<Key> set = ExtensionsKt.<Key>persistentListOf();
+        PersistentList<Key> l = ExtensionsKt.persistentListOf();
         for (Key key : data.listA) {
-            set = set.add(key);
+            l = l.adding(key);
         }
-        return set;
+        return l;
     }
 
-    //@Benchmark
+
+    /// This appears to be broken!
+    @Benchmark
     public PersistentList<Key> mRemoveOneByOne() {
-        var map = listA;
+        var l = listA;
         for (var e : data.listA) {
-            map = map.removing(e);
+            l = l.removing(e);
         }
-        if (!map.isEmpty()) throw new AssertionError("map: " + map);
-        return map;
+        if (!l.isEmpty()) throw new AssertionError("map: " + l);
+        return l;
     }
 
-    //@Benchmark
+
+    @Benchmark
     public PersistentList<Key> mRemoveAll() {
-        PersistentList<Key> set = listA;
-        return set.removingAll(data.listA);
+        PersistentList<Key> l = listA;
+        return l.removingAll(data.setA);
     }
+
 
     @Benchmark
     public int mIterate() {
         int sum = 0;
         for (Iterator<Key> i = listA.iterator(); i.hasNext(); ) {
+            sum += i.next().value;
+        }
+        return sum;
+    }
+
+    @Benchmark
+    public int mListIterate() {
+        int sum = 0;
+        for (Iterator<Key> i = listA.listIterator(); i.hasNext(); ) {
             sum += i.next().value;
         }
         return sum;
@@ -140,36 +191,37 @@ public class KotlinPersistentListJmh {
     }
 
     @Benchmark
-    public PersistentList<Key> mTail() {
-        return listA.removeAt(0);
+    public PersistentList<Key> mRemoveFirst() {
+        return listA.removingAt(0);
     }
 
     @Benchmark
     public PersistentList<Key> mAddLast() {
         Key key = data.nextKeyInB();
-        return (listA).add(key);
+        return (listA).adding(key);
     }
 
     @Benchmark
     public PersistentList<Key> mAddFirst() {
         Key key = data.nextKeyInB();
-        return (listA).add(0, key);
+        return (listA).addingAt(0, key);
     }
+
 
     @Benchmark
     public PersistentList<Key> mRemoveLast() {
-        return listA.removeAt(listA.size() - 1);
+        return listA.removingAt(listA.size() - 1);
     }
 
     @Benchmark
     public PersistentList<Key> mRemoveAtIndex() {
-        return listA.removeAt(index);
+        return listA.removingAt(index);
     }
 
     @Benchmark
     public Key mGet() {
-        int index = data.nextIndexInA();
-        return listA.get(index);
+        int offset = data.nextIndexInA();
+        return listA.get(offset);
     }
 
     @Benchmark
@@ -179,16 +231,14 @@ public class KotlinPersistentListJmh {
     }
 
     @Benchmark
-    public Key mHead() {
+    public Key mGetFirst() {
         return listA.get(0);
     }
 
     @Benchmark
     public PersistentList<Key> mSet() {
-        int index = data.nextIndexInA();
+        int offset = data.nextIndexInA();
         Key key = data.nextKeyInB();
-        return listA.set(index, key);
+        return listA.replacingAt(offset, key);
     }
-
-
 }

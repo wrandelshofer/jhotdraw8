@@ -315,7 +315,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
                 if (concatenatedWithLast instanceof Affine) {
                     set(TRANSFORMS, ts.adding(transform));
                 } else {
-                    set(TRANSFORMS, ts.replacingAt(last, concatenatedWithLast));
+                    set(TRANSFORMS, ts.settingAt(last, concatenatedWithLast));
                 }
             }
             return;
@@ -382,7 +382,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
             if (transforms.isEmpty()) {
                 set(TRANSFORMS, PersistentVectorList.of(t));
             } else {
-                set(TRANSFORMS, transforms.replacingAt(0, t));
+                set(TRANSFORMS, transforms.settingAt(0, t));
             }
         }
     }

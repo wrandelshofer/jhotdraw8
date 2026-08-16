@@ -27,7 +27,7 @@ public interface PersistentSortedSet<E> extends ReadableSortedSet<E>, Persistent
     }
 
     @Override
-    <T> PersistentSortedSet<T> cleared();
+    PersistentSortedSet<E> cleared();
 
     /// Returns a copy of this collection that is empty, and has the specified
     /// type and comparator.

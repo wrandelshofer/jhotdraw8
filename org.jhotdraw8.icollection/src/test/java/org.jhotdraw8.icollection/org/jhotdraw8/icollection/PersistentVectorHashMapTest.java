@@ -19,12 +19,12 @@ public class PersistentVectorHashMapTest extends AbstractImmutableSequencedMapTe
 
     @Override
     protected <K, V> PersistentVectorHashMap<K, V> newInstance(Map<K, V> map) {
-        return PersistentVectorHashMap.<K, V>copyOf(map);
+        return PersistentVectorHashMap.<K, V>of().puttingAll(map);
     }
 
     @Override
     protected <K, V> PersistentVectorHashMap<K, V> newInstance(ReadableMap<K, V> map) {
-        return PersistentVectorHashMap.<K, V>copyOf(map);
+        return PersistentVectorHashMap.<K, V>of().puttingAll(map);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class PersistentVectorHashMapTest extends AbstractImmutableSequencedMapTe
 
     @Override
     protected <K, V> PersistentVectorHashMap<K, V> newInstance(Iterable<Map.Entry<K, V>> entries) {
-        return new PersistentVectorHashMapBuilder<K, V>().addEntries(entries).build();
+        return PersistentVectorHashMap.<K, V>of().puttingAll(entries);
     }
 
     @Override

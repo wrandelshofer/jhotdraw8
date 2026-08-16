@@ -11,7 +11,7 @@ import org.jhotdraw8.icollection.readable.ReadableSet;
 import java.util.SequencedSet;
 import java.util.Set;
 
-public class MutableVectorHashSetTest extends AbstractSequencedSetTest {
+public class MutablePersistentVectorHashSetTest extends AbstractSequencedSetTest {
     @Override
     protected <E> SequencedSet<E> newInstance() {
         return new MutableVectorHashSet<>();
