@@ -844,7 +844,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     ///
     /// If the layout of this figure depends on the layout of other figures, then
     /// calling layout on this figure will only result in the correct result,
-    /// if layout of the other figures has been performed tree.
+    /// if layout of the other figures has been performed first.
     ///
     /// A figure does not keep track of changes that require layout updates.
     /// Use [DrawingModel] to manage layout updates.
@@ -977,7 +977,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     ///
     /// This is a convenience method which takes all parameters in pixel units.
     ///
-    /// @param x      desired element-position in parent coordinates
+    /// @param x      desired x-position in parent coordinates
     /// @param y      desired y-position in parent coordinates
     /// @param width  desired width in parent coordinates, may be negative
     /// @param height desired height in parent coordinates, may be negative
@@ -995,13 +995,13 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /// This method can forward a call to [#reshapeInLocal(Transform)]
     /// using the following code:
     /// <pre><code>
-    /// void reshapeInLocal(CssSize element, CssSize y, CssSize width, CssSize height) {
-    ///   Transform tx = Transforms.createReshapeTransform(getCssBoundsInLocal(), element, y, width, height);
+    /// void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
+    ///   Transform tx = Transforms.createReshapeTransform(getCssBoundsInLocal(), x, y, width, height);
     ///   reshapeInLocal(tx);
     /// }
     /// </code></pre>
     ///
-    /// @param x      desired element-position in parent coordinates
+    /// @param x      desired x-position in parent coordinates
     /// @param y      desired y-position in parent coordinates
     /// @param width  desired width in parent coordinates, may be negative
     /// @param height desired height in parent coordinates, may be negative
@@ -1019,7 +1019,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /// Attempts to translate the parent bounds of the figure.
     ///
-    /// @param t the translation in element and in y direction
+    /// @param t the translation in x and in y direction
     default void translateInParent(CssPoint2D t) {
         if (FXTransforms.isIdentityOrNull(getParentToLocal())) {
             translateInLocal(t);
@@ -1031,7 +1031,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /// Attempts to translate the local bounds of the figure.
     ///
-    /// @param t the translation in element and in y direction
+    /// @param t the translation in x and in y direction
     default void translateInLocal(CssPoint2D t) {
         CssRectangle2D b = getCssLayoutBounds();
         reshapeInLocal(b.getMinX().add(t.getX()),

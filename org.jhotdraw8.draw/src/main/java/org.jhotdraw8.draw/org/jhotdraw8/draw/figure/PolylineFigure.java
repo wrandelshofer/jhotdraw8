@@ -42,18 +42,15 @@ public class PolylineFigure extends AbstractLeafFigure
     /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Polyline";
 
-    @SuppressWarnings("this-escape")
     public PolylineFigure() {
         this(0, 0, 1, 1);
     }
 
-    @SuppressWarnings("this-escape")
     public PolylineFigure(double startX, double startY, double endX, double endY) {
         set(POINTS, PersistentVectorList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
         set(FILL, null);
     }
 
-    @SuppressWarnings("this-escape")
     public PolylineFigure(Point2D... points) {
         set(POINTS, PersistentVectorList.of(points));
         set(FILL, null);

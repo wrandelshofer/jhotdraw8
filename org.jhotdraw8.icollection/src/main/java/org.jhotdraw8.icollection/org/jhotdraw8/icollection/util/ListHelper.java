@@ -17,12 +17,12 @@ public class ListHelper {
     }
 
 
-    /// Copies 'src' and inserts 'numComponents' at position 'offset'.
+    /// Copies 'src' and inserts 'numComponents' at position 'index'.
     ///
     /// The new components will have a null value.
     ///
     /// @param src           an array
-    /// @param index         an offset
+    /// @param index         an index
     /// @param numComponents the number of array components to be added
     /// @param <T>           the array type
     /// @return a new array
@@ -36,10 +36,10 @@ public class ListHelper {
         return dst;
     }
 
-    /// Copies 'src' and removes 'numComponents' at position 'offset'.
+    /// Copies 'src' and removes 'numComponents' at position 'index'.
     ///
     /// @param src           an array
-    /// @param index         an offset
+    /// @param index         an index
     /// @param numComponents the number of array components to be removed
     /// @param <T>           the array type
     /// @return a new array
@@ -53,10 +53,10 @@ public class ListHelper {
         return dst;
     }
 
-    /// Copies 'src' and sets 'value' at position 'offset'.
+    /// Copies 'src' and sets 'value' at position 'index'.
     ///
     /// @param src   an array
-    /// @param index an offset
+    /// @param index an index
     /// @param value a value
     /// @param <T>   the array type
     /// @return a new array

@@ -302,10 +302,10 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
             items[index * ITEM_SIZE + ITEM_ARROW_OFFSET] = a;
         }
 
-        /// Gets the node at the specified offset.
+        /// Gets the node at the specified index.
         ///
-        /// @param index an offset
-        /// @return the node at the offset
+        /// @param index an index
+        /// @return the node at the index
         public Node<V, A> getNode(int index) {
             rangeCheck(index, size);
 
@@ -318,10 +318,10 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
             return getNode(index).vertex;
         }
 
-        /// Gets the arrow data at the specified offset.
+        /// Gets the arrow data at the specified index.
         ///
-        /// @param index an offset
-        /// @return the node at the offset
+        /// @param index an index
+        /// @return the node at the index
         public A getArrow(int index) {
             rangeCheck(index, size);
 
@@ -373,9 +373,9 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
             return false;
         }
 
-        /// Removes the item at the specified offset from this list.
+        /// Removes the item at the specified index from this list.
         ///
-        /// @param index an offset
+        /// @param index an index
         public void removeAt(int index) {
             rangeCheck(index, size);
             int numMoved = size - index - 1;

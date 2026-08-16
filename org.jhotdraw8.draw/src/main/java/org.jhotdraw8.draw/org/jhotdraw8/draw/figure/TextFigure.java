@@ -44,12 +44,10 @@ public class TextFigure extends AbstractLeafFigure
         this(0, 0, "");
     }
 
-    @SuppressWarnings("this-escape")
     public TextFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
-    @SuppressWarnings("this-escape")
     public TextFigure(double x, double y, String text) {
         set(TEXT, text);
         set(ORIGIN, new CssPoint2D(x, y));

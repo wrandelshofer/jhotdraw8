@@ -45,7 +45,6 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     /// All figures which are not in the map use the default constrainer.
     private final NonNullObjectProperty<Constrainer> defaultConstrainer = new NonNullObjectProperty<>(this, DEFAULT_CONSTRAINER_PROPERTY, new NullConstrainer());
 
-    @SuppressWarnings("this-escape")
     public FigureSpecificConstrainer() {
     }
 

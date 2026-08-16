@@ -19,18 +19,18 @@ public class SvgPath2D extends Path2D.Double {
     public SvgPath2D() {
     }
 
-    /// Adds an elliptical arc, defined by two radii, an angle from the element-axis, a
+    /// Adds an elliptical arc, defined by two radii, an angle from the x-axis, a
     /// flag to choose the large arc or not, a flag to indicate if we increase or
     /// decrease the angles and the final point of the arc.
     ///
     /// As specified in
     /// <a href="http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands">w3.org</a>
     ///
-    /// @param rx            the element radius of the ellipse
+    /// @param rx            the x radius of the ellipse
     /// @param ry            the y radius of the ellipse
-    /// @param xAxisRotation the angle from the element-axis of the current coordinate
-    ///                      system to the element-axis of the ellipse in degrees.
-    /// @param x             the absolute element coordinate of the final point of the arc.
+    /// @param xAxisRotation the angle from the x-axis of the current coordinate
+    ///                      system to the x-axis of the ellipse in degrees.
+    /// @param x             the absolute x coordinate of the final point of the arc.
     /// @param y             the absolute y coordinate of the final point of the arc.
     /// @param largeArcFlag  the large arc flag. If true the arc spanning less
     ///                      than or equal to 180 degrees is chosen, otherwise the arc spanning
@@ -42,7 +42,7 @@ public class SvgPath2D extends Path2D.Double {
                       double xAxisRotation,
                       double x, double y, boolean largeArcFlag, boolean sweepFlag) {
 
-        // Get the current (element, y) coordinates of the path
+        // Get the current (x, y) coordinates of the path
         Point2D.Double lastPoint = (Point2D.Double) getCurrentPoint();
         double lastX = lastPoint.getX();
         double lastY = lastPoint.getY();

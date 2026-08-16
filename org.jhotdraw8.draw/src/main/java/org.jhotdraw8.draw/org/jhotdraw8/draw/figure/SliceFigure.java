@@ -38,7 +38,7 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     /// The CSS type selector for this object is {@value #TYPE_SELECTOR}.
     public static final String TYPE_SELECTOR = "Slice";
 
-    public static final CssSizeStyleableKey X = new CssSizeStyleableKey("element", CssSize.ZERO);
+    public static final CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
     public static final CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
     public static final CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.ZERO);
     public static final CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.ZERO);

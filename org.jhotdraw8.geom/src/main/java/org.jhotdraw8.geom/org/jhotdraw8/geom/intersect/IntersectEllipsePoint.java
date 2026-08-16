@@ -20,7 +20,7 @@ public class IntersectEllipsePoint {
     ///
     /// @param point  the point
     /// @param center the center of the ellipse
-    /// @param rx     the element-radius of ellipse
+    /// @param rx     the x-radius of ellipse
     /// @param ry     the y-radius of ellipse
     /// @return computed intersection. Status can be[IntersectionStatus#INTERSECTION],
     /// Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.

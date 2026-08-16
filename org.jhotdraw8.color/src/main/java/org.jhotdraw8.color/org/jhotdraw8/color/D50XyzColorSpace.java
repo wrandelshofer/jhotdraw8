@@ -7,7 +7,6 @@ package org.jhotdraw8.color;
 
 
 import java.awt.color.ColorSpace;
-import java.io.Serial;
 
 /// CIE XYZ Color Space with D50 white point.
 ///
@@ -17,9 +16,6 @@ import java.io.Serial;
 /// : [w3.org](https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#predefined-xyz)
 ///
 public class D50XyzColorSpace extends AbstractNamedColorSpace {
-    @Serial
-    private static final long serialVersionUID = 0L;
-
     public static D50XyzColorSpace getInstance() {
         class Holder {
             private static final D50XyzColorSpace INSTANCE = new D50XyzColorSpace();

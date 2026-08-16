@@ -8,8 +8,6 @@ package org.jhotdraw8.color;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.color.trc.ParametricToneMapper;
 
-import java.io.Serial;
-
 import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65_XYZ;
 
 /// Rec. 709 Color Space.
@@ -75,8 +73,6 @@ import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65_X
 /// : [wikipedia](https://en.wikipedia.org/wiki/Rec._709)
 public class Rec709ColorSpace extends ParametricNonLinearRgbColorSpace {
 
-    @Serial
-    private static final long serialVersionUID = 0L;
 
     // Rec. 709 instance without scaling
     public static Rec709ColorSpace getInstance() {

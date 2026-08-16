@@ -35,7 +35,7 @@ public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> 
 
     private int currentStackLevel = -1;
 
-    /// Even indexes: node offset
+    /// Even indexes: node index
     /// Odd indexes: node length
     private final int[] indexAndArity = new int[MAX_DEPTH * 2];
 

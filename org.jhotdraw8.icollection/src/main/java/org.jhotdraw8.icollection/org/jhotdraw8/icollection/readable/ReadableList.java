@@ -27,27 +27,27 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
 
     /// Returns the element at the specified position in this list.
     ///
-    /// @param index the offset of the element
+    /// @param index the index of the element
     /// @return the element
-    /// @throws IndexOutOfBoundsException if the offset is out of range
-    ///                                   (`offset < 0 || offset >= size()`)
+    /// @throws IndexOutOfBoundsException if the index is out of range
+    ///                                   (`index < 0 || index >= size()`)
     E get(int index);
 
     /// Returns the element at the specified position in this list, counted
     /// from the last element of the list.
     ///
-    /// @param index the offset of the element, counted from the last
+    /// @param index the index of the element, counted from the last
     ///              element.
     /// @return the element
-    /// @throws IndexOutOfBoundsException if the offset is out of range
-    ///                                   (`offset < 0 || offset >= size()`)
+    /// @throws IndexOutOfBoundsException if the index is out of range
+    ///                                   (`index < 0 || index >= size()`)
     default E getLast(int index) {
         return get(size() - index - 1);
     }
 
-    /// Gets the tree element of the list.
+    /// Gets the first element of the list.
     ///
-    /// @return the tree element
+    /// @return the first element
     /// @throws NoSuchElementException if the list is empty
     @Override
     default E getFirst() {
@@ -70,9 +70,9 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
         return get(index);
     }
 
-    /// Peeks the tree element of the list.
+    /// Peeks the first element of the list.
     ///
-    /// @return the tree element or null if the list is empty
+    /// @return the first element or null if the list is empty
     default @Nullable E peekFirst() {
         return isEmpty() ? null : get(0);
     }
@@ -109,9 +109,9 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
     }
 
     /// Returns a list iterator over elements of type `E` starting
-    /// at the specified offset.
+    /// at the specified index.
     ///
-    /// @param index the start offset
+    /// @param index the start index
     /// @return a list iterator.
     default ListIterator<E> listIterator(int index) {
         return new ReadableListSpliterator<>(this, index, size());
@@ -127,16 +127,16 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
     /// Returns a view of the portion of this list between the specified
     /// * `fromIndex`, inclusive, and `toIndex`, exclusive.
     ///
-    /// @param fromIndex the from offset
-    /// @param toIndex   the to offset (exclusive)
+    /// @param fromIndex the from index
+    /// @param toIndex   the to index (exclusive)
     /// @return the sub list
     ReadableList<E> readableSubList(int fromIndex, int toIndex);
 
-    /// Returns the offset of the tree occurrence of the specified element
+    /// Returns the index of the first occurrence of the specified element
     /// in this list, or -1 if this list does not contain the element.
     ///
     /// @param o an element
-    /// @return the offset of the element or -1
+    /// @return the index of the element or -1
     default int indexOf(Object o) {
         for (int i = 0, n = size(); i < n; i++) {
             if (Objects.equals(get(i), o)) {
@@ -146,11 +146,11 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
         return -1;
     }
 
-    /// Returns the offset of the last occurrence of the specified element
+    /// Returns the index of the last occurrence of the specified element
     /// in this list, or -1 if this list does not contain the element.
     ///
     /// @param o an element
-    /// @return the offset of the element or -1
+    /// @return the index of the element or -1
     default int lastIndexOf(Object o) {
         for (int i = size() - 1; i >= 0; i--) {
             if (Objects.equals(get(i), o)) {

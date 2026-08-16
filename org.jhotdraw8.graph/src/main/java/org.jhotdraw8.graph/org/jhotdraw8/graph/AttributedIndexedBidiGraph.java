@@ -33,7 +33,7 @@ public interface AttributedIndexedBidiGraph<V, A> extends IndexedBidiGraph, Attr
     /// Returns the specified predecessor (previous) arrow of the specified vertex.
     ///
     /// @param vertex a vertex
-    /// @param index  offset of next arrow
+    /// @param index  index of next arrow
     /// @return the specified arrow
     A getPrevArrow(int vertex, int index);
 

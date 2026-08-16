@@ -58,7 +58,7 @@ public class CardinalSplines {
     ///
     /// @param p the points of the cardinal spline
     /// @param c the tension of the cardinal spline
-    /// @return the cubic bezier curves (tree point is `moveTo`,
+    /// @return the cubic bezier curves (first point is `moveTo`,
     /// subsequent triples of points are `curveTo`s.
     public static Point2D[] cardinalSplineToBezier(Point2D[] p, double c) {
         List<Point2D> b = new ArrayList<>();

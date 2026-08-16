@@ -11,16 +11,16 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-/// An "adjacent sibling combinator" matches an element if its tree selector
-/// matches on the adjacent sibling of the element and if its offset selector
+/// An "adjacent sibling combinator" matches an element if its first selector
+/// matches on the adjacent sibling of the element and if its second selector
 /// matches the element.
 public class AdjacentSiblingCombinator extends Combinator {
 
     /// Creates a new instance.
     ///
     /// @param sourceLocator
-    /// @param first         the tree selector
-    /// @param second        the offset selector
+    /// @param first         the first selector
+    /// @param second        the second selector
     public AdjacentSiblingCombinator(@Nullable SourceLocator sourceLocator, SimpleSelector first, Selector second) {
         super(sourceLocator, first, second);
     }
@@ -51,10 +51,10 @@ public class AdjacentSiblingCombinator extends Combinator {
         second.produceTokens(consumer);
     }
 
-    /// This selector matches only on a specific type, if its offset
+    /// This selector matches only on a specific type, if its second
     /// selector matches only on a specific type.
     ///
-    /// @return `offset.matchesOnlyOnASpecificType()`
+    /// @return `second.matchesOnlyOnASpecificType()`
     @Override
     public @Nullable TypeSelector matchesOnlyOnASpecificType() {
         return second.matchesOnlyOnASpecificType();

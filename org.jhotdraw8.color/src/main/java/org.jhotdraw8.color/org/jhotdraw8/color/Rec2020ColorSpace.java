@@ -8,8 +8,6 @@ package org.jhotdraw8.color;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.color.trc.GammaToneMapper;
 
-import java.io.Serial;
-
 import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65_XYZ;
 
 /// Rec. 2020 Color Space.
@@ -51,9 +49,6 @@ import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65_X
 /// Wikipedia: Rec. 2020
 /// : [wikipedia](https://en.wikipedia.org/wiki/Rec_2020)
 public class Rec2020ColorSpace extends ParametricNonLinearRgbColorSpace {
-    @Serial
-    private static final long serialVersionUID = 0L;
-
     public static Rec2020ColorSpace getInstance() {
         class Holder {
             private static final Rec2020ColorSpace INSTANCE = new Rec2020ColorSpace();

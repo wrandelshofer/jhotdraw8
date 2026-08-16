@@ -315,7 +315,7 @@ public class BezierNode {
     }
 
 
-    /// Gets the element-coordinate of a control point given the specified mask.
+    /// Gets the x-coordinate of a control point given the specified mask.
     ///
     /// @param mask a mask, one of [#POINT_MASK],[#IN_MASK],[#OUT_MASK].
     /// @return the point

@@ -29,16 +29,11 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     }
 
     private final Figure figure;
-    @SuppressWarnings("serial")
     private final Key<?> key;
-    @SuppressWarnings("serial")
     private final Object oldValue;
-    @SuppressWarnings("serial")
     private final Object newValue;
 
-    @SuppressWarnings("serial")
     private final Figure parent;
-    @SuppressWarnings("serial")
     private final Drawing drawing;
     private final int index;
     private final DrawingModelEvent.EventType eventType;
@@ -130,9 +125,9 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         return figure;
     }
 
-    /// If the figure was added or removed, returns the child offset.
+    /// If the figure was added or removed, returns the child index.
     ///
-    /// @return an offset. Returns -1 if the figure was neither added or removed.
+    /// @return an index. Returns -1 if the figure was neither added or removed.
     public int getIndex() {
         return index;
     }
@@ -165,7 +160,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
                 + ", key=" + key
                 + ", oldValue=" + oldValue + ", newValue=" + newValue
                 + ", parent=" + (parent == null ? null : parent.getTypeSelector() + "@" + Integer.toHexString(System.identityHashCode(parent)))
-                + ", offset=" + index + ", eventType="
+                + ", index=" + index + ", eventType="
                 + eventType + ", source=" + source + '}';
     }
 

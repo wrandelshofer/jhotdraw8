@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 /// Entry iterator over a CHAMP trie.
 ///
 /// Uses a fixed stack in depth.
-/// Iterates tree over inlined data entries and then continues depth tree.
+/// Iterates first over inlined data entries and then continues depth first.
 ///
 /// Supports remove and [Map.Entry#setValue]. The functions that are
 /// passed to this iterator must not change the trie structure that the iterator

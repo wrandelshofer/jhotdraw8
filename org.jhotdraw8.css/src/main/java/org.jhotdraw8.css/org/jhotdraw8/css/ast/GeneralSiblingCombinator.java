@@ -11,8 +11,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-/// An "general sibling combinator" matches an element if its tree selector
-/// matches the sibling of the element and if its offset selector
+/// An "general sibling combinator" matches an element if its first selector
+/// matches the sibling of the element and if its second selector
 /// matches the element.
 public class GeneralSiblingCombinator extends Combinator {
 
@@ -53,10 +53,10 @@ public class GeneralSiblingCombinator extends Combinator {
         second.produceTokens(consumer);
     }
 
-    /// This selector matches only on a specific type, if its offset
+    /// This selector matches only on a specific type, if its second
     /// selector matches only on a specific type.
     ///
-    /// @return `offset.matchesOnlyOnASpecificType()`
+    /// @return `second.matchesOnlyOnASpecificType()`
     @Override
     public @Nullable TypeSelector matchesOnlyOnASpecificType() {
         return second.matchesOnlyOnASpecificType();

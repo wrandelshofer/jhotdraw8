@@ -16,7 +16,6 @@ public class ResizePane extends BorderPane {
 
     private final ResizeButton rb = new ResizeButton();
 
-    @SuppressWarnings("this-escape")
     public ResizePane() {
         rb.setTarget(this);
         setBottom(rb);

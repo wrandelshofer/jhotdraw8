@@ -14,9 +14,6 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 public class Lines {
-    private Lines() {
-    }
-
     /// Evaluates the given curve at the specified time.
     ///
     /// @param x0 point P0 of the curve
@@ -32,11 +29,11 @@ public class Lines {
 
     /// Returns true if the three points are collinear.
     ///
-    /// @param a element-coordinate of point 0
+    /// @param a x-coordinate of point 0
     /// @param b y-coordinate of point 0
-    /// @param m element-coordinate of point 1
+    /// @param m x-coordinate of point 1
     /// @param n y-coordinate of point 1
-    /// @param x element-coordinate of point 2
+    /// @param x x-coordinate of point 2
     /// @param y y-coordinate of point 2
     /// @return true if collinear
     public static boolean isCollinear(double a, double b, double m, double n, double x, double y) {
@@ -51,11 +48,11 @@ public class Lines {
     /// perpendicular projection is outside segment; or If pts on line are same,
     /// return distance from point
     ///
-    /// @param xa the element-coordinate of point a on the line
+    /// @param xa the x-coordinate of point a on the line
     /// @param ya the y-coordinate of point a on the line
-    /// @param xb the element-coordinate of point b on the line
+    /// @param xb the x-coordinate of point b on the line
     /// @param yb the y-coordinate of point b on the line
-    /// @param xc the element-coordinate of the point c
+    /// @param xc the x-coordinate of the point c
     /// @param yc the y-coordinate of the point c
     /// @return the distance from the line
     public static double distanceFromLine(double xa, double ya,
@@ -148,9 +145,9 @@ public class Lines {
 
     /// Gets the distance between to points
     ///
-    /// @param x1 the element coordinate of point 1
+    /// @param x1 the x coordinate of point 1
     /// @param y1 the y coordinate of point 1
-    /// @param x2 the element coordinate of point 2
+    /// @param x2 the x coordinate of point 2
     /// @param y2 the y coordinate of point 2
     /// @return the distance between the two points
     public static double arcLength(double x1, double y1, double x2, double y2) {
@@ -164,9 +161,9 @@ public class Lines {
 
     /// Gets the arc length s at the given time t.
     ///
-    /// @param x1 the element coordinate of point 1
+    /// @param x1 the x coordinate of point 1
     /// @param y1 the y coordinate of point 1
-    /// @param x2 the element coordinate of point 2
+    /// @param x2 the x coordinate of point 2
     /// @param y2 the y coordinate of point 2
     /// @param t  the time
     /// @return arc length s at time t
@@ -176,9 +173,9 @@ public class Lines {
 
     /// Computes time t at the given arc length s.
     ///
-    /// @param x1 the element coordinate of point 1
+    /// @param x1 the x coordinate of point 1
     /// @param y1 the y coordinate of point 1
-    /// @param x2 the element coordinate of point 2
+    /// @param x2 the x coordinate of point 2
     /// @param y2 the y coordinate of point 2
     /// @param s  arc length
     /// @return t at s
@@ -189,7 +186,7 @@ public class Lines {
     /// Computes time t at the given arc length s.
     ///
     /// @param p      points of the line
-    /// @param offset offset of the tree point in array `a`
+    /// @param offset index of the first point in array `a`
     /// @param s      arc length
     /// @return t at s
     public static double invArcLength(double[] p, int offset, double s) {

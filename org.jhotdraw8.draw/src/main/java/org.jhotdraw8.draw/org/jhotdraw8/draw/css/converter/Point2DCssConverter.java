@@ -40,7 +40,7 @@ public class Point2DCssConverter extends AbstractCssConverter<CssPoint2D> {
     @Override
     public CssPoint2D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y;
-        x = parseSize(tt, "element");
+        x = parseSize(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         y = parseSize(tt, "y");
 
@@ -63,6 +63,6 @@ public class Point2DCssConverter extends AbstractCssConverter<CssPoint2D> {
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨CssPoint2D⟩: ⟨element⟩ ⟨y⟩";
+        return "Format of ⟨CssPoint2D⟩: ⟨x⟩ ⟨y⟩";
     }
 }

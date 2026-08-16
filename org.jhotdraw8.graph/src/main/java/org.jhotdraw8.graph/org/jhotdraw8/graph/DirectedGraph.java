@@ -34,12 +34,12 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
         return index < 0 ? null : getNextArrow(u, index);
     }
 
-    /// Returns the offset of vertex `u` in the list of next vertices
+    /// Returns the index of vertex `u` in the list of next vertices
     /// of `v` if an arrow from `v` to `u` exists.
     ///
     /// @param v a vertex
     /// @param u a vertex
-    /// @return offset of vertex `u` or a value {@literal < 0}
+    /// @return index of vertex `u` or a value {@literal < 0}
     default int findIndexOfNext(V v, V u) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {
             if (u.equals(getNext(v, i))) {
@@ -61,7 +61,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
     /// arrow from vertex `v`.
     ///
     /// @param v a vertex
-    /// @param i the offset into the list of outgoing arrows
+    /// @param i the index into the list of outgoing arrows
     /// @return the arc data
     default Arc<V, A> getNextArc(V v, int i) {
         return new Arc<>(v, getNext(v, i), getNextArrow(v, i));
@@ -135,18 +135,18 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
         return findIndexOfNext(v, u) != -1;
     }
 
-    /// Gets the vertex data at the specified offset.
+    /// Gets the vertex data at the specified index.
     ///
-    /// @param index an offset
+    /// @param index an index
     /// @return vertex data
-    /// @throws IndexOutOfBoundsException if the offset is out of bounds
+    /// @throws IndexOutOfBoundsException if the index is out of bounds
     V getVertex(int index);
 
     /// Searches for vertices starting at the provided vertex.
     ///
     /// @param start the start vertex
-    /// @param dfs   whether to search depth-tree instead of breadth-tree
-    /// @return breadth tree search
+    /// @param dfs   whether to search depth-first instead of breadth-first
+    /// @return breadth first search
     default Enumerator<V> searchNextVertices(final V start, final boolean dfs) {
         final Set<V> visited = new HashSet<>();
         return searchNextVertices(start, visited::add, dfs);
@@ -156,8 +156,8 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
     ///
     /// @param start   the start vertex
     /// @param visited the add method of the visited set, see [Set#add].
-    /// @param dfs     whether to search depth-tree instead of breadth-tree
-    /// @return breadth tree search
+    /// @param dfs     whether to search depth-first instead of breadth-first
+    /// @return breadth first search
     default Enumerator<V> searchNextVertices(final V start, final AddToSet<V> visited, final boolean dfs) {
         return new BfsDfsVertexSpliterator<>(this::getNextVertices, start, visited, dfs);
     }

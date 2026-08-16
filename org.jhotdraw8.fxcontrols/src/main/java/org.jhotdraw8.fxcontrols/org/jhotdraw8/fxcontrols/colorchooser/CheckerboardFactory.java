@@ -33,11 +33,11 @@ class CheckerboardFactory {
         WritableImage image = new WritableImage(pixelBuffer);
         int[] a = intBuffer.array();
 
-        // fill tree even line
+        // fill first even line
         Arrays.fill(a, 0, size, evenArgb);
         Arrays.fill(a, size, size * 2, oddArgb);
 
-        // fill tree odd line
+        // fill first odd line
         int xy = size * width;
         Arrays.fill(a, xy, xy + size, oddArgb);
         Arrays.fill(a, xy + size, xy + size * 2, evenArgb);

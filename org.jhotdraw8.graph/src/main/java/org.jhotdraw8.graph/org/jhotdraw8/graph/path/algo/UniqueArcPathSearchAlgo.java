@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /// Searches a globally unique vertex path from a set of start vertices to a
-/// set of goal vertices using a breadth-tree search algorithm on a directed
+/// set of goal vertices using a breadth-first search algorithm on a directed
 /// (potentially cyclic) graph (DIG).
 ///
 /// Uniqueness is global up to (inclusive) the specified maximal depth.

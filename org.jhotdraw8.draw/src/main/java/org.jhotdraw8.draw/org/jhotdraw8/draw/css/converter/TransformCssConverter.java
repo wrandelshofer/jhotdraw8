@@ -48,7 +48,7 @@ import java.util.function.Consumer;
 /// Rotate        = "rotate(" , [S] ,
 ///                  rotate-angle , [ C , Pivot , [ C, Axis ] , [S], ")" ;
 ///
-/// Shear         = "shear(" , [S] , element , Sep , y , [Sep,Pivot2D], [S], ")" ;
+/// Shear         = "shear(" , [S] , x , Sep , y , [Sep,Pivot2D], [S], ")" ;
 ///
 /// Axis          =  axisX, Sep , axisY, Sep , axisZ ;
 /// Pivot         =  pivotX, Sep , pivotY, [Sep,pivotZ] ;

@@ -75,7 +75,7 @@ public class PlinePath extends ArrayList<PlineVertex> implements Cloneable {
     }
 
     /// Iterate the segement indices of the polyline. visitor function is invoked for each segment
-    /// offset pair, stops when all indices have been visited or visitor returns false. visitor
+    /// index pair, stops when all indices have been visited or visitor returns false. visitor
     /// signature is bool(int, int).
     public void visitSegIndices(BiPredicate<Integer, Integer> visitor) {
         if (size() < 2) {
@@ -133,10 +133,10 @@ public class PlinePath extends ArrayList<PlineVertex> implements Cloneable {
         return b.build();
     }
 
-    /// Creates an approximate spatial offset for all the segments in the polyline given using
+    /// Creates an approximate spatial index for all the segments in the polyline given using
     /// createFastApproxBoundingBox.
     public static StaticSpatialIndex createApproxSpatialIndex(final PlinePath pline) {
-        assert pline.size() > 1 : "need at least 2 vertexes to form segments for spatial offset";
+        assert pline.size() > 1 : "need at least 2 vertexes to form segments for spatial index";
 
         int segmentCount = pline.isClosed() ? pline.size() : pline.size() - 1;
         StaticSpatialIndex result = new StaticSpatialIndex(segmentCount);
@@ -148,7 +148,7 @@ public class PlinePath extends ArrayList<PlineVertex> implements Cloneable {
         }
 
         if (pline.isClosed()) {
-            // add final segment from last to tree
+            // add final segment from last to first
             AABB approxBB = createFastApproxBoundingBox(pline.lastVertex(), pline.getFirst());
             result.add(approxBB.minX(), approxBB.minY(),
                     approxBB.maxX(), approxBB.maxY());

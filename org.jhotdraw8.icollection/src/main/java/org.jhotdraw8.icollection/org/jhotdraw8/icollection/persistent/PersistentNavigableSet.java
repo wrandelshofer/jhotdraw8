@@ -37,9 +37,9 @@ public interface PersistentNavigableSet<E> extends ReadableNavigableSet<E>, Pers
     }
 
     /// Returns a copy of this set that contains all elements
-    /// of this set except the tree.
+    /// of this set except the first.
     ///
-    /// @return a new set instance with the tree element removed
+    /// @return a new set instance with the first element removed
     /// @throws NoSuchElementException if this set is empty
     @Override
     default PersistentNavigableSet<E> removingFirst() {

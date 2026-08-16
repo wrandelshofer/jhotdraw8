@@ -81,7 +81,7 @@ public interface Application extends Disableable, PropertyBean {
     }
 
     /// The set of recent URIs. The set must be ordered by most recently used
-    /// tree. Only the tree items as specified in
+    /// first. Only the first items as specified in
     /// [#maxNumberOfRecentUrisProperty] of the set are used and persisted
     /// in user preferences.
     ///

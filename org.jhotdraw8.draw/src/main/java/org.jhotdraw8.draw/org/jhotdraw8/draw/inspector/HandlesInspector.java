@@ -55,12 +55,10 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
     private Slider handleStrokeWidthSlider;
     private Node node;
 
-    @SuppressWarnings("this-escape")
     public HandlesInspector() {
         this(GridInspector.class.getResource("HandlesInspector.fxml"));
     }
 
-    @SuppressWarnings("this-escape")
     public HandlesInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }

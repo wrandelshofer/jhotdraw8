@@ -214,7 +214,7 @@ public class RadialGradientCssConverter extends AbstractCssConverter<CssRadialGr
                         centerX = tt.currentNumberNonNull().doubleValue();
                         break;
                     default:
-                        throw new ParseException("CSS RadialGradient: center element-value expected, found: " + tt.getToken(), tt.getStartPosition());
+                        throw new ParseException("CSS RadialGradient: center x-value expected, found: " + tt.getToken(), tt.getStartPosition());
                 }
                 switch (tt.next()) {
                     case CssTokenType.TT_PERCENTAGE:
@@ -259,7 +259,7 @@ public class RadialGradientCssConverter extends AbstractCssConverter<CssRadialGr
                         radius = tt.currentNumberNonNull().doubleValue();
                         break;
                     default:
-                        throw new ParseException("CSS RadialGradient: center element-value  expected, found: " + tt.getToken(), tt.getStartPosition());
+                        throw new ParseException("CSS RadialGradient: center x-value  expected, found: " + tt.getToken(), tt.getStartPosition());
                 }
             } else {
                 tt.pushBack();

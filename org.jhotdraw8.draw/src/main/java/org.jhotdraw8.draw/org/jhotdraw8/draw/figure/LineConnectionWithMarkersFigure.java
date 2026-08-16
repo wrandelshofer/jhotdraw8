@@ -41,7 +41,6 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
-    @SuppressWarnings("this-escape")
     public LineConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
         set(MARKER_FILL, new CssColor("black", Color.BLACK));

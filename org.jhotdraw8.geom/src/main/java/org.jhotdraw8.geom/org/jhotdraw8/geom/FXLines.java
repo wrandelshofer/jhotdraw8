@@ -10,9 +10,6 @@ import javafx.geometry.Point2D;
 public class FXLines {
 
 
-    private FXLines() {
-    }
-
     public static Point2D lerp(double x0, double y0, double x1, double y1, double t) {
         return new Point2D(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }

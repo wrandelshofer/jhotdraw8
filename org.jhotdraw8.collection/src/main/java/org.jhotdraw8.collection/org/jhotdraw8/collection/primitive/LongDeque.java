@@ -51,7 +51,7 @@ public interface LongDeque extends Deque<Long> {
         return getFirstAsLong();
     }
 
-    /// Returns the tree offset of the specified element
+    /// Returns the first index of the specified element
     /// or -1 if this deque does not contain the element.
     int firstIndexOfAsLong(long o);
 
@@ -71,7 +71,7 @@ public interface LongDeque extends Deque<Long> {
     /// @see Deque#getLast()
     long getLastAsLong();
 
-    /// Returns the last offset of the specified element
+    /// Returns the last index of the specified element
     /// or -1 if this deque does not contain the element.
     int lastIndexOfAsLong(long o);
 

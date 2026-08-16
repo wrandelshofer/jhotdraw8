@@ -58,12 +58,10 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
     double x;
     double y;
 
-    @SuppressWarnings("this-escape")
     public SimpleSelectAreaTracker() {
         this("tool.selectArea", ApplicationLabels.getResources());
     }
 
-    @SuppressWarnings("this-escape")
     public SimpleSelectAreaTracker(String name, Resources rsrc) {
         //super(name, rsrc);
 

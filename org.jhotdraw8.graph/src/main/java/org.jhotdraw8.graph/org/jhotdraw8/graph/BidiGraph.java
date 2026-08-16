@@ -39,7 +39,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
     /// arrow from vertex `v`.
     ///
     /// @param v a vertex
-    /// @param i the offset into the list of outgoing arrows
+    /// @param i the index into the list of outgoing arrows
     /// @return the arc data
     default Arc<V, A> getPrevArc(V v, int i) {
         return new Arc<>(getPrev(v, i), v, getPrevArrow(v, i));
@@ -53,12 +53,12 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
         return new ListFacade<>(() -> this.getPrevCount(v), i -> getPrevArc(v, i));
     }
 
-    /// Returns the offset of vertex `u` in the list of previous vertices
+    /// Returns the index of vertex `u` in the list of previous vertices
     /// of `v` if an arrow from `u` to `v` exists.
     ///
     /// @param v a vertex
     /// @param u a vertex
-    /// @return offset of vertex `u` or a value {@literal < 0}
+    /// @return index of vertex `u` or a value {@literal < 0}
     default int findIndexOfPrev(final V v, final V u) {
         for (int i = 0, n = getPrevCount(v); i < n; i++) {
             if (u.equals(getPrev(v, i))) {
@@ -81,8 +81,8 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
     /// Searches for vertices starting at the provided vertex.
     ///
     /// @param start the start vertex
-    /// @param dfs   whether to search depth-tree instead of breadth-tree
-    /// @return breadth tree search
+    /// @param dfs   whether to search depth-first instead of breadth-first
+    /// @return breadth first search
     default Enumerator<V> searchPrevVertices(final V start, final boolean dfs) {
         final Set<V> visited = new HashSet<>();
         return searchPrevVertices(start, visited::add, dfs);
@@ -92,8 +92,8 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
     ///
     /// @param start   the start vertex
     /// @param visited the add method of the visited set, see [Set#add].
-    /// @param dfs     whether to search depth-tree instead of breadth-tree
-    /// @return breadth tree search
+    /// @param dfs     whether to search depth-first instead of breadth-first
+    /// @return breadth first search
     default Enumerator<V> searchPrevVertices(final V start, final AddToSet<V> visited, final boolean dfs) {
         return new BfsDfsVertexSpliterator<>(this::getPrevVertices, start, visited, dfs);
     }

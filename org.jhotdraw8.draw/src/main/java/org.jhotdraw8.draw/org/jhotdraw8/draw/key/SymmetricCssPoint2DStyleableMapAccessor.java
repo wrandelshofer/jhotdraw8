@@ -31,7 +31,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
     /// Creates a new instance with the specified name.
     ///
     /// @param name the name of the accessor
-    /// @param xKey the key for the element coordinate of the point
+    /// @param xKey the key for the x coordinate of the point
     /// @param yKey the key for the y coordinate of the point
     public SymmetricCssPoint2DStyleableMapAccessor(String name,
                                                    NonNullMapAccessor<CssSize> xKey,
@@ -42,7 +42,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
     /// Creates a new instance with the specified name.
     ///
     /// @param name     the name of the accessor
-    /// @param xKey     the key for the element coordinate of the point
+    /// @param xKey     the key for the x coordinate of the point
     /// @param yKey     the key for the y coordinate of the point
     /// @param examples example values
     public SymmetricCssPoint2DStyleableMapAccessor(String name,

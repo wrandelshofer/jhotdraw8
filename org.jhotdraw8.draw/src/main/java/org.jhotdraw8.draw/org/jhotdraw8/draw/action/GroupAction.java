@@ -36,7 +36,6 @@ public class GroupAction extends AbstractDrawingViewAction {
         this(ID, editor, groupFactory);
     }
 
-    @SuppressWarnings("this-escape")
     public GroupAction(String id, DrawingEditor editor, @Nullable Supplier<Figure> groupFactory) {
         super(editor);
         Resources labels

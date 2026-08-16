@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /// Enumerates vertices in a graph with indexed vertices starting from a root vertex in
-/// breadth-tree-order or in depth-tree-order.
+/// breadth-first-order or in depth-first-order.
 public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumerator {
 
     private final Function<Integer, Enumerator.OfInt> nextFunction;
@@ -27,7 +27,7 @@ public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumerator {
     /// @param nextFunction the nextFunction
     /// @param root         the root vertex
     /// @param vertexCount  the vertex count
-    /// @param dfs          whether to perform depth-tree-search instead of breadth-tree-search
+    /// @param dfs          whether to perform depth-first-search instead of breadth-first-search
     public BfsDfsIndexedVertexSpliterator(Function<Integer, Enumerator.OfInt> nextFunction,
                                           int root,
                                           int vertexCount, boolean dfs) {
@@ -38,7 +38,7 @@ public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumerator {
     ///
     /// @param nextFunction the nextFunction
     /// @param root         the root vertex
-    /// @param dfs          whether to perform depth-tree-search instead of breadth-tree-search
+    /// @param dfs          whether to perform depth-first-search instead of breadth-first-search
     public BfsDfsIndexedVertexSpliterator(Function<Integer, Enumerator.OfInt> nextFunction, int root, AddToIntSet visited, boolean dfs) {
         super(Long.MAX_VALUE, NONNULL | ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;

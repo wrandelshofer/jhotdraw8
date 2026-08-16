@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /// Enumerates vertices in a graph starting from a root vertex in
-/// breadth-tree-order or in depth-tree-order.
+/// breadth-first-order or in depth-first-order.
 ///
 /// References:
 /// <dl>
@@ -36,7 +36,7 @@ public class BfsDfsVertexSpliterator<V> extends AbstractEnumerator<V> {
     ///
     /// @param nextFunction a function that returns the next vertices for a given vertex
     /// @param root         the root vertex
-    /// @param dfs          whether to enumerate depth-tree instead of breadth-tree
+    /// @param dfs          whether to enumerate depth-first instead of breadth-first
     public BfsDfsVertexSpliterator(Function<V, Iterable<V>> nextFunction, V root, boolean dfs) {
         this(nextFunction, root, new HashSet<>()::add, dfs);
     }
@@ -47,7 +47,7 @@ public class BfsDfsVertexSpliterator<V> extends AbstractEnumerator<V> {
     /// @param root         the root vertex
     /// @param visited      a function that adds a provided vertex to a set, and returns true if the vertex was not in the set.
     ///                     If the graph is known to be a tree, the function can always return true.
-    /// @param dfs          whether to enumerate depth-tree instead of breadth-tree
+    /// @param dfs          whether to enumerate depth-first instead of breadth-first
     public BfsDfsVertexSpliterator(Function<V, Iterable<V>> nextFunction, V root, AddToSet<V> visited, boolean dfs) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;

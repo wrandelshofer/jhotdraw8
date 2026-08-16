@@ -49,12 +49,10 @@ public class ZoomToolbar extends BorderPane {
 
     }
 
-    @SuppressWarnings("this-escape")
     public ZoomToolbar() {
         this(ZoomToolbar.class.getResource("ZoomToolbar.fxml"));
     }
 
-    @SuppressWarnings("this-escape")
     public ZoomToolbar(URL fxmlUrl) {
         init(fxmlUrl);
     }

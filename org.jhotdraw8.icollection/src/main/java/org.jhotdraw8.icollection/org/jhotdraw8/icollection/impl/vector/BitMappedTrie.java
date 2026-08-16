@@ -28,7 +28,7 @@ import static org.jhotdraw8.icollection.impl.vector.ArrayType.obj;
 ///
 /// Each node has a maximum of `32` children (configurable).
 ///
-/// Access to a given position is done by converting the offset to a base 32 number and using each digit to descend down
+/// Access to a given position is done by converting the index to a base 32 number and using each digit to descend down
 /// the tree.
 ///
 /// Modifying the tree is done similarly, but along the way the path is copied, returning a new root every time.
@@ -36,9 +36,9 @@ import static org.jhotdraw8.icollection.impl.vector.ArrayType.obj;
 /// `Append` inserts in the last leaf, or if the tree is full from the right, it adds another layer on top of it
 /// (the old root will be the tree of the new one).
 ///
-/// `Prepend` is done similarly, but an offset is needed, because adding a new top node (where the current root would be
-/// the last node of the new root) shifts the indices by half of the current tree's full size. The `offset` shifts them
-/// back to the correct offset.
+/// `Prepend` is done similarly, but an index is needed, because adding a new top node (where the current root would be
+/// the last node of the new root) shifts the indices by half of the current tree's full size. The `index` shifts them
+/// back to the correct index.
 ///
 /// `Slice` is done by trimming the path from the root and discarding any `leading`/`trailing` values in effectively
 /// constant time (without memory leak, as in `Java`/`Clojure`).
@@ -206,7 +206,7 @@ public class BitMappedTrie<T> {
         return map(identity());
     }
 
-    /// Removes the n tree elements
+    /// Removes the n index elements
     public BitMappedTrie<T> drop(int n) {
         if (n <= 0) {
             return this;
@@ -245,8 +245,8 @@ public class BitMappedTrie<T> {
         return type.getAt(leaf, leafIndex);
     }
 
-    /// fetch the leaf, corresponding to the given offset.
-    /// Node: the offset and length should be taken into consideration as there may be leading and trailing garbage.
+    /// fetch the leaf, corresponding to the given index.
+    /// Node: the index and length should be taken into consideration as there may be leading and trailing garbage.
     /// Also, the returned array is mutable, but should not be mutated!
     @SuppressWarnings("WeakerAccess")
     @Nullable Object getLeaf(int index) {

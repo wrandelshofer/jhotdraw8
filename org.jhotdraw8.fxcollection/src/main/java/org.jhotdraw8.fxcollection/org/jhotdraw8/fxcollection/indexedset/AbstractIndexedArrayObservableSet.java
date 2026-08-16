@@ -132,8 +132,8 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     ///
     /// So that `indexOf(element) == newIndex`;
     ///
-    /// @param oldIndex the current offset of the element
-    /// @param newIndex the desired new offset of the element
+    /// @param oldIndex the current index of the element
+    /// @param newIndex the desired new index of the element
     public void move(int oldIndex, int newIndex) {
         if (oldIndex == newIndex) {
             return;
@@ -182,10 +182,10 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
             endChange();
             return true;
         } else if (oldIndex == clampedIndex || index - oldIndex == 1) {
-            // the element is already at the desired offset in the list
+            // the element is already at the desired index in the list
             return false;
         } else {
-            // => move the element from the old offset to the desired offset
+            // => move the element from the old index to the desired index
             beginChange();
             arrayDoRemove(oldIndex);
             nextRemove(oldIndex, element);
@@ -234,7 +234,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
             // the element is replaced by itself
             return element;
         } else {
-            // the element at the offset is removed
+            // the element at the index is removed
             beginChange();
             E old = arrayDoRemove(index);
             nextRemove(index, old);
@@ -483,7 +483,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         private E iterGet(int index) {
             checkModCount();
             if (index < from || index >= to) {
-                throw new NoSuchElementException("offset out of bounds:" + index);
+                throw new NoSuchElementException("index out of bounds:" + index);
             }
             return doGet(index);
         }

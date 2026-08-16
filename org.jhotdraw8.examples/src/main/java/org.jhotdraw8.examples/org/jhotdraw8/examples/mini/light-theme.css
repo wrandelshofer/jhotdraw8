@@ -47,7 +47,7 @@
     -fx-default-button: #ABD8ED;
 
     /* A bright blue for the focus indicator of objects. Typically used as the
-     * tree color in -fx-background-color for the "focused" pseudo-class. Also
+     * first color in -fx-background-color for the "focused" pseudo-class. Also
      * typically used with insets of -1.4 to provide a glowing effect.
      */
     -fx-focus-color: #039ED3;
@@ -127,7 +127,7 @@
     );
 
     /* A gradient that goes from a little darker than -fx-color on the top to
-     * even more darker than -fx-color on the bottom.  Typically is the offset
+     * even more darker than -fx-color on the bottom.  Typically is the second
      * color in the -fx-background-color list as the small thin border around
      * a control. It is typically the same size as the control (i.e., insets
      * are 0).

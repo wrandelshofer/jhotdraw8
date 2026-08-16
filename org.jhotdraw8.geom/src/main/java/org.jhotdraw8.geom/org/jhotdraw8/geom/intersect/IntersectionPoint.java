@@ -11,7 +11,7 @@ import java.io.Serial;
 /// function at an intersection point.
 ///
 /// This class extends Point2D.Double rather than aggregating it to reduce
-/// pointer chasing. As a consequence, IntersectionPoint only uses the element and y
+/// pointer chasing. As a consequence, IntersectionPoint only uses the x and y
 /// coordinates for equals and hashCode.
 public class IntersectionPoint extends Point2D.Double {
     @Serial
@@ -46,7 +46,7 @@ public class IntersectionPoint extends Point2D.Double {
     /// then this field is used to indicate to which segment the parametric
     /// function belongs.
     ///
-    /// The offset of the segment.
+    /// The index of the segment.
     public int segmentA() {
         return segmentA;
     }
@@ -54,7 +54,7 @@ public class IntersectionPoint extends Point2D.Double {
     @Override
     public String toString() {
         return "IntersectionPoint{" +
-                "element=" + x +
+                "x=" + x +
                 ", y=" + y +
                 ", a=" + argumentA +
                 '}';

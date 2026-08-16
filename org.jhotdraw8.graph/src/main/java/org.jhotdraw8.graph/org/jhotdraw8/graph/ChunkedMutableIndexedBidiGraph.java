@@ -27,7 +27,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     /// Number of vertices per chunk.
     /// Must be a power of 2.
     private final int chunkSize;
-    /// Number of bits that we need to shift a vertex offset to the right to get
+    /// Number of bits that we need to shift a vertex index to the right to get
     /// the chunk that contains it.
     /// This is log2(chunkSize).
     private final int chunkShift;
@@ -70,8 +70,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
 
     /// Adds the arrow if it is absent.
     ///
-    /// @param v offset of vertex 'v'
-    /// @param u offset of vertex 'u'
+    /// @param v index of vertex 'v'
+    /// @param u index of vertex 'u'
     @Override
     public void addArrowAsInt(final int v, final int u) {
         addArrowAsInt(v, u, 0);
@@ -79,8 +79,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
 
     /// Adds the arrow if it is absent.
     ///
-    /// @param v offset of vertex 'v'
-    /// @param u offset of vertex 'u'
+    /// @param v index of vertex 'v'
+    /// @param u index of vertex 'u'
     @Override
     public void addArrowAsInt(final int v, final int u, final int data) {
         addArrowIfAbsentAsInt(v, u, data);
@@ -89,8 +89,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     /// Adds the arrow if it is absent, updates the arrow data if the arrow is
     /// present.
     ///
-    /// @param v    offset of vertex 'v'
-    /// @param u    offset of vertex 'u'
+    /// @param v    index of vertex 'v'
+    /// @param u    index of vertex 'u'
     /// @param data the arrow data
     /// @return true if the arrow was absent
     public boolean addArrowIfAbsentAsInt(final int v, final int u, final int data) {
@@ -107,8 +107,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     /// Adds the arrow if its absent, updates the arrow data if the arrow is
     /// present.
     ///
-    /// @param v    offset of vertex 'v'
-    /// @param u    offset of vertex 'u'
+    /// @param v    index of vertex 'v'
+    /// @param u    index of vertex 'u'
     /// @param data the arrow data
     /// @return true if the arrow was absent
     public boolean addOrUpdateArrowAsInt(final int v, final int u, final int data) {
@@ -139,10 +139,10 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
 
     /// Searches for predecessor vertices of the specified vertex.
     ///
-    /// @param vidx    the offset of the vertex
-    /// @param dfs     whether depth-tree-search should be used instead of breadth-tree-search
+    /// @param vidx    the index of the vertex
+    /// @param dfs     whether depth-first-search should be used instead of breadth-first-search
     /// @param visited the set of visited vertices
-    /// @return the enumerator provides the vertex offset
+    /// @return the enumerator provides the vertex index
     public Enumerator.OfInt searchPrevVertices(final int vidx, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexSpliterator(vidx, prevChunks, dfs, visited);
     }
@@ -150,10 +150,10 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     /// Searches for predecessor vertex data of the specified vertex.
     ///
     /// @param v       a vertex
-    /// @param dfs     whether depth-tree-search should be used instead of breadth-tree-search
+    /// @param dfs     whether depth-first-search should be used instead of breadth-first-search
     /// @param visited the set of visited vertices
     /// @return the enumerator provides the vertex data in the 32 high-bits
-    /// and the vertex offset in the 32 low-bits of the long.
+    /// and the vertex index in the 32 low-bits of the long.
     public Spliterator.OfLong searchPrevVertexData(final int v, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexDataSpliterator(v, prevChunks, dfs, visited);
     }
@@ -161,9 +161,9 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     /// Searches for successor vertices of the specified vertex.
     ///
     /// @param v       a vertex
-    /// @param dfs     whether depth-tree-search should be used instead of breadth-tree-search
+    /// @param dfs     whether depth-first-search should be used instead of breadth-first-search
     /// @param visited the set of visited vertices
-    /// @return the enumerator provides the vertex offset
+    /// @return the enumerator provides the vertex index
     public Enumerator.OfInt searchNextVertices(final int v, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexSpliterator(v, nextChunks, dfs, visited);
     }
@@ -171,10 +171,10 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     /// Searches for successor vertex data of the specified vertex.
     ///
     /// @param v       a vertex
-    /// @param dfs     whether depth-tree-search should be used instead of breadth-tree-search
+    /// @param dfs     whether depth-first-search should be used instead of breadth-first-search
     /// @param visited the set of visited vertices
     /// @return the enumerator provides the vertex data in the 32 high-bits
-    /// and the vertex offset in the 32 low-bits of the long.
+    /// and the vertex index in the 32 low-bits of the long.
     public Spliterator.OfLong searchNextVertexData(final int v, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexDataSpliterator(v, nextChunks, dfs, visited);
     }

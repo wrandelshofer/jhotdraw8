@@ -86,7 +86,7 @@ public class CubicCurvesJmh {
     /// Computes the arc length s from time 0 to time t using a flattening path iterator.
     ///
     /// @param p       points of the curve
-    /// @param offset  offset of the tree point in array `p`
+    /// @param offset  index of the first point in array `p`
     /// @param t       the time
     /// @param epsilon the error tolerance
     /// @return the arc length

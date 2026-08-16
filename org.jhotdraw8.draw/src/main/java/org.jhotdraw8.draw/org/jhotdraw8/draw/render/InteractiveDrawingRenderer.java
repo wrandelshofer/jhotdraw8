@@ -67,8 +67,8 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
 
-    /// This must be a linked set, so that figures are updated in tree-come
-    /// tree-serve fashion.
+    /// This must be a linked set, so that figures are updated in first-come
+    /// first-serve fashion.
     ///
     /// If many figures change constantly, and [#updateLimit] is a small
     /// value, then the linked set ensures that all figures are updated eventually.
@@ -83,7 +83,6 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final NodeFinder nodeFinder = new NodeFinder();
     private final Runnable pulseListener = this::onPulse;
 
-    @SuppressWarnings("this-escape")
     public InteractiveDrawingRenderer() {
         drawingPane.setManaged(false);
         model.addListener(this::onDrawingModelChanged);
@@ -130,7 +129,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     /// JavaFX Node of the figure that intersects with the point.
     ///
     /// @param figure a figure
-    /// @param vx     element coordinate of a point in view coordinates
+    /// @param vx     x coordinate of a point in view coordinates
     /// @param vy     y coordinate of a point in view coordinates
     /// @return the front-most JavaFX Node of the figure that intersects with the point
     public @Nullable Node findFigureNode(Figure figure, double vx, double vy) {
@@ -161,7 +160,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     /// coordinates, or that have a distance that is less than
     /// the tolerance of the editor.
     ///
-    /// @param vx        element-coordinate of the point in view coordinates
+    /// @param vx        x-coordinate of the point in view coordinates
     /// @param vy        y-coordinate of the point in view coordinates
     /// @param decompose If true, a figure is decomposed in sub-figures and
     ///                  the sub-figure is returned instead of the figure.
@@ -641,7 +640,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         final Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[0]);
 
         // If there are too many dirty figures, we update the node of
-        // figures that intersect with the visible rect tree.
+        // figures that intersect with the visible rect first.
         int count = 0;
         if (copyOfDirtyFigureNodes.length > limit) {
             for (int i = 0, n = copyOfDirtyFigureNodes.length; i < n && count < limit; i++) {

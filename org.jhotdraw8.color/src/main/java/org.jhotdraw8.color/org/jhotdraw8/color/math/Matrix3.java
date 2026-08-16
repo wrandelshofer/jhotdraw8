@@ -7,9 +7,7 @@ package org.jhotdraw8.color.math;
 
 import javafx.geometry.Point3D;
 
-import java.io.Serializable;
-
-public interface Matrix3 extends Serializable {
+public interface Matrix3 {
     double det();
 
     Matrix3Float toFloat();

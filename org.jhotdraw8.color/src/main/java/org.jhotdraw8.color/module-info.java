@@ -14,7 +14,7 @@ module org.jhotdraw8.color {
     requires transitive org.jspecify;
 
     requires java.logging;
-    exports org.jhotdraw8.color.trc;
+
     exports org.jhotdraw8.color;
     exports org.jhotdraw8.color.math;
 }

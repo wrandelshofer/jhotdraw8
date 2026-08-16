@@ -40,7 +40,7 @@ public class Scale3DCssConverter extends AbstractCssConverter<Point3D> {
     @Override
     public Point3D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, z;
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale3D⟩: ⟨element⟩ expected.");
+        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale3D⟩: ⟨x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         if (tt.next() == CssTokenType.TT_NUMBER) {
@@ -95,7 +95,7 @@ public class Scale3DCssConverter extends AbstractCssConverter<Point3D> {
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨Scale3D⟩: ⟨s⟩ ｜ ⟨tree⟩ ⟨ys⟩ ｜ ⟨tree⟩ ⟨ys⟩ ⟨zs⟩";
+        return "Format of ⟨Scale3D⟩: ⟨s⟩ ｜ ⟨xs⟩ ⟨ys⟩ ｜ ⟨xs⟩ ⟨ys⟩ ⟨zs⟩";
     }
 
 }

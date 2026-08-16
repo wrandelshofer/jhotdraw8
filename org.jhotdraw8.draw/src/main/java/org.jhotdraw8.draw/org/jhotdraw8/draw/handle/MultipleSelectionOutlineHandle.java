@@ -23,7 +23,6 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
     private final Polygon node;
     private final double[] points;
 
-    @SuppressWarnings("this-escape")
     public MultipleSelectionOutlineHandle() {
         super(null);
 

@@ -39,9 +39,9 @@ public class IntersectLinePathIterator {
     ///     </dd>
     /// </dl>
     ///
-    /// @param a0x  the element-coordinate of the start point of the line
+    /// @param a0x  the x-coordinate of the start point of the line
     /// @param a0y  the y-coordinate of the start point of the line
-    /// @param a1x  the element-coordinate of the end point of the line
+    /// @param a1x  the x-coordinate of the end point of the line
     /// @param a1y  the y-coordinate of the end point of the line
     /// @param pit  the path iterator
     /// @param maxT the maximal time of the line (1 = entire line)

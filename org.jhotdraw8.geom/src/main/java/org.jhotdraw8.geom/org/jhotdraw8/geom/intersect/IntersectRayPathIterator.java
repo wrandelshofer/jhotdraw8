@@ -37,9 +37,9 @@ public class IntersectRayPathIterator {
     ///     </dd>
     /// </dl>
     ///
-    /// @param aox  the element-coordinate of the origin of the ray
+    /// @param aox  the x-coordinate of the origin of the ray
     /// @param aoy  the y-coordinate of the origin of the ray
-    /// @param adx  the element-coordinate of the direction of the ray
+    /// @param adx  the x-coordinate of the direction of the ray
     /// @param ady  the y-coordinate of the direction of the ray
     /// @param pit  the path iterator
     /// @param maxT the maximal time of the line (1 = entire line)

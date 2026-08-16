@@ -24,7 +24,6 @@ public class SelectChildrenAction extends AbstractDrawingViewAction {
     /// Creates a new instance.
     ///
     /// @param editor the drawing editor
-    @SuppressWarnings("this-escape")
     public SelectChildrenAction(DrawingEditor editor) {
         super(editor);
         Resources labels = DrawLabels.getResources();

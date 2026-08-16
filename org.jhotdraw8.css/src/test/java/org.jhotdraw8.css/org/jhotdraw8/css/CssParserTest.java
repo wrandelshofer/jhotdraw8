@@ -108,12 +108,12 @@ public class CssParserTest {
                         "<xml/>",//
                         "<xml/>")),
                 // example 3 (Changed \26 to \41 so that we can match an element)
-                dynamicTest("6", () -> testCssSyntax(true, "\\41 B {element:y}", //
+                dynamicTest("6", () -> testCssSyntax(true, "\\41 B {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"y\"/></xml>")),
-                dynamicTest("7", () -> testCssSyntax(true, "\\000041B {element:y}", //
+                        "<xml><AB x=\"y\"/></xml>")),
+                dynamicTest("7", () -> testCssSyntax(true, "\\000041B {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"y\"/></xml>")),
+                        "<xml><AB x=\"y\"/></xml>")),
                 // example 4
                 dynamicTest("8", () -> testCssSyntax(true, ":nth-child(2n+0) {}", //
                         "<xml/>",//
@@ -179,26 +179,26 @@ public class CssParserTest {
                         "<xml/>",//
                         "<xml/>")),//
                 // with comments
-                dynamicTest("31", () -> testCssSyntax(true, "/*comment*/AB {element:y}", //
+                dynamicTest("31", () -> testCssSyntax(true, "/*comment*/AB {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"y\"/></xml>")),
+                        "<xml><AB x=\"y\"/></xml>")),
 
                 // selector missing after comma
-                dynamicTest("32", () -> testCssSyntax(false, "AB, {element:y}", //
+                dynamicTest("32", () -> testCssSyntax(false, "AB, {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"y\"/></xml>")),
+                        "<xml><AB x=\"y\"/></xml>")),
 
-                dynamicTest("33", () -> testCssSyntax(false, "AB,, {element:y}", //
+                dynamicTest("33", () -> testCssSyntax(false, "AB,, {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"y\"/></xml>")),
+                        "<xml><AB x=\"y\"/></xml>")),
 
                 // attribute value has curly braces
-                dynamicTest("41", () -> testCssSyntax(false, "AB {element:{y}}}", //
+                dynamicTest("41", () -> testCssSyntax(false, "AB {x:{y}}}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"{y}\"/></xml>")),
-                dynamicTest("42", () -> testCssSyntax(false, "AB {element:{class:[Object]};y:4}}", //
+                        "<xml><AB x=\"{y}\"/></xml>")),
+                dynamicTest("42", () -> testCssSyntax(false, "AB {x:{class:[Object]};y:4}}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"{class:[Object]}\" y=\"4\"/></xml>"))
+                        "<xml><AB x=\"{class:[Object]}\" y=\"4\"/></xml>"))
 
         )/**/;
     }
@@ -208,26 +208,26 @@ public class CssParserTest {
     public List<DynamicTest> dynamicTestsAtRule() {
         return Arrays.asList(
                 // at rules
-                dynamicTest("1", () -> testAtRule(false, "@charset \"UTF-8\"; AB {element:y}", //
+                dynamicTest("1", () -> testAtRule(false, "@charset \"UTF-8\"; AB {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"y\"/></xml>")),
-                dynamicTest("2", () -> testAtRule(false, "@import url('landscape.css') screen and (orientation:landscape); AB {element:y}", //
+                        "<xml><AB x=\"y\"/></xml>")),
+                dynamicTest("2", () -> testAtRule(false, "@import url('landscape.css') screen and (orientation:landscape); AB {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"y\"/></xml>")),
-                dynamicTest("3", () -> testAtRule(true, "@namespace url(http://www.w3.org/1999/xhtml); AB {element:y}", //
+                        "<xml><AB x=\"y\"/></xml>")),
+                dynamicTest("3", () -> testAtRule(true, "@namespace url(http://www.w3.org/1999/xhtml); AB {x:y}", //
                         "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><AB/></xml>",//
-                        "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><AB element=\"y\"/></xml>")),
-                dynamicTest("3 with any NS", () -> testAtRule(true, "@namespace url(http://www.w3.org/1999/xhtml); *|AB {element:y}", //
+                        "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><AB x=\"y\"/></xml>")),
+                dynamicTest("3 with any NS", () -> testAtRule(true, "@namespace url(http://www.w3.org/1999/xhtml); *|AB {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"y\"/></xml>")),
-                dynamicTest("4", () -> testAtRule(true, "@namespace svg url(http://www.w3.org/2000/svg); AB {element:y}", //
+                        "<xml><AB x=\"y\"/></xml>")),
+                dynamicTest("4", () -> testAtRule(true, "@namespace svg url(http://www.w3.org/2000/svg); AB {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"y\"/></xml>")),
+                        "<xml><AB x=\"y\"/></xml>")),
                 dynamicTest("5", () -> testAtRule(false, "@media print {\n" +
                                 "  body { font-size: 10pt }\n" +
-                                "} AB {element:y}", //
+                                "} AB {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"y\"/></xml>")),
+                        "<xml><AB x=\"y\"/></xml>")),
                 dynamicTest("6", () -> testAtRule(false, "@document url(http://www.w3.org/),\n" +
                                 "               url-prefix(http://www.w3.org/Style/),\n" +
                                 "               domain(mozilla.org),\n" +
@@ -237,9 +237,9 @@ public class CssParserTest {
                                 "    color: purple;\n" +
                                 "    background: yellow;\n" +
                                 "  }\n" +
-                                "} AB {element:y}", //
+                                "} AB {x:y}", //
                         "<xml><AB/></xml>",//
-                        "<xml><AB element=\"y\"/></xml>"))
+                        "<xml><AB x=\"y\"/></xml>"))
         )/**/;
     }
 
@@ -302,24 +302,24 @@ public class CssParserTest {
     @TestFactory
     public List<DynamicTest> dynamicTestsSelectorSyntax() {
         return Arrays.asList(
-                dynamicTest("type selector", () -> testSelectorSyntax(true, "a {element:1;}", //
+                dynamicTest("type selector", () -> testSelectorSyntax(true, "a {x:1;}", //
                         "<xml><a/><b/></xml>",//
-                        "<xml><a element=\"1\"/><b/></xml>")), //
-                dynamicTest("empty not selector", () -> testSelectorSyntax(false, ":not() {element:1;}", //
-                        "<xml><a/><b/></xml>",//
-                        "<xml><a/><b/></xml>")), //
-                dynamicTest("not selector 1", () -> testSelectorSyntax(true, ":not(a) {element:1;}", //
-                        "<xml><a/><b/></xml>",//
-                        "<xml element=\"1\"><a/><b element=\"1\"/></xml>")), //
-                dynamicTest("not selector 2", () -> testSelectorSyntax(false, ":not(xml,a) {element:1;}", //
+                        "<xml><a x=\"1\"/><b/></xml>")), //
+                dynamicTest("empty not selector", () -> testSelectorSyntax(false, ":not() {x:1;}", //
                         "<xml><a/><b/></xml>",//
                         "<xml><a/><b/></xml>")), //
-                dynamicTest("nested not selector", () -> testSelectorSyntax(true, ":not(:not(a)) {element:1;}", //
+                dynamicTest("not selector 1", () -> testSelectorSyntax(true, ":not(a) {x:1;}", //
                         "<xml><a/><b/></xml>",//
-                        "<xml><a element=\"1\"/><b/></xml>")), //
-                dynamicTest("universal selector", () -> testSelectorSyntax(true, "* {element:1;}", //
+                        "<xml x=\"1\"><a/><b x=\"1\"/></xml>")), //
+                dynamicTest("not selector 2", () -> testSelectorSyntax(false, ":not(xml,a) {x:1;}", //
                         "<xml><a/><b/></xml>",//
-                        "<xml element=\"1\"><a element=\"1\"/><b element=\"1\"/></xml>")) //
+                        "<xml><a/><b/></xml>")), //
+                dynamicTest("nested not selector", () -> testSelectorSyntax(true, ":not(:not(a)) {x:1;}", //
+                        "<xml><a/><b/></xml>",//
+                        "<xml><a x=\"1\"/><b/></xml>")), //
+                dynamicTest("universal selector", () -> testSelectorSyntax(true, "* {x:1;}", //
+                        "<xml><a/><b/></xml>",//
+                        "<xml x=\"1\"><a x=\"1\"/><b x=\"1\"/></xml>")) //
         );
     }
 
@@ -332,39 +332,39 @@ public class CssParserTest {
     @TestFactory
     public List<DynamicTest> dynamicTestsSelectorSyntaxNS() {
         return Arrays.asList(
-                dynamicTest("type selector not ns aware", () -> testSelectorSyntaxNS(true, "a {element:1;}", //
+                dynamicTest("type selector not ns aware", () -> testSelectorSyntaxNS(true, "a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
-                        "<xml xmlns:n1=\"http://n1.com\"><a element=\"1\"/><n1:a element=\"1\"/><b/></xml>")),
-                dynamicTest("type selector in all ns", () -> testSelectorSyntaxNS(true, "*|a {element:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a x=\"1\"/><b/></xml>")),
+                dynamicTest("type selector in all ns", () -> testSelectorSyntaxNS(true, "*|a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
-                        "<xml xmlns:n1=\"http://n1.com\"><a element=\"1\"/><n1:a element=\"1\"/><b/></xml>")),
-                dynamicTest("type selector in all elements without a declared ns", () -> testSelectorSyntaxNS(true, "|a {element:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a x=\"1\"/><b/></xml>")),
+                dynamicTest("type selector in all elements without a declared ns", () -> testSelectorSyntaxNS(true, "|a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
-                        "<xml xmlns:n1=\"http://n1.com\"><a element=\"1\"/><n1:a/><b/></xml>")),
-                dynamicTest("attribute selector not ns aware", () -> testSelectorSyntaxNS(true, "[element=\"1\"] {element:2;}", //
-                        "<xml xmlns:n1=\"http://n1.com\"><a element=\"1\"/><n1:a n1:element=\"1\"/></xml>",//
-                        "<xml xmlns:n1=\"http://n1.com\"><a element=\"2\"/><n1:a n1:element=\"1\" element=\"2\"/></xml>")),
-                dynamicTest("attribute selector any ns", () -> testSelectorSyntaxNS(true, "[*|element=\"1\"] {element:2;}", //
-                        "<xml xmlns:n1=\"http://n1.com\"><a element=\"1\"/><n1:a n1:element=\"1\"/></xml>",//
-                        "<xml xmlns:n1=\"http://n1.com\"><a element=\"2\"/><n1:a n1:element=\"1\" element=\"2\"/></xml>")),
-                dynamicTest("attribute selector no ns", () -> testSelectorSyntaxNS(true, "[|element=\"1\"] {element:2;}", //
-                        "<xml xmlns:n1=\"http://n1.com\"><a element=\"1\"/><n1:a n1:element=\"1\"/></xml>",//
-                        "<xml xmlns:n1=\"http://n1.com\"><a element=\"2\"/><n1:a n1:element=\"1\"/></xml>")),
-                dynamicTest("attribute selector ns in n1", () -> testSelectorSyntaxNS(true, "@namespace ns \"http://n1.com\"; [ns|element=\"1\"] {ns|element:2;}", //
-                        "<xml xmlns:n1=\"http://n1.com\"><a element=\"1\"/><n1:a n1:element=\"1\"/></xml>",//
-                        "<xml xmlns:n1=\"http://n1.com\"><a element=\"1\"/><n1:a xmlns:ns0=\"http://n1.com\" ns0:element=\"2\"/></xml>")),
-                dynamicTest("type selector with ns prefix as string", () -> testSelectorSyntaxNS(true, "@namespace ns \"http://n1.com\"; ns|a {element:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a/><b/></xml>")),
+                dynamicTest("attribute selector not ns aware", () -> testSelectorSyntaxNS(true, "[x=\"1\"] {x:2;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a n1:x=\"1\"/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"2\"/><n1:a n1:x=\"1\" x=\"2\"/></xml>")),
+                dynamicTest("attribute selector any ns", () -> testSelectorSyntaxNS(true, "[*|x=\"1\"] {x:2;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a n1:x=\"1\"/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"2\"/><n1:a n1:x=\"1\" x=\"2\"/></xml>")),
+                dynamicTest("attribute selector no ns", () -> testSelectorSyntaxNS(true, "[|x=\"1\"] {x:2;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a n1:x=\"1\"/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"2\"/><n1:a n1:x=\"1\"/></xml>")),
+                dynamicTest("attribute selector ns in n1", () -> testSelectorSyntaxNS(true, "@namespace ns \"http://n1.com\"; [ns|x=\"1\"] {ns|x:2;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a n1:x=\"1\"/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a xmlns:ns0=\"http://n1.com\" ns0:x=\"2\"/></xml>")),
+                dynamicTest("type selector with ns prefix as string", () -> testSelectorSyntaxNS(true, "@namespace ns \"http://n1.com\"; ns|a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
-                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a element=\"1\"/><b/></xml>")),
-                dynamicTest("type selector with ns prefix as url", () -> testSelectorSyntaxNS(true, "@namespace ns url(http://n1.com); ns|a {element:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a x=\"1\"/><b/></xml>")),
+                dynamicTest("type selector with ns prefix as url", () -> testSelectorSyntaxNS(true, "@namespace ns url(http://n1.com); ns|a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
-                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a element=\"1\"/><b/></xml>")),
-                dynamicTest("type selector with default ns as string", () -> testSelectorSyntaxNS(true, "@namespace \"http://n1.com\"; a {element:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a x=\"1\"/><b/></xml>")),
+                dynamicTest("type selector with default ns as string", () -> testSelectorSyntaxNS(true, "@namespace \"http://n1.com\"; a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
-                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a element=\"1\"/><b/></xml>")),
-                dynamicTest("type selector with default ns as url", () -> testSelectorSyntaxNS(true, "@namespace url(http://n1.com); a {element:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a x=\"1\"/><b/></xml>")),
+                dynamicTest("type selector with default ns as url", () -> testSelectorSyntaxNS(true, "@namespace url(http://n1.com); a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
-                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a element=\"1\"/><b/></xml>"))
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a x=\"1\"/><b/></xml>"))
         );
     }
 

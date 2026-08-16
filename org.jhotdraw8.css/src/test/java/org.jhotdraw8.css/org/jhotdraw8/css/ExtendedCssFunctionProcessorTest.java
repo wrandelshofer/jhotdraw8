@@ -49,13 +49,13 @@ public class ExtendedCssFunctionProcessorTest extends AbstractCssFunctionProcess
                 dynamicTest("301", () -> doTestProcess("concat()", "\"\"")),
                 dynamicTest("302", () -> doTestProcess("concat(\"a\",\"b\")", "\"ab\"")),
                 //
-                dynamicTest("401", () -> doTestProcess("concat(attr(id),\"element\")", "\"o1x\"")),
+                dynamicTest("401", () -> doTestProcess("concat(attr(id),\"x\")", "\"o1x\"")),
                 //
                 dynamicTest("501", () -> doTestProcess("replace(\"aabfooaabfooabfoob\")", null)),
                 dynamicTest("502", () -> doTestProcess("replace(\"aabfooaabfooabfoob\",\"a*b\")", null)),
                 dynamicTest("503", () -> doTestProcess("replace(\"aabfooaabfooabfoob\",\"a*b\",\"-\")", "\"-foo-foo-foo-\"")),
                 //
-                dynamicTest("601", () -> doTestProcess("replace(attr(id),\"\\\\d\",\"element\")", "\"ox\"")),
+                dynamicTest("601", () -> doTestProcess("replace(attr(id),\"\\\\d\",\"x\")", "\"ox\"")),
                 //
                 dynamicTest("701", () -> doTestProcess("round(0.5)", "1")),
                 dynamicTest("702", () -> doTestProcess("round(-0.5)", "0")),

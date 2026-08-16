@@ -42,12 +42,10 @@ public class EllipseFigure extends AbstractLeafFigure
         this(0, 0, 2, 2);// the values must correspond to the default values of the property keys
     }
 
-    @SuppressWarnings("this-escape")
     public EllipseFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
     }
 
-    @SuppressWarnings("this-escape")
     public EllipseFigure(Rectangle2D rect) {
         reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }

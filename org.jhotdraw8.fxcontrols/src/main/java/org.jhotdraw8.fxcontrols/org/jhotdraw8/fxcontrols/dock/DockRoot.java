@@ -21,7 +21,7 @@ public interface DockRoot extends DockParent {
     /// Data format used for dragging a DockItem with the drag board.
     /// The value of this data format is the [System#identityHashCode(Object)]
     /// of the dragged leaf.
-    DataFormat DOCKABLE_DATA_FORMAT = new DataFormat("application/element-jhotdraw8-dragged-dock-leaf");
+    DataFormat DOCKABLE_DATA_FORMAT = new DataFormat("application/x-jhotdraw8-dragged-dock-leaf");
     /// We store the dragged item here, because we move the _reference_
     /// of a DockItem with the drag board rather than a value of the DockItem.
     ObjectProperty<Dockable> draggedDockable = new SimpleObjectProperty<>();

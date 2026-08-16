@@ -36,7 +36,7 @@ import java.io.IOException;
 /// <dd><a href="http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/">w3.org</a></dd>
 /// </dl>
 public interface CssScanner {
-    /// Phase 2: Processes unicode escape sequences tree, and then processes
+    /// Phase 2: Processes unicode escape sequences first, and then processes
     /// newlines.
     ///
     /// @return the next character. Returns -1 if EOF.

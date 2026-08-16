@@ -78,9 +78,9 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
         items[size++] = newItem;
     }
 
-    /// Inserts a new item at the specified offset into this list.
+    /// Inserts a new item at the specified index into this list.
     ///
-    /// @param index   the offset
+    /// @param index   the index
     /// @param newItem the new item
     @Override
     public void addAsByte(int index, byte newItem) {
@@ -153,10 +153,10 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
         return true;
     }
 
-    /// Gets the item at the specified offset.
+    /// Gets the item at the specified index.
     ///
-    /// @param index an offset
-    /// @return the item at the offset
+    /// @param index an index
+    /// @return the item at the index
     @Override
     public byte getAsByte(int index) {
         Objects.checkIndex(index, size);
@@ -164,10 +164,10 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
     }
 
     /*
-     * Gets the item at the specified offset.
+     * Gets the item at the specified index.
      *
-     * @param offset an offset
-     * @return the item at the offset
+     * @param index an index
+     * @return the item at the index
      */
     @Override
     public Byte get(int index) {
@@ -259,9 +259,9 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
         return false;
     }
 
-    /// Removes the item at the specified offset from this list.
+    /// Removes the item at the specified index from this list.
     ///
-    /// @param index an offset
+    /// @param index an index
     /// @return the removed item
     @Override
     public byte removeAtAsByte(int index) {
@@ -287,9 +287,9 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
         return removeAtAsByte(size - 1);
     }
 
-    /// Replaces the item at the specified offset.
+    /// Replaces the item at the specified index.
     ///
-    /// @param index   an offset
+    /// @param index   an index
     /// @param newItem the new item
     /// @return the old item
     public byte setAsByte(int index, byte newItem) {

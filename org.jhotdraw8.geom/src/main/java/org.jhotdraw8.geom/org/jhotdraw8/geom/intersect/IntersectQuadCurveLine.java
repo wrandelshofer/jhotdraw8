@@ -71,7 +71,7 @@ public class IntersectQuadCurveLine {
         a0y = a0.getY();
         a1y = a1.getY();
 
-        // Convert line to normal form: a·element + b·y + c = 0
+        // Convert line to normal form: a·x + b·y + c = 0
         // Find normal to line: negative inverse of original line's slope
         final Point2D.Double n;                // normal for normal form of line
         n = new Point2D.Double(a0y - a1y, a1x - a0x);

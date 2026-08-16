@@ -28,10 +28,10 @@ public interface BareDirectedGraph<V, A> extends BareDirectedVertexGraph<V> {
 
 
     /// Returns the arrow data associated with the specified vertex and outgoing arrow
-    /// offset.
+    /// index.
     ///
     /// @param v     a vertex
-    /// @param index offset of outgoing arrow
+    /// @param index index of outgoing arrow
     /// @return the next arrow data
     /// @see #getNextCount
     @Nullable

@@ -17,9 +17,9 @@ public class Angles {
 
     /// Gets the angle of the specified line.
     ///
-    /// @param x1 the element-coordinate of point 1 on the line
+    /// @param x1 the x-coordinate of point 1 on the line
     /// @param y1 the y-coordinate of point 1 on the line
-    /// @param x2 the element-coordinate of point 2 on the line
+    /// @param x2 the x-coordinate of point 2 on the line
     /// @param y2 the y-coordinate of point 2 on the line
     /// @return the angle in radians
     public static double angle(double x1, double y1, double x2, double y2) {
@@ -78,8 +78,8 @@ public class Angles {
 
     /// Gets the perpendicular vector to the given vector.
     ///
-    /// @param x the element value of the vector
-    /// @param y the element value of the vector
+    /// @param x the x value of the vector
+    /// @param y the x value of the vector
     /// @return the perpendicular vector
     public static Point2D.Double perp(double x, double y) {
         return new Point2D.Double(y, -x);

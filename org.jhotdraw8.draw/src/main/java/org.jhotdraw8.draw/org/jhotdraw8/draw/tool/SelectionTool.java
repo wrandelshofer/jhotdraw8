@@ -71,23 +71,19 @@ public class SelectionTool extends AbstractTool {
     // ---
     // Constructors
     // ---
-    @SuppressWarnings("this-escape")
     public SelectionTool() {
         this("tool.selectFigure", HandleType.RESIZE, ApplicationLabels.getResources());
     }
 
-    @SuppressWarnings("this-escape")
     public SelectionTool(String name, Resources rsrc) {
         this(name, HandleType.RESIZE, rsrc);
     }
 
-    @SuppressWarnings("this-escape")
     public SelectionTool(String name, HandleType handleType, Resources rsrc) {
         super(name, rsrc);
         this.handleType = handleType;
     }
 
-    @SuppressWarnings("this-escape")
     public SelectionTool(String name, HandleType handleType, HandleType anchorHandleType, HandleType leadHandleType, Resources rsrc) {
         super(name, rsrc);
         this.handleType = handleType;
@@ -161,7 +157,7 @@ public class SelectionTool extends AbstractTool {
                             break;
                         }
                     }
-                    // take tree figure
+                    // take first figure
                     if (pressedFigure == null) {
                         pressedFigure = firstFigure;
                     }

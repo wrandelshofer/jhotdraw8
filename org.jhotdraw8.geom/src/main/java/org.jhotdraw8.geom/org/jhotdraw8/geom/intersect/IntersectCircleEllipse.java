@@ -16,7 +16,7 @@ public class IntersectCircleEllipse {
     /// @param cc the center of the circle
     /// @param r  the radius of the circle
     /// @param ec the center of the ellipse
-    /// @param rx the element-radius of the ellipse
+    /// @param rx the x-radius of the ellipse
     /// @param ry the y-radius of the ellipse
     /// @return computed intersection
     public static IntersectionResult intersectCircleEllipse(Point2D cc, double r, Point2D ec, double rx, double ry) {

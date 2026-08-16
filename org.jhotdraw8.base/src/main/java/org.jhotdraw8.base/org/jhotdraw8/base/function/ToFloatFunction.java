@@ -7,9 +7,6 @@ package org.jhotdraw8.base.function;
 
 import java.util.function.Function;
 
-/// Represents a function that produces a float-valued result.
-///
-/// @param <T1> argument 1
 @FunctionalInterface
 public interface ToFloatFunction<T1> extends Function<T1, Float> {
 

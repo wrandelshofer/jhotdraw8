@@ -26,7 +26,6 @@ public class FontFamilyDialog extends Dialog<String> {
 
     private FontFamilyChooserController controller;
 
-    @SuppressWarnings("this-escape")
     public FontFamilyDialog() {
         final Resources labels = ModulepathResources.getResources(FontDialog.class.getModule(), "org.jhotdraw8.fxcontrols.spi.labels");
         final DialogPane dialogPane = getDialogPane();

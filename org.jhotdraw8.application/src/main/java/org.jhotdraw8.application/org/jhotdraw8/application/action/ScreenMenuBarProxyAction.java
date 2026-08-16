@@ -17,7 +17,6 @@ public class ScreenMenuBarProxyAction extends AbstractAction implements MapChang
     private final Application app;
     private @Nullable Action currentAction;
 
-    @SuppressWarnings("this-escape")
     public ScreenMenuBarProxyAction(Application app, String id) {
         this.app = app;
         set(ID_KEY, id);

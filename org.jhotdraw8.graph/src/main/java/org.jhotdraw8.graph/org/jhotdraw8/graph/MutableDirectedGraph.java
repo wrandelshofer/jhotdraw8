@@ -31,7 +31,7 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
     /// @param a arrow data
     void addArrow(V v, V u, @Nullable A a);
 
-    /// Removes the tree arrow from vertex v to vertex u that has
+    /// Removes the first arrow from vertex v to vertex u that has
     /// the same data value.
     ///
     /// @param v vertex data v
@@ -39,7 +39,7 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
     /// @param a arrow data
     void removeArrow(V v, V u, @Nullable A a);
 
-    /// Removes the tree arrow from vertex v to vertex u.
+    /// Removes the first arrow from vertex v to vertex u.
     ///
     /// @param v vertex data v
     /// @param u vertex data u
@@ -48,6 +48,6 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
     /// Removes the k-th next arrow from vertex v.
     ///
     /// @param v vertex data v
-    /// @param k offset of arrow to be removed
+    /// @param k index of arrow to be removed
     void removeNext(V v, int k);
 }

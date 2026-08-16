@@ -8,8 +8,6 @@ package org.jhotdraw8.color;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.color.trc.GammaToneMapper;
 
-import java.io.Serial;
-
 import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D50_XYZ;
 
 /// ProPhoto RGB Color Space.
@@ -30,9 +28,6 @@ import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D50_X
 ///     <dd>[w3.org](https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-conversion-code)</dd>
 /// </dl>
 public class ProPhotoRgbColorSpace extends ParametricNonLinearRgbColorSpace {
-    @Serial
-    private static final long serialVersionUID = 0L;
-
     public static ProPhotoRgbColorSpace getInstance() {
         class Holder {
             private static final ProPhotoRgbColorSpace INSTANCE = new ProPhotoRgbColorSpace();

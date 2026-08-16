@@ -14,17 +14,17 @@ import java.util.function.IntFunction;
 /// @param <T> the element type
 public class ChildIterator<T> implements Iterator<T> {
 
-    /// Returns a child element given an offset.
+    /// Returns a child element given an index.
     private final IntFunction<T> getElementFunction;
     /// The number of children (the size of the child collection).
     private final int size;
-    /// The next offset.
+    /// The next index.
     private int next;
 
     /// Creates a new instance.
     ///
     /// @param childCount         the number of children
-    /// @param getElementFunction returns a child element given an offset
+    /// @param getElementFunction returns a child element given an index
     public ChildIterator(int childCount, IntFunction<T> getElementFunction) {
         this.size = childCount;
         this.getElementFunction = getElementFunction;

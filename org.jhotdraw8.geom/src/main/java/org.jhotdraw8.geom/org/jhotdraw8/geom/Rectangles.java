@@ -31,11 +31,11 @@ public class Rectangles {
     /// Returns true if the bounds contain the specified point within the given
     /// tolerance.
     ///
-    /// @param rx        the bounds element-coordinate
+    /// @param rx        the bounds x-coordinate
     /// @param ry        the bounds y-coordinate
     /// @param rw        the bounds width
     /// @param rh        the bounds height
-    /// @param x         the element-coordinate of the point
+    /// @param x         the x-coordinate of the point
     /// @param y         the y-coordinate of the point
     /// @param tolerance the tolerance
     /// @return true if inside
@@ -63,9 +63,9 @@ public class Rectangles {
     /// Returns the direction OUT_TOP, OUT_BOTTOM, OUT_LEFT, OUT_RIGHT from one
     /// point to another one.
     ///
-    /// @param x1 the element coordinate of point 1
+    /// @param x1 the x coordinate of point 1
     /// @param y1 the y coordinate of point 1
-    /// @param x2 the element coordinate of point 2
+    /// @param x2 the x coordinate of point 2
     /// @param y2 the y coordinate of point 2
     /// @return the direction
     public static int direction(double x1, double y1, double x2, double y2) {

@@ -65,7 +65,7 @@ public class SvgPaths {
 
                 switch (command) {
                     case 'M' -> {
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "element coordinate missing for 'M'");
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'M'");
                         ix = x = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'M'");
                         iy = y = tt.nval;
@@ -88,8 +88,8 @@ public class SvgPaths {
                         y = iy;
                     }
                     case 'L' -> {
-                        // absolute-lineto element y
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "element coordinate missing for 'L'");
+                        // absolute-lineto x y
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'L'");
                         x = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'L'");
                         y = tt.nval;
@@ -106,8 +106,8 @@ public class SvgPaths {
                         next = 'l';
                     }
                     case 'H' -> {
-                        // absolute-horizontal-lineto element
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "element coordinate missing for 'H'");
+                        // absolute-horizontal-lineto x
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'H'");
                         x = tt.nval;
                         builder.lineTo(x, y);
                         next = 'H';
@@ -134,7 +134,7 @@ public class SvgPaths {
                         next = 'v';
                     }
                     case 'C' -> {
-                        // absolute-curveto x1 y1 x2 y2 element y
+                        // absolute-curveto x1 y1 x2 y2 x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x1 coordinate missing for 'C'");
                         cx1 = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y1 coordinate missing for 'C'");
@@ -143,7 +143,7 @@ public class SvgPaths {
                         cx2 = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y2 coordinate missing for 'C'");
                         cy2 = tt.nval;
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "element coordinate missing for 'C'");
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'C'");
                         x = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'C'");
                         y = tt.nval;
@@ -168,12 +168,12 @@ public class SvgPaths {
                         next = 'c';
                     }
                     case 'S' -> {
-                        // absolute-shorthand-curveto x2 y2 element y
+                        // absolute-shorthand-curveto x2 y2 x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x2 coordinate missing for 'S'");
                         cx2 = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y2 coordinate missing for 'S'");
                         cy2 = tt.nval;
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "element coordinate missing for 'S'");
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'S'");
                         x = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'S'");
                         y = tt.nval;
@@ -194,12 +194,12 @@ public class SvgPaths {
                         next = 's';
                     }
                     case 'Q' -> {
-                        // absolute-quadto x1 y1 element y
+                        // absolute-quadto x1 y1 x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x1 coordinate missing for 'Q'");
                         cx1 = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y1 coordinate missing for 'Q'");
                         cy1 = tt.nval;
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "element coordinate missing for 'Q'");
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'Q'");
                         x = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'Q'");
                         y = tt.nval;
@@ -220,8 +220,8 @@ public class SvgPaths {
                         next = 'q';
                     }
                     case 'T' -> {
-                        // absolute-shorthand-quadto element y
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "element coordinate missing for 'T'");
+                        // absolute-shorthand-quadto x y
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'T'");
                         x = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'T'");
                         y = tt.nval;
@@ -238,20 +238,20 @@ public class SvgPaths {
                         next = 's';
                     }
                     case 'A' -> {
-                        // absolute-elliptical-arc rx ry element-axis-rotation large-arc-flag sweep-flag element y
+                        // absolute-elliptical-arc rx ry x-axis-rotation large-arc-flag sweep-flag x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "rx coordinate missing for 'A'");
                         // If rX or rY have negative signs, these are dropped;
                         // the absolute value is used instead.
                         double rx = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "ry coordinate missing for 'A'");
                         double ry = tt.nval;
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "element-axis-rotation missing for 'A'");
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x-axis-rotation missing for 'A'");
                         double xAxisRotation = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "large-arc-flag missing for 'A'");
                         boolean largeArcFlag = tt.nval != 0;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "sweep-flag missing for 'A'");
                         boolean sweepFlag = tt.nval != 0;
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "element coordinate missing for 'A'");
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'A'");
                         x = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'A'");
                         y = tt.nval;
@@ -260,20 +260,20 @@ public class SvgPaths {
                         next = 'A';
                     }
                     case 'a' -> {
-                        // relative-elliptical-arc rx ry element-axis-rotation large-arc-flag sweep-flag element y
+                        // relative-elliptical-arc rx ry x-axis-rotation large-arc-flag sweep-flag x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "rx coordinate missing for 'A'");
                         // If rX or rY have negative signs, these are dropped;
                         // the absolute value is used instead.
                         double rx = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "ry coordinate missing for 'A'");
                         double ry = tt.nval;
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "element-axis-rotation missing for 'A'");
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x-axis-rotation missing for 'A'");
                         double xAxisRotation = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "large-arc-flag missing for 'A'");
                         boolean largeArcFlag = tt.nval != 0;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "sweep-flag missing for 'A'");
                         boolean sweepFlag = tt.nval != 0;
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "element coordinate missing for 'A'");
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'A'");
                         x = x + tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'A'");
                         y = y + tt.nval;

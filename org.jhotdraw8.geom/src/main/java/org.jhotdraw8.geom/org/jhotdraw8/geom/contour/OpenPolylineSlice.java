@@ -25,7 +25,7 @@ public class OpenPolylineSlice {
 
     /// Creates a new instance with a clone of the specified polyline slice.
     ///
-    /// @param sIndex start offset
+    /// @param sIndex start index
     /// @param slice  a polyline slice (will be cloned)
     public OpenPolylineSlice(int sIndex, PlinePath slice) {
         this.intrStartIndex = sIndex;

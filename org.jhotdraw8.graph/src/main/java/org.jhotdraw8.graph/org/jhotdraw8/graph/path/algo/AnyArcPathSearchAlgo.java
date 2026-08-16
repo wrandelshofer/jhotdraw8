@@ -19,7 +19,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /// Searches an arbitrary path from a set of start vertices to a set of goal
-/// vertices using a breadth-tree search algorithm.
+/// vertices using a breadth-first search algorithm.
 ///
 /// This algorithm **ignores** cost limit. If you need it, use one of
 /// the shortest path search algorithms.

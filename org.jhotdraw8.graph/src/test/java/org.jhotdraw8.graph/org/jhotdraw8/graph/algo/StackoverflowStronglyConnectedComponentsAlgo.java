@@ -35,13 +35,13 @@ public class StackoverflowStronglyConnectedComponentsAlgo {
     /// Holds bookkeeping data for a node v from the graph.
     private static class NodeData {
 
-        /// Low represents the smallest offset of any node known to be reachable from v through v's DFS subtree,
+        /// Low represents the smallest index of any node known to be reachable from v through v's DFS subtree,
         /// including v itself.
         ///
-        /// Therefore, v must be left on the stack if v.low < v.offset, whereas v must be removed as the root of a
-        /// strongly connected component if v.low == v.offset.
+        /// Therefore, v must be left on the stack if v.low < v.index, whereas v must be removed as the root of a
+        /// strongly connected component if v.low == v.index.
         ///
-        /// The value v.low is computed during the depth-tree search from v, as this finds the nodes that are reachable from v.
+        /// The value v.low is computed during the depth-first search from v, as this finds the nodes that are reachable from v.
         private int low;
 
     }

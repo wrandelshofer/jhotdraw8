@@ -16,7 +16,7 @@ public class IntersectEllipseRectangle {
     /// Computes the intersection between an ellipse and a rectangle.
     ///
     /// @param c  the center of the ellipse
-    /// @param rx the element-radius of the ellipse
+    /// @param rx the x-radius of the ellipse
     /// @param ry the y-radius of the ellipse
     /// @param r1 corner point 1 of the rectangle
     /// @param r2 corner point 2 of the rectangle

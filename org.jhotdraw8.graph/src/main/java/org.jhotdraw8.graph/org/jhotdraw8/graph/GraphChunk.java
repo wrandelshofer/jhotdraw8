@@ -22,7 +22,7 @@ package org.jhotdraw8.graph;
 /// A chunk stores the following data:
 /// <dl>
 ///     <dt>vertex data</dt><dd>one 32-bit int data element for each vertex</dd>
-///     <dt>siblings</dt><dd>one 32-bit int offset for each sibling</dd>
+///     <dt>siblings</dt><dd>one 32-bit int index for each sibling</dd>
 ///     <dt>arrow data</dt><dd>one 32-bit int data element for each arrow
 ///     to a sibling</dd>
 /// </dl>
@@ -69,33 +69,33 @@ package org.jhotdraw8.graph;
 public interface GraphChunk {
     /// Tries to add an arrow from vertex `v` to vertex `u`.
     ///
-    /// @param v               the offset of vertex v
-    /// @param u               the offset of vertex u
+    /// @param v               the index of vertex v
+    /// @param u               the index of vertex u
     /// @param data            the arrow data
     /// @param updateIfPresent when true, updates the arrow data if the arrow is
     ///                        already present
     /// @return true, if the arrow is already present
     boolean tryAddArrow(final int v, final int u, final int data, final boolean updateIfPresent);
 
-    /// Gets the offset of the arrow vertex `v` to `u`.
+    /// Gets the index of the arrow vertex `v` to `u`.
     ///
-    /// @param v the offset of vertex v
-    /// @param u the offset of vertex u
-    /// @return the offset of the arrow if present,
+    /// @param v the index of vertex v
+    /// @param u the index of vertex u
+    /// @return the index of the arrow if present,
     /// `~insertionIndex` if the arrow is absent
     int indexOf(final int v, final int u);
 
     /// Gets the `from`-offset at which the siblings array contains
     /// indices of sibling vertices for the vertex `v`.
     ///
-    /// @param v the offset of vertex v
+    /// @param v the index of vertex v
     /// @return the `from`-offset in the siblings array
     /// @see #getSiblingsArray()
     int getSiblingsFromOffset(final int v);
 
     /// Gets the number of siblings of vertex `v`.
     ///
-    /// @param v the offset of vertex v
+    /// @param v the index of vertex v
     /// @return the number of siblings
     int getSiblingCount(final int v);
 
@@ -112,14 +112,14 @@ public interface GraphChunk {
 
     /// Tries to remove an arrow from vertex `v` to vertex `u`.
     ///
-    /// @param v the offset of vertex v
-    /// @param u the offset of vertex u
+    /// @param v the index of vertex v
+    /// @param u the index of vertex u
     /// @return true, if there was an arrow
     boolean tryRemoveArrow(final int v, final int u);
 
     /// Removes all arrows from vertex `v`.
     ///
-    /// @param v the offset of vertex v
+    /// @param v the index of vertex v
     void removeAllArrows(final int v);
 
     int removeArrowAt(final int v, final int removalIndex);

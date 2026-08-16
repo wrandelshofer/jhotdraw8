@@ -16,7 +16,7 @@ import org.jhotdraw8.fxbase.control.Disableable;
 /// Binds `disabled` to `disablers.emptyProperty().not()`.
 ///
 /// If a subclass wants to bind `disabled` to additional reasons, it must
-/// unbind `disabled` tree.
+/// unbind `disabled` first.
 public class AbstractDisableable implements Disableable {
 
     /// Holds the disablers.

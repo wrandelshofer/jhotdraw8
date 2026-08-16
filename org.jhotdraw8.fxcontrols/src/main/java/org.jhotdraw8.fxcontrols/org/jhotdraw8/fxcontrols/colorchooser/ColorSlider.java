@@ -30,9 +30,9 @@ import java.util.function.ToIntFunction;
 /// This slider shows one component dimension of an [NamedColorSpace]
 /// in a rectangular shape.
 public class ColorSlider extends AbstractColorSlider {
-    /// The offset of the color space component that is displayed along the extent of the rectangle.
+    /// The index of the color space component that is displayed along the extent of the rectangle.
     ///
-    /// Alpha has offset 4.
+    /// Alpha has index 4.
     @SuppressWarnings("this-escape")
     private final IntegerProperty componentIndex = new SimpleIntegerProperty(this, "componentIndex", 0);
 
@@ -52,7 +52,6 @@ public class ColorSlider extends AbstractColorSlider {
     @SuppressWarnings("this-escape")
     private final DoubleProperty majorTickUnit = new SimpleDoubleProperty(this, "majorTickUnit", 1d / 255);
 
-    @SuppressWarnings("this-escape")
     public ColorSlider() {
         load();
     }

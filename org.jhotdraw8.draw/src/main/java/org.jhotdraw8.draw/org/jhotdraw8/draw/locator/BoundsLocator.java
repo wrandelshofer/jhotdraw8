@@ -35,7 +35,7 @@ public class BoundsLocator extends AbstractLocator {
     public static final BoundsLocator SOUTH_WEST = new BoundsLocator(0.0, 1.0);
     public static final BoundsLocator WEST = new BoundsLocator(0.0, 0.5);
 
-    /// Relative element-coordinate on the bounds of the figure. The value 0 is on the
+    /// Relative x-coordinate on the bounds of the figure. The value 0 is on the
     /// left boundary of the figure, the value 1 on the right boundary.
     protected final double relativeX;
     /// Relative y-coordinate on the bounds of the figure. The value 0 is on the
@@ -49,7 +49,7 @@ public class BoundsLocator extends AbstractLocator {
 
     /// Creates a new instance.
     ///
-    /// @param relativeX element-position relative to bounds expressed as a value
+    /// @param relativeX x-position relative to bounds expressed as a value
     ///                  between 0 and 1.
     /// @param relativeY y-position relative to bounds expressed as a value
     ///                  between 0 and 1.

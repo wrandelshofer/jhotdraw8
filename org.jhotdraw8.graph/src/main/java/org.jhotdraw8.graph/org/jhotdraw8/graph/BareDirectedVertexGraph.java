@@ -23,10 +23,10 @@ import java.util.Set;
 /// @param <V> the vertex data type
 public interface BareDirectedVertexGraph<V> {
     /// Returns the next vertex associated with
-    /// the specified vertex and outgoing arrow offset.
+    /// the specified vertex and outgoing arrow index.
     ///
     /// @param v     a vertex
-    /// @param index offset of outgoing arrow
+    /// @param index index of outgoing arrow
     /// @return the next vertex
     /// @see #getNextCount
     V getNext(V v, int index);

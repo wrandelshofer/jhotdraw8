@@ -78,12 +78,10 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     private TextField textField;
     private boolean willUpdateList;
 
-    @SuppressWarnings("this-escape")
     public StyleClassesInspector() {
         this(StyleClassesInspector.class.getResource("StyleClassesInspector.fxml"));
     }
 
-    @SuppressWarnings("this-escape")
     public StyleClassesInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }

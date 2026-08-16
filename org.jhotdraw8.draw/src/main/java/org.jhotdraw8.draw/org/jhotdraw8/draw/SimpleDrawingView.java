@@ -97,7 +97,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
     private final Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
 
 
-    @SuppressWarnings("this-escape")
     public SimpleDrawingView() {
         initStyle();
         initLayout();

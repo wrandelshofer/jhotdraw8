@@ -36,7 +36,7 @@ public class Rectangle2DConverter extends AbstractCssConverter<Rectangle2D> {
     @Override
     public Rectangle2D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, width, height;
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Rectangle2D⟩: ⟨element⟩ expected.");
+        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Rectangle2D⟩: ⟨x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Rectangle2D⟩: ⟨y⟩ expected.");
@@ -73,6 +73,6 @@ public class Rectangle2DConverter extends AbstractCssConverter<Rectangle2D> {
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨Rectangle2D⟩: ⟨element⟩ ⟨y⟩ ⟨width⟩ ⟨height⟩";
+        return "Format of ⟨Rectangle2D⟩: ⟨x⟩ ⟨y⟩ ⟨width⟩ ⟨height⟩";
     }
 }

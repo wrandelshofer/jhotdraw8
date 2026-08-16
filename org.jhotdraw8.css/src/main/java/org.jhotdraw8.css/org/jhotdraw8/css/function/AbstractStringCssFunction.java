@@ -29,7 +29,7 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
 
         int count = 0;
 
-        // neighbors white space
+        // skip white space
         while (tt.next() == CssTokenType.TT_S) {
         }
         tt.pushBack();

@@ -23,7 +23,7 @@ import java.util.function.ToIntFunction;
 ///
 /// In a CHAMP trie, the bit sequence is derived from the hash code of a data
 /// object. A hash code is a bit sequence with a fixed length. This bit sequence
-/// is split up into parts. Each part is used as the offset to the next child node
+/// is split up into parts. Each part is used as the index to the next child node
 /// in the tree, starting from the root node of the tree.
 ///
 /// The nodes of a CHAMP trie are compressed. Instead of allocating a node for
@@ -79,7 +79,7 @@ public abstract class Node<D> {
     /// For example, if the bit partition is 5 bits, then
     /// we 2^5 == 32 distinct bit-positions.
     /// If the masked dataHash is 3 then the bit-position is
-    /// the bit with offset 3. That is, 1<<3 = 0b0100.
+    /// the bit with index 3. That is, 1<<3 = 0b0100.
     ///
     /// @param mask masked data hash
     /// @return bit position
@@ -270,8 +270,8 @@ public abstract class Node<D> {
     ///                       in this object
     /// @param updateFunction only used if there is a matching data object
     ///                       in the trie.
-    ///                       Given the existing data object (tree argument) and
-    ///                       the new data object (offset argument), yields a
+    ///                       Given the existing data object (first argument) and
+    ///                       the new data object (second argument), yields a
     ///                       new data object or returns either of the two.
     ///                       In all cases, the update function must return
     ///                       a data object that has the same data hash

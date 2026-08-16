@@ -65,12 +65,10 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     /// Counter for incrementing stylesheet names.
     private int counter;
 
-    @SuppressWarnings("this-escape")
     public StylesheetsInspector() {
         this(StylesheetsInspector.class.getResource("StylesheetsInspector.fxml"));
     }
 
-    @SuppressWarnings("this-escape")
     public StylesheetsInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }

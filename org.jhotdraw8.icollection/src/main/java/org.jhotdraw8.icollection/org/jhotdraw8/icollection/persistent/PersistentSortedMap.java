@@ -10,7 +10,7 @@ import java.util.Map;
 ///
 /// A sorted map is a sorted sequence of distinct entries.
 /// An entry maps a key to a value.
-/// The entries are sorted by key from tree to last.
+/// The entries are sorted by key from first to last.
 ///
 /// A copy-returning operation returns a new copy of the map
 /// with changes applied to it. The operation does not change the original

@@ -414,9 +414,9 @@ public class ColorCssConverter implements CssConverter<CssColor> {
             case CssTokenType.TT_DIMENSION -> {
                 // If the color is written with a leading "0xabcdef", then the
                 // color value is tokenized into a TT_DIMENSION. The unit
-                // contains the leading 'element' and the color value 'abcdef'.
+                // contains the leading 'x' and the color value 'abcdef'.
                 if (tt.currentNumberNonNull().intValue() == 0 && (tt.currentNumber() instanceof Long)
-                        && tt.currentStringNonNull().startsWith("element")) {
+                        && tt.currentStringNonNull().startsWith("x")) {
                     yield parseColorHexDigits(tt.currentStringNonNull().substring(1), tt.getStartPosition());
                 } else {
                     throw tt.createParseException("Could not convert a string to CssColor because it does not contain the expected hex digits.");

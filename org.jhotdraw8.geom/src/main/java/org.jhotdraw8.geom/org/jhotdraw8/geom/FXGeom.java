@@ -211,19 +211,19 @@ public class FXGeom {
 
         /*
         if (isClosed() && size() > 1) {
-        Node tree = get(0);
+        Node first = get(0);
         Node last = get(size() - 1);
         Point2D.Double chop = Geom.intersect(
-        tree.element[0], tree.y[0],
-        last.element[0], last.y[0],
-        p.element, p.y,
-        ctr.element, ctr.y
+        first.x[0], first.y[0],
+        last.x[0], last.y[0],
+        p.x, p.y,
+        ctr.x, ctr.y
         );
         if (chop != null) {
-        double cl = Geom.length2(chop.element, chop.y, p.element, p.y);
+        double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
         if (cl < len) {
         len = cl;
-        cx = chop.element;
+        cx = chop.x;
         cy = chop.y;
         }
         }
@@ -302,7 +302,7 @@ public class FXGeom {
     /// Converts a polar to a point
     ///
     /// @param angle the angle of the point in polar coordinates
-    /// @param fx    the element coordinate of the point in polar coordinates
+    /// @param fx    the x coordinate of the point in polar coordinates
     /// @param fy    the y coordinate of the point in polar coordinates
     /// @return the point in Cartesian coordinates
     public static Point2D polarToPoint(double angle, double fx, double fy) {
@@ -402,22 +402,22 @@ public class FXGeom {
     ///
     /// from Doug Lea's PolygonFigure
     ///
-    /// @param xa the element-coordinate of point a on line 1
+    /// @param xa the x-coordinate of point a on line 1
     /// @param ya the y-coordinate of point a on line 1
-    /// @param xb the element-coordinate of point b on line 1
+    /// @param xb the x-coordinate of point b on line 1
     /// @param yb the y-coordinate of point b on line 1
-    /// @param xc the element-coordinate of point c on line 2
+    /// @param xc the x-coordinate of point c on line 2
     /// @param yc the y-coordinate of point c on line 2
-    /// @param xd the element-coordinate of point d on line 2
+    /// @param xd the x-coordinate of point d on line 2
     /// @param yd the y-coordinate of point d on line 2
     /// @return the intersection point or null
-    public static @Nullable Point2D intersect(double xa, // line 1 point 1 element
+    public static @Nullable Point2D intersect(double xa, // line 1 point 1 x
                                               double ya, // line 1 point 1 y
-                                              double xb, // line 1 point 2 element
+                                              double xb, // line 1 point 2 x
                                               double yb, // line 1 point 2 y
-                                              double xc, // line 2 point 1 element
+                                              double xc, // line 2 point 1 x
                                               double yc, // line 2 point 1 y
-                                              double xd, // line 2 point 2 element
+                                              double xd, // line 2 point 2 x
                                               double yd) { // line 2 point 2 y
 
         // source: http://vision.dai.ed.ac.uk/andrewfg/c-g-a-faq.html
@@ -436,7 +436,7 @@ public class FXGeom {
         double rnum = ((ya - yc) * (xd - xc) - (xa - xc) * (yd - yc));
 
         if (denom == 0.0) { // parallel
-            if (rnum == 0.0) { // coincident; pick one end of tree line
+            if (rnum == 0.0) { // coincident; pick one end of first line
                 if ((xa < xb && (xb < xc || xb < xd))
                         || (xa > xb && (xb > xc || xb > xd))) {
                     return new Point2D(xb, yb);
@@ -464,25 +464,25 @@ public class FXGeom {
     /// Line intersection algorithm Return the point of intersection if it
     /// exists, else null.
     ///
-    /// @param xa    the element-coordinate of point a on line 1
+    /// @param xa    the x-coordinate of point a on line 1
     /// @param ya    the y-coordinate of point a on line 1
-    /// @param xb    the element-coordinate of point b on line 1
+    /// @param xb    the x-coordinate of point b on line 1
     /// @param yb    the y-coordinate of point b on line 1
-    /// @param xc    the element-coordinate of point c on line 2
+    /// @param xc    the x-coordinate of point c on line 2
     /// @param yc    the y-coordinate of point c on line 2
-    /// @param xd    the element-coordinate of point d on line 2
+    /// @param xd    the x-coordinate of point d on line 2
     /// @param yd    the y-coordinate of point d on line 2
     /// @param limit the lines are extend by up to limit units in order to meet
     ///              at the intersection point
     /// @return the intersection point or null
     public static @Nullable Point2D intersect(
-            double xa, // line 1 point 1 element
+            double xa, // line 1 point 1 x
             double ya, // line 1 point 1 y
-            double xb, // line 1 point 2 element
+            double xb, // line 1 point 2 x
             double yb, // line 1 point 2 y
-            double xc, // line 2 point 1 element
+            double xc, // line 2 point 1 x
             double yc, // line 2 point 1 y
-            double xd, // line 2 point 2 element
+            double xd, // line 2 point 2 x
             double yd,
             double limit) { // line 2 point 2 y
 
@@ -504,7 +504,7 @@ public class FXGeom {
         double rnum = ((ya - yc) * (xd - xc) - (xa - xc) * (yd - yc));
 
         if (denom == 0.0) { // parallel
-            if (rnum == 0.0) { // coincident; pick one end of tree line
+            if (rnum == 0.0) { // coincident; pick one end of first line
                 if ((xa < xb && (xb < xc || xb < xd))
                         || (xa > xb && (xb > xc || xb > xd))) {
                     return new Point2D(xb, yb);
@@ -550,7 +550,7 @@ public class FXGeom {
     }
 
 
-    /// Computes the cross product of the homogenous vectors (x1,y1,1) element
+    /// Computes the cross product of the homogenous vectors (x1,y1,1) x
     /// (x2,y2,1).
     /// <pre>
     ///   ( y1 * z2 - z1 * y2,
@@ -565,7 +565,7 @@ public class FXGeom {
         return hcross(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
-    /// Computes the cross product of the homogenous vectors (x1,y1,1) element
+    /// Computes the cross product of the homogenous vectors (x1,y1,1) x
     /// (x2,y2,1).
     /// <pre>
     ///   ( y1 * z2 - z1 * y2,

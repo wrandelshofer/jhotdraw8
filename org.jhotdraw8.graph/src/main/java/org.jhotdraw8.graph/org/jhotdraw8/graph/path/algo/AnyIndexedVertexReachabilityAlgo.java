@@ -44,10 +44,10 @@ public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> 
         return (int) searchNode;
     }
 
-    /// Gets the vertex offset from a SearchNode.
+    /// Gets the vertex index from a SearchNode.
     ///
     /// @param searchNode a SearchNode
-    /// @return the vertex offset
+    /// @return the vertex index
     private static int searchNodeGetVertex(long searchNode) {
         return (int) (searchNode >> 32);
     }
@@ -80,7 +80,7 @@ public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> 
                 maxDepth);
     }
 
-    /// Searches breadth-tree whether a path from root to goal exists.
+    /// Searches breadth-first whether a path from root to goal exists.
     ///
     /// @param startVertices the starting points of the search
     ///                      Must be {@literal >= 0}.

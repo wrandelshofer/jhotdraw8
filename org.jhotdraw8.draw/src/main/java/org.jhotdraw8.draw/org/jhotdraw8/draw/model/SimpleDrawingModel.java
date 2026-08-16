@@ -44,12 +44,10 @@ import java.util.function.BiFunction;
 /// like `LineConnectionFigure`.
 public class SimpleDrawingModel extends AbstractDrawingModel {
 
-    @SuppressWarnings("this-escape")
     public SimpleDrawingModel() {
         this.listenOnDrawing = true;
     }
 
-    @SuppressWarnings("this-escape")
     public SimpleDrawingModel(boolean listenOnDrawing) {
         this.listenOnDrawing = listenOnDrawing;
     }

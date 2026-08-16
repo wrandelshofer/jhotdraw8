@@ -19,7 +19,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /// Iterates over all walks from a set of start vertices to a set of goal
-/// vertices using a breadth-tree search.
+/// vertices using a breadth-first search.
 ///
 /// Only enumerates walks that contain a goal once.
 ///

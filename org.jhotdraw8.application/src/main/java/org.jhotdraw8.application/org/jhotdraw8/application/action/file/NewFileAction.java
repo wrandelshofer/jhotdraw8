@@ -22,7 +22,6 @@ public class NewFileAction extends AbstractApplicationAction {
         this(app, ID);
     }
 
-    @SuppressWarnings("this-escape")
     public NewFileAction(Application app, String id) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);

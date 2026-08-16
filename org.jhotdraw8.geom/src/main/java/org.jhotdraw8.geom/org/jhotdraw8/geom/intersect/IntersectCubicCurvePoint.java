@@ -94,15 +94,15 @@ public class IntersectCubicCurvePoint {
     ///
     /// </ol>
     ///
-    /// @param x0      element-coordinate of control point P0 of the bezier curve
+    /// @param x0      x-coordinate of control point P0 of the bezier curve
     /// @param y0      y-coordinate of control point P0 of the bezier curve
-    /// @param x1      element-coordinate of control point P1 of the bezier curve
+    /// @param x1      x-coordinate of control point P1 of the bezier curve
     /// @param y1      y-coordinate of control point P1 of the bezier curve
-    /// @param x2      element-coordinate of control point P2 of the bezier curve
+    /// @param x2      x-coordinate of control point P2 of the bezier curve
     /// @param y2      y-coordinate of control point P2 of the bezier curve
-    /// @param x3      element-coordinate of control point P3 of the bezier curve
+    /// @param x3      x-coordinate of control point P3 of the bezier curve
     /// @param y3      y-coordinate of control point P3 of the bezier curve
-    /// @param cx      element-coordinate of the point
+    /// @param cx      x-coordinate of the point
     /// @param cy      y-coordinate of the point
     /// @param epsilon the tolerance radius
     /// @return the intersection

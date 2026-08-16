@@ -36,7 +36,7 @@ import java.util.stream.StreamSupport;
 /// the figures.
 ///
 /// **Layers.** By convention the children of a `Drawing` must be
-/// [Layer]s. To addChild figures to a drawing, tree addChild a layer, and then addChild the figures to the layer.
+/// [Layer]s. To addChild figures to a drawing, first addChild a layer, and then addChild the figures to the layer.
 public interface Drawing extends Figure {
 
     /// Specifies the home address of all relative URLs used in a drawing.
@@ -112,7 +112,7 @@ public interface Drawing extends Figure {
     /// Performs one layout pass over the entire drawing.
     ///
     /// This method lays out figures that do not depend on the layout
-    /// of other figures tree, and then lays out figures that depend
+    /// of other figures first, and then lays out figures that depend
     /// on them, until all figures are laid out once.
     /// Circular dependencies are broken up deterministically.
     ///
@@ -124,7 +124,7 @@ public interface Drawing extends Figure {
     /// Performs one layout pass over the entire drawing.
     ///
     /// This method lays out figures that do not depend on the layout
-    /// of other figures tree, and then lays out figures that depend
+    /// of other figures first, and then lays out figures that depend
     /// on them, until all figures are laid out once.
     /// Circular dependencies are broken up deterministically.
     ///
@@ -183,7 +183,7 @@ public interface Drawing extends Figure {
     }
 
     /// Returns all figures in topological order according to their layout dependencies.
-    /// Independent figures come tree.
+    /// Independent figures come first.
     ///
     /// @return figures in topological order according to layout dependencies
     default Iterable<Figure> layoutDependenciesIterable() {

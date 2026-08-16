@@ -7,7 +7,6 @@ import javax.swing.undo.UndoableEdit;
 
 /// This undoable edit can be used to recreate handles of a drawing view
 /// as part of an undo/redo operation.
-@SuppressWarnings("serial")
 public class RecreateHandlesEdit extends AbstractUndoableEdit {
     private final DrawingView drawingView;
 

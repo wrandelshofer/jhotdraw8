@@ -218,7 +218,7 @@ public class ContourBuilder {
         final PlineVertex u1 = s2.v1();
         final PlineVertex u2 = s2.v2();
         assert !v1.bulgeIsZero() && u1.bulgeIsZero() :
-                "tree seg should be line, offset seg should be arc";
+                "first seg should be line, second seg should be arc";
 
         Runnable connectUsingArc = () -> {
             final Point2D.Double arcCenter = s1.origV2Pos();
@@ -337,7 +337,7 @@ public class ContourBuilder {
 
         result.addVertex(rawOffsets.get(0).v1());
 
-        // join tree two segments and determine if tree vertex was replaced (to know how to handle last
+        // join first two segments and determine if first vertex was replaced (to know how to handle last
         // two segment joins for closed polyline)
         if (rawOffsets.size() > 1) {
 
@@ -370,7 +370,7 @@ public class ContourBuilder {
             }
             result.removeLast();
 
-            // update tree vertex (only if it has not already been updated/replaced)
+            // update first vertex (only if it has not already been updated/replaced)
             if (!firstVertexReplaced) {
                 final Point2D.Double updatedFirstPos = closingPartResult.lastVertex().pos();
                 if (result.get(0).bulgeIsZero()) {
@@ -384,7 +384,7 @@ public class ContourBuilder {
                     final double updatedTheta = deltaAngle(a1, a2);
                     if ((updatedTheta < 0.0 && result.get(0).bulgeIsPos()) ||
                             (updatedTheta > 0.0 && result.get(0).bulgeIsNeg())) {
-                        // tree vertex not valid, just update its position to be removed later
+                        // first vertex not valid, just update its position to be removed later
                         result.set(0, new PlineVertex(updatedFirstPos, result.getFirst().bulge()));
                     } else {
                         // update position and bulge
@@ -393,7 +393,7 @@ public class ContourBuilder {
                 }
             }
 
-            // must do final singularity prune between tree and offset vertex after joining curves (n, 0)
+            // must do final singularity prune between first and second vertex after joining curves (n, 0)
             // and (0, 1)
             if (result.size() > 1 && Points.almostEqual(result.get(0).pos(), result.get(1).pos(), realPrecision)) {
                 result.removeFirst();
@@ -525,7 +525,7 @@ public class ContourBuilder {
         };
 
         if (!originalPline.isClosed()) {
-            // build tree open polyline that ends at the tree intersect since we will not wrap back to
+            // build first open polyline that ends at the first intersect since we will not wrap back to
             // capture it as in the case of a closed polyline
             PlinePath firstSlice = new PlinePath();
             int index = 0;
@@ -545,14 +545,14 @@ public class ContourBuilder {
                         break;
                     }
 
-                    // offset check (only test segment if we're not adding the tree vertex)
+                    // index check (only test segment if we're not adding the first vertex)
                     if (index != 0 && intersectsOrigPline.test(firstSlice.lastVertex(), rawOffsetPline.get(index))) {
                         break;
                     }
 
                     addOrReplaceIfSamePos(firstSlice, rawOffsetPline.get(index));
                 } else {
-                    // intersect found, test segment will be valid before finishing tree open polyline
+                    // intersect found, test segment will be valid before finishing first open polyline
                     final Point2D.Double intersectPos = iter.getFirst();
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
                             intersectPos, queryStack)) {
@@ -584,9 +584,9 @@ public class ContourBuilder {
         }
 
         for (final Map.Entry<Integer, List<Point2D.Double>> kvp : intersectsLookup.entrySet()) {
-            // start offset for the slice we're about to build
+            // start index for the slice we're about to build
             int sIndex = kvp.getKey();
-            // self intersect list for this start offset
+            // self intersect list for this start index
             List<Point2D.Double> siList = kvp.getValue();
 
             final PlineVertex startVertex = rawOffsetPline.get(sIndex);
@@ -594,7 +594,7 @@ public class ContourBuilder {
             final PlineVertex endVertex = rawOffsetPline.get(nextIndex);
 
             if (siList.size() != 1) {
-                // build all the segments between the N intersects in siList (N > 1), skipping the tree
+                // build all the segments between the N intersects in siList (N > 1), skipping the first
                 // segment (to be processed at the end)
                 SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList.getFirst());
                 PlineVertex prevVertex = firstSplit.splitVertex;
@@ -602,7 +602,7 @@ public class ContourBuilder {
                     SplitResult split = splitAtPoint(prevVertex, endVertex, siList.get(i));
                     // update prevVertex for next loop iteration
                     prevVertex = split.splitVertex;
-                    // neighbors if they're ontop of each other
+                    // skip if they're ontop of each other
                     if (Points.almostEqual(split.updatedStart.pos(), split.splitVertex.pos(),
                             Utils.realPrecision)) {
                         continue;
@@ -640,7 +640,7 @@ public class ContourBuilder {
 
             // build the segment between the last intersect in siList and the next intersect found
 
-            // check that the tree point is valid
+            // check that the first point is valid
             if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, siList.getLast(),
                     queryStack)) {
                 continue;
@@ -708,10 +708,10 @@ public class ContourBuilder {
 
                     break;
                 }
-                // else there is not an intersect, increment offset and continue
+                // else there is not an intersect, increment index and continue
                 if (index == rawOffsetPline.size() - 1) {
                     if (originalPline.isClosed()) {
-                        // wrap offset
+                        // wrap index
                         index = 0;
                     } else {
                         // open polyline, we're done
@@ -790,7 +790,7 @@ public class ContourBuilder {
         final PlineVertex u1 = s2.v1();
         final PlineVertex u2 = s2.v2();
         assert v1.bulgeIsZero() && !u1.bulgeIsZero() :
-                "tree seg should be arc, offset seg should be line";
+                "first seg should be arc, second seg should be line";
 
         Runnable connectUsingArc = () -> {
             final Point2D.Double arcCenter = s1.origV2Pos();
@@ -1095,9 +1095,9 @@ public class ContourBuilder {
         };
 
         for (final Map.Entry<Integer, List<Point2D.Double>> kvp : intersectsLookup.entrySet()) {
-            // start offset for the slice we're about to build
+            // start index for the slice we're about to build
             int sIndex = kvp.getKey();
-            // self intersect list for this start offset
+            // self intersect list for this start index
             List<Point2D.Double> siList = kvp.getValue();
 
             final PlineVertex startVertex = rawOffsetPline.get(sIndex);
@@ -1105,7 +1105,7 @@ public class ContourBuilder {
             final PlineVertex endVertex = rawOffsetPline.get(nextIndex);
 
             if (siList.size() != 1) {
-                // build all the segments between the N intersects in siList (N > 1), skipping the tree
+                // build all the segments between the N intersects in siList (N > 1), skipping the first
                 // segment (to be processed at the end)
                 SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList.getFirst());
                 PlineVertex prevVertex = firstSplit.splitVertex;
@@ -1113,7 +1113,7 @@ public class ContourBuilder {
                     SplitResult split = splitAtPoint(prevVertex, endVertex, siList.get(i));
                     // update prevVertex for next loop iteration
                     prevVertex = split.splitVertex;
-                    // neighbors if they're ontop of each other
+                    // skip if they're ontop of each other
                     if (Points.almostEqual(split.updatedStart.pos(), split.splitVertex.pos(),
                             Utils.realPrecision)) {
                         continue;
@@ -1152,7 +1152,7 @@ public class ContourBuilder {
 
             // build the segment between the last intersect in siList and the next intersect found
 
-            // check that the tree point is valid
+            // check that the first point is valid
             if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, siList.getLast(),
                     queryStack)) {
                 continue;
@@ -1220,7 +1220,7 @@ public class ContourBuilder {
 
                     break;
                 }
-                // else there is not an intersect, increment offset and continue
+                // else there is not an intersect, increment index and continue
                 index = Utils.nextWrappingIndex(index, rawOffsetPline);
             }
 
@@ -1267,7 +1267,7 @@ public class ContourBuilder {
             return result;
         }
 
-        // load spatial offset with all start points
+        // load spatial index with all start points
         StaticSpatialIndex spatialIndex = new StaticSpatialIndex(slices.size());
         for (final OpenPolylineSlice slice : slices) {
             final Point2D.Double point = slice.pline.getFirst().pos();
@@ -1313,7 +1313,7 @@ public class ContourBuilder {
                     if (currLoopStartIndex <= slice.intrStartIndex) {
                         indexDist = slice.intrStartIndex - currLoopStartIndex;
                     } else {
-                        // forward wrapping distance (distance to end + distance to offset)
+                        // forward wrapping distance (distance to end + distance to index)
                         indexDist = origMaxIndex - currLoopStartIndex + slice.intrStartIndex;
                     }
 
@@ -1328,7 +1328,7 @@ public class ContourBuilder {
                             OrderedPair<Integer, Boolean> distAndEqualInitial1 = indexDistAndEqualInitial.apply(index1);
                             OrderedPair<Integer, Boolean> distAndEqualInitial2 = indexDistAndEqualInitial.apply(index2);
                             if (distAndEqualInitial1.first().equals(distAndEqualInitial2.first())) {
-                                // offset distances are equal, compare on position being equal to initial start
+                                // index distances are equal, compare on position being equal to initial start
                                 // (testing index1 < index2, we want the longest closed loop possible)
                                 return (distAndEqualInitial1.second() ? 1 : 0) - (distAndEqualInitial2.second() ? 1 : 0);
                             }

@@ -23,7 +23,7 @@ public class IntersectEllipseLine {
     /// Computes the intersection between an ellipse and a line.
     ///
     /// @param ac  the center of the ellipse
-    /// @param arx the element-radius of the ellipse
+    /// @param arx the x-radius of the ellipse
     /// @param ary the y-radius of the ellipse
     /// @param b0  point 0 of the line
     /// @param b1  point 1 of the line
@@ -104,7 +104,7 @@ public class IntersectEllipseLine {
     /// [0,1].
     ///
     /// @param ec the center of the ellipse
-    /// @param rx the element-radius of the ellipse
+    /// @param rx the x-radius of the ellipse
     /// @param ry the y-radius of the ellipse
     /// @param a0 point 0 of the line
     /// @param a1 point 1 of the line
@@ -115,13 +115,13 @@ public class IntersectEllipseLine {
 
     /// Intersects a line with an ellipse.
     ///
-    /// @param x0      the element-coordinate of the start point of the line
+    /// @param x0      the x-coordinate of the start point of the line
     /// @param y0      the y-coordinate of the start point of the line
-    /// @param x1      the element-coordinate of the end point of the line
+    /// @param x1      the x-coordinate of the end point of the line
     /// @param y1      the y-coordinate of the end point of the line
-    /// @param cx      the element-coordinate of the center of the ellipse
+    /// @param cx      the x-coordinate of the center of the ellipse
     /// @param cy      the y-coordinate of the center of the ellipse
-    /// @param rx      the element-radius of the ellipse
+    /// @param rx      the x-radius of the ellipse
     /// @param ry      the y-radius ellipse
     /// @param epsilon the precision threshold
     /// @return the intersection result

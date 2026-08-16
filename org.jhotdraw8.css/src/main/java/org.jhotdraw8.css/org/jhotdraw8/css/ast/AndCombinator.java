@@ -10,15 +10,15 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-/// An "and combinator" matches an element if both its tree selector and its
-/// offset selector match the element.
+/// An "and combinator" matches an element if both its first selector and its
+/// second selector match the element.
 public class AndCombinator extends Combinator {
 
     /// Creates a new instance.
     ///
     /// @param sourceLocator
-    /// @param first         the tree selector
-    /// @param second        the offset selector
+    /// @param first         the first selector
+    /// @param second        the second selector
     public AndCombinator(@Nullable SourceLocator sourceLocator, SimpleSelector first, Selector second) {
         super(sourceLocator, first, second);
     }
@@ -45,10 +45,10 @@ public class AndCombinator extends Combinator {
         second.produceTokens(consumer);
     }
 
-    /// This selector matches only on a specific type, if its tree or its offset
+    /// This selector matches only on a specific type, if its first or its second
     /// selector matches only on a specific type.
     ///
-    /// @return `tree.matchesOnlyOnASpecificType()!=null? tree.matchesOnlyOnASpecificType(): offset.matchesOnlyOnASpecificType()`
+    /// @return `first.matchesOnlyOnASpecificType()!=null? first.matchesOnlyOnASpecificType(): second.matchesOnlyOnASpecificType()`
     @Override
     public @Nullable TypeSelector matchesOnlyOnASpecificType() {
         TypeSelector firstQN = first.matchesOnlyOnASpecificType();

@@ -41,7 +41,7 @@ public class PageLabelFigure extends AbstractLabelFigure
 
     /// Creates a new instance.
     ///
-    /// @param x         element-coordinate of the label
+    /// @param x         x-coordinate of the label
     /// @param y         y-coordinate of the label
     /// @param text      text of the label
     /// @param keyValues properties to set

@@ -31,7 +31,6 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
 
     protected final ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
 
-    @SuppressWarnings("this-escape")
     public StyleAttributesInspector() {
     }
 

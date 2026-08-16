@@ -49,7 +49,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         }
     }
 
-    /// Adds tree using branch-less code that takes advantage of the out-of-order
+    /// Adds first using branch-less code that takes advantage of the out-of-order
     /// execution unit in the CPU.
     ///
     /// @param e         an element
@@ -271,7 +271,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         return -1;
     }
 
-    /// Removes an element at the given array offset.
+    /// Removes an element at the given array index.
     public void removeAt(int i) {
         int size = size();
         Objects.checkIndex(i, size);

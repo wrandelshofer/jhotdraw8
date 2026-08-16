@@ -53,8 +53,8 @@ public class PageFigure extends AbstractCompositeFigure
         FillableFigure, StrokableFigure {
 
     public static final CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
-    /// The computed number of pages along the element-axis.
-    public static final DoubleStyleableKey NUM_PAGES_X = new DoubleStyleableKey("num-pages-element", 1.0);
+    /// The computed number of pages along the x-axis.
+    public static final DoubleStyleableKey NUM_PAGES_X = new DoubleStyleableKey("num-pages-x", 1.0);
     /// The computed number of pages along the y-axis.
     public static final DoubleStyleableKey NUM_PAGES_Y = new DoubleStyleableKey("num-pages-y", 1.0);
     public static final Point2DStyleableMapAccessor NUM_PAGES_X_Y = new Point2DStyleableMapAccessor("num-pages", NUM_PAGES_X, NUM_PAGES_Y);
@@ -63,7 +63,7 @@ public class PageFigure extends AbstractCompositeFigure
     public static final CssSizeStyleableKey PAGE_INSETS_RIGHT = new CssSizeStyleableKey("page-insets-right", CssSize.ZERO);
     public static final CssSizeStyleableKey PAGE_INSETS_TOP = new CssSizeStyleableKey("page-insets-top", CssSize.ZERO);
     public static final CssInsetsStyleableMapAccessor PAGE_INSETS = new CssInsetsStyleableMapAccessor("page-insets", PAGE_INSETS_TOP, PAGE_INSETS_RIGHT, PAGE_INSETS_BOTTOM, PAGE_INSETS_LEFT);
-    public static final CssSizeStyleableKey PAGE_OVERLAP_X = new CssSizeStyleableKey("page-overlap-element", CssSize.ZERO);
+    public static final CssSizeStyleableKey PAGE_OVERLAP_X = new CssSizeStyleableKey("page-overlap-x", CssSize.ZERO);
     public static final CssSizeStyleableKey PAGE_OVERLAP_Y = new CssSizeStyleableKey("page-overlap-y", CssSize.ZERO);
     public static final CssPoint2DStyleableMapAccessor PAGE_OVERLAP = new CssPoint2DStyleableMapAccessor("page-overlap", PAGE_OVERLAP_X, PAGE_OVERLAP_Y);
     public static final CssSizeStyleableKey PAPER_HEIGHT = new CssSizeStyleableKey("paper-size-height", CssSize.of(297.0, "mm"));

@@ -65,7 +65,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
 
     public static final DataFormat SVG_FORMAT;
     public static final String SVG_MIME_TYPE = "image/svg+xml";
-    private static final String SKIP_KEY = "neighbors";
+    private static final String SKIP_KEY = "skip";
 
     static {
         DataFormat fmt = DataFormat.lookupMimeType(SVG_MIME_TYPE);

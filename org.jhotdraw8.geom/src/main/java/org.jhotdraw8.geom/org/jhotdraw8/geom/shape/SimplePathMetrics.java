@@ -41,8 +41,8 @@ import static java.lang.Double.POSITIVE_INFINITY;
 ///     or it must be followed by a [PathIterator#SEG_MOVETO].
 ///   - The length of a [PathIterator#SEG_LINETO], [PathIterator#SEG_QUADTO],
 ///     [PathIterator#SEG_CUBICTO] must be greater than 0.
-///   - The `element, y` coordinates of the [PathIterator#SEG_MOVETO]
-///     at the beginning of a closed path must equal to the `element, y` coordinates
+///   - The `x, y` coordinates of the [PathIterator#SEG_MOVETO]
+///     at the beginning of a closed path must equal to the `x, y` coordinates
 ///     of the last segment of the closed path.
 ///
 public class SimplePathMetrics extends AbstractShape implements PathMetrics {
@@ -107,13 +107,13 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                 i--;
             }
         } else if (commands[i] == SEG_MOVETO) {
-            // Use the tree segment of the shape that is being opened
+            // Use the first segment of the shape that is being opened
             while (i < commands.length - 1 && commands[i] == SEG_MOVETO) {
                 i++;
             }
         }
 
-        int offset = offsets[i] - 2;// at offset - 2 we have the element,y coordinates of the previous command
+        int offset = offsets[i] - 2;// at offset - 2 we have the x,y coordinates of the previous command
         double start = (i == 0 ? 0 : lengths[i - 1]);
         final double segmentS = s - start;// the s value inside the segment
 
@@ -125,7 +125,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                     QuadCurves.eval(coords, offset, QuadCurves.invArcLength(coords, offset, segmentS, epsilon));
             case SEG_CUBICTO ->
                     CubicCurves.eval(coords, offset, CubicCurves.invArcLength(coords, offset, segmentS, epsilon));
-            default -> throw new IllegalStateException("unexpected command=" + commands[i] + " at offset=" + i);
+            default -> throw new IllegalStateException("unexpected command=" + commands[i] + " at index=" + i);
         };
     }
 
@@ -360,9 +360,9 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         private final SimplePathMetrics m;
         private final AffineTransform tt;
         int current = 0;
-        /// The offset of the tree command that ends inside the sub-path.
+        /// The index of the first command that ends inside the sub-path.
         int i0;
-        /// The offset of the tree command that ends outside the sub-path.
+        /// The index of the first command that ends outside the sub-path.
         int i1;
         final double[] splitCoords = new double[8];
         private final double[] segCoords = new double[6];
@@ -440,7 +440,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                             QuadCurves.invArcLength(m.coords, offset - 2, ss0, arcLength, epsilon), null, 0, splitCoords, 0);
                     case SEG_CUBICTO -> CubicCurves.split(m.coords, offset - 2,
                             CubicCurves.invArcLength(m.coords, offset - 2, ss0, arcLength, epsilon), null, 0, splitCoords, 0);
-                    default -> throw new AssertionError("unexpected command=" + m.commands[i0] + " at offset=" + i0);
+                    default -> throw new AssertionError("unexpected command=" + m.commands[i0] + " at index=" + i0);
                 }
                 System.arraycopy(splitCoords, 0, segCoords, 0, 2);
                 if (i0 == i1 && !endsAtSegment) {
@@ -453,8 +453,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                                 QuadCurves.invArcLength(splitCoords, 0, ss1 - ss0, arcLength, epsilon), splitCoords, 0, null, 0);
                         case SEG_CUBICTO -> CubicCurves.split(splitCoords, 0,
                                 CubicCurves.invArcLength(splitCoords, 0, ss1 - ss0, arcLength, epsilon), splitCoords, 0, null, 0);
-                        default ->
-                                throw new AssertionError("unexpected command=" + m.commands[i0] + " at offset=" + i0);
+                        default -> throw new AssertionError("unexpected command=" + m.commands[i0] + " at index=" + i0);
                     }
                     state = State.CLIP_FIRST_AND_LAST_SEGMENT;
                 } else {

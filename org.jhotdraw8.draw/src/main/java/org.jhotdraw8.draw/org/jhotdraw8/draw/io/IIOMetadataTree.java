@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class IIOMetadataTree {
-    public IIOMetadataTree() {
-    }
-
     public Enumerator<Node> preorderSpliterator(Node root) {
         return new PreorderSpliterator<>(n -> (Iterable<Node>) () -> new Iterator<Node>() {
             Node next = n.getFirstChild();

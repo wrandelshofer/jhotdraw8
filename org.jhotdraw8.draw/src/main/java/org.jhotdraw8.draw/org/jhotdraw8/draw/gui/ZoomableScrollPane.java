@@ -138,7 +138,6 @@ public class ZoomableScrollPane extends GridPane {
     @FXML // fx:id="foregroundPane"
     private Pane foreground; // Value injected by FXMLLoader
 
-    @SuppressWarnings("this-escape")
     public ZoomableScrollPane() {
     }
 

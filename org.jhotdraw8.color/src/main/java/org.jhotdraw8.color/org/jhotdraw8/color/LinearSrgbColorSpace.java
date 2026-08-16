@@ -7,8 +7,6 @@ package org.jhotdraw8.color;
 
 import javafx.geometry.Point2D;
 
-import java.io.Serial;
-
 /// Linear `sRGB` Color Space.
 /// <dl>
 ///     <dt>Wikipedia: sRGB. Transformation</dt>
@@ -17,9 +15,6 @@ import java.io.Serial;
 ///     <dd>[w3.org](https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-conversion-code)</dd>
 /// </dl>
 public class LinearSrgbColorSpace extends ParametricLinearRgbColorSpace {
-    @Serial
-    private static final long serialVersionUID = 0L;
-
     public static LinearSrgbColorSpace getInstance() {
         class Holder {
             private static final LinearSrgbColorSpace INSTANCE = new LinearSrgbColorSpace();

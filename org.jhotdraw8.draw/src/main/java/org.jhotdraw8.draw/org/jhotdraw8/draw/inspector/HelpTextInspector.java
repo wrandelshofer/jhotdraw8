@@ -25,12 +25,10 @@ public class HelpTextInspector extends AbstractDrawingViewInspector {
 
     private Node node;
 
-    @SuppressWarnings("this-escape")
     public HelpTextInspector() {
         this(HelpTextInspector.class.getResource("HelpTextInspector.fxml"));
     }
 
-    @SuppressWarnings("this-escape")
     public HelpTextInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }

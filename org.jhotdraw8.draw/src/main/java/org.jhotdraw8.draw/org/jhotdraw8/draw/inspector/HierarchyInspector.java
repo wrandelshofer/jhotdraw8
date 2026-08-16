@@ -98,13 +98,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private boolean willUpdateSelectionInTree;
     private final SetChangeListener<Figure> viewSelectionHandler = this::updateSelectionInTreeLater;
 
-    @SuppressWarnings("this-escape")
     public HierarchyInspector() {
         this(HierarchyInspector.class.getResource("HierarchyInspector.fxml"),
                 InspectorLabels.getResources().asResourceBundle());
     }
 
-    @SuppressWarnings("this-escape")
     public HierarchyInspector(URL fxmlUrl, ResourceBundle resources) {
         init(fxmlUrl, resources);
     }

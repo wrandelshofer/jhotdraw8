@@ -48,12 +48,10 @@ public class PolygonFigure extends AbstractLeafFigure
         this(0, 0, 1, 1);
     }
 
-    @SuppressWarnings("this-escape")
     public PolygonFigure(double startX, double startY, double endX, double endY) {
         set(POINTS, PersistentVectorList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
     }
 
-    @SuppressWarnings("this-escape")
     public PolygonFigure(Point2D... points) {
         set(POINTS, PersistentVectorList.of(points));
     }

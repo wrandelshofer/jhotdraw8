@@ -28,7 +28,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     /// Creates a new instance with the specified name.
     ///
     /// @param name the name of the accessor
-    /// @param xKey the key for the element coordinate of the point
+    /// @param xKey the key for the x coordinate of the point
     /// @param yKey the key for the y coordinate of the point
     /// @param zKey the key for the u coordinate of the point
     public Point3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey) {

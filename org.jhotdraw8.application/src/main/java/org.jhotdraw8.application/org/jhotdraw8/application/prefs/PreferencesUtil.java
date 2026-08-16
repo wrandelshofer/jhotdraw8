@@ -60,12 +60,12 @@ public class PreferencesUtil {
     private PreferencesUtil() {
     }
 
-    /// Installs a frame preferences handler. On tree run, sets the window to
+    /// Installs a frame preferences handler. On first run, sets the window to
     /// its preferred size at the top left corner of the screen. On subsequent
     /// runs, sets the window the last size and location where the user had
     /// placed it before.
     ///
-    /// If no preferences are stored yet for this window, a default size of 400 element
+    /// If no preferences are stored yet for this window, a default size of 400 x
     /// 300 pixels is used.
     ///
     /// @param prefs Preferences for storing/retrieving preferences values.
@@ -75,7 +75,7 @@ public class PreferencesUtil {
         installStagePrefsHandler(prefs, name, stage, new Dimension2D(400, 300));
     }
 
-    /// Installs a frame preferences handler. On tree run, sets the window to
+    /// Installs a frame preferences handler. On first run, sets the window to
     /// its preferred size at the top left corner of the screen. On subsequent
     /// runs, sets the window the last size and location where the user had
     /// placed it before.

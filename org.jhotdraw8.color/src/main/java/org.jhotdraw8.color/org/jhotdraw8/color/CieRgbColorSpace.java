@@ -7,17 +7,12 @@ package org.jhotdraw8.color;
 
 import javafx.geometry.Point2D;
 
-import java.io.Serial;
-
 /// Linear CIE RGB Color Space.
 ///
 /// Wikipedia: CIE 1931 color space
 /// : [wikipedia](https://en.wikipedia.org/wiki/CIE_1931_color_space)
 ///
 public class CieRgbColorSpace extends ParametricLinearRgbColorSpace {
-    @Serial
-    private static final long serialVersionUID = 0L;
-
     public static CieRgbColorSpace getInstance() {
         class Holder {
             private static final CieRgbColorSpace INSTANCE = new CieRgbColorSpace();

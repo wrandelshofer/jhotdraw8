@@ -13,19 +13,19 @@ import org.jspecify.annotations.Nullable;
 /// @param <A> the arrow data type
 public interface BareBidiGraph<V, A> extends BareDirectedGraph<V, A> {
     /// Returns the previous vertex associated with the specified vertex and
-    /// incoming arrow offset.
+    /// incoming arrow index.
     ///
     /// @param vertex a vertex
-    /// @param index  offset of incoming arrow
+    /// @param index  index of incoming arrow
     /// @return the previous vertex
     /// @see #getPrevCount
     V getPrev(V vertex, int index);
 
     /// Returns the arrow data associated with the specified vertex and
-    /// the specified incoming arrow offset.
+    /// the specified incoming arrow index.
     ///
     /// @param vertex a vertex
-    /// @param index  offset of incoming arrow
+    /// @param index  index of incoming arrow
     /// @return the arrow
     /// @see #getPrevCount
     @Nullable

@@ -48,7 +48,7 @@ import java.util.function.BiConsumer;
 ///  y  |
 ///     |
 ///   0 +----------------->
-///     0       element        0.8
+///     0       x        0.8
 /// </pre>
 public class ChromaticityDiagram extends Pane {
     private static final float xwMax = 0.8f;

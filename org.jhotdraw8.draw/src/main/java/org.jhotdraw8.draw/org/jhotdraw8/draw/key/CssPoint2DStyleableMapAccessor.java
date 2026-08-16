@@ -28,7 +28,7 @@ public class CssPoint2DStyleableMapAccessor
     /// Creates a new instance with the specified name.
     ///
     /// @param name the name of the accessor
-    /// @param xKey the key for the element coordinate of the point
+    /// @param xKey the key for the x coordinate of the point
     /// @param yKey the key for the y coordinate of the point
     public CssPoint2DStyleableMapAccessor(String name, NonNullMapAccessor<CssSize> xKey, NonNullMapAccessor<CssSize> yKey) {
         this(name, xKey, yKey, new Point2DCssConverter(false));
@@ -37,7 +37,7 @@ public class CssPoint2DStyleableMapAccessor
     /// Creates a new instance with the specified name.
     ///
     /// @param name      the name of the accessor
-    /// @param xKey      the key for the element coordinate of the point
+    /// @param xKey      the key for the x coordinate of the point
     /// @param yKey      the key for the y coordinate of the point
     /// @param converter String converter for the point
     public CssPoint2DStyleableMapAccessor(String name, NonNullMapAccessor<CssSize> xKey, NonNullMapAccessor<CssSize> yKey, Converter<CssPoint2D> converter) {

@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.color.trc;
 
-import java.io.Serial;
-
 /// Parametric tone curve mapper.
 /// ```
 /// f(x) = { (a * x + b)^gamma : when x >= d
@@ -17,8 +15,6 @@ import java.io.Serial;
 ///        { y / c                 : when y < c * d
 /// ```
 public final class ParametricToneMapper implements ToneMapper {
-    @Serial
-    private static final long serialVersionUID = 0L;
     private final float gamma;
     private final float a;
     private final float b;

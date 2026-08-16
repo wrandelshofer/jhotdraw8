@@ -25,7 +25,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     /// Creates a new instance with the specified name.
     ///
     /// @param name the name of the accessor
-    /// @param xKey the key for the element coordinate of the point
+    /// @param xKey the key for the x coordinate of the point
     /// @param yKey the key for the y coordinate of the point
     public Scale2DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey) {
         super(name, Point2D.class, new MapAccessor<?>[]{xKey, yKey}, new Point2D(xKey.getDefaultValue(), yKey.getDefaultValue()));

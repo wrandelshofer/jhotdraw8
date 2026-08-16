@@ -34,7 +34,7 @@ import java.util.List;
 /// </pre>
 /// References:
 /// <dl>
-///     <dt>Robert Tarjan (1972). Depth-tree search and linear graph algorithms.
+///     <dt>Robert Tarjan (1972). Depth-first search and linear graph algorithms.
 ///     </dt>
 ///     <dd><a href="http://www.cs.ucsb.edu/~gilbert/cs240a/old/cs240aSpr2011/slides/TarjanDFS.pdf">cs.ucsb.edu</a></dd>
 /// </dl>

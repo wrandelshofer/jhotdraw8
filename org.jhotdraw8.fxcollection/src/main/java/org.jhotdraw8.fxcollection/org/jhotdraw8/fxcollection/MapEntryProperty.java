@@ -27,7 +27,6 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
     /// Here char is used as an uint16.
     private char changing;
 
-    @SuppressWarnings("this-escape")
     public MapEntryProperty(ObservableMap<K, V> map, K key, Type tClazz) {
         this.map = map;
         this.key = key;

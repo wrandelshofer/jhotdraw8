@@ -19,9 +19,9 @@ public class Points {
 
     /// Gets the squared distance between the points (x1,y1) and (x2,y2).
     ///
-    /// @param x1 element-coordinate of point 1
+    /// @param x1 x-coordinate of point 1
     /// @param y1 y-coordinate of point 1
-    /// @param x2 element-coordinate of point 2
+    /// @param x2 x-coordinate of point 2
     /// @param y2 y-coordinate of point 2
     /// @return
     public static double squaredDistance(double x1, double y1, double x2, double y2) {
@@ -32,9 +32,9 @@ public class Points {
 
     /// Computes the distance between the points (x1,y1) and (x2,y2).
     ///
-    /// @param x1 element-coordinate of point 1
+    /// @param x1 x-coordinate of point 1
     /// @param y1 y-coordinate of point 1
-    /// @param x2 element-coordinate of point 2
+    /// @param x2 x-coordinate of point 2
     /// @param y2 y-coordinate of point 2
     /// @return
     public static double distance(double x1, double y1, double x2, double y2) {
@@ -47,9 +47,9 @@ public class Points {
     ///
     /// Computing the sqrt of a float is twice as fast as computing the sqrt of a double.
     ///
-    /// @param x1 element-coordinate of point 1
+    /// @param x1 x-coordinate of point 1
     /// @param y1 y-coordinate of point 1
-    /// @param x2 element-coordinate of point 2
+    /// @param x2 x-coordinate of point 2
     /// @param y2 y-coordinate of point 2
     /// @return
     public static float distanceF(double x1, double y1, double x2, double y2) {
@@ -85,7 +85,7 @@ public class Points {
     /// Computes the distance from the given shape to the given point.
     ///
     /// @param awtShape a shape
-    /// @param x        element-coordinate of the point
+    /// @param x        x-coordinate of the point
     /// @param y        y-coordinate of the point
     /// @return the distance
     public static double distanceFromShape(Shape awtShape, double x, double y) {

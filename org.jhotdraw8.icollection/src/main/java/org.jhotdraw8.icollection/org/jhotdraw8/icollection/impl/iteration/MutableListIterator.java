@@ -20,7 +20,7 @@ public class MutableListIterator<E> implements ListIterator<E> {
     /// Constructs a new instance.
     ///
     /// @param src   the underlying source list
-    /// @param index the next offset of the iterator
+    /// @param index the next index of the iterator
     public MutableListIterator(List<E> src, int index, IntSupplier modCount) {
         Objects.checkIndex(index, src.size() + 1);
         this.src = src;

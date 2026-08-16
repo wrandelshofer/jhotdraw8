@@ -57,7 +57,6 @@ public class ToolsToolbar extends GridPane {
         });
     }
 
-    @SuppressWarnings("this-escape")
     public ToolsToolbar(DrawingEditor editor) {
         setDrawingEditor(editor);
     }

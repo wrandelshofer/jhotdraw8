@@ -46,13 +46,13 @@ import java.util.Set;
 /// and rotation of the label using the properties [#LABEL_OFFSET]
 /// and [#LABEL_AUTOROTATE].
 /// <pre>
-/// LABELED_LOCATION:    element,y (has a derivative that can be rotated)
+/// LABELED_LOCATION:    x,y (has a derivative that can be rotated)
 ///                       |
 ///                       | + LABEL_OFFSET (perpendicular to
 ///                       |                 LABELED_LOCATION)
 ///                       ↓
 ///                   +--------------------+
-/// ORIGIN:           |  element,y               |
+/// ORIGIN:           |  x,y               |
 /// LABEL_AUTOROTATE: |   ↺                |
 ///                   |                    |
 ///                   |    layout bounds   |

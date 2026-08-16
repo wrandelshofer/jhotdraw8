@@ -78,7 +78,7 @@ import java.util.Objects;
 /// <pre>
 /// text-hpos: left;  ┆ center;            ┆ right;
 ///                   ┆                    ┆
-/// element                 ┆       element            ┆               element
+/// x                 ┆       x            ┆               x
 /// +-------------+   ┆ +-------------+    ┆ +-------------+
 /// | content box |   ┆ | content box |    ┆ | content box |
 /// +-------------+   ┆ +-------------+    ┆ +-------------+

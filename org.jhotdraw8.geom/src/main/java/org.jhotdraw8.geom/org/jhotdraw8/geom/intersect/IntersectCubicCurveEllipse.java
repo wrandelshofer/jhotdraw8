@@ -77,7 +77,7 @@ public class IntersectCubicCurveEllipse {
     /// @param p2 control point P2 of 'p'
     /// @param p3 control point P3 of 'p'
     /// @param ec the center of the ellipse
-    /// @param rx the element-radius of the ellipse
+    /// @param rx the x-radius of the ellipse
     /// @param ry the y-radius of the ellipse
     /// @return the computed result. Status can be[IntersectionStatus#INTERSECTION],
     /// Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.

@@ -17,7 +17,7 @@ public abstract class AbstractCssScanner implements CssScanner {
     /// The current character.
     protected int currentChar;
 
-    /// Whether we need to neighbors a linefeed on the next read.
+    /// Whether we need to skip a linefeed on the next read.
     protected boolean skipLF;
 
     public AbstractCssScanner() {

@@ -39,7 +39,6 @@ public class FXPreciseRotate extends Rotate {
     /// @param pivotY the Y coordinate of the rotation pivot point
     /// @param pivotZ the Z coordinate of the rotation pivot point
     /// @param axis   the axis of rotation
-    @SuppressWarnings("this-escape")
     public FXPreciseRotate(double angle, double pivotX, double pivotY, double pivotZ, Point3D axis) {
         this(angle, pivotX, pivotY);
         setPivotZ(pivotZ);

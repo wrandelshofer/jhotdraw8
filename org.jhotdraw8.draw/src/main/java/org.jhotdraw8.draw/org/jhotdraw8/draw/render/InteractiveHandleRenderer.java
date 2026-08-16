@@ -81,7 +81,6 @@ public class InteractiveHandleRenderer {
     private boolean recreateHandles;
     private boolean handlesAreValid;
 
-    @SuppressWarnings("this-escape")
     public InteractiveHandleRenderer() {
         handlesPane.setManaged(false);
         handlesPane.setAutoSizeChildren(false);

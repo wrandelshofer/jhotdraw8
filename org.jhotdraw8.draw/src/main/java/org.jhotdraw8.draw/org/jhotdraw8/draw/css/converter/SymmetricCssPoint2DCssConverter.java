@@ -44,7 +44,7 @@ public class SymmetricCssPoint2DCssConverter extends AbstractCssConverter<CssPoi
     @Override
     public CssPoint2D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y;
-        x = SizeCssConverter.parseSize(tt, "element");
+        x = SizeCssConverter.parseSize(tt, "x");
         if (tt.next() == CssTokenType.TT_EOF) {
             y = x;
         } else {
@@ -81,7 +81,7 @@ public class SymmetricCssPoint2DCssConverter extends AbstractCssConverter<CssPoi
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨SymmetricPoint2D⟩: ⟨xy⟩ ｜ ⟨element⟩ ⟨y⟩";
+        return "Format of ⟨SymmetricPoint2D⟩: ⟨xy⟩ ｜ ⟨x⟩ ⟨y⟩";
     }
 
 }
