@@ -79,17 +79,8 @@ public class MutableHashMap<K, V> extends AbstractMutableChampMap<K, V> {
     /// @param m a map
     @SuppressWarnings("this-escape")
     public MutableHashMap(Map<? extends K, ? extends V> m) {
-        // FIXME Use Builder!
-        if (m instanceof MutableHashMap) {
-            @SuppressWarnings("unchecked")
-            MutableHashMap<K, V> that = (MutableHashMap<K, V>) m;
-            this.root = that.root;
-            this.size = that.size;
-            this.modCount = 0;
-        } else {
-            this.root = BitmapIndexedNode.emptyNode();
-            this.putAll(m);
-        }
+        this();
+        putAll(m);
     }
 
     /// Constructs a map containing the same entries as in the specified
@@ -98,17 +89,8 @@ public class MutableHashMap<K, V> extends AbstractMutableChampMap<K, V> {
     /// @param m an iterable
     @SuppressWarnings("this-escape")
     public MutableHashMap(Iterable<? extends Entry<? extends K, ? extends V>> m) {
-        if (m instanceof PersistentHashMap) {
-            @SuppressWarnings("unchecked")
-            PersistentHashMap<K, V> that = (PersistentHashMap<K, V>) m;
-            this.root = that.root;
-            this.size = that.size;
-        } else {
-            this.root = BitmapIndexedNode.emptyNode();
-            for (Entry<? extends K, ? extends V> e : m) {
-                this.put(e.getKey(), e.getValue());
-            }
-        }
+        this();
+        putAll(m);
     }
 
     /// Removes all entries from this map.
@@ -122,7 +104,9 @@ public class MutableHashMap<K, V> extends AbstractMutableChampMap<K, V> {
     /// Returns a shallow copy of this map.
     @Override
     public MutableHashMap<K, V> clone() {
-        return (MutableHashMap<K, V>) super.clone();
+        var that = (MutableHashMap<K, V>) super.clone();
+        that.owner = null;
+        return that;
     }
 
 
@@ -306,9 +290,9 @@ public class MutableHashMap<K, V> extends AbstractMutableChampMap<K, V> {
         return false;
     }
 
-    /// Returns an persistent copy of this map.
+    /// Returns a persistent copy of this map.
     ///
-    /// @return an persistent copy
+    /// @return a persistent copy
     public PersistentHashMap<K, V> toPersistent() {
         owner = null;
         return isEmpty() ? PersistentHashMap.of()

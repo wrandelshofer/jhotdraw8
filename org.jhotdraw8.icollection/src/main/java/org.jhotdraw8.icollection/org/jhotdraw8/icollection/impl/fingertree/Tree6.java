@@ -2,6 +2,8 @@ package org.jhotdraw8.icollection.impl.fingertree;
 
 import org.jspecify.annotations.Nullable;
 
+import java.io.Serial;
+
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyAppend;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyInit;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyPrepend;
@@ -13,10 +15,49 @@ import static org.jhotdraw8.icollection.impl.fingertree.Arr.empty4;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.empty5;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.wrap1;
 
-public record Tree6<A>(int size, byte len1, short len12, short len123, int len1234, int len12345,
-                       A[] p1, A[][] p2, A[][][] p3, A[][][][] p4, A[][][][][] p5,
-                       A[][][][][][] d6,
-                       A[][][][][] s5, A[][][][] s4, A[][][] s3, A[][] s2, A[] s1) implements FingerTree<A> {
+public final class Tree6<A> extends FingerTree<A> {
+    @Serial
+    private static final long serialVersionUID = 0L;
+    private final int size;
+    private final byte len1;
+    private final short len12;
+    private final short len123;
+    private final int len1234;
+    private final int len12345;
+    private final A[] p1;
+    private final A[][] p2;
+    private final A[][][] p3;
+    private final A[][][][] p4;
+    private final A[][][][][] p5;
+    private final A[][][][][][] d6;
+    private final A[][][][][] s5;
+    private final A[][][][] s4;
+    private final A[][][] s3;
+    private final A[][] s2;
+    private final A[] s1;
+
+    public Tree6(int size, byte len1, short len12, short len123, int len1234, int len12345,
+                 A[] p1, A[][] p2, A[][][] p3, A[][][][] p4, A[][][][][] p5,
+                 A[][][][][][] d6,
+                 A[][][][][] s5, A[][][][] s4, A[][][] s3, A[][] s2, A[] s1) {
+        this.size = size;
+        this.len1 = len1;
+        this.len12 = len12;
+        this.len123 = len123;
+        this.len1234 = len1234;
+        this.len12345 = len12345;
+        this.p1 = p1;
+        this.p2 = p2;
+        this.p3 = p3;
+        this.p4 = p4;
+        this.p5 = p5;
+        this.d6 = d6;
+        this.s5 = s5;
+        this.s4 = s4;
+        this.s3 = s3;
+        this.s2 = s2;
+        this.s1 = s1;
+    }
 
     public Tree6(int size, A[] p1, A[][] p2, A[][][] p3, A[][][][] p4, A[][][][][] p5, A[][][][][][] d6, A[][][][][] s5, A[][][][] s4, A[][][] s3, A[][] s2, A[] s1) {
         var len1 = p1.length;
@@ -44,7 +85,7 @@ public record Tree6<A>(int size, byte len1, short len12, short len123, int len12
     }
 
     @Override
-    public FingerTree<A> addLast(A x) {
+    public FingerTree<A> addingLast(A x) {
         if (s1.length < WIDTH)
             return new Tree6<>(size + 1, len1, len12, len123, len1234, len12345,
                     p1, p2, p3, p4, p5, d6, s5, s4, s3, s2, copyAppend(s1, x));
@@ -67,7 +108,7 @@ public record Tree6<A>(int size, byte len1, short len12, short len123, int len12
     }
 
     @Override
-    public FingerTree<A> addFirst(A x) {
+    public FingerTree<A> addingFirst(A x) {
         if (len1 < WIDTH)
             return new Tree6<>(size + 1, len1 + 1, len12 + 1, len123 + 1, len1234 + 1, len12345 + 1,
                     copyPrepend(x, p1), p2, p3, p4, p5, d6, s5, s4, s3, s2, s1);
@@ -230,5 +271,74 @@ public record Tree6<A>(int size, byte len1, short len12, short len123, int len12
             case 10 -> s1;
             default -> throw new IllegalArgumentException("Unexpected value: " + idx);
         };
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    byte len1() {
+        return len1;
+    }
+
+    short len12() {
+        return len12;
+    }
+
+    short len123() {
+        return len123;
+    }
+
+    int len1234() {
+        return len1234;
+    }
+
+    int len12345() {
+        return len12345;
+    }
+
+    A[] p1() {
+        return p1;
+    }
+
+    A[][] p2() {
+        return p2;
+    }
+
+    A[][][] p3() {
+        return p3;
+    }
+
+    A[][][][] p4() {
+        return p4;
+    }
+
+    A[][][][][] p5() {
+        return p5;
+    }
+
+    A[][][][][][] d6() {
+        return d6;
+    }
+
+    A[][][][][] s5() {
+        return s5;
+    }
+
+    A[][][][] s4() {
+        return s4;
+    }
+
+    A[][][] s3() {
+        return s3;
+    }
+
+    A[][] s2() {
+        return s2;
+    }
+
+    A[] s1() {
+        return s1;
     }
 }

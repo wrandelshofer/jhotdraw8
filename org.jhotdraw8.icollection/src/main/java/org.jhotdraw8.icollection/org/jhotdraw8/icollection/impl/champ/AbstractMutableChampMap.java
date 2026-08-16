@@ -181,4 +181,15 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
         }
         return false;
     }
+
+    /// Gets the owner id of this set. Creates a new id, if this
+    /// set has no owner id.
+    ///
+    /// @return a new unique id or the existing unique id.
+    protected IdentityObject makeOwner() {
+        if (owner == null) {
+            owner = new IdentityObject();
+        }
+        return owner;
+    }
 }

@@ -382,9 +382,9 @@ public class MutableBMTrieHashSet<E> extends AbstractMutableChampSet<E, Sequence
                 this::reverseSpliterator);
     }
 
-    /// Returns an persistent copy of this set.
+    /// Returns a persistent copy of this set.
     ///
-    /// @return an persistent copy
+    /// @return a persistent copy
     public PersistentBMTrieHashSet<E> toPersistent() {
         owner = null;
         return size == 0

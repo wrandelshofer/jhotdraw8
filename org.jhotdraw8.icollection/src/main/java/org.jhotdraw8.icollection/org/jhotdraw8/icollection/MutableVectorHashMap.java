@@ -15,11 +15,13 @@ import org.jhotdraw8.icollection.impl.champ.Node;
 import org.jhotdraw8.icollection.impl.champ.ReverseTombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.impl.champ.SequencedData;
 import org.jhotdraw8.icollection.impl.champ.SequencedEntry;
+import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorIterator;
 import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
-import org.jhotdraw8.icollection.impl.fingertree.FingerTree;
+import org.jhotdraw8.icollection.impl.champmap.EditableMapEntry;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
+import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.readable.ReadableSequencedMap;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedMapView;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
@@ -35,6 +37,7 @@ import java.util.SequencedSet;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.function.Function;
 
 /// Implements the [SequencedMap] interface using a Compressed
 /// Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
@@ -85,13 +88,13 @@ public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, Se
         implements SequencedMap<K, V>, ReadableSequencedMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
-    /// Offset of sequence numbers to vector indices.
-    /// <pre>vector offset = sequence number + offset</pre>
+    /// Sequence number of the first entry.
+    /// `vector index = sequence number - offset`
     private int offset = 0;
     /// In this vector we store the elements in the order in which they were inserted.
 
     @SuppressWarnings("serialization")
-    private FingerTree<Object> vector;
+    private PersistentVectorList<Object> vector;
 
 
     /// Constructs a new empty map.
@@ -106,9 +109,8 @@ public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, Se
     /// @param c a map
     @SuppressWarnings("unchecked")
     public MutableVectorHashMap(Map<? extends K, ? extends V> c) {
-        this((c instanceof MutableVectorHashMap<?, ?> mvm)
-                ? ((MutableVectorHashMap<K, V>) mvm).toPersistent()
-                : c.entrySet());
+        this();
+        putAll(c);
     }
 
     /// Constructs a map containing the same entries as in the specified
@@ -117,19 +119,8 @@ public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, Se
     /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableVectorHashMap(Iterable<? extends Entry<? extends K, ? extends V>> c) {
-        // FIXME Use Builder!
-        if (c instanceof PersistentVectorHashMap<?, ?>) {
-            PersistentVectorHashMap<K, V> that = (PersistentVectorHashMap<K, V>) c;
-            this.hashMap = that.hashMap;
-            this.size = that.size;
-            this.offset = that.offset;
-            this.vector = that.vector;
-        } else {
-            this.hashMap = BitmapIndexedNode.emptyNode();
-            this.vector = FingerTreeAPI.of();
-            putAll(c);
-        }
-
+        this();
+        putAll(c);
     }
 
 
@@ -140,13 +131,15 @@ public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, Se
         vector = FingerTreeAPI.of();
         size = 0;
         modCount++;
-        offset = -1;
+        offset = 0;
     }
 
     /// Returns a shallow copy of this map.
     @Override
     public MutableVectorHashMap<K, V> clone() {
-        return (MutableVectorHashMap<K, V>) super.clone();
+        MutableVectorHashMap<K, V> that = (MutableVectorHashMap<K, V>) super.clone();
+        that.owner = null;
+        return that;
     }
 
     @Override
@@ -159,8 +152,21 @@ public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, Se
 
     @Override
     public Iterator<Map.Entry<K, V>> iterator() {
-        return new FailFastIterator<>(Spliterators.iterator(spliterator()),
+        Iterator<Map.Entry<K, V>> inner;
+        Function<Object, Entry<K, V>> mapper = o -> {
+            var se = (SequencedEntry<K, V>) o;
+            var eme = new EditableMapEntry<>(se.getKey(), se.getValue(), se.sequenceNumber());
+            eme.setPutIfPresentFunction(this::iteratorPutIfPresent);
+            return eme;
+        };
+        if (vector.size() == size()) {
+            inner = new MappedIterator<>(FingerTreeAPI.iterator(vector), mapper);
+        } else {
+            inner = new TombSkippingVectorIterator<>(vector, mapper);
+        }
+        return new FailFastIterator<>(inner,
                 this::iteratorRemove, () -> modCount);
+
     }
 
     private Iterator<Map.Entry<K, V>> reverseIterator() {
@@ -300,7 +306,7 @@ public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, Se
 
     private ChangeEvent<SequencedEntry<K, V>> putFirst(K key, V val, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
-        var newEntry = new SequencedEntry<>(key, val, -offset - 1);
+        var newEntry = new SequencedEntry<>(key, val, offset - 1);
         hashMap = hashMap.put(getOrCreateOwner(), newEntry,
                 SequencedEntry.keyHash(key), 0, details,
                 moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
@@ -320,8 +326,8 @@ public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, Se
                 modCount++;
                 size++;
             }
-            offset++;
-            vector = FingerTreeAPI.addFirst(newEntry, vector);
+            offset--;
+            vector = FingerTreeAPI.addFirst(vector, newEntry);
             renumber();
         }
         return details;
@@ -355,7 +361,7 @@ public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, Se
 
     ChangeEvent<SequencedEntry<K, V>> putLast(K key, V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
-        var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
+        var newEntry = new SequencedEntry<>(key, value, vector.size() + offset);
         hashMap = hashMap.put(getOrCreateOwner(), newEntry,
                 SequencedEntry.keyHash(key), 0, details,
                 moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
@@ -426,7 +432,7 @@ public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, Se
     private void renumber() {
         if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
             // center the numbers around 0 so that we have the interval [-size/2,size]
-            var b = new PersistentVectorHashMapBuilder<K, V>(size / -2);
+            var b = new PersistentVectorHashMapBuilder<K, V>(makeOwner(), size / -2);
             b.addMap(this);
             var tmp = b.build();
             hashMap = tmp.hashMap;
@@ -440,9 +446,9 @@ public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, Se
         return new ReversedSequencedMapView<>(this);
     }
 
-    /// Returns an persistent copy of this map.
+    /// Returns a persistent copy of this map.
     ///
-    /// @return an persistent copy
+    /// @return a persistent copy
     public PersistentVectorHashMap<K, V> toPersistent() {
         owner = null;
         return size == 0 ? PersistentVectorHashMap.of()

@@ -15,20 +15,20 @@ import java.util.Objects;
 /// number is not included.
 public class SequencedElement<E> implements SequencedData {
 
-    private final @Nullable E element;
+    private final E element;
     private final int sequenceNumber;
 
-    public SequencedElement(@Nullable E element) {
+    public SequencedElement(E element) {
         this.element = element;
         this.sequenceNumber = NO_SEQUENCE_NUMBER;
     }
 
-    public SequencedElement(@Nullable E element, int sequenceNumber) {
+    public SequencedElement(E element, int sequenceNumber) {
         this.element = element;
         this.sequenceNumber = sequenceNumber;
     }
 
-    public static <E> SequencedElement<E> put(SequencedElement<E> oldK, SequencedElement<E> newK) {
+    public static <E> SequencedElement<E> putIfAbsent(SequencedElement<E> oldK, SequencedElement<E> newK) {
         return oldK;
     }
 
@@ -70,7 +70,7 @@ public class SequencedElement<E> implements SequencedData {
         return Objects.hashCode(element);
     }
 
-    public @Nullable E getElement() {
+    public E getElement() {
         return element;
     }
 

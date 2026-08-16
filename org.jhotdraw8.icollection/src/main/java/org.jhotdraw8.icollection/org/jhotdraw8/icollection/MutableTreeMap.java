@@ -13,6 +13,7 @@ import org.jhotdraw8.icollection.navigable.DescendingNavigableMapView;
 import org.jhotdraw8.icollection.navigable.SubsetNavigableMapView;
 import org.jhotdraw8.icollection.readable.ReadableNavigableMap;
 import org.jhotdraw8.icollection.readable.ReadableSequencedMap;
+import org.jhotdraw8.icollection.readable.ReadableSortedMap;
 import org.jhotdraw8.icollection.serialization.SortedMapSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -79,15 +80,8 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
     /// @param m a map
     @SuppressWarnings("this-escape")
     public MutableTreeMap(Map<? extends K, ? extends V> m) {
-        this.comparator = NaturalComparator.instance();
-        if (m instanceof MutableTreeMap<?, ?> r && r.comparator() == null) {
-            @SuppressWarnings("unchecked")
-            MutableTreeMap<K, V> that = (MutableTreeMap<K, V>) m;
-            this.tree = that.tree;
-        } else {
-            this.tree = RedBlackTree.empty();
-            this.putAll(m);
-        }
+        this(NaturalComparator.instance());
+        putAll(m);
     }
 
     /// Constructs a map containing the same entries as in the specified
@@ -96,14 +90,18 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
     /// @param m a map
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableTreeMap(SortedMap<? extends K, ? extends V> m) {
-        this.comparator = m.comparator() == null ? NaturalComparator.instance() : (Comparator<? super K>) m.comparator();
-        if (m instanceof MutableTreeMap<?, ?> r && r.comparator() == null) {
-            MutableTreeMap<K, V> that = (MutableTreeMap<K, V>) m;
-            this.tree = that.tree;
-        } else {
-            this.tree = RedBlackTree.empty();
-            this.putAll(m);
-        }
+        this((Comparator<? super K>) m.comparator());
+        putAll(m);
+    }
+
+    /// Constructs a map containing the same entries as in the specified
+    /// [Map], using the same ordering as used by the provided map.
+    ///
+    /// @param m a map
+    @SuppressWarnings({"unchecked", "this-escape"})
+    public MutableTreeMap(ReadableSortedMap<? extends K, ? extends V> m) {
+        this((Comparator<? super K>) m.comparator());
+        putAll(m);
     }
 
     /// Constructs a map containing the same entries as in the specified
@@ -112,17 +110,9 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
     ///
     /// @param m an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
-    public MutableTreeMap(Iterable<? extends Entry<? extends K, ? extends V>> m) {
-        this.comparator = NaturalComparator.instance();
-        if (m instanceof PersistentTreeMap) {
-            PersistentTreeMap<K, V> that = (PersistentTreeMap<K, V>) m;
-            this.tree = that.root;
-        } else {
-            this.tree = RedBlackTree.empty();
-            for (Entry<? extends K, ? extends V> e : m) {
-                this.put(e.getKey(), e.getValue());
-            }
-        }
+    public MutableTreeMap(Iterable<? extends Entry<K, V>> m) {
+        this(NaturalComparator.instance());
+        this.putAll(m);
     }
 
     MutableTreeMap(RedBlackTree<K, V> tree, Comparator<? super K> comparator) {
@@ -358,7 +348,7 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
 
 
     public PersistentTreeMap<K, V> toPersistent() {
-        return new PersistentTreeMap<>(tree, comparator);
+        return new PersistentTreeMap<>(comparator, tree);
     }
 
     public Iterator<Entry<K, V>> iterator() {

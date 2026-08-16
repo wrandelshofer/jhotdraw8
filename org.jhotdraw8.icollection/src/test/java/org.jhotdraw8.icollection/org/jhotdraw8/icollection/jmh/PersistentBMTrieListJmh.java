@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.PersistentVectorList;
+import org.jhotdraw8.icollection.alt.PersistentBMTrieList;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -81,53 +81,53 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class VectorListJmh {
+public class PersistentBMTrieListJmh {
     @Param({"10", "1000", "100000"})
     private int size;
 
     private int mask = -65;
 
     private BenchmarkData data;
-    private PersistentVectorList<Key> listA;
-    private PersistentVectorList<Key> listB;
+    private PersistentBMTrieList<Key> listA;
+    private PersistentBMTrieList<Key> listB;
 
     private int index;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        listA = PersistentVectorList.of();
+        listA = PersistentBMTrieList.of();
         for (Key key : data.setA) {
             listA = listA.adding(key);
         }
-        listB = PersistentVectorList.copyOf(data.setB);
+        listB = PersistentBMTrieList.copyOf(data.setB);
         index = Math.min(listA.size() - 1, BigInteger.valueOf(listA.size() / 2).nextProbablePrime().intValue());
     }
 
 
     @Benchmark
-    public PersistentVectorList<Key> mCopyOf() {
-        return PersistentVectorList.copyOf(data.setA);
+    public PersistentBMTrieList<Key> mCopyOf() {
+        return PersistentBMTrieList.copyOf(data.setA);
     }
 
     @Benchmark
-    public PersistentVectorList<Key> mAddAll() {
+    public PersistentBMTrieList<Key> mAddAll() {
         return listA.addingAll(data.listB);
     }
 
     @Benchmark
-    public PersistentVectorList<Key> mAddAllSameType() {
+    public PersistentBMTrieList<Key> mAddAllSameType() {
         return listA.addingAll(listB);
     }
 
     @Benchmark
-    public PersistentVectorList<Key> mAddAllArray() {
-        return PersistentVectorList.<Key>of(data.arrayA);
+    public PersistentBMTrieList<Key> mAddAllArray() {
+        return PersistentBMTrieList.<Key>of(data.arrayA);
     }
 
     @Benchmark
-    public PersistentVectorList<Key> mAddOneByOne() {
-        PersistentVectorList<Key> l = PersistentVectorList.of();
+    public PersistentBMTrieList<Key> mAddOneByOne() {
+        PersistentBMTrieList<Key> l = PersistentBMTrieList.of();
         for (Key key : data.listA) {
             l = l.adding(key);
         }
@@ -137,7 +137,7 @@ public class VectorListJmh {
 
     /// This appears to be broken!
     @Benchmark
-    public PersistentVectorList<Key> mRemoveOneByOne() {
+    public PersistentBMTrieList<Key> mRemoveOneByOne() {
         var l = listA;
         for (var e : data.listA) {
             l = l.removing(e);
@@ -211,7 +211,7 @@ public class VectorListJmh {
         }
     */
     @Benchmark
-    public PersistentVectorList<Key> mRemoveAtIndex() {
+    public PersistentBMTrieList<Key> mRemoveAtIndex() {
         return listA.removingAt(index);
     }
 /*

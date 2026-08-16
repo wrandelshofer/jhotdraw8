@@ -1,7 +1,11 @@
 package org.jhotdraw8.icollection.impl.fingertree;
 
+import org.jhotdraw8.icollection.PersistentVectorList;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -15,11 +19,11 @@ import java.util.function.Predicate;
 public interface FingerTreeAPI {
 
     /// Adds the provided element at the specified offset to the node
-    static <A> FingerTree<A> add(FingerTree<A> xs, int index, A x) {
+    static <A> PersistentVectorList<A> add(FingerTree<A> xs, int index, A x) {
         if (xs.size() + 1 < 0)
             throw new IllegalArgumentException("Combined size exceeds maximal capacity. tree.size=" + xs.size() + ", element.size=1");
-        if (index == 0) return xs.addFirst(x);
-        if (index == xs.size() - 1) return xs.addLast(x);
+        if (index == 0) return xs.addingFirst(x);
+        if (index == xs.size() - 1) return xs.addingLast(x);
 
         var a = xs.slice(0, index);
         var b = xs.slice(index + 1, xs.size());
@@ -31,25 +35,60 @@ public interface FingerTreeAPI {
         return c;
     }
 
-    static <E> FingerTree<E> addAll(FingerTree<E> xs, Iterable<? extends E> ys) {
+    static <E> PersistentVectorList<E> addAll(PersistentVectorList<E> list, Iterable<? extends E> ys) {
         var b = new FingerTreeBuilder<E>();
-        b.addVector(xs);
-        b.addAll(ys);
+        b.addVector((FingerTree<? extends E>) list);
+        if (ys instanceof FingerTree<? extends E> p) {
+            b.addVector(p);
+        } else {
+            b.addAll(ys);
+        }
         var result = b.build();
-        return result.size() == xs.size() ? xs : result;
+        return result.size() == list.size() ? list : result;
     }
 
-    static <E> @Nullable E getFirst(FingerTree<E> vector) {
+    @SuppressWarnings("unchecked")
+    static <E> PersistentVectorList<E> retainAll(PersistentVectorList<E> list, Iterable<?> c) {
+        FingerTree<E> newRoot;
+        if (c instanceof ReadableCollection<?> cc) {
+            newRoot = FingerTreeAPI.removeIf(list, e -> !cc.contains(e));
+        } else if (c instanceof Collection<?> cc) {
+            newRoot = FingerTreeAPI.removeIf(list, e -> !cc.contains(e));
+        } else {
+            var set = new HashSet<E>();
+            c.forEach(e -> set.add((E) e));
+            newRoot = FingerTreeAPI.removeIf(list, e -> !set.contains(e));
+        }
+        return newRoot;
+    }
+
+    @SuppressWarnings("unchecked")
+    static <E> PersistentVectorList<E> removeAll(PersistentVectorList<E> list, Iterable<?> c) {
+        FingerTree<E> newRoot;
+        if (c instanceof ReadableCollection<?> cc) {
+            newRoot = FingerTreeAPI.removeIf(list, cc::contains);
+        } else if (c instanceof Collection<?> cc) {
+            newRoot = FingerTreeAPI.removeIf(list, cc::contains);
+        } else {
+            var set = new HashSet<E>();
+            c.forEach(e -> set.add((E) e));
+            newRoot = FingerTreeAPI.removeIf(list, set::contains);
+        }
+        return newRoot;
+    }
+
+    static <E> E getFirst(PersistentVectorList<E> vector) {
         return vector.getFirst();
     }
 
-    static <E> @Nullable E getLast(FingerTree<E> vector) {
+    static <E> E getLast(PersistentVectorList<E> vector) {
         return vector.getLast();
     }
 
-    static <E> FingerTree<E> removeIf(FingerTree<E> xs, Predicate<E> p) {
+    static <E> FingerTree<E> removeIf(PersistentVectorList<E> list, Predicate<E> p) {
+        FingerTree<E> xs = (FingerTree<E>) list;
         var b = new FingerTreeBuilder<E>();
-        for (var it = new FingerTreeIterator<>(xs); it.hasNext(); ) {
+        for (var it = FingerTreeAPI.iterator(xs); it.hasNext(); ) {
             var e = it.next();
             if (!p.test(e)) {
                 b.addOne(e);
@@ -59,7 +98,7 @@ public interface FingerTreeAPI {
         return result.size() == xs.size() ? xs : result;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "SizeReplaceableByIsEmpty"})
     static <E> FingerTree<E> addAll(FingerTree<E> xs, FingerTree<? extends E> ys) {
         if (xs.size() + ys.size() < 0)
             throw new IllegalArgumentException("Combined size exceeds maximal capacity. tree.size=" + xs.size() + ", ys.size=" + ys.size());
@@ -71,47 +110,42 @@ public interface FingerTreeAPI {
         return b.build();
     }
 
-    static <E> FingerTree<E> addAllAt(FingerTree<E> xs, int index, Iterable<? extends E> ys) {
+    static <E> PersistentVectorList<E> addAllAt(PersistentVectorList<E> list, int index, Iterable<? extends E> ys) {
+        FingerTree<E> xs = (FingerTree<E>) list;
         if (index == xs.size() - 1) return addAll(xs, ys);
         var b = new FingerTreeBuilder<E>();
         b.addVector(xs);
-        b.addAll(ys);
+        if (ys instanceof FingerTree<? extends E> p) {
+            b.addVector(p);
+        } else {
+            b.addAll(ys);
+        }
         var result = b.build();
         return result.size() == xs.size() ? xs : result;
     }
 
-    static <E> FingerTree<E> addAllAt(FingerTree<E> xs, int index, FingerTree<? extends E> ys) {
-        if (index == xs.size() - 1) return addAll(xs, ys);
-        if (xs.size() + ys.size() < 0)
-            throw new IllegalArgumentException("Combined size exceeds maximal capacity. tree.size=" + xs.size() + ", ys.size=" + ys.size());
-        if (ys.size() == 0) return xs;
-        var b = new FingerTreeBuilder<E>();
-        b.addVector(xs);
-        b.addVector(ys);
-        return b.build();
-    }
-
     /// Prepends the provided element to the node
-    static <A> FingerTree<A> addFirst(@Nullable A x, FingerTree<A> xs) {
+    static <A> PersistentVectorList<A> addFirst(PersistentVectorList<A> xs, @Nullable A x) {
         if (xs.size() + 1 < 0)
             throw new IllegalArgumentException("Combined size exceeds maximal capacity. tree.size=" + xs.size() + ", element.size=1");
-        return xs.addFirst(x);
+        return xs.addingFirst(x);
     }
 
     /// Appends the provided element to the node
-    static <A> FingerTree<A> addLast(FingerTree<A> xs, @Nullable A x) {
+    static <A> PersistentVectorList<A> addLast(PersistentVectorList<A> xs, @Nullable A x) {
         if (xs.size() + 1 < 0)
             throw new IllegalArgumentException("Combined size exceeds maximal capacity. tree.size=" + xs.size() + ", element.size=1");
-        return xs.addLast(x);
+        return xs.addingLast(x);
     }
 
     /// Appends the provided element to the node
-    static <A> FingerTree<A> addAt(FingerTree<A> xs, int index, A x) {
+    static <A> PersistentVectorList<A> addAt(PersistentVectorList<A> list, int index, A x) {
+        FingerTree<A> xs = (FingerTree<A>) list;
         Objects.checkIndex(index, xs.size() + 1);
         if (xs.size() + 1 < 0)
             throw new IllegalArgumentException("Combined size exceeds maximal capacity. tree.size=" + xs.size() + ", element.size=1");
-        if (index == 0) return xs.addFirst(x);
-        if (index == xs.size()) return xs.addLast(x);
+        if (index == 0) return xs.addingFirst(x);
+        if (index == xs.size()) return xs.addingLast(x);
         var b = new FingerTreeBuilder<A>();
         b.addVector(xs.slice(0, index));
         b.addOne(x);
@@ -141,7 +175,7 @@ public interface FingerTreeAPI {
     }
 
     /// Gets the element at the specified offset
-    static <A> @Nullable A get(FingerTree<A> xs, int index) {
+    static <A> A get(PersistentVectorList<A> xs, int index) {
         Objects.checkIndex(index, xs.size());
         return xs.get(index);
     }
@@ -160,12 +194,14 @@ public interface FingerTreeAPI {
     }
 
     /// Removes the element at the specified offset
-    static <A> Result<A> removeAt(FingerTree<A> xs, int index) {
+    static <A> Result<A> removeAt(PersistentVectorList<A> list, int index) {
+        FingerTree<A> xs = (FingerTree<A>) list;
         return xs.removeAt(index);
     }
 
     /// Removes the elements in the specified range
-    static <A> FingerTree<A> removeRange(FingerTree<A> xs, int fromIndex, int toIndex) {
+    static <A> FingerTree<A> removeRange(PersistentVectorList<A> list, int fromIndex, int toIndex) {
+        FingerTree<A> xs = (FingerTree<A>) list;
         if (fromIndex == toIndex) return xs;
         if (fromIndex == 0) return xs.slice(toIndex, xs.size());
         if (toIndex == xs.size()) return xs.slice(0, fromIndex);
@@ -176,34 +212,41 @@ public interface FingerTreeAPI {
     }
 
     /// Retains the elements in the specified range
-    static <A> FingerTree<A> slice(FingerTree<A> xs, int fromIndex, int toIndex) {
+    static <A> FingerTree<A> slice(PersistentVectorList<A> list, int fromIndex, int toIndex) {
+        FingerTree<A> xs = (FingerTree<A>) list;
         return xs.slice(fromIndex, toIndex);
     }
 
-    static <A> Iterator<A> iterator(FingerTree<A> xs) {
+
+    static <A> FingerTreeIterator<A> iterator(PersistentVectorList<A> list) {
+        FingerTree<A> xs = (FingerTree<A>) list;
         return new FingerTreeIterator<>(xs);
     }
 
-    static <A> Iterator<A> iterator(FingerTree<A> xs, int fromIndex, int toIndex) {
+    static <A> Iterator<A> iterator(PersistentVectorList<A> list, int fromIndex, int toIndex) {
+        FingerTree<A> xs = (FingerTree<A>) list;
         return new FingerTreeIterator<>(xs, fromIndex, toIndex);
     }
 
     /// Removes the tree element, returns the updated node and the removed element
-    static <A> Result<A> removeFirst(FingerTree<A> xs) {
+    static <A> Result<A> removeFirst(PersistentVectorList<A> list) {
+        FingerTree<A> xs = (FingerTree<A>) list;
         return xs.removeFirst();
     }
 
     /// Removes the last element, returns the updated node and the removed element
-    static <A> Result<A> removeLast(FingerTree<A> xs) {
+    static <A> Result<A> removeLast(PersistentVectorList<A> list) {
+        FingerTree<A> xs = (FingerTree<A>) list;
         return xs.removeLast();
     }
 
     /// Sets the element at the specified offset
-    static <A> Result<A> setAt(FingerTree<A> xs, int index, A element) {
+    static <A> Result<A> setAt(PersistentVectorList<A> list, int index, A element) {
+        FingerTree<A> xs = (FingerTree<A>) list;
         Result<A> rr = xs.set(index, element);
         return Objects.equals(rr.element, element) ? new Result<>(xs, rr.element) : rr;
     }
 
-    record Result<A>(FingerTree<A> tree, @Nullable A element) {
+    record Result<A>(PersistentVectorList<A> tree, @Nullable A element) {
     }
 }

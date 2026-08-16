@@ -35,6 +35,36 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
     @Override
     protected abstract <E> PersistentSequencedSet<E> newInstance(Iterable<E> m);
 
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void addFirstWithContainedElementShouldMoveElementToFirst(SetData data) throws Exception {
+        PersistentSequencedSet<Key> instance = newInstance(data.a());
+        List<Key> expected = new ArrayList<>(data.a().asSet());
+        assertEqualSequence(expected, instance, "initial");
+        for (Key e : data.a()) {
+            instance = instance.addingFirst(e);
+            expected.remove(e);
+            expected.addFirst(e);
+            assertEqualSequence(expected, instance, "addFirst");
+            assertEquals(e, instance.getFirst());
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void addLastWithContainedElementShouldMoveElementToFirst(SetData data) throws Exception {
+        PersistentSequencedSet<Key> instance = newInstance(data.a());
+        List<Key> expected = new ArrayList<>(data.a().asSet());
+        List<Key> listA = new ArrayList<>(data.a().asSet());
+        assertEqualSequence(expected, instance, "initial");
+        for (Key e : listA.reversed()) {
+            instance = instance.addingLast(e);
+            expected.remove(e);
+            expected.addLast(e);
+            assertEqualSequence(expected, instance, "addLast");
+            assertEquals(e, instance.getLast());
+        }
+    }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
@@ -68,6 +98,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
         while (!expected.isEmpty()) {
             PersistentSequencedSet<Key> instance2 = instance.removingLast();
             assertNotSame(instance, instance2);
+            //noinspection SequencedCollectionMethodCanBeUsed
             expected.remove(expected.size() - 1);
             assertEqualSequence(expected, instance2, "removeLast");
             instance = instance2;

@@ -170,22 +170,22 @@ public class PersistentBMTrieHashMap<K, V> implements PersistentSequencedMap<K, 
         this.vector = Objects.requireNonNull(vector);
     }
 
-    /// Returns an persistent copy of the provided map.
+    /// Returns a persistent copy of the provided map.
     ///
     /// @param map a map
     /// @param <K> the key type
     /// @param <V> the value type
-    /// @return an persistent copy
+    /// @return a persistent copy
     public static <K, V> PersistentBMTrieHashMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
         return PersistentBMTrieHashMap.<K, V>of().puttingAll(map);
     }
 
-    /// Returns an persistent copy of the provided map.
+    /// Returns a persistent copy of the provided map.
     ///
     /// @param map a map
     /// @param <K> the key type
     /// @param <V> the value type
-    /// @return an persistent copy
+    /// @return a persistent copy
     public static <K, V> PersistentBMTrieHashMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
         return PersistentBMTrieHashMap.<K, V>of().puttingAll(map);
     }

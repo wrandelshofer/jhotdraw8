@@ -1,6 +1,9 @@
 package org.jhotdraw8.icollection.impl.fingertree;
 
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jspecify.annotations.Nullable;
+
+import java.io.Serial;
 
 /// Represents a Fingertree.
 ///
@@ -24,15 +27,15 @@ import org.jspecify.annotations.Nullable;
 /// Arr6          = A[][][][][]
 /// ```
 ///
-/// |Tree | min|     max size|                prefix|  data  |suffix                |
-/// |-----|---:|------------:|---------------------:|:------:|----------------------|
-/// |Tree0|   0|            0|                      |        |                      |
-/// |Tree1|   1|           32|                      |   32   |                      |
-/// |Tree2|  32|        1,088|                    32|  32^2  |32                    |
-/// |Tree3|32^2|       34,880|               32,32^2|  32^3  |32^2,32               |
-/// |Tree4|32^3|    1,116,224|          32,32^2,32^3|  32^4  |32^3,32^2,32          |
-/// |Tree5|32^4|   35,719,232|     32,32^2,32^3,32^4|  32^5  |32^4,42^3,32^2,32     |
-/// |Tree6|32^5|2,216,757,312|32,32^2,32^3,32^4,32^5| 32^5*64|32^5,32^4,32^3,32^2,32|
+/// |Tree |       min|     max size|                prefix| data |suffix                |
+/// |-----|---------:|------------:|---------------------:|:----:|----------------------|
+/// |Tree0|         0|            0|                      |      |                      |
+/// |Tree1|         1|           32|                      |  32  |                      |
+/// |Tree2|        34|        1,088|                    32| 32^2 |32                    |
+/// |Tree3|        34|       34,880|               32,32^2| 32^3 |32^2,32               |
+/// |Tree4|     1,026|    1,116,224|          32,32^2,32^3| 32^4 |32^3,32^2,32          |
+/// |Tree5|    32,770|   35,719,232|     32,32^2,32^3,32^4| 32^5 |32^4,42^3,32^2,32     |
+/// |Tree6| 1,048,578|2,216,757,312|32,32^2,32^3,32^4,32^5| 32^6 |32^5,32^4,32^3,32^2,32|
 ///
 /// A Fingertree is a general-purpose, immutable data structure.  It provides random access and updates
 /// in O(log n) time, as well as very fast append/prepend/tail/init (amortized O(1), worst case O(log n)).
@@ -59,34 +62,41 @@ import org.jspecify.annotations.Nullable;
 /// [Apache License 2.0](https://github.com/scala/scala3/blob/18df09c05fa48fbb5bf5cd4b3728e9b7a0b3f6db/LICENSE)
 ///
 /// @tparam A the element type of the vector
-public sealed interface FingerTree<A> permits Tree0, Tree1, Tree2, Tree3, Tree4, Tree5, Tree6 {
-    int BITS = 5;
-    int BITS5 = BITS * 5;
-    int WIDTH5 = 1 << BITS5;
-    int BITS4 = BITS * 4;
-    int WIDTH4 = 1 << BITS4;
-    int BITS3 = BITS * 3;
-    int WIDTH3 = 1 << BITS3;
-    int BITS2 = BITS * 2;
-    int WIDTH2 = 1 << BITS2;
-    int WIDTH = 1 << BITS;
-    int LASTWIDTH = WIDTH << 1; // 1 extra bit in the last level to go up to Int.MaxValue (2^31-1) instead of 2^30
-    int MASK = WIDTH - 1;
+public abstract sealed class FingerTree<A> extends PersistentVectorList<A> permits Tree0, Tree1, Tree2, Tree3, Tree4, Tree5, Tree6 {
+    @Serial
+    private static final long serialVersionUID = 0L;
+    public static final int BITS = 5;
+    public static final int BITS5 = BITS * 5;
+    public static final int WIDTH5 = 1 << BITS5;
+    public static final int BITS4 = BITS * 4;
+    public static final int WIDTH4 = 1 << BITS4;
+    public static final int BITS3 = BITS * 3;
+    public static final int WIDTH3 = 1 << BITS3;
+    public static final int BITS2 = BITS * 2;
+    public static final int WIDTH2 = 1 << BITS2;
+    public static final int WIDTH = 1 << BITS;
+    public static final int LASTWIDTH = WIDTH << 1; // 1 extra bit in the last level to go up to Int.MaxValue (2^31-1) instead of 2^30
+    public static final int MASK = WIDTH - 1;
 
     /// Adds `element` as the tree element and returns the updated fingertree
-    FingerTree<A> addFirst(@Nullable A x);
+    @Override
+    public abstract PersistentVectorList<A> addingFirst(@Nullable A x);
 
     /// Adds `element` as the last element and returns the updated fingertree
-    FingerTree<A> addLast(@Nullable A x);
+    @Override
+    public abstract PersistentVectorList<A> addingLast(@Nullable A x);
 
     /// Gets the element at the specified `offset`
-    @Nullable A get(int index);
+    @Override
+    public abstract @Nullable A get(int index);
 
-    @Nullable A getFirst();
+    @Override
+    public abstract @Nullable A getFirst();
 
-    @Nullable A getLast();
+    @Override
+    public abstract @Nullable A getLast();
 
-    default FingerTreeAPI.Result<A> removeAt(int index) {
+    FingerTreeAPI.Result<A> removeAt(int index) {
         if (index == 0) return removeFirst();
         if (index == size() - 1) return removeLast();
         var removed = get(index);
@@ -100,25 +110,25 @@ public sealed interface FingerTree<A> permits Tree0, Tree1, Tree2, Tree3, Tree4,
     }
 
     /// Removes the tree element, and returns the updated fingertree and the removed value
-    FingerTreeAPI.Result<A> removeFirst();
+    abstract FingerTreeAPI.Result<A> removeFirst();
 
     /// Removes the last element, and returns the updated fingertree and the removed value
-    FingerTreeAPI.Result<A> removeLast();
+    abstract FingerTreeAPI.Result<A> removeLast();
 
     /// Sets the element at the specified `offset` and returns the updated fingertree and the previous value
-    FingerTreeAPI.Result<A> set(int index, A x);
+    abstract FingerTreeAPI.Result<A> set(int index, A x);
 
-    int size();
+    public abstract int size();
 
     /// Returns a fingertree that contains the elements from `from` (inclusive) to `to` (exclusive).
-    FingerTree<A> slice(int from, int to);
+    abstract FingerTree<A> slice(int from, int to);
 
     /// Gets the slice at offset.
     ///
     /// @param idx the zero-based slice offset
     /// @return the underlying data array (of dimension matching the slice level) for the slice at position \`idx\`
-    A[] getSliceAt(int idx);
+    abstract A[] getSliceAt(int idx);
 
     /// Number of slices.
-    int getSliceCount();
+    abstract int getSliceCount();
 }

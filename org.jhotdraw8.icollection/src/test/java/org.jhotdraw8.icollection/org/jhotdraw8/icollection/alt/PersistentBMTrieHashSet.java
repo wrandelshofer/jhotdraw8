@@ -175,11 +175,11 @@ public class PersistentBMTrieHashSet<E> implements Serializable, PersistentSeque
     }
 
 
-    /// Returns an persistent set that contains the provided elements.
+    /// Returns a persistent set that contains the provided elements.
     ///
     /// @param c   an iterable
     /// @param <E> the element type
-    /// @return an persistent set of the provided elements
+    /// @return a persistent set of the provided elements
     @SuppressWarnings("unchecked")
     public static <E> PersistentBMTrieHashSet<E> copyOf(Iterable<? extends E> c) {
         return PersistentBMTrieHashSet.<E>of().addingAll(c);
@@ -196,11 +196,11 @@ public class PersistentBMTrieHashSet<E> implements Serializable, PersistentSeque
     }
 
 
-    /// Returns an persistent set that contains the provided elements.
+    /// Returns a persistent set that contains the provided elements.
     ///
     /// @param elements elements
     /// @param <E>      the element type
-    /// @return an persistent set of the provided elements
+    /// @return a persistent set of the provided elements
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
     public static <E> PersistentBMTrieHashSet<E> of(E @Nullable ... elements) {
@@ -253,6 +253,7 @@ public class PersistentBMTrieHashSet<E> implements Serializable, PersistentSeque
         return this;
     }
 
+    @Override
     public PersistentBMTrieHashSet<E> addingLast(@Nullable E element) {
         return addLast(element, true);
     }

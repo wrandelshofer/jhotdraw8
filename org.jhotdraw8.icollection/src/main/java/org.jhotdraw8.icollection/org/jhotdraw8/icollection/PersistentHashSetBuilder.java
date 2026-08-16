@@ -5,15 +5,22 @@ import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
 import org.jspecify.annotations.Nullable;
 
-import java.util.AbstractMap;
 import java.util.Objects;
 
 /// This Builder allows to efficiently build a [PersistentHashSet] without
 /// generating intermediate editions.
 public class PersistentHashSetBuilder<E> implements SetBuilder<E, PersistentHashSet<E>> {
     private BitmapIndexedNode<E> hashSet = BitmapIndexedNode.emptyNode();
-    private IdentityObject owner = new IdentityObject();
+    private IdentityObject owner;
     private int size;
+
+    public PersistentHashSetBuilder() {
+        this(new IdentityObject());
+    }
+
+    public PersistentHashSetBuilder(IdentityObject owner) {
+        this.owner = owner;
+    }
 
     @Override
     public PersistentHashSetBuilder<E> add(@Nullable E elem) {
@@ -29,6 +36,6 @@ public class PersistentHashSetBuilder<E> implements SetBuilder<E, PersistentHash
     @Override
     public PersistentHashSet<E> build() {
         owner = new IdentityObject();
-        return new PersistentHashSet<>(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(hashSet, size)));
+        return new PersistentHashSet<>(hashSet, size);
     }
 }

@@ -83,18 +83,8 @@ public class MutableHashSet<E> extends AbstractMutableChampSet<E, E> {
     /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableHashSet(Iterable<? extends E> c) {
-        // FIXME Use Builder!
-        if (c instanceof MutableHashSet<?>) {
-            c = ((MutableHashSet<? extends E>) c).toPersistent();
-        }
-        if (c instanceof PersistentHashSet<?>) {
-            PersistentHashSet<E> that = (PersistentHashSet<E>) c;
-            this.hashSet = that.root;
-            this.size = that.size;
-        } else {
-            this.hashSet = BitmapIndexedNode.emptyNode();
-            addAll(c);
-        }
+        this();
+        addAll(c);
     }
 
     @Override
@@ -117,6 +107,7 @@ public class MutableHashSet<E> extends AbstractMutableChampSet<E, E> {
     /// @return `true` if this set changed
     @SuppressWarnings("unchecked")
     public boolean addAll(Iterable<? extends E> c) {
+        if (c == this) return false;
         if (c instanceof MutableHashSet<?> m) {
             c = (Iterable<? extends E>) m.toPersistent();
         }
@@ -137,11 +128,6 @@ public class MutableHashSet<E> extends AbstractMutableChampSet<E, E> {
             return true;
         }
         return super.addAll(c);
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return removeAll((Iterable<?>) c);
     }
 
     @SuppressWarnings("unchecked")
@@ -243,7 +229,9 @@ public class MutableHashSet<E> extends AbstractMutableChampSet<E, E> {
     /// Returns a shallow copy of this set.
     @Override
     public MutableHashSet<E> clone() {
-        return (MutableHashSet<E>) super.clone();
+        MutableHashSet<E> that = (MutableHashSet<E>) super.clone();
+        that.owner = null;
+        return that;
     }
 
     @Override
@@ -284,9 +272,9 @@ public class MutableHashSet<E> extends AbstractMutableChampSet<E, E> {
         return details.isModified();
     }
 
-    /// Returns an persistent copy of this set.
+    /// Returns a persistent copy of this set.
     ///
-    /// @return an persistent copy
+    /// @return a persistent copy
     public PersistentHashSet<E> toPersistent() {
         owner = null;
         return size == 0

@@ -4,7 +4,6 @@ import org.jhotdraw8.icollection.impl.redblack.RedBlackTree;
 import org.jhotdraw8.icollection.readable.ReadableSortedSet;
 import org.jspecify.annotations.Nullable;
 
-import java.util.AbstractMap;
 import java.util.Comparator;
 import java.util.SortedSet;
 
@@ -52,6 +51,6 @@ public class PersistentTreeSetBuilder<E> implements SetBuilder<E, PersistentTree
 
     @Override
     public PersistentTreeSet<E> build() {
-        return new PersistentTreeSet<>(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(getComparatorOrDefault(), tree)));
+        return new PersistentTreeSet<>(getComparatorOrDefault(), tree);
     }
 }

@@ -54,9 +54,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         assertEqualSequence(expected, instance, "new instance");
-        ArrayList<Key> shuffled = new ArrayList<>(data.a().asSet());
-        Collections.shuffle(shuffled, new Random(0));
-        for (Key e : shuffled) {
+        for (Key e : data.a()) {
             instance.addFirst(e);
             assertEquals(e, instance.getFirst());
             assertEquals(e, instance.reversed().getLast());

@@ -2,7 +2,6 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.impl.redblack.RedBlackTree;
 
-import java.util.AbstractMap;
 import java.util.Comparator;
 
 /// This Builder allows to efficiently build a [PersistentTreeSet] without
@@ -31,6 +30,6 @@ public class PersistentTreeMapBuilder<K, V> implements MapBuilder<K, V, Persiste
 
     @Override
     public PersistentTreeMap<K, V> build() {
-        return new PersistentTreeMap<>(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(comparator, tree)));
+        return new PersistentTreeMap<>(comparator, tree);
     }
 }

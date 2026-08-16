@@ -45,7 +45,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         for (Map.Entry<Key, Value> e : data.a()) {
             instance = instance.puttingFirst(e.getKey(), e.getValue());
             expected.remove(e);
-            expected.add(0, e);
+            expected.addFirst(e);
             assertEqualSequence(expected, instance, "putFirst");
             assertEquals(e, instance.firstEntry());
         }
@@ -73,7 +73,8 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
     public void putLastWithContainedElementShouldMoveElementToLast(MapData data) throws Exception {
         PersistentSequencedMap<Key, Value> instance = newInstance(data.a());
         List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
-        for (Map.Entry<Key, Value> e : data.a()) {
+        List<Map.Entry<Key, Value>> listA = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<Key, Value> e : listA.reversed()) {
             instance = instance.puttingLast(e.getKey(), e.getValue());
             Map.Entry<Key, Value> lastEntry = instance.lastEntry();
             assertEquals(e, lastEntry);

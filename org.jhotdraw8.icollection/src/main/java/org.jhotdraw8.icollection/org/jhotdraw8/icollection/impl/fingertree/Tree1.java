@@ -2,6 +2,8 @@ package org.jhotdraw8.icollection.impl.fingertree;
 
 import org.jspecify.annotations.Nullable;
 
+import java.io.Serial;
+
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyAppend;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyInit;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyPrepend;
@@ -17,7 +19,18 @@ import static org.jhotdraw8.icollection.impl.fingertree.Arr.wrap1;
 /// [Scala 3, Vector.scala](https://github.com/scala/scala3/blob/18df09c05fa48fbb5bf5cd4b3728e9b7a0b3f6db/library/src/scala/collection/immutable/Vector.scala),
 /// EPFL and Lightbend, Inc. dba Akka,
 /// [Apache License 2.0](https://github.com/scala/scala3/blob/18df09c05fa48fbb5bf5cd4b3728e9b7a0b3f6db/LICENSE)
-public record Tree1<A>(A[] d1) implements FingerTree<A> {
+public final class Tree1<A> extends FingerTree<A> {
+    @Serial
+    private static final long serialVersionUID = 0L;
+    private final A[] d1;
+
+    /**
+     *
+     */
+    public Tree1(A[] d1) {
+        this.d1 = d1;
+    }
+
     @Override
     public int size() {
         return d1.length;
@@ -52,7 +65,7 @@ public record Tree1<A>(A[] d1) implements FingerTree<A> {
 
 
     @Override
-    public FingerTree<A> addLast(A x) {
+    public FingerTree<A> addingLast(A x) {
         if (d1.length < WIDTH)
             return new Tree1<>(copyAppend(d1, x));
 
@@ -74,7 +87,7 @@ public record Tree1<A>(A[] d1) implements FingerTree<A> {
     }
 
     @Override
-    public FingerTree<A> addFirst(A x) {
+    public FingerTree<A> addingFirst(A x) {
         if (d1.length < WIDTH)
             return new Tree1<>(copyPrepend(x, d1));
 
@@ -94,5 +107,9 @@ public record Tree1<A>(A[] d1) implements FingerTree<A> {
     @Override
     public FingerTreeAPI.Result<A> removeAt(int index) {
         return new FingerTreeAPI.Result<>(new Tree1<>(copyRemove(d1, index)), d1[index]);
+    }
+
+    A[] d1() {
+        return d1;
     }
 }

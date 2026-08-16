@@ -39,46 +39,24 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
 
     @Serial
     private static final long serialVersionUID = 0L;
+    @SuppressWarnings("TransientFieldNotInitialized")
     final transient RedBlackTree<K, V> root;
+    @SuppressWarnings("TransientFieldNotInitialized")
     final transient Comparator<? super K> comparator;
 
-    /// Creates a new instance with the provided privateData data object.
-    ///
-    /// This constructor is intended to be called from a constructor
-    /// of the subclass, that is called from method [#newInstance(PrivateData)].
-    ///
-    /// @param privateData an privateData data object
-    @SuppressWarnings("unchecked")
-    protected PersistentTreeMap(PrivateData privateData) {
-        this(((Map.Entry<?, RedBlackTree<K, V>>) privateData.get()).getValue(), ((Map.Entry<Comparator<? super K>, ?>) privateData.get()).getKey());
-    }
 
-    /// Creates a new instance with the provided privateData object as its internal data structure.
-    ///
-    /// Subclasses must override this method, and return a new instance of their subclass!
-    ///
-    /// @param privateData the internal data structure needed by this class for creating the instance.
-    /// @return a new instance of the subclass
-    protected PersistentTreeMap<K, V> newInstance(PrivateData privateData) {
-        return new PersistentTreeMap<>(privateData);
-    }
-
-    private PersistentTreeMap<K, V> newInstance(Comparator<? super K> comparator, RedBlackTree<K, V> root) {
-        return newInstance(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(comparator, root)));
-    }
-
-    PersistentTreeMap(RedBlackTree<K, V> root, Comparator<? super K> comparator) {
+    PersistentTreeMap(Comparator<? super K> comparator, RedBlackTree<K, V> root) {
         this.root = root;
         this.comparator = comparator;
     }
 
-    /// Returns an persistent map that contains the provided entries, sorted according to the
+    /// Returns a persistent map that contains the provided entries, sorted according to the
     /// specified comparator.
     ///
     /// @param c   an iterable
     /// @param <K> the key type
     /// @param <V> the value type
-    /// @return an persistent map of the provided elements
+    /// @return a persistent map of the provided elements
     @SuppressWarnings("unchecked")
     public static <K, V> PersistentTreeMap<K, V> copyOf(Comparator<? super K> comparator, Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         if (c instanceof PersistentTreeMap<?, ?> r && r.comparator.equals(comparator)) {
@@ -121,24 +99,24 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
         return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.retainingAll(c);
     }
 
-    /// Returns an persistent map that contains the provided elements sorted according to the
+    /// Returns a persistent map that contains the provided elements sorted according to the
     /// _natural ordering_ of its elements.
     ///
     /// @param c   an iterable
     /// @param <K> the key type
     /// @param <V> the value type
-    /// @return an persistent map of the provided elements
+    /// @return a persistent map of the provided elements
     public static <K, V> PersistentTreeMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         return PersistentTreeMap.copyOf(NaturalComparator.instance(), c);
     }
 
-    /// Returns an persistent copy of the provided map that contains the provided elements sorted according to the
+    /// Returns a persistent copy of the provided map that contains the provided elements sorted according to the
     /// _natural ordering_ of its elements.
     ///
     /// @param map a map
     /// @param <K> the key type
     /// @param <V> the value type
-    /// @return an persistent copy
+    /// @return a persistent copy
     public static <K, V> PersistentTreeMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
         return PersistentTreeMap.<K, V>of().puttingAll(map);
     }
@@ -151,16 +129,16 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
     /// @return an empty persistent map
     public static <K, V> PersistentTreeMap<K, V> sortedOf(@Nullable Comparator<? super K> comparator) {
         comparator = comparator == null ? NaturalComparator.instance() : comparator;
-        return new PersistentTreeMap<>(RedBlackTree.of(comparator), comparator);
+        return new PersistentTreeMap<>(comparator, RedBlackTree.of(comparator));
     }
 
-    /// Returns an persistent map that contains the provided elements, sorted according to the
+    /// Returns a persistent map that contains the provided elements, sorted according to the
     /// specified comparator.
     ///
     /// @param elements elements
     /// @param <K>      the key type
     /// @param <V>      the value type
-    /// @return an persistent map of the provided elements
+    /// @return a persistent map of the provided elements
     @SuppressWarnings({"varargs"})
     @SafeVarargs
     public static <K, V> PersistentTreeMap<K, V> sortedOf(@Nullable Comparator<? super K> comparator, Map.Entry<K, V> @Nullable ... elements) {
@@ -175,17 +153,17 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
     /// @param <V> the value type
     /// @return an empty persistent map
     public static <K, V> PersistentTreeMap<K, V> of() {
-        return new PersistentTreeMap<>(RedBlackTree.of(NaturalComparator.instance()), NaturalComparator.instance()
+        return new PersistentTreeMap<>(NaturalComparator.instance(), RedBlackTree.of(NaturalComparator.instance())
         );
     }
 
-    /// Returns an persistent map that contains the provided entries, sorted according to the
+    /// Returns a persistent map that contains the provided entries, sorted according to the
     /// _natural ordering_ of its entries.
     ///
     /// @param entries entries
     /// @param <K>     the key type
     /// @param <V>     the value type
-    /// @return an persistent map of the provided entries
+    /// @return a persistent map of the provided entries
     @SuppressWarnings({"varargs"})
     @SafeVarargs
     public static <K, V> PersistentTreeMap<K, V> of(Map.Entry<K, V> @Nullable ... entries) {
@@ -281,13 +259,13 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
     @Override
     public PersistentTreeMap<K, V> putting(K key, @Nullable V value) {
         RedBlackTree<K, V> newRoot = root.insert(key, value, comparator);
-        return newRoot == root ? this : newInstance(comparator, newRoot);
+        return newRoot == root ? this : new PersistentTreeMap<>(comparator, newRoot);
     }
 
     @Override
     public PersistentTreeMap<K, V> removing(K key) {
         RedBlackTree<K, V> newRoot = root.delete(key, comparator);
-        return newRoot == root ? this : newInstance(comparator, newRoot);
+        return newRoot == root ? this : new PersistentTreeMap<>(comparator, newRoot);
     }
 
     @Override

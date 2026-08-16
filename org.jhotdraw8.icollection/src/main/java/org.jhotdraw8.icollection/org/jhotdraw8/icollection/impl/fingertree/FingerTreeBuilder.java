@@ -82,7 +82,7 @@ public class FingerTreeBuilder<A> {
         depth = 1;
     }
 
-    public void initSparse(int size, A elem) {
+    public FingerTreeBuilder<A> initSparse(int size, A elem) {
         if (!isEmpty()) throw new IllegalStateException("initSparse can only be called when empty");
         setLen(size);
         Arrays.fill(a1, elem);
@@ -107,6 +107,7 @@ public class FingerTreeBuilder<A> {
                 } else depth = 3;
             } else depth = 2;
         } else depth = 1;
+        return this;
     }
 
     private void initFrom(A[] p1) {

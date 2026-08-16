@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.icollection.impl.fingertree.FingerTree;
+import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 
 /// A `SequencedData` stores a sequence number plus some data.
@@ -29,37 +29,37 @@ public interface SequencedData {
     /// anyway.
     int NO_SEQUENCE_NUMBER = Integer.MIN_VALUE;
 
-    record Result(FingerTree<Object> tree, int offset) {
+    record Result(PersistentVectorList<Object> tree, int offset) {
     }
 
     static boolean vecMustRenumber(int size, int offset, int vectorSize) {
         return size == 0
                 || vectorSize >>> 1 > size
-                || (long) vectorSize - offset > Integer.MAX_VALUE - 2
+                || (long) offset + size > Integer.MAX_VALUE - 2
                 || offset < Integer.MIN_VALUE + 2;
     }
 
 
-    static <K extends SequencedData> Result vecRemove(FingerTree<Object> vector, K oldElem, int offset) {
+    static <K extends SequencedData> Result vecRemove(PersistentVectorList<Object> vector, K oldElem, int offset) {
         // If the element is the tree, we can remove it and its neighboring tombstones from the vector.
         int size = vector.size();
         int index = oldElem.sequenceNumber() - offset;
         if (index == 0) {
             if (size > 1) {
                 Object o = vector.get(1);
-                if (o instanceof Tombstone t) {
+                if (o instanceof Tombstone(int neighbors)) {
                     return new Result(
-                            FingerTreeAPI.removeRange(vector, 0, 2 + t.neighbors()), offset - 2 - t.neighbors());
+                            FingerTreeAPI.removeRange(vector, 0, 2 + neighbors), offset + 2 + neighbors);
                 }
             }
-            return new Result(FingerTreeAPI.removeFirst(vector).tree(), offset - 1);
+            return new Result(FingerTreeAPI.removeFirst(vector).tree(), offset + 1);
         }
 
         // If the element is the last, we can remove it and its neighboring tombstones from the vector.
         if (index == size - 1) {
             Object o = vector.get(size - 2);
-            if (o instanceof Tombstone t) {
-                return new Result(FingerTreeAPI.removeRange(vector, size - 2 - t.neighbors(), size), offset);
+            if (o instanceof Tombstone(int neighbors)) {
+                return new Result(FingerTreeAPI.removeRange(vector, size - 2 - neighbors, size), offset);
             }
             return new Result(FingerTreeAPI.removeLast(vector).tree(), offset);
         }

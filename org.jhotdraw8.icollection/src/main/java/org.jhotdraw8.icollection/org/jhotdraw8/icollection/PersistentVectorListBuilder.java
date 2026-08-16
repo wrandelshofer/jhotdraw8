@@ -1,5 +1,6 @@
 package org.jhotdraw8.icollection;
 
+import org.jhotdraw8.icollection.impl.fingertree.FingerTree;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeBuilder;
 
 /// This Builder allows to efficiently build a [PersistentVectorList] without
@@ -15,12 +16,12 @@ public class PersistentVectorListBuilder<T> implements ListBuilder<T, Persistent
 
     @Override
     public PersistentVectorListBuilder<T> addAll(Iterable<? extends T> elements) {
-        if (elements instanceof PersistentVectorList<? extends T> pvl) {
-            if (b.isEmpty()) b.initFrom(pvl.root);
-            else b.addVector(pvl.root);
+        if (elements instanceof FingerTree<? extends T> pvl) {
+            if (b.isEmpty()) b.initFrom(pvl);
+            else b.addVector(pvl);
         } else if (elements instanceof MutableVectorList<? extends T> pvl) {
-            if (b.isEmpty()) b.initFrom(pvl.root);
-            else b.addVector(pvl.root);
+            if (b.isEmpty()) b.initFrom((FingerTree<?>) pvl.tree);
+            else b.addVector((FingerTree<? extends T>) pvl.tree);
         } else {
             b.addAll(elements);
         }
@@ -41,6 +42,6 @@ public class PersistentVectorListBuilder<T> implements ListBuilder<T, Persistent
 
     @Override
     public PersistentVectorList<T> build() {
-        return new PersistentVectorList<>(b.build());
+        return b.build();
     }
 }

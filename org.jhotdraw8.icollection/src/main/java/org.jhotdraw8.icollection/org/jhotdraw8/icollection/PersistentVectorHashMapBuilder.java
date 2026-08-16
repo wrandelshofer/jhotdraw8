@@ -12,16 +12,17 @@ import org.jhotdraw8.icollection.impl.fingertree.FingerTreeBuilder;
 public class PersistentVectorHashMapBuilder<K, V> implements MapBuilder<K, V, PersistentVectorHashMap<K, V>> {
     private final FingerTreeBuilder<Object> vector = new FingerTreeBuilder<>();
     private BitmapIndexedNode<SequencedEntry<K, V>> hashMap = BitmapIndexedNode.emptyNode();
-    private IdentityObject owner = new IdentityObject();
+    private IdentityObject owner;
     private int size;
     private final int offset;
 
     public PersistentVectorHashMapBuilder() {
-        this(Integer.MIN_VALUE / 4);
+        this(new IdentityObject(), Integer.MIN_VALUE / 4);
     }
 
-    PersistentVectorHashMapBuilder(int offset) {
+    PersistentVectorHashMapBuilder(IdentityObject owner, int offset) {
         this.offset = offset;
+        this.owner = owner;
     }
 
     @Override
@@ -41,9 +42,6 @@ public class PersistentVectorHashMapBuilder<K, V> implements MapBuilder<K, V, Pe
     @Override
     public PersistentVectorHashMap<K, V> build() {
         owner = new IdentityObject();
-        return new PersistentVectorHashMap<>(
-                new PrivateData(
-                        new PersistentVectorHashMap.OpaqueRecord<>(hashMap,
-                                vector.build(), size, offset)));
+        return new PersistentVectorHashMap<>(hashMap, vector.build(), size, offset);
     }
 }

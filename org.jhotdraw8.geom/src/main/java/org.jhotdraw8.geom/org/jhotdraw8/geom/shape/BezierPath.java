@@ -16,8 +16,9 @@ import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jhotdraw8.icollection.PersistentVectorList;
-import org.jhotdraw8.icollection.PrivateData;
+import org.jhotdraw8.icollection.PersistentVectorListBuilder;
 import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jhotdraw8.icollection.readable.ReadableSequencedCollection;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.Rectangle;
@@ -27,39 +28,41 @@ import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.List;
 
 /// A BezierPath is defined by its nodes. Each node has three control points:
 /// C0, C1, C2. A mask defines which control points are in use. At a node, the path
 /// passes through C0. C1 controls the curve going towards C0. C2 controls the
 /// curve going away from C0.
-public class BezierPath extends PersistentVectorList<BezierNode> implements Shape {
+public class BezierPath implements PersistentList<BezierNode>, Shape {
     /// This field is used for memoizing PathMetrics that have been built fom this instance.
     private transient @Nullable PathMetrics pathMetrics;
     /// This field is used for memoizing Bounds that have been built fom this instance.
     private transient Rectangle2D.@Nullable Double bounds;
     private final int windingRule;
+    private PersistentList<BezierNode> nodes;
 
     private BezierPath(int windingRule) {
+        this(windingRule, PersistentVectorList.of());
+    }
+
+    private BezierPath(int windingRule, PersistentList<BezierNode> nodes) {
         super();
         this.windingRule = windingRule;
+        this.nodes = nodes;
     }
 
-    public BezierPath(PrivateData privateData, int windingRule) {
-        super(privateData);
-        this.windingRule = windingRule;
-    }
-
-    public BezierPath(@Nullable Iterable<BezierNode> nodes) {
+    public BezierPath(Iterable<BezierNode> nodes) {
         this(nodes, PathIterator.WIND_EVEN_ODD);
     }
 
-    public BezierPath(@Nullable Iterable<BezierNode> nodes, FillRule windingRule) {
+    public BezierPath(Iterable<BezierNode> nodes, FillRule windingRule) {
         this(nodes, windingRule == FillRule.EVEN_ODD ? PathIterator.WIND_EVEN_ODD : PathIterator.WIND_NON_ZERO);
 
     }
 
-    public BezierPath(@Nullable Iterable<BezierNode> nodes, int windingRule) {
-        super(nodes);
+    public BezierPath(Iterable<BezierNode> nodes, int windingRule) {
+        this.nodes = new PersistentVectorListBuilder<BezierNode>().addAll(nodes).build();
         this.windingRule = windingRule;
     }
 
@@ -103,7 +106,7 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
     }
 
     @Override
-    public PathIterator getPathIterator(AffineTransform at) {
+    public PathIterator getPathIterator(@Nullable AffineTransform at) {
         return new BezierPathIterator(this, at);
     }
 
@@ -131,11 +134,16 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
         return IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
     }
 
+    @Override
+    public ReadableSequencedCollection<BezierNode> readableReversed() {
+        return null;
+    }
+
     public BezierPath split(double x, double y, double tolerance) {
         IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
         PersistentList<IntersectionPoint> intersections = isect.intersections();
         //noinspection RedundantSuppression
-        @SuppressWarnings({"unchecked", "rawtypes"}) PersistentVectorList<BezierNode>[] result = new PersistentVectorList[]{this};
+        @SuppressWarnings({"unchecked", "rawtypes"}) PersistentList<BezierNode>[] result = new PersistentList[]{nodes};
         if (intersections.size() == 1) {
             int segment = (int) intersections.getFirst().argumentA();
             final BezierNode middle;
@@ -191,12 +199,12 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
                 result[0] = result[0].addingAt(segment, middle);
             }
         }
-        return (BezierPath) result[0];
+        return new BezierPath(windingRule, result[0]);
     }
 
     public BezierPath join(int segment, double tolerance) {
         //noinspection RedundantSuppression
-        @SuppressWarnings({"unchecked", "rawtypes"}) PersistentVectorList<BezierNode>[] result = new PersistentVectorList[]{this};
+        @SuppressWarnings({"unchecked", "rawtypes"}) PersistentList<BezierNode>[] result = new PersistentList[]{nodes};
 
         final int prevSegment = (segment - 1 + size()) % size();
         final int nextSegment = (segment + 1) % size();
@@ -231,7 +239,7 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
             }
         }
         result[0] = result[0].removingAt(segment);
-        return (BezierPath) result[0];
+        return new BezierPath(windingRule, result[0]);
     }
 
     /// Gets the outgoing tangent point for the bezier node
@@ -274,84 +282,91 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
     }
 
     @Override
-    protected PersistentVectorList<BezierNode> newInstance(PrivateData privateData) {
-        return new BezierPath(privateData, windingRule);
+    public int maxSize() {
+        return 0;
     }
 
     @Override
     public BezierPath adding(BezierNode element) {
-        return (BezierPath) super.adding(element);
+        return new BezierPath(windingRule, nodes.adding(element));
     }
 
     @Override
     public BezierPath addingAt(int index, BezierNode element) {
-        return (BezierPath) super.addingAt(index, element);
+        return new BezierPath(windingRule, nodes.addingAt(index, element));
     }
 
     @Override
     public BezierPath addingAll(Iterable<? extends BezierNode> c) {
-        return (BezierPath) super.addingAll(c);
+        return newInstanceOrSame(windingRule, nodes.addingAll(c));
+    }
+
+    private BezierPath newInstanceOrSame(int windingRule, PersistentList<BezierNode> bezierNodes) {
+        if (bezierNodes == this.nodes && windingRule == this.windingRule) {
+            return this;
+        }
+        return new BezierPath(windingRule, bezierNodes);
     }
 
     @Override
     public BezierPath addingFirst(@Nullable BezierNode element) {
-        return (BezierPath) super.addingFirst(element);
+        return new BezierPath(windingRule, nodes.addingFirst(element));
     }
 
     @Override
     public BezierPath addingLast(@Nullable BezierNode element) {
-        return (BezierPath) super.addingLast(element);
+        return new BezierPath(windingRule, nodes.addingFirst(element));
     }
 
     @Override
     public BezierPath addingAllAt(int index, Iterable<? extends BezierNode> c) {
-        return (BezierPath) super.addingAllAt(index, c);
+        return newInstanceOrSame(windingRule, nodes.addingAllAt(index, c));
     }
 
 
     @Override
     public BezierPath removing(BezierNode element) {
-        return (BezierPath) super.removing(element);
+        return newInstanceOrSame(windingRule, nodes.removing(element));
     }
 
     @Override
     public BezierPath removingAt(int index) {
-        return (BezierPath) super.removingAt(index);
+        return new BezierPath(windingRule, nodes.removingAt(index));
     }
 
     @Override
     public BezierPath removingFirst() {
-        return (BezierPath) super.removingFirst();
+        return new BezierPath(windingRule, nodes.removingFirst());
     }
 
     @Override
     public BezierPath removingLast() {
-        return (BezierPath) super.removingLast();
+        return new BezierPath(windingRule, nodes.removingLast());
     }
 
     @Override
     public BezierPath retainingAll(Iterable<?> c) {
-        return (BezierPath) super.retainingAll(c);
+        return newInstanceOrSame(windingRule, nodes.retainingAll(c));
     }
 
     @Override
     public BezierPath removingRange(int fromIndex, int toIndex) {
-        return (BezierPath) super.removingRange(fromIndex, toIndex);
+        return newInstanceOrSame(windingRule, nodes.removingRange(fromIndex, toIndex));
     }
 
     @Override
     public BezierPath removingAll(Iterable<?> c) {
-        return (BezierPath) super.removingAll(c);
+        return newInstanceOrSame(windingRule, nodes.removingAll(c));
     }
 
     @Override
     public BezierPath settingAt(int index, BezierNode element) {
-        return (BezierPath) super.settingAt(index, element);
+        return newInstanceOrSame(windingRule, nodes.settingAt(index, element));
     }
 
     @Override
     public BezierNode get(int index) {
-        return super.get(index);
+        return nodes.get(index);
     }
 
     public PathMetrics getPathMetrics() {
@@ -363,12 +378,22 @@ public class BezierPath extends PersistentVectorList<BezierNode> implements Shap
 
     @Override
     public BezierPath readableSubList(int fromIndex, int toIndex) {
-        return (BezierPath) super.readableSubList(fromIndex, toIndex);
+        return newInstanceOrSame(windingRule, nodes.readableSubList(fromIndex, toIndex));
+    }
+
+    @Override
+    public List<BezierNode> toMutable() {
+        return List.of();
     }
 
     @Override
     public int size() {
-        return super.size();
+        return nodes.size();
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return nodes.contains(o);
     }
 
     /// Evaluates the tree point of the bezier path.

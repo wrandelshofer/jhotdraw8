@@ -315,9 +315,9 @@ public class MutableTreeSet<E> extends AbstractSet<E> implements NavigableSet<E>
     }
 
 
-    /// Returns an persistent copy of this set.
+    /// Returns a persistent copy of this set.
     ///
-    /// @return an persistent copy
+    /// @return a persistent copy
     public PersistentTreeSet<E> toPersistent() {
         return new PersistentTreeSet<>(comparator, root);
     }

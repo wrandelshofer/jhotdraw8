@@ -5,6 +5,7 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
+import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
 import org.jhotdraw8.icollection.impl.champ.Node;
@@ -12,7 +13,6 @@ import org.jhotdraw8.icollection.impl.champ.ReverseTombSkippingVectorSpliterator
 import org.jhotdraw8.icollection.impl.champ.SequencedData;
 import org.jhotdraw8.icollection.impl.champ.SequencedEntry;
 import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
-import org.jhotdraw8.icollection.impl.fingertree.FingerTree;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedMap;
@@ -46,8 +46,8 @@ import java.util.Spliterators;
 /// Performance characteristics:
 ///
 ///   - put, putFirst, putLast: O(log₃₂ N) in an amortized sense, because we sometimes have to
-///     renumber the elements.
-///   - remove: O(log₃₂ N) in an amortized sense, because we sometimes have to renumber the elements.
+///     renumber the entries.
+///   - remove: O(log₃₂ N) in an amortized sense, because we sometimes have to renumber the entries.
 ///   - containsKey: O(log₃₂ N)
 ///   - toMutable: O(1) + O(log₃₂ N) distributed across subsequent updates in
 ///     the mutable copy
@@ -59,12 +59,12 @@ import java.util.Spliterators;
 ///
 /// Implementation details:
 ///
-/// This map performs read and write operations of single elements in O(log N) time,
-/// and in O(log N) space, where N is the number of elements in the set.
+/// This map performs read and write operations of single entries in O(log N) time,
+/// and in O(log N) space, where N is the number of entries in the map.
 ///
 /// The CHAMP trie contains nodes that may be shared with other maps.
 ///
-/// If a write operation is performed on a node, then this set creates a
+/// If a write operation is performed on a node, then this map creates a
 /// copy of the node and of all parent nodes up to the root (copy-path-on-write).
 /// Since the CHAMP trie has a fixed maximal height, the cost is O(1).
 ///
@@ -84,7 +84,7 @@ import java.util.Spliterators;
 /// only in an amortized sense.
 ///
 /// To support iteration, we use a Vector. The Vector has the same contents
-/// as the CHAMP trie. However, its elements are stored in insertion order.
+/// as the CHAMP trie. However, its entries are stored in insertion order.
 ///
 /// If an element is removed from the CHAMP trie that is not the tree or the
 /// last element of the Vector, we replace its corresponding element in
@@ -95,8 +95,8 @@ import java.util.Spliterators;
 /// direction. We use these numbers to neighbors tombstones when we iterate over the vector.
 /// Since we only allow iteration in ascending or descending order from one of the ends of
 /// the vector, we do not need to keep the number of neighbors in all tombstones up to date.
-/// It is sufficient, if we update the neighbor with the lowest offset and the one with the
-/// highest offset.
+/// It is sufficient, if we update the neighbor with the lowest index and the one with the
+/// highest index.
 ///
 /// If the number of tombstones exceeds half of the size of the collection, we renumber all
 /// sequence numbers, and we create a new Vector.
@@ -116,56 +116,21 @@ import java.util.Spliterators;
 @SuppressWarnings("exports")
 public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, V>, Serializable {
     private static final PersistentVectorHashMap<?, ?> EMPTY = new PersistentVectorHashMap<>(
-            BitmapIndexedNode.emptyNode(), FingerTreeAPI.of(), 0, 0);
+            BitmapIndexedNode.emptyNode(), PersistentVectorList.of(), 0, 0);
     @Serial
     private static final long serialVersionUID = 0L;
     @SuppressWarnings("TransientFieldNotInitialized")
     final transient BitmapIndexedNode<SequencedEntry<K, V>> hashMap;
-    /// Offset of sequence numbers to vector indices.
-    /// <pre>vector offset = sequence number + offset</pre>
+    /// Sequence number of the first entry.
+    /// `vector index = sequence number - offset`
     final int offset;
     /// The size of the map.
     final int size;
     /// In this vector we store the elements in the order in which they were inserted.
-    final FingerTree<Object> vector;
-
-    record OpaqueRecord<K, V>(BitmapIndexedNode<SequencedEntry<K, V>> root,
-                              FingerTree<Object> vector,
-                              int size, int offset) {
-    }
-
-    /// Creates a new instance with the provided privateData data object.
-    ///
-    /// This constructor is intended to be called from a constructor
-    /// of the subclass, that is called from method [#newInstance(PrivateData)].
-    ///
-    /// @param privateData an privateData data object
-    @SuppressWarnings("unchecked")
-    protected PersistentVectorHashMap(PrivateData privateData) {
-        this(((OpaqueRecord<K, V>) privateData.get()).root,
-                ((OpaqueRecord<K, V>) privateData.get()).vector,
-                ((OpaqueRecord<K, V>) privateData.get()).size,
-                ((OpaqueRecord<K, V>) privateData.get()).offset);
-    }
-
-    /// Creates a new instance with the provided privateData object as its internal data structure.
-    ///
-    /// Subclasses must override this method, and return a new instance of their subclass!
-    ///
-    /// @param privateData the internal data structure needed by this class for creating the instance.
-    /// @return a new instance of the subclass
-    protected PersistentVectorHashMap<K, V> newInstance(PrivateData privateData) {
-        return new PersistentVectorHashMap<>(privateData);
-    }
-
-    private PersistentVectorHashMap<K, V> newInstance(BitmapIndexedNode<SequencedEntry<K, V>> root,
-                                                      FingerTree<Object> vector,
-                                                      int size, int offset) {
-        return new PersistentVectorHashMap<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
-    }
+    final PersistentVectorList<Object> vector;
 
     PersistentVectorHashMap(BitmapIndexedNode<SequencedEntry<K, V>> hashMap,
-                            FingerTree<Object> vector,
+                            PersistentVectorList<Object> vector,
                             int size, int offset) {
         this.hashMap = hashMap;
         this.size = size;
@@ -173,22 +138,22 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
         this.vector = Objects.requireNonNull(vector);
     }
 
-    /// Returns an persistent copy of the provided map.
+    /// Returns a persistent copy of the provided map.
     ///
     /// @param map a map
     /// @param <K> the key type
     /// @param <V> the value type
-    /// @return an persistent copy
+    /// @return a persistent copy
     public static <K, V> PersistentVectorHashMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
         return new PersistentVectorHashMapBuilder<K, V>().addEntries(map).build();
     }
 
-    /// Returns an persistent copy of the provided map.
+    /// Returns a persistent copy of the provided map.
     ///
     /// @param map a map
     /// @param <K> the key type
     /// @param <V> the value type
-    /// @return an persistent copy
+    /// @return a persistent copy
     public static <K, V> PersistentVectorHashMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
         return new PersistentVectorHashMapBuilder<K, V>().addMap(map).build();
     }
@@ -263,7 +228,7 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
     public Iterator<Map.Entry<K, V>> iterator() {
         if (vector.size() == size) {
             // No skipping iterator needed, because we have no tombstones.
-            return FingerTreeAPI.iterator((FingerTree<Map.Entry<K, V>>) (FingerTree<?>) vector);
+            return FingerTreeAPI.iterator((PersistentVectorList<Map.Entry<K, V>>) (PersistentVectorList<?>) vector);
         }
         return Spliterators.iterator(spliterator());
     }
@@ -297,7 +262,7 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
 
     private PersistentVectorHashMap<K, V> putFirst(K key, @Nullable V value, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
-        var newEntry = new SequencedEntry<>(key, value, -offset - 1);
+        var newEntry = new SequencedEntry<>(key, value, offset - 1);
         var newRoot = hashMap.put(null, newEntry,
                 SequencedEntry.keyHash(key), 0, details,
                 moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
@@ -307,7 +272,7 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
             // If we have replaced the entry in the tree, but the sequence number is still the same.
             // Then we replace the entry in the vector.
             var newVector = FingerTreeAPI.setAt(vector, details.getNewDataNonNull().sequenceNumber() - offset, details.getNewDataNonNull());
-            return newInstance(newRoot, newVector.tree(), size, offset);
+            return new PersistentVectorHashMap<>(newRoot, newVector.tree(), size, offset);
         }
         if (details.isModified()) {
             var newVector = vector;
@@ -325,8 +290,8 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
                 newSize++;
             }
             // We insert the new entry at the start of the vector.
-            int newOffset = offset + 1;
-            newVector = FingerTreeAPI.addFirst(newEntry, newVector);
+            int newOffset = offset - 1;
+            newVector = FingerTreeAPI.addFirst(newVector, newEntry);
             return renumber(newRoot, newVector, newSize, newOffset);
         }
         return this;
@@ -334,7 +299,7 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
 
     private PersistentVectorHashMap<K, V> putLast(K key, @Nullable V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
-        var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
+        var newEntry = new SequencedEntry<>(key, value, vector.size() + offset);
         var newRoot = hashMap.put(null, newEntry,
                 SequencedEntry.keyHash(key), 0, details,
                 moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
@@ -342,19 +307,17 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
         if (details.isReplaced()
                 && details.getOldDataNonNull().sequenceNumber() == details.getNewDataNonNull().sequenceNumber()) {
             var newVector = FingerTreeAPI.setAt(vector, details.getNewDataNonNull().sequenceNumber() - offset, details.getNewDataNonNull());
-            return newInstance(newRoot, newVector.tree(), size, offset);
+            return new PersistentVectorHashMap<>(newRoot, newVector.tree(), size, offset);
         }
         if (details.isModified()) {
             var newVector = vector;
             int newOffset = offset;
             int newSize = size;
             if (details.isReplaced()) {
-                if (moveToLast) {
-                    var oldElem = details.getOldDataNonNull();
-                    var result = SequencedData.vecRemove(newVector, oldElem, newOffset);
-                    newVector = result.tree();
-                    newOffset = result.offset();
-                }
+                var oldElem = details.getOldDataNonNull();
+                var result = SequencedData.vecRemove(newVector, oldElem, newOffset);
+                newVector = result.tree();
+                newOffset = result.offset();
             } else {
                 newSize++;
             }
@@ -406,13 +369,13 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
 
     private PersistentVectorHashMap<K, V> renumber(
             BitmapIndexedNode<SequencedEntry<K, V>> root,
-            FingerTree<Object> vector,
+            PersistentVectorList<Object> vector,
             int size, int offset) {
 
         if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             // center the numbers around 0 so that we have the interval [-size/2,size]
             int newOffset = size / -2;
-            var b = new PersistentVectorHashMapBuilder<K, V>(newOffset);
+            var b = new PersistentVectorHashMapBuilder<K, V>(new IdentityObject(), newOffset);
             b.addEntries(new TombSkippingVectorSpliterator<>(
                     new FingerTreeSpliterator<>(vector),
                     e -> ((Map.Entry<K, V>) e),
@@ -420,9 +383,9 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
                     Spliterator.NONNULL | characteristics()));
             var tmp = b.build();
             assert tmp.size() == size;
-            return newInstance(tmp.hashMap, tmp.vector, size, newOffset);
+            return new PersistentVectorHashMap<>(tmp.hashMap, tmp.vector, size, newOffset);
         }
-        return newInstance(root, vector, size, offset);
+        return new PersistentVectorHashMap<>(root, vector, size, offset);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class EditableMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
         return sequenceNumber;
     }
 
-    void setPutIfPresentFunction(@Nullable BiConsumer<K, V> putIfPresentFunction) {
+    public void setPutIfPresentFunction(@Nullable BiConsumer<K, V> putIfPresentFunction) {
         this.putIfPresentFunction = putIfPresentFunction;
     }
 

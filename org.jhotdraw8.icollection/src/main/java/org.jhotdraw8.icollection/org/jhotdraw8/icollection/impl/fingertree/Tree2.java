@@ -2,6 +2,8 @@ package org.jhotdraw8.icollection.impl.fingertree;
 
 import org.jspecify.annotations.Nullable;
 
+import java.io.Serial;
+
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyAppend;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyInit;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyPrepend;
@@ -16,7 +18,26 @@ import static org.jhotdraw8.icollection.impl.fingertree.Arr.wrap2;
 /// [Scala 3, Vector.scala](https://github.com/scala/scala3/blob/18df09c05fa48fbb5bf5cd4b3728e9b7a0b3f6db/library/src/scala/collection/immutable/Vector.scala),
 /// EPFL and Lightbend, Inc. dba Akka,
 /// [Apache License 2.0](https://github.com/scala/scala3/blob/18df09c05fa48fbb5bf5cd4b3728e9b7a0b3f6db/LICENSE)
-public record Tree2<A>(int size, byte len1, A[] p1, A[][] d2, A[] s1) implements FingerTree<A> {
+public final class Tree2<A> extends FingerTree<A> {
+    @Serial
+    private static final long serialVersionUID = 0L;
+    private final int size;
+    private final byte len1;
+    private final A[] p1;
+    private final A[][] d2;
+    private final A[] s1;
+
+    /**
+     *
+     */
+    public Tree2(int size, byte len1, A[] p1, A[][] d2, A[] s1) {
+        this.size = size;
+        this.len1 = len1;
+        this.p1 = p1;
+        this.d2 = d2;
+        this.s1 = s1;
+    }
+
     public Tree2(int size, int len1, A[] p1, A[][] d2, A[] s1) {
         this(size, (byte) len1, p1, d2, s1);
     }
@@ -38,11 +59,11 @@ public record Tree2<A>(int size, byte len1, A[] p1, A[][] d2, A[] s1) implements
     }
 
     @Override
-    public FingerTree<A> addFirst(A x) {
+    public FingerTree<A> addingFirst(A x) {
         if (len1 < WIDTH)
             return new Tree2<>(size + 1, len1 + 1,//
                     copyPrepend(x, p1), d2, s1);
-        if (d2().length < WIDTH - 2)
+        if (d2.length < WIDTH - 2)
             return new Tree2<>(size + 1, 1,//
                     wrap1(x), copyPrepend(p1, d2), s1);
 
@@ -51,10 +72,10 @@ public record Tree2<A>(int size, byte len1, A[] p1, A[][] d2, A[] s1) implements
     }
 
     @Override
-    public FingerTree<A> addLast(A x) {
-        if (s1().length < WIDTH)
+    public FingerTree<A> addingLast(A x) {
+        if (s1.length < WIDTH)
             return new Tree2<>(size + 1, len1, p1, d2, copyAppend(s1, x));
-        if (d2().length < WIDTH - 2)
+        if (d2.length < WIDTH - 2)
             return new Tree2<>(size + 1, len1, p1, copyAppend(d2, s1), wrap1(x));
 
         return new Tree3<>(size + 1, len1, WIDTH * (WIDTH - 2) + len1, p1, d2, empty3(), wrap2(s1), wrap1(x));
@@ -78,7 +99,7 @@ public record Tree2<A>(int size, byte len1, A[] p1, A[][] d2, A[] s1) implements
 
     @Override
     public FingerTreeAPI.Result<A> removeLast() {
-        if (s1().length > 1)
+        if (s1.length > 1)
             return new FingerTreeAPI.Result<>(new Tree2<>(size - 1, len1, p1, d2, copyInit(s1)), s1[s1.length - 1]);
         return new FingerTreeAPI.Result<>(slice(0, size - 1), s1[0]);
     }
@@ -121,5 +142,24 @@ public record Tree2<A>(int size, byte len1, A[] p1, A[][] d2, A[] s1) implements
         return 3;
     }
 
+    @Override
+    public int size() {
+        return size;
+    }
 
+    byte len1() {
+        return len1;
+    }
+
+    A[] p1() {
+        return p1;
+    }
+
+    A[][] d2() {
+        return d2;
+    }
+
+    A[] s1() {
+        return s1;
+    }
 }

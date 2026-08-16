@@ -17,9 +17,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.AbstractMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
@@ -87,33 +85,9 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     private static final PersistentHashSet<?> EMPTY = new PersistentHashSet<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
+    @SuppressWarnings("TransientFieldNotInitialized")
     final transient BitmapIndexedNode<E> root;
     final int size;
-
-    /// Creates a new instance with the provided privateData data object.
-    ///
-    /// This constructor is intended to be called from a constructor
-    /// of the subclass, that is called from method [#newInstance(PrivateData)].
-    ///
-    /// @param privateData an privateData data object
-    @SuppressWarnings("unchecked")
-    protected PersistentHashSet(PrivateData privateData) {
-        this(((Map.Entry<BitmapIndexedNode<E>, ?>) privateData.get()).getKey(), ((Map.Entry<?, Integer>) privateData.get()).getValue());
-    }
-
-    /// Creates a new instance with the provided privateData object as its internal data structure.
-    ///
-    /// Subclasses must override this method, and return a new instance of their subclass!
-    ///
-    /// @param privateData the internal data structure needed by this class for creating the instance.
-    /// @return a new instance of the subclass
-    protected PersistentHashSet<E> newInstance(PrivateData privateData) {
-        return new PersistentHashSet<>(privateData);
-    }
-
-    private PersistentHashSet<E> newInstance(BitmapIndexedNode<E> root, int size) {
-        return new PersistentHashSet<>(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(root, size)));
-    }
 
     PersistentHashSet(BitmapIndexedNode<E> root, int size) {
         this.root = root;
@@ -121,11 +95,11 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     }
 
 
-    /// Returns an persistent set that contains the provided elements.
+    /// Returns a persistent set that contains the provided elements.
     ///
     /// @param c   an iterable
     /// @param <E> the element type
-    /// @return an persistent set of the provided elements
+    /// @return a persistent set of the provided elements
     @SuppressWarnings("unchecked")
     public static <E> PersistentHashSet<E> copyOf(Iterable<? extends E> c) {
         return PersistentHashSet.<E>of().addingAll(c);
@@ -140,11 +114,11 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
         return ((PersistentHashSet<E>) PersistentHashSet.EMPTY);
     }
 
-    /// Returns an persistent set that contains the provided elements.
+    /// Returns a persistent set that contains the provided elements.
     ///
     /// @param elements elements
     /// @param <E>      the element type
-    /// @return an persistent set of the provided elements
+    /// @return a persistent set of the provided elements
     @SuppressWarnings({"varargs"})
     @SafeVarargs
     public static <E> PersistentHashSet<E> of(E @Nullable ... elements) {
@@ -177,7 +151,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
         BitmapIndexedNode<E> newRootNode = root.put(null, element, keyHash, 0, details,
                 PersistentHashSet::updateElement, Objects::equals, PersistentHashSet::keyHash);
         if (details.isModified()) {
-            return newInstance(newRootNode, size + 1);
+            return new PersistentHashSet<>(newRootNode, size + 1);
         }
         return this;
     }
@@ -239,7 +213,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
         ChangeEvent<E> details = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = root.remove(null, key, keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
-            return size == 1 ? PersistentHashSet.of() : newInstance(newRootNode, size - 1);
+            return size == 1 ? PersistentHashSet.of() : new PersistentHashSet<>(newRootNode, size - 1);
         }
         return this;
     }

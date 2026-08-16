@@ -1,6 +1,8 @@
 package org.jhotdraw8.icollection.impl.fingertree;
 
 
+import org.jhotdraw8.icollection.PersistentVectorList;
+
 import java.util.Spliterators;
 import java.util.function.Consumer;
 
@@ -17,7 +19,8 @@ public class FingerTreeSpliterator<A> extends Spliterators.AbstractSpliterator<A
     /// Length of a1
     int a1len;
 
-    public FingerTreeSpliterator(FingerTree<A> tree) {
+    public FingerTreeSpliterator(PersistentVectorList<A> list) {
+        FingerTree<A> tree = (FingerTree<A>) list;
         super(tree.size(), 0);
         switch (tree) {
             case Tree0<A> n -> {

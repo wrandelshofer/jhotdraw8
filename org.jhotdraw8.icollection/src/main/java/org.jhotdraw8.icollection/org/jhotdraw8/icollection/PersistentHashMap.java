@@ -91,33 +91,10 @@ public class PersistentHashMap<K, V>
     private static final long serialVersionUID = 0L;
     /// We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
     static final int SALT = new Random().nextInt();
+    @SuppressWarnings("TransientFieldNotInitialized")
     final transient BitmapIndexedNode<K, V> root;
     final int size;
 
-    /// Creates a new instance with the provided privateData data object.
-    ///
-    /// This constructor is intended to be called from a constructor
-    /// of the subclass, that is called from method [#newInstance(PrivateData)].
-    ///
-    /// @param privateData an privateData data object
-    @SuppressWarnings("unchecked")
-    protected PersistentHashMap(PrivateData privateData) {
-        this(((Map.Entry<BitmapIndexedNode<K, V>, ?>) privateData.get()).getKey(), ((Map.Entry<?, Integer>) privateData.get()).getValue());
-    }
-
-    /// Creates a new instance with the provided privateData object as its internal data structure.
-    ///
-    /// Subclasses must override this method, and return a new instance of their subclass!
-    ///
-    /// @param privateData the internal data structure needed by this class for creating the instance.
-    /// @return a new instance of the subclass
-    protected PersistentHashMap<K, V> newInstance(PrivateData privateData) {
-        return new PersistentHashMap<>(privateData);
-    }
-
-    private PersistentHashMap<K, V> newInstance(BitmapIndexedNode<K, V> root, int size) {
-        return newInstance(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(root, size)));
-    }
 
     PersistentHashMap(BitmapIndexedNode<K, V> root, int size) {
         this.root = root;
@@ -129,37 +106,28 @@ public class PersistentHashMap<K, V>
         return Spliterator.IMMUTABLE | Spliterator.SIZED | Spliterator.DISTINCT;
     }
 
-    /// Returns an persistent copy of the provided map.
+    /// Returns a persistent copy of the provided map.
     ///
     /// @param c   a map
     /// @param <K> the key type
     /// @param <V> the value type
-    /// @return an persistent copy
-    @SuppressWarnings("unchecked")
+    /// @return a persistent copy
     public static <K, V> PersistentHashMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         return new PersistentHashMapBuilder<K, V>().addEntries(c).build();
     }
 
-    /// Returns an persistent copy of the provided map.
+    /// Returns a persistent copy of the provided map.
     ///
     /// @param map a map
     /// @param <K> the key type
     /// @param <V> the value type
-    /// @return an persistent copy
+    /// @return a persistent copy
     public static <K, V> PersistentHashMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
         return PersistentHashMap.<K, V>of().puttingAll(map);
     }
 
-    static <V, K> boolean entryKeyEquals(SimpleImmutableEntry<K, V> a, SimpleImmutableEntry<K, V> b) {
-        return Objects.equals(a.getKey(), b.getKey());
-    }
-
     static <V, K> int keyHash(Object e) {
         return SALT ^ Objects.hashCode(e);
-    }
-
-    static <V, K> int entryKeyHash(SimpleImmutableEntry<K, V> e) {
-        return SALT ^ keyHash(e.getKey());
     }
 
     /// Returns an empty persistent map.
@@ -241,7 +209,7 @@ public class PersistentHashMap<K, V>
         var newRootNode = root.put(null, key, value,
                 keyHash(key), 0, details, PersistentHashMap::keyHash);
         if (details.isModified()) {
-            return newInstance(newRootNode, details.isReplaced() ? size : size + 1);
+            return new PersistentHashMap<>(newRootNode, details.isReplaced() ? size : size + 1);
         }
         return this;
     }
@@ -264,7 +232,7 @@ public class PersistentHashMap<K, V>
         var details = new ChangeEvent<V>();
         var newRootNode = root.remove(null, key, keyHash, 0, details);
         if (details.isModified()) {
-            return size == 1 ? PersistentHashMap.of() : newInstance(newRootNode, size - 1);
+            return size == 1 ? PersistentHashMap.of() : new PersistentHashMap<>(newRootNode, size - 1);
         }
         return this;
     }

@@ -433,9 +433,9 @@ public class MutableBMTrieHashMap<K, V> extends AbstractMutableChampMap<K, V, Se
         return new ReversedSequencedMapView<>(this);
     }
 
-    /// Returns an persistent copy of this map.
+    /// Returns a persistent copy of this map.
     ///
-    /// @return an persistent copy
+    /// @return a persistent copy
     public PersistentBMTrieHashMap<K, V> toPersistent() {
         owner = null;
         return size == 0 ? PersistentBMTrieHashMap.of()

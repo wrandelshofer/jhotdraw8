@@ -2,6 +2,7 @@ package org.jhotdraw8.icollection.impl.fingertree;
 
 import org.jspecify.annotations.Nullable;
 
+import java.io.Serial;
 import java.util.NoSuchElementException;
 
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.wrap1;
@@ -11,8 +12,16 @@ import static org.jhotdraw8.icollection.impl.fingertree.Arr.wrap1;
 /// [Scala 3, Vector.scala](https://github.com/scala/scala3/blob/18df09c05fa48fbb5bf5cd4b3728e9b7a0b3f6db/library/src/scala/collection/immutable/Vector.scala),
 /// EPFL and Lightbend, Inc. dba Akka,
 /// [Apache License 2.0](https://github.com/scala/scala3/blob/18df09c05fa48fbb5bf5cd4b3728e9b7a0b3f6db/LICENSE)
-public record Tree0<A>() implements FingerTree<A> {
-    public final static Tree0<?> INSTANCE = new Tree0<>();
+public final class Tree0<A> extends FingerTree<A> {
+    @Serial
+    private static final long serialVersionUID = 0L;
+    public static final Tree0<?> INSTANCE = new Tree0<>();
+
+    /**
+     *
+     */
+    public Tree0() {
+    }
 
     /// Returns the root element of an empty Fingertree
     public static <A> Tree0<A> empty() {
@@ -40,12 +49,12 @@ public record Tree0<A>() implements FingerTree<A> {
     }
 
     @Override
-    public FingerTree<A> addLast(A x) {
+    public FingerTree<A> addingLast(A x) {
         return new Tree1<>(wrap1(x));
     }
 
     @Override
-    public FingerTree<A> addFirst(A x) {
+    public FingerTree<A> addingFirst(A x) {
         return new Tree1<>(wrap1(x));
     }
 

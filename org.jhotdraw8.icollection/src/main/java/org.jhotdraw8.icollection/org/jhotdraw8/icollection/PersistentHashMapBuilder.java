@@ -5,8 +5,6 @@ import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champmap.ChangeEvent;
 
-import java.util.AbstractMap;
-
 /// This Builder allows to efficiently build a [PersistentHashMap] without
 /// generating intermediate editions.
 public class PersistentHashMapBuilder<K, V> implements MapBuilder<K, V, PersistentHashMap<K, V>> {
@@ -36,6 +34,6 @@ public class PersistentHashMapBuilder<K, V> implements MapBuilder<K, V, Persiste
     @Override
     public PersistentHashMap<K, V> build() {
         owner = new IdentityObject();
-        return new PersistentHashMap<>(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(hashMap, size)));
+        return new PersistentHashMap<>(hashMap, size);
     }
 }
