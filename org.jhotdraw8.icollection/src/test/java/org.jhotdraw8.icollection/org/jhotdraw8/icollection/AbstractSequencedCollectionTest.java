@@ -11,18 +11,22 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.SequencedCollection;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /// Tests classes that implement the interface [SequencedCollection<Key>].
 public abstract class AbstractSequencedCollectionTest {
-    private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
-    private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
-    private static final SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
-    private static final SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static int size = 100_000;
+    private static int bound = (int) Math.min(Integer.MAX_VALUE, size * 1000L);
+    private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, size, bound);
+    private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, size, bound);
+    private static final SetData ALL_COLLISION = SetData.newData("all collisions", 0, size, bound);
+    private static final SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, size, bound);
 
     public static Stream<SetData> dataProvider() {
         return Stream.of(
@@ -86,13 +90,16 @@ public abstract class AbstractSequencedCollectionTest {
     public void shouldRemoveFirst(SetData data) throws Exception {
         SequencedCollection<Key> instance = newInstance();
         instance.addAll(data.b.asCollection());
-        instance.removeFirst();
 
         List<Key> expected = new ArrayList<>();
         expected.addAll(data.b.asCollection());
-        expected.removeFirst();
 
-        assertEquals(expected, instance);
+        while (!expected.isEmpty()) {
+            instance.removeFirst();
+            expected.removeFirst();
+            assertEquals(expected, instance);
+        }
+
     }
 
     @ParameterizedTest
@@ -100,13 +107,34 @@ public abstract class AbstractSequencedCollectionTest {
     public void shouldRemoveLast(SetData data) throws Exception {
         SequencedCollection<Key> instance = newInstance();
         instance.addAll(data.b.asCollection());
-        instance.removeLast();
 
         List<Key> expected = new ArrayList<>();
         expected.addAll(data.b.asCollection());
-        expected.removeLast();
 
-        assertEquals(expected, instance);
+        while (!expected.isEmpty()) {
+            instance.removeLast();
+            expected.removeLast();
+            assertEquals(expected, instance);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldRemoveElement(SetData data) throws Exception {
+        SequencedCollection<Key> instance = newInstance();
+        instance.addAll(data.b.asCollection());
+
+        List<Key> expected = new ArrayList<>();
+        expected.addAll(data.b.asCollection());
+        Random rng = new Random(0);
+        while (!expected.isEmpty()) {
+            Key e = expected.get(rng.nextInt(expected.size()));
+            int expectedIndex = expected.indexOf(e);
+            boolean removed = instance.remove(e);
+            expected.remove(e);
+            assertTrue(removed, "element should have been removed " + e + " expected index= " + expectedIndex);
+            assertEquals(expected, instance);
+        }
     }
 
     protected abstract SequencedCollection<Key> newInstance();

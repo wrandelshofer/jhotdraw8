@@ -30,13 +30,13 @@ import java.util.concurrent.TimeUnit;
 /// mTail              1000000  avgt    4    _   197.068 ±       3.920  ns/op
 /// </pre>
 @State(Scope.Benchmark)
-@Measurement(iterations = 4)
-@Warmup(iterations = 4)
+@Measurement(iterations = 2)
+@Warmup(iterations = 1)
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class KotlinxPersistentHashSetJmh {
-    @Param({"1000000"})
+    @Param({"10", "1000", "1000000"})
     private int size;
 
     private final int mask = ~64;

@@ -138,7 +138,64 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
     /// @param o an element
     /// @return the index of the element or -1
     default int indexOf(Object o) {
-        for (int i = 0, n = size(); i < n; i++) {
+        return indexOf((E) o, 0, size());
+    }
+
+    /// Returns the index of the first occurrence of the specified element
+    /// in the range from `fromIndex` to `size`,
+    ///  or -1 if the range does not contain the element.
+    ///
+    /// @param o         an element
+    /// @param fromIndex the Index to start the search from (included)
+    /// @return the index of the element or -1
+    default int indexOf(Object o, int fromIndex) {
+        return indexOf((E) o, fromIndex, size());
+    }
+
+    /// Returns the index of the first occurrence of the specified element
+    /// in the range from `fromIndex` to `toIndex`,
+    ///  or -1 if the range does not contain the element.
+    ///
+    /// @param o         an element
+    /// @param fromIndex the Index to start the search from (included)
+    /// @param toIndex   the Index to stop the search at (excluded)
+    /// @return the index of the element or -1
+    default int indexOf(Object o, int fromIndex, int toIndex) {
+        int size = size();
+        Objects.checkIndex(fromIndex, size + 1);
+        Objects.checkIndex(toIndex, size + 1);
+        for (int i = fromIndex; i < toIndex; i++) {
+            if (Objects.equals(get(i), o)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /// Returns the index of the first occurrence of the specified element
+    /// in the range from `0` to `endIndex`,
+    ///  or -1 if the range does not contain the element.
+    ///
+    /// @param o        an element
+    /// @param endIndex the end index of the range (included)
+    /// @return the index of the element or -1
+    default int lastIndexOf(Object o, int endIndex) {
+        return indexOf((E) o, 0, endIndex + 1);
+    }
+
+    /// Returns the index of the first occurrence of the specified element
+    /// in the range from `fromIndex` to `toIndex`,
+    /// or -1 if the range does not contain the element.
+    ///
+    /// @param o         an element
+    /// @param fromIndex the index to end the search at (included)
+    /// @param toIndex   the index to start the search at (excluded)
+    /// @return the index of the element or -1
+    default int lastIndexOf(Object o, int fromIndex, int toIndex) {
+        int size = size();
+        Objects.checkIndex(fromIndex, size + 1);
+        Objects.checkIndex(toIndex, size + 1);
+        for (int i = toIndex - 1; i >= fromIndex; i--) {
             if (Objects.equals(get(i), o)) {
                 return i;
             }
@@ -152,12 +209,7 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
     /// @param o an element
     /// @return the index of the element or -1
     default int lastIndexOf(Object o) {
-        for (int i = size() - 1; i >= 0; i--) {
-            if (Objects.equals(get(i), o)) {
-                return i;
-            }
-        }
-        return -1;
+        return lastIndexOf((E) o, 0, size());
     }
 
     /// Compares the given list with the given object for equality.

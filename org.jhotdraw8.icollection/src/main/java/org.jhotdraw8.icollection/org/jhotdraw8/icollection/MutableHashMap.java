@@ -64,7 +64,7 @@ import java.util.Spliterator;
 ///
 /// @param <K> the key type
 /// @param <V> the value type
-public class MutableHashMap<K, V> extends AbstractMutableChampMap<K, V> {
+public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
 

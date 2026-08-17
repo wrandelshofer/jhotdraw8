@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Spliterator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -146,6 +147,23 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
             checker.assertCollectable(b.getFirst()); // notReferenced should be collectable
         });
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldRemoveAt(SetData data) throws Exception {
+        List<Key> instance = newListInstance();
+        instance.addAll(data.b.asCollection());
+
+        List<Key> expected = new ArrayList<>();
+        expected.addAll(data.b.asCollection());
+        Random rng = new Random(0);
+        while (!expected.isEmpty()) {
+            int index = rng.nextInt(expected.size());
+            instance.remove(index);
+            expected.remove(index);
+            assertEquals(expected, instance);
+        }
     }
 
 

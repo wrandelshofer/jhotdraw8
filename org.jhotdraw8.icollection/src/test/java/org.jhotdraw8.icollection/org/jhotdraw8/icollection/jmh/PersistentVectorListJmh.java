@@ -14,7 +14,6 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
 import java.math.BigInteger;
-import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /// # JMH version: 1.37
@@ -22,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 /// # Mac Mini M4 Pro, 4.40 GHz
 ///
 /// Benchmark                                  (size)  Mode  Cnt        Score   Error  Units
-/// PersistentVectorListJmh.mAddAll                10  avgt    2       22.105          ns/op
-/// PersistentVectorListJmh.mAddAll              1000  avgt    2     2259.933          ns/op
-/// PersistentVectorListJmh.mAddAll            100000  avgt    2   219268.753          ns/op
+/// PersistentVectorListJmh.mAddAll                10  avgt    2       22.296          ns/op
+/// PersistentVectorListJmh.mAddAll              1000  avgt    2     2258.890          ns/op
+/// PersistentVectorListJmh.mAddAll            100000  avgt    2   218018.436          ns/op *
 /// PersistentVectorListJmh.mAddAllArray           10  avgt    2       13.647          ns/op
 /// PersistentVectorListJmh.mAddAllArray         1000  avgt    2     1148.524          ns/op
 /// PersistentVectorListJmh.mAddAllArray       100000  avgt    2   113523.461          ns/op
@@ -37,9 +36,9 @@ import java.util.concurrent.TimeUnit;
 /// PersistentVectorListJmh.mAddLast               10  avgt    2        6.011          ns/op
 /// PersistentVectorListJmh.mAddLast             1000  avgt    2        8.352          ns/op
 /// PersistentVectorListJmh.mAddLast           100000  avgt    2       12.545          ns/op
-/// PersistentVectorListJmh.mAddOneByOne           10  avgt    2       60.972          ns/op
-/// PersistentVectorListJmh.mAddOneByOne         1000  avgt    2     7901.860          ns/op
-/// PersistentVectorListJmh.mAddOneByOne       100000  avgt    2  1052549.564          ns/op
+/// PersistentVectorListJmh.mAddOneByOne           10  avgt    2       59.737          ns/op
+/// PersistentVectorListJmh.mAddOneByOne         1000  avgt    2     7878.423          ns/op
+/// PersistentVectorListJmh.mAddOneByOne       100000  avgt    2  1058240.091          ns/op *
 /// PersistentVectorListJmh.mContainsNotFound      10  avgt    2       16.284          ns/op
 /// PersistentVectorListJmh.mContainsNotFound    1000  avgt    2     1199.331          ns/op
 /// PersistentVectorListJmh.mContainsNotFound  100000  avgt    2   128610.229          ns/op
@@ -49,9 +48,12 @@ import java.util.concurrent.TimeUnit;
 /// PersistentVectorListJmh.mGet                   10  avgt    2        1.870          ns/op
 /// PersistentVectorListJmh.mGet                 1000  avgt    2        2.180          ns/op
 /// PersistentVectorListJmh.mGet               100000  avgt    2        5.860          ns/op
-/// PersistentVectorListJmh.mGetFirst             10  avgt    2        0.781          ns/op
-/// PersistentVectorListJmh.mGetFirst           1000  avgt    2        0.888          ns/op
-/// PersistentVectorListJmh.mGetFirst         100000  avgt    2        0.866          ns/op
+/// PersistentVectorListJmh.mGetFirst              10  avgt    2        0.781          ns/op
+/// PersistentVectorListJmh.mGetFirst            1000  avgt    2        0.888          ns/op
+/// PersistentVectorListJmh.mGetFirst          100000  avgt    2        0.866          ns/op
+/// PersistentVectorListJmh.mIndexOfLast           10  avgt    2       17.107          ns/op
+/// PersistentVectorListJmh.mIndexOfLast         1000  avgt    2     2216.939          ns/op
+/// PersistentVectorListJmh.mIndexOfLast       100000  avgt    2   271528.935          ns/op
 /// PersistentVectorListJmh.mIterate               10  avgt    2       16.426          ns/op
 /// PersistentVectorListJmh.mIterate             1000  avgt    2      926.852          ns/op
 /// PersistentVectorListJmh.mIterate           100000  avgt    2   134645.518          ns/op
@@ -64,20 +66,30 @@ import java.util.concurrent.TimeUnit;
 /// PersistentVectorListJmh.mRemoveAtIndex         10  avgt    2        7.957          ns/op
 /// PersistentVectorListJmh.mRemoveAtIndex       1000  avgt    2      321.195          ns/op
 /// PersistentVectorListJmh.mRemoveAtIndex     100000  avgt    2    23788.564          ns/op
+/// PersistentVectorListJmh.mRemoveFirst           10  avgt    2        6.202          ns/op
+/// PersistentVectorListJmh.mRemoveFirst         1000  avgt    2        6.910          ns/op
+/// PersistentVectorListJmh.mRemoveFirst       100000  avgt    2        9.112          ns/op
 /// PersistentVectorListJmh.mRemoveLast            10  avgt    2        4.778          ns/op
 /// PersistentVectorListJmh.mRemoveLast          1000  avgt    2        5.793          ns/op
 /// PersistentVectorListJmh.mRemoveLast        100000  avgt    2       10.727          ns/op
-/// PersistentVectorListJmh.mRemoveOneByOne        10  avgt    2      224.356          ns/op
-/// PersistentVectorListJmh.mRemoveOneByOne      1000  avgt    2   807260.577          ns/op
+/// PersistentVectorListJmh.mRemoveAtOneByOne         10  avgt    2          106.410          ns/op
+/// PersistentVectorListJmh.mRemoveAtOneByOne       1000  avgt    2       230243.572          ns/op
+/// PersistentVectorListJmh.mRemoveAtOneByOne     100000  avgt    2   1196867523.167          ns/op
+/// PersistentVectorListJmh.mRemoveFirstOneByOne      10  avgt    2           38.840          ns/op
+/// PersistentVectorListJmh.mRemoveFirstOneByOne    1000  avgt    2         8088.253          ns/op
+/// PersistentVectorListJmh.mRemoveFirstOneByOne  100000  avgt    2      1068381.315          ns/op
+/// PersistentVectorListJmh.mRemoveLastOneByOne       10  avgt    2           38.393          ns/op
+/// PersistentVectorListJmh.mRemoveLastOneByOne     1000  avgt    2         8207.751          ns/op
+/// PersistentVectorListJmh.mRemoveLastOneByOne   100000  avgt    2      1073929.369          ns/op
+/// PersistentVectorListJmh.mRemoveOneByOne           10  avgt    2          222.847          ns/op
+/// PersistentVectorListJmh.mRemoveOneByOne         1000  avgt    2       810173.908          ns/op
+/// PersistentVectorListJmh.mRemoveOneByOne       100000  avgt    2  11904632396.000          ns/op
 /// PersistentVectorListJmh.mReversedIterate       10  avgt    2        3.324          ns/op
 /// PersistentVectorListJmh.mReversedIterate     1000  avgt    2      750.826          ns/op
 /// PersistentVectorListJmh.mReversedIterate   100000  avgt    2   174570.704          ns/op
 /// PersistentVectorListJmh.mSet                   10  avgt    2        7.090          ns/op
 /// PersistentVectorListJmh.mSet                 1000  avgt    2       21.033          ns/op
 /// PersistentVectorListJmh.mSet               100000  avgt    2       42.444          ns/op
-/// PersistentVectorListJmh.mRemoveFirst           10  avgt    2        6.202          ns/op
-/// PersistentVectorListJmh.mRemoveFirst         1000  avgt    2        6.910          ns/op
-/// PersistentVectorListJmh.mRemoveFirst       100000  avgt    2        9.112          ns/op
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 1)
@@ -107,26 +119,26 @@ public class PersistentVectorListJmh {
         index = Math.min(listA.size() - 1, BigInteger.valueOf(listA.size() / 2).nextProbablePrime().intValue());
     }
 
-
-    @Benchmark
-    public PersistentVectorList<Key> mCopyOf() {
-        return PersistentVectorList.copyOf(data.setA);
-    }
+    /*
+        @Benchmark
+        public PersistentVectorList<Key> mCopyOf() {
+            return PersistentVectorList.copyOf(data.setA);
+        }
 
     @Benchmark
     public PersistentVectorList<Key> mAddAll() {
         return listA.addingAll(data.listB);
     }
 
-    @Benchmark
-    public PersistentVectorList<Key> mAddAllSameType() {
-        return listA.addingAll(listB);
-    }
+        @Benchmark
+        public PersistentVectorList<Key> mAddAllSameType() {
+            return listA.addingAll(listB);
+        }
 
-    @Benchmark
-    public PersistentVectorList<Key> mOfArray() {
-        return PersistentVectorList.<Key>of(data.arrayA);
-    }
+        @Benchmark
+        public PersistentVectorList<Key> mOfArray() {
+            return PersistentVectorList.<Key>of(data.arrayA);
+        }
 
     @Benchmark
     public PersistentVectorList<Key> mAddOneByOne() {
@@ -137,8 +149,6 @@ public class PersistentVectorListJmh {
         return l;
     }
 
-
-    /// This appears to be broken!
     @Benchmark
     public PersistentVectorList<Key> mRemoveOneByOne() {
         var l = listA;
@@ -149,90 +159,121 @@ public class PersistentVectorListJmh {
         return l;
     }
 
-
     @Benchmark
-    public PersistentVectorList<Key> mRemoveAll() {
-        PersistentVectorList<Key> l = listA;
-        return l.removingAll(data.setA);
-    }
-
-
-    @Benchmark
-    public int mIterate() {
-        int sum = 0;
-        for (Iterator<Key> i = listA.iterator(); i.hasNext(); ) {
-            sum += i.next().value;
+    public PersistentVectorList<Key> mRemoveAtOneByOne() {
+        var l = listA;
+        for (var e : data.listA) {
+            l = l.removingAt(l.size() / 2);
         }
-        return sum;
+        if (!l.isEmpty()) throw new AssertionError("map: " + l);
+        return l;
     }
-
+*/
     @Benchmark
-    public int mListIterate() {
-        int sum = 0;
-        for (Iterator<Key> i = listA.listIterator(); i.hasNext(); ) {
-            sum += i.next().value;
+    public PersistentVectorList<Key> mRemoveFirstOneByOne() {
+        var l = listA;
+        while (!l.isEmpty()) {
+            l = l.removingFirst();
         }
-        return sum;
+        return l;
     }
-
+/*
     @Benchmark
-    public int mReversedIterate() {
-        int sum = 0;
-        for (int i = listA.size() - 1; i >= 0; i--) {
-            sum += listA.get(i).value;
+    public PersistentVectorList<Key> mRemoveLastOneByOne() {
+        var l = listA;
+        while (!l.isEmpty()) {
+            l = l.removingLast();
         }
-        return sum;
+        return l;
     }
+/*
 
+        @Benchmark
+        public PersistentVectorList<Key> mRemoveAll() {
+            PersistentVectorList<Key> l = listA;
+            return l.removingAll(data.setA);
+        }
+
+
+        @Benchmark
+        public int mIterate() {
+            int sum = 0;
+            for (Iterator<Key> i = listA.iterator(); i.hasNext(); ) {
+                sum += i.next().value;
+            }
+            return sum;
+        }
+
+        @Benchmark
+        public int mListIterate() {
+            int sum = 0;
+            for (Iterator<Key> i = listA.listIterator(); i.hasNext(); ) {
+                sum += i.next().value;
+            }
+            return sum;
+        }
+
+        @Benchmark
+        public int mReversedIterate() {
+            int sum = 0;
+            for (int i = listA.size() - 1; i >= 0; i--) {
+                sum += listA.get(i).value;
+            }
+            return sum;
+        }
+
+        @Benchmark
+        public PersistentVectorList<Key> mRemoveFirst() {
+            return listA.removingFirst();
+        }
+
+        @Benchmark
+        public PersistentVectorList<Key> mAddLast() {
+            Key key = data.nextKeyInB();
+            return (listA).adding(key);
+        }
+
+        @Benchmark
+        public PersistentVectorList<Key> mAddFirst() {
+            Key key = data.nextKeyInB();
+            return (listA).addingFirst(key);
+        }
+
+
+        @Benchmark
+        public PersistentVectorList<Key> mRemoveLast() {
+            return listA.removingAt(listA.size() - 1);
+        }
+
+        @Benchmark
+        public PersistentVectorList<Key> mRemoveAtIndex() {
+            return listA.removingAt(index);
+        }
+
+        @Benchmark
+        public Key mGet() {
+            int offset = data.nextIndexInA();
+            return listA.get(offset);
+        }
+
+        @Benchmark
+        public boolean mContainsNotFound() {
+            Key key = data.nextKeyInB();
+            return listA.contains(key);
+        }
+        @Benchmark
+        public Key mGetFirst() {
+            return listA.get(0);
+        }
+
+        @Benchmark
+        public PersistentVectorList<Key> mSet() {
+            int offset = data.nextIndexInA();
+            Key key = data.nextKeyInB();
+            return listA.settingAt(offset, key);
+        }
     @Benchmark
-    public PersistentVectorList<Key> mRemoveFirst() {
-        return listA.removingFirst();
-    }
-
-    @Benchmark
-    public PersistentVectorList<Key> mAddLast() {
-        Key key = data.nextKeyInB();
-        return (listA).adding(key);
-    }
-
-    @Benchmark
-    public PersistentVectorList<Key> mAddFirst() {
-        Key key = data.nextKeyInB();
-        return (listA).addingFirst(key);
-    }
-
-
-    @Benchmark
-    public PersistentVectorList<Key> mRemoveLast() {
-        return listA.removingAt(listA.size() - 1);
-    }
-
-    @Benchmark
-    public PersistentVectorList<Key> mRemoveAtIndex() {
-        return listA.removingAt(index);
-    }
-
-    @Benchmark
-    public Key mGet() {
-        int offset = data.nextIndexInA();
-        return listA.get(offset);
-    }
-
-    @Benchmark
-    public boolean mContainsNotFound() {
-        Key key = data.nextKeyInB();
-        return listA.contains(key);
-    }
-
-    @Benchmark
-    public Key mGetFirst() {
-        return listA.get(0);
-    }
-
-    @Benchmark
-    public PersistentVectorList<Key> mSet() {
-        int offset = data.nextIndexInA();
-        Key key = data.nextKeyInB();
-        return listA.settingAt(offset, key);
-    }
+    public int mIndexOfLast() {
+        return listA.indexOf(listA.getLast());
+    }*/
 }

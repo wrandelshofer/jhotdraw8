@@ -108,7 +108,7 @@ public final class SetData {
         do {
             value = rng.nextInt(bound);
             count++;
-            if (count >= bound) {
+            if (count >= bound * 5) {
                 throw new RuntimeException("error in rng");
             }
         } while (!usedValues.add(value));

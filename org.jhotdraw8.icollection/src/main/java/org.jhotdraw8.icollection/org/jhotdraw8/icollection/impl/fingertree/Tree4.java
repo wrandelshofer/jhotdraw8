@@ -3,6 +3,7 @@ package org.jhotdraw8.icollection.impl.fingertree;
 import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
+import java.util.Objects;
 
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyAppend;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyInit;
@@ -26,7 +27,7 @@ public final class Tree4<A> extends FingerTree<A> {
     private final int size;
     private final byte len1;
     private final short len12;
-    private final short len123;
+    private final char len123;
     private final A[] p1;
     private final A[][] p2;
     private final A[][][] p3;
@@ -38,7 +39,7 @@ public final class Tree4<A> extends FingerTree<A> {
     /**
      *
      */
-    public Tree4(int size, byte len1, short len12, short len123, A[] p1, A[][] p2, A[][][] p3, A[][][][] d4,
+    public Tree4(int size, byte len1, short len12, char len123, A[] p1, A[][] p2, A[][][] p3, A[][][][] d4,
                  A[][][] s3, A[][] s2, A[] s1) {
         this.size = size;
         this.len1 = len1;
@@ -57,11 +58,11 @@ public final class Tree4<A> extends FingerTree<A> {
         var len1 = p1.length;
         var len12 = len1 + p2.length * WIDTH;
         var len123 = len12 + p3.length * WIDTH2;
-        this(size, (byte) len1, (short) len12, (short) len123, p1, p2, p3, d4, s3, s2, s1);
+        this(size, (byte) len1, (short) len12, (char) len123, p1, p2, p3, d4, s3, s2, s1);
     }
 
     public Tree4(int size, int len1, int len12, int len123, A[] p1, A[][] p2, A[][][] p3, A[][][][] d4, A[][][] s3, A[][] s2, A[] s1) {
-        this(size, (byte) len1, (short) len12, (short) len123, p1, p2, p3, d4, s3, s2, s1);
+        this(size, (byte) len1, (short) len12, (char) len123, p1, p2, p3, d4, s3, s2, s1);
     }
 
     @Override
@@ -229,7 +230,7 @@ public final class Tree4<A> extends FingerTree<A> {
         return len12;
     }
 
-    short len123() {
+    char len123() {
         return len123;
     }
 
@@ -259,5 +260,38 @@ public final class Tree4<A> extends FingerTree<A> {
 
     A[] s1() {
         return s1;
+    }
+
+    public int _indexOf(Object o, int fromIndex, int toIndex) {
+        int i = fromIndex;
+        for (; i < Math.min(toIndex, len1); i++) {
+            if (Objects.equals(p1[i], o)) return i;
+        }
+        for (; i < Math.min(toIndex, len12); i++) {
+            int index = i - len1;
+            if (Objects.equals(p2[index >> BITS][index & MASK], o)) return i;
+        }
+        for (; i < Math.min(toIndex, len123); i++) {
+            int index = i - len12;
+            if (Objects.equals(p3[index >> BITS2][(index >> BITS) & MASK][index & MASK], o)) return i;
+        }
+        for (; i < Math.min(toIndex, len123 + d4.length * WIDTH3); i++) {
+            int index = i - len123;
+            if (Objects.equals(d4[index >> BITS3][(index >> BITS2) & MASK][(index >> BITS) & MASK][index & MASK], o))
+                return i;
+        }
+        for (; i < Math.min(toIndex, size - s1.length - s2.length * WIDTH); i++) {
+            int index = i - len123 - d4.length * WIDTH3;
+            if (Objects.equals(s3[index >> BITS2][(index >> BITS) & MASK][index & MASK], o)) return i;
+        }
+        for (; i < Math.min(toIndex, size - s1.length); i++) {
+            int index = i - len123 - d4.length * WIDTH3 - s3.length * WIDTH2;
+            if (Objects.equals(s2[index >> BITS][index & MASK], o)) return i;
+        }
+        for (; i < Math.min(toIndex, size); i++) {
+            int index = i - size + s1.length;
+            if (Objects.equals(s1[index], o)) return i;
+        }
+        return -1;
     }
 }

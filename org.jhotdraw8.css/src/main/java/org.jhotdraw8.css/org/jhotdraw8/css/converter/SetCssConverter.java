@@ -10,8 +10,8 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
-import org.jhotdraw8.icollection.PersistentVectorHashSet;
 import org.jhotdraw8.icollection.PersistentVectorList;
+import org.jhotdraw8.icollection.PersistentVectorSet;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
@@ -134,7 +134,7 @@ public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T
     @Override
     public PersistentSequencedSet<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return PersistentVectorHashSet.of();
+            return PersistentVectorSet.of();
         } else {
             tt.pushBack();
         }
@@ -170,7 +170,7 @@ public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T
         if (comparatorForSorting != null) {
             list.sort(comparatorForSorting);
         }
-        return PersistentVectorHashSet.copyOf(list);
+        return PersistentVectorSet.copyOf(list);
     }
 
     @Override
@@ -211,7 +211,7 @@ public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T
 
     @Override
     public @Nullable PersistentSequencedSet<T> getDefaultValue() {
-        return PersistentVectorHashSet.of();
+        return PersistentVectorSet.of();
     }
 
     @Override

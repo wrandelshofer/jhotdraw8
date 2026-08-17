@@ -128,7 +128,7 @@ public interface Arr<A> {
     }
 
     static <A> A[] copyRemove(A[] as, int idx) {
-        var c = (A[]) new Object[as.length - 1];
+        A[] c = (A[]) Array.newInstance(as.getClass().getComponentType(), as.length - 1);
         System.arraycopy(as, 0, c, 0, idx);
         System.arraycopy(as, idx + 1, c, idx, as.length - idx - 1);
         return c;

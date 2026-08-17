@@ -27,7 +27,7 @@ public final class Tree5<A> extends FingerTree<A> {
     private final int size;
     private final byte len1;
     private final short len12;
-    private final short len123;
+    private final char len123;
     private final int len1234;
     private final A[] p1;
     private final A[][] p2;
@@ -42,7 +42,7 @@ public final class Tree5<A> extends FingerTree<A> {
     /**
      *
      */
-    public Tree5(int size, byte len1, short len12, short len123, int len1234,
+    public Tree5(int size, byte len1, short len12, char len123, int len1234,
                  A[] p1, A[][] p2, A[][][] p3, A[][][][] p4,
                  A[][][][][] d5,
                  A[][][][] s4, A[][][] s3, A[][] s2, A[] s1) {
@@ -67,11 +67,11 @@ public final class Tree5<A> extends FingerTree<A> {
         var len12 = len1 + p2.length * WIDTH;
         var len123 = len12 + p3.length * WIDTH2;
         var len1234 = len123 + p4.length * WIDTH3;
-        this(size, (byte) len1, (short) len12, (short) len123, len1234, p1, p2, p3, p4, d5, s4, s3, s2, s1);
+        this(size, (byte) len1, (short) len12, (char) len123, len1234, p1, p2, p3, p4, d5, s4, s3, s2, s1);
     }
 
     public Tree5(int size, int len1, int len12, int len123, int len1234, A[] p1, A[][] p2, A[][][] p3, A[][][][] p4, A[][][][][] d5, A[][][][] s4, A[][][] s3, A[][] s2, A[] s1) {
-        this(size, (byte) len1, (short) len12, (short) len123, len1234, p1, p2, p3, p4, d5, s4, s3, s2, s1);
+        this(size, (byte) len1, (short) len12, (char) len123, len1234, p1, p2, p3, p4, d5, s4, s3, s2, s1);
     }
 
     @Override
@@ -267,7 +267,7 @@ public final class Tree5<A> extends FingerTree<A> {
         return len12;
     }
 
-    short len123() {
+    char len123() {
         return len123;
     }
 
