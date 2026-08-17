@@ -36,11 +36,7 @@ public class PersistentTreeSetBuilder<E> implements SetBuilder<E, PersistentTree
 
     @Override
     public PersistentTreeSetBuilder<E> add(E elem) {
-        RedBlackTree<E, Void> newRoot = tree.insert(elem, null, getComparatorOrDefault());
-        if (newRoot == tree) {
-            throw new IllegalStateException("Element is already in the set. elem=" + elem);
-        }
-        tree = newRoot;
+        tree = tree.insert(elem, null, getComparatorOrDefault());
         return this;
     }
 

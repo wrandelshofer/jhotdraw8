@@ -29,14 +29,16 @@ public class PersistentVectorSetBuilder<E> implements SetBuilder<E, PersistentVe
     @Override
     public PersistentVectorSetBuilder<E> add(E elem) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        if (details.isReplaced()) throw new IllegalArgumentException("element already exists");
         var newElem = new SequencedElement<>(elem, size + offset);
-        hashSet = hashSet.put(owner, newElem,
+        var newHashSet = hashSet.put(owner, newElem,
                 SequencedElement.keyHash(elem), 0, details,
                 SequencedElement::insertOrFail,
                 Objects::equals, SequencedElement::elementKeyHash);
-        vector.addOne(newElem);
-        size++;
+        if (newHashSet != hashSet) {
+            hashSet = newHashSet;
+            vector.addOne(newElem);
+            size++;
+        }
         return this;
     }
 

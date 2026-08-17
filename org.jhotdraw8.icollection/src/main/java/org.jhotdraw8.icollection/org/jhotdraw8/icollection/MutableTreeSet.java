@@ -10,6 +10,7 @@ import org.jhotdraw8.icollection.navigable.SubsetNavigableSetView;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableNavigableSet;
 import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
+import org.jhotdraw8.icollection.readable.ReadableSortedSet;
 import org.jhotdraw8.icollection.serialization.SortedSetSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -81,8 +82,8 @@ public class MutableTreeSet<E> extends AbstractSet<E> implements NavigableSet<E>
     /// @param c the collection
     @SuppressWarnings("this-escape")
     public MutableTreeSet(Iterable<? extends E> c) {
-        this.comparator = NaturalComparator.instance();
-        this.root = RedBlackTree.empty();
+        this((Comparator<E>) (c instanceof SortedSet<? extends E> sc ? sc.comparator() :
+                c instanceof ReadableSortedSet<? extends E> rsc ? rsc.comparator() : NaturalComparator.instance()));
         this.addAll(c);
     }
 

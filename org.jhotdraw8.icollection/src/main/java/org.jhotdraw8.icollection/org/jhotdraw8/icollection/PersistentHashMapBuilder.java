@@ -21,10 +21,6 @@ public class PersistentHashMapBuilder<K, V> implements MapBuilder<K, V, Persiste
         var newMap = hashMap.put(owner, key, value,
                 PersistentHashMap.keyHash(key), 0, details,
                 PersistentHashMap::keyHash);
-        if (details.isReplaced()) {
-            throw new IllegalStateException("An entry with the same key is already in the map." +
-                    "Existing entry key=" + key + " value=" + details.getOldValue() + ", new entry key=" + key + " value=" + value);
-        }
         hashMap = newMap;
         size++;
         return this;

@@ -80,27 +80,7 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
     /// @param m a map
     @SuppressWarnings("this-escape")
     public MutableTreeMap(Map<? extends K, ? extends V> m) {
-        this(NaturalComparator.instance());
-        putAll(m);
-    }
-
-    /// Constructs a map containing the same entries as in the specified
-    /// [Map], using the same ordering as used by the provided map.
-    ///
-    /// @param m a map
-    @SuppressWarnings({"unchecked", "this-escape"})
-    public MutableTreeMap(SortedMap<? extends K, ? extends V> m) {
-        this((Comparator<? super K>) m.comparator());
-        putAll(m);
-    }
-
-    /// Constructs a map containing the same entries as in the specified
-    /// [Map], using the same ordering as used by the provided map.
-    ///
-    /// @param m a map
-    @SuppressWarnings({"unchecked", "this-escape"})
-    public MutableTreeMap(ReadableSortedMap<? extends K, ? extends V> m) {
-        this((Comparator<? super K>) m.comparator());
+        this((Comparator<? super K>) (m instanceof SortedMap<? extends K, ? extends V> sm ? sm.comparator() : NaturalComparator.instance()));
         putAll(m);
     }
 
@@ -111,7 +91,7 @@ public class MutableTreeMap<K, V> extends AbstractMap<K, V> implements Navigable
     /// @param m an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableTreeMap(Iterable<? extends Entry<K, V>> m) {
-        this(NaturalComparator.instance());
+        this((Comparator<? super K>) (m instanceof ReadableSortedMap<?, ?> sm ? sm.comparator() : NaturalComparator.instance()));
         this.putAll(m);
     }
 

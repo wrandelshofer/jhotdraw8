@@ -29,12 +29,15 @@ public class PersistentVectorMapBuilder<K, V> implements MapBuilder<K, V, Persis
     public PersistentVectorMapBuilder<K, V> add(K key, V value) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, size + offset);
-        hashMap = hashMap.put(owner, newEntry,
+        var newHashMap = hashMap.put(owner, newEntry,
                 SequencedEntry.keyHash(key), 0, details,
                 SequencedEntry::failIfKeyExists,
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
-        vector.addOne(newEntry);
-        size++;
+        if (newHashMap != hashMap) {
+            hashMap = newHashMap;
+            vector.addOne(newEntry);
+            size++;
+        }
         return this;
     }
 

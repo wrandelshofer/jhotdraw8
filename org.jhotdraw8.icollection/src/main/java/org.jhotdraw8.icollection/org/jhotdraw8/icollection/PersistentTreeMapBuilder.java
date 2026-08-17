@@ -20,11 +20,7 @@ public class PersistentTreeMapBuilder<K, V> implements MapBuilder<K, V, Persiste
     }
 
     public PersistentTreeMapBuilder<K, V> add(K key, V value) {
-        RedBlackTree<K, V> newRoot = tree.insert(key, value, comparator);
-        if (newRoot == tree) {
-            throw new IllegalStateException("There is already an entry with this key in the map. key=" + key);
-        }
-        tree = newRoot;
+        tree = tree.insert(key, value, comparator);
         return this;
     }
 
