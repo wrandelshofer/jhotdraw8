@@ -25,13 +25,13 @@ import java.util.function.Function;
 ///
 /// @param <K> the data type of the trie node
 /// @param <E> the element type of the iterator
-public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> {
-    private final Function<K, E> mappingFunction;
+public class ChampSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
+    private final Function<Object, E> mappingFunction;
     private static final int MAX_DEPTH = 7;
 
     protected int currentValueCursor;
     protected int currentValueLength;
-    protected Node<K> currentValueNode;
+    protected Node currentValueNode;
 
     private int currentStackLevel = -1;
 
@@ -40,13 +40,17 @@ public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> 
     private final int[] indexAndArity = new int[MAX_DEPTH * 2];
 
     @SuppressWarnings({"unchecked", "rawtypes", "RedundantSuppression"})
-    final Node<K>[] nodes = new Node[MAX_DEPTH];
-    private K current;
+    final Node[] nodes = new Node[MAX_DEPTH];
+    private Object current;
+    private final int ENTRY_LENGTH;
+    private final int DATA_INDEX;
 
     @SuppressWarnings("unchecked")
-    public ChampSpliterator(Node<K> rootNode, @Nullable Function<K, E> mappingFunction, long size, int characteristics) {
+    public ChampSpliterator(Node rootNode, @Nullable Function<Object, E> mappingFunction, long size, int characteristics, int entryLength, int dataIndex) {
         super(size, characteristics);
         this.mappingFunction = mappingFunction == null ? k -> (E) k : mappingFunction;
+        ENTRY_LENGTH = entryLength;
+        DATA_INDEX = dataIndex;
         if (rootNode.hasNodes()) {
             currentStackLevel = 0;
 
@@ -58,7 +62,7 @@ public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> 
         if (rootNode.hasData()) {
             currentValueNode = rootNode;
             currentValueCursor = 0;
-            currentValueLength = rootNode.dataArity();
+            currentValueLength = rootNode.dataArity(ENTRY_LENGTH);
         }
     }
 
@@ -79,7 +83,7 @@ public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> 
                 if (nextNode.hasData()) {
                     currentValueNode = nextNode;
                     currentValueCursor = 0;
-                    currentValueLength = nextNode.dataArity();
+                    currentValueLength = nextNode.dataArity(ENTRY_LENGTH);
                     return true;
                 }
             } else {
@@ -94,7 +98,7 @@ public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> 
         // For inlining, it is essential that this method has a very small amount of byte code!
         // Specifically, do not inline searchNextValueNode() into this method!
         if (currentValueCursor < currentValueLength || searchNextValueNode()) {
-            action.accept(mappingFunction.apply(currentValueNode.getData(currentValueCursor++)));
+            action.accept(mappingFunction.apply(currentValueNode.getData(currentValueCursor++, ENTRY_LENGTH, DATA_INDEX)));
             return true;
         }
         return false;

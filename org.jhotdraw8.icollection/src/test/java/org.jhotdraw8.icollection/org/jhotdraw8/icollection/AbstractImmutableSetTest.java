@@ -62,10 +62,11 @@ public abstract class AbstractImmutableSetTest {
         );
     }
 
-    private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
-    private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
-    private static final SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
-    private static final SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static final int DATA_SIZE = 24;
+    private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, DATA_SIZE, 100_000);
+    private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, DATA_SIZE, 100_000);
+    private static final SetData ALL_COLLISION = SetData.newData("all collisions", 0, DATA_SIZE, 100_000);
+    private static final SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, DATA_SIZE, 100_000);
 
     private static int createNewValue(Random rng, Set<Integer> usedValues, int bound) {
         int value;
@@ -86,6 +87,26 @@ public abstract class AbstractImmutableSetTest {
     }
 
     protected void assertEqualSet(Set<Key> expected, PersistentSet<Key> actual) {
+        // check for duplicate values on iterator
+        LinkedHashSet<Key> distinct = new LinkedHashSet<>();
+        for (Iterator<Key> iterator = actual.iterator(); iterator.hasNext(); ) {
+            var key = iterator.next();
+            if (!distinct.add(key)) {
+                IO.println("duplicate key on iterator: " + key);
+            }
+        }
+
+        // check for duplicate values on spliterator
+        distinct.clear();
+        Object[] current = new Object[1];
+        for (Spliterator<Key> iterator = actual.spliterator(); iterator.tryAdvance(o -> current[0] = o); ) {
+            Key key = (Key) current[0];
+            if (!distinct.add(key)) {
+                IO.println("duplicate key on spliterator: " + key);
+            }
+        }
+
+
         ArrayList<Key> expectedValues = new ArrayList<>(expected);
         ArrayList<Key> actualValues = new ArrayList<>(actual.asSet());
         expectedValues.sort(Comparator.comparing(Key::getValue));
@@ -272,6 +293,7 @@ public abstract class AbstractImmutableSetTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void addNullContainsNullShouldReturnTrue(SetData data) throws Exception {
+        if (!supportsNullKeys()) return;
         PersistentSet<Key> instance = newInstance();
         var expected = new LinkedHashSet<Key>();
         expected.add(null);
@@ -284,6 +306,7 @@ public abstract class AbstractImmutableSetTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void addAllNullContainsNullShouldReturnTrue(SetData data) throws Exception {
+        if (!supportsNullKeys()) return;
         PersistentSet<Key> instance = newInstance();
         var expected = new LinkedHashSet<Key>();
         expected.addAll(Collections.singleton(null));
@@ -352,11 +375,12 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void addAllWithCloneShouldReturnSameInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
+        assertEquals(data.a.asSet(), instance.asSet());
         PersistentSet<Key> clone = toClonedInstance(instance);
         assertNotSame(instance, clone);
         PersistentSet<Key> instance3 = instance.addingAll(clone);
-        assertSame(instance, instance3);
         assertEquals(data.a.asSet(), instance3.asSet());
+        assertSame(instance, instance3);
     }
 
     @ParameterizedTest
@@ -482,6 +506,32 @@ public abstract class AbstractImmutableSetTest {
 
         PersistentSet<Key> instance2 = newInstance();
         instance2 = instance2.addingAll(listA.subList(0, listA.size() / 2));
+        instance2 = instance2.addingAll(listC.subList(0, listC.size() / 2));
+
+        LinkedHashSet<Key> expected = new LinkedHashSet<>(listA);
+        LinkedHashSet<Key> expected2 = new LinkedHashSet<>();
+        expected2.addAll(listA.subList(0, listA.size() / 2));
+        expected2.addAll(listC.subList(0, listC.size() / 2));
+        assertEqualSet(expected2, instance2);
+
+        PersistentSet<Key> instance3 = instance.addingAll(instance2);
+        assertNotSame(instance2, instance3);
+        expected.addAll(expected2);
+
+
+        assertEqualSet(expected, instance3);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void addAllWithSharedDataAndSomeNewKeysShouldReturnNewInstance(SetData data) throws Exception {
+        PersistentSet<Key> instance = newInstance(data.a);
+
+        ArrayList<Key> listA = new ArrayList<>(data.a.asSet());
+        ArrayList<Key> listC = new ArrayList<>(data.c.asSet());
+
+        PersistentSet<Key> instance2 = instance;
+        instance2 = instance2.retainingAll(listA.subList(0, listA.size() / 2));
         instance2 = instance2.addingAll(listC.subList(0, listC.size() / 2));
 
         LinkedHashSet<Key> expected = new LinkedHashSet<>(listA);
@@ -670,9 +720,9 @@ public abstract class AbstractImmutableSetTest {
     public void spliteratorShouldSupportNullKeys() throws Exception {
         PersistentSet<Key> instance = newInstance();
         if (supportsNullKeys()) {
-            assertEquals(instance.spliterator().characteristics() & Spliterator.NONNULL, 0, "spliterator should be non-null");
+            assertEquals(instance.spliterator().characteristics() & Spliterator.NONNULL, 0, "spliterator should not be non-null");
         } else {
-            assertEquals(instance.spliterator().characteristics() & Spliterator.NONNULL, Spliterator.NONNULL, "spliterator should be nullable");
+            assertEquals(instance.spliterator().characteristics() & Spliterator.NONNULL, Spliterator.NONNULL, "spliterator should be non-null");
         }
     }
 

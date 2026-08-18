@@ -1,6 +1,6 @@
 /*
  * @(#)ChangeEvent.java
- * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.icollection.impl.champ;
@@ -9,12 +9,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/// This class is used to report a change (or no changes) of data in a CHAMP trie.
-///
-/// @param <D> the data type
-public class ChangeEvent<D> {
+public class ChangeEvent {
+
     public boolean isUnchanged() {
-        return type == Type.UNCHANGED;
+        return type == ChangeEvent.Type.UNCHANGED;
     }
 
     enum Type {
@@ -24,70 +22,70 @@ public class ChangeEvent<D> {
         REPLACED
     }
 
-    private Type type = Type.UNCHANGED;
-    private @Nullable D oldData;
-    private @Nullable D newData;
+    private ChangeEvent.Type type = ChangeEvent.Type.UNCHANGED;
+    private @Nullable Object[] oldEntry;
+    private @Nullable Object[] newEntry;
 
     public ChangeEvent() {
     }
 
-    void found(D data) {
-        this.oldData = data;
+    void setFound(Object[] data) {
+        this.oldEntry = data;
     }
 
-    public @Nullable D getOldData() {
-        return oldData;
+    public @Nullable Object[] getOldEntry() {
+        return oldEntry;
     }
 
-    public @Nullable D getNewData() {
-        return newData;
+    public @Nullable Object[] getNewEntry() {
+        return newEntry;
     }
 
-    public D getOldDataNonNull() {
-        return Objects.requireNonNull(oldData);
+    public Object[] getOldDataNonNull() {
+        return Objects.requireNonNull(oldEntry);
     }
 
-    public D getNewDataNonNull() {
-        return Objects.requireNonNull(newData);
+    public Object[] getNewDataNonNull() {
+        return Objects.requireNonNull(newEntry);
     }
 
     /// Call this method to indicate that the value of an element has changed.
     ///
-    /// @param oldData the old value of the element
-    /// @param newData the new value of the element
-    void setReplaced(@Nullable D oldData, @Nullable D newData) {
-        this.oldData = oldData;
-        this.newData = newData;
-        this.type = Type.REPLACED;
+    /// @param oldEntry the old value of the element
+    /// @param newEntry the new value of the element
+    void setReplaced(@Nullable Object[] oldEntry, @Nullable Object[] newEntry) {
+        this.oldEntry = oldEntry;
+        this.newEntry = newEntry;
+        this.type = ChangeEvent.Type.REPLACED;
     }
 
     /// Call this method to indicate that an element has been removed.
     ///
-    /// @param oldData the value of the removed element
-    void setRemoved(@Nullable D oldData) {
-        this.oldData = oldData;
-        this.type = Type.REMOVED;
+    /// @param oldEntry the value of the removed element
+    void setRemoved(@Nullable Object[] oldEntry) {
+        this.oldEntry = oldEntry;
+        this.type = ChangeEvent.Type.REMOVED;
     }
 
     /// Call this method to indicate that a data element has been added.
-    void setAdded(@Nullable D newData) {
-        this.newData = newData;
-        this.type = Type.ADDED;
+    void setAdded(@Nullable Object[] newEntry) {
+        this.newEntry = newEntry;
+        this.type = ChangeEvent.Type.ADDED;
     }
 
     /// Returns true if the CHAMP trie has been modified.
     public boolean isModified() {
-        return type != Type.UNCHANGED;
+        return type != ChangeEvent.Type.UNCHANGED;
     }
 
     /// Returns true if the data element has been replaced.
     public boolean isReplaced() {
-        return type == Type.REPLACED;
+        return type == ChangeEvent.Type.REPLACED;
     }
 
     void reset() {
-        type = Type.UNCHANGED;
-        oldData = null;
-        newData = null;
+        type = ChangeEvent.Type.UNCHANGED;
+        oldEntry = null;
+        newEntry = null;
     }
 }

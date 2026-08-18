@@ -8,7 +8,6 @@ package org.jhotdraw8.icollection.impl.champ;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableSet;
-import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -32,12 +31,11 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
     ///
     /// All nodes that have the same non-null owner id, are exclusively owned
     /// by this set, and therefore can be mutated without affecting other sets.
-    ///
-    /// If this owner id is null, then this set does not own any nodes.
-    protected transient @Nullable IdentityObject owner;
+    @SuppressWarnings("TransientFieldNotInitialized")
+    protected transient IdentityObject owner = new IdentityObject();
 
     /// The root of this CHAMP trie.
-    protected transient BitmapIndexedNode<D> hashSet;
+    protected transient BitmapIndexedNode hashSet;
 
     /// The number of elements in this set.
     protected int size;
@@ -103,10 +101,12 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
             return true;
         }
         if (o instanceof AbstractMutableChampSet<?, ?> that) {
-            return size == that.size && hashSet.equivalent(that.hashSet);
+            return size == that.size && hashSet.equivalent(that.hashSet, getEntryLength());
         }
         return super.equals(o);
     }
+
+    protected abstract int getEntryLength();
 
     /// Returns the current value of the modification counter.
     ///
@@ -120,20 +120,14 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
         return size;
     }
 
-    /// Gets the owner id of this set. Creates a new id, if this
-    /// set has no owner id.
-    ///
-    /// @return a new unique id or the existing unique id.
-    protected IdentityObject makeOwner() {
-        if (owner == null) {
-            owner = new IdentityObject();
-        }
-        return owner;
-    }
-
     @Override
     public boolean removeAll(Collection<?> c) {
         return removeAll((Iterable<?>) c);
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return retainAll((Iterable<?>) c);
     }
 
     /// Removes all specified elements that are in this set.
@@ -164,7 +158,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
     @SuppressWarnings("unchecked")
     public AbstractMutableChampSet<E, D> clone() {
         try {
-            owner = null;
+            owner = new IdentityObject();
             return (AbstractMutableChampSet<E, D>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);

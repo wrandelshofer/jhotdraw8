@@ -12,8 +12,10 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import scala.collection.IterableOnce;
+import scala.collection.Iterator;
 import scala.collection.immutable.Vector;
 import scala.collection.mutable.ReusableBuilder;
+import scala.jdk.javaapi.CollectionConverters;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -133,7 +135,7 @@ public class ScalaVectorJmh {
             throw new RuntimeException(e);
         }
     }
-/*
+
     @Benchmark
     public Vector<Key> mCopyOf() {
         ReusableBuilder<Key, Vector<Key>> builder = Vector.<Key>newBuilder();
@@ -155,7 +157,7 @@ public class ScalaVectorJmh {
     public Vector<Key> mAddAllSet() throws InvocationTargetException, IllegalAccessException {
         return (Vector<Key>) appendedAllMethod.invoke(listA, data.setB);
     }
-*/
+
 
     @Benchmark
     public Vector<Key> mCopyOfOneByOne() throws InvocationTargetException, IllegalAccessException {
@@ -165,23 +167,23 @@ public class ScalaVectorJmh {
         }
         return l;
     }
-/*
-    //   @Benchmark
-    //   public Vector<Key> mRemoveOneByOne() {
-    //       var l = listA;
-    //       for (var e : data.listA) {
-    //           l = l.removed(e);
-    //       }
-    //       if (!l.isEmpty()) throw new AssertionError("map: " + l);
-    //       return l;
-    //   }
-//
-    //   @Benchmark
-    //   public Vector<Key> mRemoveAll() {
-    //       Vector<Key> set = listA;
-    //       return set.filter(data.listA);
-    //   }
-//
+
+    //    @Benchmark
+    //    public Vector<Key> mRemoveOneByOne() {
+    //        var l = listA;
+    //        for (var e : data.listA) {
+    //            l = l.removed(e);
+    //        }
+    //        if (!l.isEmpty()) throw new AssertionError("map: " + l);
+    //        return l;
+    //    }
+
+    //    @Benchmark
+    //    public Vector<Key> mRemoveAll() {
+    //        Vector<Key> set = listA;
+    //        return set.filter(data.listA);
+    //    }
+
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -251,5 +253,5 @@ public class ScalaVectorJmh {
 
         return (Vector<Key>) updated.invoke(listA, index, key);
     }
-*/
+
 }

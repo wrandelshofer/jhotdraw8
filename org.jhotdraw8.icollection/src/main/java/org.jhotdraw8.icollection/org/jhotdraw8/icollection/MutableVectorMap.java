@@ -8,16 +8,17 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedSetFacade;
-import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampMap;
-import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
-import org.jhotdraw8.icollection.impl.champ.Node;
-import org.jhotdraw8.icollection.impl.champ.ReverseTombSkippingVectorSpliterator;
-import org.jhotdraw8.icollection.impl.champ.SequencedData;
-import org.jhotdraw8.icollection.impl.champ.SequencedEntry;
-import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorIterator;
-import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.champmap.EditableMapEntry;
+import org.jhotdraw8.icollection.impl.champset.AbstractMutableChampMap;
+import org.jhotdraw8.icollection.impl.champset.BitmapIndexedNode;
+import org.jhotdraw8.icollection.impl.champset.ChangeEvent;
+import org.jhotdraw8.icollection.impl.champset.Node;
+import org.jhotdraw8.icollection.impl.champset.ReverseTombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.impl.champset.SequencedData;
+import org.jhotdraw8.icollection.impl.champset.SequencedEntry;
+import org.jhotdraw8.icollection.impl.champset.TombSkippingVectorIterator;
+import org.jhotdraw8.icollection.impl.champset.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
@@ -68,7 +69,7 @@ import java.util.function.Function;
 ///
 /// Implementation details:
 ///
-/// See description at [PersistentVectorMap].
+/// See description at [PersistentVectorHashMap].
 ///
 /// References:
 /// <dl>
@@ -138,7 +139,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     @Override
     public MutableVectorMap<K, V> clone() {
         MutableVectorMap<K, V> that = (MutableVectorMap<K, V>) super.clone();
-        that.owner = null;
+        that.owner = new IdentityObject();
         return that;
     }
 
@@ -250,13 +251,13 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     private void iteratorPutIfPresent(K k, V v) {
         if (containsKey(k)) {
-            owner = null;
+            owner = new IdentityObject();
             put(k, v);
         }
     }
 
     private void iteratorRemove(Entry<K, V> entry) {
-        owner = null;
+        owner = new IdentityObject();
         remove(entry.getKey());
     }
 
@@ -307,7 +308,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     private ChangeEvent<SequencedEntry<K, V>> putFirst(K key, V val, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, val, offset - 1);
-        hashMap = hashMap.put(getOrCreateOwner(), newEntry,
+        hashMap = hashMap.put(owner, newEntry,
                 SequencedEntry.keyHash(key), 0, details,
                 moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
@@ -339,7 +340,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         if (c instanceof MutableVectorMap<?, ?> that) {
             c = (Iterable<? extends Entry<? extends K, ? extends V>>) that.toPersistent();
         }
-        if (isEmpty() && c instanceof PersistentVectorMap<?, ?> that) {
+        if (isEmpty() && c instanceof PersistentVectorHashMap<?, ?> that) {
             if (that.isEmpty()) {
                 return false;
             }
@@ -362,7 +363,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     ChangeEvent<SequencedEntry<K, V>> putLast(K key, V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, vector.size() + offset);
-        hashMap = hashMap.put(getOrCreateOwner(), newEntry,
+        hashMap = hashMap.put(owner, newEntry,
                 SequencedEntry.keyHash(key), 0, details,
                 moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
@@ -411,7 +412,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(K key) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
-        hashMap = hashMap.remove(getOrCreateOwner(),
+        hashMap = hashMap.remove(owner,
                 new SequencedEntry<>(key),
                 SequencedEntry.keyHash(key), 0, details, SequencedEntry::keyEquals);
         if (details.isModified()) {
@@ -432,7 +433,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     private void renumber() {
         if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
             // center the numbers around 0 so that we have the interval [-size/2,size]
-            var b = new PersistentVectorMapBuilder<K, V>(makeOwner(), size / -2);
+            var b = new PersistentVectorHashMapBuilder<K, V>(owner, size / -2);
             b.addMap(this);
             var tmp = b.build();
             hashMap = tmp.hashMap;
@@ -449,10 +450,10 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     /// Returns a persistent copy of this map.
     ///
     /// @return a persistent copy
-    public PersistentVectorMap<K, V> toPersistent() {
-        owner = null;
-        return size == 0 ? PersistentVectorMap.of()
-                : new PersistentVectorMap<>(hashMap, vector, size, offset);
+    public PersistentVectorHashMap<K, V> toPersistent() {
+        owner = new IdentityObject();
+        return size == 0 ? PersistentVectorHashMap.of()
+                : new PersistentVectorHashMap<>(hashMap, vector, size, offset);
     }
 
     @Override

@@ -19,7 +19,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
 import java.util.Spliterator;
 
@@ -81,15 +80,17 @@ import java.util.Spliterator;
 @SuppressWarnings("exports")
 public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     /// We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
-    static final int SALT = new Random().nextInt();
+    static final int SALT = 0;//new Random().nextInt();
     private static final PersistentHashSet<?> EMPTY = new PersistentHashSet<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
     @SuppressWarnings("TransientFieldNotInitialized")
-    final transient BitmapIndexedNode<E> root;
+    final transient BitmapIndexedNode root;
     final int size;
+    static final int ENTRY_LENGTH = 1;
+    static final int KEY_DATA_INDEX = 0;
 
-    PersistentHashSet(BitmapIndexedNode<E> root, int size) {
+    PersistentHashSet(BitmapIndexedNode root, int size) {
         this.root = root;
         this.size = size;
     }
@@ -126,18 +127,13 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
         return new PersistentHashSetBuilder<E>().addArray(elements).build();
     }
 
-    /// Update function for a set: we always keep the old element.
+    /// Update function for a set: we always keep the old entry.
     ///
-    /// @param oldElement the old element
-    /// @param newElement the new element
-    /// @param <E>        the element type
-    /// @return always returns the old element
-    static <E> E updateElement(E oldElement, E newElement) {
+    /// @param oldElement the old entry
+    /// @param newElement the new entry
+    /// @return always returns the old entry
+    static Object[] keepOldEntry(Object[] oldElement, Object[] newElement) {
         return oldElement;
-    }
-
-    public static <E> E insertOrFail(E oldElement, E newElement) {
-        throw new IllegalArgumentException("Element is already in the set. elem=" + oldElement);
     }
 
     static int keyHash(Object e) {
@@ -147,9 +143,9 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     @Override
     public PersistentHashSet<E> adding(@Nullable E element) {
         int keyHash = keyHash(element);
-        ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = root.put(null, element, keyHash, 0, details,
-                PersistentHashSet::updateElement, Objects::equals, PersistentHashSet::keyHash);
+        ChangeEvent details = new ChangeEvent();
+        BitmapIndexedNode newRootNode = root.put(null, element, new Object[]{element}, keyHash, 0, details,
+                PersistentHashSet::keepOldEntry, PersistentHashSet::keyHash, ENTRY_LENGTH);
         if (details.isModified()) {
             return new PersistentHashSet<>(newRootNode, size + 1);
         }
@@ -175,7 +171,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return root.find((E) o, keyHash(o), 0, Objects::equals) != Node.NO_DATA;
+        return root.findData((E) o, keyHash(o), 0, ENTRY_LENGTH, KEY_DATA_INDEX) != Node.NO_DATA;
     }
 
     @Override
@@ -187,7 +183,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
             return false;
         }
         if (other instanceof PersistentHashSet<?> that) {
-            return size == that.size && root.equivalent(that.root);
+            return size == that.size && root.equivalent(that.root, ENTRY_LENGTH);
         }
         return ReadableSet.setEquals(this, other);
     }
@@ -199,7 +195,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
 
     @Override
     public Iterator<E> iterator() {
-        return new ChampIterator<>(root, null);
+        return new ChampIterator<>(root, null, ENTRY_LENGTH, KEY_DATA_INDEX);
     }
 
     @Override
@@ -210,8 +206,8 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     @Override
     public PersistentHashSet<E> removing(E key) {
         int keyHash = keyHash(key);
-        ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = root.remove(null, key, keyHash, 0, details, Objects::equals);
+        ChangeEvent details = new ChangeEvent();
+        BitmapIndexedNode newRootNode = root.remove(null, key, keyHash, 0, details, ENTRY_LENGTH);
         if (details.isModified()) {
             return size == 1 ? PersistentHashSet.of() : new PersistentHashSet<>(newRootNode, size - 1);
         }
@@ -239,7 +235,8 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     }
 
     public Spliterator<E> spliterator() {
-        return new ChampSpliterator<>(root, null, size, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT);
+        return new ChampSpliterator<>(root, null, size, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT,
+                ENTRY_LENGTH, KEY_DATA_INDEX);
     }
 
     @Override

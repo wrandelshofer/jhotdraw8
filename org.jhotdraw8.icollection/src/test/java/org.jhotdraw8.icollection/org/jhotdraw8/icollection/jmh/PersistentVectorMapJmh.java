@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.PersistentVectorMap;
+import org.jhotdraw8.icollection.PersistentVectorHashMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -72,12 +72,12 @@ public class PersistentVectorMapJmh {
     private int mask = -65;
 
     private BenchmarkData data;
-    private PersistentVectorMap<Key, Boolean> mapA;
+    private PersistentVectorHashMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        mapA = PersistentVectorMap.of();
+        mapA = PersistentVectorHashMap.of();
         for (Key key : data.setA) {
             mapA = mapA.putting(key, Boolean.TRUE);
         }
@@ -93,25 +93,25 @@ public class PersistentVectorMapJmh {
     }
 
     @Benchmark
-    public PersistentVectorMap<Key, Boolean> mRemoveThenAdd() {
+    public PersistentVectorHashMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return mapA.removing(key).putting(key, Boolean.TRUE);
     }
 
     @Benchmark
-    public PersistentVectorMap<Key, Boolean> mPut() {
+    public PersistentVectorHashMap<Key, Boolean> mPut() {
         Key key = data.nextKeyInA();
         return mapA.putting(key, Boolean.FALSE);
     }
 
     @Benchmark
-    public PersistentVectorMap<Key, Boolean> mCopyOf() {
-        return PersistentVectorMap.copyOf(data.mapA);
+    public PersistentVectorHashMap<Key, Boolean> mCopyOf() {
+        return PersistentVectorHashMap.copyOf(data.mapA);
     }
 
     @Benchmark
-    public PersistentVectorMap<Key, Boolean> mCopyOnyByOne() {
-        PersistentVectorMap<Key, Boolean> set = PersistentVectorMap.of();
+    public PersistentVectorHashMap<Key, Boolean> mCopyOnyByOne() {
+        PersistentVectorHashMap<Key, Boolean> set = PersistentVectorHashMap.of();
         for (Key key : data.listA) {
             set = set.putting(key, Boolean.FALSE);
         }
@@ -137,12 +137,12 @@ public class PersistentVectorMapJmh {
     }
 
     @Benchmark
-    public PersistentVectorMap<Key, Boolean> mTail() {
+    public PersistentVectorHashMap<Key, Boolean> mTail() {
         return mapA.removing(mapA.iterator().next().getKey());
     }
 
     @Benchmark
-    public PersistentVectorMap<Key, Boolean> mRemoveOneByOne() {
+    public PersistentVectorHashMap<Key, Boolean> mRemoveOneByOne() {
         var map = mapA;
         for (var e : data.listA) {
             map = map.removing(e);
@@ -153,14 +153,14 @@ public class PersistentVectorMapJmh {
 
 
     @Benchmark
-    public PersistentVectorMap<Key, Boolean> mRemoveAll() {
+    public PersistentVectorHashMap<Key, Boolean> mRemoveAll() {
         var updated = mapA.removingAll(data.setA);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public PersistentVectorMap<Key, Boolean> mRetainAllNoneRetained() {
+    public PersistentVectorHashMap<Key, Boolean> mRetainAllNoneRetained() {
         var set = mapA;
         var updated = set.retainingAll(data.setB);
         assert updated.isEmpty();
@@ -168,7 +168,7 @@ public class PersistentVectorMapJmh {
     }
 
     @Benchmark
-    public PersistentVectorMap<Key, Boolean> mRetainAllAllRetained() {
+    public PersistentVectorHashMap<Key, Boolean> mRetainAllAllRetained() {
         var set = mapA;
         var updated = set.retainingAll(data.setA);
         assert updated == mapA;

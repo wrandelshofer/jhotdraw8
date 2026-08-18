@@ -6,15 +6,16 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
-import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampSet;
-import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
-import org.jhotdraw8.icollection.impl.champ.Node;
-import org.jhotdraw8.icollection.impl.champ.ReverseTombSkippingVectorSpliterator;
-import org.jhotdraw8.icollection.impl.champ.SequencedData;
-import org.jhotdraw8.icollection.impl.champ.SequencedElement;
-import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorIterator;
-import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.champset.AbstractMutableChampSet;
+import org.jhotdraw8.icollection.impl.champset.BitmapIndexedNode;
+import org.jhotdraw8.icollection.impl.champset.ChangeEvent;
+import org.jhotdraw8.icollection.impl.champset.Node;
+import org.jhotdraw8.icollection.impl.champset.ReverseTombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.impl.champset.SequencedData;
+import org.jhotdraw8.icollection.impl.champset.SequencedElement;
+import org.jhotdraw8.icollection.impl.champset.TombSkippingVectorIterator;
+import org.jhotdraw8.icollection.impl.champset.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
@@ -35,7 +36,7 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
-import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
+import static org.jhotdraw8.icollection.impl.champset.SequencedData.vecRemove;
 
 /// Implements the [SequencedSet] interface using a Compressed
 /// Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
@@ -65,7 +66,7 @@ import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
 ///
 /// Implementation details:
 ///
-/// See description at [PersistentVectorSet].
+/// See description at [PersistentVectorHashSet].
 ///
 /// References:
 /// <dl>
@@ -118,7 +119,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         if (c instanceof MutableVectorSet<?> m) {
             c = (Iterable<? extends E>) m.toPersistent();
         }
-        if (isEmpty() && (c instanceof PersistentVectorSet<?> cc)) {
+        if (isEmpty() && (c instanceof PersistentVectorHashSet<?> cc)) {
             hashSet = (BitmapIndexedNode<SequencedElement<E>>) (BitmapIndexedNode<?>) cc.hashSet;
             vector = cc.vector;
             offset = cc.offset;
@@ -146,10 +147,10 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private boolean addAllAddNext(@Nullable E e, PersistentVectorListBuilder<Object> b, int seqNumber) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, seqNumber);
-        hashSet = hashSet.put(makeOwner(),
+        hashSet = hashSet.put(owner,
                 newElem, SequencedElement.keyHash(e), 0,
                 details,
-                SequencedElement::putIfAbsent,
+                SequencedElement::keepOldValue,
                 Objects::equals, SequencedElement::elementKeyHash);
         boolean modified = details.isModified();
         if (modified) {
@@ -168,9 +169,9 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, offset - 1);
-        hashSet = hashSet.put(makeOwner(), newElem,
+        hashSet = hashSet.put(owner, newElem,
                 SequencedElement.keyHash(e), 0, details,
-                moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::putIfAbsent,
+                moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::keepOldValue,
                 Objects::equals, SequencedElement::elementKeyHash);
         boolean modified = details.isModified();
         if (modified) {
@@ -198,10 +199,10 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, offset + vector.size());
-        hashSet = hashSet.put(makeOwner(),
+        hashSet = hashSet.put(owner,
                 newElem, SequencedElement.keyHash(e), 0,
                 details,
-                moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::putIfAbsent,
+                moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::keepOldValue,
                 Objects::equals, SequencedElement::elementKeyHash);
         boolean modified = details.isModified();
         if (modified) {
@@ -234,7 +235,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     @Override
     public MutableVectorSet<E> clone() {
         var that = (MutableVectorSet<E>) super.clone();
-        that.owner = null;
+        that.owner = new IdentityObject();
         return that;
     }
 
@@ -271,7 +272,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     }
 
     private void iteratorRemove(E element) {
-        owner = null;
+        owner = new IdentityObject();
         remove(element);
     }
 
@@ -284,7 +285,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     @Override
     public boolean remove(Object o) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        hashSet = hashSet.remove(makeOwner(),
+        hashSet = hashSet.remove(owner,
                 new SequencedElement<>((E) o),
                 SequencedElement.keyHash(o), 0, details, Objects::equals);
         boolean modified = details.isModified();
@@ -316,7 +317,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     /// Renumbers the sequence numbers if they have overflown.
     private void renumber() {
         if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
-            var b = new PersistentVectorSetBuilder<E>(makeOwner(), size / -2);
+            var b = new PersistentVectorHashSetBuilder<E>(owner, size / -2);
             b.addAll(this);
             var tmp = b.build();
             hashSet = tmp.hashSet;
@@ -359,11 +360,11 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     /// Returns a persistent copy of this set.
     ///
     /// @return a persistent copy
-    public PersistentVectorSet<E> toPersistent() {
-        owner = null;
+    public PersistentVectorHashSet<E> toPersistent() {
+        owner = new IdentityObject();
         return size == 0
-                ? PersistentVectorSet.of()
-                : new PersistentVectorSet<>(hashSet, vector, size, offset);
+                ? PersistentVectorHashSet.of()
+                : new PersistentVectorHashSet<>(hashSet, vector, size, offset);
     }
 
     @Serial

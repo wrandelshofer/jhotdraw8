@@ -20,23 +20,27 @@ import java.util.function.Function;
 ///
 /// @param <K> the data type of the trie node
 /// @param <E> the element type of the iterator
-public class ChampIterator<K, E> implements Iterator<E> {
-    private final Function<K, E> mappingFunction;
+public class ChampIterator<E> implements Iterator<E> {
+    private final Function<Object, E> mappingFunction;
     private static final int MAX_DEPTH = 7;
 
     protected int currentValueCursor;
     protected int currentValueLength;
-    protected Node<K> currentValueNode;
+    protected Node currentValueNode;
 
     private int currentStackLevel = -1;
     private final int[] indexAndArity = new int[MAX_DEPTH * 2];
 
     @SuppressWarnings({"unchecked", "rawtypes", "RedundantSuppression"})
-    final Node<K>[] nodes = new Node[MAX_DEPTH];
+    final Node[] nodes = new Node[MAX_DEPTH];
+    private final int ENTRY_LENGTH;
+    private final int DATA_INDEX;
 
     @SuppressWarnings("unchecked")
-    public ChampIterator(Node<K> rootNode, @Nullable Function<K, E> mappingFunction) {
+    public ChampIterator(Node rootNode, @Nullable Function<Object, E> mappingFunction, int ENTRY_LENGTH, int dataIndex) {
+        this.ENTRY_LENGTH = ENTRY_LENGTH;
         this.mappingFunction = mappingFunction == null ? k -> (E) k : mappingFunction;
+        DATA_INDEX = dataIndex;
         if (rootNode.hasNodes()) {
             currentStackLevel = 0;
 
@@ -48,7 +52,7 @@ public class ChampIterator<K, E> implements Iterator<E> {
         if (rootNode.hasData()) {
             currentValueNode = rootNode;
             currentValueCursor = 0;
-            currentValueLength = rootNode.dataArity();
+            currentValueLength = rootNode.dataArity(ENTRY_LENGTH);
         }
     }
 
@@ -74,7 +78,7 @@ public class ChampIterator<K, E> implements Iterator<E> {
                     // found next node that contains values
                     currentValueNode = nextNode;
                     currentValueCursor = 0;
-                    currentValueLength = nextNode.dataArity();
+                    currentValueLength = nextNode.dataArity(ENTRY_LENGTH);
                     return true;
                 }
             } else {
@@ -95,7 +99,7 @@ public class ChampIterator<K, E> implements Iterator<E> {
         if (!hasNext()) {
             throw new NoSuchElementException();
         } else {
-            return mappingFunction.apply(currentValueNode.getData(currentValueCursor++));
+            return mappingFunction.apply(currentValueNode.getData(currentValueCursor++, ENTRY_LENGTH, DATA_INDEX));
         }
     }
 

@@ -51,9 +51,9 @@ import java.util.concurrent.TimeUnit;
 /// KotlinPersistentListJmh.mGetFirst              10  avgt                0.804          ns/op
 /// KotlinPersistentListJmh.mGetFirst            1000  avgt                1.340          ns/op
 /// KotlinPersistentListJmh.mGetFirst          100000  avgt                2.030          ns/op
-/// KotlinPersistentListJmh.mIndexOfLast              10  avgt    2           4.914          ns/op
-/// KotlinPersistentListJmh.mIndexOfLast            1000  avgt    2        2056.409          ns/op
-/// KotlinPersistentListJmh.mIndexOfLast          100000  avgt    2      214645.041          ns/op
+/// KotlinPersistentListJmh.mIndexOfLast           10  avgt    2           4.914          ns/op
+/// KotlinPersistentListJmh.mIndexOfLast         1000  avgt    2        2056.409          ns/op
+/// KotlinPersistentListJmh.mIndexOfLast       100000  avgt    2      214645.041          ns/op
 /// KotlinPersistentListJmh.mIterate               10  avgt                3.510          ns/op
 /// KotlinPersistentListJmh.mIterate             1000  avgt             1755.806          ns/op
 /// KotlinPersistentListJmh.mIterate           100000  avgt           213130.443          ns/op

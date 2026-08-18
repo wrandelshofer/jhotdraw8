@@ -1,6 +1,6 @@
 /*
  * @(#)Node.java
- * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.icollection.impl.champ;
@@ -8,56 +8,16 @@ package org.jhotdraw8.icollection.impl.champ;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jspecify.annotations.Nullable;
 
-import java.util.NoSuchElementException;
+import java.util.Arrays;
 import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-/// Represents a node in a 'Compressed Hash-Array Mapped Prefix-tree'
-/// (CHAMP) trie.
+/// Represents a node in a CHAMP trie.
 ///
-/// A trie is a tree structure that stores a set of data objects; the
-/// path to a data object is determined by a bit sequence derived from the data
-/// object.
-///
-/// In a CHAMP trie, the bit sequence is derived from the hash code of a data
-/// object. A hash code is a bit sequence with a fixed length. This bit sequence
-/// is split up into parts. Each part is used as the index to the next child node
-/// in the tree, starting from the root node of the tree.
-///
-/// The nodes of a CHAMP trie are compressed. Instead of allocating a node for
-/// each data object, the data objects are stored directly in the ancestor node
-/// at which the path to the data object starts to become unique. This means,
-/// that in most cases, only a prefix of the bit sequence is needed for the
-/// path to a data object in the tree.
-///
-/// If the hash code of a data object in the set is not unique, then it is
-/// stored in a [HashCollisionNode], otherwise it is stored in a
-/// [BitmapIndexedNode]. Since the hash codes have a fixed length,
-/// all [HashCollisionNode]s are located at the same, maximal depth
-/// of the tree.
-///
-/// In this implementation, a hash code has a length of
-/// {@value #HASH_CODE_LENGTH} bits, and is split up in little-endian order into parts of
-/// {@value #BIT_PARTITION_SIZE} bits (the last part contains the remaining bits).
-///
-/// References:
-///
-/// This class has been derived from 'The Capsule Hash Trie Collections Library'.
-/// <dl>
-///      <dt>The Capsule Hash Trie Collections Library.
-///
-/// Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
-///      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
-/// </dl>
-///
-/// @param <D> the type of the data objects that are stored in this trie
-public abstract class Node<D> {
-    /// Represents no data.
-    /// We can not use `null`, because we allow storing null-data in the
-    /// trie.
-    public static final Object NO_DATA = new Object();
+/// A node can store object arrays of a specifiable length.
+/// The first element of the array is the key, the other elements are values.
+public abstract class Node {
     static final int HASH_CODE_LENGTH = 32;
     /// Bit partition size in the range [1,5].
     ///
@@ -65,81 +25,77 @@ public abstract class Node<D> {
     /// (You can use a size of 6, if you replace the bit-mask fields with longs).
     static final int BIT_PARTITION_SIZE = 5;
     static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
+
+    /// Represents no value.
+    /// We can not use `null`, because we allow storing null-keys and
+    /// null-values in the trie.
+    public static final Object NO_DATA = new IdentityObject();
+
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
-    static final int MAX_SHIFT = HASH_CODE_LENGTH - HASH_CODE_LENGTH % BIT_PARTITION_SIZE;
 
     Object[] array;
 
     Node() {
+
     }
 
-    /// Given a masked dataHash, returns its bit-position
+    /// Given a masked keyHash, returns its bit-position
     /// in the bit-map.
     ///
     /// For example, if the bit partition is 5 bits, then
     /// we 2^5 == 32 distinct bit-positions.
-    /// If the masked dataHash is 3 then the bit-position is
+    /// If the masked keyHash is 3 then the bit-position is
     /// the bit with index 3. That is, 1<<3 = 0b0100.
     ///
-    /// @param mask masked data hash
+    /// @param mask masked key hash
     /// @return bit position
     static int bitpos(int mask) {
         return 1 << mask;
     }
 
-    public static <E> E getFirst(Node<E> node) {
-        while (node instanceof BitmapIndexedNode<E> bxn) {
-            int nodeMap = bxn.nodeMap();
-            int dataMap = bxn.dataMap();
-            if ((nodeMap | dataMap) == 0) {
-                break;
-            }
-            int firstNodeBit = Integer.numberOfTrailingZeros(nodeMap);
-            int firstDataBit = Integer.numberOfTrailingZeros(dataMap);
-            if (nodeMap != 0 && firstNodeBit < firstDataBit) {
-                node = node.getNode(0);
-            } else {
-                return node.getData(0);
-            }
-        }
-        if (node instanceof HashCollisionNode<E> hcn) {
-            return hcn.getData(0);
-        }
-        throw new NoSuchElementException();
+    /// Given a bitmap and a bit-position, returns the index
+    /// in the array.
+    ///
+    /// For example, if the bitmap is 0b1101 and
+    /// bit-position is 0b0100, then the index is 1.
+    ///
+    /// @param bitmap a bit-map
+    /// @param bitpos a bit-position
+    /// @return the array index
+    static int index(int bitmap, int bitpos) {
+        return Integer.bitCount(bitmap & (bitpos - 1));
     }
 
-    public static <E> E getLast(Node<E> node) {
-        while (node instanceof BitmapIndexedNode<E> bxn) {
-            int nodeMap = bxn.nodeMap();
-            int dataMap = bxn.dataMap();
-            if ((nodeMap | dataMap) == 0) {
-                break;
-            }
-            if (Integer.compareUnsigned(nodeMap, dataMap) > 0) {
-                node = node.getNode(node.nodeArity() - 1);
-            } else {
-                return node.getData(node.dataArity() - 1);
-            }
-        }
-        if (node instanceof HashCollisionNode<E> hcn) {
-            return hcn.getData(hcn.dataArity() - 1);
-        }
-        throw new NoSuchElementException();
+    protected final int dataArrayIndex(int dataIndex, int ENTRY_LENGTH) {
+        return dataIndex * ENTRY_LENGTH;
     }
 
-    static int mask(int dataHash, int shift) {
-        return (dataHash >>> shift) & BIT_PARTITION_MASK;
+    protected final int nodeArrayIndex(int nodeIndex, Object[] mx) {
+        return mx.length - 1 - nodeIndex;
     }
 
-    static <K> Node<K> mergeTwoDataEntriesIntoNode(IdentityObject owner,
-                                                   K k0, int keyHash0,
-                                                   K k1, int keyHash1,
-                                                   int shift) {
+    static int mask(int keyHash, int shift) {
+        return (keyHash >>> shift) & BIT_PARTITION_MASK;
+    }
+
+    boolean isNodeEmpty() {
+        return !hasData() && !hasNodes();
+    }
+
+    boolean hasMany(int ENTRY_LENGTH) {
+        return hasNodes() || dataArity(ENTRY_LENGTH) > 1;
+    }
+
+    Node mergeTwoDataEntriesIntoNode(@Nullable IdentityObject mutator,
+                                     Object[] entry0, int keyHash0,
+                                     Object[] entry1, int keyHash1,
+                                     int shift, int ENTRY_LENGTH) {
+
         if (shift >= HASH_CODE_LENGTH) {
-            Object[] entries = new Object[2];
-            entries[0] = k0;
-            entries[1] = k1;
-            return NodeFactory.newHashCollisionNode(owner, keyHash0, entries);
+            Object[] entries = new Object[ENTRY_LENGTH * 2];
+            System.arraycopy(entry0, 0, entries, 0, ENTRY_LENGTH);
+            System.arraycopy(entry1, 0, entries, ENTRY_LENGTH, ENTRY_LENGTH);
+            return ChampTrie.newHashCollisionNode(mutator, keyHash0, entries, ENTRY_LENGTH);
         }
 
         int mask0 = mask(keyHash0, shift);
@@ -149,196 +105,107 @@ public abstract class Node<D> {
             // both nodes fit on same level
             int dataMap = bitpos(mask0) | bitpos(mask1);
 
-            Object[] entries = new Object[2];
+            Object[] dst = new Object[ENTRY_LENGTH * 2];
             if (mask0 < mask1) {
-                entries[0] = k0;
-                entries[1] = k1;
+                System.arraycopy(entry0, 0, dst, 0, ENTRY_LENGTH);
+                System.arraycopy(entry1, 0, dst, ENTRY_LENGTH, ENTRY_LENGTH);
             } else {
-                entries[0] = k1;
-                entries[1] = k0;
+                System.arraycopy(entry1, 0, dst, 0, ENTRY_LENGTH);
+                System.arraycopy(entry0, 0, dst, ENTRY_LENGTH, ENTRY_LENGTH);
             }
-            return NodeFactory.newBitmapIndexedNode(owner, (0), dataMap, entries);
+            return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, dst, ENTRY_LENGTH);
         } else {
-            Node<K> node = mergeTwoDataEntriesIntoNode(owner,
-                    k0, keyHash0,
-                    k1, keyHash1,
-                    shift + BIT_PARTITION_SIZE);
+            Node node = mergeTwoDataEntriesIntoNode(mutator,
+                    entry0, keyHash0,
+                    entry1, keyHash1,
+                    shift + BIT_PARTITION_SIZE,
+                    ENTRY_LENGTH);
             // values fit on next level
 
             int nodeMap = bitpos(mask0);
-            return NodeFactory.newBitmapIndexedNode(owner, nodeMap, (0), new Object[]{node});
+            return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, (0), new Object[]{node}, ENTRY_LENGTH);
         }
     }
 
-    abstract int dataArity();
+    abstract int dataArity(int ENTRY_LENGTH);
+
+    abstract boolean hasDataArityOne();
 
     /// Checks if this trie is equivalent to the specified other trie.
     ///
-    /// @param other the other trie
+    /// @param other        the other trie
+    /// @param ENTRY_LENGTH
     /// @return true if equivalent
-    abstract boolean equivalent(Object other);
+    abstract boolean equivalent(Object other, int ENTRY_LENGTH);
 
-    /// Finds a data object in the CHAMP trie, that matches the provided data
-    /// object and data hash.
+    /// Finds an entry by a key.
     ///
-    /// @param data           the provided data object
-    /// @param dataHash       the hash code of the provided data
-    /// @param shift          the shift for this node
-    /// @param equalsFunction a function that tests data objects for equality
-    /// @return the found data, returns [#NO_DATA] if no data in the trie
-    /// matches the provided data.
-    abstract Object find(D data, int dataHash, int shift, BiPredicate<D, D> equalsFunction);
+    /// @param key          a key
+    /// @param keyHash      the hash code of the key
+    /// @param shift        the shift for this node
+    /// @param ENTRY_LENGTH
+    /// @return the entry, returns [#NO_DATA] if the entry is not present.
+    abstract Object findEntry(Object key, int keyHash, int shift, int ENTRY_LENGTH);
+
+    /// Finds a value by a key.
+    ///
+    /// @param key          a key
+    /// @param keyHash      the hash code of the key
+    /// @param shift        the shift for this node
+    /// @param ENTRY_LENGTH
+    /// @param DATA_INDEX
+    /// @return the value, returns [#NO_DATA] if the entry is not present.
+    abstract Object findData(Object key, int keyHash, int shift, int ENTRY_LENGTH, int DATA_INDEX);
 
 
-    @Nullable IdentityObject getOwner() {
+    public final Object[] getDataEntry(int index, int ENTRY_LENGTH) {
+        Object[] entry = new Object[ENTRY_LENGTH];
+        System.arraycopy(array, ENTRY_LENGTH * index, entry, 0, ENTRY_LENGTH);
+        return entry;
+    }
+
+    @SuppressWarnings("unchecked")
+    public final Object getKey(int index, int ENTRY_LENGTH) {
+        return (Object) array[index * ENTRY_LENGTH];
+    }
+
+
+    @Nullable IdentityObject getMutator() {
         return null;
     }
 
-    protected final int dataArrayIndex(int dataIndex, Object[] mx) {
-        return dataIndex;
+    final Node getNode(int index) {
+        return (Node) array[array.length - 1 - index];
     }
 
-    protected final int nodeArrayIndex(int nodeIndex, Object[] mx) {
-        return mx.length - 1 - nodeIndex;
+    public final Object[] getEntry(int index, int ENTRY_LENGTH) {
+        return Arrays.copyOfRange(array, index * ENTRY_LENGTH, index * ENTRY_LENGTH + ENTRY_LENGTH);
     }
 
-    @SuppressWarnings("unchecked")
-    final Node<D> getNode(int index) {
-        return (Node<D>) array[nodeArrayIndex(index, array)];
-    }
-
-    @SuppressWarnings("unchecked")
-    final D getData(int index) {
-        return (D) array[dataArrayIndex(index, array)];
+    public final Object getData(int index, int ENTRY_LENGTH, int DATA_INDEX) {
+        return array[index * ENTRY_LENGTH + DATA_INDEX];
     }
 
     abstract boolean hasData();
 
-    boolean isNodeEmpty() {
-        return !hasData() && !hasNodes();
-    }
-
-    boolean hasMany() {
-        return hasNodes() || dataArity() > 1;
-    }
-
-    abstract boolean hasDataArityOne();
-
     abstract boolean hasNodes();
 
     boolean isAllowedToUpdate(@Nullable IdentityObject y) {
-        IdentityObject x = getOwner();
+        IdentityObject x = getMutator();
         return x != null && x == y;
     }
 
     abstract int nodeArity();
 
-    /// Removes a data object from the trie.
-    ///
-    /// @param owner          A non-null value means, that this method may update
-    ///                       nodes that are marked with the same unique id,
-    ///                       and that this method may create new mutable nodes
-    ///                       with this unique id.
-    ///                       A null value means, that this method must not update
-    ///                       any node and may only create new persistent nodes.
-    /// @param data           the data to be removed
-    /// @param dataHash       the hash-code of the data object
-    /// @param shift          the shift of the current node
-    /// @param details        this method reports the changes that it performed
-    ///                       in this object
-    /// @param equalsFunction a function that tests data objects for equality
-    /// @return the updated trie
-    abstract Node<D> remove(@Nullable IdentityObject owner, D data,
-                            int dataHash, int shift,
-                            ChangeEvent<D> details,
-                            BiPredicate<D, D> equalsFunction);
+    abstract Node remove(@Nullable IdentityObject mutator, Object key,
+                         int keyHash, int shift, ChangeEvent details, int ENTRY_LENGTH);
 
-    /// Inserts or replaces a data object in the trie.
-    ///
-    /// @param owner          A non-null value means, that this method may update
-    ///                       nodes that are marked with the same unique id,
-    ///                       and that this method may create new mutable nodes
-    ///                       with this unique id.
-    ///                       A null value means, that this method must not update
-    ///                       any node and may only create new persistent nodes.
-    /// @param newData        the data to be inserted,
-    ///                       or to be used for merging if there is already
-    ///                       a matching data object in the trie
-    /// @param dataHash       the hash-code of the data object
-    /// @param shift          the shift of the current node
-    /// @param details        this method reports the changes that it performed
-    ///                       in this object
-    /// @param updateFunction only used if there is a matching data object
-    ///                       in the trie.
-    ///                       Given the existing data object (first argument) and
-    ///                       the new data object (second argument), yields a
-    ///                       new data object or returns either of the two.
-    ///                       In all cases, the update function must return
-    ///                       a data object that has the same data hash
-    ///                       as the existing data object.
-    /// @param equalsFunction a function that tests data objects for equality
-    /// @param hashFunction   a function that computes the hash-code for a data
-    ///                       object
-    /// @return the updated trie
-    abstract Node<D> put(@Nullable IdentityObject owner, D newData,
-                         int dataHash, int shift, ChangeEvent<D> details,
-                         BiFunction<D, D, D> updateFunction,
-                         BiPredicate<D, D> equalsFunction,
-                         ToIntFunction<D> hashFunction);
 
-    /// Inserts or replaces data elements from the specified other trie in this trie.
-    ///
-    /// @param owner
-    /// @param otherNode      a node with the same shift as this node from the other trie
-    /// @param shift          the shift of this node and the other node
-    /// @param bulkChange     updates the field [BulkChangeEvent#inBoth]
-    /// @param updateFunction the update function for data elements
-    /// @param equalsFunction the equals function for data elements
-    /// @param hashFunction   the hash function for data elements
-    /// @param details        the change event for single elements
-    /// @return the updated trie
-    protected abstract Node<D> putAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift,
-                                      BulkChangeEvent bulkChange,
-                                      BiFunction<D, D, D> updateFunction,
-                                      BiPredicate<D, D> equalsFunction,
-                                      ToIntFunction<D> hashFunction,
-                                      ChangeEvent<D> details);
-
-    /// Removes data elements in the specified other trie from this trie.
-    ///
-    /// @param owner
-    /// @param otherNode      a node with the same shift as this node from the other trie
-    /// @param shift          the shift of this node and the other node
-    /// @param bulkChange     updates the field [BulkChangeEvent#removed]
-    /// @param updateFunction the update function for data elements
-    /// @param equalsFunction the equals function for data elements
-    /// @param hashFunction   the hash function for data elements
-    /// @param details        the change event for single elements
-    /// @return the updated trie
-    protected abstract Node<D> removeAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift,
-                                         BulkChangeEvent bulkChange,
-                                         BiFunction<D, D, D> updateFunction,
-                                         BiPredicate<D, D> equalsFunction,
-                                         ToIntFunction<D> hashFunction,
-                                         ChangeEvent<D> details);
-
-    /// Retains data elements in this trie that are also in the other trie - removes the rest.
-    ///
-    /// @param owner
-    /// @param otherNode      a node with the same shift as this node from the other trie
-    /// @param shift          the shift of this node and the other node
-    /// @param bulkChange     updates the field [BulkChangeEvent#removed]
-    /// @param updateFunction the update function for data elements
-    /// @param equalsFunction the equals function for data elements
-    /// @param hashFunction   the hash function for data elements
-    /// @param details        the change event for single elements
-    /// @return the updated trie
-    protected abstract Node<D> retainAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift,
-                                         BulkChangeEvent bulkChange,
-                                         BiFunction<D, D, D> updateFunction,
-                                         BiPredicate<D, D> equalsFunction,
-                                         ToIntFunction<D> hashFunction,
-                                         ChangeEvent<D> details);
+    public abstract Node put(@Nullable IdentityObject mutator, Object key, Object[] entry,
+                             int keyHash, int shift, ChangeEvent details,
+                             BiFunction<Object[], Object[], Object[]> updateFunction,
+                             ToIntFunction<Object> hashFunction
+            , int ENTRY_LENGTH);
 
     /// Retains data elements in this trie for which the provided predicate returns true.
     ///
@@ -347,8 +214,14 @@ public abstract class Node<D> {
     /// @param shift      the shift of this node and the other node
     /// @param bulkChange updates the field [BulkChangeEvent#removed]
     /// @return the updated trie
-    protected abstract Node<D> filterAll(@Nullable IdentityObject owner, Predicate<? super D> predicate, int shift,
-                                         BulkChangeEvent bulkChange);
+    protected abstract Node removeIf(@Nullable IdentityObject owner,
+                                     Predicate<Object> predicate, int shift,
+                                     BulkChangeEvent bulkChange, int ENTRY_LENGTH);
 
-    protected abstract int calculateSize();
+    protected abstract Node putAll(@Nullable IdentityObject owner, Node otherNode, int shift,
+                                   BulkChangeEvent bulkChange,
+                                   ToIntFunction<Object> hashFunction,
+                                   ChangeEvent details, int ENTRY_LENGTH);
+
+    protected abstract int calculateSize(int ENTRY_LENGTH);
 }

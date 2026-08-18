@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.icollection.PersistentVectorSet;
+import org.jhotdraw8.icollection.PersistentVectorHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 
 import java.lang.reflect.Type;
@@ -27,7 +27,7 @@ public class NonNullSetStyleableKey<T> extends AbstractReadableStyleableKey<Pers
     /// @param type      the class of the type
     /// @param converter String converter for a list element
     public NonNullSetStyleableKey(String name, Type type, CssConverter<PersistentSequencedSet<T>> converter) {
-        super(name, type, converter, PersistentVectorSet.of());
+        super(name, type, converter, PersistentVectorHashSet.of());
     }
 
     /// Creates a new instance with the specified name, mask and default value.

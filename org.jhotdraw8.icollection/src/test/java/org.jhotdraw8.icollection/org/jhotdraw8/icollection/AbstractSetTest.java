@@ -89,6 +89,9 @@ public abstract class AbstractSetTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void addNullContainsNullShouldReturnTrue(SetData data) throws Exception {
+        if (!supportsNullKeys()) {
+            return;
+        }
         Set<Key> instance = newInstance();
         assertFalse(instance.contains(null));
         var expected = new LinkedHashSet<Key>();
@@ -101,6 +104,9 @@ public abstract class AbstractSetTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void addAllNullContainsNullShouldReturnTrue(SetData data) throws Exception {
+        if (!supportsNullKeys()) {
+            return;
+        }
         Set<Key> instance = newInstance();
         assertFalse(instance.contains(null));
         var expected = new LinkedHashSet<Key>();
@@ -214,6 +220,7 @@ public abstract class AbstractSetTest {
     public void addWithNewElementShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
+        assertEqualSet(expected, instance);
         for (Key e : data.c) {
             assertTrue(instance.add(e));
             expected.add(e);
@@ -292,7 +299,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void hashCodeShouldYieldExpectedValue(SetData data) {
+    public void hashCodeShouldYieldExpectedValueAfterRetainAll(SetData data) {
         Set<Key> instance = newInstance(data.a());
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         assertEquals(expected.hashCode(), instance.hashCode());

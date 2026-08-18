@@ -443,5 +443,4 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         assertTrue(instance.spliterator().hasCharacteristics(Spliterator.ORDERED), "spliterator should be ordered");
         assertTrue(instance.reversed().spliterator().hasCharacteristics(Spliterator.ORDERED), "spliterator should be ordered");
     }
-
 }

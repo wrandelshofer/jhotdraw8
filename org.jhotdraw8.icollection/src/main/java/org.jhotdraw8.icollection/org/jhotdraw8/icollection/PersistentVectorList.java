@@ -21,6 +21,7 @@ import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.RandomAccess;
 
 /// Implements the [PersistentList] interface using a finger tree.
 ///
@@ -53,7 +54,7 @@ import java.util.Objects;
 /// [Apache License 2.0](https://github.com/scala/scala3/blob/18df09c05fa48fbb5bf5cd4b3728e9b7a0b3f6db/LICENSE)
 ///
 /// @param <E> the element type
-public abstract class PersistentVectorList<E> implements PersistentList<E>, Serializable {
+public abstract class PersistentVectorList<E> implements PersistentList<E>, Serializable, RandomAccess {
     @Serial
     private static final long serialVersionUID = 0L;
 

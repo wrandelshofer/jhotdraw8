@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ScalaTreeSeqMapJmh {
-    @Param({"10", "100", "1000", "10000", "100000", "1000000"})
+    @Param({"10", "1000", "100000"})
     private int size;
 
     @Param({"-65"})
@@ -121,7 +121,7 @@ public class ScalaTreeSeqMapJmh {
     }
 
     @Benchmark
-    public TreeSeqMap<Key, Boolean> mRemoveOneByOne() {
+    public TreeSeqMap<Key, Boolean> mRemove() {
         var map = mapA;
         for (var e : data.listA) {
             map = map.removed(e);

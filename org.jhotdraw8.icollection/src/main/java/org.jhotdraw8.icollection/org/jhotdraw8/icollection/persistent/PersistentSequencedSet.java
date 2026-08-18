@@ -91,4 +91,5 @@ public interface PersistentSequencedSet<E> extends PersistentSet<E>, ReadableSeq
         }
         return this.<E>cleared().addingAll(readableReversed());
     }
+
 }

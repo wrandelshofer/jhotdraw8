@@ -18,6 +18,7 @@ import java.util.AbstractList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.RandomAccess;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -53,7 +54,7 @@ import java.util.stream.Stream;
 /// [vavr MIT-License](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE)
 ///
 /// @param <E> the element type
-public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadableList<E>, List<E>, Cloneable {
+public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadableList<E>, List<E>, Cloneable, RandomAccess {
     @Serial
     private static final long serialVersionUID = 0L;
 

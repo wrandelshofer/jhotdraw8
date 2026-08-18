@@ -1,6 +1,7 @@
 package org.jhotdraw8.icollection.jmh;
 
 import org.jhotdraw8.icollection.alt.PersistentBMTrieSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -63,37 +64,36 @@ public class PersistentBMTrieSetJmh {
         setAA = PersistentBMTrieSet.copyOf(data.listA);
     }
 
-    /*
-        @Benchmark
-        public SimpleImmutableSequencedSet<Key> mCopyOf() {
-            SimpleImmutableSequencedSet<Key> set = SimpleImmutableSequencedSet.copyOf(data.listA);
-            assert set.size() == data.listA.size();
-            return set;
-        }
-
-
-        @Benchmark
-        public SimpleImmutableSequencedSet<Key> mCopyOnyByOne() {
-            SimpleImmutableSequencedSet<Key> set = SimpleImmutableSequencedSet.of();
-            for (Key key : data.listA) {
-                set = set.add(key);
-            }
-            assert set.size() == data.listA.size();
-            return set;
-        }
-
-        @Benchmark
-        public SimpleImmutableSequencedSet<Key> mRemoveOneByOne() {
-            SimpleImmutableSequencedSet<Key> set = setA;
-            for (Key key : data.listA) {
-                set = set.remove(key);
-            }
-            assert set.isEmpty();
-            return set;
-        }
-    */
     @Benchmark
-    public PersistentBMTrieSet<Key> mRemoveAllFromDifferentType() {
+    public PersistentSet<Key> mCopyOf() {
+        PersistentSet<Key> set = PersistentBMTrieSet.copyOf(data.listA);
+        assert set.size() == data.listA.size();
+        return set;
+    }
+
+
+    @Benchmark
+    public PersistentSet<Key> mAdd() {
+        PersistentBMTrieSet<Key> set = PersistentBMTrieSet.of();
+        for (Key key : data.listA) {
+            set = set.adding(key);
+        }
+        assert set.size() == data.listA.size();
+        return set;
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mRemove() {
+        PersistentSet<Key> set = setA;
+        for (Key key : data.listA) {
+            set = set.removing(key);
+        }
+        assert set.isEmpty();
+        return set;
+    }
+
+    @Benchmark
+    public PersistentBMTrieSet<Key> mRemoveAll() {
         PersistentBMTrieSet<Key> set = setA;
         PersistentBMTrieSet<Key> updated = set.removingAll(data.setA);
         assert updated.isEmpty();
@@ -101,7 +101,7 @@ public class PersistentBMTrieSetJmh {
     }
 
     @Benchmark
-    public PersistentBMTrieSet<Key> mRemoveAllFromSameType() {
+    public PersistentBMTrieSet<Key> mRemoveAllSameType() {
         PersistentBMTrieSet<Key> set = setA;
         PersistentBMTrieSet<Key> updated = set.removingAll(setAA);
         assert updated.isEmpty();
@@ -110,7 +110,7 @@ public class PersistentBMTrieSetJmh {
 
 
     @Benchmark
-    public PersistentBMTrieSet<Key> mRetainAllFromDifferentTypeAllRetained() {
+    public PersistentBMTrieSet<Key> mRetainAllAllRetained() {
         PersistentBMTrieSet<Key> set = setA;
         PersistentBMTrieSet<Key> updated = set.retainingAll(data.setA);
         assert updated == setA;
@@ -118,30 +118,14 @@ public class PersistentBMTrieSetJmh {
     }
 
     @Benchmark
-    public PersistentBMTrieSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
+    public PersistentBMTrieSet<Key> mRetainAllNoneRetained() {
         PersistentBMTrieSet<Key> set = setA;
         PersistentBMTrieSet<Key> updated = set.retainingAll(data.setB);
         assert updated.isEmpty();
         return updated;
     }
 
-    @Benchmark
-    public PersistentBMTrieSet<Key> mRetainAllFromSameTypeAllRetained() {
-        PersistentBMTrieSet<Key> set = setA;
-        PersistentBMTrieSet<Key> updated = set.retainingAll(setAA);
-        assert updated == setA;
-        return updated;
-    }
 
-
-    @Benchmark
-    public PersistentBMTrieSet<Key> mRetainAllFromSameTypeNoneRetained() {
-        PersistentBMTrieSet<Key> set = setA;
-        PersistentBMTrieSet<Key> updated = set.retainingAll(setB);
-        assert updated.isEmpty();
-        return updated;
-    }
-/*
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -152,31 +136,30 @@ public class PersistentBMTrieSetJmh {
     }
 
     @Benchmark
-    public SimpleImmutableSequencedSet<Key> mRemoveThenAdd() {
-        Key key = data.nextKeyInA();
-        return setA.remove(key).add(key);
-    }
-
-    @Benchmark
-    public Key mHead() {
+    public Key mGetFirst() {
         return setA.iterator().next();
     }
 
     @Benchmark
-    public SimpleImmutableSequencedSet<Key> mTail() {
-        return setA.remove(setA.iterator().next());
+    public PersistentBMTrieSet<Key> mRemoveFirst() {
+        return setA.removing(setA.iterator().next());
     }
 
     @Benchmark
     public boolean mContainsFound() {
-        Key key = data.nextKeyInA();
-        return setA.contains(key);
+        boolean found = true;
+        for (Key k : data.listA) {
+            found = setA.contains(k) & found;//must be long-circuit and operator
+        }
+        return found;
     }
 
     @Benchmark
     public boolean mContainsNotFound() {
-        Key key = data.nextKeyInB();
-        return setA.contains(key);
+        boolean found = true;
+        for (Key k : data.listB) {
+            found = setA.contains(k) & found;//must be long-circuit and operator
+        }
+        return found;
     }
-*/
 }

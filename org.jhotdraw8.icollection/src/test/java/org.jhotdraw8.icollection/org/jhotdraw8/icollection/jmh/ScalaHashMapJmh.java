@@ -132,7 +132,7 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @SuppressWarnings("unchecked")
 public class ScalaHashMapJmh {
-    @Param({"10", "1000", "1000000"})
+    @Param({"10", "1000", "100000"})
     private int size;
 
     @Param({"-65"})

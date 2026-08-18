@@ -149,4 +149,18 @@ public class ArrayHelper {
         dst[index] = value;
         return dst;
     }
+
+    /// Copies 'src' and sets 'entry' at position 'index'.
+    ///
+    /// @param src          an array
+    /// @param index        an index
+    /// @param entry        an entry
+    /// @param ENTRY_LENGTH the length of the entry
+    /// @param <T>          the array type
+    /// @return a new array
+    public static <T> T[] copySet(T[] src, int index, T[] entry, int ENTRY_LENGTH) {
+        T[] dst = Arrays.copyOf(src, src.length);
+        System.arraycopy(entry, 0, dst, index, ENTRY_LENGTH);
+        return dst;
+    }
 }

@@ -5,12 +5,10 @@ import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
-
 /// This Builder allows to efficiently build a [PersistentHashSet] without
 /// generating intermediate editions.
 public class PersistentHashSetBuilder<E> implements SetBuilder<E, PersistentHashSet<E>> {
-    private BitmapIndexedNode<E> hashSet = BitmapIndexedNode.emptyNode();
+    private BitmapIndexedNode hashSet = BitmapIndexedNode.emptyNode();
     private IdentityObject owner;
     private int size;
 
@@ -18,17 +16,18 @@ public class PersistentHashSetBuilder<E> implements SetBuilder<E, PersistentHash
         this(new IdentityObject());
     }
 
-    public PersistentHashSetBuilder(IdentityObject owner) {
+    PersistentHashSetBuilder(IdentityObject owner) {
         this.owner = owner;
     }
 
     @Override
     public PersistentHashSetBuilder<E> add(@Nullable E elem) {
-        var details = new ChangeEvent<E>();
-        hashSet = hashSet.put(owner, elem,
+        var details = new ChangeEvent();
+        hashSet = hashSet.put(owner, elem, new Object[]{elem},
                 PersistentHashSet.keyHash(elem), 0, details,
-                PersistentHashSet::insertOrFail,
-                Objects::equals, PersistentHashSet::keyHash);
+                PersistentHashSet::keepOldEntry,
+                PersistentHashSet::keyHash,
+                PersistentHashSet.ENTRY_LENGTH);
         size++;
         return this;
     }

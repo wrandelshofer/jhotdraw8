@@ -6,7 +6,7 @@
 package org.jhotdraw8.xml.converter;
 
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.icollection.PersistentVectorSet;
+import org.jhotdraw8.icollection.PersistentVectorHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;
@@ -33,7 +33,7 @@ public class SetXmlConverterTest {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         SetXmlConverter<Double> instance = new SetXmlConverter<>(new DoubleXmlConverter(false), null);
-        instance.toString(out, idFactory, value == null ? null : PersistentVectorSet.copyOf(value));
+        instance.toString(out, idFactory, value == null ? null : PersistentVectorHashSet.copyOf(value));
         String actual = out.toString();
         Assertions.assertEquals(expected, actual);
     }

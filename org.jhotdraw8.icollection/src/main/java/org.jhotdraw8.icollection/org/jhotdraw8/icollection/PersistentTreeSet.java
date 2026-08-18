@@ -41,6 +41,20 @@ public class PersistentTreeSet<E> implements PersistentNavigableSet<E>, Serializ
     @SuppressWarnings({"serial", "RedundantSuppression"})//Conditionally serializable
     final Comparator<E> comparator;
 
+    @Override
+    public PersistentTreeSet<E> reversed() {
+        return (PersistentTreeSet<E>) PersistentNavigableSet.super.reversed();
+    }
+
+    @Override
+    public PersistentTreeSet<E> removingFirst() {
+        return (PersistentTreeSet<E>) PersistentNavigableSet.super.removingFirst();
+    }
+
+    @Override
+    public PersistentTreeSet<E> removingLast() {
+        return (PersistentTreeSet<E>) PersistentNavigableSet.super.removingLast();
+    }
 
     private PersistentTreeSet<E> newInstance(Comparator<E> comparator, RedBlackTree<E, Void> root) {
         return new PersistentTreeSet<>(comparator, root);

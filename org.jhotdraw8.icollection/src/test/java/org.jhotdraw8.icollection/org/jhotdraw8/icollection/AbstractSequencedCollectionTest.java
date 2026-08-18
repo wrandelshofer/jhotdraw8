@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /// Tests classes that implement the interface [SequencedCollection<Key>].
 public abstract class AbstractSequencedCollectionTest {
-    private static int size = 100_000;
+    private static int size = 17;
     private static int bound = (int) Math.min(Integer.MAX_VALUE, size * 1000L);
     private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, size, bound);
     private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, size, bound);

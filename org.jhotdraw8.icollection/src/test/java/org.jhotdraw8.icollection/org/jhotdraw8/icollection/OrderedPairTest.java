@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.impl.champ.OrderedPair;
+import org.jhotdraw8.icollection.impl.champset.OrderedPair;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

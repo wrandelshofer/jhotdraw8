@@ -14,6 +14,7 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /// # JMH version: 1.37
@@ -119,26 +120,26 @@ public class PersistentVectorListJmh {
         index = Math.min(listA.size() - 1, BigInteger.valueOf(listA.size() / 2).nextProbablePrime().intValue());
     }
 
-    /*
-        @Benchmark
-        public PersistentVectorList<Key> mCopyOf() {
-            return PersistentVectorList.copyOf(data.setA);
-        }
+
+    @Benchmark
+    public PersistentVectorList<Key> mCopyOf() {
+        return PersistentVectorList.copyOf(data.setA);
+    }
 
     @Benchmark
     public PersistentVectorList<Key> mAddAll() {
         return listA.addingAll(data.listB);
     }
 
-        @Benchmark
-        public PersistentVectorList<Key> mAddAllSameType() {
-            return listA.addingAll(listB);
-        }
+    @Benchmark
+    public PersistentVectorList<Key> mAddAllSameType() {
+        return listA.addingAll(listB);
+    }
 
-        @Benchmark
-        public PersistentVectorList<Key> mOfArray() {
-            return PersistentVectorList.<Key>of(data.arrayA);
-        }
+    @Benchmark
+    public PersistentVectorList<Key> mOfArray() {
+        return PersistentVectorList.<Key>of(data.arrayA);
+    }
 
     @Benchmark
     public PersistentVectorList<Key> mAddOneByOne() {
@@ -160,7 +161,7 @@ public class PersistentVectorListJmh {
     }
 
     @Benchmark
-    public PersistentVectorList<Key> mRemoveAtOneByOne() {
+    public PersistentVectorList<Key> mRemoveAt() {
         var l = listA;
         for (var e : data.listA) {
             l = l.removingAt(l.size() / 2);
@@ -168,112 +169,87 @@ public class PersistentVectorListJmh {
         if (!l.isEmpty()) throw new AssertionError("map: " + l);
         return l;
     }
-*/
+
     @Benchmark
-    public PersistentVectorList<Key> mRemoveFirstOneByOne() {
+    public PersistentVectorList<Key> mRemoveFirst() {
         var l = listA;
         while (!l.isEmpty()) {
             l = l.removingFirst();
         }
         return l;
     }
-/*
+
     @Benchmark
-    public PersistentVectorList<Key> mRemoveLastOneByOne() {
+    public PersistentVectorList<Key> mRemoveLast() {
         var l = listA;
         while (!l.isEmpty()) {
             l = l.removingLast();
         }
         return l;
     }
-/*
 
-        @Benchmark
-        public PersistentVectorList<Key> mRemoveAll() {
-            PersistentVectorList<Key> l = listA;
-            return l.removingAll(data.setA);
+
+    @Benchmark
+    public PersistentVectorList<Key> mRemoveAll() {
+        PersistentVectorList<Key> l = listA;
+        return l.removingAll(data.setA);
+    }
+
+
+    @Benchmark
+    public int mIterate() {
+        int sum = 0;
+        for (Iterator<Key> i = listA.iterator(); i.hasNext(); ) {
+            sum += i.next().value;
         }
+        return sum;
+    }
 
-
-        @Benchmark
-        public int mIterate() {
-            int sum = 0;
-            for (Iterator<Key> i = listA.iterator(); i.hasNext(); ) {
-                sum += i.next().value;
-            }
-            return sum;
+    @Benchmark
+    public int mListIterate() {
+        int sum = 0;
+        for (Iterator<Key> i = listA.listIterator(); i.hasNext(); ) {
+            sum += i.next().value;
         }
+        return sum;
+    }
 
-        @Benchmark
-        public int mListIterate() {
-            int sum = 0;
-            for (Iterator<Key> i = listA.listIterator(); i.hasNext(); ) {
-                sum += i.next().value;
-            }
-            return sum;
+    @Benchmark
+    public int mReversedIterate() {
+        int sum = 0;
+        for (int i = listA.size() - 1; i >= 0; i--) {
+            sum += listA.get(i).value;
         }
-
-        @Benchmark
-        public int mReversedIterate() {
-            int sum = 0;
-            for (int i = listA.size() - 1; i >= 0; i--) {
-                sum += listA.get(i).value;
-            }
-            return sum;
-        }
-
-        @Benchmark
-        public PersistentVectorList<Key> mRemoveFirst() {
-            return listA.removingFirst();
-        }
-
-        @Benchmark
-        public PersistentVectorList<Key> mAddLast() {
-            Key key = data.nextKeyInB();
-            return (listA).adding(key);
-        }
-
-        @Benchmark
-        public PersistentVectorList<Key> mAddFirst() {
-            Key key = data.nextKeyInB();
-            return (listA).addingFirst(key);
-        }
+        return sum;
+    }
 
 
-        @Benchmark
-        public PersistentVectorList<Key> mRemoveLast() {
-            return listA.removingAt(listA.size() - 1);
-        }
+    @Benchmark
+    public Key mGet() {
+        int offset = data.nextIndexInA();
+        return listA.get(offset);
+    }
 
-        @Benchmark
-        public PersistentVectorList<Key> mRemoveAtIndex() {
-            return listA.removingAt(index);
-        }
+    @Benchmark
+    public boolean mContainsNotFound() {
+        Key key = data.nextKeyInB();
+        return listA.contains(key);
+    }
 
-        @Benchmark
-        public Key mGet() {
-            int offset = data.nextIndexInA();
-            return listA.get(offset);
-        }
+    @Benchmark
+    public Key mGetFirst() {
+        return listA.get(0);
+    }
 
-        @Benchmark
-        public boolean mContainsNotFound() {
-            Key key = data.nextKeyInB();
-            return listA.contains(key);
-        }
-        @Benchmark
-        public Key mGetFirst() {
-            return listA.get(0);
-        }
+    @Benchmark
+    public PersistentVectorList<Key> mSet() {
+        int offset = data.nextIndexInA();
+        Key key = data.nextKeyInB();
+        return listA.settingAt(offset, key);
+    }
 
-        @Benchmark
-        public PersistentVectorList<Key> mSet() {
-            int offset = data.nextIndexInA();
-            Key key = data.nextKeyInB();
-            return listA.settingAt(offset, key);
-        }
     @Benchmark
     public int mIndexOfLast() {
         return listA.indexOf(listA.getLast());
-    }*/
+    }
 }
