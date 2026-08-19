@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.OldPersistentLinkedHashSet;
+import org.jhotdraw8.icollection.PersistentLinkedHashSetWithLinkedElement;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -73,16 +73,16 @@ public class OldPersistentLinkedHashSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private OldPersistentLinkedHashSet<Key> setA;
-    private OldPersistentLinkedHashSet<Key> setAA;
-    private OldPersistentLinkedHashSet<Key> setB;
+    private PersistentLinkedHashSetWithLinkedElement<Key> setA;
+    private PersistentLinkedHashSetWithLinkedElement<Key> setAA;
+    private PersistentLinkedHashSetWithLinkedElement<Key> setB;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = OldPersistentLinkedHashSet.copyOf(data.setA);
-        setB = OldPersistentLinkedHashSet.copyOf(data.listB);
-        setAA = OldPersistentLinkedHashSet.copyOf(data.listA);
+        setA = PersistentLinkedHashSetWithLinkedElement.copyOf(data.setA);
+        setB = PersistentLinkedHashSetWithLinkedElement.copyOf(data.listB);
+        setAA = PersistentLinkedHashSetWithLinkedElement.copyOf(data.listA);
     }
 
     /*
@@ -163,7 +163,7 @@ public class OldPersistentLinkedHashSetJmh {
         }
     */
     @Benchmark
-    public OldPersistentLinkedHashSet<Key> mRemoveFirst() {
+    public PersistentLinkedHashSetWithLinkedElement<Key> mRemoveFirst() {
         var s = setA;
         for (int i = 0, n = setA.size(); i < n; i++) {
             s = s.removingFirst();

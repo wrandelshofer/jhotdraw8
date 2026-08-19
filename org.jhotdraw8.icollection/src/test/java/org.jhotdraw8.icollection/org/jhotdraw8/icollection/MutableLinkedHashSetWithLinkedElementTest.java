@@ -11,53 +11,53 @@ import org.jhotdraw8.icollection.readable.ReadableSet;
 import java.util.SequencedSet;
 import java.util.Set;
 
-public class OldMutableLinkedHashSetTest extends AbstractSequencedSetTest {
+public class MutableLinkedHashSetWithLinkedElementTest extends AbstractSequencedSetTest {
 
 
     @Override
     protected <E> SequencedSet<E> newInstance() {
-        return new OldMutableLinkedHashSet<>();
+        return new MutableLinkedHashSetWithLinkedElement<>();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(int numElements, float loadFactor) {
-        return new OldMutableLinkedHashSet<>();
+        return new MutableLinkedHashSetWithLinkedElement<>();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(Set<E> m) {
-        return new OldMutableLinkedHashSet<>(m);
+        return new MutableLinkedHashSetWithLinkedElement<>(m);
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(ReadableSet<E> m) {
-        return new OldMutableLinkedHashSet<>(m);
+        return new MutableLinkedHashSetWithLinkedElement<>(m);
     }
 
     @Override
     protected <E> SequencedSet<E> toClonedInstance(Set<E> m) {
-        return ((OldMutableLinkedHashSet<E>) m).clone();
+        return ((MutableLinkedHashSetWithLinkedElement<E>) m).clone();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(SequencedSet<E> m) {
-        return new OldMutableLinkedHashSet<>(m);
+        return new MutableLinkedHashSetWithLinkedElement<>(m);
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(ReadableSequencedSet<E> m) {
-        return new OldMutableLinkedHashSet<>(m);
+        return new MutableLinkedHashSetWithLinkedElement<>(m);
     }
 
 
     @Override
     protected <E> SequencedSet<E> toClonedInstance(SequencedSet<E> m) {
-        return ((OldMutableLinkedHashSet<E>) m).clone();
+        return ((MutableLinkedHashSetWithLinkedElement<E>) m).clone();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(Iterable<E> m) {
-        return new OldMutableLinkedHashSet<>(m);
+        return new MutableLinkedHashSetWithLinkedElement<>(m);
     }
 
     public void addingLastWithContainedElementShouldMoveElementToLast(SetData data) throws Exception {

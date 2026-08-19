@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.alt.impl.champset.BitmapIndexedNode;
-import org.jhotdraw8.icollection.alt.impl.champset.ChampIterator;
-import org.jhotdraw8.icollection.alt.impl.champset.ChampSpliterator;
-import org.jhotdraw8.icollection.alt.impl.champset.ChangeEvent;
-import org.jhotdraw8.icollection.alt.impl.champset.Node;
+import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.icollection.impl.champ.ChampIterator;
+import org.jhotdraw8.icollection.impl.champ.ChampSpliterator;
+import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableSet;
@@ -78,17 +77,19 @@ import java.util.Spliterator;
 ///
 /// @param <E> the element type
 @SuppressWarnings("exports")
-public class OldPersistentHashSet<E> implements PersistentSet<E>, Serializable {
+public class PersistentHashSetWithEntryLength<E> implements PersistentSet<E>, Serializable {
     /// We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
-    static final int SALT = 0;// new Random().nextInt();
-    private static final OldPersistentHashSet<?> EMPTY = new OldPersistentHashSet<>(BitmapIndexedNode.emptyNode(), 0);
+    static final int SALT = 0;//new Random().nextInt();
+    private static final PersistentHashSetWithEntryLength<?> EMPTY = new PersistentHashSetWithEntryLength<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
     @SuppressWarnings("TransientFieldNotInitialized")
-    final transient BitmapIndexedNode<E> root;
+    final transient BitmapIndexedNode root;
     final int size;
+    static final int ENTRY_LENGTH = 1;
+    static final int KEY_DATA_INDEX = 0;
 
-    OldPersistentHashSet(BitmapIndexedNode<E> root, int size) {
+    PersistentHashSetWithEntryLength(BitmapIndexedNode root, int size) {
         this.root = root;
         this.size = size;
     }
@@ -100,8 +101,8 @@ public class OldPersistentHashSet<E> implements PersistentSet<E>, Serializable {
     /// @param <E> the element type
     /// @return a persistent set of the provided elements
     @SuppressWarnings("unchecked")
-    public static <E> OldPersistentHashSet<E> copyOf(Iterable<? extends E> c) {
-        return OldPersistentHashSet.<E>of().addingAll(c);
+    public static <E> PersistentHashSetWithEntryLength<E> copyOf(Iterable<? extends E> c) {
+        return PersistentHashSetWithEntryLength.<E>of().addingAll(c);
     }
 
     /// Returns an empty persistent set.
@@ -109,8 +110,8 @@ public class OldPersistentHashSet<E> implements PersistentSet<E>, Serializable {
     /// @param <E> the element type
     /// @return an empty persistent set
     @SuppressWarnings("unchecked")
-    public static <E> OldPersistentHashSet<E> of() {
-        return ((OldPersistentHashSet<E>) OldPersistentHashSet.EMPTY);
+    public static <E> PersistentHashSetWithEntryLength<E> of() {
+        return ((PersistentHashSetWithEntryLength<E>) PersistentHashSetWithEntryLength.EMPTY);
     }
 
     /// Returns a persistent set that contains the provided elements.
@@ -120,42 +121,41 @@ public class OldPersistentHashSet<E> implements PersistentSet<E>, Serializable {
     /// @return a persistent set of the provided elements
     @SuppressWarnings({"varargs"})
     @SafeVarargs
-    public static <E> OldPersistentHashSet<E> of(E @Nullable ... elements) {
+    public static <E> PersistentHashSetWithEntryLength<E> of(E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
-        return new OldPersistentHashSetBuilder<E>().addArray(elements).build();
+        return new PersistentHashSetBuilderWithEntryLength<E>().addArray(elements).build();
     }
 
-    /// Update function for a set: we always keep the old element.
+    /// Update function for a set: we always keep the old entry.
     ///
-    /// @param oldElement the old element
-    /// @param newElement the new element
-    /// @param <E>        the element type
-    /// @return always returns the old element
-    static <E> E keepOldElement(E oldElement, E newElement) {
+    /// @param oldElement the old entry
+    /// @param newElement the new entry
+    /// @return always returns the old entry
+    static Object[] keepOldEntry(Object[] oldElement, Object[] newElement) {
         return oldElement;
     }
 
-    static int keyHash(@Nullable Object e) {
+    static int keyHash(Object e) {
         return SALT ^ Objects.hashCode(e);
     }
 
     @Override
-    public OldPersistentHashSet<E> adding(@Nullable E element) {
+    public PersistentHashSetWithEntryLength<E> adding(@Nullable E element) {
         int keyHash = keyHash(element);
-        ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = root.put(null, element, keyHash, 0, details,
-                OldPersistentHashSet::keepOldElement, Objects::equals, OldPersistentHashSet::keyHash);
+        ChangeEvent details = new ChangeEvent();
+        BitmapIndexedNode newRootNode = root.put(null, element, new Object[]{element}, keyHash, 0, details,
+                PersistentHashSetWithEntryLength::keepOldEntry, PersistentHashSetWithEntryLength::keyHash, ENTRY_LENGTH);
         if (details.isModified()) {
-            return new OldPersistentHashSet<>(newRootNode, size + 1);
+            return new PersistentHashSetWithEntryLength<>(newRootNode, size + 1);
         }
         return this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public OldPersistentHashSet<E> addingAll(Iterable<? extends E> c) {
-        if (isEmpty() && c instanceof OldPersistentHashSet<? extends E> s) {
-            return (OldPersistentHashSet<E>) s;
+    public PersistentHashSetWithEntryLength<E> addingAll(Iterable<? extends E> c) {
+        if (isEmpty() && c instanceof PersistentHashSetWithEntryLength<? extends E> s) {
+            return (PersistentHashSetWithEntryLength<E>) s;
         }
         var m = toMutable();
         return m.addAll(c) ? m.toPersistent() : this;
@@ -163,14 +163,14 @@ public class OldPersistentHashSet<E> implements PersistentSet<E>, Serializable {
 
     /// {@inheritDoc}
     @Override
-    public OldPersistentHashSet<E> cleared() {
+    public PersistentHashSetWithEntryLength<E> cleared() {
         return of();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return root.find((E) o, keyHash(o), 0, Objects::equals) != Node.NO_DATA;
+        return root.contains((E) o, keyHash(o), 0, ENTRY_LENGTH);
     }
 
     @Override
@@ -181,8 +181,8 @@ public class OldPersistentHashSet<E> implements PersistentSet<E>, Serializable {
         if (other == null) {
             return false;
         }
-        if (other instanceof OldPersistentHashSet<?> that) {
-            return size == that.size && root.equivalent(that.root);
+        if (other instanceof PersistentHashSetWithEntryLength<?> that) {
+            return size == that.size && root.equivalent(that.root, ENTRY_LENGTH);
         }
         return ReadableSet.setEquals(this, other);
     }
@@ -194,7 +194,7 @@ public class OldPersistentHashSet<E> implements PersistentSet<E>, Serializable {
 
     @Override
     public Iterator<E> iterator() {
-        return new ChampIterator<>(root, null);
+        return new ChampIterator<>(root, null, ENTRY_LENGTH, KEY_DATA_INDEX);
     }
 
     @Override
@@ -203,19 +203,19 @@ public class OldPersistentHashSet<E> implements PersistentSet<E>, Serializable {
     }
 
     @Override
-    public OldPersistentHashSet<E> removing(E key) {
+    public PersistentHashSetWithEntryLength<E> removing(E key) {
         int keyHash = keyHash(key);
-        ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = root.remove(null, key, keyHash, 0, details, Objects::equals);
+        ChangeEvent details = new ChangeEvent();
+        BitmapIndexedNode newRootNode = root.remove(null, key, keyHash, 0, details, ENTRY_LENGTH);
         if (details.isModified()) {
-            return size == 1 ? OldPersistentHashSet.of() : new OldPersistentHashSet<>(newRootNode, size - 1);
+            return size == 1 ? PersistentHashSetWithEntryLength.of() : new PersistentHashSetWithEntryLength<>(newRootNode, size - 1);
         }
         return this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public OldPersistentHashSet<E> removingAll(Iterable<?> c) {
+    public PersistentHashSetWithEntryLength<E> removingAll(Iterable<?> c) {
         var m = toMutable();
         return m.removeAll(c) ? m.toPersistent() : this;
     }
@@ -223,7 +223,7 @@ public class OldPersistentHashSet<E> implements PersistentSet<E>, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
-    public OldPersistentHashSet<E> retainingAll(Iterable<?> c) {
+    public PersistentHashSetWithEntryLength<E> retainingAll(Iterable<?> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toPersistent() : this;
     }
@@ -234,12 +234,13 @@ public class OldPersistentHashSet<E> implements PersistentSet<E>, Serializable {
     }
 
     public Spliterator<E> spliterator() {
-        return new ChampSpliterator<>(root, null, size, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT);
+        return new ChampSpliterator<>(root, null, size, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT,
+                ENTRY_LENGTH, KEY_DATA_INDEX);
     }
 
     @Override
-    public OldMutableHashSet<E> toMutable() {
-        return new OldMutableHashSet<>(this);
+    public MutableHashSetWithEntryLength<E> toMutable() {
+        return new MutableHashSetWithEntryLength<>(this);
     }
 
     @Override
@@ -263,7 +264,7 @@ public class OldPersistentHashSet<E> implements PersistentSet<E>, Serializable {
         @Serial
         @Override
         protected Object readResolve() {
-            return OldPersistentHashSet.copyOf(deserializedElements);
+            return PersistentHashSetWithEntryLength.copyOf(deserializedElements);
         }
     }
 }

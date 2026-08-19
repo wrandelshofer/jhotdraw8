@@ -17,6 +17,25 @@ public class ArrayHelper {
     private ArrayHelper() {
     }
 
+    public static boolean contains(Object[] a, Object element) {
+        for (Object o : a) {
+            if (Objects.equals(o, element)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int indexOf(Object[] a, Object element) {
+        for (int i = 0; i < a.length; i++) {
+            Object o = a[i];
+            if (Objects.equals(o, element)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /// Checks if the elements in two sub-arrays are equal to one another
     /// in the same order.
     ///

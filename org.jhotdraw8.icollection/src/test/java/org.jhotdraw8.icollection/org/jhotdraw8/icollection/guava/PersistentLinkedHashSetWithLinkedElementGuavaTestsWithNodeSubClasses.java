@@ -13,7 +13,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.icollection.OldPersistentLinkedHashSet;
+import org.jhotdraw8.icollection.PersistentLinkedHashSetWithLinkedElement;
 import org.jhotdraw8.icollection.facade.MutableSetFacade;
 
 import java.lang.reflect.Method;
@@ -21,15 +21,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-/// Tests [OldPersistentLinkedHashSet] with the Guava test suite.
-public class OldPersistentLinkedHashSetGuavaTests {
+/// Tests [PersistentLinkedHashSetWithLinkedElement] with the Guava test suite.
+public class PersistentLinkedHashSetWithLinkedElementGuavaTestsWithNodeSubClasses {
 
     public static Test suite() {
-        return new OldPersistentLinkedHashSetGuavaTests().allTests();
+        return new PersistentLinkedHashSetWithLinkedElementGuavaTestsWithNodeSubClasses().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(OldPersistentLinkedHashSet.class.getSimpleName());
+        TestSuite suite = new TestSuite(PersistentLinkedHashSetWithLinkedElement.class.getSimpleName());
         suite.addTest(testsForTrieSet());
         return suite;
     }
@@ -40,10 +40,10 @@ public class OldPersistentLinkedHashSetGuavaTests {
                             @Override
                             public Set<String> create(String[] elements) {
                                 return new MutableSetFacade<>(
-                                        OldPersistentLinkedHashSet.<String>copyOf(MinimalCollection.<String>of(elements)));
+                                        PersistentLinkedHashSetWithLinkedElement.<String>copyOf(MinimalCollection.<String>of(elements)));
                             }
                         })
-                .named(OldPersistentLinkedHashSet.class.getSimpleName())
+                .named(PersistentLinkedHashSetWithLinkedElement.class.getSimpleName())
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         //CollectionFeature.ALLOWS_NULL_VALUES,

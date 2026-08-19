@@ -54,7 +54,7 @@ import java.util.function.Function;
 ///
 /// Implementation details:
 ///
-/// See description at [OldPersistentHashSet].
+/// See description at [PersistentHashSetWithNodeSubClasses].
 ///
 /// References:
 ///
@@ -70,12 +70,12 @@ import java.util.function.Function;
 /// </dl>
 ///
 /// @param <E> the element type
-public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
+public class MutableHashSetWithNodeSubClasses<E> extends AbstractMutableChampSet<E, E> {
     @Serial
     private static final long serialVersionUID = 0L;
 
     /// Constructs a new empty set.
-    public OldMutableHashSet() {
+    public MutableHashSetWithNodeSubClasses() {
         hashSet = BitmapIndexedNode.emptyNode();
     }
 
@@ -83,7 +83,7 @@ public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
     ///
     /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
-    public OldMutableHashSet(Iterable<? extends E> c) {
+    public MutableHashSetWithNodeSubClasses(Iterable<? extends E> c) {
         this();
         addAll(c);
     }
@@ -92,9 +92,9 @@ public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
     public boolean add(@Nullable E e) {
         ChangeEvent<E> details = new ChangeEvent<>();
         hashSet = hashSet.put(owner,
-                e, OldPersistentHashSet.keyHash(e), 0, details,
+                e, PersistentHashSetWithNodeSubClasses.keyHash(e), 0, details,
                 (oldKey, newKey) -> oldKey,
-                Objects::equals, OldPersistentHashSet::keyHash);
+                Objects::equals, PersistentHashSetWithNodeSubClasses::keyHash);
         if (details.isModified()) {
             size++;
             modCount++;
@@ -109,17 +109,17 @@ public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
     @SuppressWarnings("unchecked")
     public boolean addAll(Iterable<? extends E> c) {
         if (c == this) return false;
-        if (c instanceof OldMutableHashSet<?> m) {
+        if (c instanceof MutableHashSetWithNodeSubClasses<?> m) {
             c = (Iterable<? extends E>) m.toPersistent();
         }
-        if (isEmpty() && (c instanceof OldPersistentHashSet<?> cc)) {
+        if (isEmpty() && (c instanceof PersistentHashSetWithNodeSubClasses<?> cc)) {
             hashSet = (BitmapIndexedNode<E>) cc.root;
             size = cc.size;
             return true;
         }
-        if (c instanceof OldPersistentHashSet<?> that) {
+        if (c instanceof PersistentHashSetWithNodeSubClasses<?> that) {
             var bulkChange = new BulkChangeEvent();
-            var newRootNode = hashSet.putAll(owner, (Node<E>) that.root, 0, bulkChange, OldPersistentHashSet::keepOldElement, Objects::equals, OldPersistentHashSet::keyHash, new ChangeEvent<>());
+            var newRootNode = hashSet.putAll(owner, (Node<E>) that.root, 0, bulkChange, PersistentHashSetWithNodeSubClasses::keepOldElement, Objects::equals, PersistentHashSetWithNodeSubClasses::keyHash, new ChangeEvent<>());
             if (bulkChange.inBoth == that.size()) {
                 return false;
             }
@@ -143,12 +143,12 @@ public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
             clear();
             return true;
         }
-        if (c instanceof OldMutableHashSet<?> m) {
+        if (c instanceof MutableHashSetWithNodeSubClasses<?> m) {
             c = m.toPersistent();
         }
-        if (c instanceof OldPersistentHashSet<?> that) {
+        if (c instanceof PersistentHashSetWithNodeSubClasses<?> that) {
             BulkChangeEvent bulkChange = new BulkChangeEvent();
-            BitmapIndexedNode<E> newRootNode = hashSet.removeAll(owner, (BitmapIndexedNode<E>) that.root, 0, bulkChange, OldPersistentHashSet::keepOldElement, Objects::equals, OldPersistentHashSet::keyHash, new ChangeEvent<>());
+            BitmapIndexedNode<E> newRootNode = hashSet.removeAll(owner, (BitmapIndexedNode<E>) that.root, 0, bulkChange, PersistentHashSetWithNodeSubClasses::keepOldElement, Objects::equals, PersistentHashSetWithNodeSubClasses::keyHash, new ChangeEvent<>());
             if (bulkChange.removed == 0) {
                 return false;
             }
@@ -170,10 +170,10 @@ public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
             clear();
             return true;
         }
-        if (c instanceof OldMutableHashSet<?> m) {
-            OldPersistentHashSet<?> that = m.toPersistent();
+        if (c instanceof MutableHashSetWithNodeSubClasses<?> m) {
+            PersistentHashSetWithNodeSubClasses<?> that = m.toPersistent();
             BulkChangeEvent bulkChange = new BulkChangeEvent();
-            BitmapIndexedNode<E> newRootNode = hashSet.retainAll(owner, (BitmapIndexedNode<E>) that.root, 0, bulkChange, OldPersistentHashSet::keepOldElement, Objects::equals, OldPersistentHashSet::keyHash, new ChangeEvent<>());
+            BitmapIndexedNode<E> newRootNode = hashSet.retainAll(owner, (BitmapIndexedNode<E>) that.root, 0, bulkChange, PersistentHashSetWithNodeSubClasses::keepOldElement, Objects::equals, PersistentHashSetWithNodeSubClasses::keyHash, new ChangeEvent<>());
             if (bulkChange.removed == 0) {
                 return false;
             }
@@ -199,8 +199,8 @@ public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
         BulkChangeEvent bulkChange = new BulkChangeEvent();
         BitmapIndexedNode<E> newRootNode;
         switch (c) {
-            case OldPersistentHashSet<?> that ->
-                    newRootNode = hashSet.retainAll(owner, (BitmapIndexedNode<E>) that.root, 0, bulkChange, OldPersistentHashSet::keepOldElement, Objects::equals, OldPersistentHashSet::keyHash, new ChangeEvent<>());
+            case PersistentHashSetWithNodeSubClasses<?> that ->
+                    newRootNode = hashSet.retainAll(owner, (BitmapIndexedNode<E>) that.root, 0, bulkChange, PersistentHashSetWithNodeSubClasses::keepOldElement, Objects::equals, PersistentHashSetWithNodeSubClasses::keyHash, new ChangeEvent<>());
             case Collection<?> that -> newRootNode = hashSet.filterAll(owner, that::contains, 0, bulkChange);
             case ReadableCollection<?> that -> newRootNode = hashSet.filterAll(owner, that::contains, 0, bulkChange);
             default -> {
@@ -228,8 +228,8 @@ public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
 
     /// Returns a shallow copy of this set.
     @Override
-    public OldMutableHashSet<E> clone() {
-        OldMutableHashSet<E> that = (OldMutableHashSet<E>) super.clone();
+    public MutableHashSetWithNodeSubClasses<E> clone() {
+        MutableHashSetWithNodeSubClasses<E> that = (MutableHashSetWithNodeSubClasses<E>) super.clone();
         that.owner = new IdentityObject();
         return that;
     }
@@ -237,7 +237,7 @@ public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return Node.NO_DATA != hashSet.find((E) o, OldPersistentHashSet.keyHash(o), 0, Objects::equals);
+        return Node.NO_DATA != hashSet.find((E) o, PersistentHashSetWithNodeSubClasses.keyHash(o), 0, Objects::equals);
     }
 
     @Override
@@ -263,7 +263,7 @@ public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
     public boolean remove(Object o) {
         ChangeEvent<E> details = new ChangeEvent<>();
         hashSet = hashSet.remove(owner,
-                (E) o, OldPersistentHashSet.keyHash(o), 0, details,
+                (E) o, PersistentHashSetWithNodeSubClasses.keyHash(o), 0, details,
                 Objects::equals);
         if (details.isModified()) {
             size--;
@@ -275,11 +275,11 @@ public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
     /// Returns a persistent copy of this set.
     ///
     /// @return a persistent copy
-    public OldPersistentHashSet<E> toPersistent() {
+    public PersistentHashSetWithNodeSubClasses<E> toPersistent() {
         owner = new IdentityObject();
         return size == 0
-                ? OldPersistentHashSet.of()
-                : new OldPersistentHashSet<>(hashSet, size);
+                ? PersistentHashSetWithNodeSubClasses.of()
+                : new PersistentHashSetWithNodeSubClasses<>(hashSet, size);
     }
 
     @Serial
@@ -298,7 +298,7 @@ public class OldMutableHashSet<E> extends AbstractMutableChampSet<E, E> {
         @Serial
         @Override
         protected Object readResolve() {
-            return new OldMutableHashSet<>(deserializedElements);
+            return new MutableHashSetWithNodeSubClasses<>(deserializedElements);
         }
     }
 }

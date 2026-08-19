@@ -48,7 +48,7 @@ import java.util.function.Predicate;
 ///
 /// Implementation details:
 ///
-/// See description at [PersistentLinkedHashSet].
+/// See description at [PersistentLinkedHashSetWithNodeSubClasses].
 ///
 /// References:
 ///
@@ -67,13 +67,13 @@ import java.util.function.Predicate;
 public class MutableLinkedHashSet<E> extends AbstractSet<E> implements SequencedSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
-    private PersistentLinkedHashSet<E> delegate;
+    private PersistentLinkedHashSetWithNodeSubClasses<E> delegate;
     private int modCount;
     private IdentityObject owner;
 
     /// Constructs a new empty set.
     public MutableLinkedHashSet() {
-        delegate = PersistentLinkedHashSet.<E>of();
+        delegate = PersistentLinkedHashSetWithNodeSubClasses.<E>of();
     }
 
     /// Constructs a set containing the elements in the specified iterable.
@@ -82,8 +82,8 @@ public class MutableLinkedHashSet<E> extends AbstractSet<E> implements Sequenced
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableLinkedHashSet(Iterable<? extends E> c) {
         this();
-        if (c instanceof PersistentLinkedHashSet) {
-            delegate = (PersistentLinkedHashSet<E>) c;
+        if (c instanceof PersistentLinkedHashSetWithNodeSubClasses) {
+            delegate = (PersistentLinkedHashSetWithNodeSubClasses<E>) c;
         } else {
             addAll(c);
         }
@@ -214,7 +214,7 @@ public class MutableLinkedHashSet<E> extends AbstractSet<E> implements Sequenced
     /// Returns a persistent copy of this set.
     ///
     /// @return a persistent copy
-    public PersistentLinkedHashSet<E> toPersistent() {
+    public PersistentLinkedHashSetWithNodeSubClasses<E> toPersistent() {
         owner = new IdentityObject();
         return delegate;
     }

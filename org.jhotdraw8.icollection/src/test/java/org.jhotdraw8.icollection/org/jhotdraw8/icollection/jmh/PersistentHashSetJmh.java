@@ -77,7 +77,7 @@ public class PersistentHashSetJmh {
 
     private BenchmarkData data;
     private PersistentHashSet<Key> setA;
-    private PersistentHashSet<Key> setAA;
+    private PersistentHashSet<Key> setC;
     private PersistentHashSet<Key> setB;
 
     @Setup
@@ -85,7 +85,7 @@ public class PersistentHashSetJmh {
         data = new BenchmarkData(size, mask);
         setA = PersistentHashSet.copyOf(data.setA);
         setB = PersistentHashSet.copyOf(data.listB);
-        setAA = PersistentHashSet.copyOf(data.listA);
+        setC = PersistentHashSet.copyOf(data.listC);
     }
 
     @Benchmark
@@ -129,33 +129,33 @@ public class PersistentHashSetJmh {
     @Benchmark
     public PersistentHashSet<Key> mRemoveAll() {
         PersistentHashSet<Key> set = setA;
-        PersistentHashSet<Key> updated = set.removingAll(data.setA);
-        assert updated.isEmpty();
+        PersistentHashSet<Key> updated = set.removingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
         return updated;
     }
 
     @Benchmark
     public PersistentHashSet<Key> mRemoveAllSameType() {
         PersistentHashSet<Key> set = setA;
-        PersistentHashSet<Key> updated = set.removingAll(setAA);
-        assert updated.isEmpty();
+        PersistentHashSet<Key> updated = set.removingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
         return updated;
     }
 
 
     @Benchmark
-    public PersistentHashSet<Key> mRetainAllAllRetained() {
+    public PersistentHashSet<Key> mRetainAll() {
         PersistentHashSet<Key> set = setA;
-        PersistentHashSet<Key> updated = set.retainingAll(data.setA);
-        assert updated == setA;
+        PersistentHashSet<Key> updated = set.retainingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
         return updated;
     }
 
     @Benchmark
-    public PersistentHashSet<Key> mRetainAllNoneRetained() {
+    public PersistentHashSet<Key> mRetainAllSameType() {
         PersistentHashSet<Key> set = setA;
-        PersistentHashSet<Key> updated = set.retainingAll(data.setB);
-        assert updated.isEmpty();
+        PersistentHashSet<Key> updated = set.retainingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
         return updated;
     }
 
@@ -180,21 +180,21 @@ public class PersistentHashSetJmh {
     }
 
     @Benchmark
-    public boolean mContainsFound() {
-        boolean found = true;
-        for (Key k : data.listA) {
-            found = setA.contains(k) & found;//must be long-circuit and operator
+    public int mContains() {
+        int count = 0;
+        for (Key k : data.listC) {
+            if (setA.contains(k)) count++;
         }
-        return found;
+        assert count == data.listC.size() / 2;
+        return count;
     }
 
     @Benchmark
-    public boolean mContainsNotFound() {
-        boolean found = true;
-        for (Key k : data.listB) {
-            found = setA.contains(k) & found;//must be long-circuit and operator
-        }
-        return found;
+    public boolean mContainsAllSameType() {
+        return setA.containsAll(setC);
     }
 
+    public boolean mContainsAll() {
+        return setA.containsAll(data.setC);
+    }
 }

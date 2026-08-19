@@ -14,12 +14,12 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class OldPersistentHashSetTest extends AbstractImmutableSetTest {
+public class PersistentLinkedHashSetWithNodeSubClassesNonSequencedTest extends AbstractImmutableSetTest {
 
 
     @Override
     protected <E> PersistentSet<E> newInstance() {
-        return OldPersistentHashSet.of();
+        return PersistentLinkedHashSetWithNodeSubClasses.of();
     }
 
 
@@ -30,17 +30,17 @@ public class OldPersistentHashSetTest extends AbstractImmutableSetTest {
 
     @Override
     protected <E> PersistentSet<E> toImmutableInstance(Set<E> m) {
-        return ((OldMutableHashSet<E>) m).toPersistent();
+        return ((MutableLinkedHashSet<E>) m).toPersistent();
     }
 
     @Override
     protected <E> PersistentSet<E> toClonedInstance(PersistentSet<E> m) {
-        return OldPersistentHashSet.copyOf(m.asSet());
+        return PersistentLinkedHashSetWithNodeSubClasses.copyOf(m.asSet());
     }
 
     @Override
     protected <E> PersistentSet<E> newInstance(Iterable<E> m) {
-        return OldPersistentHashSet.copyOf(m);
+        return PersistentLinkedHashSetWithNodeSubClasses.copyOf(m);
     }
 
     @ParameterizedTest
@@ -48,8 +48,8 @@ public class OldPersistentHashSetTest extends AbstractImmutableSetTest {
     public void testToMutableAddingAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
         PersistentSet<Key> instance2 = newInstance(data.c);
-        OldMutableHashSet<Key> mutableInstance = (OldMutableHashSet<Key>) instance.toMutable();
-        assertTrue(mutableInstance.addAll(instance2));
+        Set<Key> mutableInstance = (Set<Key>) instance.toMutable();
+        assertTrue(mutableInstance.addAll(instance2.toMutable()));
 
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         expected.addAll(data.c.asSet());
@@ -59,7 +59,7 @@ public class OldPersistentHashSetTest extends AbstractImmutableSetTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testOfArrayArgShouldYieldExpectedResult(SetData data) throws Exception {
-        PersistentSet<Key> instance = OldPersistentHashSet.of(data.a().toArray(new Key[0]));
+        PersistentSet<Key> instance = PersistentLinkedHashSetWithNodeSubClasses.of(data.a().toArray(new Key[0]));
         assertEqualSet(data.a, instance);
     }
 

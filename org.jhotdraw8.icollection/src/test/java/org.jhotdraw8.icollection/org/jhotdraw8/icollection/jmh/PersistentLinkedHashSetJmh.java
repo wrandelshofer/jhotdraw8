@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.PersistentLinkedHashSet;
+import org.jhotdraw8.icollection.PersistentLinkedHashSetWithNodeSubClasses;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -73,16 +73,16 @@ public class PersistentLinkedHashSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private PersistentLinkedHashSet<Key> setA;
-    private PersistentLinkedHashSet<Key> setAA;
-    private PersistentLinkedHashSet<Key> setB;
+    private PersistentLinkedHashSetWithNodeSubClasses<Key> setA;
+    private PersistentLinkedHashSetWithNodeSubClasses<Key> setAA;
+    private PersistentLinkedHashSetWithNodeSubClasses<Key> setB;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = PersistentLinkedHashSet.copyOf(data.setA);
-        setB = PersistentLinkedHashSet.copyOf(data.listB);
-        setAA = PersistentLinkedHashSet.copyOf(data.listA);
+        setA = PersistentLinkedHashSetWithNodeSubClasses.copyOf(data.setA);
+        setB = PersistentLinkedHashSetWithNodeSubClasses.copyOf(data.listB);
+        setAA = PersistentLinkedHashSetWithNodeSubClasses.copyOf(data.listA);
     }
 
     /*

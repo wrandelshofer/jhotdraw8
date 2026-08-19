@@ -27,15 +27,15 @@ import java.util.concurrent.TimeUnit;
 /// KotlinxPersistentHashSetJmh.mAdd                        10  avgt    2       257.479          ns/op
 /// KotlinxPersistentHashSetJmh.mAdd                      1000  avgt    2     72630.152          ns/op
 /// KotlinxPersistentHashSetJmh.mAdd                    100000  avgt    2  19153090.652          ns/op
-/// KotlinxPersistentHashSetJmh.mAddContained               10  avgt    2        14.786          ns/op
-/// KotlinxPersistentHashSetJmh.mAddContained             1000  avgt    2      6664.113          ns/op
-/// KotlinxPersistentHashSetJmh.mAddContained           100000  avgt    2   1667419.885          ns/op
-/// KotlinxPersistentHashSetJmh.mContainsFound              10  avgt    2        13.568          ns/op
-/// KotlinxPersistentHashSetJmh.mContainsFound            1000  avgt    2      5636.819          ns/op
-/// KotlinxPersistentHashSetJmh.mContainsFound          100000  avgt    2   1717716.822          ns/op
-/// KotlinxPersistentHashSetJmh.mContainsNotFound           10  avgt    2         9.007          ns/op
-/// KotlinxPersistentHashSetJmh.mContainsNotFound         1000  avgt    2      4019.352          ns/op
-/// KotlinxPersistentHashSetJmh.mContainsNotFound       100000  avgt    2   1354170.886          ns/op
+/// KotlinxPersistentHashSetJmh.mAddContained               10  avgt    2        14.764          ns/op
+/// KotlinxPersistentHashSetJmh.mAddContained             1000  avgt    2      6805.759          ns/op
+/// KotlinxPersistentHashSetJmh.mAddContained           100000  avgt    2   1942697.362          ns/op
+/// KotlinxPersistentHashSetJmh.mContains                   10  avgt    2        10.738          ns/op
+/// KotlinxPersistentHashSetJmh.mContains                 1000  avgt    2      4720.833          ns/op
+/// KotlinxPersistentHashSetJmh.mContains               100000  avgt    2   2043299.412          ns/op
+/// KotlinxPersistentHashSetJmh.mContainsAllSameType        10  avgt    2        0.991           ns/op
+/// KotlinxPersistentHashSetJmh.mContainsAllSameType      1000  avgt    2        4.137           ns/op
+/// KotlinxPersistentHashSetJmh.mContainsAllSameType    100000  avgt    2        5.622           ns/op
 /// KotlinxPersistentHashSetJmh.mCopyOf                     10  avgt    2       214.744          ns/op
 /// KotlinxPersistentHashSetJmh.mCopyOf                   1000  avgt    2     23275.868          ns/op
 /// KotlinxPersistentHashSetJmh.mCopyOf                 100000  avgt    2   6217437.868          ns/op
@@ -48,21 +48,22 @@ import java.util.concurrent.TimeUnit;
 /// KotlinxPersistentHashSetJmh.mRemove                     10  avgt    2       128.931          ns/op
 /// KotlinxPersistentHashSetJmh.mRemove                   1000  avgt    2     32710.332          ns/op
 /// KotlinxPersistentHashSetJmh.mRemove                 100000  avgt    2  10670140.402          ns/op
-/// KotlinxPersistentHashSetJmh.mRemoveAll                  10  avgt    2       313.591          ns/op
-/// KotlinxPersistentHashSetJmh.mRemoveAll                1000  avgt    2     47662.084          ns/op
-/// KotlinxPersistentHashSetJmh.mRemoveAll              100000  avgt    2   6276129.235          ns/op
-/// KotlinxPersistentHashSetJmh.mRemoveAllSameType          10  avgt    2        44.066          ns/op
-/// KotlinxPersistentHashSetJmh.mRemoveAllSameType        1000  avgt    2      5743.166          ns/op
-/// KotlinxPersistentHashSetJmh.mRemoveAllSameType      100000  avgt    2    727312.461          ns/op
+/// KotlinxPersistentHashSetJmh.mRemoveAll                  10  avgt    2       213.688          ns/op
+/// KotlinxPersistentHashSetJmh.mRemoveAll                1000  avgt    2     30023.479          ns/op
+/// KotlinxPersistentHashSetJmh.mRemoveAll              100000  avgt    2   5245753.236          ns/op
+/// KotlinxPersistentHashSetJmh.mRemoveAllSameType          10  avgt    2        28.320          ns/op
+/// KotlinxPersistentHashSetJmh.mRemoveAllSameType        1000  avgt    2      9157.864          ns/op
+/// KotlinxPersistentHashSetJmh.mRemoveAllSameType      100000  avgt    2   1119704.383          ns/op
+/// KotlinxPersistentHashSetJmh.mRetainAll                  10  avgt    2       228.652          ns/op
+/// KotlinxPersistentHashSetJmh.mRetainAll                1000  avgt    2     30482.788          ns/op
+/// KotlinxPersistentHashSetJmh.mRetainAll              100000  avgt    2   4825596.266          ns/op
+/// KotlinxPersistentHashSetJmh.mRetainAllSameType          10  avgt    2        25.430          ns/op
+/// KotlinxPersistentHashSetJmh.mRetainAllSameType        1000  avgt    2      7070.702          ns/op
+/// KotlinxPersistentHashSetJmh.mRetainAllSameType      100000  avgt    2    734034.018          ns/op
 /// KotlinxPersistentHashSetJmh.mRemoveFirst                10  avgt    2        10.621          ns/op
 /// KotlinxPersistentHashSetJmh.mRemoveFirst              1000  avgt    2        39.427          ns/op
 /// KotlinxPersistentHashSetJmh.mRemoveFirst            100000  avgt    2        80.495          ns/op
-/// KotlinxPersistentHashSetJmh.mRetainAllAllRetained       10  avgt    2        61.113          ns/op
-/// KotlinxPersistentHashSetJmh.mRetainAllAllRetained     1000  avgt    2      9641.931          ns/op
-/// KotlinxPersistentHashSetJmh.mRetainAllAllRetained   100000  avgt    2   1732041.795          ns/op
-/// KotlinxPersistentHashSetJmh.mRetainAllNoneRetained      10  avgt    2       310.326          ns/op
-/// KotlinxPersistentHashSetJmh.mRetainAllNoneRetained    1000  avgt    2     49187.754          ns/op
-/// KotlinxPersistentHashSetJmh.mRetainAllNoneRetained  100000  avgt    2   6662015.640          ns/op
+///
 /// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
@@ -78,14 +79,14 @@ public class KotlinxPersistentHashSetJmh {
 
     private BenchmarkData data;
     private PersistentSet<Key> setA;
+    private PersistentSet<Key> setC;
 
-    private PersistentSet<Key> setAA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
         setA = ExtensionsKt.toPersistentHashSet(data.setA);
-        setAA = ExtensionsKt.toPersistentHashSet(data.listA);
+        setC = ExtensionsKt.toPersistentHashSet(data.setC);
     }
 
     @Benchmark
@@ -97,103 +98,108 @@ public class KotlinxPersistentHashSetJmh {
         assert set.size() == data.listA.size();
         return set;
     }
-/*
-    @Benchmark
-    public PersistentSet<Key> mCopyOf() {
-        PersistentSet<Key> set = ExtensionsKt.toPersistentHashSet(data.listA);
-        assert set.size() == data.listA.size();
-        return set;
-    }
 
-
-    @Benchmark
-    public PersistentSet<Key> mAdd() {
-        PersistentSet<Key> set = ExtensionsKt.persistentSetOf();
-        for (Key key : data.listA) {
-            set = set.adding(key);
+    /*
+        @Benchmark
+        public PersistentSet<Key> mCopyOf() {
+            PersistentSet<Key> set = ExtensionsKt.toPersistentHashSet(data.listA);
+            assert set.size() == data.listA.size();
+            return set;
         }
-        assert set.size() == data.listA.size();
-        return set;
-    }
 
-    @Benchmark
-    public PersistentSet<Key> mRemove() {
-        PersistentSet<Key> set = setA;
-        for (Key key : data.listA) {
-            set = set.removing(key);
+
+        @Benchmark
+        public PersistentSet<Key> mAdd() {
+            PersistentSet<Key> set = ExtensionsKt.persistentSetOf();
+            for (Key key : data.listA) {
+                set = set.adding(key);
+            }
+            assert set.size() == data.listA.size();
+            return set;
         }
-        assert set.isEmpty();
-        return set;
-    }
 
+        @Benchmark
+        public PersistentSet<Key> mRemove() {
+            PersistentSet<Key> set = setA;
+            for (Key key : data.listA) {
+                set = set.removing(key);
+            }
+            assert set.isEmpty();
+            return set;
+        }
+    */
     @Benchmark
     public PersistentSet<Key> mRemoveAll() {
         PersistentSet<Key> set = setA;
-        PersistentSet<Key> updated = set.removingAll(data.setA);
-        assert updated.isEmpty();
+        PersistentSet<Key> updated = set.removingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
         return updated;
     }
 
     @Benchmark
     public PersistentSet<Key> mRemoveAllSameType() {
         PersistentSet<Key> set = setA;
-        PersistentSet<Key> updated = set.removingAll(setAA);
-        assert updated.isEmpty();
+        PersistentSet<Key> updated = set.removingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
         return updated;
     }
 
 
     @Benchmark
-    public PersistentSet<Key> mRetainAllAllRetained() {
+    public PersistentSet<Key> mRetainAll() {
         PersistentSet<Key> set = setA;
-        PersistentSet<Key> updated = set.retainingAll(data.setA);
-        assert updated == setA;
+        PersistentSet<Key> updated = set.retainingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
         return updated;
     }
 
     @Benchmark
-    public PersistentSet<Key> mRetainAllNoneRetained() {
+    public PersistentSet<Key> mRetainAllSameType() {
         PersistentSet<Key> set = setA;
-        PersistentSet<Key> updated = set.retainingAll(data.setB);
-        assert updated.isEmpty();
+        PersistentSet<Key> updated = set.retainingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
         return updated;
     }
 
 
-    @Benchmark
-    public int mIterate() {
-        int sum = 0;
-        for (Key k : setA) {
-            sum += k.value;
+    /*
+        @Benchmark
+        public int mIterate() {
+            int sum = 0;
+            for (Key k : setA) {
+                sum += k.value;
+            }
+            return sum;
         }
-        return sum;
-    }
 
-    @Benchmark
-    public Key mGetFirst() {
-        return setA.iterator().next();
-    }
-
-    @Benchmark
-    public PersistentSet<Key> mRemoveFirst() {
-        return setA.removing(setA.iterator().next());
-    }
-
-    @Benchmark
-    public boolean mContainsFound() {
-        boolean found = true;
-        for (Key k : data.listA) {
-            found = setA.contains(k) & found;//must be long-circuit and operator
+        @Benchmark
+        public Key mGetFirst() {
+            return setA.iterator().next();
         }
-        return found;
+
+        @Benchmark
+        public PersistentSet<Key> mRemoveFirst() {
+            return setA.removing(setA.iterator().next());
+        }
+    */
+    @Benchmark
+    public int mContains() {
+        int count = 0;
+        for (Key k : data.listC) {
+            if (setA.contains(k)) count++;
+        }
+        assert count == data.listC.size() / 2;
+        return count;
     }
 
     @Benchmark
-    public boolean mContainsNotFound() {
-        boolean found = true;
-        for (Key k : data.listB) {
-            found = setA.contains(k) & found;//must be long-circuit and operator
-        }
-        return found;
-    }*/
+    public boolean mContainsAllSameType() {
+        return setA.containsAll(setC);
+    }
+
+    public boolean mContainsAll() {
+        return setA.containsAll(data.setC);
+    }
+
+
 }

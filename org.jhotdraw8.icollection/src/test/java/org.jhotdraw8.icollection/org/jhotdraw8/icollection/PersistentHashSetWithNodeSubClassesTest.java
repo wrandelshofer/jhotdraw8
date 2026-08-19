@@ -14,12 +14,12 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PersistentLinkedHashSetNonSequencedTest extends AbstractImmutableSetTest {
+public class PersistentHashSetWithNodeSubClassesTest extends AbstractImmutableSetTest {
 
 
     @Override
     protected <E> PersistentSet<E> newInstance() {
-        return PersistentLinkedHashSet.of();
+        return PersistentHashSetWithNodeSubClasses.of();
     }
 
 
@@ -30,17 +30,17 @@ public class PersistentLinkedHashSetNonSequencedTest extends AbstractImmutableSe
 
     @Override
     protected <E> PersistentSet<E> toImmutableInstance(Set<E> m) {
-        return ((MutableLinkedHashSet<E>) m).toPersistent();
+        return ((MutableHashSetWithNodeSubClasses<E>) m).toPersistent();
     }
 
     @Override
     protected <E> PersistentSet<E> toClonedInstance(PersistentSet<E> m) {
-        return PersistentLinkedHashSet.copyOf(m.asSet());
+        return PersistentHashSetWithNodeSubClasses.copyOf(m.asSet());
     }
 
     @Override
     protected <E> PersistentSet<E> newInstance(Iterable<E> m) {
-        return PersistentLinkedHashSet.copyOf(m);
+        return PersistentHashSetWithNodeSubClasses.copyOf(m);
     }
 
     @ParameterizedTest
@@ -48,8 +48,8 @@ public class PersistentLinkedHashSetNonSequencedTest extends AbstractImmutableSe
     public void testToMutableAddingAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
         PersistentSet<Key> instance2 = newInstance(data.c);
-        Set<Key> mutableInstance = (Set<Key>) instance.toMutable();
-        assertTrue(mutableInstance.addAll(instance2.toMutable()));
+        MutableHashSetWithNodeSubClasses<Key> mutableInstance = (MutableHashSetWithNodeSubClasses<Key>) instance.toMutable();
+        assertTrue(mutableInstance.addAll(instance2));
 
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         expected.addAll(data.c.asSet());
@@ -59,7 +59,7 @@ public class PersistentLinkedHashSetNonSequencedTest extends AbstractImmutableSe
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testOfArrayArgShouldYieldExpectedResult(SetData data) throws Exception {
-        PersistentSet<Key> instance = PersistentLinkedHashSet.of(data.a().toArray(new Key[0]));
+        PersistentSet<Key> instance = PersistentHashSetWithNodeSubClasses.of(data.a().toArray(new Key[0]));
         assertEqualSet(data.a, instance);
     }
 

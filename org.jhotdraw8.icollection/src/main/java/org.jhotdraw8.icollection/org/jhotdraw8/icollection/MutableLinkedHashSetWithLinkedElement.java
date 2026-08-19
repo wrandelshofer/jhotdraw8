@@ -53,7 +53,7 @@ import java.util.Spliterators;
 ///
 /// Implementation details:
 ///
-/// See description at [PersistentLinkedHashSet].
+/// See description at [PersistentLinkedHashSetWithNodeSubClasses].
 ///
 /// References:
 ///
@@ -69,7 +69,7 @@ import java.util.Spliterators;
 /// </dl>
 ///
 /// @param <E> the element type
-public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, LinkedElement<E>> implements SequencedSet<E> {
+public class MutableLinkedHashSetWithLinkedElement<E> extends AbstractMutableChampSet<E, LinkedElement<E>> implements SequencedSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
     private @Nullable LinkedElement<E> first;
@@ -77,7 +77,7 @@ public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, Linke
 
 
     /// Constructs a new empty set.
-    public OldMutableLinkedHashSet() {
+    public MutableLinkedHashSetWithLinkedElement() {
         hashSet = BitmapIndexedNode.emptyNode();
     }
 
@@ -85,7 +85,7 @@ public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, Linke
     ///
     /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
-    public OldMutableLinkedHashSet(Iterable<? extends E> c) {
+    public MutableLinkedHashSetWithLinkedElement(Iterable<? extends E> c) {
         this();
         addAll(c);
     }
@@ -115,9 +115,9 @@ public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, Linke
         ChangeEvent<LinkedElement<E>> details = new ChangeEvent<>();
         var linkedElement = new LinkedElement<>(e, last == null ? null : last.key(), null, this.owner);
         hashSet = hashSet.put(this.owner,
-                linkedElement, PersistentLinkedHashSet.keyHash(e), 0, details,
+                linkedElement, PersistentLinkedHashSetWithNodeSubClasses.keyHash(e), 0, details,
                 (oldKey, newKey) -> moveToLast && oldKey.next() != null ? newKey : oldKey,
-                Objects::equals, PersistentLinkedHashSet::keyHash);
+                Objects::equals, PersistentLinkedHashSetWithNodeSubClasses::keyHash);
         if (details.isModified()) {
             if (details.isReplaced()) {
                 var removed = details.getOldData();
@@ -145,9 +145,9 @@ public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, Linke
         var e = linkedElement.key();
         ChangeEvent<LinkedElement<E>> details = new ChangeEvent<>();
         hashSet = hashSet.put(this.owner,
-                linkedElement, PersistentLinkedHashSet.keyHash(e), 0, details,
+                linkedElement, PersistentLinkedHashSetWithNodeSubClasses.keyHash(e), 0, details,
                 (oldKey, newKey) -> newKey,
-                Objects::equals, PersistentLinkedHashSet::keyHash);
+                Objects::equals, PersistentLinkedHashSetWithNodeSubClasses::keyHash);
         return details.getOldData();
     }
 
@@ -161,9 +161,9 @@ public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, Linke
         ChangeEvent<LinkedElement<E>> details = new ChangeEvent<>();
         var linkedElement = new LinkedElement<>(e, null, first == null ? null : first.key(), this.owner);
         hashSet = hashSet.put(this.owner,
-                linkedElement, PersistentLinkedHashSet.keyHash(e), 0, details,
+                linkedElement, PersistentLinkedHashSetWithNodeSubClasses.keyHash(e), 0, details,
                 (oldKey, newKey) -> moveToFirst && oldKey.prev() != null ? newKey : oldKey,
-                Objects::equals, PersistentLinkedHashSet::keyHash);
+                Objects::equals, PersistentLinkedHashSetWithNodeSubClasses::keyHash);
         if (details.isModified()) {
             if (details.isReplaced()) {
                 var removed = details.getOldData();
@@ -235,8 +235,8 @@ public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, Linke
 
     /// Returns a shallow copy of this set.
     @Override
-    public OldMutableLinkedHashSet<E> clone() {
-        OldMutableLinkedHashSet<E> that = (OldMutableLinkedHashSet<E>) super.clone();
+    public MutableLinkedHashSetWithLinkedElement<E> clone() {
+        MutableLinkedHashSetWithLinkedElement<E> that = (MutableLinkedHashSetWithLinkedElement<E>) super.clone();
         that.owner = new IdentityObject();
         return that;
     }
@@ -244,7 +244,7 @@ public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, Linke
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return Node.NO_DATA != hashSet.find(new LinkedElement((E) o, null, null), PersistentLinkedHashSet.keyHash(o), 0, Objects::equals);
+        return Node.NO_DATA != hashSet.find(new LinkedElement((E) o, null, null), PersistentLinkedHashSetWithNodeSubClasses.keyHash(o), 0, Objects::equals);
     }
 
     @Override
@@ -302,7 +302,7 @@ public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, Linke
     public boolean remove(Object o) {
         ChangeEvent<LinkedElement<E>> details = new ChangeEvent<>();
         hashSet = hashSet.remove(this.owner,
-                new LinkedElement<>((E) o, null, null), PersistentLinkedHashSet.keyHash(o), 0, details,
+                new LinkedElement<>((E) o, null, null), PersistentLinkedHashSetWithNodeSubClasses.keyHash(o), 0, details,
                 Objects::equals);
         if (details.isModified()) {
             var removed = details.getOldData();
@@ -320,11 +320,11 @@ public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, Linke
     /// Returns a persistent copy of this set.
     ///
     /// @return a persistent copy
-    public OldPersistentLinkedHashSet<E> toPersistent() {
+    public PersistentLinkedHashSetWithLinkedElement<E> toPersistent() {
         owner = new IdentityObject();
         return size == 0
-                ? OldPersistentLinkedHashSet.of()
-                : OldPersistentLinkedHashSet.<E>of().addingAll(this);
+                ? PersistentLinkedHashSetWithLinkedElement.of()
+                : PersistentLinkedHashSetWithLinkedElement.<E>of().addingAll(this);
     }
 
     @Serial
@@ -343,7 +343,7 @@ public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, Linke
         @Serial
         @Override
         protected Object readResolve() {
-            return new OldMutableLinkedHashSet<>(deserializedElements);
+            return new MutableLinkedHashSetWithLinkedElement<>(deserializedElements);
         }
     }
 }

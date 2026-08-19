@@ -5,8 +5,8 @@
 
 package org.jhotdraw8.icollection.alt.impl.champset;
 
+import org.jhotdraw8.icollection.impl.ArrayHelper;
 import org.jhotdraw8.icollection.impl.IdentityObject;
-import org.jhotdraw8.icollection.util.ListHelper;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
@@ -55,7 +55,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
     BitmapIndexedNode<D> copyAndInsertData(@Nullable IdentityObject owner, int bitpos,
                                            D data) {
         int idx = dataArrayIndex(dataIndex(bitpos), array);
-        Object[] dst = ListHelper.copyComponentAdd(this.array, idx, 1);
+        Object[] dst = ArrayHelper.copyComponentAdd(this.array, idx, 1);
         dst[idx] = data;
         return newBitmapIndexedNode(owner, nodeMap, dataMap | bitpos, dst);
     }
@@ -106,7 +106,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
             return this;
         } else {
             // copy 'src' and set 1 element(s) at position 'idx'
-            Object[] dst = ListHelper.copySet(this.array, idx, node);
+            Object[] dst = ArrayHelper.copySet(this.array, idx, node);
             return newBitmapIndexedNode(owner, nodeMap, dataMap, dst);
         }
     }
@@ -221,7 +221,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
             return newBitmapIndexedNode(owner, 0, newDataMap, nodes);
         }
         int idx = dataArrayIndex(dataIndex, array);
-        Object[] dst = ListHelper.copyComponentRemove(this.array, idx, 1);
+        Object[] dst = ArrayHelper.copyComponentRemove(this.array, idx, 1);
         return newBitmapIndexedNode(owner, nodeMap, dataMap ^ bitpos, dst);
     }
 
@@ -286,7 +286,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
             this.array[dataArrayIndex(dataIndex, array)] = updatedData;
             return this;
         }
-        Object[] newMixed = ListHelper.copySet(this.array, dataArrayIndex(dataIndex, array), updatedData);
+        Object[] newMixed = ArrayHelper.copySet(this.array, dataArrayIndex(dataIndex, array), updatedData);
         return newBitmapIndexedNode(owner, nodeMap, dataMap, newMixed);
     }
 
