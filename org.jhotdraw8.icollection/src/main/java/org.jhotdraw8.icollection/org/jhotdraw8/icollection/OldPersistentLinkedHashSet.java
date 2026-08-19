@@ -4,14 +4,14 @@
  */
 package org.jhotdraw8.icollection;
 
+import org.jhotdraw8.icollection.alt.impl.champset.BitmapIndexedNode;
+import org.jhotdraw8.icollection.alt.impl.champset.ChampSpliterator;
+import org.jhotdraw8.icollection.alt.impl.champset.ChangeEvent;
+import org.jhotdraw8.icollection.alt.impl.champset.Node;
 import org.jhotdraw8.icollection.alt.impl.linked.LinkedElement;
 import org.jhotdraw8.icollection.alt.impl.linked.LinkedElementIterator;
 import org.jhotdraw8.icollection.alt.impl.linked.ReversedLinkedElementIterator;
 import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
-import org.jhotdraw8.icollection.impl.champset.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.champset.ChampSpliterator;
-import org.jhotdraw8.icollection.impl.champset.ChangeEvent;
-import org.jhotdraw8.icollection.impl.champset.Node;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
@@ -139,11 +139,11 @@ public class OldPersistentLinkedHashSet<E> implements PersistentSequencedSet<E>,
     @Override
     @SuppressWarnings("unchecked")
     public OldPersistentLinkedHashSet<E> addingAll(Iterable<? extends E> c) {
-        if (isEmpty() && c instanceof OldPersistentLinkedHashSet<? extends E> s) {
-            return (OldPersistentLinkedHashSet<E>) s;
+        var result = this;
+        for (var e : c) {
+            result = result.adding(e);
         }
-        var m = toMutable();
-        return m.addAll(c) ? m.toPersistent() : this;
+        return result;
     }
 
     private static <E> @Nullable LinkedElement<E> get(BitmapIndexedNode<LinkedElement<E>> hashSet, @Nullable E key) {
@@ -153,7 +153,7 @@ public class OldPersistentLinkedHashSet<E> implements PersistentSequencedSet<E>,
         Object result = hashSet.find(
                 new LinkedElement<>((E) key, null, null),
                 Objects.hashCode(key), 0, Objects::equals);
-        return result == org.jhotdraw8.icollection.impl.champset.Node.NO_DATA ? null : (LinkedElement<E>) result;
+        return result == Node.NO_DATA ? null : (LinkedElement<E>) result;
     }
 
     @Override

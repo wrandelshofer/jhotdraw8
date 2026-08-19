@@ -5,14 +5,14 @@
 
 package org.jhotdraw8.icollection;
 
+import org.jhotdraw8.icollection.alt.impl.champset.AbstractMutableChampSet;
+import org.jhotdraw8.icollection.alt.impl.champset.BitmapIndexedNode;
+import org.jhotdraw8.icollection.alt.impl.champset.BulkChangeEvent;
+import org.jhotdraw8.icollection.alt.impl.champset.ChampIterator;
+import org.jhotdraw8.icollection.alt.impl.champset.ChampSpliterator;
+import org.jhotdraw8.icollection.alt.impl.champset.ChangeEvent;
+import org.jhotdraw8.icollection.alt.impl.champset.Node;
 import org.jhotdraw8.icollection.impl.IdentityObject;
-import org.jhotdraw8.icollection.impl.champset.AbstractMutableChampSet;
-import org.jhotdraw8.icollection.impl.champset.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.champset.BulkChangeEvent;
-import org.jhotdraw8.icollection.impl.champset.ChampIterator;
-import org.jhotdraw8.icollection.impl.champset.ChampSpliterator;
-import org.jhotdraw8.icollection.impl.champset.ChangeEvent;
-import org.jhotdraw8.icollection.impl.champset.Node;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.readable.ReadableCollection;

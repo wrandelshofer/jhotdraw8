@@ -5,14 +5,14 @@
 
 package org.jhotdraw8.icollection;
 
+import org.jhotdraw8.icollection.alt.impl.champset.AbstractMutableChampSet;
+import org.jhotdraw8.icollection.alt.impl.champset.BitmapIndexedNode;
+import org.jhotdraw8.icollection.alt.impl.champset.ChangeEvent;
+import org.jhotdraw8.icollection.alt.impl.champset.Node;
 import org.jhotdraw8.icollection.alt.impl.linked.LinkedElement;
 import org.jhotdraw8.icollection.alt.impl.linked.LinkedElementIterator;
 import org.jhotdraw8.icollection.alt.impl.linked.ReversedLinkedElementIterator;
 import org.jhotdraw8.icollection.impl.IdentityObject;
-import org.jhotdraw8.icollection.impl.champset.AbstractMutableChampSet;
-import org.jhotdraw8.icollection.impl.champset.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.champset.ChangeEvent;
-import org.jhotdraw8.icollection.impl.champset.Node;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedSetView;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
@@ -97,7 +97,7 @@ public class OldMutableLinkedHashSet<E> extends AbstractMutableChampSet<E, Linke
         Object result = hashSet.find(
                 new LinkedElement<>((E) o, null, null),
                 Objects.hashCode(o), 0, Objects::equals);
-        return result == org.jhotdraw8.icollection.impl.champset.Node.NO_DATA ? null : (LinkedElement<E>) result;
+        return result == Node.NO_DATA ? null : (LinkedElement<E>) result;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.jhotdraw8.icollection.alt.impl.linked;
 
-import org.jhotdraw8.icollection.impl.champset.BitmapIndexedNode;
+import org.jhotdraw8.icollection.alt.impl.champset.BitmapIndexedNode;
+import org.jhotdraw8.icollection.alt.impl.champset.Node;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
@@ -41,6 +42,6 @@ public class LinkedElementIterator<E> implements Iterator<E> {
         Object result = root.find(
                 new LinkedElement<>((E) o, null, null),
                 Objects.hashCode(o), 0, Objects::equals);
-        return result == org.jhotdraw8.icollection.impl.champset.Node.NO_DATA ? null : (LinkedElement<E>) result;
+        return result == Node.NO_DATA ? null : (LinkedElement<E>) result;
     }
 }

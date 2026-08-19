@@ -5,17 +5,17 @@
 
 package org.jhotdraw8.icollection;
 
+import org.jhotdraw8.icollection.alt.impl.champset.AbstractMutableChampSet;
+import org.jhotdraw8.icollection.alt.impl.champset.BitmapIndexedNode;
+import org.jhotdraw8.icollection.alt.impl.champset.ChangeEvent;
+import org.jhotdraw8.icollection.alt.impl.champset.Node;
+import org.jhotdraw8.icollection.alt.impl.champset.ReverseTombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.alt.impl.champset.SequencedData;
+import org.jhotdraw8.icollection.alt.impl.champset.SequencedElement;
+import org.jhotdraw8.icollection.alt.impl.champset.TombSkippingVectorIterator;
+import org.jhotdraw8.icollection.alt.impl.champset.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
 import org.jhotdraw8.icollection.impl.IdentityObject;
-import org.jhotdraw8.icollection.impl.champset.AbstractMutableChampSet;
-import org.jhotdraw8.icollection.impl.champset.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.champset.ChangeEvent;
-import org.jhotdraw8.icollection.impl.champset.Node;
-import org.jhotdraw8.icollection.impl.champset.ReverseTombSkippingVectorSpliterator;
-import org.jhotdraw8.icollection.impl.champset.SequencedData;
-import org.jhotdraw8.icollection.impl.champset.SequencedElement;
-import org.jhotdraw8.icollection.impl.champset.TombSkippingVectorIterator;
-import org.jhotdraw8.icollection.impl.champset.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
@@ -36,7 +36,7 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
-import static org.jhotdraw8.icollection.impl.champset.SequencedData.vecRemove;
+import static org.jhotdraw8.icollection.alt.impl.champset.SequencedData.vecRemove;
 
 /// Implements the [SequencedSet] interface using a Compressed
 /// Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).

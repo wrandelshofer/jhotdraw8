@@ -5,14 +5,14 @@
 
 package org.jhotdraw8.icollection.alt;
 
-import org.jhotdraw8.icollection.alt.impl.champ.AbstractMutableChampSet;
-import org.jhotdraw8.icollection.alt.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.icollection.alt.impl.champ.ChangeEvent;
-import org.jhotdraw8.icollection.alt.impl.champ.Node;
-import org.jhotdraw8.icollection.alt.impl.champ.ReverseTombSkippingVectorSpliterator;
-import org.jhotdraw8.icollection.alt.impl.champ.SequencedData;
-import org.jhotdraw8.icollection.alt.impl.champ.SequencedElement;
-import org.jhotdraw8.icollection.alt.impl.champ.TombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.alt.impl.champmap.AbstractMutableChampSet;
+import org.jhotdraw8.icollection.alt.impl.champmap.BitmapIndexedNode;
+import org.jhotdraw8.icollection.alt.impl.champmap.ChangeEvent;
+import org.jhotdraw8.icollection.alt.impl.champmap.Node;
+import org.jhotdraw8.icollection.alt.impl.champmap.ReverseTombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.alt.impl.champmap.SequencedData;
+import org.jhotdraw8.icollection.alt.impl.champmap.SequencedElement;
+import org.jhotdraw8.icollection.alt.impl.champmap.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
-import static org.jhotdraw8.icollection.alt.impl.champ.SequencedData.vecRemove;
+import static org.jhotdraw8.icollection.alt.impl.champmap.SequencedData.vecRemove;
 
 /// Implements the [SequencedSet] interface using a Compressed
 /// Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).

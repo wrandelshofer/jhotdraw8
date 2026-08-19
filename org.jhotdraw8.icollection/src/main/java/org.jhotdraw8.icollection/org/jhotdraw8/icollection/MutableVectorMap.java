@@ -5,20 +5,20 @@
 
 package org.jhotdraw8.icollection;
 
+import org.jhotdraw8.icollection.alt.impl.champset.AbstractMutableChampMap;
+import org.jhotdraw8.icollection.alt.impl.champset.BitmapIndexedNode;
+import org.jhotdraw8.icollection.alt.impl.champset.ChangeEvent;
+import org.jhotdraw8.icollection.alt.impl.champset.Node;
+import org.jhotdraw8.icollection.alt.impl.champset.ReverseTombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.alt.impl.champset.SequencedData;
+import org.jhotdraw8.icollection.alt.impl.champset.SequencedEntry;
+import org.jhotdraw8.icollection.alt.impl.champset.TombSkippingVectorIterator;
+import org.jhotdraw8.icollection.alt.impl.champset.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedSetFacade;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.champmap.EditableMapEntry;
-import org.jhotdraw8.icollection.impl.champset.AbstractMutableChampMap;
-import org.jhotdraw8.icollection.impl.champset.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.champset.ChangeEvent;
-import org.jhotdraw8.icollection.impl.champset.Node;
-import org.jhotdraw8.icollection.impl.champset.ReverseTombSkippingVectorSpliterator;
-import org.jhotdraw8.icollection.impl.champset.SequencedData;
-import org.jhotdraw8.icollection.impl.champset.SequencedEntry;
-import org.jhotdraw8.icollection.impl.champset.TombSkippingVectorIterator;
-import org.jhotdraw8.icollection.impl.champset.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
