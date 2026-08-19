@@ -47,7 +47,7 @@ import java.util.Spliterator;
 ///
 /// Implementation details:
 ///
-/// See description at [PersistentHashMap].
+/// See description at [PersistentHashMapWithNodeSubClasses].
 ///
 /// References:
 ///
@@ -64,12 +64,12 @@ import java.util.Spliterator;
 ///
 /// @param <K> the key type
 /// @param <V> the value type
-public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
+public class MutableHashMapWithNodeSubClasses<K, V> extends AbstractMutableHashMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
 
     /// Constructs a new empty map.
-    public MutableHashMap() {
+    public MutableHashMapWithNodeSubClasses() {
         root = BitmapIndexedNode.emptyNode();
     }
 
@@ -78,7 +78,7 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
     ///
     /// @param m a map
     @SuppressWarnings("this-escape")
-    public MutableHashMap(Map<? extends K, ? extends V> m) {
+    public MutableHashMapWithNodeSubClasses(Map<? extends K, ? extends V> m) {
         this();
         putAll(m);
     }
@@ -88,7 +88,7 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
     ///
     /// @param m an iterable
     @SuppressWarnings("this-escape")
-    public MutableHashMap(Iterable<? extends Entry<? extends K, ? extends V>> m) {
+    public MutableHashMapWithNodeSubClasses(Iterable<? extends Entry<? extends K, ? extends V>> m) {
         this();
         putAll(m);
     }
@@ -103,8 +103,8 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
 
     /// Returns a shallow copy of this map.
     @Override
-    public MutableHashMap<K, V> clone() {
-        var that = (MutableHashMap<K, V>) super.clone();
+    public MutableHashMapWithNodeSubClasses<K, V> clone() {
+        var that = (MutableHashMapWithNodeSubClasses<K, V>) super.clone();
         that.owner = null;
         return that;
     }
@@ -114,7 +114,7 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
     @SuppressWarnings("unchecked")
     public boolean containsKey(@Nullable Object o) {
         return root.findByKey((K) o,
-                PersistentHashMap.keyHash(o), 0) != Node.NO_DATA;
+                PersistentHashMapWithNodeSubClasses.keyHash(o), 0) != Node.NO_DATA;
     }
 
     @Override
@@ -155,7 +155,7 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
     @SuppressWarnings("unchecked")
     public @Nullable V get(Object o) {
         Object result = root.findByKey((K) o,
-                PersistentHashMap.keyHash(o), 0);
+                PersistentHashMapWithNodeSubClasses.keyHash(o), 0);
         return result == Node.NO_DATA ? null : (V) result;
     }
 
@@ -204,9 +204,9 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
     }*/
 
     ChangeEvent<V> putEntry(@Nullable K key, @Nullable V val) {
-        int keyHash = PersistentHashMap.keyHash(key);
+        int keyHash = PersistentHashMapWithNodeSubClasses.keyHash(key);
         ChangeEvent<V> details = new ChangeEvent<>();
-        root = root.put(getOrCreateOwner(), key, val, keyHash, 0, details, PersistentHashMap::keyHash);
+        root = root.put(getOrCreateOwner(), key, val, keyHash, 0, details, PersistentHashMapWithNodeSubClasses::keyHash);
         if (details.isModified() && !details.isReplaced()) {
             size += 1;
             modCount++;
@@ -258,7 +258,7 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
     }*/
 
     ChangeEvent<V> removeKey(K key) {
-        int keyHash = PersistentHashMap.keyHash(key);
+        int keyHash = PersistentHashMapWithNodeSubClasses.keyHash(key);
         ChangeEvent<V> details = new ChangeEvent<>();
         root = root.remove(getOrCreateOwner(), key, keyHash, 0, details);
         if (details.isModified()) {
@@ -270,7 +270,7 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
 
     void iteratorRemoveKey(K key) {
         // Note: mutator must be null, because we must not change the structure of the trie, while iterating over it.
-        int keyHash = PersistentHashMap.keyHash(key);
+        int keyHash = PersistentHashMapWithNodeSubClasses.keyHash(key);
         ChangeEvent<V> details = new ChangeEvent<>();
         root = root.remove(null, key, keyHash, 0, details);
         if (details.isModified()) {
@@ -293,10 +293,10 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
     /// Returns a persistent copy of this map.
     ///
     /// @return a persistent copy
-    public PersistentHashMap<K, V> toPersistent() {
+    public PersistentHashMapWithNodeSubClasses<K, V> toPersistent() {
         owner = null;
-        return isEmpty() ? PersistentHashMap.of()
-                : new PersistentHashMap<>(root, size);
+        return isEmpty() ? PersistentHashMapWithNodeSubClasses.of()
+                : new PersistentHashMapWithNodeSubClasses<>(root, size);
     }
 
     @Serial
@@ -315,7 +315,7 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
         @Serial
         @Override
         protected Object readResolve() {
-            return new MutableHashMap<>(deserializedEntries);
+            return new MutableHashMapWithNodeSubClasses<>(deserializedEntries);
         }
     }
 }

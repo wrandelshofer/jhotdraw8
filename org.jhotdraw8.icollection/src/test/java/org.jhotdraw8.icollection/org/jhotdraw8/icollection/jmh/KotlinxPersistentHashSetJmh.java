@@ -73,16 +73,13 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class KotlinxPersistentHashSetJmh {
+    private final int mask = ~64;
     @Param({"10", "1000", "100000"})
     private int size;
-
-    private final int mask = ~64;
-
     private BenchmarkData data;
     private PersistentSet<Key> setA;
     private PersistentSet<Key> setAA;
     private PersistentSet<Key> setC;
-
 
     @Setup
     public void setup() {
@@ -93,60 +90,15 @@ public class KotlinxPersistentHashSetJmh {
     }
 
     @Benchmark
-    public PersistentSet<Key> mAddContained() {
-        PersistentSet<Key> set = setA;
+    public PersistentSet<Key> mAdd() {
+        PersistentSet<Key> set = ExtensionsKt.persistentHashSetOf();
         for (Key key : data.listA) {
             set = set.adding(key);
         }
         assert set.size() == data.listA.size();
         return set;
     }
-
-    /*
-        @Benchmark
-        public PersistentSet<Key> mCopyOf() {
-            PersistentSet<Key> set = ExtensionsKt.toPersistentHashSet(data.listA);
-            assert set.size() == data.listA.size();
-            return set;
-        }
-
-
-        @Benchmark
-        public PersistentSet<Key> mAdd() {
-            PersistentSet<Key> set = ExtensionsKt.persistentSetOf();
-            for (Key key : data.listA) {
-                set = set.adding(key);
-            }
-            assert set.size() == data.listA.size();
-            return set;
-        }
-
-        @Benchmark
-        public PersistentSet<Key> mRemove() {
-            PersistentSet<Key> set = setA;
-            for (Key key : data.listA) {
-                set = set.removing(key);
-            }
-            assert set.isEmpty();
-            return set;
-        }
-    */
-    @Benchmark
-    public PersistentSet<Key> mRemoveAll() {
-        PersistentSet<Key> set = setA;
-        PersistentSet<Key> updated = set.removingAll(data.setC);
-        assert updated.size() == data.listC.size() / 2;
-        return updated;
-    }
-
-    @Benchmark
-    public PersistentSet<Key> mRemoveAllSameType() {
-        PersistentSet<Key> set = setA;
-        PersistentSet<Key> updated = set.removingAll(setC);
-        assert updated.size() == data.listC.size() / 2;
-        return updated;
-    }
-
+/*
     @Benchmark
     public PersistentSet<Key> mAddAll() {
         PersistentSet<Key> set = setA;
@@ -164,6 +116,93 @@ public class KotlinxPersistentHashSetJmh {
     }
 
     @Benchmark
+    public PersistentSet<Key> mAddContained() {
+        PersistentSet<Key> set = setA;
+        for (Key key : data.listA) {
+            set = set.adding(key);
+        }
+        assert set.size() == data.listA.size();
+        return set;
+    }
+
+    @Benchmark
+    public int mContains() {
+        int count = 0;
+        for (Key k : data.listC) {
+            if (setA.contains(k)) count++;
+        }
+        assert count == data.listC.size() / 2;
+        return count;
+    }
+    */
+
+    @Benchmark
+    public boolean mContainsAll() {
+        return setA.containsAll(data.setA);
+    }
+
+    @Benchmark
+    public boolean mContainsAllSameType() {
+        return setA.containsAll(setAA);
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mCopyOf() {
+        PersistentSet<Key> set = ExtensionsKt.toPersistentHashSet(data.listA);
+        assert set.size() == data.listA.size();
+        return set;
+    }
+
+    @Benchmark
+    public Key mGetFirst() {
+        return setA.iterator().next();
+    }
+
+    @Benchmark
+    public int mIterate() {
+        int sum = 0;
+        for (Key k : setA) {
+            sum += k.value;
+        }
+        return sum;
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mRemove() {
+        PersistentSet<Key> set = setA;
+        for (Key key : data.listA) {
+            set = set.removing(key);
+        }
+        assert set.isEmpty();
+        return set;
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mRemoveAll() {
+        PersistentSet<Key> set = setA;
+        PersistentSet<Key> updated = set.removingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mRemoveAllSameType() {
+        PersistentSet<Key> set = setA;
+        PersistentSet<Key> updated = set.removingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mRemoveFirst() {
+        PersistentSet<Key> set = setA;
+        while (!set.isEmpty()) {
+            set = set.removing(set.iterator().next());
+        }
+        return set;
+    }
+
+    @Benchmark
     public PersistentSet<Key> mRetainAll() {
         PersistentSet<Key> set = setA;
         PersistentSet<Key> updated = set.retainingAll(data.setC);
@@ -178,51 +217,4 @@ public class KotlinxPersistentHashSetJmh {
         assert updated.size() == data.listC.size() / 2;
         return updated;
     }
-
-
-    /*
-        @Benchmark
-        public int mIterate() {
-            int sum = 0;
-            for (Key k : setA) {
-                sum += k.value;
-            }
-            return sum;
-        }
-
-        @Benchmark
-        public Key mGetFirst() {
-            return setA.iterator().next();
-        }
-
-    @Benchmark
-    public PersistentSet<Key> mRemoveFirst() {
-        PersistentSet<Key> set = setA;
-        while (!set.isEmpty()) {
-            set = set.removing(set.iterator().next());
-        }
-        return set;
-    }
-
-    @Benchmark
-    public int mContains() {
-        int count = 0;
-        for (Key k : data.listC) {
-            if (setA.contains(k)) count++;
-        }
-        assert count == data.listC.size() / 2;
-        return count;
-    }*/
-
-    @Benchmark
-    public boolean mContainsAllSameType() {
-        return setA.containsAll(setAA);
-    }
-
-    @Benchmark
-    public boolean mContainsAll() {
-        return setA.containsAll(data.setA);
-    }
-
-
 }

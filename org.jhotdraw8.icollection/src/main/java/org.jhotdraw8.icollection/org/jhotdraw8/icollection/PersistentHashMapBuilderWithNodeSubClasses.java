@@ -5,22 +5,22 @@ import org.jhotdraw8.icollection.alt.impl.champmap.BitmapIndexedNode;
 import org.jhotdraw8.icollection.alt.impl.champmap.ChangeEvent;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 
-/// This Builder allows to efficiently build a [PersistentHashMap] without
+/// This Builder allows to efficiently build a [PersistentHashMapWithNodeSubClasses] without
 /// generating intermediate editions.
-public class PersistentHashMapBuilder<K, V> implements MapBuilder<K, V, PersistentHashMap<K, V>> {
+public class PersistentHashMapBuilderWithNodeSubClasses<K, V> implements MapBuilder<K, V, PersistentHashMapWithNodeSubClasses<K, V>> {
     private BitmapIndexedNode<K, V> hashMap = BitmapIndexedNode.emptyNode();
     private IdentityObject owner = new IdentityObject();
     private int size;
 
-    public PersistentHashMapBuilder() {
+    public PersistentHashMapBuilderWithNodeSubClasses() {
     }
 
     @Override
-    public PersistentHashMapBuilder<K, V> add(K key, V value) {
+    public PersistentHashMapBuilderWithNodeSubClasses<K, V> add(K key, V value) {
         var details = new ChangeEvent<V>();
         var newMap = hashMap.put(owner, key, value,
-                PersistentHashMap.keyHash(key), 0, details,
-                PersistentHashMap::keyHash);
+                PersistentHashMapWithNodeSubClasses.keyHash(key), 0, details,
+                PersistentHashMapWithNodeSubClasses::keyHash);
         hashMap = newMap;
         size++;
         return this;
@@ -28,8 +28,8 @@ public class PersistentHashMapBuilder<K, V> implements MapBuilder<K, V, Persiste
 
 
     @Override
-    public PersistentHashMap<K, V> build() {
+    public PersistentHashMapWithNodeSubClasses<K, V> build() {
         owner = new IdentityObject();
-        return new PersistentHashMap<>(hashMap, size);
+        return new PersistentHashMapWithNodeSubClasses<>(hashMap, size);
     }
 }

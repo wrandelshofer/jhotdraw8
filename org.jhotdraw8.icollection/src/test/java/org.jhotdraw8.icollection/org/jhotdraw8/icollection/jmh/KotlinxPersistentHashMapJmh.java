@@ -48,84 +48,168 @@ import java.util.concurrent.TimeUnit;
 /// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
-@Warmup(iterations = 2)
-@Fork(value = 1, jvmArgsAppend = {"-Xmx28g"})
+@Warmup(iterations = 1)
+@Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class KotlinxPersistentHashMapJmh {
-    @Param({"100000"})
+    @Param({"10", "1000", "100000"})
     private int size;
 
     @Param({"-65"})
     private int mask;
 
     private BenchmarkData data;
-    private PersistentMap<Key, Boolean> mapA;
+    private PersistentMap<Key, Boolean> setA;
+    private PersistentMap<Key, Boolean> setAA;
+    private PersistentMap<Key, Boolean> setC;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        mapA = ExtensionsKt.persistentHashMapOf();
+        setA = ExtensionsKt.persistentHashMapOf();
+        setAA = ExtensionsKt.persistentHashMapOf();
+        setC = ExtensionsKt.persistentHashMapOf();
         for (Key key : data.setA) {
-            mapA = mapA.put(key, Boolean.TRUE);
+            setA = setA.put(key, Boolean.TRUE);
+        }
+        for (Key key : data.listA) {
+            setAA = setAA.put(key, Boolean.TRUE);
+        }
+        for (Key key : data.setC) {
+            setC = setC.put(key, Boolean.FALSE);
         }
     }
 
+    @Benchmark
+    public PersistentMap<Key, Boolean> mPut() {
+        PersistentMap<Key, Boolean> set = ExtensionsKt.persistentHashMapOf();
+        for (Key key : data.listA) {
+            set = set.putting(key, true);
+        }
+        assert set.size() == data.listA.size();
+        return set;
+    }
+
+    @Benchmark
+    public PersistentMap<Key, Boolean> mPutAll() {
+        PersistentMap<Key, Boolean> set = setA;
+        PersistentMap<Key, Boolean> updated = set.puttingAll(data.mapC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentMap<Key, Boolean> mPutAllSameType() {
+        PersistentMap<Key, Boolean> set = setA;
+        PersistentMap<Key, Boolean> updated = set.puttingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentMap<Key, Boolean> mPutContained() {
+        PersistentMap<Key, Boolean> set = setA;
+        for (Key key : data.listA) {
+            set = set.putting(key, true);
+        }
+        assert set.size() == data.listA.size();
+        return set;
+    }
+
+    @Benchmark
+    public int mContainsKey() {
+        int count = 0;
+        for (Key k : data.listC) {
+            if (setA.containsKey(k)) count++;
+        }
+        assert count == data.listC.size() / 2;
+        return count;
+    }
+
+    @Benchmark
+    public boolean mContainsAll() {
+        return setA.keySet().containsAll(data.setA);
+    }
+
+    @Benchmark
+    public boolean mContainsAllSameType() {
+        return setA.keySet().containsAll(setAA.keySet());
+    }
+
+    @Benchmark
+    public PersistentMap<Key, Boolean> mCopyOf() {
+        PersistentMap.Builder<Key, Boolean> builder = ExtensionsKt.<Key, Boolean>persistentHashMapOf().builder();
+        builder.putAll(data.mapA);
+        PersistentMap<Key, Boolean> set = builder.build();
+        assert set.size() == data.listA.size();
+        return set;
+    }
+
+    @Benchmark
+    public Key mGetFirst() {
+        return setA.keySet().iterator().next();
+    }
 
     @Benchmark
     public int mIterate() {
         int sum = 0;
-        for (Key k : mapA.keySet()) {
+        for (Key k : setA.keySet()) {
             sum += k.value;
         }
         return sum;
     }
 
     @Benchmark
-    public PersistentMap<Key, Boolean> mRemoveThenAdd() {
-        Key key = data.nextKeyInA();
-        return mapA.remove(key).put(key, Boolean.TRUE);
-    }
-
-    @Benchmark
-    public PersistentMap<Key, Boolean> mPut() {
-        Key key = data.nextKeyInA();
-        return mapA.put(key, Boolean.FALSE);
-    }
-
-    @Benchmark
-    public boolean mContainsFound() {
-        Key key = data.nextKeyInA();
-        return mapA.containsKey(key);
-    }
-
-    @Benchmark
-    public boolean mContainsNotFound() {
-        Key key = data.nextKeyInB();
-        return mapA.containsKey(key);
-    }
-
-    @Benchmark
-    public Key mHead() {
-        return mapA.keySet().iterator().next();
-    }
-
-    @Benchmark
-    public PersistentMap<Key, Boolean> mTail() {
-        return mapA.remove(mapA.keySet().iterator().next());
-    }
-
-    @Benchmark
-    public PersistentMap<Key, Boolean> mCopyOnyByOne() {
-        PersistentMap<Key, Boolean> map = ExtensionsKt.persistentHashMapOf();
-        for (Key key : data.setA) {
-            map = map.put(key, Boolean.TRUE);
+    public PersistentMap<Key, Boolean> mRemove() {
+        PersistentMap<Key, Boolean> set = setA;
+        for (Key key : data.listA) {
+            set = set.removing(key);
         }
-        return map;
+        assert set.isEmpty();
+        return set;
+    }
+
+    /*
+
+    @Benchmark
+    public PersistentMap<Key,Boolean> mRemoveAll() {
+        PersistentMap<Key,Boolean> set = setA;
+        PersistentMap<Key,Boolean> updated = set.removingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
     }
 
     @Benchmark
-    public PersistentMap<Key, Boolean> mCopyOf() {
-        return ExtensionsKt.toPersistentHashMap(data.mapA);
+    public PersistentMap<Key,Boolean> mRemoveAllSameType() {
+        PersistentMap<Key,Boolean> set = setA;
+        PersistentMap<Key,Boolean> updated = set.removingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }*/
+
+    @Benchmark
+    public PersistentMap<Key, Boolean> mRemoveFirst() {
+        PersistentMap<Key, Boolean> set = setA;
+        while (!set.isEmpty()) {
+            set = set.removing(set.keySet().iterator().next());
+        }
+        return set;
     }
+/*
+    @Benchmark
+    public PersistentMap<Key,Boolean> mRetainAll() {
+        PersistentMap<Key,Boolean> set = setA;
+        PersistentMap<Key,Boolean> updated = set.retainingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentMap<Key,Boolean> mRetainAllSameType() {
+        PersistentMap<Key,Boolean> set = setA;
+        PersistentMap<Key,Boolean> updated = set.retainingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }*/
 }

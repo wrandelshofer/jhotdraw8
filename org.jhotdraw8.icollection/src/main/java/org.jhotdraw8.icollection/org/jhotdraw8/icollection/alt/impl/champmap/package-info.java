@@ -18,4 +18,4 @@
 /// Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
 ///      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
 /// </dl>
-package org.jhotdraw8.icollection.impl.champmap;
+package org.jhotdraw8.icollection.alt.impl.champmap;

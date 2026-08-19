@@ -5,8 +5,8 @@
 
 package org.jhotdraw8.icollection;
 
+import org.jhotdraw8.icollection.alt.impl.champmap.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.IdentityObject;
-import org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jspecify.annotations.Nullable;

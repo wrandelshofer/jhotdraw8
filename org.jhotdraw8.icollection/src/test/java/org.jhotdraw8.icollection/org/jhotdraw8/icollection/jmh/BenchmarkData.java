@@ -31,6 +31,7 @@ public class BenchmarkData {
     public final Set<Key> setC;
     /// Map 'a'.
     public final Map<Key, Boolean> mapA;
+    public final Map<Key, Boolean> mapC;
     /// List 'b'.
     ///
     /// The elements have been shuffled, so that they
@@ -68,6 +69,8 @@ public class BenchmarkData {
         setA = new HashSet<>(keysInA);
         setB = new HashSet<>(keysNotInA);
         setC = new HashSet<>(keys50PercentInA);
+        mapC = new HashMap<>();
+        keys50PercentInA.forEach(k -> mapC.put(k, Boolean.FALSE));
         Collections.shuffle(keysInA);
         Collections.shuffle(keysNotInA);
         Collections.shuffle(keys50PercentInA);

@@ -53,7 +53,7 @@ public class PersistentHashMapJol extends AbstractJol {
     ///      COUNT       AVG       SUM   DESCRIPTION
     ///        283        48     13712   [Ljava.lang.Object;
     ///          1        24        24   org.jhotdraw8.icollection.ChampMap
-    ///        283        24      6792   org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode
+    ///        283        24      6792   org.jhotdraw8.icollection.alt.impl.champmap.BitmapIndexedNode
     ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
     ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Value
     ///       2567               68528   (total)

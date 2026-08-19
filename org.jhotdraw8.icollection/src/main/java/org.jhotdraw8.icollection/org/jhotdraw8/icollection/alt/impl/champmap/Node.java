@@ -3,7 +3,7 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.icollection.impl.champmap;
+package org.jhotdraw8.icollection.alt.impl.champmap;
 
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jspecify.annotations.Nullable;

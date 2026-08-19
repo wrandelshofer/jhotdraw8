@@ -1,6 +1,7 @@
 package org.jhotdraw8.icollection.jmh;
 
 import org.jhotdraw8.icollection.PersistentHashSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -94,76 +95,14 @@ public class PersistentHashSetJmh {
         setC = PersistentHashSet.copyOf(data.listC);
     }
 
-    /*
-        @Benchmark
-        public PersistentSet<Key> mAddContained() {
-            PersistentSet<Key> set = setA;
-            for (Key key : data.listA) {
-                set = set.adding(key);
-            }
-            assert set.size() == data.listA.size();
-            return set;
-        }
-
-        @Benchmark
-        public PersistentSet<Key> mCopyOf() {
-            PersistentSet<Key> set = PersistentHashSet.copyOf(data.listA);
-            assert set.size() == data.listA.size();
-            return set;
-        }
-
-
-        @Benchmark
-        public PersistentSet<Key> mAdd() {
-            PersistentHashSet<Key> set = PersistentHashSet.of();
-            for (Key key : data.listA) {
-                set = set.adding(key);
-            }
-            assert set.size() == data.listA.size();
-            return set;
-        }
-
-        @Benchmark
-        public PersistentSet<Key> mRemove() {
-            PersistentSet<Key> set = setA;
-            for (Key key : data.listA) {
-                set = set.removing(key);
-            }
-            assert set.isEmpty();
-            return set;
-        }
-
-        @Benchmark
-        public PersistentHashSet<Key> mRemoveAll() {
-            PersistentHashSet<Key> set = setA;
-            PersistentHashSet<Key> updated = set.removingAll(data.setC);
-            assert updated.size() == data.listC.size() / 2;
-            return updated;
-        }
-
     @Benchmark
-    public PersistentHashSet<Key> mRemoveAllSameType() {
-        PersistentHashSet<Key> set = setA;
-        PersistentHashSet<Key> updated = set.removingAll(setC);
-        assert updated.size() == data.listC.size() / 2;
-        return updated;
-    }
-
-
-        @Benchmark
-        public PersistentHashSet<Key> mRetainAll() {
-            PersistentHashSet<Key> set = setA;
-            PersistentHashSet<Key> updated = set.retainingAll(data.setC);
-            assert updated.size() == data.listC.size() / 2;
-            return updated;
+    public PersistentSet<Key> mAdd() {
+        PersistentHashSet<Key> set = PersistentHashSet.of();
+        for (Key key : data.listA) {
+            set = set.adding(key);
         }
-
-    @Benchmark
-    public PersistentHashSet<Key> mRetainAllSameType() {
-        PersistentHashSet<Key> set = setA;
-        PersistentHashSet<Key> updated = set.retainingAll(setC);
-        assert updated.size() == data.listC.size() / 2;
-        return updated;
+        assert set.size() == data.listA.size();
+        return set;
     }
 
     @Benchmark
@@ -182,27 +121,13 @@ public class PersistentHashSetJmh {
         return updated;
     }
 
-
     @Benchmark
-    public int mIterate() {
-        int sum = 0;
-        for (Key k : setA) {
-            sum += k.value;
-        }
-        return sum;
-    }
-
-    @Benchmark
-    public Key mGetFirst() {
-        return setA.iterator().next();
-    }
-
-    @Benchmark
-    public PersistentSet<Key> mRemoveFirst() {
+    public PersistentSet<Key> mAddContained() {
         PersistentSet<Key> set = setA;
-        while (!set.isEmpty()) {
-            set = set.removing(set.iterator().next());
+        for (Key key : data.listA) {
+            set = set.adding(key);
         }
+        assert set.size() == data.listA.size();
         return set;
     }
 
@@ -217,14 +142,85 @@ public class PersistentHashSetJmh {
     }
 
     @Benchmark
+    public boolean mContainsAll() {
+        return setA.containsAll(data.setA);
+    }
+
+    @Benchmark
     public boolean mContainsAllSameType() {
         return setA.containsAll(setAA);
     }
-    */
 
     @Benchmark
-    public boolean mContainsAll() {
-        return setA.containsAll(data.setA);
+    public PersistentSet<Key> mCopyOf() {
+        PersistentSet<Key> set = PersistentHashSet.copyOf(data.listA);
+        assert set.size() == data.listA.size();
+        return set;
+    }
+
+    @Benchmark
+    public Key mGetFirst() {
+        return setA.iterator().next();
+    }
+
+    @Benchmark
+    public int mIterate() {
+        int sum = 0;
+        for (Key k : setA) {
+            sum += k.value;
+        }
+        return sum;
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mRemove() {
+        PersistentSet<Key> set = setA;
+        for (Key key : data.listA) {
+            set = set.removing(key);
+        }
+        assert set.isEmpty();
+        return set;
+    }
+
+    @Benchmark
+    public PersistentHashSet<Key> mRemoveAll() {
+        PersistentHashSet<Key> set = setA;
+        PersistentHashSet<Key> updated = set.removingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentHashSet<Key> mRemoveAllSameType() {
+        PersistentHashSet<Key> set = setA;
+        PersistentHashSet<Key> updated = set.removingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mRemoveFirst() {
+        PersistentSet<Key> set = setA;
+        while (!set.isEmpty()) {
+            set = set.removing(set.iterator().next());
+        }
+        return set;
+    }
+
+    @Benchmark
+    public PersistentHashSet<Key> mRetainAll() {
+        PersistentHashSet<Key> set = setA;
+        PersistentHashSet<Key> updated = set.retainingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentHashSet<Key> mRetainAllSameType() {
+        PersistentHashSet<Key> set = setA;
+        PersistentHashSet<Key> updated = set.retainingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
     }
 
 
