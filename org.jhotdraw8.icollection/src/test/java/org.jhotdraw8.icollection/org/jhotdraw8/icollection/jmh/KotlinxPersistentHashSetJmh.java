@@ -2,6 +2,7 @@ package org.jhotdraw8.icollection.jmh;
 
 import kotlinx.collections.immutable.ExtensionsKt;
 import kotlinx.collections.immutable.PersistentSet;
+
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -79,6 +80,7 @@ public class KotlinxPersistentHashSetJmh {
 
     private BenchmarkData data;
     private PersistentSet<Key> setA;
+    private PersistentSet<Key> setAA;
     private PersistentSet<Key> setC;
 
 
@@ -86,6 +88,7 @@ public class KotlinxPersistentHashSetJmh {
     public void setup() {
         data = new BenchmarkData(size, mask);
         setA = ExtensionsKt.toPersistentHashSet(data.setA);
+        setAA = ExtensionsKt.toPersistentHashSet(data.listA);
         setC = ExtensionsKt.toPersistentHashSet(data.setC);
     }
 
@@ -144,6 +147,21 @@ public class KotlinxPersistentHashSetJmh {
         return updated;
     }
 
+    @Benchmark
+    public PersistentSet<Key> mAddAll() {
+        PersistentSet<Key> set = setA;
+        PersistentSet<Key> updated = set.addingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mAddAllSameType() {
+        PersistentSet<Key> set = setA;
+        PersistentSet<Key> updated = set.addingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
 
     @Benchmark
     public PersistentSet<Key> mRetainAll() {
@@ -177,11 +195,15 @@ public class KotlinxPersistentHashSetJmh {
             return setA.iterator().next();
         }
 
-        @Benchmark
-        public PersistentSet<Key> mRemoveFirst() {
-            return setA.removing(setA.iterator().next());
+    @Benchmark
+    public PersistentSet<Key> mRemoveFirst() {
+        PersistentSet<Key> set = setA;
+        while (!set.isEmpty()) {
+            set = set.removing(set.iterator().next());
         }
-    */
+        return set;
+    }
+
     @Benchmark
     public int mContains() {
         int count = 0;
@@ -190,15 +212,16 @@ public class KotlinxPersistentHashSetJmh {
         }
         assert count == data.listC.size() / 2;
         return count;
-    }
+    }*/
 
     @Benchmark
     public boolean mContainsAllSameType() {
-        return setA.containsAll(setC);
+        return setA.containsAll(setAA);
     }
 
+    @Benchmark
     public boolean mContainsAll() {
-        return setA.containsAll(data.setC);
+        return setA.containsAll(data.setA);
     }
 
 

@@ -6,4 +6,8 @@ package org.jhotdraw8.icollection.impl.champset;
 /// [Apache License 2.0](https://github.com/Kotlin/kotlinx.collections.immutable/blob/578f6ed44cbafdb16bef330d1ec4a6b753201516/LICENSE.txt)
 public class DeltaCounter {
     public int count;
+
+    public boolean isModified() {
+        return count != 0;
+    }
 }

@@ -351,7 +351,8 @@ public abstract class AbstractSetTest {
         Set<Key> actual = newInstance(data.a());
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> toRemove = new ArrayList<>(new HashSet<>(data.a().asSet()));
-        while (!toRemove.isEmpty() && !expected.isEmpty()) {
+        int len = expected.size();
+        while (len-- > 0) {
             for (Iterator<Key> i = actual.iterator(); i.hasNext(); ) {
                 Key k = i.next();
                 if (k.equals(toRemove.get(0))) {

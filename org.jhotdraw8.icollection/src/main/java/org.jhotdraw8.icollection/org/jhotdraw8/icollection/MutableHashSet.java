@@ -5,14 +5,10 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
-import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampSet;
-import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.champ.BulkChangeEvent;
-import org.jhotdraw8.icollection.impl.champ.ChampIterator;
-import org.jhotdraw8.icollection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
-import org.jhotdraw8.icollection.impl.champ.Node;
+import org.jhotdraw8.icollection.impl.champset.DeltaCounter;
+import org.jhotdraw8.icollection.impl.champset.ElementIterator;
+import org.jhotdraw8.icollection.impl.champset.TrieBuilder;
+import org.jhotdraw8.icollection.impl.champset.TrieNode;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
@@ -20,12 +16,15 @@ import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
+import java.io.Serializable;
+import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.function.Predicate;
+import java.util.Spliterators;
 
 /// Implements the [Set] interface using a Compressed Hash-Array Mapped
 /// Prefix-tree (CHAMP).
@@ -69,13 +68,22 @@ import java.util.function.Predicate;
 /// </dl>
 ///
 /// @param <E> the element type
-public class MutableHashSet<E> extends AbstractMutableChampSet<E, E> {
+public class MutableHashSet<E> extends AbstractSet<E> implements Cloneable, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
+    private TrieNode<E> node;
+    private int size;
+    private int modCount;
+    private TrieBuilder<E> mutator = new TrieBuilder<>();
 
     /// Constructs a new empty set.
     public MutableHashSet() {
-        hashSet = BitmapIndexedNode.emptyNode();
+        node = TrieNode.empty();
+    }
+
+    MutableHashSet(TrieNode<E> node, int size) {
+        this.node = node;
+        this.size = size;
     }
 
     /// Constructs a set containing the elements in the specified iterable.
@@ -89,17 +97,12 @@ public class MutableHashSet<E> extends AbstractMutableChampSet<E, E> {
 
     @Override
     public boolean add(@Nullable E e) {
-        ChangeEvent details = new ChangeEvent();
-        hashSet = hashSet.put(owner,
-                e, new Object[]{e},
-                PersistentHashSet.keyHash(e), 0, details,
-                PersistentHashSet::keepOldEntry,
-                PersistentHashSet::keyHash, PersistentHashSet.ENTRY_LENGTH);
-        if (details.isModified()) {
+        node = node.mutableAdd(Objects.hashCode(e), e, 0, mutator.reset());
+        if (mutator.isModified()) {
             size++;
             modCount++;
         }
-        return details.isModified();
+        return mutator.isModified();
     }
 
     /// Adds all specified elements that are not already in this set.
@@ -112,41 +115,33 @@ public class MutableHashSet<E> extends AbstractMutableChampSet<E, E> {
         if (c instanceof MutableHashSet<?> m) {
             c = (Iterable<? extends E>) m.toPersistent();
         }
-        if (isEmpty() && (c instanceof PersistentHashSet<?> cc)) {
-            hashSet = (BitmapIndexedNode) cc.root;
-            size = cc.size;
-            return true;
-        }
-        if (c instanceof PersistentHashSet<?> that) {
-            var bulkChange = new BulkChangeEvent();
-            var newRootNode = hashSet.putAll(owner, (Node) that.root, 0,
-                    bulkChange, PersistentHashSet::keyHash, new ChangeEvent(), PersistentHashSet.ENTRY_LENGTH);
-            if (bulkChange.inBoth == that.size()) {
-                return false;
+        if (c instanceof PersistentHashSet<?> cc) {
+            if (isEmpty()) {
+                node = (TrieNode<E>) cc.node;
+                size = cc.size;
+                modCount++;
+                return true;
             }
-            hashSet = newRootNode;
-            size += that.size - bulkChange.inBoth;
+            var delta = new DeltaCounter();
+            node.mutableAddAll((TrieNode<E>) cc.node, 0, delta, mutator.reset());
+            if (delta.isModified()) {
+                size += delta.count;
+                modCount++;
+            }
+            return delta.isModified();
+        }
+        mutator.reset();
+        for (E e : c) {
+            node = node.mutableAdd(Objects.hashCode(e), e, 0, mutator);
+        }
+        if (mutator.isModified()) {
+            size += mutator.size;
             modCount++;
-            return true;
         }
-        return super.addAll(c);
-    }
-
-    @Override
-    public boolean removeIf(Predicate<? super E> filter) {
-        BulkChangeEvent bulkChange = new BulkChangeEvent();
-        BitmapIndexedNode newRootNode = hashSet.removeIf(owner, (Predicate<Object>) filter, 0, bulkChange, PersistentHashSet.ENTRY_LENGTH);
-        if (bulkChange.removed == 0) {
-            return false;
-        }
-        hashSet = newRootNode;
-        size -= bulkChange.removed;
-        modCount++;
-        return true;
+        return mutator.isModified();
     }
 
     @SuppressWarnings("unchecked")
-    @Override
     public boolean removeAll(Iterable<?> c) {
         if (isEmpty()
                 || (c instanceof Collection<?> cc) && cc.isEmpty()
@@ -157,69 +152,85 @@ public class MutableHashSet<E> extends AbstractMutableChampSet<E, E> {
             clear();
             return true;
         }
-        BulkChangeEvent bulkChange = new BulkChangeEvent();
-        BitmapIndexedNode newRootNode;
-        switch (c) {
-            case Collection<?> that ->
-                    newRootNode = hashSet.removeIf(owner, that::contains, 0, bulkChange, PersistentHashSet.ENTRY_LENGTH);
-            case ReadableCollection<?> that ->
-                    newRootNode = hashSet.removeIf(owner, that::contains, 0, bulkChange, PersistentHashSet.ENTRY_LENGTH);
-            default -> {
-                HashSet<Object> that = new HashSet<>();
-                c.forEach(that::add);
-                newRootNode = hashSet.removeIf(owner, that::contains, 0, bulkChange, PersistentHashSet.ENTRY_LENGTH);
+        if (c instanceof PersistentHashSet<?> cc) {
+            var delta = new DeltaCounter();
+            node.mutableRemoveAll((TrieNode<E>) cc.node, 0, delta, mutator.reset());
+            if (delta.isModified()) {
+                size += delta.count;
+                modCount++;
             }
+            return delta.isModified();
         }
-        if (bulkChange.removed == 0) {
-            return false;
+        mutator.reset();
+        for (Object e : c) {
+            node = node.mutableRemove(Objects.hashCode(e), (E) e, 0, mutator);
         }
-        hashSet = newRootNode;
-        size -= bulkChange.removed;
-        modCount++;
-        return true;
+        if (mutator.isModified()) {
+            size += mutator.size;
+            modCount++;
+        }
+        return mutator.isModified();
     }
 
     @SuppressWarnings("unchecked")
     public boolean retainAll(Iterable<?> c) {
-        if (c == this || isEmpty()) {
+        if (isEmpty()
+                || (c instanceof Collection<?> cc) && cc.isEmpty()
+                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
             return false;
         }
-        if ((c instanceof Collection<?> cc && cc.isEmpty())
-                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
+        if (c == this) {
             clear();
             return true;
         }
-        BulkChangeEvent bulkChange = new BulkChangeEvent();
-        BitmapIndexedNode newRootNode;
-        switch (c) {
-            case Collection<?> that ->
-                    newRootNode = hashSet.removeIf(owner, o -> !that.contains(o), 0, bulkChange, PersistentHashSet.ENTRY_LENGTH);
-            case ReadableCollection<?> that ->
-                    newRootNode = hashSet.removeIf(owner, o -> !that.contains(o), 0, bulkChange, PersistentHashSet.ENTRY_LENGTH);
-            default -> {
-                HashSet<Object> that = new HashSet<>();
-                c.forEach(that::add);
-                newRootNode = hashSet.removeIf(owner, o -> !that.contains(o), 0, bulkChange, PersistentHashSet.ENTRY_LENGTH);
+        if (c instanceof PersistentHashSet<?> cc) {
+            var delta = new DeltaCounter();
+            node.mutableRetainAll((TrieNode<E>) cc.node, 0, delta, mutator.reset());
+            if (delta.isModified()) {
+                size += delta.count;
+                modCount++;
+            }
+            return delta.isModified();
+        }
+
+        int count = 0;
+        if (c instanceof ReadableCollection<?> rc) {
+            for (E e : this) {
+                if (!rc.contains(e)) {
+                    remove(e);
+                    count++;
+                }
             }
         }
-        if (bulkChange.removed == 0) {
-            return false;
+        if (!(c instanceof Collection<?>)) {
+            var cc = new HashSet<E>();
+            for (var it = c.iterator(); it.hasNext(); ) {
+                cc.add((E) it.next());
+            }
+            c = cc;
         }
-        hashSet = newRootNode;
-        size -= bulkChange.removed;
-        modCount++;
-        return true;
+        var ccc = (Collection<E>) c;
+        boolean modified = false;
+        for (E e : this) {
+            if (!ccc.contains(e)) {
+                remove(e);
+                count++;
+            }
+        }
+
+        if (count != 0) {
+            size -= count;
+            modCount++;
+            return true;
+        }
+        return false;
     }
 
-    @Override
-    protected int getEntryLength() {
-        return PersistentHashSet.ENTRY_LENGTH;
-    }
 
     /// Removes all elements from this set.
     @Override
     public void clear() {
-        hashSet = BitmapIndexedNode.emptyNode();
+        node = TrieNode.empty();
         size = 0;
         modCount++;
     }
@@ -227,57 +238,69 @@ public class MutableHashSet<E> extends AbstractMutableChampSet<E, E> {
     /// Returns a shallow copy of this set.
     @Override
     public MutableHashSet<E> clone() {
-        MutableHashSet<E> that = (MutableHashSet<E>) super.clone();
-        that.owner = new IdentityObject();
+        MutableHashSet<E> that = null;
+        try {
+            that = (MutableHashSet<E>) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+        that.mutator = new TrieBuilder<>();
         return that;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return hashSet.contains((E) o, PersistentHashSet.keyHash(o), 0, PersistentHashSet.ENTRY_LENGTH);
+        return node.contains(Objects.hashCode(o), (E) o, 0);
     }
 
     @Override
     public Iterator<E> iterator() {
         return new FailFastIterator<>(
-                new ChampIterator<>(hashSet, null, PersistentHashSet.ENTRY_LENGTH, PersistentHashSet.KEY_DATA_INDEX),
+                new ElementIterator<>(node),
                 this::iteratorRemove, this::getModCount
         );
     }
 
     @Override
+    public int size() {
+        return size;
+    }
+
+    private int getModCount() {
+        return modCount;
+    }
+
+    @Override
     public Spliterator<E> spliterator() {
-        return new FailFastSpliterator<E>(new ChampSpliterator<E>(hashSet, o -> (E) o, size, Spliterator.DISTINCT | Spliterator.SIZED, PersistentHashSet.ENTRY_LENGTH, PersistentHashSet.KEY_DATA_INDEX), () -> this.modCount, null);
+        return new FailFastSpliterator<E>(
+                Spliterators.<E>spliterator(new ElementIterator<E>(node), size, Spliterator.DISTINCT | Spliterator.SIZED),
+                () -> this.modCount, null);
     }
 
     private void iteratorRemove(E e) {
-        owner = new IdentityObject();
         remove(e);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean remove(Object o) {
-        ChangeEvent details = new ChangeEvent();
-        hashSet = hashSet.remove(owner,
-                (E) o, PersistentHashSet.keyHash(o), 0, details,
-                PersistentHashSet.ENTRY_LENGTH);
-        if (details.isModified()) {
+        node = node.mutableRemove(Objects.hashCode(o), (E) o, 0, mutator.reset());
+        if (mutator.isModified()) {
             size--;
             modCount++;
         }
-        return details.isModified();
+        return mutator.isModified();
     }
 
     /// Returns a persistent copy of this set.
     ///
     /// @return a persistent copy
     public PersistentHashSet<E> toPersistent() {
-        owner = new IdentityObject();
+        mutator = new TrieBuilder<>();
         return size == 0
                 ? PersistentHashSet.of()
-                : new PersistentHashSet<>(hashSet, size);
+                : new PersistentHashSet<>(node, size);
     }
 
     @Serial

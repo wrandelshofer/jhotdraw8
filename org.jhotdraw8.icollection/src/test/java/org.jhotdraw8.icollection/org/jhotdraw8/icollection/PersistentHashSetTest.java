@@ -48,8 +48,8 @@ public class PersistentHashSetTest extends AbstractImmutableSetTest {
     public void testToMutableAddingAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
         PersistentSet<Key> instance2 = newInstance(data.c);
-        MutableHashSet<Key> mutableInstance = (MutableHashSet<Key>) instance.toMutable();
-        assertTrue(mutableInstance.addAll(instance2));
+        Set<Key> mutableInstance = (Set<Key>) instance.toMutable();
+        assertTrue(mutableInstance.addAll(instance2.toMutable()));
 
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         expected.addAll(data.c.asSet());

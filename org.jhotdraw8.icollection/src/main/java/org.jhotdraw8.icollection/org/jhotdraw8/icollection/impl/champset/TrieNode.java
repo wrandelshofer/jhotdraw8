@@ -14,14 +14,19 @@ import java.util.function.Predicate;
 /// JetBrains s.r.o.
 /// [Apache License 2.0](https://github.com/Kotlin/kotlinx.collections.immutable/blob/578f6ed44cbafdb16bef330d1ec4a6b753201516/LICENSE.txt)
 public class TrieNode<E> {
-    private int bitmap;
-    private Object[] buffer;
+    int bitmap;
+    public Object[] buffer;
     private @Nullable IdentityObject ownedBy;
-    private static final int MAX_BRANCHING_FACTOR = 32;
-    private static final int LOG_MAX_BRANCHING_FACTOR = 5;
+    static final int MAX_BRANCHING_FACTOR = 32;
+    public static final int LOG_MAX_BRANCHING_FACTOR = 5;
     private static final int MAX_BRANCHING_FACTOR_MINUS_ONE = MAX_BRANCHING_FACTOR - 1;
     private static final int MAX_SHIFT = 30;
-    private static TrieNode<Object> EMPTY = new TrieNode<Object>(0, new Object[0], null);
+    public static TrieNode<Object> EMPTY = new TrieNode<Object>(0, new Object[0], null);
+
+    public static <T> TrieNode<T> empty() {
+        //noinspection unchecked
+        return (TrieNode<T>) EMPTY;
+    }
 
     public TrieNode(int bitmap, Object[] buffer, @Nullable IdentityObject ownedBy) {
         this.bitmap = bitmap;
@@ -37,17 +42,36 @@ public class TrieNode<E> {
         return (bitmap & positionMask) == 0;
     }
 
+    /// Computes (nodeMask << 32) | dataMask
+    public long computeNodeAndDataMask(int shift) {
+        if (shift == MAX_SHIFT) {
+            return 0xffffffffL;
+        }
+        int nodeMask = 0;
+        int dataMask = 0;
+        for (ForEachOneBit iter = new ForEachOneBit(bitmap); iter.moveNext(); ) {
+            int positionMask = iter.getPositionMask();
+            int index = iter.getIndex();
+            if (buffer[index] instanceof TrieNode) {
+                nodeMask |= positionMask;
+            } else {
+                dataMask |= positionMask;
+            }
+        }
+        return ((long) nodeMask << 32) | dataMask;
+    }
+
     private int indexOfCellAt(int positionMask) {
         return Integer.bitCount(bitmap & (positionMask - 1));
     }
 
     @SuppressWarnings("unchecked")
-    private E elementAtIndex(int index) {
+    E elementAtIndex(int index) {
         return (E) buffer[index];
     }
 
     @SuppressWarnings("unchecked")
-    private TrieNode<E> nodeAtIndex(int index) {
+    TrieNode<E> nodeAtIndex(int index) {
         return (TrieNode<E>) buffer[index];
     }
 
@@ -98,7 +122,7 @@ public class TrieNode<E> {
             return setCellAtIndex(cellIndex, newNode, null);
         }
         // element is directly in buffer
-        if (element == buffer[cellIndex]) return this;
+        if (Objects.equals(element, buffer[cellIndex])) return this;
         return moveElementToNode(cellIndex, elementHash, element, shift, null);
     }
 
@@ -143,7 +167,7 @@ public class TrieNode<E> {
         return new TrieNode<E>(1 << setBit1, new Object[]{node}, owner);
     }
 
-    TrieNode<E> mutableAdd(int elementHash, E element, int shift, PersistentHashSetBuilder<?> mutator) {
+    public TrieNode<E> mutableAdd(int elementHash, E element, int shift, TrieBuilder<?> mutator) {
         var cellPosition = 1 << indexSegment(elementHash, shift);
 
         if (hasNoCellAt(cellPosition)) { // element is absent
@@ -161,12 +185,12 @@ public class TrieNode<E> {
             return setCellAtIndex(cellIndex, newNode, mutator.ownership);
         }
         // element is directly in buffer
-        if (element == buffer[cellIndex]) return this;
+        if (Objects.equals(element, buffer[cellIndex])) return this;
         mutator.size++;
         return moveElementToNode(cellIndex, elementHash, element, shift, mutator.ownership);
     }
 
-    TrieNode<E> remove(int elementHash, E element, int shift) {
+    public TrieNode<E> remove(int elementHash, E element, int shift) {
         var cellPositionMask = 1 << indexSegment(elementHash, shift);
 
         if (hasNoCellAt(cellPositionMask)) { // element is absent
@@ -183,7 +207,7 @@ public class TrieNode<E> {
             return canonicalizeNodeAtIndex(cellIndex, newNode, null);
         }
         // element is directly in buffer
-        if (element == buffer[cellIndex]) {
+        if (Objects.equals(element, buffer[cellIndex])) {
             assert shift == 0 || buffer.length > 1;
             return removeCellAtIndex(cellIndex, cellPositionMask, null);
         }
@@ -219,7 +243,7 @@ public class TrieNode<E> {
         return setProperties(newBitmap, newBuffer, owner);
     }
 
-    TrieNode<E> mutableRemove(int elementHash, E element, int shift, PersistentHashSetBuilder<?> mutator) {
+    public TrieNode<E> mutableRemove(int elementHash, E element, int shift, TrieBuilder<?> mutator) {
         var cellPositionMask = 1 << indexSegment(elementHash, shift);
 
         if (hasNoCellAt(cellPositionMask)) { // element is absent
@@ -241,7 +265,7 @@ public class TrieNode<E> {
             return canonicalizeNodeAtIndex(cellIndex, newNode, mutator.ownership);
         }
         // element is directly in buffer
-        if (element == buffer[cellIndex]) {
+        if (Objects.equals(element, buffer[cellIndex])) {
             assert shift == 0 || buffer.length > 1;
             mutator.size--;
             return removeCellAtIndex(cellIndex, cellPositionMask, mutator.ownership);// check is empty
@@ -249,7 +273,7 @@ public class TrieNode<E> {
         return this;
     }
 
-    boolean contains(int elementHash, E element, int shift) {
+    public boolean contains(int elementHash, E element, int shift) {
         var cellPositionMask = 1 << indexSegment(elementHash, shift);
 
         if (hasNoCellAt(cellPositionMask)) { // element is absent
@@ -265,19 +289,21 @@ public class TrieNode<E> {
             return targetNode.contains(elementHash, element, shift + LOG_MAX_BRANCHING_FACTOR);
         }
         // element is directly in buffer
-        return element == buffer[cellIndex];
+        return Objects.equals(element, buffer[cellIndex]);
     }
 
     private boolean collisionContainsElement(E element) {
         return ArrayHelper.contains(buffer, element);
     }
 
-    @SuppressWarnings("unchecked")
-    TrieNode<E> mutableAddAll(
+    //
+    // val newSize = mySet.size + otherSet.size - deltaCounter.count
+    @SuppressWarnings({"unchecked", "RedundantCast"})
+    public TrieNode<E> mutableAddAll(
             TrieNode<E> otherNode,
             int shift,
             DeltaCounter intersectionSizeRef,
-            PersistentHashSetBuilder<?> mutator
+            TrieBuilder<?> mutator
     ) {
         if (this == otherNode) {
             intersectionSizeRef.count += this.calculateSize();
@@ -299,7 +325,7 @@ public class TrieNode<E> {
         // we Note shouldn't overrun MAX_SHIFT because both sides are correct TrieNodes, right?
         for (ForEachOneBit iter = new ForEachOneBit(newBitMap); iter.moveNext(); ) {
             int positionMask = iter.getPositionMask();
-            int newNodeIndex = iter.getNewNodeIndex();
+            int newNodeIndex = iter.getIndex();
             var thisIndex = indexOfCellAt(positionMask);
             var otherNodeIndex = otherNode.indexOfCellAt(positionMask);
 
@@ -388,7 +414,7 @@ public class TrieNode<E> {
         return setProperties(0, newBuffer, null);
     }
 
-    private TrieNode<E> mutableCollisionAdd(E element, PersistentHashSetBuilder<?> mutator) {
+    private TrieNode<E> mutableCollisionAdd(E element, TrieBuilder<?> mutator) {
         if (collisionContainsElement(element)) return this;
         mutator.size++;
         var newBuffer = ArrayHelper.copyAdd(buffer, 0, element);
@@ -408,7 +434,7 @@ public class TrieNode<E> {
         return setProperties(0, newBuffer, owner);
     }
 
-    private TrieNode<E> mutableCollisionRemove(E element, PersistentHashSetBuilder<?> mutator) {
+    private TrieNode<E> mutableCollisionRemove(E element, TrieBuilder<?> mutator) {
         var index = ArrayHelper.indexOf(buffer, element);
         if (index != -1) {
             mutator.size--;
@@ -417,6 +443,7 @@ public class TrieNode<E> {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     private TrieNode<E> mutableCollisionAddAll(
             TrieNode<E> otherNode,
             DeltaCounter intersectionSizeRef,
@@ -438,9 +465,9 @@ public class TrieNode<E> {
         return setProperties(0, newBuffer, owner);
     }
 
-    /// Writes all elements from [thisArray] to [newArray], starting with [newArrayOffset], filtering
-    /// on the fly using [predicate]. By default, filters out [TrieNode.EMPTY] instances
-    /// return number of elements written to [newArray]
+    /// Writes all elements from `thisArray` to `newArray`, starting with `newArrayOffset`, filtering
+    /// on the fly using `predicate`. By default, filters out [TrieNode#EMPTY] instances
+    /// return number of elements written to `newArray`
     private int filterTo(Object[] thisArray, Object[] newArray, int newArrayOffset, Predicate<Object> predicate) {
         var i = 0;
         var j = 0;
@@ -457,12 +484,13 @@ public class TrieNode<E> {
         return j;
     }
 
+    ///  newSize = deltaCounter.count
     @SuppressWarnings("unchecked")
     public Object mutableRetainAll(
             TrieNode<E> otherNode,
             int shift,
             DeltaCounter intersectionSizeRef,
-            PersistentHashSetBuilder<?> mutator) {
+            TrieBuilder<?> mutator) {
         if (this == otherNode) {
             intersectionSizeRef.count += calculateSize();
             return this;
@@ -471,19 +499,19 @@ public class TrieNode<E> {
             return mutableCollisionRetainAll(otherNode, intersectionSizeRef, mutator.ownership);
         }
         // intersection mask contains bits that are set in both inputs
-        // this mask is not final 'cos some children may have no intersection
+        // this mask is not final because some children may have no intersection
         var newBitMap = bitmap & otherNode.bitmap;
         // zero means no nodes intersect
-        if (newBitMap == 0) return (TrieNode<E>) EMPTY;
+        if (newBitMap == 0) return EMPTY;
         var mutableNode =
                 (ownedBy == mutator.ownership && newBitMap == bitmap) ? this
                         : new TrieNode<E>(newBitMap, new Object[Integer.bitCount(newBitMap)], mutator.ownership);
-        // we need to keep track of the real mask 'cos some of the children may intersect to nothing
+        // we need to keep track of the real mask because some of the children may intersect to nothing
         var realBitMap = 0;
         // for each bit in intersection mask, try to intersect children
         for (ForEachOneBit it = new ForEachOneBit(newBitMap); it.moveNext(); ) {
             int positionMask = it.getPositionMask();
-            int newNodeIndex = it.getNewNodeIndex();
+            int newNodeIndex = it.getIndex();
             var thisIndex = indexOfCellAt(positionMask);
             var otherNodeIndex = otherNode.indexOfCellAt(positionMask);
             Object newValue;
@@ -531,7 +559,7 @@ public class TrieNode<E> {
         }
         // resulting array's size is the popcount of resulting mask
         var realSize = Integer.bitCount(realBitMap);
-        if (realBitMap == 0) return (TrieNode<E>) EMPTY;
+        if (realBitMap == 0) return EMPTY;
         // single values are kept only on root level
         if (realSize == 1 && shift != 0) {
             var single = mutableNode.buffer[mutableNode.indexOfCellAt(realBitMap)];
@@ -578,20 +606,22 @@ public class TrieNode<E> {
         return setProperties(0, Arrays.copyOf(tempBuffer, totalWritten), owner);
     }
 
+    /// newSize = mySet.size - deltaCounter.count
+    @SuppressWarnings("unchecked")
     public Object mutableRemoveAll(
             TrieNode<E> otherNode,
             int shift,
             DeltaCounter intersectionSizeRef,
-            PersistentHashSetBuilder<?> mutator) {
+            TrieBuilder<?> mutator) {
         if (this == otherNode) {
             intersectionSizeRef.count += calculateSize();
-            return (TrieNode<E>) EMPTY;
+            return empty();
         }
         if (shift > MAX_SHIFT) {
             return mutableCollisionRemoveAll(otherNode, intersectionSizeRef, mutator.ownership);
         }
         // same as with intersection, only children of both nodes are considered
-        // this mask is not final 'cos some children may have no intersection
+        // this mask is not final because some children may have no intersection
         var removalBitmap = bitmap & otherNode.bitmap;
         // zero means no intersection => nothing to remove
         if (removalBitmap == 0) return this;
@@ -637,7 +667,7 @@ public class TrieNode<E> {
                         intersectionSizeRef.count += 1;
                         newValue = EMPTY;
                     } else newValue = thisCell;
-                } else if (thisCell == otherNodeCell) {
+                } else if (Objects.equals(thisCell, otherNodeCell)) {
                     // both are just E => compare them
                     intersectionSizeRef.count += 1;
                     newValue = EMPTY;
@@ -655,7 +685,7 @@ public class TrieNode<E> {
         // resulting size is popcount of the resulting mask
         var realSize = Integer.bitCount(realBitMap);
 
-        if (realBitMap == 0) return EMPTY;
+        if (realBitMap == 0) return empty();
         if (realSize == 1 && shift != 0) {
             // single values are kept only on root level
             var single = mutableNode.buffer[mutableNode.indexOfCellAt(realBitMap)];
@@ -677,6 +707,7 @@ public class TrieNode<E> {
 
     }
 
+    @SuppressWarnings("unchecked")
     private Object mutableCollisionRemoveAll(
             TrieNode<E> otherNode,
             DeltaCounter intersectionSizeRef,
@@ -700,6 +731,7 @@ public class TrieNode<E> {
     }
 
 
+    @SuppressWarnings("unchecked")
     public boolean containsAll(TrieNode<E> otherNode, int shift) {
         if (this == otherNode) return true;
         if (shift > MAX_SHIFT) {

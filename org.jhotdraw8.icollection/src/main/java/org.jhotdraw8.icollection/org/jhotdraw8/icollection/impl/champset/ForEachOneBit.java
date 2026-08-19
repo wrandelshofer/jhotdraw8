@@ -37,7 +37,7 @@ public class ForEachOneBit {
         return bit;
     }
 
-    public int getNewNodeIndex() {
+    public int getIndex() {
         return index;
     }
 

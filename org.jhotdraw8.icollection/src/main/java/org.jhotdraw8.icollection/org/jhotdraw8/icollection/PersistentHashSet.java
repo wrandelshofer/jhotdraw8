@@ -4,15 +4,14 @@
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.champ.ChampIterator;
-import org.jhotdraw8.icollection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
+import org.jhotdraw8.icollection.impl.champset.DeltaCounter;
+import org.jhotdraw8.icollection.impl.champset.ElementIterator;
+import org.jhotdraw8.icollection.impl.champset.TrieBuilder;
+import org.jhotdraw8.icollection.impl.champset.TrieNode;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
-import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -20,6 +19,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
+import java.util.Spliterators;
 
 
 /// Implements the [PersistentSet] interface using a Compressed Hash-Array
@@ -78,123 +78,37 @@ import java.util.Spliterator;
 /// @param <E> the element type
 @SuppressWarnings("exports")
 public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
-    /// We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
-    static final int SALT = 0;//new Random().nextInt();
-    private static final PersistentHashSet<?> EMPTY = new PersistentHashSet<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
-    @SuppressWarnings("TransientFieldNotInitialized")
-    final transient BitmapIndexedNode root;
+    private static final PersistentHashSet<?> EMPTY = new PersistentHashSet<Object>(TrieNode.EMPTY, 0);
+    final TrieNode<E> node;
     final int size;
-    static final int ENTRY_LENGTH = 1;
-    static final int KEY_DATA_INDEX = 0;
 
-    PersistentHashSet(BitmapIndexedNode root, int size) {
-        this.root = root;
+    @SuppressWarnings("unchecked")
+    public static <T> PersistentHashSet<T> of() {
+        return (PersistentHashSet<T>) EMPTY;
+    }
+
+    public static <T> PersistentHashSet<T> of(T... elements) {
+        return new PersistentHashSetBuilder<T>().addArray(elements).build();
+    }
+
+    public static <T> PersistentHashSet<T> copyOf(Iterable<T> elements) {
+        return new PersistentHashSetBuilder<T>().addAll(elements).build();
+    }
+
+    public static <T> PersistentHashSetBuilder<T> builder() {
+        return new PersistentHashSetBuilder<T>();
+    }
+
+    PersistentHashSet(TrieNode<E> node, int size) {
+        this.node = node;
         this.size = size;
     }
 
-
-    /// Returns a persistent set that contains the provided elements.
-    ///
-    /// @param c   an iterable
-    /// @param <E> the element type
-    /// @return a persistent set of the provided elements
-    @SuppressWarnings("unchecked")
-    public static <E> PersistentHashSet<E> copyOf(Iterable<? extends E> c) {
-        return PersistentHashSet.<E>of().addingAll(c);
-    }
-
-    /// Returns an empty persistent set.
-    ///
-    /// @param <E> the element type
-    /// @return an empty persistent set
-    @SuppressWarnings("unchecked")
-    public static <E> PersistentHashSet<E> of() {
-        return ((PersistentHashSet<E>) PersistentHashSet.EMPTY);
-    }
-
-    /// Returns a persistent set that contains the provided elements.
-    ///
-    /// @param elements elements
-    /// @param <E>      the element type
-    /// @return a persistent set of the provided elements
-    @SuppressWarnings({"varargs"})
-    @SafeVarargs
-    public static <E> PersistentHashSet<E> of(E @Nullable ... elements) {
-        Objects.requireNonNull(elements, "elements is null");
-        return new PersistentHashSetBuilder<E>().addArray(elements).build();
-    }
-
-    /// Update function for a set: we always keep the old entry.
-    ///
-    /// @param oldElement the old entry
-    /// @param newElement the new entry
-    /// @return always returns the old entry
-    static Object[] keepOldEntry(Object[] oldElement, Object[] newElement) {
-        return oldElement;
-    }
-
-    static int keyHash(Object e) {
-        return SALT ^ Objects.hashCode(e);
-    }
-
-    @Override
-    public PersistentHashSet<E> adding(@Nullable E element) {
-        int keyHash = keyHash(element);
-        ChangeEvent details = new ChangeEvent();
-        BitmapIndexedNode newRootNode = root.put(null, element, new Object[]{element}, keyHash, 0, details,
-                PersistentHashSet::keepOldEntry, PersistentHashSet::keyHash, ENTRY_LENGTH);
-        if (details.isModified()) {
-            return new PersistentHashSet<>(newRootNode, size + 1);
-        }
-        return this;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public PersistentHashSet<E> addingAll(Iterable<? extends E> c) {
-        if (isEmpty() && c instanceof PersistentHashSet<? extends E> s) {
-            return (PersistentHashSet<E>) s;
-        }
-        var m = toMutable();
-        return m.addAll(c) ? m.toPersistent() : this;
-    }
-
-    /// {@inheritDoc}
     @Override
     public PersistentHashSet<E> cleared() {
         return of();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public boolean contains(@Nullable Object o) {
-        return root.contains((E) o, keyHash(o), 0, ENTRY_LENGTH);
-    }
-
-    @Override
-    public boolean equals(@Nullable Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (other == null) {
-            return false;
-        }
-        if (other instanceof PersistentHashSet<?> that) {
-            return size == that.size && root.equivalent(that.root, ENTRY_LENGTH);
-        }
-        return ReadableSet.setEquals(this, other);
-    }
-
-    @Override
-    public int hashCode() {
-        return ReadableSet.iteratorToHashCode(iterator());
-    }
-
-    @Override
-    public Iterator<E> iterator() {
-        return new ChampIterator<>(root, null, ENTRY_LENGTH, KEY_DATA_INDEX);
     }
 
     @Override
@@ -203,29 +117,69 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     }
 
     @Override
-    public PersistentHashSet<E> removing(E key) {
-        int keyHash = keyHash(key);
-        ChangeEvent details = new ChangeEvent();
-        BitmapIndexedNode newRootNode = root.remove(null, key, keyHash, 0, details, ENTRY_LENGTH);
-        if (details.isModified()) {
-            return size == 1 ? PersistentHashSet.of() : new PersistentHashSet<>(newRootNode, size - 1);
+    public PersistentHashSet<E> adding(E element) {
+        var newNode = node.add(Objects.hashCode(element), element, 0);
+        if (newNode == node) {
+            return this;
         }
-        return this;
+        return new PersistentHashSet<>(newNode, size + 1);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public PersistentHashSet<E> addingAll(Iterable<? extends E> c) {
+        if (c instanceof MutableHashSet<? extends E> m) {
+            c = m.toPersistent();
+        }
+        if (c instanceof PersistentHashSet<? extends E> m) {
+            var deltaCounter = new DeltaCounter();
+            var builder = new TrieBuilder<>();
+            var newNode = node.mutableAddAll((TrieNode<E>) m.node, 0, deltaCounter, builder);
+            var newSize = size + m.size - deltaCounter.count;
+            return (size != newSize) ? new PersistentHashSet<>(newNode, newSize) : this;
+        }
+        return (PersistentHashSet<E>) PersistentSet.super.addingAll(c);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public PersistentHashSet<E> removingAll(Iterable<?> c) {
-        var m = toMutable();
-        return m.removeAll(c) ? m.toPersistent() : this;
+        if (c instanceof MutableHashSet<?> m) {
+            c = m.toPersistent();
+        }
+        if (c instanceof PersistentHashSet<?> m) {
+            var deltaCounter = new DeltaCounter();
+            var builder = new TrieBuilder<>();
+            TrieNode<E> newNode = (TrieNode<E>) node.mutableRemoveAll((TrieNode<E>) m.node, 0, deltaCounter, builder);
+            var newSize = size - deltaCounter.count;
+            return (newSize != size) ? new PersistentHashSet<>(newNode, newSize) : this;
+        }
+        return (PersistentHashSet<E>) PersistentSet.super.removingAll(c);
     }
-
 
     @SuppressWarnings("unchecked")
     @Override
     public PersistentHashSet<E> retainingAll(Iterable<?> c) {
-        var m = toMutable();
-        return m.retainAll(c) ? m.toPersistent() : this;
+        if (c instanceof MutableHashSet<?> m) {
+            c = m.toPersistent();
+        }
+        if (c instanceof PersistentHashSet<?> m) {
+            var deltaCounter = new DeltaCounter();
+            var builder = new TrieBuilder<>();
+            TrieNode<E> newNode = (TrieNode<E>) node.mutableRetainAll((TrieNode<E>) m.node, 0, deltaCounter, builder);
+            var newSize = deltaCounter.count;
+            return (newSize != size) ? new PersistentHashSet<>(newNode, newSize) : this;
+        }
+        return (PersistentHashSet<E>) PersistentSet.super.retainingAll(c);
+    }
+
+    @Override
+    public PersistentHashSet<E> removing(E element) {
+        var newNode = node.remove(Objects.hashCode(element), element, 0);
+        if (newNode == node) {
+            return this;
+        }
+        return new PersistentHashSet<>(newNode, size - 1);
     }
 
     @Override
@@ -233,19 +187,19 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
         return size;
     }
 
+    @Override
+    public boolean contains(Object o) {
+        return node.contains(Objects.hashCode(o), (E) o, 0);
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return new ElementIterator<>(node);
+    }
+
+    @Override
     public Spliterator<E> spliterator() {
-        return new ChampSpliterator<>(root, null, size, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT,
-                ENTRY_LENGTH, KEY_DATA_INDEX);
-    }
-
-    @Override
-    public MutableHashSet<E> toMutable() {
-        return new MutableHashSet<>(this);
-    }
-
-    @Override
-    public String toString() {
-        return ReadableCollection.iterableToString(this);
+        return Spliterators.spliterator(iterator(), size, Spliterator.DISTINCT | Spliterator.SIZED | Spliterator.IMMUTABLE);
     }
 
     @Serial
@@ -264,7 +218,30 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
         @Serial
         @Override
         protected Object readResolve() {
-            return PersistentHashSet.copyOf(deserializedElements);
+            return PersistentHashSet.builder().addAll(deserializedElements).build();
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ReadableSet.setEquals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return ReadableSet.iteratorToHashCode(this.iterator());
+    }
+
+    public MutableHashSet<E> toMutable() {
+        return new MutableHashSet<>(this.node, size);
+    }
+
+    public MutableHashSet<E> asSet() {
+        return new MutableHashSet<>(this.node, size);
+    }
+
+    @Override
+    public String toString() {
+        return ReadableCollection.iterableToString(this);
     }
 }
