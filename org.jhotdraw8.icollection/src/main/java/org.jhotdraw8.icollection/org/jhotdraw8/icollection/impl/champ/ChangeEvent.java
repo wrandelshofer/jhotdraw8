@@ -23,30 +23,30 @@ public class ChangeEvent {
     }
 
     private ChangeEvent.Type type = ChangeEvent.Type.UNCHANGED;
-    private @Nullable Object[] oldEntry;
-    private @Nullable Object[] newEntry;
+    private @Nullable Object[] oldData;
+    private @Nullable Object[] newData;
 
     public ChangeEvent() {
     }
 
     void setFound(Object[] data) {
-        this.oldEntry = data;
+        this.oldData = data;
     }
 
-    public @Nullable Object[] getOldEntry() {
-        return oldEntry;
+    public @Nullable Object[] getOldData() {
+        return oldData;
     }
 
-    public @Nullable Object[] getNewEntry() {
-        return newEntry;
+    public @Nullable Object[] getNewData() {
+        return newData;
     }
 
     public Object[] getOldDataNonNull() {
-        return Objects.requireNonNull(oldEntry);
+        return Objects.requireNonNull(oldData);
     }
 
     public Object[] getNewDataNonNull() {
-        return Objects.requireNonNull(newEntry);
+        return Objects.requireNonNull(newData);
     }
 
     /// Call this method to indicate that the value of an element has changed.
@@ -54,8 +54,8 @@ public class ChangeEvent {
     /// @param oldEntry the old value of the element
     /// @param newEntry the new value of the element
     void setReplaced(@Nullable Object[] oldEntry, @Nullable Object[] newEntry) {
-        this.oldEntry = oldEntry;
-        this.newEntry = newEntry;
+        this.oldData = oldEntry;
+        this.newData = newEntry;
         this.type = ChangeEvent.Type.REPLACED;
     }
 
@@ -63,13 +63,13 @@ public class ChangeEvent {
     ///
     /// @param oldEntry the value of the removed element
     void setRemoved(@Nullable Object[] oldEntry) {
-        this.oldEntry = oldEntry;
+        this.oldData = oldEntry;
         this.type = ChangeEvent.Type.REMOVED;
     }
 
     /// Call this method to indicate that a data element has been added.
     void setAdded(@Nullable Object[] newEntry) {
-        this.newEntry = newEntry;
+        this.newData = newEntry;
         this.type = ChangeEvent.Type.ADDED;
     }
 
@@ -85,7 +85,7 @@ public class ChangeEvent {
 
     void reset() {
         type = ChangeEvent.Type.UNCHANGED;
-        oldEntry = null;
-        newEntry = null;
+        oldData = null;
+        newData = null;
     }
 }

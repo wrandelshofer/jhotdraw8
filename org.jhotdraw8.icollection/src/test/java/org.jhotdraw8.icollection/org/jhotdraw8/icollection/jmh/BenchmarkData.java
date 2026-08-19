@@ -11,6 +11,8 @@ import java.util.Random;
 import java.util.Set;
 
 /// This class provides collections that can be used in JMH benchmarks.
+/// Collections 'a' and 'b' are disjoint.
+/// Collection 'c' contains 50% of 'a' and 50% of 'b'.
 @SuppressWarnings("JmhInspections")
 public class BenchmarkData {
     /// List 'a'.
@@ -20,9 +22,13 @@ public class BenchmarkData {
     public final List<Key> listA;
     public final Key[] arrayA;
     private final List<Integer> indicesA;
+    private final List<Integer> indicesC;
     /// Set 'a'.
     public final Set<Key> setA;
+    /// Set 'b'.
     public final Set<Key> setB;
+    /// Set 'c'.
+    public final Set<Key> setC;
     /// Map 'a'.
     public final Map<Key, Boolean> mapA;
     /// List 'b'.
@@ -30,6 +36,11 @@ public class BenchmarkData {
     /// The elements have been shuffled, so that they
     /// are not in contiguous memory addresses.
     public final List<Key> listB;
+    /// List 'c'.
+    ///
+    /// The elements have been shuffled, so that they
+    /// are not in contiguous memory addresses.
+    public final List<Key> listC;
 
 
     private int index;
@@ -40,28 +51,40 @@ public class BenchmarkData {
         Random rng = new Random(0);
         int initialCapacity = (int) Math.min(Integer.MAX_VALUE, size * 2L);
         Set<Integer> preventDuplicates = new HashSet<>(initialCapacity);
-        ArrayList<Key> keysInSet = new ArrayList<>(size);
+        ArrayList<Key> keysInA = new ArrayList<>(size);
         mapA = new HashMap<>(initialCapacity);
-        ArrayList<Key> keysNotInSet = new ArrayList<>(size);
+        ArrayList<Key> keysNotInA = new ArrayList<>(size);
         Map<Key, Integer> indexMap = new HashMap<>(initialCapacity);
         for (int i = 0; i < size; i++) {
             Key key = createKey(rng, preventDuplicates, mask);
-            keysInSet.add(key);
+            keysInA.add(key);
             mapA.put(key, Boolean.TRUE);
             indexMap.put(key, i);
-            keysNotInSet.add(createKey(rng, preventDuplicates, mask));
+            keysNotInA.add(createKey(rng, preventDuplicates, mask));
         }
-        setA = new HashSet<>(keysInSet);
-        setB = new HashSet<>(keysNotInSet);
-        Collections.shuffle(keysInSet);
-        Collections.shuffle(keysNotInSet);
-        this.listA = Collections.unmodifiableList(keysInSet);
-        this.arrayA = keysInSet.toArray(new Key[0]);
-        this.listB = Collections.unmodifiableList(keysNotInSet);
-        indicesA = new ArrayList<>(keysInSet.size());
-        for (var k : keysInSet) {
+        ArrayList<Key> keys50PercentInA = new ArrayList<>(size);
+        keys50PercentInA.addAll(keysInA.subList(0, size / 2));
+        keys50PercentInA.addAll(keysNotInA.subList(size / 2, size));
+        setA = new HashSet<>(keysInA);
+        setB = new HashSet<>(keysNotInA);
+        setC = new HashSet<>(keys50PercentInA);
+        Collections.shuffle(keysInA);
+        Collections.shuffle(keysNotInA);
+        Collections.shuffle(keys50PercentInA);
+        this.listA = Collections.unmodifiableList(keysInA);
+        this.arrayA = keysInA.toArray(new Key[0]);
+        this.listB = Collections.unmodifiableList(keysNotInA);
+        this.listC = Collections.unmodifiableList(keys50PercentInA);
+        indicesA = new ArrayList<>(keysInA.size());
+
+        for (var k : keysInA) {
             indicesA.add(indexMap.get(k));
         }
+        indicesC = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            indicesC.add(i);
+        }
+        Collections.shuffle(indicesC);
     }
 
     private Key createKey(Random rng, Set<Integer> preventDuplicates, int mask) {
@@ -85,5 +108,10 @@ public class BenchmarkData {
     public Key nextKeyInB() {
         index = index < size - 1 ? index + 1 : 0;
         return listA.get(index);
+    }
+
+    public Key nextKeyInC() {
+        index = index < size - 1 ? index + 1 : 0;
+        return listC.get(index);
     }
 }

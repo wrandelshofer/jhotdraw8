@@ -8,7 +8,6 @@ import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChampIterator;
 import org.jhotdraw8.icollection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
-import org.jhotdraw8.icollection.impl.champ.Node;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableSet;
@@ -171,7 +170,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return root.findData((E) o, keyHash(o), 0, ENTRY_LENGTH, KEY_DATA_INDEX) != Node.NO_DATA;
+        return root.contains((E) o, keyHash(o), 0, ENTRY_LENGTH);
     }
 
     @Override

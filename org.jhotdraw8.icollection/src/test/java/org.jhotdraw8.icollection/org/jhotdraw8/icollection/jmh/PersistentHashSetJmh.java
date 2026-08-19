@@ -18,46 +18,49 @@ import java.util.concurrent.TimeUnit;
 
 /// <pre>
 /// # JMH version: 1.37
-/// /// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
-/// /// # Mac Mini M4 Pro, 4.40 GHz
+/// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
+/// # Mac Mini M4 Pro, 4.40 GHz
 ///
 /// Benchmark                                    (mask)  (size)  Mode  Cnt         Score   Error  Units
-/// PersistentHashSetJmh.mAdd                       -65      10  avgt    2       145.214          ns/op
-/// PersistentHashSetJmh.mAdd                       -65    1000  avgt    2     36381.689          ns/op
-/// PersistentHashSetJmh.mAdd                       -65  100000  avgt    2  11721594.653          ns/op
-/// PersistentHashSetJmh.mContainsFound             -65      10  avgt    2        20.507          ns/op
-/// PersistentHashSetJmh.mContainsFound             -65    1000  avgt    2      6454.328          ns/op
-/// PersistentHashSetJmh.mContainsFound             -65  100000  avgt    2   1774241.923          ns/op
-/// PersistentHashSetJmh.mContainsNotFound          -65      10  avgt    2        23.618          ns/op
-/// PersistentHashSetJmh.mContainsNotFound          -65    1000  avgt    2      4768.093          ns/op
-/// PersistentHashSetJmh.mContainsNotFound          -65  100000  avgt    2   1526052.327          ns/op
-/// PersistentHashSetJmh.mCopyOf                    -65      10  avgt    2       165.172          ns/op
-/// PersistentHashSetJmh.mCopyOf                    -65    1000  avgt    2     34447.710          ns/op
-/// PersistentHashSetJmh.mCopyOf                    -65  100000  avgt    2   7821692.950          ns/op
-/// PersistentHashSetJmh.mGetFirst                  -65      10  avgt    2         1.022          ns/op
-/// PersistentHashSetJmh.mGetFirst                  -65    1000  avgt    2         1.482          ns/op
-/// PersistentHashSetJmh.mGetFirst                  -65  100000  avgt    2         6.906          ns/op
-/// PersistentHashSetJmh.mIterate                   -65      10  avgt    2        10.088          ns/op
-/// PersistentHashSetJmh.mIterate                   -65    1000  avgt    2      1552.284          ns/op
-/// PersistentHashSetJmh.mIterate                   -65  100000  avgt    2    516561.987          ns/op
-/// PersistentHashSetJmh.mRemove                    -65      10  avgt    2       151.698          ns/op
-/// PersistentHashSetJmh.mRemove                    -65    1000  avgt    2     38393.816          ns/op
-/// PersistentHashSetJmh.mRemove                    -65  100000  avgt    2  11788660.510          ns/op
-/// PersistentHashSetJmh.mRemoveAll                 -65      10  avgt    2       160.879          ns/op
-/// PersistentHashSetJmh.mRemoveAll                 -65    1000  avgt    2     37378.025          ns/op
-/// PersistentHashSetJmh.mRemoveAll                 -65  100000  avgt    2   8512400.202          ns/op
-/// PersistentHashSetJmh.mRemoveAllSameType         -65      10  avgt    2        48.814          ns/op
-/// PersistentHashSetJmh.mRemoveAllSameType         -65    1000  avgt    2      7310.738          ns/op
-/// PersistentHashSetJmh.mRemoveAllSameType         -65  100000  avgt    2    681754.168          ns/op
-/// PersistentHashSetJmh.mRemoveFirst               -65      10  avgt    2        11.820          ns/op
-/// PersistentHashSetJmh.mRemoveFirst               -65    1000  avgt    2        19.581          ns/op
-/// PersistentHashSetJmh.mRemoveFirst               -65  100000  avgt    2        36.999          ns/op
-/// PersistentHashSetJmh.mRetainAllAllRetained      -65      10  avgt    2        48.291          ns/op
-/// PersistentHashSetJmh.mRetainAllAllRetained      -65    1000  avgt    2     11418.710          ns/op
-/// PersistentHashSetJmh.mRetainAllAllRetained      -65  100000  avgt    2   1748979.859          ns/op
-/// PersistentHashSetJmh.mRetainAllNoneRetained     -65      10  avgt    2        87.419          ns/op
-/// PersistentHashSetJmh.mRetainAllNoneRetained     -65    1000  avgt    2     12886.427          ns/op
-/// PersistentHashSetJmh.mRetainAllNoneRetained     -65  100000  avgt    2   1837815.641          ns/op
+/// PersistentHashSetJmh.mAdd                       -65      10  avgt    2       181.273          ns/op
+/// PersistentHashSetJmh.mAdd                       -65    1000  avgt    2     43283.075          ns/op
+/// PersistentHashSetJmh.mAdd                       -65  100000  avgt    2  11504819.911          ns/op
+/// PersistentHashSetJmh.mAddContained              -65      10  avgt    2        77.569          ns/op
+/// PersistentHashSetJmh.mAddContained              -65    1000  avgt    2     32643.634          ns/op
+/// PersistentHashSetJmh.mAddContained              -65  100000  avgt    2   4358871.283          ns/op
+/// PersistentHashSetJmh.mContainsFound             -65      10  avgt    2        20.733          ns/op
+/// PersistentHashSetJmh.mContainsFound             -65    1000  avgt    2      5692.804          ns/op
+/// PersistentHashSetJmh.mContainsFound             -65  100000  avgt    2   1715805.540          ns/op
+/// PersistentHashSetJmh.mContainsNotFound          -65      10  avgt    2        23.994          ns/op
+/// PersistentHashSetJmh.mContainsNotFound          -65    1000  avgt    2      4446.425          ns/op
+/// PersistentHashSetJmh.mContainsNotFound          -65  100000  avgt    2   1456217.097          ns/op
+/// PersistentHashSetJmh.mCopyOf                    -65      10  avgt    2       179.614          ns/op
+/// PersistentHashSetJmh.mCopyOf                    -65    1000  avgt    2     47004.346          ns/op
+/// PersistentHashSetJmh.mCopyOf                    -65  100000  avgt    2   8909278.403          ns/op
+/// PersistentHashSetJmh.mGetFirst                  -65      10  avgt    2         1.023          ns/op
+/// PersistentHashSetJmh.mGetFirst                  -65    1000  avgt    2         1.457          ns/op
+/// PersistentHashSetJmh.mGetFirst                  -65  100000  avgt    2         8.684          ns/op
+/// PersistentHashSetJmh.mIterate                   -65      10  avgt    2        10.177          ns/op
+/// PersistentHashSetJmh.mIterate                   -65    1000  avgt    2      2958.470          ns/op
+/// PersistentHashSetJmh.mIterate                   -65  100000  avgt    2    454123.890          ns/op
+/// PersistentHashSetJmh.mRemove                    -65      10  avgt    2       165.223          ns/op
+/// PersistentHashSetJmh.mRemove                    -65    1000  avgt    2     49675.240          ns/op
+/// PersistentHashSetJmh.mRemove                    -65  100000  avgt    2  13452829.022          ns/op
+/// PersistentHashSetJmh.mRemoveAll                 -65      10  avgt    2        72.393          ns/op
+/// PersistentHashSetJmh.mRemoveAll                 -65    1000  avgt    2     15541.162          ns/op
+/// PersistentHashSetJmh.mRemoveAll                 -65  100000  avgt    2   1983407.792          ns/op
+/// PersistentHashSetJmh.mRemoveAllSameType         -65      10  avgt    2        70.312          ns/op
+/// PersistentHashSetJmh.mRemoveAllSameType         -65    1000  avgt    2     31624.896          ns/op
+/// PersistentHashSetJmh.mRemoveAllSameType         -65  100000  avgt    2   3454655.824          ns/op
+/// PersistentHashSetJmh.mRemoveFirst               -65      10  avgt    2        13.524          ns/op
+/// PersistentHashSetJmh.mRemoveFirst               -65    1000  avgt    2        21.159          ns/op
+/// PersistentHashSetJmh.mRemoveFirst               -65  100000  avgt    2        66.750          ns/op
+/// PersistentHashSetJmh.mRetainAllAllRetained      -65      10  avgt    2        51.808          ns/op
+/// PersistentHashSetJmh.mRetainAllAllRetained      -65    1000  avgt    2     12897.290          ns/op
+/// PersistentHashSetJmh.mRetainAllAllRetained      -65  100000  avgt    2   1761517.837          ns/op
+/// PersistentHashSetJmh.mRetainAllNoneRetained     -65      10  avgt    2        72.231          ns/op
+/// PersistentHashSetJmh.mRetainAllNoneRetained     -65    1000  avgt    2     14491.321          ns/op
+/// PersistentHashSetJmh.mRetainAllNoneRetained     -65  100000  avgt    2   1947315.931          ns/op
 /// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
@@ -85,6 +88,15 @@ public class PersistentHashSetJmh {
         setAA = PersistentHashSet.copyOf(data.listA);
     }
 
+    @Benchmark
+    public PersistentSet<Key> mAddContained() {
+        PersistentSet<Key> set = setA;
+        for (Key key : data.listA) {
+            set = set.adding(key);
+        }
+        assert set.size() == data.listA.size();
+        return set;
+    }
 
     @Benchmark
     public PersistentSet<Key> mCopyOf() {

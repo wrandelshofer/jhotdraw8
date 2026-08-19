@@ -60,7 +60,7 @@ public class ChampTrieGraphviz<K, V> {
                     a.append(Objects.toString(node.getKey(Node.index(dataMap, bitpos), ENTRY_LENGTH)));
                     if (printValue) {
                         a.append('=');
-                        a.append(Objects.toString(node.getEntry(Node.index(dataMap, bitpos), ENTRY_LENGTH)));
+                        a.append(Objects.toString(node.getData(Node.index(dataMap, bitpos), ENTRY_LENGTH)));
                     }
                 } else {
                     a.append("·");

@@ -66,8 +66,8 @@ public abstract class Node {
         return Integer.bitCount(bitmap & (bitpos - 1));
     }
 
-    protected final int dataArrayIndex(int dataIndex, int ENTRY_LENGTH) {
-        return dataIndex * ENTRY_LENGTH;
+    protected final int dataArrayIndex(int dataIndex, int DATA_LENGTH) {
+        return dataIndex * DATA_LENGTH;
     }
 
     protected final int nodeArrayIndex(int nodeIndex, Object[] mx) {
@@ -82,20 +82,20 @@ public abstract class Node {
         return !hasData() && !hasNodes();
     }
 
-    boolean hasMany(int ENTRY_LENGTH) {
-        return hasNodes() || dataArity(ENTRY_LENGTH) > 1;
+    boolean hasMany(int DATA_LENGTH) {
+        return hasNodes() || dataArity(DATA_LENGTH) > 1;
     }
 
     Node mergeTwoDataEntriesIntoNode(@Nullable IdentityObject mutator,
                                      Object[] entry0, int keyHash0,
                                      Object[] entry1, int keyHash1,
-                                     int shift, int ENTRY_LENGTH) {
+                                     int shift, int DATA_LENGTH) {
 
         if (shift >= HASH_CODE_LENGTH) {
-            Object[] entries = new Object[ENTRY_LENGTH * 2];
-            System.arraycopy(entry0, 0, entries, 0, ENTRY_LENGTH);
-            System.arraycopy(entry1, 0, entries, ENTRY_LENGTH, ENTRY_LENGTH);
-            return ChampTrie.newHashCollisionNode(mutator, keyHash0, entries, ENTRY_LENGTH);
+            Object[] entries = new Object[DATA_LENGTH * 2];
+            System.arraycopy(entry0, 0, entries, 0, DATA_LENGTH);
+            System.arraycopy(entry1, 0, entries, DATA_LENGTH, DATA_LENGTH);
+            return ChampTrie.newHashCollisionNode(mutator, keyHash0, entries, DATA_LENGTH);
         }
 
         int mask0 = mask(keyHash0, shift);
@@ -105,68 +105,70 @@ public abstract class Node {
             // both nodes fit on same level
             int dataMap = bitpos(mask0) | bitpos(mask1);
 
-            Object[] dst = new Object[ENTRY_LENGTH * 2];
+            Object[] dst = new Object[DATA_LENGTH * 2];
             if (mask0 < mask1) {
-                System.arraycopy(entry0, 0, dst, 0, ENTRY_LENGTH);
-                System.arraycopy(entry1, 0, dst, ENTRY_LENGTH, ENTRY_LENGTH);
+                System.arraycopy(entry0, 0, dst, 0, DATA_LENGTH);
+                System.arraycopy(entry1, 0, dst, DATA_LENGTH, DATA_LENGTH);
             } else {
-                System.arraycopy(entry1, 0, dst, 0, ENTRY_LENGTH);
-                System.arraycopy(entry0, 0, dst, ENTRY_LENGTH, ENTRY_LENGTH);
+                System.arraycopy(entry1, 0, dst, 0, DATA_LENGTH);
+                System.arraycopy(entry0, 0, dst, DATA_LENGTH, DATA_LENGTH);
             }
-            return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, dst, ENTRY_LENGTH);
+            return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, dst, DATA_LENGTH);
         } else {
             Node node = mergeTwoDataEntriesIntoNode(mutator,
                     entry0, keyHash0,
                     entry1, keyHash1,
                     shift + BIT_PARTITION_SIZE,
-                    ENTRY_LENGTH);
+                    DATA_LENGTH);
             // values fit on next level
 
             int nodeMap = bitpos(mask0);
-            return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, (0), new Object[]{node}, ENTRY_LENGTH);
+            return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, (0), new Object[]{node}, DATA_LENGTH);
         }
     }
 
-    abstract int dataArity(int ENTRY_LENGTH);
+    abstract int dataArity(int DATA_LENGTH);
 
     abstract boolean hasDataArityOne();
 
     /// Checks if this trie is equivalent to the specified other trie.
     ///
-    /// @param other        the other trie
-    /// @param ENTRY_LENGTH
+    /// @param other       the other trie
+    /// @param DATA_LENGTH
     /// @return true if equivalent
-    abstract boolean equivalent(Object other, int ENTRY_LENGTH);
+    abstract boolean equivalent(Object other, int DATA_LENGTH);
 
     /// Finds an entry by a key.
     ///
-    /// @param key          a key
-    /// @param keyHash      the hash code of the key
-    /// @param shift        the shift for this node
-    /// @param ENTRY_LENGTH
-    /// @return the entry, returns [#NO_DATA] if the entry is not present.
-    abstract Object findEntry(Object key, int keyHash, int shift, int ENTRY_LENGTH);
+    /// @param key         a key
+    /// @param keyHash     the hash code of the key
+    /// @param shift       the shift for this node
+    /// @param DATA_LENGTH
+    /// @return the data, returns [#NO_DATA] if the key is not present.
+    abstract Object findData(Object key, int keyHash, int shift, int DATA_LENGTH);
 
     /// Finds a value by a key.
     ///
-    /// @param key          a key
-    /// @param keyHash      the hash code of the key
-    /// @param shift        the shift for this node
-    /// @param ENTRY_LENGTH
-    /// @param DATA_INDEX
+    /// @param key         a key
+    /// @param keyHash     the hash code of the key
+    /// @param shift       the shift for this node
+    /// @param DATA_LENGTH
+    /// @param VALUE_INDEX
     /// @return the value, returns [#NO_DATA] if the entry is not present.
-    abstract Object findData(Object key, int keyHash, int shift, int ENTRY_LENGTH, int DATA_INDEX);
+    abstract Object findValue(Object key, int keyHash, int shift, int DATA_LENGTH, int VALUE_INDEX);
+
+    abstract boolean contains(Object key, int keyHash, int shift, int ENTRY_LENGTHX);
 
 
-    public final Object[] getDataEntry(int index, int ENTRY_LENGTH) {
-        Object[] entry = new Object[ENTRY_LENGTH];
-        System.arraycopy(array, ENTRY_LENGTH * index, entry, 0, ENTRY_LENGTH);
+    public final Object[] getDataEntry(int index, int DATA_LENGTH) {
+        Object[] entry = new Object[DATA_LENGTH];
+        System.arraycopy(array, DATA_LENGTH * index, entry, 0, DATA_LENGTH);
         return entry;
     }
 
     @SuppressWarnings("unchecked")
-    public final Object getKey(int index, int ENTRY_LENGTH) {
-        return (Object) array[index * ENTRY_LENGTH];
+    public final Object getKey(int index, int DATA_LENGTH) {
+        return (Object) array[index * DATA_LENGTH];
     }
 
 
@@ -178,12 +180,12 @@ public abstract class Node {
         return (Node) array[array.length - 1 - index];
     }
 
-    public final Object[] getEntry(int index, int ENTRY_LENGTH) {
-        return Arrays.copyOfRange(array, index * ENTRY_LENGTH, index * ENTRY_LENGTH + ENTRY_LENGTH);
+    public final Object[] getData(int index, int DATA_LENGTH) {
+        return Arrays.copyOfRange(array, index * DATA_LENGTH, index * DATA_LENGTH + DATA_LENGTH);
     }
 
-    public final Object getData(int index, int ENTRY_LENGTH, int DATA_INDEX) {
-        return array[index * ENTRY_LENGTH + DATA_INDEX];
+    public final Object getData(int index, int DATA_LENGTH, int DATA_INDEX) {
+        return array[index * DATA_LENGTH + DATA_INDEX];
     }
 
     abstract boolean hasData();
@@ -198,14 +200,14 @@ public abstract class Node {
     abstract int nodeArity();
 
     abstract Node remove(@Nullable IdentityObject mutator, Object key,
-                         int keyHash, int shift, ChangeEvent details, int ENTRY_LENGTH);
+                         int keyHash, int shift, ChangeEvent details, int DATA_LENGTH);
 
 
-    public abstract Node put(@Nullable IdentityObject mutator, Object key, Object[] entry,
+    public abstract Node put(@Nullable IdentityObject mutator, Object key, Object[] newData,
                              int keyHash, int shift, ChangeEvent details,
                              BiFunction<Object[], Object[], Object[]> updateFunction,
                              ToIntFunction<Object> hashFunction
-            , int ENTRY_LENGTH);
+            , int DATA_LENGTH);
 
     /// Retains data elements in this trie for which the provided predicate returns true.
     ///
@@ -216,12 +218,12 @@ public abstract class Node {
     /// @return the updated trie
     protected abstract Node removeIf(@Nullable IdentityObject owner,
                                      Predicate<Object> predicate, int shift,
-                                     BulkChangeEvent bulkChange, int ENTRY_LENGTH);
+                                     BulkChangeEvent bulkChange, int DATA_LENGTH);
 
     protected abstract Node putAll(@Nullable IdentityObject owner, Node otherNode, int shift,
                                    BulkChangeEvent bulkChange,
                                    ToIntFunction<Object> hashFunction,
-                                   ChangeEvent details, int ENTRY_LENGTH);
+                                   ChangeEvent details, int DATA_LENGTH);
 
-    protected abstract int calculateSize(int ENTRY_LENGTH);
+    protected abstract int calculateSize(int DATA_LENGTH);
 }

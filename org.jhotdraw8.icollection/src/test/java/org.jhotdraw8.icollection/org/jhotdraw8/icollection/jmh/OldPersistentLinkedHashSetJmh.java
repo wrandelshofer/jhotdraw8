@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.PersistentLinkedHashElementSet;
+import org.jhotdraw8.icollection.OldPersistentLinkedHashSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -65,7 +65,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class PersistentLinkedHashElementSetJmh {
+public class OldPersistentLinkedHashSetJmh {
     @Param({"10", "1000", "100000"})
     private int size;
 
@@ -73,16 +73,16 @@ public class PersistentLinkedHashElementSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private PersistentLinkedHashElementSet<Key> setA;
-    private PersistentLinkedHashElementSet<Key> setAA;
-    private PersistentLinkedHashElementSet<Key> setB;
+    private OldPersistentLinkedHashSet<Key> setA;
+    private OldPersistentLinkedHashSet<Key> setAA;
+    private OldPersistentLinkedHashSet<Key> setB;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = PersistentLinkedHashElementSet.copyOf(data.setA);
-        setB = PersistentLinkedHashElementSet.copyOf(data.listB);
-        setAA = PersistentLinkedHashElementSet.copyOf(data.listA);
+        setA = OldPersistentLinkedHashSet.copyOf(data.setA);
+        setB = OldPersistentLinkedHashSet.copyOf(data.listB);
+        setAA = OldPersistentLinkedHashSet.copyOf(data.listA);
     }
 
     /*
@@ -163,7 +163,7 @@ public class PersistentLinkedHashElementSetJmh {
         }
     */
     @Benchmark
-    public PersistentLinkedHashElementSet<Key> mRemoveFirst() {
+    public OldPersistentLinkedHashSet<Key> mRemoveFirst() {
         var s = setA;
         for (int i = 0, n = setA.size(); i < n; i++) {
             s = s.removingFirst();

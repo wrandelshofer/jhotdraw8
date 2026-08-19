@@ -223,8 +223,9 @@ public abstract class AbstractImmutableSetTest {
         PersistentSet<Key> instance = newInstance(data.a());
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> toRemove = new ArrayList<>(new HashSet<>(data.a().asSet()));
+        int maxIter = data.a().size();
         outer:
-        while (!toRemove.isEmpty() && !expected.isEmpty()) {
+        while (maxIter-- >= 0 && !toRemove.isEmpty() && !expected.isEmpty()) {
             for (Iterator<Key> i = instance.iterator(); i.hasNext(); ) {
                 Key k = i.next();
                 if (k.equals(toRemove.get(0))) {
@@ -558,6 +559,7 @@ public abstract class AbstractImmutableSetTest {
         expected.addAll(data.c.asSet());
         assertEqualSet(expected, instance3);
     }
+
 
     @ParameterizedTest
     @MethodSource("dataProvider")

@@ -18,8 +18,8 @@ import java.util.concurrent.TimeUnit;
 
 /// <pre>
 /// # JMH version: 1.37
-/// /// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
-/// /// # Mac Mini M4 Pro, 4.40 GHz
+/// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
+/// # Mac Mini M4 Pro, 4.40 GHz
 ///
 /// Benchmark               (mask)  (size)  Mode  Cnt         Score   Error  Units
 /// mAdd                       -65      10  avgt    2       145.214          ns/op

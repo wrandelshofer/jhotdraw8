@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -157,6 +158,19 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         instance.addFirst(e);
         assertEqualSequence(expected, instance, "addFirstIdempotent");
 
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void addAllFirstWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData data) throws Exception {
+        SequencedSet<Key> instance = newInstance(data.a);
+
+        LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
+        for (var k : data.a()) {
+            instance.addFirst(k);
+            expected.addFirst(k);
+        }
+        assertEqualSet(expected, instance);
     }
 
     @ParameterizedTest

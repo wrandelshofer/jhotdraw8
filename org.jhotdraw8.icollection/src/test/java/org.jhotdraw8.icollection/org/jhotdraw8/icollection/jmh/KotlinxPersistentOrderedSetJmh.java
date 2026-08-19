@@ -26,6 +26,9 @@ import java.util.concurrent.TimeUnit;
 /// KotlinxPersistentOrderedSetJmh.mAdd                        10  avgt    2       264.255          ns/op
 /// KotlinxPersistentOrderedSetJmh.mAdd                      1000  avgt    2     74652.286          ns/op
 /// KotlinxPersistentOrderedSetJmh.mAdd                    100000  avgt    2  18466287.515          ns/op
+/// KotlinxPersistentOrderedSetJmh.mAddContained               10  avgt    2        14.319          ns/op
+/// KotlinxPersistentOrderedSetJmh.mAddContained             1000  avgt    2      6101.824          ns/op
+/// KotlinxPersistentOrderedSetJmh.mAddContained           100000  avgt    2   1704048.786          ns/op
 /// KotlinxPersistentOrderedSetJmh.mContainsFound              10  avgt    2        11.146          ns/op
 /// KotlinxPersistentOrderedSetJmh.mContainsFound            1000  avgt    2      5915.346          ns/op
 /// KotlinxPersistentOrderedSetJmh.mContainsFound          100000  avgt    2   1784595.752          ns/op
@@ -83,6 +86,7 @@ public class KotlinxPersistentOrderedSetJmh {
         setAA = ExtensionsKt.toPersistentSet(data.listA);
     }
 
+
     @Benchmark
     public PersistentSet<Key> mCopyOf() {
         PersistentSet<Key> set = ExtensionsKt.toPersistentSet(data.listA);
@@ -94,6 +98,16 @@ public class KotlinxPersistentOrderedSetJmh {
     @Benchmark
     public PersistentSet<Key> mAdd() {
         PersistentSet<Key> set = ExtensionsKt.persistentSetOf();
+        for (Key key : data.listA) {
+            set = set.adding(key);
+        }
+        assert set.size() == data.listA.size();
+        return set;
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mAddContained() {
+        PersistentSet<Key> set = setA;
         for (Key key : data.listA) {
             set = set.adding(key);
         }

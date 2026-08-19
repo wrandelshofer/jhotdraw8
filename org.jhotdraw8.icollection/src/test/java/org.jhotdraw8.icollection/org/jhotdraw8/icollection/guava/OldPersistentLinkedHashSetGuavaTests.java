@@ -13,7 +13,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.icollection.PersistentLinkedHashElementSet;
+import org.jhotdraw8.icollection.OldPersistentLinkedHashSet;
 import org.jhotdraw8.icollection.facade.MutableSetFacade;
 
 import java.lang.reflect.Method;
@@ -21,15 +21,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-/// Tests [PersistentLinkedHashElementSet] with the Guava test suite.
-public class PersistentLinkedHashElementSetGuavaTests {
+/// Tests [OldPersistentLinkedHashSet] with the Guava test suite.
+public class OldPersistentLinkedHashSetGuavaTests {
 
     public static Test suite() {
-        return new PersistentLinkedHashElementSetGuavaTests().allTests();
+        return new OldPersistentLinkedHashSetGuavaTests().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(PersistentLinkedHashElementSet.class.getSimpleName());
+        TestSuite suite = new TestSuite(OldPersistentLinkedHashSet.class.getSimpleName());
         suite.addTest(testsForTrieSet());
         return suite;
     }
@@ -40,10 +40,10 @@ public class PersistentLinkedHashElementSetGuavaTests {
                             @Override
                             public Set<String> create(String[] elements) {
                                 return new MutableSetFacade<>(
-                                        PersistentLinkedHashElementSet.<String>copyOf(MinimalCollection.<String>of(elements)));
+                                        OldPersistentLinkedHashSet.<String>copyOf(MinimalCollection.<String>of(elements)));
                             }
                         })
-                .named(PersistentLinkedHashElementSet.class.getSimpleName())
+                .named(OldPersistentLinkedHashSet.class.getSimpleName())
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         //CollectionFeature.ALLOWS_NULL_VALUES,

@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.MutableLinkedHashElementSet;
+import org.jhotdraw8.icollection.OldMutableLinkedHashSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -75,21 +75,21 @@ public class MutableLinkedSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private MutableLinkedHashElementSet<Key> setA;
-    private MutableLinkedHashElementSet<Key> setAA;
-    private MutableLinkedHashElementSet<Key> setB;
+    private OldMutableLinkedHashSet<Key> setA;
+    private OldMutableLinkedHashSet<Key> setAA;
+    private OldMutableLinkedHashSet<Key> setB;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = new MutableLinkedHashElementSet<>(data.setA);
-        setB = new MutableLinkedHashElementSet<>(data.listB);
-        setAA = new MutableLinkedHashElementSet<>(data.listA);
+        setA = new OldMutableLinkedHashSet<>(data.setA);
+        setB = new OldMutableLinkedHashSet<>(data.listB);
+        setAA = new OldMutableLinkedHashSet<>(data.listA);
     }
 
     @Benchmark
-    public MutableLinkedHashElementSet<Key> mAdd() {
-        MutableLinkedHashElementSet<Key> set = new MutableLinkedHashElementSet<>();
+    public OldMutableLinkedHashSet<Key> mAdd() {
+        OldMutableLinkedHashSet<Key> set = new OldMutableLinkedHashSet<>();
         for (Key key : data.listA) {
             //noinspection UseBulkOperation
             set.add(key);
@@ -117,8 +117,8 @@ public class MutableLinkedSetJmh {
     }
 
     @Benchmark
-    public MutableLinkedHashElementSet<Key> mCopyOf() {
-        MutableLinkedHashElementSet<Key> set = new MutableLinkedHashElementSet<>(data.listA);
+    public OldMutableLinkedHashSet<Key> mCopyOf() {
+        OldMutableLinkedHashSet<Key> set = new OldMutableLinkedHashSet<>(data.listA);
         assert set.size() == data.listA.size();
         return set;
     }
@@ -138,8 +138,8 @@ public class MutableLinkedSetJmh {
     }
 
     @Benchmark
-    public MutableLinkedHashElementSet<Key> mRemove() {
-        MutableLinkedHashElementSet<Key> set = setA.clone();
+    public OldMutableLinkedHashSet<Key> mRemove() {
+        OldMutableLinkedHashSet<Key> set = setA.clone();
         for (Key key : data.listA) {
             set.remove(key);
         }
@@ -148,23 +148,23 @@ public class MutableLinkedSetJmh {
     }
 
     @Benchmark
-    public MutableLinkedHashElementSet<Key> mRemoveAll() {
-        MutableLinkedHashElementSet<Key> set = setA.clone();
+    public OldMutableLinkedHashSet<Key> mRemoveAll() {
+        OldMutableLinkedHashSet<Key> set = setA.clone();
         set.removeAll(data.setA);
         assert set.isEmpty();
         return set;
     }
 
     @Benchmark
-    public MutableLinkedHashElementSet<Key> mRemoveAllSameType() {
-        MutableLinkedHashElementSet<Key> set = setA.clone();
+    public OldMutableLinkedHashSet<Key> mRemoveAllSameType() {
+        OldMutableLinkedHashSet<Key> set = setA.clone();
         set.removeAll(setAA);
         assert set.isEmpty();
         return set;
     }
 
     @Benchmark
-    public MutableLinkedHashElementSet<Key> mRemoveFirst() {
+    public OldMutableLinkedHashSet<Key> mRemoveFirst() {
         var s = setA.clone();
         for (int i = 0, n = setA.size(); i < n; i++) {
             s.removeFirst();
@@ -173,16 +173,16 @@ public class MutableLinkedSetJmh {
     }
 
     @Benchmark
-    public MutableLinkedHashElementSet<Key> mRetainAllAllRetained() {
-        MutableLinkedHashElementSet<Key> set = setA.clone();
+    public OldMutableLinkedHashSet<Key> mRetainAllAllRetained() {
+        OldMutableLinkedHashSet<Key> set = setA.clone();
         set.retainAll(data.setA);
         assert set.size() == setA.size();
         return set;
     }
 
     @Benchmark
-    public MutableLinkedHashElementSet<Key> mRetainAllNoneRetained() {
-        MutableLinkedHashElementSet<Key> set = setA.clone();
+    public OldMutableLinkedHashSet<Key> mRetainAllNoneRetained() {
+        OldMutableLinkedHashSet<Key> set = setA.clone();
         set.retainAll(data.setB);
         assert set.isEmpty();
         return set;

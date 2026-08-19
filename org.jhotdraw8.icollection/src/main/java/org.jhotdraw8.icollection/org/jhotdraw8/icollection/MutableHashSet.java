@@ -235,7 +235,7 @@ public class MutableHashSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return Node.NO_DATA != hashSet.findData((E) o, PersistentHashSet.keyHash(o), 0, PersistentHashSet.ENTRY_LENGTH, PersistentHashSet.KEY_DATA_INDEX);
+        return hashSet.contains((E) o, PersistentHashSet.keyHash(o), 0, PersistentHashSet.ENTRY_LENGTH);
     }
 
     @Override

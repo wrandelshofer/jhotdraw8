@@ -51,7 +51,7 @@ public class EntryIterator<K, V> extends AbstractChampIterator implements Iterat
             throw new NoSuchElementException();
         } else {
             canRemove = true;
-            Object[] entry = nextValueNode.getEntry(nextValueCursor++, ENTRY_LENGTH);
+            Object[] entry = nextValueNode.getData(nextValueCursor++, ENTRY_LENGTH);
             current = new EditableMapEntry<K, V>((K) entry[0], (V) entry[1], 0);
             current.setPutIfPresentFunction(persistentPutIfPresentFunction);
             return current;

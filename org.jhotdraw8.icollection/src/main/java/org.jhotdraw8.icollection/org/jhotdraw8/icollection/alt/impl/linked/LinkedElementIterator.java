@@ -1,4 +1,4 @@
-package org.jhotdraw8.icollection.impl.linked;
+package org.jhotdraw8.icollection.alt.impl.linked;
 
 import org.jhotdraw8.icollection.impl.champset.BitmapIndexedNode;
 import org.jspecify.annotations.Nullable;
@@ -8,12 +8,12 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Function;
 
-public class ReversedLinkedElementIterator<E> implements Iterator<E> {
+public class LinkedElementIterator<E> implements Iterator<E> {
     private @Nullable LinkedElement<E> current;
     private BitmapIndexedNode<LinkedElement<E>> root;
     private final Function<LinkedElement<E>, E> mapper;
 
-    public ReversedLinkedElementIterator(LinkedElement<E> current, BitmapIndexedNode<LinkedElement<E>> root, Function<LinkedElement<E>, E> mapper) {
+    public LinkedElementIterator(LinkedElement<E> current, BitmapIndexedNode<LinkedElement<E>> root, Function<LinkedElement<E>, E> mapper) {
         this.current = current;
         this.root = root;
         this.mapper = mapper;
@@ -30,7 +30,7 @@ public class ReversedLinkedElementIterator<E> implements Iterator<E> {
             throw new NoSuchElementException();
         }
         E value = mapper.apply(current);
-        current = get(current.prev());
+        current = get(current.next());
         return value;
     }
 

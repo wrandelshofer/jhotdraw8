@@ -52,7 +52,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addLastWithContainedElementShouldMoveElementToFirst(SetData data) throws Exception {
+    public void addLastWithContainedElementShouldMoveElementToLast(SetData data) throws Exception {
         PersistentSequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         List<Key> listA = new ArrayList<>(data.a().asSet());

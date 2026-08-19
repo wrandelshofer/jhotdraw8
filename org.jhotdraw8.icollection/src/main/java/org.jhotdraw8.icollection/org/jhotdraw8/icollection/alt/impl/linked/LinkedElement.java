@@ -1,4 +1,4 @@
-package org.jhotdraw8.icollection.impl.linked;
+package org.jhotdraw8.icollection.alt.impl.linked;
 
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jspecify.annotations.Nullable;

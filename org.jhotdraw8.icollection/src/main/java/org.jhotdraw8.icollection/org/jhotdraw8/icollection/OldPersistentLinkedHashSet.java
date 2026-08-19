@@ -4,14 +4,14 @@
  */
 package org.jhotdraw8.icollection;
 
+import org.jhotdraw8.icollection.alt.impl.linked.LinkedElement;
+import org.jhotdraw8.icollection.alt.impl.linked.LinkedElementIterator;
+import org.jhotdraw8.icollection.alt.impl.linked.ReversedLinkedElementIterator;
 import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
 import org.jhotdraw8.icollection.impl.champset.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champset.ChampSpliterator;
 import org.jhotdraw8.icollection.impl.champset.ChangeEvent;
 import org.jhotdraw8.icollection.impl.champset.Node;
-import org.jhotdraw8.icollection.impl.linked.LinkedElement;
-import org.jhotdraw8.icollection.impl.linked.LinkedElementIterator;
-import org.jhotdraw8.icollection.impl.linked.ReversedLinkedElementIterator;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
@@ -51,7 +51,7 @@ import java.util.Spliterator;
 ///
 /// @param <E> the element type
 @SuppressWarnings("exports")
-public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet<E>, Serializable {
+public class OldPersistentLinkedHashSet<E> implements PersistentSequencedSet<E>, Serializable {
     private final @Nullable LinkedElement<E> first;
     private final @Nullable LinkedElement<E> last;
 
@@ -68,17 +68,17 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
     }
 
 
-    private static final PersistentLinkedHashElementSet<?> EMPTY = new PersistentLinkedHashElementSet<>(null, null, BitmapIndexedNode.emptyNode(), 0);
+    private static final OldPersistentLinkedHashSet<?> EMPTY = new OldPersistentLinkedHashSet<>(null, null, BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
     @SuppressWarnings("TransientFieldNotInitialized")
-    final transient BitmapIndexedNode<LinkedElement<E>> hashSet;
+    final transient BitmapIndexedNode<LinkedElement<E>> root;
     final int size;
 
-    PersistentLinkedHashElementSet(@Nullable LinkedElement<E> first, @Nullable LinkedElement<E> last, BitmapIndexedNode<LinkedElement<E>> root, int size) {
+    OldPersistentLinkedHashSet(@Nullable LinkedElement<E> first, @Nullable LinkedElement<E> last, BitmapIndexedNode<LinkedElement<E>> root, int size) {
         this.first = first;
         this.last = last;
-        this.hashSet = root;
+        this.root = root;
         this.size = size;
     }
 
@@ -88,8 +88,8 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
     /// @param c   an iterable
     /// @param <E> the element type
     /// @return a persistent set of the provided elements
-    public static <E> PersistentLinkedHashElementSet<E> copyOf(Iterable<? extends E> c) {
-        return PersistentLinkedHashElementSet.<E>of().addingAll(c);
+    public static <E> OldPersistentLinkedHashSet<E> copyOf(Iterable<? extends E> c) {
+        return OldPersistentLinkedHashSet.<E>of().addingAll(c);
     }
 
     /// Returns an empty persistent set.
@@ -97,8 +97,8 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
     /// @param <E> the element type
     /// @return an empty persistent set
     @SuppressWarnings("unchecked")
-    public static <E> PersistentLinkedHashElementSet<E> of() {
-        return ((PersistentLinkedHashElementSet<E>) PersistentLinkedHashElementSet.EMPTY);
+    public static <E> OldPersistentLinkedHashSet<E> of() {
+        return ((OldPersistentLinkedHashSet<E>) OldPersistentLinkedHashSet.EMPTY);
     }
 
     /// Returns a persistent set that contains the provided elements.
@@ -108,9 +108,9 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
     /// @return a persistent set of the provided elements
     @SuppressWarnings({"varargs"})
     @SafeVarargs
-    public static <E> PersistentLinkedHashElementSet<E> of(E @Nullable ... elements) {
+    public static <E> OldPersistentLinkedHashSet<E> of(E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
-        return new PersistentLinkedHashElementSetBuilder<E>().addArray(elements).build();
+        return new OldPersistentLinkedHashSetBuilder<E>().addArray(elements).build();
     }
 
     /// Update function for a set: we always keep the old element.
@@ -132,43 +132,43 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
     }
 
     @Override
-    public PersistentLinkedHashElementSet<E> adding(@Nullable E element) {
+    public OldPersistentLinkedHashSet<E> adding(@Nullable E element) {
         return addLast(element, false);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public PersistentLinkedHashElementSet<E> addingAll(Iterable<? extends E> c) {
-        if (isEmpty() && c instanceof PersistentLinkedHashElementSet<? extends E> s) {
-            return (PersistentLinkedHashElementSet<E>) s;
+    public OldPersistentLinkedHashSet<E> addingAll(Iterable<? extends E> c) {
+        if (isEmpty() && c instanceof OldPersistentLinkedHashSet<? extends E> s) {
+            return (OldPersistentLinkedHashSet<E>) s;
         }
         var m = toMutable();
         return m.addAll(c) ? m.toPersistent() : this;
     }
 
-    private static <E> @Nullable LinkedElement<E> get(BitmapIndexedNode<LinkedElement<E>> hashSet, @Nullable E o) {
-        if (o == null) {
+    private static <E> @Nullable LinkedElement<E> get(BitmapIndexedNode<LinkedElement<E>> hashSet, @Nullable E key) {
+        if (key == null) {
             return null;
         }
         Object result = hashSet.find(
-                new LinkedElement<>((E) o, null, null),
-                Objects.hashCode(o), 0, Objects::equals);
+                new LinkedElement<>((E) key, null, null),
+                Objects.hashCode(key), 0, Objects::equals);
         return result == org.jhotdraw8.icollection.impl.champset.Node.NO_DATA ? null : (LinkedElement<E>) result;
     }
 
     @Override
-    public PersistentLinkedHashElementSet<E> addingFirst(@Nullable E element) {
+    public OldPersistentLinkedHashSet<E> addingFirst(@Nullable E element) {
         return addFirst(element, true);
     }
 
-    private PersistentLinkedHashElementSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
+    private OldPersistentLinkedHashSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
         Objects.requireNonNull(e, "e must not be null");
         ChangeEvent<LinkedElement<E>> details = new ChangeEvent<>();
         var linkedElement = new LinkedElement<>(e, null, first == null ? null : first.key());
-        var newHashSet = this.hashSet.put(null,
-                linkedElement, PersistentLinkedHashElementSet.keyHash(e), 0, details,
+        var newHashSet = this.root.put(null,
+                linkedElement, OldPersistentLinkedHashSet.keyHash(e), 0, details,
                 (oldKey, newKey) -> moveToFirst && oldKey.prev() != null ? newKey : oldKey,
-                Objects::equals, PersistentLinkedHashElementSet::keyHash);
+                Objects::equals, OldPersistentLinkedHashSet::keyHash);
         if (details.isModified()) {
             Updated<E> updated = new Updated<>(newHashSet, first, last);
             if (details.isReplaced()) {
@@ -187,26 +187,26 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
                 } else {
                     updated = updatePrev(updated.hashSet, updated.first, e, updated.first, updated.last);
                 }
-                return new PersistentLinkedHashElementSet<>(linkedElement, updated.last, updated.hashSet, size + 1);
+                return new OldPersistentLinkedHashSet<>(linkedElement, updated.last, updated.hashSet, size + 1);
             }
-            return new PersistentLinkedHashElementSet<>(linkedElement, updated.last, updated.hashSet, size);
+            return new OldPersistentLinkedHashSet<>(linkedElement, updated.last, updated.hashSet, size);
         }
         return this;
     }
 
     @Override
-    public PersistentLinkedHashElementSet<E> addingLast(@Nullable E element) {
+    public OldPersistentLinkedHashSet<E> addingLast(@Nullable E element) {
         return addLast(element, true);
     }
 
-    private PersistentLinkedHashElementSet<E> addLast(@Nullable E e, boolean moveToLast) {
+    private OldPersistentLinkedHashSet<E> addLast(@Nullable E e, boolean moveToLast) {
         Objects.requireNonNull(e, "e must not be null");
         ChangeEvent<LinkedElement<E>> details = new ChangeEvent<>();
         var linkedElement = new LinkedElement<>(e, last == null ? null : last.key(), null);
-        var newHashSet = hashSet.put(null,
-                linkedElement, PersistentLinkedHashElementSet.keyHash(e), 0, details,
+        var newHashSet = root.put(null,
+                linkedElement, OldPersistentLinkedHashSet.keyHash(e), 0, details,
                 (oldKey, newKey) -> moveToLast && oldKey.next() != null ? newKey : oldKey,
-                Objects::equals, PersistentLinkedHashElementSet::keyHash);
+                Objects::equals, OldPersistentLinkedHashSet::keyHash);
         if (details.isModified()) {
             Updated<E> updated = new Updated<>(newHashSet, first, last);
             if (details.isReplaced()) {
@@ -223,9 +223,9 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
                 } else {
                     updated = updateNext(updated.hashSet, updated.last, e, updated.first, updated.last);
                 }
-                return new PersistentLinkedHashElementSet<>(updated.first, linkedElement, updated.hashSet, size + 1);
+                return new OldPersistentLinkedHashSet<>(updated.first, linkedElement, updated.hashSet, size + 1);
             }
-            return new PersistentLinkedHashElementSet<>(updated.first, linkedElement, updated.hashSet, size);
+            return new OldPersistentLinkedHashSet<>(updated.first, linkedElement, updated.hashSet, size);
         }
         return this;
     }
@@ -243,9 +243,9 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
         var ee = newData.key();
         ChangeEvent<LinkedElement<E>> details = new ChangeEvent<>();
         hashSet = hashSet.put(null,
-                newData, PersistentLinkedHashElementSet.keyHash(ee), 0, details,
+                newData, OldPersistentLinkedHashSet.keyHash(ee), 0, details,
                 (oldKey, newKey) -> newKey,
-                Objects::equals, PersistentLinkedHashElementSet::keyHash);
+                Objects::equals, OldPersistentLinkedHashSet::keyHash);
         var oldData = details.getOldData();
 
         if (last == oldData) {
@@ -266,9 +266,9 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
         var ee = newData.key();
         ChangeEvent<LinkedElement<E>> details = new ChangeEvent<>();
         hashSet = hashSet.put(null,
-                newData, PersistentLinkedHashElementSet.keyHash(ee), 0, details,
+                newData, OldPersistentLinkedHashSet.keyHash(ee), 0, details,
                 (oldKey, newKey) -> newKey,
-                Objects::equals, PersistentLinkedHashElementSet::keyHash);
+                Objects::equals, OldPersistentLinkedHashSet::keyHash);
         var oldData = details.getOldData();
         if (last == oldData) {
             last = newData;
@@ -281,14 +281,14 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
 
     /// {@inheritDoc}
     @Override
-    public PersistentLinkedHashElementSet<E> cleared() {
+    public OldPersistentLinkedHashSet<E> cleared() {
         return of();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return hashSet.find(new LinkedElement<>((E) o, null, null), keyHash(o), 0, Objects::equals) != Node.NO_DATA;
+        return root.find(new LinkedElement<>((E) o, null, null), keyHash(o), 0, Objects::equals) != Node.NO_DATA;
     }
 
     @Override
@@ -299,8 +299,8 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
         if (other == null) {
             return false;
         }
-        if (other instanceof PersistentLinkedHashElementSet<?> that) {
-            return size == that.size && hashSet.equivalent(that.hashSet);
+        if (other instanceof OldPersistentLinkedHashSet<?> that) {
+            return size == that.size && root.equivalent(that.root);
         }
         return ReadableSet.setEquals(this, other);
     }
@@ -312,11 +312,11 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
 
     @Override
     public Iterator<E> iterator() {
-        return new LinkedElementIterator<>(first, hashSet, LinkedElement::key);
+        return new LinkedElementIterator<>(first, root, LinkedElement::key);
     }
 
     private Iterator<E> reverseIterator() {
-        return new ReversedLinkedElementIterator<>(last, hashSet, LinkedElement::key);
+        return new ReversedLinkedElementIterator<>(last, root, LinkedElement::key);
     }
 
     @Override
@@ -325,7 +325,7 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
     }
 
     @Override
-    public PersistentLinkedHashElementSet<E> removingFirst() {
+    public OldPersistentLinkedHashSet<E> removingFirst() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
@@ -333,7 +333,7 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
     }
 
     @Override
-    public PersistentLinkedHashElementSet<E> removingLast() {
+    public OldPersistentLinkedHashSet<E> removingLast() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
@@ -341,13 +341,13 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
     }
 
     @Override
-    public PersistentLinkedHashElementSet<E> removing(E key) {
+    public OldPersistentLinkedHashSet<E> removing(E key) {
         int keyHash = keyHash(key);
         ChangeEvent<LinkedElement<E>> details = new ChangeEvent<>();
-        BitmapIndexedNode<LinkedElement<E>> newHashSet = hashSet.remove(null,
+        BitmapIndexedNode<LinkedElement<E>> newHashSet = root.remove(null,
                 new LinkedElement<>(key, null, null), keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
-            if (size == 1) return PersistentLinkedHashElementSet.of();
+            if (size == 1) return OldPersistentLinkedHashSet.of();
             var removed = details.getOldData();
             assert removed != null;
             Updated<E> updated = new Updated<>(newHashSet, first, last);
@@ -357,14 +357,14 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
                 updated = new Updated<>(updated.hashSet, updated.first, get(updated.hashSet, updated.last.prev()));
             if (updated.first == removed)
                 updated = new Updated<>(updated.hashSet, get(updated.hashSet, updated.first.next()), updated.last);
-            return new PersistentLinkedHashElementSet<>(updated.first, updated.last, updated.hashSet, size - 1);
+            return new OldPersistentLinkedHashSet<>(updated.first, updated.last, updated.hashSet, size - 1);
         }
         return this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentLinkedHashElementSet<E> removingAll(Iterable<?> c) {
+    public OldPersistentLinkedHashSet<E> removingAll(Iterable<?> c) {
         var m = toMutable();
         return m.removeAll(c) ? m.toPersistent() : this;
     }
@@ -372,7 +372,7 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentLinkedHashElementSet<E> retainingAll(Iterable<?> c) {
+    public OldPersistentLinkedHashSet<E> retainingAll(Iterable<?> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toPersistent() : this;
     }
@@ -383,12 +383,12 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
     }
 
     public Spliterator<E> spliterator() {
-        return new ChampSpliterator<>(hashSet, null, size, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.NONNULL);
+        return new ChampSpliterator<>(root, null, size, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.NONNULL);
     }
 
     @Override
-    public MutableLinkedHashElementSet<E> toMutable() {
-        return new MutableLinkedHashElementSet<>(this);
+    public OldMutableLinkedHashSet<E> toMutable() {
+        return new OldMutableLinkedHashSet<>(this);
     }
 
     @Override
@@ -412,7 +412,7 @@ public class PersistentLinkedHashElementSet<E> implements PersistentSequencedSet
         @Serial
         @Override
         protected Object readResolve() {
-            return PersistentLinkedHashElementSet.copyOf(deserializedElements);
+            return OldPersistentLinkedHashSet.copyOf(deserializedElements);
         }
     }
 }
