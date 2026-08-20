@@ -17,28 +17,34 @@ public class TrieNode<K, V> {
     int dataMap;
     int nodeMap;
     public Object[] buffer;
-    private @Nullable MutabilityOwnership ownedBy;
     static final int MAX_BRANCHING_FACTOR = 32;
     public static final int LOG_MAX_BRANCHING_FACTOR = 5;
     private static final int MAX_BRANCHING_FACTOR_MINUS_ONE = MAX_BRANCHING_FACTOR - 1;
     private static final int MAX_SHIFT = 30;
     public static final int ENTRY_SIZE = 2;
-    public static TrieNode<Object, Object> EMPTY = new TrieNode<Object, Object>(0, 0, new Object[0], null);
+    public static TrieNode<Object, Object> EMPTY = new TrieNode<Object, Object>(0, 0, new Object[0]);
 
     public static <T, U> TrieNode<T, U> empty() {
         //noinspection unchecked
         return (TrieNode<T, U>) EMPTY;
     }
 
-    TrieNode(int dataMap, int nodeMap, Object[] buffer) {
-        this(dataMap, nodeMap, buffer, null);
+    public static <K, V> TrieNode<K, V> newTrieNode(int dataMap, int nodeMap, Object[] buffer, @Nullable MutabilityOwnership ownedBy) {
+        if (ownedBy == null) {
+            return new TrieNode<K, V>(dataMap, nodeMap, buffer);
+        } else {
+            return new MutableTrieNode<K, V>(dataMap, nodeMap, buffer, ownedBy);
+        }
     }
 
-    TrieNode(int dataMap, int nodeMap, Object[] buffer, @Nullable MutabilityOwnership ownedBy) {
+    TrieNode(int dataMap, int nodeMap, Object[] buffer) {
         this.dataMap = dataMap;
         this.nodeMap = nodeMap;
         this.buffer = buffer;
-        this.ownedBy = ownedBy;
+    }
+
+    public @Nullable MutabilityOwnership ownedBy() {
+        return null;
     }
 
     private static <K, V> Object[] insertEntryAtIndex(Object[] array, int keyIndex, K key, V value) {
@@ -189,27 +195,27 @@ public class TrieNode<K, V> {
 
         var keyIndex = entryKeyIndex(positionMask);
         var newBuffer = insertEntryAtIndex(buffer, keyIndex, key, value);
-        return new TrieNode<>(dataMap | positionMask, nodeMap, newBuffer);
+        return newTrieNode(dataMap | positionMask, nodeMap, newBuffer, null);
     }
 
     private TrieNode<K, V> mutableInsertEntryAt(int positionMask, K key, V value, MutabilityOwnership owner) {
         assert !hasEntryAt(positionMask);
 
         var keyIndex = entryKeyIndex(positionMask);
-        if (ownedBy == owner) {
+        if (ownedBy() == owner) {
             buffer = insertEntryAtIndex(buffer, keyIndex, key, value);
             dataMap = dataMap | positionMask;
             return this;
         }
         var newBuffer = insertEntryAtIndex(buffer, keyIndex, key, value);
-        return new TrieNode<>(dataMap | positionMask, nodeMap, newBuffer, owner);
+        return newTrieNode(dataMap | positionMask, nodeMap, newBuffer, owner);
     }
 
     private TrieNode<K, V> updateValueAtIndex(int keyIndex, V value) {
         assert buffer[keyIndex + 1] != value;
         var newBuffer = buffer.clone();
         newBuffer[keyIndex + 1] = value;
-        return new TrieNode<>(dataMap, nodeMap, newBuffer);
+        return newTrieNode(dataMap, nodeMap, newBuffer, null);
     }
 
     private TrieNode<K, V> mutableUpdateValueAtIndex(
@@ -220,7 +226,7 @@ public class TrieNode<K, V> {
         assert buffer[keyIndex + 1] != value;
 
         // If the [mutator] is exclusive owner of this node, update value at specified index in-place.
-        if (ownedBy == mutator.ownership) {
+        if (ownedBy() == mutator.ownership) {
             buffer[keyIndex + 1] = value;
             return this;
         }
@@ -229,7 +235,7 @@ public class TrieNode<K, V> {
         // Create new node with updated value at specified index.
         var newBuffer = buffer.clone();
         newBuffer[keyIndex + 1] = value;
-        return new TrieNode<>(dataMap, nodeMap, newBuffer, mutator.ownership);
+        return newTrieNode(dataMap, nodeMap, newBuffer, mutator.ownership);
     }
 
     /**
@@ -250,17 +256,17 @@ public class TrieNode<K, V> {
 
             var keyIndex = entryKeyIndex(positionMask);
             var newBuffer = replaceNodeWithEntry(buffer, nodeIndex, keyIndex, newNode.buffer[0], newNode.buffer[1]);
-            return new TrieNode<>(dataMap ^ positionMask, nodeMap ^ positionMask, newBuffer, owner);
+            return newTrieNode(dataMap ^ positionMask, nodeMap ^ positionMask, newBuffer, owner);
         }
 
-        if (owner != null && ownedBy == owner) {
+        if (owner != null && ownedBy() == owner) {
             buffer[nodeIndex] = newNode;
             return this;
         }
 
         var newBuffer = buffer.clone();
         newBuffer[nodeIndex] = newNode;
-        return new TrieNode<>(dataMap, nodeMap, newBuffer, owner);
+        return newTrieNode(dataMap, nodeMap, newBuffer, owner);
     }
 
     private TrieNode<K, V> removeNodeAtIndex(int nodeIndex, int positionMask) {
@@ -268,7 +274,7 @@ public class TrieNode<K, V> {
         if (buffer.length == 1) return empty();
 
         var newBuffer = removeNodeAtIndex(buffer, nodeIndex);
-        return new TrieNode<>(dataMap, nodeMap ^ positionMask, newBuffer);
+        return newTrieNode(dataMap, nodeMap ^ positionMask, newBuffer, null);
     }
 
     ///
@@ -284,13 +290,13 @@ public class TrieNode<K, V> {
         assert hasNodeAt(positionMask);
         if (buffer.length == 1) return empty();
 
-        if (ownedBy == owner) {
+        if (ownedBy() == owner) {
             buffer = removeNodeAtIndex(buffer, nodeIndex);
             nodeMap = nodeMap ^ positionMask;
             return this;
         }
         var newBuffer = removeNodeAtIndex(buffer, nodeIndex);
-        return new TrieNode<>(dataMap, nodeMap ^ positionMask, newBuffer, owner);
+        return newTrieNode(dataMap, nodeMap ^ positionMask, newBuffer, owner);
     }
 
 
@@ -329,7 +335,7 @@ public class TrieNode<K, V> {
         assert !hasNodeAt(positionMask);
 
         var newBuffer = bufferMoveEntryToNode(keyIndex, positionMask, newKeyHash, newKey, newValue, shift, null);
-        return new TrieNode<>(dataMap ^ positionMask, nodeMap | positionMask, newBuffer);
+        return newTrieNode(dataMap ^ positionMask, nodeMap | positionMask, newBuffer, null);
     }
 
     private TrieNode<K, V> mutableMoveEntryToNode(
@@ -344,14 +350,14 @@ public class TrieNode<K, V> {
         assert hasEntryAt(positionMask);
         assert !hasNodeAt(positionMask);
 
-        if (ownedBy == owner) {
+        if (ownedBy() == owner) {
             buffer = bufferMoveEntryToNode(keyIndex, positionMask, newKeyHash, newKey, newValue, shift, owner);
             dataMap = dataMap ^ positionMask;
             nodeMap = nodeMap | positionMask;
             return this;
         }
         var newBuffer = bufferMoveEntryToNode(keyIndex, positionMask, newKeyHash, newKey, newValue, shift, owner);
-        return new TrieNode<>(dataMap ^ positionMask, nodeMap | positionMask, newBuffer, owner);
+        return newTrieNode(dataMap ^ positionMask, nodeMap | positionMask, newBuffer, owner);
     }
 
     int indexSegment(int index, int shift) {
@@ -359,7 +365,7 @@ public class TrieNode<K, V> {
     }
 
     /**
-     * Creates a new TrieNode for holding two given key value entries
+     * Creates a newTrieNode for holding two given key value entries
      */
     private TrieNode<K, V> makeNode(
             int keyHash1,
@@ -374,7 +380,7 @@ public class TrieNode<K, V> {
         if (shift > MAX_SHIFT) {
             assert key1 != key2;
             // when two key hashes are entirely equal: the last level subtrie node stores them just as unordered list
-            return new TrieNode<>(0, 0, new Object[]{key1, value1, key2, value2}, owner);
+            return newTrieNode(0, 0, new Object[]{key1, value1, key2, value2}, owner);
         }
 
         var setBit1 = indexSegment(keyHash1, shift);
@@ -385,18 +391,18 @@ public class TrieNode<K, V> {
                     new Object[]{key1, value1, key2, value2}
                     :
                     new Object[]{key2, value2, key1, value1};
-            return new TrieNode<>((1 << setBit1) | (1 << setBit2), 0, nodeBuffer, owner);
+            return newTrieNode((1 << setBit1) | (1 << setBit2), 0, nodeBuffer, owner);
         }
         // hash segments at the given shift are equal: move these entries into the subtrie
         var node = makeNode(keyHash1, key1, value1, keyHash2, key2, value2, shift + LOG_MAX_BRANCHING_FACTOR, owner);
-        return new TrieNode<>(0, 1 << setBit1, new Object[]{node}, owner);
+        return newTrieNode(0, 1 << setBit1, new Object[]{node}, owner);
     }
 
     private TrieNode<K, V> removeEntryAtIndex(int keyIndex, int positionMask) {
         assert hasEntryAt(positionMask);
         if (buffer.length == ENTRY_SIZE) return empty();
         var newBuffer = removeEntryAtIndex(buffer, keyIndex);
-        return new TrieNode<>(dataMap ^ positionMask, nodeMap, newBuffer);
+        return newTrieNode(dataMap ^ positionMask, nodeMap, newBuffer, null);
     }
 
     private TrieNode<K, V> mutableRemoveEntryAtIndex(
@@ -409,19 +415,19 @@ public class TrieNode<K, V> {
         mutator.operationResult = valueAtKeyIndex(keyIndex);
         if (buffer.length == ENTRY_SIZE) return empty();
 
-        if (ownedBy == mutator.ownership) {
+        if (ownedBy() == mutator.ownership) {
             buffer = removeEntryAtIndex(buffer, keyIndex);
             dataMap = dataMap ^ positionMask;
             return this;
         }
         var newBuffer = removeEntryAtIndex(buffer, keyIndex);
-        return new TrieNode<>(dataMap ^ positionMask, nodeMap, newBuffer, mutator.ownership);
+        return newTrieNode(dataMap ^ positionMask, nodeMap, newBuffer, mutator.ownership);
     }
 
     private TrieNode<K, V> collisionRemoveEntryAtIndex(int i) {
         if (buffer.length == ENTRY_SIZE) return empty();
         var newBuffer = removeEntryAtIndex(buffer, i);
-        return new TrieNode<>(0, 0, newBuffer);
+        return newTrieNode(0, 0, newBuffer, null);
     }
 
     private TrieNode<K, V> mutableCollisionRemoveEntryAtIndex(int i, TrieBuilder<K, V> mutator) {
@@ -429,12 +435,12 @@ public class TrieNode<K, V> {
         mutator.operationResult = valueAtKeyIndex(i);
         if (buffer.length == ENTRY_SIZE) return empty();
 
-        if (ownedBy == mutator.ownership) {
+        if (ownedBy() == mutator.ownership) {
             buffer = removeEntryAtIndex(buffer, i);
             return this;
         }
         var newBuffer = removeEntryAtIndex(buffer, i);
-        return new TrieNode<>(0, 0, newBuffer, mutator.ownership);
+        return newTrieNode(0, 0, newBuffer, mutator.ownership);
     }
 
     private int collisionKeyIndex(Object key) {
@@ -462,10 +468,10 @@ public class TrieNode<K, V> {
             }
             var newBuffer = buffer.clone();
             newBuffer[keyIndex + 1] = value;
-            return new TrieNode<K, V>(0, 0, newBuffer).asUpdateResult(oldValue);
+            return TrieNode.<K, V>newTrieNode(0, 0, newBuffer, null).asUpdateResult(oldValue);
         }
         var newBuffer = insertEntryAtIndex(buffer, 0, key, value);
-        return new TrieNode<K, V>(0, 0, newBuffer).asInsertResult();
+        return TrieNode.<K, V>newTrieNode(0, 0, newBuffer, null).asInsertResult();
     }
 
     private TrieNode<K, V> mutableCollisionPut(K key, V value, TrieBuilder<K, V> mutator) {
@@ -480,7 +486,7 @@ public class TrieNode<K, V> {
             mutator.modCount++;
 
             // If the [mutator] is exclusive owner of this node, update value of the entry in-place.
-            if (ownedBy == mutator.ownership) {
+            if (ownedBy() == mutator.ownership) {
                 buffer[keyIndex + 1] = value;
                 return this;
             }
@@ -488,12 +494,12 @@ public class TrieNode<K, V> {
             // Create new node with updated entry value.
             var newBuffer = buffer.clone();
             newBuffer[keyIndex + 1] = value;
-            return new TrieNode<>(0, 0, newBuffer, mutator.ownership);
+            return newTrieNode(0, 0, newBuffer, mutator.ownership);
         }
         // Create new collision node with the specified entry added to it.
         mutator.size++;
         var newBuffer = insertEntryAtIndex(buffer, 0, key, value);
-        return new TrieNode<>(0, 0, newBuffer, mutator.ownership);
+        return newTrieNode(0, 0, newBuffer, mutator.ownership);
     }
 
     private TrieNode<K, V> collisionRemove(K key) {
@@ -551,8 +557,8 @@ public class TrieNode<K, V> {
         int newSize = i;
         if (newSize == this.buffer.length) return this;
         if (newSize == otherNode.buffer.length) return otherNode;
-        if (newSize == tempBuffer.length) return new TrieNode<>(0, 0, tempBuffer, owner);
-        return new TrieNode<>(0, 0, Arrays.copyOf(tempBuffer, newSize), owner);
+        if (newSize == tempBuffer.length) return newTrieNode(0, 0, tempBuffer, owner);
+        return newTrieNode(0, 0, Arrays.copyOf(tempBuffer, newSize), owner);
     }
 
     /**
@@ -729,11 +735,11 @@ public class TrieNode<K, V> {
         }
         assert (newNodeMap & newDataMap) == 0;
         TrieNode<K, V> mutableNode;
-        if (this.ownedBy == mutator.ownership && this.dataMap == newDataMap && this.nodeMap == newNodeMap) {
+        if (this.ownedBy() == mutator.ownership && this.dataMap == newDataMap && this.nodeMap == newNodeMap) {
             mutableNode = this;
         } else {
             var newBuffer = new Object[Integer.bitCount(newDataMap) * ENTRY_SIZE + Integer.bitCount(newNodeMap)];
-            mutableNode = new TrieNode<>(newDataMap, newNodeMap, newBuffer);
+            mutableNode = newTrieNode(newDataMap, newNodeMap, newBuffer, null);
         }
 
         for (ForEachOneBit it = new ForEachOneBit(newNodeMap); it.moveNext(); ) {

@@ -77,7 +77,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class PersistentHashSetJmh {
+public class PersistentHashSetWithTrieNodSubClassJmh {
     @Param({"10", "1000", "100000"})
     private int size;
 

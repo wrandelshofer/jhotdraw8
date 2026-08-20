@@ -16,22 +16,33 @@ import java.util.function.Predicate;
 public class TrieNode<E> {
     int bitmap;
     public Object[] buffer;
-    private @Nullable MutabilityOwnership ownedBy;
+
     static final int MAX_BRANCHING_FACTOR = 32;
     public static final int LOG_MAX_BRANCHING_FACTOR = 5;
     private static final int MAX_BRANCHING_FACTOR_MINUS_ONE = MAX_BRANCHING_FACTOR - 1;
     private static final int MAX_SHIFT = 30;
-    public static TrieNode<Object> EMPTY = new TrieNode<Object>(0, new Object[0], null);
+    public static TrieNode<Object> EMPTY = new TrieNode<Object>(0, new Object[0]);
 
     public static <T> TrieNode<T> empty() {
         //noinspection unchecked
         return (TrieNode<T>) EMPTY;
     }
 
-    public TrieNode(int bitmap, Object[] buffer, @Nullable MutabilityOwnership ownedBy) {
+    public @Nullable MutabilityOwnership ownedBy() {
+        return null;
+    }
+
+    public static <E> TrieNode<E> newTrieNode(int bitmap, Object[] buffer, @Nullable MutabilityOwnership ownedBy) {
+        if (ownedBy == null) {
+            return new TrieNode<E>(bitmap, buffer);
+        } else {
+            return new MutableTrieNode<E>(bitmap, buffer, ownedBy);
+        }
+    }
+
+    public TrieNode(int bitmap, Object[] buffer) {
         this.bitmap = bitmap;
         this.buffer = buffer;
-        this.ownedBy = ownedBy;
     }
 
     private static int indexSegment(int index, int shift) {
@@ -86,22 +97,22 @@ public class TrieNode<E> {
 
 
     private TrieNode<E> setProperties(int newBitmap, Object[] newBuffer, @Nullable MutabilityOwnership owner) {
-        if (ownedBy != null && ownedBy == owner) {
+        if (ownedBy() != null && ownedBy() == owner) {
             bitmap = newBitmap;
             buffer = newBuffer;
             return this;
         }
-        return new TrieNode<>(newBitmap, newBuffer, owner);
+        return newTrieNode(newBitmap, newBuffer, owner);
     }
 
     private TrieNode<E> setCellAtIndex(int cellIndex, Object newCell, @Nullable MutabilityOwnership owner) {
-        if (ownedBy != null && ownedBy == owner) {
+        if (ownedBy() != null && ownedBy() == owner) {
             buffer[cellIndex] = newCell;
             return this;
         }
         var newBuffer = buffer.clone();
         newBuffer[cellIndex] = newCell;
-        return new TrieNode<>(bitmap, newBuffer, owner);
+        return newTrieNode(bitmap, newBuffer, owner);
     }
 
     public TrieNode<E> add(int elementHash, E element, int shift) {
@@ -152,7 +163,7 @@ public class TrieNode<E> {
         if (shift > MAX_SHIFT) {
             assert element1 != element2;
             // when two element hashes are entirely equal: the last level subtrie node stores them just as unordered list
-            return new TrieNode<E>(0, new Object[]{element1, element2}, owner);
+            return newTrieNode(0, new Object[]{element1, element2}, owner);
         }
 
         var setBit1 = indexSegment(elementHash1, shift);
@@ -160,11 +171,11 @@ public class TrieNode<E> {
 
         if (setBit1 != setBit2) {
             var nodeBuffer = (setBit1 < setBit2) ? new Object[]{element1, element2} : new Object[]{element2, element1};
-            return new TrieNode<>((1 << setBit1) | (1 << setBit2), nodeBuffer, owner);
+            return newTrieNode((1 << setBit1) | (1 << setBit2), nodeBuffer, owner);
         }
         // hash segments at the given shift are equal: move these elements into the subtrie
         var node = makeNode(elementHash1, element1, elementHash2, element2, shift + LOG_MAX_BRANCHING_FACTOR, owner);
-        return new TrieNode<E>(1 << setBit1, new Object[]{node}, owner);
+        return newTrieNode(1 << setBit1, new Object[]{node}, owner);
     }
 
     public TrieNode<E> mutableAdd(int elementHash, E element, int shift, TrieBuilder<?> mutator) {
@@ -258,7 +269,7 @@ public class TrieNode<E> {
             // If targetNode is owned by mutator, this node is also owned by mutator.
             // Thus, no new node will be created to replace this node.
             // If newNode !== targetNode, it is newly created.
-            if (targetNode.ownedBy != mutator.ownership && targetNode == newNode) return this;
+            if (targetNode.ownedBy() != mutator.ownership && targetNode == newNode) return this;
             return canonicalizeNodeAtIndex(cellIndex, newNode, mutator.ownership);
         }
         // element is directly in buffer
@@ -313,9 +324,9 @@ public class TrieNode<E> {
         var newBitMap = bitmap | otherNode.bitmap;
         // first allocate the node and then fill it in
         // we are doing a union, so all the array elements are guaranteed to exist
-        var mutableNode = (newBitMap == bitmap && ownedBy == mutator.ownership)
+        TrieNode<E> mutableNode = (newBitMap == bitmap && ownedBy() == mutator.ownership)
                 ? this
-                : new TrieNode<E>(newBitMap, new Object[Integer.bitCount(newBitMap)], mutator.ownership);
+                : newTrieNode(newBitMap, new Object[Integer.bitCount(newBitMap)], mutator.ownership);
 
         // for each bit set in the resulting mask,
         // either left, right or both masks contain the same bit
@@ -396,7 +407,7 @@ public class TrieNode<E> {
     }
 
 
-    private boolean elementsIdentityEquals(TrieNode<E> otherNode) {
+    private boolean elementsIdentityEquals(TrieNode<?> otherNode) {
         if (this == otherNode) return true;
         if (bitmap != otherNode.bitmap) return false;
         for (int i = 0; i < buffer.length; i++) {
@@ -501,8 +512,8 @@ public class TrieNode<E> {
         // zero means no nodes intersect
         if (newBitMap == 0) return EMPTY;
         var mutableNode =
-                (ownedBy == mutator.ownership && newBitMap == bitmap) ? this
-                        : new TrieNode<E>(newBitMap, new Object[Integer.bitCount(newBitMap)], mutator.ownership);
+                (ownedBy() == mutator.ownership && newBitMap == bitmap) ? this
+                        : newTrieNode(newBitMap, new Object[Integer.bitCount(newBitMap)], mutator.ownership);
         // we need to keep track of the real mask because some of the children may intersect to nothing
         var realBitMap = 0;
         // for each bit in intersection mask, try to intersect children
@@ -561,7 +572,7 @@ public class TrieNode<E> {
         if (realSize == 1 && shift != 0) {
             var single = mutableNode.buffer[mutableNode.indexOfCellAt(realBitMap)];
             if (single instanceof TrieNode<?>)
-                return new TrieNode<E>(realBitMap, new Object[]{single}, mutator.ownership);
+                return newTrieNode(realBitMap, new Object[]{single}, mutator.ownership);
             return single;
         }
         if (realBitMap == newBitMap) {
@@ -574,7 +585,7 @@ public class TrieNode<E> {
             // clean up all the EMPTYs in the resulting buffer
             var realBuffer = new Object[realSize];
             filterTo(mutableNode.buffer, realBuffer, 0, o -> o != EMPTY);
-            return new TrieNode<E>(realBitMap, realBuffer, mutator.ownership);
+            return newTrieNode(realBitMap, realBuffer, mutator.ownership);
         }
     }
 
@@ -589,7 +600,7 @@ public class TrieNode<E> {
             return this;
         }
         var tempBuffer =
-                (owner == ownedBy) ? buffer
+                (owner == ownedBy()) ? buffer
                         : new Object[Math.min(buffer.length, otherNode.buffer.length)];
         var totalWritten = filterTo(buffer, tempBuffer, 0, it ->
                 otherNode.collisionContainsElement((E) it));
@@ -623,8 +634,8 @@ public class TrieNode<E> {
         // zero means no intersection => nothing to remove
         if (removalBitmap == 0) return this;
         // node here is either us (if we are mutable) or a mutable copy
-        TrieNode<E> mutableNode = (ownedBy == mutator.ownership) ? this
-                : new TrieNode<>(bitmap, buffer.clone(), mutator.ownership);
+        TrieNode<E> mutableNode = (ownedBy() == mutator.ownership) ? this
+                : newTrieNode(bitmap, buffer.clone(), mutator.ownership);
         // keep track of the real mask
         var realBitMap = bitmap;
         for (ForEachOneBit it = new ForEachOneBit(removalBitmap); it.moveNext(); ) {
@@ -687,7 +698,7 @@ public class TrieNode<E> {
             // single values are kept only on root level
             var single = mutableNode.buffer[mutableNode.indexOfCellAt(realBitMap)];
             if (single instanceof TrieNode<?>)
-                return new TrieNode<E>(realBitMap, new Object[]{single}, mutator.ownership);
+                return newTrieNode(realBitMap, new Object[]{single}, mutator.ownership);
             return single;
         }
 
@@ -700,7 +711,7 @@ public class TrieNode<E> {
         // clean up all the EMPTYs in the resulting buffer
         var realBuffer = new Object[realSize];
         filterTo(mutableNode.buffer, realBuffer, 0, it -> it != EMPTY);
-        return new TrieNode<E>(realBitMap, realBuffer, mutator.ownership);
+        return newTrieNode(realBitMap, realBuffer, mutator.ownership);
 
     }
 
@@ -714,7 +725,7 @@ public class TrieNode<E> {
             intersectionSizeRef.count += buffer.length;
             return EMPTY;
         }
-        var tempBuffer = (owner == ownedBy) ? buffer : new Object[buffer.length];
+        var tempBuffer = (owner == ownedBy()) ? buffer : new Object[buffer.length];
         var totalWritten = filterTo(buffer, tempBuffer, 0, it ->
                 !otherNode.collisionContainsElement((E) it));
 
