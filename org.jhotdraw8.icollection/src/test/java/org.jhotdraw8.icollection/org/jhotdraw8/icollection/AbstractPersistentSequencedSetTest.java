@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.SequencedSet;
@@ -16,10 +17,12 @@ import java.util.Set;
 import java.util.Spliterator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutableSetTest {
+public abstract class AbstractPersistentSequencedSetTest extends AbstractPersistentSetTest {
     @Override
     protected abstract <E> PersistentSequencedSet<E> newInstance();
 
@@ -87,6 +90,22 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
             assertEqualSequence(expected, instance2, "removeLast");
             instance = instance2;
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldIterateOverElementsInSequence(SetData data) {
+        PersistentSequencedSet<Key> instance = newInstance(data.a());
+        Iterator<Key> actual = instance.iterator();
+        Iterator<Key> expected = data.a().iterator();
+        assertEquals(actual.hasNext(), expected.hasNext());
+        while (expected.hasNext()) {
+            assertTrue(actual.hasNext());
+            Key actualKey = actual.next();
+            Key expectedKey = expected.next();
+            assertEquals(expectedKey, actualKey);
+        }
+        assertFalse(actual.hasNext());
     }
 
     @ParameterizedTest

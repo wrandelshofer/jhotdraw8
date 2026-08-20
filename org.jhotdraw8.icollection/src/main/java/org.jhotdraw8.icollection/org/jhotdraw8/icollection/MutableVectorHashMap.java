@@ -18,7 +18,7 @@ import org.jhotdraw8.icollection.alt.impl.champset.TombSkippingVectorSpliterator
 import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedSetFacade;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
@@ -85,7 +85,7 @@ import java.util.function.Function;
 /// @param <K> the key type
 /// @param <V> the value type
 @SuppressWarnings("exports")
-public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, SequencedEntry<K, V>>
+public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, SequencedEntry<K, V>>
         implements SequencedMap<K, V>, ReadableSequencedMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -99,7 +99,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
 
     /// Constructs a new empty map.
-    public MutableVectorMap() {
+    public MutableVectorHashMap() {
         hashMap = BitmapIndexedNode.emptyNode();
         vector = FingerTreeAPI.of();
     }
@@ -109,7 +109,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     ///
     /// @param c a map
     @SuppressWarnings("unchecked")
-    public MutableVectorMap(Map<? extends K, ? extends V> c) {
+    public MutableVectorHashMap(Map<? extends K, ? extends V> c) {
         this();
         putAll(c);
     }
@@ -119,7 +119,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     ///
     /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
-    public MutableVectorMap(Iterable<? extends Entry<? extends K, ? extends V>> c) {
+    public MutableVectorHashMap(Iterable<? extends Entry<? extends K, ? extends V>> c) {
         this();
         putAll(c);
     }
@@ -137,9 +137,9 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     /// Returns a shallow copy of this map.
     @Override
-    public MutableVectorMap<K, V> clone() {
-        MutableVectorMap<K, V> that = (MutableVectorMap<K, V>) super.clone();
-        that.owner = new IdentityObject();
+    public MutableVectorHashMap<K, V> clone() {
+        MutableVectorHashMap<K, V> that = (MutableVectorHashMap<K, V>) super.clone();
+        that.owner = new MutabilityOwnership();
         return that;
     }
 
@@ -251,13 +251,13 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     private void iteratorPutIfPresent(K k, V v) {
         if (containsKey(k)) {
-            owner = new IdentityObject();
+            owner = new MutabilityOwnership();
             put(k, v);
         }
     }
 
     private void iteratorRemove(Entry<K, V> entry) {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         remove(entry.getKey());
     }
 
@@ -337,7 +337,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     @SuppressWarnings("unchecked")
     @Override
     public boolean putAll(Iterable<? extends Entry<? extends K, ? extends V>> c) {
-        if (c instanceof MutableVectorMap<?, ?> that) {
+        if (c instanceof MutableVectorHashMap<?, ?> that) {
             c = (Iterable<? extends Entry<? extends K, ? extends V>>) that.toPersistent();
         }
         if (isEmpty() && c instanceof PersistentVectorHashMap<?, ?> that) {
@@ -434,7 +434,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
             // center the numbers around 0 so that we have the interval [-size/2,size]
             var b = new PersistentVectorHashMapBuilder<K, V>(owner, size / -2);
-            b.addMap(this);
+            b.putAll(this);
             var tmp = b.build();
             hashMap = tmp.hashMap;
             vector = tmp.vector;
@@ -451,7 +451,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     ///
     /// @return a persistent copy
     public PersistentVectorHashMap<K, V> toPersistent() {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         return size == 0 ? PersistentVectorHashMap.of()
                 : new PersistentVectorHashMap<>(hashMap, vector, size, offset);
     }
@@ -477,7 +477,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         @Serial
         @Override
         protected Object readResolve() {
-            return new MutableVectorMap<>(deserializedEntries);
+            return new MutableVectorHashMap<>(deserializedEntries);
         }
     }
 }

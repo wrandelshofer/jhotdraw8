@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.alt.impl.champmap;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
@@ -34,7 +34,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
     /// by this set, and therefore can be mutated without affecting other sets.
     ///
     /// If this owner id is null, then this set does not own any nodes.
-    protected transient @Nullable IdentityObject owner;
+    protected transient @Nullable MutabilityOwnership owner;
 
     /// The root of this CHAMP trie.
     protected transient BitmapIndexedNode<D> root;
@@ -124,9 +124,9 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
     /// set has no owner id.
     ///
     /// @return a new unique id or the existing unique id.
-    protected IdentityObject makeOwner() {
+    protected MutabilityOwnership makeOwner() {
         if (owner == null) {
-            owner = new IdentityObject();
+            owner = new MutabilityOwnership();
         }
         return owner;
     }

@@ -5,13 +5,13 @@
 
 package org.jhotdraw8.icollection.alt;
 
-import org.jhotdraw8.icollection.AbstractImmutableSequencedSetTest;
+import org.jhotdraw8.icollection.AbstractPersistentSequencedSetTest;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 
 import java.util.SequencedSet;
 import java.util.Set;
 
-public class PersistentBMTrieSetTest extends AbstractImmutableSequencedSetTest {
+public class PersistentBMTrieSetTest extends AbstractPersistentSequencedSetTest {
 
 
     @Override

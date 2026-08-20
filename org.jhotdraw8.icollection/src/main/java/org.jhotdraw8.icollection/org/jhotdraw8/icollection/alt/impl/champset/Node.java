@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.alt.impl.champset;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.NoSuchElementException;
@@ -131,7 +131,7 @@ public abstract class Node<D> {
         return (dataHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    static <K> Node<K> mergeTwoDataEntriesIntoNode(IdentityObject owner,
+    static <K> Node<K> mergeTwoDataEntriesIntoNode(MutabilityOwnership owner,
                                                    K k0, int keyHash0,
                                                    K k1, int keyHash1,
                                                    int shift) {
@@ -190,7 +190,7 @@ public abstract class Node<D> {
     abstract Object find(D data, int dataHash, int shift, BiPredicate<D, D> equalsFunction);
 
 
-    @Nullable IdentityObject getOwner() {
+    @Nullable MutabilityOwnership getOwner() {
         return null;
     }
 
@@ -226,8 +226,8 @@ public abstract class Node<D> {
 
     abstract boolean hasNodes();
 
-    boolean isAllowedToUpdate(@Nullable IdentityObject y) {
-        IdentityObject x = getOwner();
+    boolean isAllowedToUpdate(@Nullable MutabilityOwnership y) {
+        MutabilityOwnership x = getOwner();
         return x != null && x == y;
     }
 
@@ -248,7 +248,7 @@ public abstract class Node<D> {
     ///                       in this object
     /// @param equalsFunction a function that tests data objects for equality
     /// @return the updated trie
-    abstract Node<D> remove(@Nullable IdentityObject owner, D data,
+    abstract Node<D> remove(@Nullable MutabilityOwnership owner, D data,
                             int dataHash, int shift,
                             ChangeEvent<D> details,
                             BiPredicate<D, D> equalsFunction);
@@ -280,7 +280,7 @@ public abstract class Node<D> {
     /// @param hashFunction   a function that computes the hash-code for a data
     ///                       object
     /// @return the updated trie
-    abstract Node<D> put(@Nullable IdentityObject owner, D newData,
+    abstract Node<D> put(@Nullable MutabilityOwnership owner, D newData,
                          int dataHash, int shift, ChangeEvent<D> details,
                          BiFunction<D, D, D> updateFunction,
                          BiPredicate<D, D> equalsFunction,
@@ -297,7 +297,7 @@ public abstract class Node<D> {
     /// @param hashFunction   the hash function for data elements
     /// @param details        the change event for single elements
     /// @return the updated trie
-    protected abstract Node<D> putAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift,
+    protected abstract Node<D> putAll(@Nullable MutabilityOwnership owner, Node<D> otherNode, int shift,
                                       BulkChangeEvent bulkChange,
                                       BiFunction<D, D, D> updateFunction,
                                       BiPredicate<D, D> equalsFunction,
@@ -315,7 +315,7 @@ public abstract class Node<D> {
     /// @param hashFunction   the hash function for data elements
     /// @param details        the change event for single elements
     /// @return the updated trie
-    protected abstract Node<D> removeAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift,
+    protected abstract Node<D> removeAll(@Nullable MutabilityOwnership owner, Node<D> otherNode, int shift,
                                          BulkChangeEvent bulkChange,
                                          BiFunction<D, D, D> updateFunction,
                                          BiPredicate<D, D> equalsFunction,
@@ -333,7 +333,7 @@ public abstract class Node<D> {
     /// @param hashFunction   the hash function for data elements
     /// @param details        the change event for single elements
     /// @return the updated trie
-    protected abstract Node<D> retainAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift,
+    protected abstract Node<D> retainAll(@Nullable MutabilityOwnership owner, Node<D> otherNode, int shift,
                                          BulkChangeEvent bulkChange,
                                          BiFunction<D, D, D> updateFunction,
                                          BiPredicate<D, D> equalsFunction,
@@ -347,7 +347,7 @@ public abstract class Node<D> {
     /// @param shift      the shift of this node and the other node
     /// @param bulkChange updates the field [BulkChangeEvent#removed]
     /// @return the updated trie
-    protected abstract Node<D> filterAll(@Nullable IdentityObject owner,
+    protected abstract Node<D> filterAll(@Nullable MutabilityOwnership owner,
                                          Predicate<? super D> predicate, int shift,
                                          BulkChangeEvent bulkChange);
 

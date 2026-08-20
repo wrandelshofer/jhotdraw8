@@ -13,12 +13,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.SequencedMap;
 import java.util.SequencedSet;
 import java.util.Set;
@@ -62,10 +62,10 @@ public abstract class AbstractMapTest {
         assertEquals(expected.hashCode(), actual.hashCode());
         assertEquals(expected, actual);
         assertEquals(actual, expected);
-        assertEquals(expected.entrySet(), actual.entrySet());
-        assertEquals(expected.keySet(), actual.keySet());
+        assertEquals(expected.entrySet(), actual.entrySet(), "entries are not equal");
+        assertEquals(expected.keySet(), actual.keySet(), "keys not equal");
         assertEquals(new LinkedHashSet<>(expected.values()),
-                new LinkedHashSet<>(actual.values()));
+                new LinkedHashSet<>(actual.values()), "values are not equal");
     }
 
     protected <K, V> void assertNotEqualMap(Map<K, V> expected, Map<K, V> actual) {
@@ -85,7 +85,7 @@ public abstract class AbstractMapTest {
     protected abstract <K, V> Map<K, V> newInstance(Map<K, V> m);
 
     /// Creates a new instance with the specified map.
-    abstract <K, V> Map<K, V> newInstance(Iterable<Map.Entry<K, V>> m);
+    abstract <K, V> Map<K, V> newInstance(java.lang.Iterable<Map.Entry<K, V>> m);
 
     @ParameterizedTest
     @MethodSource("dataProvider")
@@ -141,6 +141,7 @@ public abstract class AbstractMapTest {
         assertEquals(Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.DISTINCT | Spliterator.SIZED) & instance.entrySet().spliterator().characteristics());
         assertEquals(Spliterator.SIZED, (Spliterator.SIZED) & instance.values().spliterator().characteristics());
     }
+
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void entryIteratorEntrySetValueShouldUpdateMap(MapData data) {
@@ -159,7 +160,9 @@ public abstract class AbstractMapTest {
     public void entryIteratorRemoveShouldRemoveEntryAndRemoveIsNotIdempotent(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
-        List<Map.Entry<Key, Value>> toRemove = new ArrayList<>(new HashSet<>(data.a().readableEntrySet().asSet()));
+        List<Map.Entry<Key, Value>> toRemove = new ArrayList<>(new LinkedHashSet<>(data.a().readableEntrySet().asSet()));
+        Random rnd = new Random(0);
+        Collections.shuffle(toRemove, rnd);
         for (int countdown = toRemove.size(); countdown > 0; countdown--) {
             for (Iterator<Map.Entry<Key, Value>> i = instance.entrySet().iterator(); i.hasNext(); ) {
                 Map.Entry<Key, Value> k = i.next();
@@ -370,7 +373,10 @@ public abstract class AbstractMapTest {
     public void keyIteratorRemoveShouldRemoveEntry(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
-        List<Key> toRemove = new ArrayList<>(new HashSet<>(data.a().readableKeySet().asSet()));
+        List<Key> toRemove = new ArrayList<>(new LinkedHashSet<>(data.a().readableKeySet().asSet()));
+        Random rnd = new Random(0);
+        Collections.shuffle(toRemove, rnd);
+
         while (!toRemove.isEmpty() && !expected.isEmpty()) {
             for (Iterator<Key> i = instance.keySet().iterator(); i.hasNext(); ) {
                 Key k = i.next();

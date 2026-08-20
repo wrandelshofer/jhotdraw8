@@ -12,7 +12,7 @@ import org.jhotdraw8.icollection.alt.impl.champset.SequencedData;
 import org.jhotdraw8.icollection.alt.impl.champset.SequencedElement;
 import org.jhotdraw8.icollection.alt.impl.champset.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
@@ -384,7 +384,7 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
         if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             // center the sequence numbers around 0 so that they are the interval [-size/2,size]
             int newOffset = size / -2;
-            var b = new PersistentVectorHashSetBuilder<E>(new IdentityObject(), newOffset);
+            var b = new PersistentVectorHashSetBuilder<E>(new MutabilityOwnership(), newOffset);
             b.addSpliterator(new TombSkippingVectorSpliterator<>(
                     new FingerTreeSpliterator<>(vector),
                     e -> ((SequencedElement<E>) e).getElement(),
@@ -430,8 +430,8 @@ public class PersistentVectorHashSet<E> implements Serializable, PersistentSeque
     }
 
     @Override
-    public MutableVectorSet<E> toMutable() {
-        return new MutableVectorSet<>(this);
+    public MutableVectorHashSet<E> toMutable() {
+        return new MutableVectorHashSet<>(this);
     }
 
     /// Returns a string representation of this set.

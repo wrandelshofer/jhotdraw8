@@ -6,7 +6,7 @@
 package org.jhotdraw8.icollection.impl.champ;
 
 import org.jhotdraw8.icollection.impl.ArrayHelper;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
@@ -132,7 +132,7 @@ class HashCollisionNode extends Node {
 
     @Override
     @Nullable
-    Node remove(@Nullable IdentityObject mutator, Object key,
+    Node remove(@Nullable MutabilityOwnership mutator, Object key,
                 int keyHash, int shift, ChangeEvent details, int DATA_LENGTH) {
         for (int idx = 0, i = 0; i < array.length; i += DATA_LENGTH, idx++) {
             if (Objects.equals(array[i], key)) {
@@ -162,7 +162,7 @@ class HashCollisionNode extends Node {
     }
 
     @Override
-    public Node put(@Nullable IdentityObject mutator, Object key, Object[] newData,
+    public Node put(@Nullable MutabilityOwnership mutator, Object key, Object[] newData,
                     int keyHash, int shift, ChangeEvent details,
                     BiFunction<Object[], Object[], Object[]> updateFunction,
                     ToIntFunction<Object> hashFunction, int DATA_LENGTH) {
@@ -197,7 +197,7 @@ class HashCollisionNode extends Node {
     }
 
     @Override
-    protected Node removeIf(@Nullable IdentityObject owner, Predicate<Object> predicate, int shift, BulkChangeEvent bulkChange, int DATA_LENGTH) {
+    protected Node removeIf(@Nullable MutabilityOwnership owner, Predicate<Object> predicate, int shift, BulkChangeEvent bulkChange, int DATA_LENGTH) {
 
         int resultSize = 0;
         Object[] buffer = new Object[this.array.length];
@@ -225,7 +225,7 @@ class HashCollisionNode extends Node {
     }
 
     @Override
-    protected Node putAll(@Nullable IdentityObject owner, Node otherNode, int shift, BulkChangeEvent bulkChange, ToIntFunction<Object> hashFunction, ChangeEvent details, int DATA_LENGTH) {
+    protected Node putAll(@Nullable MutabilityOwnership owner, Node otherNode, int shift, BulkChangeEvent bulkChange, ToIntFunction<Object> hashFunction, ChangeEvent details, int DATA_LENGTH) {
         if (otherNode == this) {
             bulkChange.inBoth += dataArity(DATA_LENGTH);
             // FIXME also count children!

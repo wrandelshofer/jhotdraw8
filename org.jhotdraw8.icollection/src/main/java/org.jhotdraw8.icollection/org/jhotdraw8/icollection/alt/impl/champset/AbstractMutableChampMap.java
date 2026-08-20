@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.alt.impl.champset;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jspecify.annotations.Nullable;
@@ -36,7 +36,7 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
     /// by this map, and therefore can be mutated without affecting other map.
     ///
     /// If this owner id is null, then this map does not own any nodes.
-    protected IdentityObject owner;
+    protected MutabilityOwnership owner;
 
     /// The root of this CHAMP trie.
     protected transient BitmapIndexedNode<D> hashMap;
@@ -51,7 +51,7 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
     @SuppressWarnings("unchecked")
     public AbstractMutableChampMap<K, V, D> clone() {
         try {
-            owner = new IdentityObject();
+            owner = new MutabilityOwnership();
             return (AbstractMutableChampMap<K, V, D>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
@@ -90,7 +90,7 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
     ///
     /// @param c an iterable of elements
     /// @return `true` if this set changed
-    public boolean putAll(Iterable<? extends Entry<? extends K, ? extends V>> c) {
+    public boolean putAll(java.lang.Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c == this) {
             return false;
         }
@@ -110,7 +110,7 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
     ///
     /// @param c an iterable of keys
     /// @return `true` if this map changed
-    public boolean removeAll(Iterable<?> c) {
+    public boolean removeAll(java.lang.Iterable<?> c) {
         if (isEmpty()) {
             return false;
         }
@@ -128,7 +128,7 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
     ///
     /// @param c an iterable of keys
     /// @return `true` if this map changed
-    public boolean retainAll(Iterable<?> c) {
+    public boolean retainAll(java.lang.Iterable<?> c) {
         if (isEmpty()) {
             return false;
         }

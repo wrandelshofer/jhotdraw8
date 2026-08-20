@@ -3,7 +3,7 @@ package org.jhotdraw8.icollection.navigable;
 import org.jhotdraw8.icollection.MutableMapEntry;
 import org.jhotdraw8.icollection.facade.NavigableSetFacade;
 import org.jhotdraw8.icollection.facade.SetFacade;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.readable.ReadableMap;
@@ -417,7 +417,7 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
                 }
             }
 
-            fenceKey = fence == null ? new IdentityObject() : fence;
+            fenceKey = fence == null ? new MutabilityOwnership() : fence;
             if (next == fenceKey) {
                 hasNext = false;
             }

@@ -59,7 +59,7 @@ public interface PersistentMap<K, V> extends ReadableMap<K, V> {
     /// @return this map instance if it already contains the same entries, or
     /// a different map instance with the entries added or updated
     @SuppressWarnings("unchecked")
-    default PersistentMap<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    default PersistentMap<K, V> puttingAll(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         if (c instanceof Collection<?> co && co.isEmpty()
                 || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
             return this;
@@ -105,7 +105,7 @@ public interface PersistentMap<K, V> extends ReadableMap<K, V> {
     /// @param c a collection with keys of entries to be removed from this map
     /// @return this map instance if it already does not contain the entries, or
     /// a different map instance with the entries removed
-    default PersistentMap<K, V> removingAll(Iterable<? extends K> c) {
+    default PersistentMap<K, V> removingAll(java.lang.Iterable<? extends K> c) {
         if (isEmpty()
                 || c instanceof Collection<?> co && co.isEmpty()
                 || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
@@ -125,7 +125,7 @@ public interface PersistentMap<K, V> extends ReadableMap<K, V> {
     /// @return this map instance if it has not changed, or
     /// a different map instance with entries removed
     @SuppressWarnings("unchecked")
-    default PersistentMap<K, V> retainingAll(Iterable<? extends K> c) {
+    default PersistentMap<K, V> retainingAll(java.lang.Iterable<? extends K> c) {
         if (isEmpty()) {
             return this;
         }

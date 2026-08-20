@@ -3,7 +3,7 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.icollection.alt.impl.champset.BitmapIndexedNode;
 import org.jhotdraw8.icollection.alt.impl.champset.ChangeEvent;
 import org.jhotdraw8.icollection.alt.impl.champset.SequencedElement;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeBuilder;
 
 import java.util.Objects;
@@ -13,15 +13,15 @@ import java.util.Objects;
 public class PersistentVectorHashSetBuilder<E> implements SetBuilder<E, PersistentVectorHashSet<E>> {
     private final FingerTreeBuilder<Object> vector = new FingerTreeBuilder<>();
     private BitmapIndexedNode<SequencedElement<E>> hashSet = BitmapIndexedNode.emptyNode();
-    private IdentityObject owner = new IdentityObject();
+    private MutabilityOwnership owner = new MutabilityOwnership();
     private final int offset;
     private int size;
 
     public PersistentVectorHashSetBuilder() {
-        this(new IdentityObject(), Integer.MIN_VALUE / 4);
+        this(new MutabilityOwnership(), Integer.MIN_VALUE / 4);
     }
 
-    PersistentVectorHashSetBuilder(IdentityObject owner, int offset) {
+    PersistentVectorHashSetBuilder(MutabilityOwnership owner, int offset) {
         this.offset = offset;
         this.owner = owner;
     }
@@ -45,7 +45,7 @@ public class PersistentVectorHashSetBuilder<E> implements SetBuilder<E, Persiste
 
     @Override
     public PersistentVectorHashSet<E> build() {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         return new PersistentVectorHashSet<>(hashSet, vector.build(), size, offset);
     }
 }

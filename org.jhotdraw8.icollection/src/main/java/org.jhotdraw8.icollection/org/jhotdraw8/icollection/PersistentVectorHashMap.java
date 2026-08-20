@@ -12,7 +12,7 @@ import org.jhotdraw8.icollection.alt.impl.champset.SequencedData;
 import org.jhotdraw8.icollection.alt.impl.champset.SequencedEntry;
 import org.jhotdraw8.icollection.alt.impl.champset.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedMap;
@@ -144,8 +144,8 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
     /// @param <K> the key type
     /// @param <V> the value type
     /// @return a persistent copy
-    public static <K, V> PersistentVectorHashMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
-        return new PersistentVectorHashMapBuilder<K, V>().addEntries(map).build();
+    public static <K, V> PersistentVectorHashMap<K, V> copyOf(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
+        return new PersistentVectorHashMapBuilder<K, V>().putEntries(map).build();
     }
 
     /// Returns a persistent copy of the provided map.
@@ -155,7 +155,7 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
     /// @param <V> the value type
     /// @return a persistent copy
     public static <K, V> PersistentVectorHashMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
-        return new PersistentVectorHashMapBuilder<K, V>().addMap(map).build();
+        return new PersistentVectorHashMapBuilder<K, V>().putAll(map).build();
     }
 
     /// Returns an empty persistent map.
@@ -250,7 +250,7 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentVectorHashMap<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public PersistentVectorHashMap<K, V> puttingAll(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         var m = toMutable();
         return m.putAll(c) ? m.toPersistent() : this;
     }
@@ -362,7 +362,7 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
 
 
     @Override
-    public PersistentVectorHashMap<K, V> removingAll(Iterable<? extends K> c) {
+    public PersistentVectorHashMap<K, V> removingAll(java.lang.Iterable<? extends K> c) {
         var t = toMutable();
         return t.removeAll(c) ? t.toPersistent() : this;
     }
@@ -375,8 +375,8 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
         if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             // center the numbers around 0 so that we have the interval [-size/2,size]
             int newOffset = size / -2;
-            var b = new PersistentVectorHashMapBuilder<K, V>(new IdentityObject(), newOffset);
-            b.addEntries(new TombSkippingVectorSpliterator<>(
+            var b = new PersistentVectorHashMapBuilder<K, V>(new MutabilityOwnership(), newOffset);
+            b.putEntries(new TombSkippingVectorSpliterator<>(
                     new FingerTreeSpliterator<>(vector),
                     e -> ((Map.Entry<K, V>) e),
                     0, size(), vector.size(),
@@ -389,7 +389,7 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
     }
 
     @Override
-    public PersistentVectorHashMap<K, V> retainingAll(Iterable<? extends K> c) {
+    public PersistentVectorHashMap<K, V> retainingAll(java.lang.Iterable<? extends K> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toPersistent() : this;
     }
@@ -424,13 +424,13 @@ public class PersistentVectorHashMap<K, V> implements PersistentSequencedMap<K, 
     ///
     /// @return a mutable sequenced CHAMP map
     @Override
-    public MutableVectorMap<K, V> toMutable() {
-        return new MutableVectorMap<>(this);
+    public MutableVectorHashMap<K, V> toMutable() {
+        return new MutableVectorHashMap<>(this);
     }
 
     @Override
-    public MutableVectorMap<K, V> asMap() {
-        return new MutableVectorMap<>(this);
+    public MutableVectorHashMap<K, V> asMap() {
+        return new MutableVectorHashMap<>(this);
     }
 
     /// Returns a string representation of this map.

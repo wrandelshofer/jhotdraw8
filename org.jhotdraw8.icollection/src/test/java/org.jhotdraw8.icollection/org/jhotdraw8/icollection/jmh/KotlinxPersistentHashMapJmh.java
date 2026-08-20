@@ -18,33 +18,47 @@ import java.util.concurrent.TimeUnit;
 
 /// <pre>
 /// # JMH version: 1.37
-/// # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
-/// # Apple M2 Max
-///                    (mask)  (size)  Mode  Cnt         Score   Error  Units
-/// mContainsFound        -65  100000  avgt    2        38.214          ns/op
-/// mContainsNotFound     -65  100000  avgt    2        39.175          ns/op
-/// mCopyOf               -65  100000  avgt    2   9738079.390          ns/op
-/// mCopyOnyByOne         -65  100000  avgt    2  15165845.241          ns/op
-/// mHead                 -65  100000  avgt    2        29.194          ns/op
-/// mIterate              -65  100000  avgt    2    933066.347          ns/op
-/// mPut                  -65  100000  avgt    2       106.105          ns/op
-/// mRemoveThenAdd        -65  100000  avgt    2       216.574          ns/op
-/// mTail                 -65  100000  avgt    2        58.428          ns/op
-/// </pre>
-/// <pre>
-/// # JMH version: 1.28
-/// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
-/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+/// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
+/// # Mac Mini M4 Pro, 4.40 GHz
+/// org.jetbrains.kotlin:kotlinx-collections-immutable-jvm:0.5.1
 ///
-///                    (size)  Mode  Cnt     _     Score   Error  Units
-/// ContainsFound     1000000  avgt          _   184.674          ns/op
-/// ContainsNotFound  1000000  avgt          _   208.197          ns/op
-/// CopyOf            1000000  avgt       399_299237.577          ns/op
-/// Head              1000000  avgt          _    44.703          ns/op
-/// Iterate           1000000  avgt        46_259569.668          ns/op
-/// Put               1000000  avgt          _   353.429          ns/op
-/// RemoveThenAdd     1000000  avgt          _   571.652          ns/op
-/// Tail              1000000  avgt          _   131.255          ns/op
+/// Benchmark                                         (mask)  (size)  Mode  Cnt         Score   Error  Units
+/// KotlinxPersistentHashMapJmh.mContainsAll             -65      10  avgt    2        35.990          ns/op
+/// KotlinxPersistentHashMapJmh.mContainsAll             -65    1000  avgt    2      7271.252          ns/op
+/// KotlinxPersistentHashMapJmh.mContainsAll             -65  100000  avgt    2   2385519.325          ns/op
+/// KotlinxPersistentHashMapJmh.mContainsAllSameType     -65      10  avgt    2        37.764          ns/op
+/// KotlinxPersistentHashMapJmh.mContainsAllSameType     -65    1000  avgt    2      8586.642          ns/op
+/// KotlinxPersistentHashMapJmh.mContainsAllSameType     -65  100000  avgt    2   1662283.503          ns/op
+/// KotlinxPersistentHashMapJmh.mContainsKey             -65      10  avgt    2        10.228          ns/op
+/// KotlinxPersistentHashMapJmh.mContainsKey             -65    1000  avgt    2      5147.611          ns/op
+/// KotlinxPersistentHashMapJmh.mContainsKey             -65  100000  avgt    2   2427384.373          ns/op
+/// KotlinxPersistentHashMapJmh.mCopyOf                  -65      10  avgt    2       153.298          ns/op
+/// KotlinxPersistentHashMapJmh.mCopyOf                  -65    1000  avgt    2     31852.741          ns/op
+/// KotlinxPersistentHashMapJmh.mCopyOf                  -65  100000  avgt    2   8222299.204          ns/op
+/// KotlinxPersistentHashMapJmh.mGetFirst                -65      10  avgt    2        10.146          ns/op
+/// KotlinxPersistentHashMapJmh.mGetFirst                -65    1000  avgt    2        14.781          ns/op
+/// KotlinxPersistentHashMapJmh.mGetFirst                -65  100000  avgt    2        16.979          ns/op
+/// KotlinxPersistentHashMapJmh.mIterate                 -65      10  avgt    2        39.632          ns/op
+/// KotlinxPersistentHashMapJmh.mIterate                 -65    1000  avgt    2      3771.418          ns/op
+/// KotlinxPersistentHashMapJmh.mIterate                 -65  100000  avgt    2    409702.381          ns/op
+/// KotlinxPersistentHashMapJmh.mPut                     -65      10  avgt    2       147.816          ns/op
+/// KotlinxPersistentHashMapJmh.mPut                     -65    1000  avgt    2     35535.000          ns/op
+/// KotlinxPersistentHashMapJmh.mPut                     -65  100000  avgt    2  12500930.015          ns/op
+/// KotlinxPersistentHashMapJmh.mPutAll                  -65      10  avgt    2       136.031          ns/op
+/// KotlinxPersistentHashMapJmh.mPutAll                  -65    1000  avgt    2     26329.174          ns/op
+/// KotlinxPersistentHashMapJmh.mPutAll                  -65  100000  avgt    2   7316476.838          ns/op
+/// KotlinxPersistentHashMapJmh.mPutAllSameType          -65      10  avgt    2        48.520          ns/op
+/// KotlinxPersistentHashMapJmh.mPutAllSameType          -65    1000  avgt    2      9404.159          ns/op
+/// KotlinxPersistentHashMapJmh.mPutAllSameType          -65  100000  avgt    2   1518075.057          ns/op
+/// KotlinxPersistentHashMapJmh.mPutContained            -65      10  avgt    2        13.647          ns/op
+/// KotlinxPersistentHashMapJmh.mPutContained            -65    1000  avgt    2      7578.176          ns/op
+/// KotlinxPersistentHashMapJmh.mPutContained            -65  100000  avgt    2   2023279.384          ns/op
+/// KotlinxPersistentHashMapJmh.mRemove                  -65      10  avgt    2       132.027          ns/op
+/// KotlinxPersistentHashMapJmh.mRemove                  -65    1000  avgt    2     39719.490          ns/op
+/// KotlinxPersistentHashMapJmh.mRemove                  -65  100000  avgt    2  12847214.279          ns/op
+/// KotlinxPersistentHashMapJmh.mRemoveFirst             -65      10  avgt    2       245.384          ns/op
+/// KotlinxPersistentHashMapJmh.mRemoveFirst             -65    1000  avgt    2     53918.664          ns/op
+/// KotlinxPersistentHashMapJmh.mRemoveFirst             -65  100000  avgt    2   9764591.609          ns/op
 /// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
@@ -71,13 +85,13 @@ public class KotlinxPersistentHashMapJmh {
         setAA = ExtensionsKt.persistentHashMapOf();
         setC = ExtensionsKt.persistentHashMapOf();
         for (Key key : data.setA) {
-            setA = setA.put(key, Boolean.TRUE);
+            setA = setA.putting(key, Boolean.TRUE);
         }
         for (Key key : data.listA) {
-            setAA = setAA.put(key, Boolean.TRUE);
+            setAA = setAA.putting(key, Boolean.TRUE);
         }
         for (Key key : data.setC) {
-            setC = setC.put(key, Boolean.FALSE);
+            setC = setC.putting(key, Boolean.FALSE);
         }
     }
 

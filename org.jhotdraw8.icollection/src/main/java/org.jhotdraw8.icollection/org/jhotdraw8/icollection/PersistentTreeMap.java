@@ -58,7 +58,7 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
     /// @param <V> the value type
     /// @return a persistent map of the provided elements
     @SuppressWarnings("unchecked")
-    public static <K, V> PersistentTreeMap<K, V> copyOf(Comparator<? super K> comparator, Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public static <K, V> PersistentTreeMap<K, V> copyOf(Comparator<? super K> comparator, java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         if (c instanceof PersistentTreeMap<?, ?> r && r.comparator.equals(comparator)) {
             return (PersistentTreeMap<K, V>) r;
         }
@@ -75,7 +75,7 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
 
 
     @Override
-    public PersistentTreeMap<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public PersistentTreeMap<K, V> puttingAll(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.puttingAll(c);
     }
 
@@ -85,12 +85,12 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
     }
 
     @Override
-    public PersistentTreeMap<K, V> removingAll(Iterable<? extends K> c) {
+    public PersistentTreeMap<K, V> removingAll(java.lang.Iterable<? extends K> c) {
         return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.removingAll(c);
     }
 
     @Override
-    public PersistentTreeMap<K, V> retainingAll(Iterable<? extends K> c) {
+    public PersistentTreeMap<K, V> retainingAll(java.lang.Iterable<? extends K> c) {
         return (PersistentTreeMap<K, V>) PersistentNavigableMap.super.retainingAll(c);
     }
 
@@ -106,7 +106,7 @@ public class PersistentTreeMap<K, V> implements PersistentNavigableMap<K, V>, Se
     /// @param <K> the key type
     /// @param <V> the value type
     /// @return a persistent map of the provided elements
-    public static <K, V> PersistentTreeMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public static <K, V> PersistentTreeMap<K, V> copyOf(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         return PersistentTreeMap.copyOf(NaturalComparator.instance(), c);
     }
 

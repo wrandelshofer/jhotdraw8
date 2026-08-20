@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.icollection.AbstractImmutableSetTest;
+import org.jhotdraw8.icollection.AbstractPersistentSetTest;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 
@@ -13,7 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Function;
 
-public class ImmutableSetFacadeTest extends AbstractImmutableSetTest {
+public class ImmutableSetFacadeTest extends AbstractPersistentSetTest {
 
 
     @SuppressWarnings("unchecked")

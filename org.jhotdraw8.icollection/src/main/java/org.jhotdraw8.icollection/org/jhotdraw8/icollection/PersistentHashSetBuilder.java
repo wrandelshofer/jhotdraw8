@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.champset.TrieBuilder;
 import org.jhotdraw8.icollection.impl.champset.TrieNode;
 import org.jspecify.annotations.Nullable;
@@ -14,10 +14,10 @@ public class PersistentHashSetBuilder<E> implements SetBuilder<E, PersistentHash
     private TrieBuilder<E> builder;
 
     public PersistentHashSetBuilder() {
-        this(new IdentityObject());
+        this(new MutabilityOwnership());
     }
 
-    PersistentHashSetBuilder(IdentityObject owner) {
+    PersistentHashSetBuilder(MutabilityOwnership owner) {
         this.builder = new TrieBuilder<>(owner);
     }
 
@@ -29,6 +29,7 @@ public class PersistentHashSetBuilder<E> implements SetBuilder<E, PersistentHash
 
     @Override
     public PersistentHashSet<E> build() {
+        builder.ownership = new MutabilityOwnership();
         return new PersistentHashSet<>(node, builder.size);
     }
 }

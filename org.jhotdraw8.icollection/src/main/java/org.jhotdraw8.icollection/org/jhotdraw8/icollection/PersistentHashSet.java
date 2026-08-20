@@ -152,7 +152,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
             var builder = new TrieBuilder<>();
             TrieNode<E> newNode = (TrieNode<E>) node.mutableRemoveAll((TrieNode<E>) m.node, 0, deltaCounter, builder);
             var newSize = size - deltaCounter.count;
-            return (newSize != size) ? new PersistentHashSet<>(newNode, newSize) : this;
+            return (newSize != size) ? newSize == 0 ? of() : new PersistentHashSet<>(newNode, newSize) : this;
         }
         return (PersistentHashSet<E>) PersistentSet.super.removingAll(c);
     }
@@ -168,7 +168,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
             var builder = new TrieBuilder<>();
             TrieNode<E> newNode = (TrieNode<E>) node.mutableRetainAll((TrieNode<E>) m.node, 0, deltaCounter, builder);
             var newSize = deltaCounter.count;
-            return (newSize != size) ? new PersistentHashSet<>(newNode, newSize) : this;
+            return (newSize != size) ? newSize == 0 ? of() : new PersistentHashSet<>(newNode, newSize) : this;
         }
         return (PersistentHashSet<E>) PersistentSet.super.retainingAll(c);
     }
@@ -179,7 +179,7 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
         if (newNode == node) {
             return this;
         }
-        return new PersistentHashSet<>(newNode, size - 1);
+        return size == 1 ? of() : new PersistentHashSet<>(newNode, size - 1);
     }
 
     @Override

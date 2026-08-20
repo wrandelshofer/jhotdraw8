@@ -33,7 +33,7 @@ public class MutableHashMapTest extends AbstractMapTest {
 
     @Override
     protected <K, V> Map<K, V> newInstance(Iterable<Map.Entry<K, V>> m) {
-        return new MutableHashMap<>(m);
+        return new PersistentHashMapBuilder<K, V>().putEntries(m).build().toMutable();
     }
 
 
@@ -45,7 +45,8 @@ public class MutableHashMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testNewInstanceReadOnlyArgOfDifferentTypeShouldBeEqualToArg(MapData data) {
-        Map<Key, Value> actual = new MutableHashMap<>(data.a());
+        MutableHashMap<Key, Value> actual = new MutableHashMap<>();
+        actual.putEntries(data.a());
         assertEqualMap(data.a(), actual);
     }
 
@@ -55,8 +56,8 @@ public class MutableHashMapTest extends AbstractMapTest {
         Map<Key, Value> instance = newInstance(data.a);
         List<Map.Entry<Key, Value>> actualList = new ArrayList<>();
         LinkedHashMap<Key, Value> actualMap = new LinkedHashMap<>();
-        ((MutableHashMap<Key, Value>) instance).iterator().forEachRemaining(actualList::add);
-        ((MutableHashMap<Key, Value>) instance).iterator().forEachRemaining(e -> actualMap.put(e.getKey(), e.getValue()));
+        ((MutableHashMap<Key, Value>) instance).entrySet().iterator().forEachRemaining(actualList::add);
+        ((MutableHashMap<Key, Value>) instance).entrySet().iterator().forEachRemaining(e -> actualMap.put(e.getKey(), e.getValue()));
         assertEquals(data.a.size(), actualList.size());
         assertEqualMap(data.a, actualMap);
     }

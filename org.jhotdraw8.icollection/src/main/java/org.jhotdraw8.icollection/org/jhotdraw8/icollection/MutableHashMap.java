@@ -1,23 +1,28 @@
 /*
- * @(#)MutableChampMap.java
+ * @(#)MutableHashMap.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.alt.impl.champmap.BitmapIndexedNode;
-import org.jhotdraw8.icollection.alt.impl.champmap.ChangeEvent;
-import org.jhotdraw8.icollection.alt.impl.champmap.EntryIterator;
-import org.jhotdraw8.icollection.alt.impl.champmap.Node;
+
+import org.jhotdraw8.icollection.alt.impl.champmap.EditableMapEntry;
 import org.jhotdraw8.icollection.facade.SetFacade;
+import org.jhotdraw8.icollection.impl.champmap.DeltaCounter;
+import org.jhotdraw8.icollection.impl.champmap.EntryIterator;
+import org.jhotdraw8.icollection.impl.champmap.TrieBuilder;
+import org.jhotdraw8.icollection.impl.champmap.TrieNode;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
+import java.io.Serializable;
+import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 
@@ -64,13 +69,18 @@ import java.util.Spliterator;
 ///
 /// @param <K> the key type
 /// @param <V> the value type
-public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
+public class MutableHashMap<K, V> extends AbstractMap<K, V> implements Cloneable, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
+    @SuppressWarnings("TransientFieldNotInitialized")
+    transient TrieNode<K, V> node;
+    int size;
+    int modCount;
+    private TrieBuilder<K, V> mutator = new TrieBuilder<>();
 
     /// Constructs a new empty map.
     public MutableHashMap() {
-        root = BitmapIndexedNode.emptyNode();
+        node = TrieNode.empty();
     }
 
     /// Constructs a map containing the same entries as in the specified
@@ -83,29 +93,32 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
         putAll(m);
     }
 
-    /// Constructs a map containing the same entries as in the specified
-    /// [Iterable].
-    ///
-    /// @param m an iterable
     @SuppressWarnings("this-escape")
-    public MutableHashMap(Iterable<? extends Entry<? extends K, ? extends V>> m) {
+    MutableHashMap(TrieNode<K, V> node, int size) {
         this();
-        putAll(m);
+        this.node = node;
+        this.size = size;
     }
 
     /// Removes all entries from this map.
     @Override
     public void clear() {
-        root = BitmapIndexedNode.emptyNode();
+        node = TrieNode.empty();
         size = 0;
         modCount++;
     }
 
     /// Returns a shallow copy of this map.
+    @SuppressWarnings("unchecked")
     @Override
     public MutableHashMap<K, V> clone() {
-        var that = (MutableHashMap<K, V>) super.clone();
-        that.owner = null;
+        MutableHashMap<K, V> that = null;
+        try {
+            that = (MutableHashMap<K, V>) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+        that.mutator = new TrieBuilder<>();
         return that;
     }
 
@@ -113,21 +126,35 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean containsKey(@Nullable Object o) {
-        return root.findByKey((K) o,
-                PersistentHashMap.keyHash(o), 0) != Node.NO_DATA;
+        @SuppressWarnings("unchecked") K key = (K) o;
+        return node.containsKey(Objects.hashCode(key), key, 0);
     }
 
-    @Override
-    public Iterator<Entry<K, V>> iterator() {
+    public boolean containsEntry(@Nullable Object o) {
+        if (o instanceof Entry<?, ?> entry) {
+            @SuppressWarnings("unchecked") K key = (K) entry.getKey();
+            V v = node.getOrDefault(Objects.hashCode(key), key, 0, node.noDataValue());
+            return Objects.equals(entry.getValue(), v);
+        }
+        return false;
+    }
+
+
+    private Iterator<Entry<K, V>> iterator() {
         return new FailFastIterator<>(
-                new EntryIterator<>(root,
-                        this::iteratorRemoveKey, this::iteratorPutIfPresent), this::getModCount
-        );
+                new EntryIterator<>(node, (k, v) -> new EditableMapEntry<>(k, v,
+                        this::iteratorPutIfPresent)), this::iteratorRemoveEntry, this::getModCount);
+        //  return new FailFastIterator<>(
+        //                this::iteratorRemoveKey, this::iteratorPutIfPresent), this::getModCount
+        // );
     }
 
-    @Override
-    public Spliterator<Entry<K, V>> spliterator() {
-        return new IteratorSpliterator<>(iterator(), size(), Spliterator.NONNULL | characteristics(), null);
+    int getModCount() {
+        return modCount;
+    }
+
+    private Spliterator<Entry<K, V>> spliterator() {
+        return new IteratorSpliterator<>(iterator(), size(), Spliterator.NONNULL | Spliterator.DISTINCT | Spliterator.SIZED, null);
     }
 
     /// Returns a [Set] view of the entries contained in this map.
@@ -154,129 +181,81 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable V get(Object o) {
-        Object result = root.findByKey((K) o,
-                PersistentHashMap.keyHash(o), 0);
-        return result == Node.NO_DATA ? null : (V) result;
+        return node.getOrDefault(Objects.hashCode(o), (K) o, 0, null);
     }
 
     private void iteratorPutIfPresent(@Nullable K k, @Nullable V v) {
         if (containsKey(k)) {
-            owner = null;
+            mutator = new TrieBuilder<>();
             put(k, v);
         }
     }
 
+    @Override
+    public V replace(K key, V value) {
+        return super.replace(key, value);
+    }
 
     @Override
     public @Nullable V put(K key, V value) {
-        return putEntry(key, value).getOldValue();
+        var newNode = node.mutablePut(Objects.hashCode(key), key, value, 0, mutator.reset());
+        if (!mutator.isModified()) {
+            return value;
+        }
+        if (mutator.size != 0) modCount++;
+        this.node = newNode;
+        size += mutator.size;
+        return mutator.getAndClearOperationResult();// must clear result to prevent memory leak
     }
 
-    /*
     @Override
-    @SuppressWarnings("unchecked")
-    public boolean putAll(Iterable<? extends Entry<? extends K, ? extends V>> c) {
-        if (c instanceof MutableChampMap<?, ?> m) {
-            c = (Iterable<? extends Entry<? extends K, ? extends V>>) m.toPersistent();
+    public void putAll(Map<? extends K, ? extends V> m) {
+        if (m == this || m.isEmpty()) return;
+        if (m instanceof MutableHashMap<? extends K, ? extends V> pm) {
+            putEntries(pm.toPersistent());
+        } else {
+            super.putAll(m);
         }
-        if (isEmpty() && c instanceof SimplePersistentMap<?, ?> that) {
-            if (that.isEmpty()) {
-                return false;
-            }
-            root = (BitmapIndexedNode<K, V>) (BitmapIndexedNode<?>) that.root;
-            size = that.size;
-            modCount++;
-            return true;
-        }
-        if (c instanceof SimplePersistentMap<?, ?> that) {
-            var bulkChange = new BulkChangeEvent();
-            var newRootNode = root.putAll(getOrCreateOwner(), (Node<SimpleImmutableEntry<K, V>>) (Node<?>) that.root, 0, bulkChange, SimplePersistentMap::updateEntry, SimplePersistentMap::entryKeyEquals,
-                    SimplePersistentMap::entryKeyHash, new ChangeEvent<>());
-            if (bulkChange.inBoth == that.size() && !bulkChange.replaced) {
-                return false;
-            }
-            root = newRootNode;
-            size += that.size - bulkChange.inBoth;
-            modCount++;
-            return true;
-        }
-        return super.putAll(c);
-    }*/
-
-    ChangeEvent<V> putEntry(@Nullable K key, @Nullable V val) {
-        int keyHash = PersistentHashMap.keyHash(key);
-        ChangeEvent<V> details = new ChangeEvent<>();
-        root = root.put(getOrCreateOwner(), key, val, keyHash, 0, details, PersistentHashMap::keyHash);
-        if (details.isModified() && !details.isReplaced()) {
-            size += 1;
-            modCount++;
-        }
-        return details;
     }
+
+    public void putEntries(Iterable<? extends Map.Entry<? extends K, ? extends V>> m) {
+        if (m == this) return;
+        if (m instanceof PersistentHashMap<?, ?> pm) {
+            var newNode = node;
+            var deltaCounter = new DeltaCounter();
+            newNode = newNode.mutablePutAll((TrieNode<K, V>) pm.node, 0, deltaCounter, mutator);
+            var newSize = size + pm.size - deltaCounter.count;
+            if (newSize != size) {
+                size += pm.size - deltaCounter.count;
+                this.node = newNode;
+            }
+            return;
+        }
+        for (var entry : m) {
+            put(entry.getKey(), entry.getValue());
+        }
+    }
+
 
     @Override
     public V remove(Object o) {
-        @SuppressWarnings("unchecked") K key = (K) o;
-        return removeKey(key).getOldValue();
-    }
-
-    @Override
-    public boolean removeAll(Iterable<?> c) {
-        return super.removeAll(c);
-    }
-
-    /*
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean retainAll(Iterable<?> c) {
-        if (isEmpty()) {
-            return false;
-        }
-        if ((c instanceof Collection<?> cc && cc.isEmpty())
-                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
-            clear();
-            return true;
-        }
-        BulkChangeEvent bulkChange = new BulkChangeEvent();
-        BitmapIndexedNode<K, V> newRootNode;
-        if (c instanceof Collection<?> that) {
-            newRootNode = root.filterAll(getOrCreateOwner(), e -> that.contains(e.getKey()), 0, bulkChange);
-        } else if (c instanceof ReadableCollection<?> that) {
-            newRootNode = root.filterAll(getOrCreateOwner(), e -> that.contains(e.getKey()), 0, bulkChange);
-        } else {
-            HashSet<Object> that = new HashSet<>();
-            c.forEach(that::add);
-            newRootNode = root.filterAll(getOrCreateOwner(), that::contains, 0, bulkChange);
-        }
-        if (bulkChange.removed == 0) {
-            return false;
-        }
-        root = newRootNode;
-        size -= bulkChange.removed;
-        modCount++;
-        return true;
-    }*/
-
-    ChangeEvent<V> removeKey(K key) {
-        int keyHash = PersistentHashMap.keyHash(key);
-        ChangeEvent<V> details = new ChangeEvent<>();
-        root = root.remove(getOrCreateOwner(), key, keyHash, 0, details);
-        if (details.isModified()) {
-            size = size - 1;
+        var newNode = node.mutableRemove(Objects.hashCode(o), (K) o, 0, mutator.reset());
+        if (mutator.isModified()) {
+            this.size--;
+            this.node = newNode;
             modCount++;
         }
-        return details;
+        return mutator.getAndClearOperationResult();// must clear result to prevent memory leak
     }
 
     void iteratorRemoveKey(K key) {
-        // Note: mutator must be null, because we must not change the structure of the trie, while iterating over it.
-        int keyHash = PersistentHashMap.keyHash(key);
-        ChangeEvent<V> details = new ChangeEvent<>();
-        root = root.remove(null, key, keyHash, 0, details);
-        if (details.isModified()) {
-            size = size - 1;
-            modCount++;
-        }
+        // Note: mutator must be recreated, because we must not change the structure of the trie, while iterating over it.
+        this.mutator = new TrieBuilder<>();
+        remove(key);
+    }
+
+    void iteratorRemoveEntry(Map.Entry<K, V> entry) {
+        iteratorRemoveKey(entry.getKey());
     }
 
     @SuppressWarnings("unchecked")
@@ -294,14 +273,19 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
     ///
     /// @return a persistent copy
     public PersistentHashMap<K, V> toPersistent() {
-        owner = null;
+        mutator = new TrieBuilder<>();
         return isEmpty() ? PersistentHashMap.of()
-                : new PersistentHashMap<>(root, size);
+                : new PersistentHashMap<>(node, size);
     }
 
     @Serial
     private Object writeReplace() {
         return new SerializationProxy<>(this);
+    }
+
+    @Override
+    public int size() {
+        return size;
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
@@ -315,7 +299,9 @@ public class MutableHashMap<K, V> extends AbstractMutableHashMap<K, V> {
         @Serial
         @Override
         protected Object readResolve() {
-            return new MutableHashMap<>(deserializedEntries);
+            MutableHashMap<Object, Object> map = new MutableHashMap<>();
+            map.putEntries(deserializedEntries);
+            return map;
         }
     }
 }

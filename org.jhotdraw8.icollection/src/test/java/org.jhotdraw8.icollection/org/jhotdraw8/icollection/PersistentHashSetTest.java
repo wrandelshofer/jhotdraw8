@@ -14,7 +14,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PersistentHashSetTest extends AbstractImmutableSetTest {
+public class PersistentHashSetTest extends AbstractPersistentSetTest {
 
 
     @Override

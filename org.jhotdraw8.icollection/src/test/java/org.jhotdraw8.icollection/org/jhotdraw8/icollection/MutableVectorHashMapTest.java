@@ -18,35 +18,35 @@ public class MutableVectorHashMapTest extends AbstractSequencedMapTest {
     }
 
     @Override
-    protected <K, V> MutableVectorMap<K, V> newInstance() {
-        return new MutableVectorMap<>();
+    protected <K, V> MutableVectorHashMap<K, V> newInstance() {
+        return new MutableVectorHashMap<>();
     }
 
     @Override
-    protected <K, V> MutableVectorMap<K, V> newInstance(int numElements, float loadFactor) {
-        return new MutableVectorMap<>();
+    protected <K, V> MutableVectorHashMap<K, V> newInstance(int numElements, float loadFactor) {
+        return new MutableVectorHashMap<>();
     }
 
     @Override
-    protected <K, V> MutableVectorMap<K, V> newInstance(Map<K, V> m) {
-        return new MutableVectorMap<>(m);
+    protected <K, V> MutableVectorHashMap<K, V> newInstance(Map<K, V> m) {
+        return new MutableVectorHashMap<>(m);
     }
 
     @Override
-    protected <K, V> MutableVectorMap<K, V> newInstance(Iterable<Map.Entry<K, V>> m) {
-        return new MutableVectorMap<>(m);
+    protected <K, V> MutableVectorHashMap<K, V> newInstance(Iterable<Map.Entry<K, V>> m) {
+        return new MutableVectorHashMap<>(m);
     }
 
 
     @Override
     protected <K, V> SequencedMap<K, V> toClonedInstance(Map<K, V> m) {
-        return ((MutableVectorMap<K, V>) m).clone();
+        return ((MutableVectorHashMap<K, V>) m).clone();
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testConstructorWithReadOnlyArgYieldsExpectedMap(MapData data) throws Exception {
-        Map<Key, Value> instance = new MutableVectorMap<>(data.a());
+        Map<Key, Value> instance = new MutableVectorHashMap<>(data.a());
         assertEqualMap(data.a(), instance);
     }
 }

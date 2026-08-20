@@ -94,7 +94,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class KotlinPersistentListJmh {
+public class KotlinxPersistentListJmh {
     @Param({"10", "1000", "100000"})
     private int size;
 

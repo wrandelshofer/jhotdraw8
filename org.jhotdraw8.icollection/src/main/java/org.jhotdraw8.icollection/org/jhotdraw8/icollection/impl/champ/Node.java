@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public abstract class Node {
     /// Represents no value.
     /// We can not use `null`, because we allow storing null-keys and
     /// null-values in the trie.
-    public static final Object NO_DATA = new IdentityObject();
+    public static final Object NO_DATA = new MutabilityOwnership();
 
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
 
@@ -86,7 +86,7 @@ public abstract class Node {
         return hasNodes() || dataArity(DATA_LENGTH) > 1;
     }
 
-    Node mergeTwoDataEntriesIntoNode(@Nullable IdentityObject mutator,
+    Node mergeTwoDataEntriesIntoNode(@Nullable MutabilityOwnership mutator,
                                      Object[] entry0, int keyHash0,
                                      Object[] entry1, int keyHash1,
                                      int shift, int DATA_LENGTH) {
@@ -172,7 +172,7 @@ public abstract class Node {
     }
 
 
-    @Nullable IdentityObject getMutator() {
+    @Nullable MutabilityOwnership getMutator() {
         return null;
     }
 
@@ -192,18 +192,18 @@ public abstract class Node {
 
     abstract boolean hasNodes();
 
-    boolean isAllowedToUpdate(@Nullable IdentityObject y) {
-        IdentityObject x = getMutator();
+    boolean isAllowedToUpdate(@Nullable MutabilityOwnership y) {
+        MutabilityOwnership x = getMutator();
         return x != null && x == y;
     }
 
     abstract int nodeArity();
 
-    abstract Node remove(@Nullable IdentityObject mutator, Object key,
+    abstract Node remove(@Nullable MutabilityOwnership mutator, Object key,
                          int keyHash, int shift, ChangeEvent details, int DATA_LENGTH);
 
 
-    public abstract Node put(@Nullable IdentityObject mutator, Object key, Object[] newData,
+    public abstract Node put(@Nullable MutabilityOwnership mutator, Object key, Object[] newData,
                              int keyHash, int shift, ChangeEvent details,
                              BiFunction<Object[], Object[], Object[]> updateFunction,
                              ToIntFunction<Object> hashFunction
@@ -216,11 +216,11 @@ public abstract class Node {
     /// @param shift      the shift of this node and the other node
     /// @param bulkChange updates the field [BulkChangeEvent#removed]
     /// @return the updated trie
-    protected abstract Node removeIf(@Nullable IdentityObject owner,
+    protected abstract Node removeIf(@Nullable MutabilityOwnership owner,
                                      Predicate<Object> predicate, int shift,
                                      BulkChangeEvent bulkChange, int DATA_LENGTH);
 
-    protected abstract Node putAll(@Nullable IdentityObject owner, Node otherNode, int shift,
+    protected abstract Node putAll(@Nullable MutabilityOwnership owner, Node otherNode, int shift,
                                    BulkChangeEvent bulkChange,
                                    ToIntFunction<Object> hashFunction,
                                    ChangeEvent details, int DATA_LENGTH);

@@ -5,13 +5,13 @@
 
 package org.jhotdraw8.icollection.alt;
 
-import org.jhotdraw8.icollection.AbstractImmutableSequencedMapTest;
+import org.jhotdraw8.icollection.AbstractPersistentSequencedMapTest;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jhotdraw8.icollection.readable.ReadableMap;
 
 import java.util.Map;
 
-public class PersistentBMTrieMapTest extends AbstractImmutableSequencedMapTest {
+public class PersistentBMTrieMapTest extends AbstractPersistentSequencedMapTest {
     @Override
     protected <K, V> PersistentBMTrieMap<K, V> newInstance() {
         return PersistentBMTrieMap.of();
@@ -34,7 +34,7 @@ public class PersistentBMTrieMapTest extends AbstractImmutableSequencedMapTest {
     }
 
     @Override
-    protected <K, V> PersistentBMTrieMap<K, V> newInstance(Iterable<Map.Entry<K, V>> entries) {
+    protected <K, V> PersistentBMTrieMap<K, V> newInstance(java.lang.Iterable<Map.Entry<K, V>> entries) {
         return PersistentBMTrieMap.<K, V>of().puttingAll(entries);
     }
 

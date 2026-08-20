@@ -12,7 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.icollection.MutableVectorMap;
+import org.jhotdraw8.icollection.MutableVectorHashMap;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-/// Tests [MutableVectorMap] with the Guava test suite.
+/// Tests [MutableVectorHashMap] with the Guava test suite.
 public class MutableVectorMapGuavaTests {
 
     public static Test suite() {
@@ -28,7 +28,7 @@ public class MutableVectorMapGuavaTests {
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(MutableVectorMap.class.getSimpleName());
+        TestSuite suite = new TestSuite(MutableVectorHashMap.class.getSimpleName());
         //    suite.addTest(testsForMap());
         suite.addTest(testsForReversedMap());
         return suite;
@@ -39,10 +39,10 @@ public class MutableVectorMapGuavaTests {
                         new TestStringMapGenerator() {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
-                                return new MutableVectorMap<>(Arrays.asList(entries));
+                                return new MutableVectorHashMap<>(Arrays.asList(entries));
                             }
                         })
-                .named(MutableVectorMap.class.getSimpleName())
+                .named(MutableVectorHashMap.class.getSimpleName())
                 .withFeatures(
                         MapFeature.GENERAL_PURPOSE,
                         MapFeature.ALLOWS_NULL_KEYS,
@@ -62,10 +62,10 @@ public class MutableVectorMapGuavaTests {
                         new TestStringMapGenerator() {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
-                                return new MutableVectorMap<>(Arrays.asList(entries)).reversed();
+                                return new MutableVectorHashMap<>(Arrays.asList(entries)).reversed();
                             }
                         })
-                .named(MutableVectorMap.class.getSimpleName() + ".reversed")
+                .named(MutableVectorHashMap.class.getSimpleName() + ".reversed")
                 .withFeatures(
                         MapFeature.GENERAL_PURPOSE,
                         MapFeature.ALLOWS_NULL_KEYS,

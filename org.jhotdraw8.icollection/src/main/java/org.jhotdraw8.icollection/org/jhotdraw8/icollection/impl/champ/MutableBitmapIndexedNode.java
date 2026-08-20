@@ -5,19 +5,19 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 
 final class MutableBitmapIndexedNode<K, V> extends BitmapIndexedNode {
 
-    private final IdentityObject mutator;
+    private final MutabilityOwnership mutator;
 
-    MutableBitmapIndexedNode(IdentityObject mutator, int nodeMap, int dataMap, Object[] nodes, int ENTRY_LENGTH) {
+    MutableBitmapIndexedNode(MutabilityOwnership mutator, int nodeMap, int dataMap, Object[] nodes, int ENTRY_LENGTH) {
         super(nodeMap, dataMap, nodes, ENTRY_LENGTH);
         this.mutator = mutator;
     }
 
     @Override
-    protected IdentityObject getMutator() {
+    protected MutabilityOwnership getMutator() {
         return mutator;
     }
 }

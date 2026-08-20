@@ -1,7 +1,7 @@
 package org.jhotdraw8.icollection.navigable;
 
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractSet;
@@ -312,7 +312,7 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
                 }
             }
 
-            fenceKey = fence == null ? new IdentityObject() : fence;
+            fenceKey = fence == null ? new MutabilityOwnership() : fence;
             if (next == fenceKey) {
                 hasNext = false;
             }

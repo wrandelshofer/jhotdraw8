@@ -2,7 +2,7 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.alt.impl.champset.BitmapIndexedNode;
 import org.jhotdraw8.icollection.alt.impl.champset.ChangeEvent;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
@@ -11,14 +11,14 @@ import java.util.Objects;
 /// generating intermediate editions.
 public class PersistentHashSetBuilderWithNodeSubClasses<E> implements SetBuilder<E, PersistentHashSetWithNodeSubClasses<E>> {
     private BitmapIndexedNode<E> hashSet = BitmapIndexedNode.emptyNode();
-    private IdentityObject owner;
+    private MutabilityOwnership owner;
     private int size;
 
     public PersistentHashSetBuilderWithNodeSubClasses() {
-        this(new IdentityObject());
+        this(new MutabilityOwnership());
     }
 
-    PersistentHashSetBuilderWithNodeSubClasses(IdentityObject owner) {
+    PersistentHashSetBuilderWithNodeSubClasses(MutabilityOwnership owner) {
         this.owner = owner;
     }
 
@@ -35,7 +35,7 @@ public class PersistentHashSetBuilderWithNodeSubClasses<E> implements SetBuilder
 
     @Override
     public PersistentHashSetWithNodeSubClasses<E> build() {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         return new PersistentHashSetWithNodeSubClasses<>(hashSet, size);
     }
 }

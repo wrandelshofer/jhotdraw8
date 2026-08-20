@@ -1,13 +1,13 @@
 package org.jhotdraw8.icollection.impl.champset;
 
-/// Enumerator for one-bits in an int.
+/// C# Enumerator for one-bits in an int.
 ///
 /// Usage:
 /// <pre>
-/// int value=...;
-/// for (ForEachOneBit it=new ForEachOneBit(value); it.moveNext(); ) {
-///   int positionMask=it.getPositionMask();
-///   int newNodeIndex=it.getNewNodeIndex();
+/// int bitmask=...;
+/// for (ForEachOneBit it=new ForEachOneBit(bitmask); it.moveNext(); ) {
+///   int positionMask=it.currentPositionMask();
+///   int index=it.currentIndex();
 ///   ...
 /// }
 /// </pre>
@@ -33,11 +33,11 @@ public class ForEachOneBit {
         return true;
     }
 
-    public int getPositionMask() {
+    public int currentPositionMask() {
         return bit;
     }
 
-    public int getIndex() {
+    public int currentIndex() {
         return index;
     }
 

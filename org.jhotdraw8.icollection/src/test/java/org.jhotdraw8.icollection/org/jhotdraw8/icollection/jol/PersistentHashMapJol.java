@@ -1,10 +1,7 @@
 package org.jhotdraw8.icollection.jol;
 
 import org.jhotdraw8.icollection.PersistentHashMap;
-import org.jhotdraw8.icollection.jmh.Key;
-import org.jhotdraw8.icollection.jmh.Value;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -12,29 +9,31 @@ import java.util.Collections;
 
 /// SimpleImmutableMapJol.
 public class PersistentHashMapJol extends AbstractJol {
+    public void main() {
+        var test = new PersistentHashMapJol();
+        int size = 1000;
+        test.estimateMemoryUsage(size);
+    }
 
     /// <pre>
-    ///  # Compressed references (oops): enabled:
-    /// class org.jhotdraw8.icollection.SimpleImmutableMap with 1000 elements.
-    /// total size              : 72280
+    /// class org.jhotdraw8.icollection.PersistentHashMap with 1000 elements.
+    /// total size              : 70808
     /// element size            : 48
-    /// data size               : 48000 66%
-    /// data structure size     : 24280 33%
-    /// overhead per element    : 24.28 bytes
+    /// data size               : 48000 67%
+    /// data structure size     : 22808 32%
+    /// overhead per element    : 22.808 bytes
     /// ----footprint---
-    /// org.jhotdraw8.icollection.SimpleImmutableMap@4b213651d footprint:
+    /// org.jhotdraw8.icollection.PersistentHashMap@bd8db5ad footprint:
     ///      COUNT       AVG       SUM   DESCRIPTION
-    ///        310        46     14320   [Ljava.lang.Object;
-    ///          1        24        24   org.jhotdraw8.icollection.SimpleImmutableMap
-    ///          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
-    ///        310        32      9920   org.jhotdraw8.icollection.impl.champmap.MutableBitmapIndexedNode
-    ///       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-    ///       2622               72280   (total)
+    ///        283        48     13712   [Ljava.lang.Object;
+    ///          1        24        24   org.jhotdraw8.icollection.PersistentHashMap
+    ///          1        16        16   org.jhotdraw8.icollection.impl.MutabilityOwnership
+    ///        283        32      9056   org.jhotdraw8.icollection.impl.champmap.TrieNode
+    ///       1000        24     24000   org.jhotdraw8.icollection.util.Key
+    ///       1000        24     24000   org.jhotdraw8.icollection.util.Value
+    ///       2568               70808   (total)
     /// </pre>
-    @Test
-    @Disabled
-    public void estimateMemoryUsage() {
-        int size = 1_000;
+    public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = generateMap(size, mask, size * 10);
         PersistentHashMap<Key, Value> mapA = PersistentHashMap.copyOf(data);
@@ -58,10 +57,7 @@ public class PersistentHashMapJol extends AbstractJol {
     ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Value
     ///       2567               68528   (total)
     /// </pre>
-    @Test
-    @Disabled
-    public void estimateMemoryUsageNoBulkOperations() {
-        int size = 1_000;
+    public void estimateMemoryUsageNoBulkOperations(int size) {
         final int mask = -1;//~64;
         var data = generateMap(size, mask, size * 10);
         PersistentHashMap<Key, Value> mapA = PersistentHashMap.of();
@@ -83,10 +79,7 @@ public class PersistentHashMapJol extends AbstractJol {
     /// total size              : 70792
     ///
     /// Difference: 71256 - 70808 = 448 bytes
-    @Test
-    @Disabled
-    public void estimateMemoryUsageForANewVersion() {
-        int size = 1_000;
+    public void estimateMemoryUsageForANewVersion(int size) {
         final int mask = -1;//~64;
         var data = generateMap(size, mask, size * 10L);
         PersistentHashMap<Key, Value> mapA = PersistentHashMap.copyOf(data);
@@ -118,10 +111,7 @@ public class PersistentHashMapJol extends AbstractJol {
     /// 500        24     12000   org.jhotdraw8.icollection.jmh.Key
     /// 910               23224   (total)
     /// </pre>
-    @Test
-    @Disabled
-    public void estimateMemoryUsageAfter75PercentRandomRemoves() {
-        int size = 1_000;
+    public void estimateMemoryUsageAfter75PercentRandomRemoves(int size) {
         final int mask = ~64;
         var data = generateMap(size, mask, size * 10);
         PersistentHashMap<Key, Value> mapA = PersistentHashMap.copyOf(data);

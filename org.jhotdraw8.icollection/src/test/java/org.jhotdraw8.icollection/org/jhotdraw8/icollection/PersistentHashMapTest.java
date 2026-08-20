@@ -33,7 +33,7 @@ public class PersistentHashMapTest extends AbstractPersistentMapTest {
     }
 
     @Override
-    protected <K, V> PersistentMap<K, V> newInstance(Iterable<Map.Entry<K, V>> entries) {
+    protected <K, V> PersistentMap<K, V> newInstance(java.lang.Iterable<Map.Entry<K, V>> entries) {
         return PersistentHashMap.<K, V>of().puttingAll(entries);
     }
 

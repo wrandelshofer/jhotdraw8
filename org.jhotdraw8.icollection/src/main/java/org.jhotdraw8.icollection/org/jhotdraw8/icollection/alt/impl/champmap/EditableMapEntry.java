@@ -23,8 +23,17 @@ public class EditableMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
     private @Nullable BiConsumer<K, V> putIfPresentFunction;// This map entry is actually not serializable
 
     public EditableMapEntry(K key, V value, int sequenceNumber) {
+        this(key, value, sequenceNumber, null);
+    }
+
+    public EditableMapEntry(K key, V value, int sequenceNumber, @Nullable BiConsumer<K, V> putIfPresentFunction) {
         super(key, value);
         this.sequenceNumber = sequenceNumber;
+        this.putIfPresentFunction = putIfPresentFunction;
+    }
+
+    public EditableMapEntry(K key, V value, @Nullable BiConsumer<K, V> putIfPresentFunction) {
+        this(key, value, 0, putIfPresentFunction);
     }
 
     public int getSequenceNumber() {

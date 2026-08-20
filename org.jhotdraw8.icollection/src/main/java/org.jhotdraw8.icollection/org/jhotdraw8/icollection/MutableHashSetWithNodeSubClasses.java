@@ -12,7 +12,7 @@ import org.jhotdraw8.icollection.alt.impl.champset.ChampIterator;
 import org.jhotdraw8.icollection.alt.impl.champset.ChampSpliterator;
 import org.jhotdraw8.icollection.alt.impl.champset.ChangeEvent;
 import org.jhotdraw8.icollection.alt.impl.champset.Node;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
@@ -230,7 +230,7 @@ public class MutableHashSetWithNodeSubClasses<E> extends AbstractMutableChampSet
     @Override
     public MutableHashSetWithNodeSubClasses<E> clone() {
         MutableHashSetWithNodeSubClasses<E> that = (MutableHashSetWithNodeSubClasses<E>) super.clone();
-        that.owner = new IdentityObject();
+        that.owner = new MutabilityOwnership();
         return that;
     }
 
@@ -254,7 +254,7 @@ public class MutableHashSetWithNodeSubClasses<E> extends AbstractMutableChampSet
     }
 
     private void iteratorRemove(E e) {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         remove(e);
     }
 
@@ -276,7 +276,7 @@ public class MutableHashSetWithNodeSubClasses<E> extends AbstractMutableChampSet
     ///
     /// @return a persistent copy
     public PersistentHashSetWithNodeSubClasses<E> toPersistent() {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         return size == 0
                 ? PersistentHashSetWithNodeSubClasses.of()
                 : new PersistentHashSetWithNodeSubClasses<>(hashSet, size);

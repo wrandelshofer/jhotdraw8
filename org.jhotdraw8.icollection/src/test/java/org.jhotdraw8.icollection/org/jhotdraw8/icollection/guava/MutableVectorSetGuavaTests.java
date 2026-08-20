@@ -13,14 +13,14 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.icollection.MutableVectorSet;
+import org.jhotdraw8.icollection.MutableVectorHashSet;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-/// Tests [MutableVectorSet] with the Guava test suite.
+/// Tests [MutableVectorHashSet] with the Guava test suite.
 public class MutableVectorSetGuavaTests {
 
     public static Test suite() {
@@ -28,7 +28,7 @@ public class MutableVectorSetGuavaTests {
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(MutableVectorSet.class.getSimpleName());
+        TestSuite suite = new TestSuite(MutableVectorHashSet.class.getSimpleName());
         suite.addTest(testsForSet());
         suite.addTest(testsForReversedSet());
         return suite;
@@ -39,10 +39,10 @@ public class MutableVectorSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new MutableVectorSet<>(MinimalCollection.of(elements));
+                                return new MutableVectorHashSet<>(MinimalCollection.of(elements));
                             }
                         })
-                .named(MutableVectorSet.class.getSimpleName())
+                .named(MutableVectorHashSet.class.getSimpleName())
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         CollectionFeature.KNOWN_ORDER,
@@ -61,10 +61,10 @@ public class MutableVectorSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new MutableVectorSet<>(MinimalCollection.of(elements)).reversed();
+                                return new MutableVectorHashSet<>(MinimalCollection.of(elements)).reversed();
                             }
                         })
-                .named(MutableVectorSet.class.getSimpleName() + "Reversed")
+                .named(MutableVectorHashSet.class.getSimpleName() + "Reversed")
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         //CollectionFeature.KNOWN_ORDER,

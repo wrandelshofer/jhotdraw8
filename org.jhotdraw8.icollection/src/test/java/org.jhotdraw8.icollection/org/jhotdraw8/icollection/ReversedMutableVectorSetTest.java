@@ -19,22 +19,22 @@ public class ReversedMutableVectorSetTest extends AbstractSequencedSetTest {
 
     @Override
     protected <E> SequencedSet<E> newInstance() {
-        return new MutableVectorSet<E>().reversed();
+        return new MutableVectorHashSet<E>().reversed();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(int numElements, float loadFactor) {
-        return new MutableVectorSet<E>().reversed();
+        return new MutableVectorHashSet<E>().reversed();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(Set<E> m) {
-        return new MutableVectorSet<>(m).reversed();
+        return new MutableVectorHashSet<>(m).reversed();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(ReadableSet<E> m) {
-        MutableVectorSet<E> es = new MutableVectorSet<>();
+        MutableVectorHashSet<E> es = new MutableVectorHashSet<>();
         SequencedSet<E> es1 = es.reversed();
         es1.addAll(m.asSet());
         return es1;
@@ -42,12 +42,12 @@ public class ReversedMutableVectorSetTest extends AbstractSequencedSetTest {
 
     @Override
     protected <E> SequencedSet<E> toClonedInstance(Set<E> m) {
-        return ((MutableVectorSet<E>) m).clone();
+        return ((MutableVectorHashSet<E>) m).clone();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(SequencedSet<E> m) {
-        MutableVectorSet<E> es = new MutableVectorSet<>();
+        MutableVectorHashSet<E> es = new MutableVectorHashSet<>();
         SequencedSet<E> es1 = es.reversed();
         es1.addAll(m);
         return es1;
@@ -55,7 +55,7 @@ public class ReversedMutableVectorSetTest extends AbstractSequencedSetTest {
 
     @Override
     protected <E> SequencedSet<E> newInstance(ReadableSequencedSet<E> m) {
-        MutableVectorSet<E> es = new MutableVectorSet<>();
+        MutableVectorHashSet<E> es = new MutableVectorHashSet<>();
         SequencedSet<E> es1 = es.reversed();
         es1.addAll(m.asSet());
         return es1;
@@ -64,12 +64,12 @@ public class ReversedMutableVectorSetTest extends AbstractSequencedSetTest {
 
     @Override
     protected <E> SequencedSet<E> toClonedInstance(SequencedSet<E> m) {
-        return ((MutableVectorSet<E>) m).clone();
+        return ((MutableVectorHashSet<E>) m).clone();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(Iterable<E> m) {
-        MutableVectorSet<E> es = new MutableVectorSet<>();
+        MutableVectorHashSet<E> es = new MutableVectorHashSet<>();
         SequencedSet<E> es1 = es.reversed();
         m.forEach(es1::add);
         return es1;

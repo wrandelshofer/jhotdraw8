@@ -6,7 +6,7 @@
 package org.jhotdraw8.icollection.alt.impl.champmap;
 
 import org.jhotdraw8.icollection.impl.ArrayHelper;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
@@ -104,7 +104,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
 
     @Override
     @Nullable
-    Node<K, V> remove(@Nullable IdentityObject mutator, K key,
+    Node<K, V> remove(@Nullable MutabilityOwnership mutator, K key,
                       int keyHash, int shift, ChangeEvent<V> details) {
         for (int idx = 0, i = 0; i < array.length; i += ENTRY_LENGTH, idx++) {
             if (Objects.equals(array[i], key)) {
@@ -135,7 +135,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
 
     @Override
     @Nullable
-    Node<K, V> put(@Nullable IdentityObject mutator, K key, V val,
+    Node<K, V> put(@Nullable MutabilityOwnership mutator, K key, V val,
                    int keyHash, int shift, ChangeEvent<V> details, ToIntFunction<K> hashFunction) {
         assert this.hash == keyHash;
 

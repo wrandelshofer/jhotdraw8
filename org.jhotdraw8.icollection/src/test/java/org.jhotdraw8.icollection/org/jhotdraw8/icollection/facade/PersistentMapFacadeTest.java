@@ -38,7 +38,7 @@ public class PersistentMapFacadeTest extends AbstractPersistentMapTest {
     }
 
     @Override
-    protected <K, V> PersistentMap<K, V> newInstance(Iterable<Map.Entry<K, V>> entries) {
+    protected <K, V> PersistentMap<K, V> newInstance(java.lang.Iterable<Map.Entry<K, V>> entries) {
         return this.<K, V>newInstance().puttingAll(entries);
     }
 

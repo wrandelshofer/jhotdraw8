@@ -51,7 +51,7 @@ public abstract class AbstractPersistentMapTest {
     protected abstract <K, V> PersistentMap<K, V> toClonedInstance(PersistentMap<K, V> m);
 
     /// Creates a new instance with the specified map.
-    protected abstract <K, V> PersistentMap<K, V> newInstance(Iterable<Map.Entry<K, V>> m);
+    protected abstract <K, V> PersistentMap<K, V> newInstance(java.lang.Iterable<Map.Entry<K, V>> m);
 
     protected abstract boolean supportsNullKeys();
 
@@ -197,6 +197,59 @@ public abstract class AbstractPersistentMapTest {
         assertThrows(Exception.class, k::remove);
         Iterator<Map.Entry<Key, Value>> j = instance.readableEntrySet().iterator();
         assertThrows(Exception.class, j::remove);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldIterateOverKeys(MapData data) {
+        PersistentMap<Key, Value> instance = newInstance(data.a());
+        Iterator<Key> actual = instance.readableKeySet().iterator();
+        Iterator<Key> expected = data.a().readableKeySet().iterator();
+        assertEquals(actual.hasNext(), expected.hasNext());
+        LinkedHashSet<Key> distinctVisited = new LinkedHashSet<>();
+        while (expected.hasNext()) {
+            assertTrue(actual.hasNext());
+            Key actualKey = actual.next();
+            expected.next();
+            assertTrue(distinctVisited.add(actualKey));
+            assertTrue(data.a().containsKey(actualKey));
+        }
+        assertFalse(actual.hasNext());
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldIterateOverValues(MapData data) {
+        PersistentMap<Key, Value> instance = newInstance(data.a());
+        Iterator<Value> actual = instance.readableValues().iterator();
+        Iterator<Value> expected = data.a().readableValues().iterator();
+        assertEquals(actual.hasNext(), expected.hasNext());
+        var values = new LinkedHashSet<Value>(data.a().readableValues().asCollection());
+        while (expected.hasNext()) {
+            assertTrue(actual.hasNext());
+            Value actualValue = actual.next();
+            expected.next();
+            assertTrue(values.contains(actualValue));
+        }
+        assertFalse(actual.hasNext());
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldIterateOverEntries(MapData data) {
+        PersistentMap<Key, Value> instance = newInstance(data.a());
+        Iterator<Map.Entry<Key, Value>> actual = instance.iterator();
+        Iterator<Map.Entry<Key, Value>> expected = data.a().iterator();
+        assertEquals(actual.hasNext(), expected.hasNext());
+        LinkedHashSet<Map.Entry<Key, Value>> distinctVisited = new LinkedHashSet<>();
+        while (expected.hasNext()) {
+            assertTrue(actual.hasNext());
+            Map.Entry<Key, Value> actualEntry = actual.next();
+            expected.next();
+            assertTrue(distinctVisited.add(actualEntry));
+            assertTrue(data.a().containsEntry(actualEntry));
+        }
+        assertFalse(actual.hasNext());
     }
 
     @SuppressWarnings("unchecked")

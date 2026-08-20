@@ -158,7 +158,7 @@ public class MapEntries {
     /// @param v6  value 6
     /// @return a list containing the entries
     public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
-                                                           K k6, V v6) {
+                                                  K k6, V v6) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
         l.add(new SimpleImmutableEntry<>(k2, v2));
@@ -191,7 +191,7 @@ public class MapEntries {
     /// @param v7  value 7
     /// @return a list containing the entries
     public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
-                                                           K k6, V v6, K k7, V v7) {
+                                                  K k6, V v6, K k7, V v7) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
         l.add(new SimpleImmutableEntry<>(k2, v2));
@@ -227,7 +227,7 @@ public class MapEntries {
     /// @param v8  value 8
     /// @return a list containing the entries
     public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
-                                                           K k6, V v6, K k7, V v7, K k8, V v8) {
+                                                  K k6, V v6, K k7, V v7, K k8, V v8) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
         l.add(new SimpleImmutableEntry<>(k2, v2));
@@ -266,7 +266,7 @@ public class MapEntries {
     /// @param v9  value 9
     /// @return a list containing the entries
     public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
-                                                           K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
+                                                  K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
         l.add(new SimpleImmutableEntry<>(k2, v2));
@@ -308,7 +308,7 @@ public class MapEntries {
     /// @param <V> the value type
     /// @return a list containing the entries
     public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
-                                                           K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
+                                                  K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
         l.add(new SimpleImmutableEntry<>(k2, v2));
@@ -371,6 +371,6 @@ public class MapEntries {
     /// @param <V> the value type
     /// @return a new map entry
     public static <K, V> Map.Entry<K, V> entry(K k, V v) {
-        return new AbstractMap.SimpleEntry<>(k, v);
+        return new AbstractMap.SimpleImmutableEntry<>(k, v);
     }
 }

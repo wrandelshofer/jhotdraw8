@@ -11,15 +11,18 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Spliterator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public abstract class AbstractImmutableSequencedMapTest extends AbstractPersistentMapTest {
+public abstract class AbstractPersistentSequencedMapTest extends AbstractPersistentMapTest {
     @Override
     protected abstract <K, V> PersistentSequencedMap<K, V> newInstance();
 
@@ -33,7 +36,7 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
     protected abstract <K, V> PersistentSequencedMap<K, V> toClonedInstance(PersistentMap<K, V> m);
 
     @Override
-    protected abstract <K, V> PersistentSequencedMap<K, V> newInstance(Iterable<Map.Entry<K, V>> m);
+    protected abstract <K, V> PersistentSequencedMap<K, V> newInstance(java.lang.Iterable<Map.Entry<K, V>> m);
 
 
     @ParameterizedTest
@@ -243,5 +246,51 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
                 (Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.SIZED) & instance.readableValues().spliterator().characteristics());
     }
 
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldIterateOverKeysInSequence(MapData data) {
+        PersistentMap<Key, Value> instance = newInstance(data.a());
+        Iterator<Key> actual = instance.readableKeySet().iterator();
+        Iterator<Key> expected = data.a().readableKeySet().iterator();
+        assertEquals(actual.hasNext(), expected.hasNext());
+        while (expected.hasNext()) {
+            assertTrue(actual.hasNext());
+            Key actualKey = actual.next();
+            Key expectedKey = expected.next();
+            assertEquals(expectedKey, actualKey);
+        }
+        assertFalse(actual.hasNext());
+    }
 
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldIterateOverValuesInSequence(MapData data) {
+        PersistentMap<Key, Value> instance = newInstance(data.a());
+        Iterator<Value> actual = instance.readableValues().iterator();
+        Iterator<Value> expected = data.a().readableValues().iterator();
+        assertEquals(actual.hasNext(), expected.hasNext());
+        while (expected.hasNext()) {
+            assertTrue(actual.hasNext());
+            Value actualValue = actual.next();
+            Value expectedValue = expected.next();
+            assertEquals(expectedValue, actualValue);
+        }
+        assertFalse(actual.hasNext());
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldIterateOverEntriesInSequence(MapData data) {
+        PersistentMap<Key, Value> instance = newInstance(data.a());
+        Iterator<Map.Entry<Key, Value>> actual = instance.iterator();
+        Iterator<Map.Entry<Key, Value>> expected = data.a().iterator();
+        assertEquals(actual.hasNext(), expected.hasNext());
+        while (expected.hasNext()) {
+            assertTrue(actual.hasNext());
+            Map.Entry<Key, Value> actualEntry = actual.next();
+            Map.Entry<Key, Value> expectedEntry = expected.next();
+            assertEquals(expectedEntry, actualEntry);
+        }
+        assertFalse(actual.hasNext());
+    }
 }

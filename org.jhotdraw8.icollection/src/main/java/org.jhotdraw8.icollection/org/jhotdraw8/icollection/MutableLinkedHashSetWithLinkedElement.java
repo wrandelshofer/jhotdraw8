@@ -12,7 +12,7 @@ import org.jhotdraw8.icollection.alt.impl.champset.Node;
 import org.jhotdraw8.icollection.alt.impl.linked.LinkedElement;
 import org.jhotdraw8.icollection.alt.impl.linked.LinkedElementIterator;
 import org.jhotdraw8.icollection.alt.impl.linked.ReversedLinkedElementIterator;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedSetView;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
@@ -237,7 +237,7 @@ public class MutableLinkedHashSetWithLinkedElement<E> extends AbstractMutableCha
     @Override
     public MutableLinkedHashSetWithLinkedElement<E> clone() {
         MutableLinkedHashSetWithLinkedElement<E> that = (MutableLinkedHashSetWithLinkedElement<E>) super.clone();
-        that.owner = new IdentityObject();
+        that.owner = new MutabilityOwnership();
         return that;
     }
 
@@ -321,7 +321,7 @@ public class MutableLinkedHashSetWithLinkedElement<E> extends AbstractMutableCha
     ///
     /// @return a persistent copy
     public PersistentLinkedHashSetWithLinkedElement<E> toPersistent() {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         return size == 0
                 ? PersistentLinkedHashSetWithLinkedElement.of()
                 : PersistentLinkedHashSetWithLinkedElement.<E>of().addingAll(this);

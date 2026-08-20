@@ -38,7 +38,9 @@ public class MutableHashMapGuavaTests {
                         new TestStringMapGenerator() {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
-                                return new MutableHashMap<>(Arrays.asList(entries));
+                                MutableHashMap<String, String> map = new MutableHashMap<>();
+                                map.putEntries(Arrays.asList(entries));
+                                return map;
                             }
                         })
                 .named(MutableHashMap.class.getSimpleName())

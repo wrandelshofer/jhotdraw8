@@ -26,7 +26,7 @@ import java.util.Spliterators;
 ///
 /// @param <K> the key type
 /// @param <V> the value type
-public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
+public interface ReadableMap<K, V> extends java.lang.Iterable<Map.Entry<K, V>> {
     /// Returns `true` if this map contains no entries.
     ///
     /// @return `true` if empty

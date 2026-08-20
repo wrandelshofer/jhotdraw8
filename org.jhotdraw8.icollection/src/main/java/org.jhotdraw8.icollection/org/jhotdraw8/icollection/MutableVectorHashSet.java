@@ -15,7 +15,7 @@ import org.jhotdraw8.icollection.alt.impl.champset.SequencedElement;
 import org.jhotdraw8.icollection.alt.impl.champset.TombSkippingVectorIterator;
 import org.jhotdraw8.icollection.alt.impl.champset.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
 import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
@@ -81,7 +81,7 @@ import static org.jhotdraw8.icollection.alt.impl.champset.SequencedData.vecRemov
 ///
 /// @param <E> the element type
 @SuppressWarnings("exports")
-public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadableSequencedSet<E>,
+public class MutableVectorHashSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadableSequencedSet<E>,
         SequencedSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -93,7 +93,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private PersistentVectorList<Object> vector;
 
     /// Constructs a new empty set.
-    public MutableVectorSet() {
+    public MutableVectorHashSet() {
         hashSet = BitmapIndexedNode.emptyNode();
         vector = FingerTreeAPI.of();
     }
@@ -103,7 +103,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     ///
     /// @param c an iterable
     @SuppressWarnings({"this-escape"})
-    public MutableVectorSet(Iterable<? extends E> c) {
+    public MutableVectorHashSet(Iterable<? extends E> c) {
         this();
         addAll(c);
     }
@@ -116,7 +116,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     @Override
     public boolean addAll(Iterable<? extends E> c) {
         if (c == this) return false;
-        if (c instanceof MutableVectorSet<?> m) {
+        if (c instanceof MutableVectorHashSet<?> m) {
             c = (Iterable<? extends E>) m.toPersistent();
         }
         if (isEmpty() && (c instanceof PersistentVectorHashSet<?> cc)) {
@@ -233,9 +233,9 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
 
     /// Returns a shallow copy of this set.
     @Override
-    public MutableVectorSet<E> clone() {
-        var that = (MutableVectorSet<E>) super.clone();
-        that.owner = new IdentityObject();
+    public MutableVectorHashSet<E> clone() {
+        var that = (MutableVectorHashSet<E>) super.clone();
+        that.owner = new MutabilityOwnership();
         return that;
     }
 
@@ -272,7 +272,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     }
 
     private void iteratorRemove(E element) {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         remove(element);
     }
 
@@ -361,7 +361,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     ///
     /// @return a persistent copy
     public PersistentVectorHashSet<E> toPersistent() {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         return size == 0
                 ? PersistentVectorHashSet.of()
                 : new PersistentVectorHashSet<>(hashSet, vector, size, offset);
@@ -383,7 +383,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         @Serial
         @Override
         protected Object readResolve() {
-            return new MutableVectorSet<>(deserializedElements);
+            return new MutableVectorHashSet<>(deserializedElements);
         }
     }
 }

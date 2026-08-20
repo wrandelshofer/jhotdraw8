@@ -35,9 +35,9 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public abstract class AbstractImmutableSetTest {
+public abstract class AbstractPersistentSetTest {
 
-    public AbstractImmutableSetTest() {
+    public AbstractPersistentSetTest() {
     }
 
     /// Creates a new empty instance.
@@ -736,4 +736,21 @@ public abstract class AbstractImmutableSetTest {
                 (Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED) & instance.spliterator().characteristics());
     }
 
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldIterateOverElements(SetData data) {
+        PersistentSet<Key> instance = newInstance(data.a());
+        Iterator<Key> actual = instance.iterator();
+        Iterator<Key> expected = data.a().iterator();
+        assertEquals(actual.hasNext(), expected.hasNext());
+        LinkedHashSet<Key> distinctVisited = new LinkedHashSet<>();
+        while (expected.hasNext()) {
+            assertTrue(actual.hasNext());
+            Key actualKey = actual.next();
+            expected.next();
+            assertTrue(distinctVisited.add(actualKey));
+            assertTrue(data.a().contains(actualKey));
+        }
+        assertFalse(actual.hasNext());
+    }
 }

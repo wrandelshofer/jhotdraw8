@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.alt.impl.champmap;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
@@ -30,7 +30,7 @@ public abstract class Node<K, V> {
     /// Represents no value.
     /// We can not use `null`, because we allow storing null-keys and
     /// null-values in the trie.
-    public static final Object NO_DATA = new IdentityObject();
+    public static final Object NO_DATA = new MutabilityOwnership();
 
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
     static final int ENTRY_LENGTH = 2;
@@ -71,7 +71,7 @@ public abstract class Node<K, V> {
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    Node<K, V> mergeTwoDataEntriesIntoNode(IdentityObject mutator,
+    Node<K, V> mergeTwoDataEntriesIntoNode(MutabilityOwnership mutator,
                                            K k0, V v0, int keyHash0,
                                            K k1, V v1, int keyHash1,
                                            int shift) {
@@ -165,7 +165,7 @@ public abstract class Node<K, V> {
         );
     }
 
-    @Nullable IdentityObject getMutator() {
+    @Nullable MutabilityOwnership getMutator() {
         return null;
     }
 
@@ -183,17 +183,17 @@ public abstract class Node<K, V> {
 
     abstract boolean hasNodes();
 
-    boolean isAllowedToEdit(@Nullable IdentityObject y) {
-        IdentityObject x = getMutator();
+    boolean isAllowedToEdit(@Nullable MutabilityOwnership y) {
+        MutabilityOwnership x = getMutator();
         return x != null && x == y;
     }
 
     abstract int nodeArity();
 
-    abstract Node<K, V> remove(@Nullable IdentityObject mutator, K key,
+    abstract Node<K, V> remove(@Nullable MutabilityOwnership mutator, K key,
                                int keyHash, int shift, ChangeEvent<V> details);
 
-    abstract Node<K, V> put(@Nullable IdentityObject mutator, K key, V val,
+    abstract Node<K, V> put(@Nullable MutabilityOwnership mutator, K key, V val,
                             int keyHash, int shift, ChangeEvent<V> details, ToIntFunction<K> hashFunction);
 
 

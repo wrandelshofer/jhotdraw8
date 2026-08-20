@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedSetView;
@@ -69,7 +69,7 @@ public class MutableLinkedHashSet<E> extends AbstractSet<E> implements Sequenced
     private static final long serialVersionUID = 0L;
     private PersistentLinkedHashSetWithNodeSubClasses<E> delegate;
     private int modCount;
-    private IdentityObject owner;
+    private MutabilityOwnership owner;
 
     /// Constructs a new empty set.
     public MutableLinkedHashSet() {
@@ -215,7 +215,7 @@ public class MutableLinkedHashSet<E> extends AbstractSet<E> implements Sequenced
     ///
     /// @return a persistent copy
     public PersistentLinkedHashSetWithNodeSubClasses<E> toPersistent() {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         return delegate;
     }
 

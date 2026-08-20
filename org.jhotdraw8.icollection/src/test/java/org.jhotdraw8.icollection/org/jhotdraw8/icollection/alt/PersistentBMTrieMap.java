@@ -12,7 +12,7 @@ import org.jhotdraw8.icollection.alt.impl.champmap.SequencedData;
 import org.jhotdraw8.icollection.alt.impl.champmap.SequencedEntry;
 import org.jhotdraw8.icollection.alt.impl.champmap.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedMap;
 import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jhotdraw8.icollection.readable.ReadableSequencedMap;
@@ -176,7 +176,7 @@ public class PersistentBMTrieMap<K, V> implements PersistentSequencedMap<K, V>, 
     /// @param <K> the key type
     /// @param <V> the value type
     /// @return a persistent copy
-    public static <K, V> PersistentBMTrieMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
+    public static <K, V> PersistentBMTrieMap<K, V> copyOf(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
         return PersistentBMTrieMap.<K, V>of().puttingAll(map);
     }
 
@@ -277,7 +277,7 @@ public class PersistentBMTrieMap<K, V> implements PersistentSequencedMap<K, V>, 
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentBMTrieMap<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public PersistentBMTrieMap<K, V> puttingAll(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         var m = toMutable();
         return m.putAll(c) ? m.toPersistent() : this;
     }
@@ -391,7 +391,7 @@ public class PersistentBMTrieMap<K, V> implements PersistentSequencedMap<K, V>, 
 
 
     @Override
-    public PersistentBMTrieMap<K, V> removingAll(Iterable<? extends K> c) {
+    public PersistentBMTrieMap<K, V> removingAll(java.lang.Iterable<? extends K> c) {
         var t = toMutable();
         return t.removeAll(c) ? t.toPersistent() : this;
     }
@@ -402,7 +402,7 @@ public class PersistentBMTrieMap<K, V> implements PersistentSequencedMap<K, V>, 
             int size, int offset) {
 
         if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
-            var owner = new IdentityObject();
+            var owner = new MutabilityOwnership();
             var result = SequencedData.vecRenumber(
                     owner, size, vector.size(), root, vector.root, SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
@@ -414,7 +414,7 @@ public class PersistentBMTrieMap<K, V> implements PersistentSequencedMap<K, V>, 
     }
 
     @Override
-    public PersistentBMTrieMap<K, V> retainingAll(Iterable<? extends K> c) {
+    public PersistentBMTrieMap<K, V> retainingAll(java.lang.Iterable<? extends K> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toPersistent() : this;
     }

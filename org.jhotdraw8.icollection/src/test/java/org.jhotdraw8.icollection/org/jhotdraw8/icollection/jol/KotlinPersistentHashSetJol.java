@@ -1,7 +1,7 @@
 package org.jhotdraw8.icollection.jol;
 
 import kotlinx.collections.immutable.ExtensionsKt;
-import org.jhotdraw8.icollection.jmh.Key;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

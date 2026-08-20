@@ -5,7 +5,7 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
@@ -196,7 +196,7 @@ public class PersistentLinkedHashSetWithNodeSubClasses<E> implements PersistentS
         return result == NO_DATA ? null : (Object[]) result;
     }
 
-    PersistentLinkedHashSetWithNodeSubClasses<E> addLast(@Nullable E e, boolean moveToLast, IdentityObject mutator) {
+    PersistentLinkedHashSetWithNodeSubClasses<E> addLast(@Nullable E e, boolean moveToLast, MutabilityOwnership mutator) {
         ChangeEvent details = new ChangeEvent();
         var newData = new Object[DATA_LENGTH];
         newData[KEY_DATA_INDEX] = e;
@@ -240,7 +240,7 @@ public class PersistentLinkedHashSetWithNodeSubClasses<E> implements PersistentS
         return this;
     }
 
-    PersistentLinkedHashSetWithNodeSubClasses<E> addFirst(@Nullable E e, boolean moveToFirst, IdentityObject mutator) {
+    PersistentLinkedHashSetWithNodeSubClasses<E> addFirst(@Nullable E e, boolean moveToFirst, MutabilityOwnership mutator) {
         Objects.requireNonNull(e, "e must not be null");
         ChangeEvent details = new ChangeEvent();
         var newData = new Object[DATA_LENGTH];
@@ -286,7 +286,7 @@ public class PersistentLinkedHashSetWithNodeSubClasses<E> implements PersistentS
         return this;
     }
 
-    private Updated updateNext(BitmapIndexedNode hashSet, @Nullable Object[] elem, @Nullable Object e, @Nullable Object[] first, @Nullable Object[] last, IdentityObject mutator) {
+    private Updated updateNext(BitmapIndexedNode hashSet, @Nullable Object[] elem, @Nullable Object e, @Nullable Object[] first, @Nullable Object[] last, MutabilityOwnership mutator) {
         if (elem == null) {
             return new Updated(hashSet, first, last);
         }
@@ -314,7 +314,7 @@ public class PersistentLinkedHashSetWithNodeSubClasses<E> implements PersistentS
         return new Updated(hashSet, first, last);
     }
 
-    private Updated updatePrev(BitmapIndexedNode hashSet, @Nullable Object[] elem, @Nullable Object e, @Nullable Object[] first, @Nullable Object[] last, IdentityObject mutator) {
+    private Updated updatePrev(BitmapIndexedNode hashSet, @Nullable Object[] elem, @Nullable Object e, @Nullable Object[] first, @Nullable Object[] last, MutabilityOwnership mutator) {
         if (elem == null) {
             return new Updated(hashSet, first, last);
         }
@@ -419,7 +419,7 @@ public class PersistentLinkedHashSetWithNodeSubClasses<E> implements PersistentS
         return remove(key, null);
     }
 
-    PersistentLinkedHashSetWithNodeSubClasses<E> remove(E key, IdentityObject mutator) {
+    PersistentLinkedHashSetWithNodeSubClasses<E> remove(E key, MutabilityOwnership mutator) {
         int keyHash = keyHash(key);
         ChangeEvent details = new ChangeEvent();
         BitmapIndexedNode newHashSet = root.remove(mutator,

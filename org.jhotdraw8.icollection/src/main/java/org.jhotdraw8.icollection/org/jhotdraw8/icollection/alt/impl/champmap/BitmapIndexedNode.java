@@ -6,7 +6,7 @@
 package org.jhotdraw8.icollection.alt.impl.champmap;
 
 import org.jhotdraw8.icollection.impl.ArrayHelper;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
@@ -35,7 +35,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         return (BitmapIndexedNode<K, V>) EMPTY_NODE;
     }
 
-    BitmapIndexedNode<K, V> copyAndInsertValue(@Nullable IdentityObject mutator, int bitpos,
+    BitmapIndexedNode<K, V> copyAndInsertValue(@Nullable MutabilityOwnership mutator, int bitpos,
                                                K key, V val) {
         int idx = ENTRY_LENGTH * dataIndex(bitpos);
         Object[] dst = ArrayHelper.copyComponentAdd(this.array, idx, ENTRY_LENGTH);
@@ -45,7 +45,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, dataMap | bitpos, dst);
     }
 
-    BitmapIndexedNode<K, V> copyAndMigrateFromDataToNode(@Nullable IdentityObject mutator,
+    BitmapIndexedNode<K, V> copyAndMigrateFromDataToNode(@Nullable MutabilityOwnership mutator,
                                                          int bitpos, Node<K, V> node) {
 
         int idxOld = ENTRY_LENGTH * dataIndex(bitpos);
@@ -63,7 +63,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         return ChampTrie.newBitmapIndexedNode(mutator, nodeMap | bitpos, dataMap ^ bitpos, dst);
     }
 
-    BitmapIndexedNode<K, V> copyAndMigrateFromNodeToData(@Nullable IdentityObject mutator,
+    BitmapIndexedNode<K, V> copyAndMigrateFromNodeToData(@Nullable MutabilityOwnership mutator,
                                                          int bitpos, Node<K, V> node) {
 
         int idxOld = this.array.length - 1 - nodeIndex(bitpos);
@@ -82,7 +82,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         return ChampTrie.newBitmapIndexedNode(mutator, nodeMap ^ bitpos, dataMap | bitpos, dst);
     }
 
-    BitmapIndexedNode<K, V> copyAndSetNode(@Nullable IdentityObject mutator, int bitpos,
+    BitmapIndexedNode<K, V> copyAndSetNode(@Nullable MutabilityOwnership mutator, int bitpos,
                                            Node<K, V> node) {
 
         int idx = this.array.length - 1 - nodeIndex(bitpos);
@@ -97,7 +97,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         }
     }
 
-    BitmapIndexedNode<K, V> copyAndSetValue(@Nullable IdentityObject mutator, int bitpos,
+    BitmapIndexedNode<K, V> copyAndSetValue(@Nullable MutabilityOwnership mutator, int bitpos,
                                             V val) {
         int idx = ENTRY_LENGTH * dataIndex(bitpos) + 1;
         if (isAllowedToEdit(mutator)) {
@@ -194,7 +194,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    public BitmapIndexedNode<K, V> remove(@Nullable IdentityObject mutator, K key,
+    public BitmapIndexedNode<K, V> remove(@Nullable MutabilityOwnership mutator, K key,
                                           int keyHash, int shift,
                                           ChangeEvent<V> details) {
         int mask = mask(keyHash, shift);
@@ -209,7 +209,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         return this;
     }
 
-    private BitmapIndexedNode<K, V> removeData(@Nullable IdentityObject mutator, K key, int keyHash, int shift, ChangeEvent<V> details, int bitpos) {
+    private BitmapIndexedNode<K, V> removeData(@Nullable MutabilityOwnership mutator, K key, int keyHash, int shift, ChangeEvent<V> details, int bitpos) {
         int dataIndex = dataIndex(bitpos);
 
         if (!Objects.equals(getKey(dataIndex), key)) {
@@ -236,7 +236,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         }
     }
 
-    private BitmapIndexedNode<K, V> removeSubNode(@Nullable IdentityObject mutator, K key, int keyHash, int shift,
+    private BitmapIndexedNode<K, V> removeSubNode(@Nullable MutabilityOwnership mutator, K key, int keyHash, int shift,
                                                   ChangeEvent<V> details,
                                                   int bitpos) {
         Node<K, V> subNode = nodeAt(bitpos);
@@ -260,7 +260,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    public BitmapIndexedNode<K, V> put(@Nullable IdentityObject mutator,
+    public BitmapIndexedNode<K, V> put(@Nullable MutabilityOwnership mutator,
                                        K key, V val,
                                        int keyHash, int shift,
                                        ChangeEvent<V> details,

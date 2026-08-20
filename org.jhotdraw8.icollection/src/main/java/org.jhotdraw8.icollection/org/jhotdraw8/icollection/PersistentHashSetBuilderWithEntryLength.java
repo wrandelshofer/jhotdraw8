@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
 import org.jspecify.annotations.Nullable;
@@ -9,14 +9,14 @@ import org.jspecify.annotations.Nullable;
 /// generating intermediate editions.
 public class PersistentHashSetBuilderWithEntryLength<E> implements SetBuilder<E, PersistentHashSetWithEntryLength<E>> {
     private BitmapIndexedNode hashSet = BitmapIndexedNode.emptyNode();
-    private IdentityObject owner;
+    private MutabilityOwnership owner;
     private int size;
 
     public PersistentHashSetBuilderWithEntryLength() {
-        this(new IdentityObject());
+        this(new MutabilityOwnership());
     }
 
-    PersistentHashSetBuilderWithEntryLength(IdentityObject owner) {
+    PersistentHashSetBuilderWithEntryLength(MutabilityOwnership owner) {
         this.owner = owner;
     }
 
@@ -34,7 +34,7 @@ public class PersistentHashSetBuilderWithEntryLength<E> implements SetBuilder<E,
 
     @Override
     public PersistentHashSetWithEntryLength<E> build() {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         return new PersistentHashSetWithEntryLength<>(hashSet, size);
     }
 }

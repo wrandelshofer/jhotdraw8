@@ -10,7 +10,7 @@ import org.jhotdraw8.icollection.persistent.PersistentSet;
 import java.util.SequencedSet;
 import java.util.Set;
 
-public class PersistentVectorHashSetTest extends AbstractImmutableSequencedSetTest {
+public class PersistentVectorHashSetTest extends AbstractPersistentSequencedSetTest {
 
 
     @Override
@@ -26,7 +26,7 @@ public class PersistentVectorHashSetTest extends AbstractImmutableSequencedSetTe
 
     @Override
     protected <E> PersistentVectorHashSet<E> toImmutableInstance(Set<E> m) {
-        return ((MutableVectorSet<E>) m).toPersistent();
+        return ((MutableVectorHashSet<E>) m).toPersistent();
     }
 
     @Override

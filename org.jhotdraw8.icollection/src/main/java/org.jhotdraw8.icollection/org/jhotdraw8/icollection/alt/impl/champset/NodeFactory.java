@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.alt.impl.champset;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 /// Provides factory methods for [Node]s.
@@ -16,7 +16,7 @@ class NodeFactory {
     }
 
     static <K> BitmapIndexedNode<K> newBitmapIndexedNode(
-            @Nullable IdentityObject owner, int nodeMap,
+            @Nullable MutabilityOwnership owner, int nodeMap,
             int dataMap, Object[] nodes) {
         return owner == null
                 ? new BitmapIndexedNode<>(nodeMap, dataMap, nodes)
@@ -24,7 +24,7 @@ class NodeFactory {
     }
 
     static <K> HashCollisionNode<K> newHashCollisionNode(
-            @Nullable IdentityObject owner, int hash, Object[] entries) {
+            @Nullable MutabilityOwnership owner, int hash, Object[] entries) {
         return owner == null
                 ? new HashCollisionNode<>(hash, entries)
                 : new MutableHashCollisionNode<>(owner, hash, entries);

@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.alt.impl.champset;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableSet;
 
@@ -31,7 +31,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
     ///
     /// All nodes that have the same non-null owner id, are exclusively owned
     /// by this set, and therefore can be mutated without affecting other sets.
-    protected transient IdentityObject owner = new IdentityObject();
+    protected transient MutabilityOwnership owner = new MutabilityOwnership();
 
     /// The root of this CHAMP trie.
     protected transient BitmapIndexedNode<D> hashSet;
@@ -150,7 +150,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
     @SuppressWarnings("unchecked")
     public AbstractMutableChampSet<E, D> clone() {
         try {
-            owner = new IdentityObject();
+            owner = new MutabilityOwnership();
             return (AbstractMutableChampSet<E, D>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);

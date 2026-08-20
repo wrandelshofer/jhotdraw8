@@ -1,7 +1,7 @@
 package org.jhotdraw8.icollection.impl.champset;
 
 import org.jhotdraw8.icollection.impl.ArrayHelper;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 public class TrieNode<E> {
     int bitmap;
     public Object[] buffer;
-    private @Nullable IdentityObject ownedBy;
+    private @Nullable MutabilityOwnership ownedBy;
     static final int MAX_BRANCHING_FACTOR = 32;
     public static final int LOG_MAX_BRANCHING_FACTOR = 5;
     private static final int MAX_BRANCHING_FACTOR_MINUS_ONE = MAX_BRANCHING_FACTOR - 1;
@@ -28,7 +28,7 @@ public class TrieNode<E> {
         return (TrieNode<T>) EMPTY;
     }
 
-    public TrieNode(int bitmap, Object[] buffer, @Nullable IdentityObject ownedBy) {
+    public TrieNode(int bitmap, Object[] buffer, @Nullable MutabilityOwnership ownedBy) {
         this.bitmap = bitmap;
         this.buffer = buffer;
         this.ownedBy = ownedBy;
@@ -50,8 +50,8 @@ public class TrieNode<E> {
         int nodeMask = 0;
         int dataMask = 0;
         for (ForEachOneBit iter = new ForEachOneBit(bitmap); iter.moveNext(); ) {
-            int positionMask = iter.getPositionMask();
-            int index = iter.getIndex();
+            int positionMask = iter.currentPositionMask();
+            int index = iter.currentIndex();
             if (buffer[index] instanceof TrieNode) {
                 nodeMask |= positionMask;
             } else {
@@ -75,7 +75,7 @@ public class TrieNode<E> {
         return (TrieNode<E>) buffer[index];
     }
 
-    private TrieNode<E> addElementAt(int positionMask, E element, @Nullable IdentityObject owner) {
+    private TrieNode<E> addElementAt(int positionMask, E element, @Nullable MutabilityOwnership owner) {
         assert hasNoCellAt(positionMask);
 
         var index = indexOfCellAt(positionMask);
@@ -85,7 +85,7 @@ public class TrieNode<E> {
     }
 
 
-    private TrieNode<E> setProperties(int newBitmap, Object[] newBuffer, @Nullable IdentityObject owner) {
+    private TrieNode<E> setProperties(int newBitmap, Object[] newBuffer, @Nullable MutabilityOwnership owner) {
         if (ownedBy != null && ownedBy == owner) {
             bitmap = newBitmap;
             buffer = newBuffer;
@@ -94,7 +94,7 @@ public class TrieNode<E> {
         return new TrieNode<>(newBitmap, newBuffer, owner);
     }
 
-    private TrieNode<E> setCellAtIndex(int cellIndex, Object newCell, @Nullable IdentityObject owner) {
+    private TrieNode<E> setCellAtIndex(int cellIndex, Object newCell, @Nullable MutabilityOwnership owner) {
         if (ownedBy != null && ownedBy == owner) {
             buffer[cellIndex] = newCell;
             return this;
@@ -129,14 +129,14 @@ public class TrieNode<E> {
     private TrieNode<E> moveElementToNode(
             int elementIndex,
             int newElementHash, E newElement,
-            int shift, @Nullable IdentityObject owner) {
+            int shift, @Nullable MutabilityOwnership owner) {
         var node = makeNodeAtIndex(elementIndex, newElementHash, newElement, shift, owner);
         return setCellAtIndex(elementIndex, node, owner);
     }
 
     private TrieNode<E> makeNodeAtIndex(
             int elementIndex, int newElementHash, E newElement,
-            int shift, @Nullable IdentityObject owner) {
+            int shift, @Nullable MutabilityOwnership owner) {
         var storedElement = elementAtIndex(elementIndex);
         return makeNode(
                 storedElement.hashCode(), storedElement,
@@ -147,7 +147,7 @@ public class TrieNode<E> {
     private TrieNode<E> makeNode(
             int elementHash1, E element1,
             int elementHash2, E element2,
-            int shift, @Nullable IdentityObject owner
+            int shift, @Nullable MutabilityOwnership owner
     ) {
         if (shift > MAX_SHIFT) {
             assert element1 != element2;
@@ -217,10 +217,9 @@ public class TrieNode<E> {
     private TrieNode<E> canonicalizeNodeAtIndex(
             int nodeIndex,
             TrieNode<E> newNode,
-            @Nullable IdentityObject owner
+            @Nullable MutabilityOwnership owner
     ) {
         Object cell;
-
         var newNodeBuffer = newNode.buffer;
         if (newNodeBuffer.length == 1 && !(newNodeBuffer[0] instanceof TrieNode<?>)) {
             if (buffer.length == 1) {
@@ -231,13 +230,11 @@ public class TrieNode<E> {
         } else {
             cell = newNode;
         }
-
         return setCellAtIndex(nodeIndex, cell, owner);
     }
 
-    private TrieNode<E> removeCellAtIndex(int cellIndex, int positionMask, @Nullable IdentityObject owner) {
+    private TrieNode<E> removeCellAtIndex(int cellIndex, int positionMask, @Nullable MutabilityOwnership owner) {
         assert !hasNoCellAt(positionMask);
-
         var newBitmap = bitmap ^ positionMask;
         var newBuffer = ArrayHelper.copyRemove(buffer, cellIndex);
         return setProperties(newBitmap, newBuffer, owner);
@@ -297,7 +294,7 @@ public class TrieNode<E> {
     }
 
     //
-    // val newSize = mySet.size + otherSet.size - deltaCounter.count
+    // int newSize = mySet.size + otherSet.size - deltaCounter.count
     @SuppressWarnings({"unchecked", "RedundantCast"})
     public TrieNode<E> mutableAddAll(
             TrieNode<E> otherNode,
@@ -324,8 +321,8 @@ public class TrieNode<E> {
         // either left, right or both masks contain the same bit
         // we Note shouldn't overrun MAX_SHIFT because both sides are correct TrieNodes, right?
         for (ForEachOneBit iter = new ForEachOneBit(newBitMap); iter.moveNext(); ) {
-            int positionMask = iter.getPositionMask();
-            int newNodeIndex = iter.getIndex();
+            int positionMask = iter.currentPositionMask();
+            int newNodeIndex = iter.currentIndex();
             var thisIndex = indexOfCellAt(positionMask);
             var otherNodeIndex = otherNode.indexOfCellAt(positionMask);
 
@@ -429,7 +426,7 @@ public class TrieNode<E> {
         return this;
     }
 
-    private TrieNode<E> collisionRemoveElementAtIndex(int i, @Nullable IdentityObject owner) {
+    private TrieNode<E> collisionRemoveElementAtIndex(int i, @Nullable MutabilityOwnership owner) {
         var newBuffer = ArrayHelper.copyRemove(buffer, i);
         return setProperties(0, newBuffer, owner);
     }
@@ -447,7 +444,7 @@ public class TrieNode<E> {
     private TrieNode<E> mutableCollisionAddAll(
             TrieNode<E> otherNode,
             DeltaCounter intersectionSizeRef,
-            IdentityObject owner
+            MutabilityOwnership owner
     ) {
         if (this == otherNode) {
             intersectionSizeRef.count += buffer.length;
@@ -510,8 +507,8 @@ public class TrieNode<E> {
         var realBitMap = 0;
         // for each bit in intersection mask, try to intersect children
         for (ForEachOneBit it = new ForEachOneBit(newBitMap); it.moveNext(); ) {
-            int positionMask = it.getPositionMask();
-            int newNodeIndex = it.getIndex();
+            int positionMask = it.currentPositionMask();
+            int newNodeIndex = it.currentIndex();
             var thisIndex = indexOfCellAt(positionMask);
             var otherNodeIndex = otherNode.indexOfCellAt(positionMask);
             Object newValue;
@@ -586,7 +583,7 @@ public class TrieNode<E> {
     private TrieNode<E> mutableCollisionRetainAll(
             TrieNode<E> otherNode,
             DeltaCounter intersectionSizeRef,
-            IdentityObject owner) {
+            MutabilityOwnership owner) {
         if (this == otherNode) {
             intersectionSizeRef.count += buffer.length;
             return this;
@@ -631,7 +628,7 @@ public class TrieNode<E> {
         // keep track of the real mask
         var realBitMap = bitmap;
         for (ForEachOneBit it = new ForEachOneBit(removalBitmap); it.moveNext(); ) {
-            int positionMask = it.getPositionMask();
+            int positionMask = it.currentPositionMask();
             var thisIndex = indexOfCellAt(positionMask);
             var otherNodeIndex = otherNode.indexOfCellAt(positionMask);
             Object newValue;
@@ -711,7 +708,7 @@ public class TrieNode<E> {
     private Object mutableCollisionRemoveAll(
             TrieNode<E> otherNode,
             DeltaCounter intersectionSizeRef,
-            IdentityObject owner
+            MutabilityOwnership owner
     ) {
         if (this == otherNode) {
             intersectionSizeRef.count += buffer.length;
@@ -748,7 +745,7 @@ public class TrieNode<E> {
         if (potentialBitMap != otherNode.bitmap) return false;
         // check each child, shortcut to false if any one isn't contained
         for (ForEachOneBit it = new ForEachOneBit(potentialBitMap); it.moveNext(); ) {
-            int positionMask = it.getPositionMask();
+            int positionMask = it.currentPositionMask();
             var thisIndex = indexOfCellAt(positionMask);
             var otherNodeIndex = otherNode.indexOfCellAt(positionMask);
             var thisCell = buffer[thisIndex];

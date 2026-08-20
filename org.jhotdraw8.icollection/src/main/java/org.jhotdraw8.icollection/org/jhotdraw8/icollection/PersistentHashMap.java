@@ -4,13 +4,13 @@
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.alt.impl.champmap.BitmapIndexedNode;
-import org.jhotdraw8.icollection.alt.impl.champmap.ChangeEvent;
-import org.jhotdraw8.icollection.alt.impl.champmap.EntryIterator;
-import org.jhotdraw8.icollection.alt.impl.champmap.KeyIterator;
-import org.jhotdraw8.icollection.alt.impl.champmap.Node;
 import org.jhotdraw8.icollection.facade.ReadableSetFacade;
+import org.jhotdraw8.icollection.impl.champmap.DeltaCounter;
+import org.jhotdraw8.icollection.impl.champmap.EntryIterator;
+import org.jhotdraw8.icollection.impl.champmap.TrieBuilder;
+import org.jhotdraw8.icollection.impl.champmap.TrieNode;
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
+import org.jhotdraw8.icollection.persistent.PersistentCollection;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jhotdraw8.icollection.readable.ReadableSet;
@@ -22,10 +22,11 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Spliterator;
 
 /// Implements the [PersistentMap] interface using a Compressed Hash-Array
@@ -86,18 +87,17 @@ import java.util.Spliterator;
 @SuppressWarnings("exports")
 public class PersistentHashMap<K, V>
         implements PersistentMap<K, V>, Serializable {
-    private static final PersistentHashMap<?, ?> EMPTY = new PersistentHashMap<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final PersistentHashMap<?, ?> EMPTY = new PersistentHashMap<>(TrieNode.empty(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
-    /// We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
-    static final int SALT = new Random().nextInt();
+
     @SuppressWarnings("TransientFieldNotInitialized")
-    final transient BitmapIndexedNode<K, V> root;
+    final transient TrieNode<K, V> node;
     final int size;
 
 
-    PersistentHashMap(BitmapIndexedNode<K, V> root, int size) {
-        this.root = root;
+    PersistentHashMap(TrieNode<K, V> node, int size) {
+        this.node = node;
         this.size = size;
     }
 
@@ -112,8 +112,8 @@ public class PersistentHashMap<K, V>
     /// @param <K> the key type
     /// @param <V> the value type
     /// @return a persistent copy
-    public static <K, V> PersistentHashMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
-        return new PersistentHashMapBuilder<K, V>().addEntries(c).build();
+    public static <K, V> PersistentHashMap<K, V> copyOf(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+        return new PersistentHashMapBuilder<K, V>().putEntries(c).build();
     }
 
     /// Returns a persistent copy of the provided map.
@@ -126,10 +126,6 @@ public class PersistentHashMap<K, V>
         return PersistentHashMap.<K, V>of().puttingAll(map);
     }
 
-    static <V, K> int keyHash(Object e) {
-        return SALT ^ Objects.hashCode(e);
-    }
-
     /// Returns an empty persistent map.
     ///
     /// @param <K> the key type
@@ -138,6 +134,16 @@ public class PersistentHashMap<K, V>
     @SuppressWarnings("unchecked")
     public static <K, V> PersistentHashMap<K, V> of() {
         return (PersistentHashMap<K, V>) PersistentHashMap.EMPTY;
+    }
+
+    /// Returns a builder for a persistent map.
+    ///
+    /// @param <K> the key type
+    /// @param <V> the value type
+    /// @return an empty builder
+    @SuppressWarnings("unchecked")
+    public static <K, V> PersistentHashMapBuilder<K, V> builder() {
+        return new PersistentHashMapBuilder<>();
     }
 
     /// {@inheritDoc}
@@ -150,25 +156,18 @@ public class PersistentHashMap<K, V>
     @Override
     public boolean containsKey(@Nullable Object o) {
         @SuppressWarnings("unchecked") K key = (K) o;
-        return root.findByKey(key, keyHash(key), 0) != Node.NO_DATA;
+        return node.containsKey(Objects.hashCode(key), key, 0);
     }
 
     @Override
     public boolean equals(@Nullable Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (other instanceof PersistentHashMap<?, ?> that) {
-            return size == that.size && root.equivalent(that.root);
-        }
         return ReadableMap.mapEquals(this, other);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable V get(Object o) {
-        Object result = root.findByKey((K) o, keyHash(o), 0);
-        return result == Node.NO_DATA ? null : (V) result;
+        return node.getOrDefault(Objects.hashCode(o), (K) o, 0, null);
     }
 
     /// Update function for a map: we keep the old entry if it has the same
@@ -195,7 +194,7 @@ public class PersistentHashMap<K, V>
 
     @Override
     public Iterator<Map.Entry<K, V>> iterator() {
-        return new EntryIterator<>(root, null, null);
+        return new EntryIterator<>(node, (k, v) -> new AbstractMap.SimpleImmutableEntry<>(k, v));
     }
 
     @Override
@@ -205,56 +204,109 @@ public class PersistentHashMap<K, V>
 
     @Override
     public PersistentHashMap<K, V> putting(K key, @Nullable V value) {
-        var details = new ChangeEvent<V>();
-        var newRootNode = root.put(null, key, value,
-                keyHash(key), 0, details, PersistentHashMap::keyHash);
-        if (details.isModified()) {
-            return new PersistentHashMap<>(newRootNode, details.isReplaced() ? size : size + 1);
-        }
-        return this;
+        var details = node.put(Objects.hashCode(key), key, value, 0);
+        return details == null ? this : new PersistentHashMap<>(details.node, size + details.sizeDelta);
     }
 
     @Override
     public PersistentHashMap<K, V> puttingAll(Map<? extends K, ? extends V> m) {
-        return (PersistentHashMap<K, V>) PersistentMap.super.puttingAll(m);
+        if (m instanceof MutableHashMap<? extends K, ? extends V> mhm) {
+            return puttingAll((java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>>) mhm.toPersistent());
+        }
+        return puttingAll(m.entrySet());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashMap<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
-        var m = toMutable();
-        return m.putAll(c) ? m.toPersistent() : this;
+    public PersistentHashMap<K, V> puttingAll(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+        var mutator = new TrieBuilder<K, V>();
+        var newNode = node;
+        if (c instanceof PersistentHashMap<?, ?> pm) {
+            if (pm.node == this.node) {
+                return this;
+            }
+            var deltaCounter = new DeltaCounter();
+            newNode = newNode.mutablePutAll((TrieNode<K, V>) pm.node, 0, deltaCounter, mutator);
+            var newSize = size + pm.size - deltaCounter.count;
+            return (size != newSize | mutator.isModified()) ? new PersistentHashMap<>(newNode, size + pm.size - deltaCounter.count) : this;
+
+        }
+        for (Map.Entry<? extends K, ? extends V> e : c) {
+            var key = e.getKey();
+            newNode = newNode.mutablePut(Objects.hashCode(key), key, e.getValue(), 0, mutator);
+        }
+        return (mutator.isModified()) ? new PersistentHashMap<>(newNode, size + mutator.size) : this;
     }
 
     @Override
     public PersistentHashMap<K, V> removing(K key) {
-        int keyHash = keyHash(key);
-        var details = new ChangeEvent<V>();
-        var newRootNode = root.remove(null, key, keyHash, 0, details);
-        if (details.isModified()) {
-            return size == 1 ? PersistentHashMap.of() : new PersistentHashMap<>(newRootNode, size - 1);
+        var newNode = node.remove(Objects.hashCode(key), key, 0);
+        return newNode == node ? this : size == 1 ? of() : new PersistentHashMap<>(newNode, size - 1);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public PersistentHashMap<K, V> removingAll(java.lang.Iterable<? extends K> c) {
+        if (c instanceof PersistentCollection<?> mhm) {
+            c = (java.lang.Iterable<? extends K>) mhm.toMutable();
         }
-        return this;
+        if (!(c instanceof Collection<?>)) {
+            HashSet<K> hm = new HashSet<>();
+            c.forEach(hm::add);
+            c = hm;
+        }
+        var cc = (Collection<K>) c;
+        if (cc.isEmpty()) {
+            return this;
+        }
+        var mutator = new TrieBuilder<K, V>();
+        var newNode = node;
+        for (K key : this.readableKeySet()) {
+            if (cc.contains(key)) {
+                newNode = newNode.mutableRemove(Objects.hashCode(key), key, 0, mutator);
+                if (newNode.isEmpty()) {
+                    return of();
+                }
+            }
+        }
+        int newSize = size + mutator.size;
+        return (newSize != size) ? newSize == 0 ? of() : new PersistentHashMap<>(newNode, newSize) : this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashMap<K, V> removingAll(Iterable<? extends K> c) {
-        var m = toMutable();
-        return m.removeAll(c) ? m.toPersistent() : this;
-    }
+    public PersistentHashMap<K, V> retainingAll(java.lang.Iterable<? extends K> c) {
+        if (c instanceof PersistentCollection<? extends K>) {
+            c = ((PersistentCollection<? extends K>) c).toMutable();
+        }
+        if (!(c instanceof Collection<?>)) {
+            HashSet<K> hm = new HashSet<>();
+            c.forEach(hm::add);
+            c = hm;
+        }
+        var cc = (Collection<K>) c;
+        if (cc.isEmpty()) {
+            return of();
+        }
+        var mutator = new TrieBuilder<K, V>();
+        var newNode = node;
+        for (K key : this.readableKeySet()) {
+            if (!cc.contains(key)) {
+                newNode = newNode.mutableRemove(Objects.hashCode(key), key, 0, mutator);
+                if (newNode.isEmpty()) {
+                    return of();
+                }
+            }
+        }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public PersistentHashMap<K, V> retainingAll(Iterable<? extends K> c) {
-        var m = toMutable();
-        return m.retainAll(c) ? m.toPersistent() : this;
+        int newSize = size + mutator.size;
+        return (newSize != size) ? newSize == 0 ? of() : new PersistentHashMap<>(newNode, newSize) : this;
     }
 
     @Override
     public ReadableSet<K> readableKeySet() {
         return new ReadableSetFacade<>(
-                () -> new KeyIterator<>(root, null),
+                () -> new EntryIterator<>(node, (k, v) -> k),
                 this::size,
                 this::containsKey,
                 Spliterator.IMMUTABLE);
@@ -274,12 +326,12 @@ public class PersistentHashMap<K, V>
     /// @return a mutable CHAMP map
     @Override
     public MutableHashMap<K, V> toMutable() {
-        return new MutableHashMap<>(this);
+        return new MutableHashMap<>(this.node, this.size);
     }
 
     @Override
     public MutableHashMap<K, V> asMap() {
-        return new MutableHashMap<>(this);
+        return new MutableHashMap<>(this.node, this.size);
     }
 
     /// Returns a string representation of this map.

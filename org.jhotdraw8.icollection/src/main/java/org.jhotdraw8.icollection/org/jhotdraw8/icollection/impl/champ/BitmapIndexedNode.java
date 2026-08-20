@@ -6,7 +6,7 @@
 package org.jhotdraw8.icollection.impl.champ;
 
 import org.jhotdraw8.icollection.impl.ArrayHelper;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
@@ -34,7 +34,7 @@ public class BitmapIndexedNode extends Node {
         return EMPTY_NODE;
     }
 
-    BitmapIndexedNode copyAndInsertData(@Nullable IdentityObject mutator, int bitpos,
+    BitmapIndexedNode copyAndInsertData(@Nullable MutabilityOwnership mutator, int bitpos,
                                         Object[] entry, int DATA_LENGTH) {
         int idx = DATA_LENGTH * dataIndex(bitpos);
         Object[] dst = ArrayHelper.copyComponentAdd(this.array, idx, DATA_LENGTH);
@@ -43,7 +43,7 @@ public class BitmapIndexedNode extends Node {
         return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, dataMap | bitpos, dst, DATA_LENGTH);
     }
 
-    BitmapIndexedNode copyAndMigrateFromDataToNode(@Nullable IdentityObject mutator,
+    BitmapIndexedNode copyAndMigrateFromDataToNode(@Nullable MutabilityOwnership mutator,
                                                    int bitpos, Node node, int DATA_LENGTH) {
 
         int idxOld = DATA_LENGTH * dataIndex(bitpos);
@@ -61,7 +61,7 @@ public class BitmapIndexedNode extends Node {
         return ChampTrie.newBitmapIndexedNode(mutator, nodeMap | bitpos, dataMap ^ bitpos, dst, DATA_LENGTH);
     }
 
-    BitmapIndexedNode copyAndMigrateFromNodeToData(@Nullable IdentityObject mutator,
+    BitmapIndexedNode copyAndMigrateFromNodeToData(@Nullable MutabilityOwnership mutator,
                                                    int bitpos, Node node, int DATA_LENGTH) {
 
         int idxOld = this.array.length - 1 - nodeIndex(bitpos);
@@ -80,7 +80,7 @@ public class BitmapIndexedNode extends Node {
         return ChampTrie.newBitmapIndexedNode(mutator, nodeMap ^ bitpos, dataMap | bitpos, dst, DATA_LENGTH);
     }
 
-    BitmapIndexedNode copyAndSetNode(@Nullable IdentityObject mutator, int bitpos,
+    BitmapIndexedNode copyAndSetNode(@Nullable MutabilityOwnership mutator, int bitpos,
                                      Node node, int DATA_LENGTH) {
 
         int idx = this.array.length - 1 - nodeIndex(bitpos);
@@ -95,7 +95,7 @@ public class BitmapIndexedNode extends Node {
         }
     }
 
-    BitmapIndexedNode copyAndSetEntry(@Nullable IdentityObject mutator, int bitpos,
+    BitmapIndexedNode copyAndSetEntry(@Nullable MutabilityOwnership mutator, int bitpos,
                                       Object[] val, int DATA_LENGTH) {
         int idx = DATA_LENGTH * dataIndex(bitpos);
         if (isAllowedToUpdate(mutator)) {
@@ -221,7 +221,7 @@ public class BitmapIndexedNode extends Node {
     }
 
     @Override
-    public BitmapIndexedNode remove(@Nullable IdentityObject mutator, Object key,
+    public BitmapIndexedNode remove(@Nullable MutabilityOwnership mutator, Object key,
                                     int keyHash, int shift,
                                     ChangeEvent details, int DATA_LENGTH) {
         int mask = mask(keyHash, shift);
@@ -236,7 +236,7 @@ public class BitmapIndexedNode extends Node {
         return this;
     }
 
-    private BitmapIndexedNode removeData(@Nullable IdentityObject mutator, Object key, int keyHash, int shift, ChangeEvent details, int bitpos, int DATA_LENGTH) {
+    private BitmapIndexedNode removeData(@Nullable MutabilityOwnership mutator, Object key, int keyHash, int shift, ChangeEvent details, int bitpos, int DATA_LENGTH) {
         int dataIndex = dataIndex(bitpos);
 
         if (!Objects.equals(getKey(dataIndex, DATA_LENGTH), key)) {
@@ -263,7 +263,7 @@ public class BitmapIndexedNode extends Node {
         }
     }
 
-    private BitmapIndexedNode removeSubNode(@Nullable IdentityObject mutator, Object key, int keyHash, int shift,
+    private BitmapIndexedNode removeSubNode(@Nullable MutabilityOwnership mutator, Object key, int keyHash, int shift,
                                             ChangeEvent details,
                                             int bitpos, int DATA_LENGTH) {
         Node subNode = nodeAt(bitpos);
@@ -287,7 +287,7 @@ public class BitmapIndexedNode extends Node {
     }
 
     @Override
-    public BitmapIndexedNode put(@Nullable IdentityObject mutator,
+    public BitmapIndexedNode put(@Nullable MutabilityOwnership mutator,
                                  Object key, Object[] newData, int keyHash,
                                  int shift, ChangeEvent details,
                                  BiFunction<Object[], Object[], Object[]> updateFunction,
@@ -339,7 +339,7 @@ public class BitmapIndexedNode extends Node {
     }
 
     @Override
-    public BitmapIndexedNode putAll(IdentityObject owner, Node other, int shift,
+    public BitmapIndexedNode putAll(MutabilityOwnership owner, Node other, int shift,
                                     BulkChangeEvent bulkChange,
                                     ToIntFunction<Object> hashFunction,
                                     ChangeEvent details, int DATA_LENGTH) {
@@ -456,7 +456,7 @@ public class BitmapIndexedNode extends Node {
     }
 
     @Override
-    public BitmapIndexedNode removeIf(@Nullable IdentityObject owner, Predicate<Object> predicate, int shift, BulkChangeEvent bulkChange, int DATA_LENGTH) {
+    public BitmapIndexedNode removeIf(@Nullable MutabilityOwnership owner, Predicate<Object> predicate, int shift, BulkChangeEvent bulkChange, int DATA_LENGTH) {
         var newBitMap = nodeMap | dataMap;
         var buffer = new Object[Integer.bitCount(newBitMap) * DATA_LENGTH];
         int newDataMap = this.dataMap;

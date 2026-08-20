@@ -14,48 +14,48 @@ import java.util.Set;
 public class MutableVectorSetTest extends AbstractSequencedSetTest {
     @Override
     protected <E> SequencedSet<E> newInstance() {
-        return new MutableVectorSet<>();
+        return new MutableVectorHashSet<>();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(int numElements, float loadFactor) {
-        return new MutableVectorSet<>();
+        return new MutableVectorHashSet<>();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(Set<E> m) {
-        return new MutableVectorSet<>(m);
+        return new MutableVectorHashSet<>(m);
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(ReadableSet<E> m) {
-        return new MutableVectorSet<>(m);
+        return new MutableVectorHashSet<>(m);
     }
 
     @Override
     protected <E> SequencedSet<E> toClonedInstance(Set<E> m) {
-        return ((MutableVectorSet<E>) m).clone();
+        return ((MutableVectorHashSet<E>) m).clone();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(SequencedSet<E> m) {
-        return new MutableVectorSet<>(m);
+        return new MutableVectorHashSet<>(m);
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(ReadableSequencedSet<E> m) {
-        return new MutableVectorSet<>(m);
+        return new MutableVectorHashSet<>(m);
     }
 
 
     @Override
     protected <E> SequencedSet<E> toClonedInstance(SequencedSet<E> m) {
-        return ((MutableVectorSet<E>) m).clone();
+        return ((MutableVectorHashSet<E>) m).clone();
     }
 
     @Override
     protected <E> SequencedSet<E> newInstance(Iterable<E> m) {
-        return new MutableVectorSet<>(m);
+        return new MutableVectorHashSet<>(m);
     }
 
     public void addingLastWithContainedElementShouldMoveElementToLast(SetData data) throws Exception {

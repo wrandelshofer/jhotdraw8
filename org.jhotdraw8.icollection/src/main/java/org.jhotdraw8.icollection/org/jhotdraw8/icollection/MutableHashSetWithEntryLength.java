@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampSet;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.BulkChangeEvent;
@@ -228,7 +228,7 @@ public class MutableHashSetWithEntryLength<E> extends AbstractMutableChampSet<E,
     @Override
     public MutableHashSetWithEntryLength<E> clone() {
         MutableHashSetWithEntryLength<E> that = (MutableHashSetWithEntryLength<E>) super.clone();
-        that.owner = new IdentityObject();
+        that.owner = new MutabilityOwnership();
         return that;
     }
 
@@ -252,7 +252,7 @@ public class MutableHashSetWithEntryLength<E> extends AbstractMutableChampSet<E,
     }
 
     private void iteratorRemove(E e) {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         remove(e);
     }
 
@@ -274,7 +274,7 @@ public class MutableHashSetWithEntryLength<E> extends AbstractMutableChampSet<E,
     ///
     /// @return a persistent copy
     public PersistentHashSetWithEntryLength<E> toPersistent() {
-        owner = new IdentityObject();
+        owner = new MutabilityOwnership();
         return size == 0
                 ? PersistentHashSetWithEntryLength.of()
                 : new PersistentHashSetWithEntryLength<>(hashSet, size);

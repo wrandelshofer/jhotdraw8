@@ -11,9 +11,9 @@ import java.util.Spliterator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public abstract class AbstractImmutableSortedMapTest extends AbstractPersistentMapTest {
+public abstract class AbstractPersistentSortedMapTest extends AbstractPersistentMapTest {
 
-    public AbstractImmutableSortedMapTest() {
+    public AbstractPersistentSortedMapTest() {
     }
 
     /// Creates a new empty instance.
@@ -29,7 +29,7 @@ public abstract class AbstractImmutableSortedMapTest extends AbstractPersistentM
     protected abstract <K, V> PersistentSortedMap<K, V> toClonedInstance(PersistentMap<K, V> m);
 
     /// Creates a new instance with the specified map.
-    protected abstract <K, V> PersistentSortedMap<K, V> newInstance(Iterable<Map.Entry<K, V>> m);
+    protected abstract <K, V> PersistentSortedMap<K, V> newInstance(java.lang.Iterable<Map.Entry<K, V>> m);
 
     @Test
     public void spliteratorShouldHaveSequencedMapCharacteristics() throws Exception {

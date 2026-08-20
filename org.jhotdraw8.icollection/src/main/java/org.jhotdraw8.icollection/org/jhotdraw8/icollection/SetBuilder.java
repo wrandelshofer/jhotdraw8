@@ -10,13 +10,9 @@ import java.util.stream.Stream;
 /// Builder for readable sets.
 public interface SetBuilder<E, C extends ReadableCollection<E>> {
     /// Adds the specified item.
-    ///
-    /// @throws IllegalStateException if the item is already in the set.
     SetBuilder<E, C> add(@Nullable E elem);
 
     /// Adds all specified items.
-    ///
-    /// @throws IllegalStateException if an item is already in the set.
     default SetBuilder<E, C> addAll(Iterable<? extends E> elements) {
         for (var e : elements) {
             add(e);
@@ -24,7 +20,7 @@ public interface SetBuilder<E, C extends ReadableCollection<E>> {
         return this;
     }
 
-    /// Adds all remaining elements in the specified iterator.
+    /// Adds all remaining elements from the specified iterator.
     default SetBuilder<E, C> addIterator(Iterator<? extends E> it) {
         while (it.hasNext()) {
             add(it.next());
@@ -32,16 +28,14 @@ public interface SetBuilder<E, C extends ReadableCollection<E>> {
         return this;
     }
 
-    /// Adds all remaining elements in the specified spliterator.
+    /// Adds all remaining elements from the specified spliterator.
     default SetBuilder<E, C> addSpliterator(Spliterator<? extends E> it) {
         while (it.tryAdvance(this::add)) {
         }
         return this;
     }
 
-    /// Adds all the specified elements.
-    ///
-    /// @throws IllegalStateException if an item is already in the set.
+    /// Adds all elements from the specified array.
     @SuppressWarnings("unchecked")
     default SetBuilder<E, C> addArray(E @Nullable ... elements) {
         for (E elem : elements) {
@@ -50,9 +44,7 @@ public interface SetBuilder<E, C extends ReadableCollection<E>> {
         return this;
     }
 
-    /// Adds all the specified elements.
-    ///
-    /// @throws IllegalStateException if an item is already in the set.
+    /// Adds all remaining elements from the specified stream.
     @SuppressWarnings("unchecked")
     default SetBuilder<E, C> addStream(Stream<E> elements) {
         elements.forEach(this::add);

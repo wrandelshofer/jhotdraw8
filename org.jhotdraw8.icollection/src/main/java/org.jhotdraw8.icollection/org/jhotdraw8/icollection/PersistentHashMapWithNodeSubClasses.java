@@ -112,8 +112,8 @@ public class PersistentHashMapWithNodeSubClasses<K, V>
     /// @param <K> the key type
     /// @param <V> the value type
     /// @return a persistent copy
-    public static <K, V> PersistentHashMapWithNodeSubClasses<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
-        return new PersistentHashMapBuilderWithNodeSubClasses<K, V>().addEntries(c).build();
+    public static <K, V> PersistentHashMapWithNodeSubClasses<K, V> copyOf(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+        return new PersistentHashMapBuilderWithNodeSubClasses<K, V>().putEntries(c).build();
     }
 
     /// Returns a persistent copy of the provided map.
@@ -221,7 +221,7 @@ public class PersistentHashMapWithNodeSubClasses<K, V>
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashMapWithNodeSubClasses<K, V> puttingAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public PersistentHashMapWithNodeSubClasses<K, V> puttingAll(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         var m = toMutable();
         return m.putAll(c) ? m.toPersistent() : this;
     }
@@ -239,14 +239,14 @@ public class PersistentHashMapWithNodeSubClasses<K, V>
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashMapWithNodeSubClasses<K, V> removingAll(Iterable<? extends K> c) {
+    public PersistentHashMapWithNodeSubClasses<K, V> removingAll(java.lang.Iterable<? extends K> c) {
         var m = toMutable();
         return m.removeAll(c) ? m.toPersistent() : this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public PersistentHashMapWithNodeSubClasses<K, V> retainingAll(Iterable<? extends K> c) {
+    public PersistentHashMapWithNodeSubClasses<K, V> retainingAll(java.lang.Iterable<? extends K> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toPersistent() : this;
     }

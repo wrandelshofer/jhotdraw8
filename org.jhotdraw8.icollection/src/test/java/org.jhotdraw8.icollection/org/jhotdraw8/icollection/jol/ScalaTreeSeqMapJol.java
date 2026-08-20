@@ -1,7 +1,5 @@
 package org.jhotdraw8.icollection.jol;
 
-import org.jhotdraw8.icollection.jmh.Key;
-import org.jhotdraw8.icollection.jmh.Value;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import scala.Tuple2;
@@ -42,15 +40,15 @@ public class ScalaTreeSeqMapJol extends AbstractJol {
     public void estimateMemoryUsage() {
 
         int size = 1_000;
-            final int mask = -1;//~64;
+        final int mask = -1;//~64;
         var data = generateMap(size, mask, size * 10);
         var b = TreeSeqMap.<Key, Value>newBuilder();
-            for (var d : data.entrySet()) {
-                b.addOne(new Tuple2<>(d.getKey(), d.getValue()));
-            }
+        for (var d : data.entrySet()) {
+            b.addOne(new Tuple2<>(d.getKey(), d.getValue()));
+        }
         TreeSeqMap<Key, Value> mapA = b.result();
         Tuple2<Key, Value> head = mapA.head();
-            estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
+        estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
 
     }
 

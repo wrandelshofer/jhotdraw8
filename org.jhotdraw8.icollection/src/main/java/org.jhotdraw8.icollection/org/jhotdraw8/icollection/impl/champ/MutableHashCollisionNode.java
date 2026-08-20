@@ -5,19 +5,19 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 
 final class MutableHashCollisionNode<K, V> extends HashCollisionNode {
 
-    private final IdentityObject mutator;
+    private final MutabilityOwnership mutator;
 
-    MutableHashCollisionNode(IdentityObject mutator, int hash, Object[] entries, int entryLength) {
+    MutableHashCollisionNode(MutabilityOwnership mutator, int hash, Object[] entries, int entryLength) {
         super(hash, entries);
         this.mutator = mutator;
     }
 
     @Override
-    protected IdentityObject getMutator() {
+    protected MutabilityOwnership getMutator() {
         return mutator;
     }
 }

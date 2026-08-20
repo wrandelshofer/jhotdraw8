@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.alt.impl.linked;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
@@ -9,20 +9,20 @@ public final class LinkedElement<E> {
     private final E value;
     private @Nullable E prev;
     private @Nullable E next;
-    private final @Nullable IdentityObject owner;
+    private final @Nullable MutabilityOwnership owner;
 
     public LinkedElement(E value, @Nullable E prev, @Nullable E next) {
         this(value, prev, next, null);
     }
 
-    public LinkedElement(E value, @Nullable E prev, @Nullable E next, @Nullable IdentityObject owner) {
+    public LinkedElement(E value, @Nullable E prev, @Nullable E next, @Nullable MutabilityOwnership owner) {
         this.value = value;
         this.prev = prev;
         this.next = next;
         this.owner = owner;
     }
 
-    public boolean isOwned(@Nullable IdentityObject owner) {
+    public boolean isOwned(@Nullable MutabilityOwnership owner) {
         return owner != null && this.owner == owner;
     }
 

@@ -1,34 +1,34 @@
 package org.jhotdraw8.icollection.jol;
 
-import org.jhotdraw8.icollection.jmh.Key;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import scala.collection.immutable.HashSet;
 
 /// ScalaHashSetJol.
 public class ScalaHashSetJol extends AbstractJol {
+    public void main() {
+        var test = new ScalaHashSetJol();
+        int size = 1000;
+        test.estimateMemoryUsage(size);
+    }
 
     /// <pre>
     /// class scala.collection.immutable.HashSet with 1000 elements.
-    /// total size              : 56592
+    /// total size              : 57104
     /// element size            : 24
     /// data size               : 24000 42%
-    /// data structure size     : 32592 57%
-    /// overhead per element    : 32.592 bytes
+    /// data structure size     : 33104 57%
+    /// overhead per element    : 33.104 bytes
     /// ----footprint---
-    /// scala.collection.immutable.HashSet@4982cc36d footprint:
+    /// scala.collection.immutable.HashSet@30b7c004d footprint:
     ///      COUNT       AVG       SUM   DESCRIPTION
-    ///        311        29      9288   [I
-    ///        316        33     10648   [Ljava.lang.Object;
-    ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
-    ///        316        40     12640   scala.collection.immutable.BitmapIndexedSetNode
+    ///        316        29      9440   [I
+    ///        321        33     10808   [Ljava.lang.Object;
+    ///       1000        24     24000   org.jhotdraw8.icollection.util.Key
+    ///        321        40     12840   scala.collection.immutable.BitmapIndexedSetNode
     ///          1        16        16   scala.collection.immutable.HashSet
-    ///       1944               56592   (total)
+    ///       1959               57104   (total)
     /// </pre>
-    @Test
-    @Disabled
-    public void estimateMemoryUsage() {
-        int size = 1_000;
+
+    public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = generateSet(size, mask);
         var b = HashSet.<Key>newBuilder();

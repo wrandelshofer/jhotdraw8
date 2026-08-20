@@ -10,7 +10,7 @@ import org.jhotdraw8.icollection.readable.ReadableMap;
 
 import java.util.Map;
 
-public class PersistentTreeMapTest extends AbstractImmutableNavigableMapTest {
+public class PersistentTreeMapTest extends AbstractPersistentNavigableMapTest {
     @Override
     protected <K, V> PersistentTreeMap<K, V> newInstance() {
         return PersistentTreeMap.of();
@@ -33,7 +33,7 @@ public class PersistentTreeMapTest extends AbstractImmutableNavigableMapTest {
     }
 
     @Override
-    protected <K, V> PersistentTreeMap<K, V> newInstance(Iterable<Map.Entry<K, V>> entries) {
+    protected <K, V> PersistentTreeMap<K, V> newInstance(java.lang.Iterable<Map.Entry<K, V>> entries) {
         return PersistentTreeMap.<K, V>of().puttingAll(entries);
     }
 

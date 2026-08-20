@@ -19,7 +19,7 @@ public class PersistentTreeMapBuilder<K, V> implements MapBuilder<K, V, Persiste
         this(NaturalComparator.<K>instance());
     }
 
-    public PersistentTreeMapBuilder<K, V> add(K key, V value) {
+    public PersistentTreeMapBuilder<K, V> put(K key, V value) {
         tree = tree.insert(key, value, comparator);
         return this;
     }

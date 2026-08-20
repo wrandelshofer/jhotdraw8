@@ -1,7 +1,6 @@
 package org.jhotdraw8.icollection.jol;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+
 import scala.Tuple2;
 import scala.collection.immutable.HashMap;
 import scala.collection.mutable.ReusableBuilder;
@@ -11,27 +10,31 @@ import java.util.AbstractMap;
 /// ScalaHashMapJol.
 public class ScalaHashMapJol extends AbstractJol {
 
+    public void main() {
+        var test = new ScalaHashMapJol();
+        int size = 1000;
+        test.estimateMemoryUsage(size);
+    }
+
     /// <pre>
     /// class scala.collection.immutable.HashMap with 1000 elements.
-    /// total size              : 82848
+    /// total size              : 84504
     /// element size            : 48
-    /// data size               : 48000 57%
-    /// data structure size     : 34848 42%
-    /// overhead per element    : 34.848 bytes
+    /// data size               : 48000 56%
+    /// data structure size     : 36504 43%
+    /// overhead per element    : 36.504 bytes
     /// ----footprint---
-    /// scala.collection.immutable.HashMap@70f59913d footprint:
+    /// scala.collection.immutable.HashMap@7a4ccb53d footprint:
     ///      COUNT       AVG       SUM   DESCRIPTION
-    ///        292        30      8968   [I
-    ///        296        47     14024   [Ljava.lang.Object;
-    ///       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-    ///        296        40     11840   scala.collection.immutable.BitmapIndexedMapNode
+    ///        315        29      9336   [I
+    ///        317        45     14472   [Ljava.lang.Object;
+    ///       1000        24     24000   org.jhotdraw8.icollection.util.Key
+    ///       1000        24     24000   org.jhotdraw8.icollection.util.Value
+    ///        317        40     12680   scala.collection.immutable.BitmapIndexedMapNode
     ///          1        16        16   scala.collection.immutable.HashMap
-    ///       2885               82848   (total)
+    ///       2950               84504   (total)
     /// </pre>
-    @Test
-    @Disabled
-    public void estimateMemoryUsage() {
-        int size = 1_000;
+    public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = generateMap(size, mask, size * 10);
         ReusableBuilder<Tuple2<Object, Object>, HashMap<Object, Object>> b = HashMap.newBuilder();

@@ -6,7 +6,7 @@
 package org.jhotdraw8.icollection.alt.impl.champset;
 
 import org.jhotdraw8.icollection.impl.ArrayHelper;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
@@ -121,7 +121,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    Node<D> remove(@Nullable IdentityObject owner, D data,
+    Node<D> remove(@Nullable MutabilityOwnership owner, D data,
                    int dataHash, int shift, ChangeEvent<D> details, BiPredicate<D, D> equalsFunction) {
         for (int idx = 0, i = 0; i < this.array.length; i += 1, idx++) {
             if (equalsFunction.test((D) this.array[i], data)) {
@@ -151,7 +151,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    Node<D> put(@Nullable IdentityObject mutator, D newData,
+    Node<D> put(@Nullable MutabilityOwnership mutator, D newData,
                 int dataHash, int shift, ChangeEvent<D> details,
                 BiFunction<D, D, D> updateFunction, BiPredicate<D, D> equalsFunction,
                 ToIntFunction<D> hashFunction) {
@@ -193,7 +193,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected Node<D> putAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift, BulkChangeEvent bulkChange, BiFunction<D, D, D> updateFunction, BiPredicate<D, D> equalsFunction, ToIntFunction<D> hashFunction, ChangeEvent<D> details) {
+    protected Node<D> putAll(@Nullable MutabilityOwnership owner, Node<D> otherNode, int shift, BulkChangeEvent bulkChange, BiFunction<D, D, D> updateFunction, BiPredicate<D, D> equalsFunction, ToIntFunction<D> hashFunction, ChangeEvent<D> details) {
         if (otherNode == this) {
             bulkChange.inBoth += dataArity();
             return this;
@@ -237,7 +237,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected Node<D> removeAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift, BulkChangeEvent bulkChange, BiFunction<D, D, D> updateFunction, BiPredicate<D, D> equalsFunction, ToIntFunction<D> hashFunction, ChangeEvent<D> details) {
+    protected Node<D> removeAll(@Nullable MutabilityOwnership owner, Node<D> otherNode, int shift, BulkChangeEvent bulkChange, BiFunction<D, D, D> updateFunction, BiPredicate<D, D> equalsFunction, ToIntFunction<D> hashFunction, ChangeEvent<D> details) {
         if (otherNode == this) {
             bulkChange.removed += dataArity();
             return (Node<D>) EMPTY;
@@ -281,7 +281,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected Node<D> retainAll(IdentityObject owner, Node<D> otherNode, int shift, BulkChangeEvent bulkChange, BiFunction<D, D, D> updateFunction, BiPredicate<D, D> equalsFunction, ToIntFunction<D> hashFunction, ChangeEvent<D> details) {
+    protected Node<D> retainAll(MutabilityOwnership owner, Node<D> otherNode, int shift, BulkChangeEvent bulkChange, BiFunction<D, D, D> updateFunction, BiPredicate<D, D> equalsFunction, ToIntFunction<D> hashFunction, ChangeEvent<D> details) {
         if (otherNode == this) {
             bulkChange.removed += dataArity();
             return (Node<D>) EMPTY;
@@ -316,7 +316,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected Node<D> filterAll(@Nullable IdentityObject owner, Predicate<? super D> predicate, int shift, BulkChangeEvent bulkChange) {
+    protected Node<D> filterAll(@Nullable MutabilityOwnership owner, Predicate<? super D> predicate, int shift, BulkChangeEvent bulkChange) {
         int thisSize = this.dataArity();
         int resultSize = 0;
         Object[] buffer = new Object[thisSize];

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public abstract class AbstractImmutableSortedSetTest extends AbstractImmutableSetTest {
+public abstract class AbstractPersistentSortedSetTest extends AbstractPersistentSetTest {
     @Override
     protected abstract <E> PersistentSortedSet<E> newInstance();
 

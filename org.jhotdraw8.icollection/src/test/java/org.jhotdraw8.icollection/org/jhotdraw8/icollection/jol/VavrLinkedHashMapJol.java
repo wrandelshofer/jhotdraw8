@@ -2,7 +2,7 @@ package org.jhotdraw8.icollection.jol;
 
 import io.vavr.Tuple2;
 import io.vavr.collection.LinkedHashMap;
-import org.jhotdraw8.icollection.jmh.Key;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

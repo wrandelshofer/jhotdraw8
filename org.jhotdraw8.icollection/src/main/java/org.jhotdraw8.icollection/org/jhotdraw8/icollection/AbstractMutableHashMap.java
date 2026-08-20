@@ -6,7 +6,7 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.alt.impl.champmap.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jspecify.annotations.Nullable;
@@ -35,7 +35,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMap<K, V> implements
     /// by this map, and therefore can be mutated without affecting other map.
     ///
     /// If this owner id is null, then this map does not own any nodes.
-    protected @Nullable IdentityObject owner;
+    protected @Nullable MutabilityOwnership owner;
 
     /// The root of this CHAMP trie.
     protected transient BitmapIndexedNode<K, V> root;
@@ -49,9 +49,9 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMap<K, V> implements
     /// Gets the owner object. If the owner object was set to null, creates a new one.
     ///
     /// @return the owner object
-    protected IdentityObject getOrCreateOwner() {
+    protected MutabilityOwnership getOrCreateOwner() {
         if (owner == null) {
-            owner = new IdentityObject();
+            owner = new MutabilityOwnership();
         }
         return owner;
     }
@@ -99,7 +99,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMap<K, V> implements
     ///
     /// @param c an iterable of elements
     /// @return `true` if this set changed
-    public boolean putAll(Iterable<? extends Entry<? extends K, ? extends V>> c) {
+    public boolean putAll(java.lang.Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c == this) {
             return false;
         }
@@ -119,7 +119,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMap<K, V> implements
     ///
     /// @param c an iterable of keys
     /// @return `true` if this map changed
-    public boolean removeAll(Iterable<?> c) {
+    public boolean removeAll(java.lang.Iterable<?> c) {
         if (isEmpty()) {
             return false;
         }
@@ -137,7 +137,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMap<K, V> implements
     ///
     /// @param c an iterable of keys
     /// @return `true` if this map changed
-    public boolean retainAll(Iterable<?> c) {
+    public boolean retainAll(java.lang.Iterable<?> c) {
         if (isEmpty()) {
             return false;
         }

@@ -1,9 +1,6 @@
 package org.jhotdraw8.icollection.jol;
 
 import org.jhotdraw8.icollection.PersistentHashSet;
-import org.jhotdraw8.icollection.jmh.Key;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,44 +8,31 @@ import java.util.Collections;
 /// ChampSetJol.
 public class PersistentHashSetJol extends AbstractJol {
 
+    public void main() {
+        var test = new PersistentHashSetJol();
+        int size = 1000;
+        test.estimateMemoryUsage(size);
+    }
+
     /// <pre>
-    /// class org.jhotdraw8.icollection.ChampSet with 1000 elements.
-    /// total size              : 43608
+    /// class org.jhotdraw8.icollection.PersistentHashSet with 1000 elements.
+    /// total size              : 41696
     /// element size            : 24
-    /// data size               : 24000 55%
-    /// data structure size     : 19608 44%
-    /// overhead per element    : 19.608 bytes
+    /// data size               : 24000 57%
+    /// data structure size     : 17696 42%
+    /// overhead per element    : 17.696 bytes
     /// ----footprint---
-    /// org.jhotdraw8.icollection.ChampSet@60410cdd footprint:
+    /// org.jhotdraw8.icollection.PersistentHashSet@69a3d1dd footprint:
     ///      COUNT       AVG       SUM   DESCRIPTION
-    ///        293        34     10192   [Ljava.lang.Object;
-    ///          1        24        24   org.jhotdraw8.icollection.ChampSet
-    ///          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
-    ///        293        32      9376   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
-    ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
-    ///       1588               43608   (total)
+    ///        304        34     10360   [Ljava.lang.Object;
+    ///          1        24        24   org.jhotdraw8.icollection.PersistentHashSet
+    ///          1        16        16   org.jhotdraw8.icollection.impl.MutabilityOwnership
+    ///        304        24      7296   org.jhotdraw8.icollection.impl.champset.TrieNode
+    ///       1000        24     24000   org.jhotdraw8.icollection.util.Key
+    ///       1610               41696   (total)
+    ///
     /// </pre>
-    /// <pre>
-    /// class org.jhotdraw8.icollection.ChampSet with 1 elements.
-    /// total size              : 120
-    /// element size            : 24
-    /// data size               : 24 20%
-    /// data structure size     : 96 80%
-    /// overhead per element    : 96.0 bytes
-    /// ----footprint---
-    /// org.jhotdraw8.icollection.ChampSet@95e33ccd footprint:
-    ///      COUNT       AVG       SUM   DESCRIPTION
-    ///          1        24        24   [Ljava.lang.Object;
-    ///          1        24        24   org.jhotdraw8.icollection.ChampSet
-    ///          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
-    ///          1        32        32   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
-    ///          1        24        24   org.jhotdraw8.icollection.jmh.Key
-    ///          5                 120   (total)
-    /// </pre>
-    @Test
-    @Disabled
-    public void estimateMemoryUsageAddingAll() {
-        int size = 1_000;
+    public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = generateSet(size, mask);
         PersistentHashSet<Key> setA = PersistentHashSet.copyOf(data);
@@ -71,10 +55,8 @@ public class PersistentHashSetJol extends AbstractJol {
     ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
     ///       1587               41248   (total)
     /// </pre>
-    @Test
-    @Disabled
-    public void estimateMemoryUsageAddingOneByOne() {
-        int size = 1_000;
+
+    public void estimateMemoryUsageAddingOneByOne(int size) {
         final int mask = -1;//~64;
         var data = generateSet(size, mask);
         PersistentHashSet<Key> setA = PersistentHashSet.of();
@@ -101,10 +83,8 @@ public class PersistentHashSetJol extends AbstractJol {
     ///        250        24      6000   org.jhotdraw8.icollection.jmh.Key
     ///        401               11000   (total)
     /// </pre>
-    @Test
-    @Disabled
-    public void estimateMemoryUsageAfter75PercentRandomRemoves() {
-        int size = 1_000;
+
+    public void estimateMemoryUsageAfter75PercentRandomRemoves(int size) {
         final int mask = ~64;
         var data = generateSet(size, mask);
         PersistentHashSet<Key> setA = PersistentHashSet.copyOf(data);

@@ -10,7 +10,7 @@ import org.jhotdraw8.icollection.persistent.PersistentSet;
 import java.util.SequencedSet;
 import java.util.Set;
 
-public class PersistentLinkedHashSetWithNodeSubClassesTest extends AbstractImmutableSequencedSetTest {
+public class PersistentLinkedHashSetWithNodeSubClassesTest extends AbstractPersistentSequencedSetTest {
 
 
     @Override

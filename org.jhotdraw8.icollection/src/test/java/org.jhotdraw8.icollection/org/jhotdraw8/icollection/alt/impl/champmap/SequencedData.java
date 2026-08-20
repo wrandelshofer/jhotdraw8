@@ -7,7 +7,7 @@ package org.jhotdraw8.icollection.alt.impl.champmap;
 
 import org.jhotdraw8.icollection.alt.PersistentBMTrieList;
 import org.jhotdraw8.icollection.alt.impl.bmtrie.BitMappedTrie;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Spliterators;
@@ -60,7 +60,7 @@ public interface SequencedData {
     /// @return a new renumbered root and a new vector with matching entries
     @SuppressWarnings("unchecked")
     static <K extends SequencedData> OrderedPair<BitmapIndexedNode<K>, PersistentBMTrieList<Object>> vecRenumber(
-            @Nullable IdentityObject owner, int size, int sizeWithTombstones,
+            @Nullable MutabilityOwnership owner, int size, int sizeWithTombstones,
             BitmapIndexedNode<K> root,
             BitMappedTrie<Object> vector,
             ToIntFunction<K> hashFunction,

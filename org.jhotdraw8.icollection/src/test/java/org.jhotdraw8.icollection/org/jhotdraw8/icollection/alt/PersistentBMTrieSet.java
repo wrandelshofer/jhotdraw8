@@ -12,7 +12,7 @@ import org.jhotdraw8.icollection.alt.impl.champmap.SequencedData;
 import org.jhotdraw8.icollection.alt.impl.champmap.SequencedElement;
 import org.jhotdraw8.icollection.alt.impl.champmap.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
@@ -400,9 +400,9 @@ public class PersistentBMTrieSet<E> implements Serializable, PersistentSequenced
             int size, int offset) {
 
         if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
-            var owner = new IdentityObject();
+            var owner = new MutabilityOwnership();
             var result = SequencedData.vecRenumber(
-                    new IdentityObject(), size, vector.size(), root, vector.root, SequencedElement::elementKeyHash, Objects::equals,
+                    new MutabilityOwnership(), size, vector.size(), root, vector.root, SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             return newInstance(
                     result.first(), result.second(),

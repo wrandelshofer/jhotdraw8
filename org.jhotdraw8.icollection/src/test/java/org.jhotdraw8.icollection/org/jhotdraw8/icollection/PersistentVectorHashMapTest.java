@@ -10,7 +10,7 @@ import org.jhotdraw8.icollection.readable.ReadableMap;
 
 import java.util.Map;
 
-public class PersistentVectorHashMapTest extends AbstractImmutableSequencedMapTest {
+public class PersistentVectorHashMapTest extends AbstractPersistentSequencedMapTest {
     @Override
     protected <K, V> PersistentVectorHashMap<K, V> newInstance() {
         return PersistentVectorHashMap.of();
@@ -33,7 +33,7 @@ public class PersistentVectorHashMapTest extends AbstractImmutableSequencedMapTe
     }
 
     @Override
-    protected <K, V> PersistentVectorHashMap<K, V> newInstance(Iterable<Map.Entry<K, V>> entries) {
+    protected <K, V> PersistentVectorHashMap<K, V> newInstance(java.lang.Iterable<Map.Entry<K, V>> entries) {
         return PersistentVectorHashMap.<K, V>of().puttingAll(entries);
     }
 

@@ -32,7 +32,7 @@ public interface ReadableSortedMap<K, V> extends ReadableSequencedMap<K, V> {
     /// `true` if the given object is also a readable map and the two maps
     /// represent the same entries.
     ///
-    /// This operation is more efficient than [ReadableMap#mapEquals(ReadableMap, Object)].
+    /// This operation is more efficient than [ReadableMap#mapEquals(ReadableMap , Object)].
     ///
     /// @param map a map
     /// @param o   an object

@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 import org.jspecify.annotations.Nullable;
 
 /// Provides static utility methods for CHAMP tries.
@@ -16,7 +16,7 @@ public class ChampTrie {
     }
 
     static <K, V> BitmapIndexedNode newBitmapIndexedNode(
-            @Nullable IdentityObject mutator, int nodeMap,
+            @Nullable MutabilityOwnership mutator, int nodeMap,
             int dataMap, Object[] array, int ENTRY_LENGTH) {
         return mutator == null
                 ? new BitmapIndexedNode(nodeMap, dataMap, array, ENTRY_LENGTH)
@@ -24,7 +24,7 @@ public class ChampTrie {
     }
 
     static <K, V> HashCollisionNode newHashCollisionNode(
-            @Nullable IdentityObject mutator, int hash, Object[] array, int entryLength) {
+            @Nullable MutabilityOwnership mutator, int hash, Object[] array, int entryLength) {
         return mutator == null
                 ? new HashCollisionNode(hash, array)
                 : new MutableHashCollisionNode(mutator, hash, array, entryLength);

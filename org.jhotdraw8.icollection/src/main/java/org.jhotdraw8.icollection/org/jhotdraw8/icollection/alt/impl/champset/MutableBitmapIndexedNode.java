@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.alt.impl.champset;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 
 /// A [BitmapIndexedNode] that provides storage space for a 'owner' identity.
 ///
@@ -22,15 +22,15 @@ import org.jhotdraw8.icollection.impl.IdentityObject;
 /// @param <K>
 class MutableBitmapIndexedNode<K> extends BitmapIndexedNode<K> {
 
-    private final IdentityObject ownedBy;
+    private final MutabilityOwnership ownedBy;
 
-    MutableBitmapIndexedNode(IdentityObject ownedBy, int nodeMap, int dataMap, Object[] nodes) {
+    MutableBitmapIndexedNode(MutabilityOwnership ownedBy, int nodeMap, int dataMap, Object[] nodes) {
         super(nodeMap, dataMap, nodes);
         this.ownedBy = ownedBy;
     }
 
     @Override
-    protected IdentityObject getOwner() {
+    protected MutabilityOwnership getOwner() {
         return ownedBy;
     }
 }

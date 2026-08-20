@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.alt.impl.champmap;
 
-import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 
 /// A [HashCollisionNode] that provides storage space for a 'owner' identity.
 ///
@@ -22,15 +22,15 @@ import org.jhotdraw8.icollection.impl.IdentityObject;
 /// @param <K>
 class MutableHashCollisionNode<K> extends HashCollisionNode<K> {
 
-    private final IdentityObject ownedBy;
+    private final MutabilityOwnership ownedBy;
 
-    MutableHashCollisionNode(IdentityObject ownedBy, int hash, Object[] entries) {
+    MutableHashCollisionNode(MutabilityOwnership ownedBy, int hash, Object[] entries) {
         super(hash, entries);
         this.ownedBy = ownedBy;
     }
 
     @Override
-    protected IdentityObject getOwner() {
+    protected MutabilityOwnership getOwner() {
         return ownedBy;
     }
 }
