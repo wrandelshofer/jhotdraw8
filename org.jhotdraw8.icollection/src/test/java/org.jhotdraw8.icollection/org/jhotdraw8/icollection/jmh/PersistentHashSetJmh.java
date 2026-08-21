@@ -21,55 +21,55 @@ import java.util.concurrent.TimeUnit;
 /// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
 /// # Mac Mini M4 Pro, 4.40 GHz
 ///
-/// Benchmark                                                     (mask)  (size)  Mode  Cnt         Score   Error  Units
-/// PersistentHashSetWithTrieNodSubClassJmh.mAdd                     -65      10  avgt    2       128.071          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mAdd                     -65    1000  avgt    2     30035.914          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mAdd                     -65  100000  avgt    2  10027624.480          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mAddAll                  -65      10  avgt    2       110.992          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mAddAll                  -65    1000  avgt    2     26631.509          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mAddAll                  -65  100000  avgt    2   7518205.627          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mAddAllSameType          -65      10  avgt    2        81.381          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mAddAllSameType          -65    1000  avgt    2      9589.576          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mAddAllSameType          -65  100000  avgt    2   1219409.850          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mAddContained            -65      10  avgt    2        26.688          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mAddContained            -65    1000  avgt    2      6774.541          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mAddContained            -65  100000  avgt    2   1992140.126          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mContains                -65      10  avgt    2        19.856          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mContains                -65    1000  avgt    2      5167.463          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mContains                -65  100000  avgt    2   2232320.875          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mContainsAll             -65      10  avgt    2        45.614          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mContainsAll             -65    1000  avgt    2      8473.466          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mContainsAll             -65  100000  avgt    2   2838307.035          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mContainsAllSameType     -65      10  avgt    2        54.893          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mContainsAllSameType     -65    1000  avgt    2     10504.696          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mContainsAllSameType     -65  100000  avgt    2   1678911.115          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mCopyOf                  -65      10  avgt    2       233.209          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mCopyOf                  -65    1000  avgt    2     24771.853          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mCopyOf                  -65  100000  avgt    2   6546373.709          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mGetFirst                -65      10  avgt    2         1.091          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mGetFirst                -65    1000  avgt    2         9.019          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mGetFirst                -65  100000  avgt    2        12.632          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mIterate                 -65      10  avgt    2        25.017          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mIterate                 -65    1000  avgt    2      3706.868          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mIterate                 -65  100000  avgt    2    698077.224          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemove                  -65      10  avgt    2       138.045          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemove                  -65    1000  avgt    2     36136.914          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemove                  -65  100000  avgt    2  10812175.640          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemoveAll               -65      10  avgt    2        96.604          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemoveAll               -65    1000  avgt    2     24331.176          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemoveAll               -65  100000  avgt    2   8366146.704          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemoveAllSameType       -65      10  avgt    2        27.005          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemoveAllSameType       -65    1000  avgt    2      9622.622          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemoveAllSameType       -65  100000  avgt    2   1090335.965          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemoveFirst             -65      10  avgt    2       192.411          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemoveFirst             -65    1000  avgt    2     53704.964          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRemoveFirst             -65  100000  avgt    2   8595315.303          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRetainAll               -65      10  avgt    2       138.870          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRetainAll               -65    1000  avgt    2     23391.418          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRetainAll               -65  100000  avgt    2   4891726.496          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRetainAllSameType       -65      10  avgt    2        23.106          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRetainAllSameType       -65    1000  avgt    2      7185.787          ns/op
-/// PersistentHashSetWithTrieNodSubClassJmh.mRetainAllSameType       -65  100000  avgt    2    737232.599          ns/op
+/// Benchmark             (mask)  (size)  Mode  Cnt         Score   Error  Units
+/// mAdd                     -65      10  avgt    2       128.071          ns/op
+/// mAdd                     -65    1000  avgt    2     30035.914          ns/op
+/// mAdd                     -65  100000  avgt    2  10027624.480          ns/op
+/// mAddAll                  -65      10  avgt    2       110.992          ns/op
+/// mAddAll                  -65    1000  avgt    2     26631.509          ns/op
+/// mAddAll                  -65  100000  avgt    2   7518205.627          ns/op
+/// mAddAllSameType          -65      10  avgt    2        81.381          ns/op
+/// mAddAllSameType          -65    1000  avgt    2      9589.576          ns/op
+/// mAddAllSameType          -65  100000  avgt    2   1219409.850          ns/op
+/// mAddContained            -65      10  avgt    2        26.688          ns/op
+/// mAddContained            -65    1000  avgt    2      6774.541          ns/op
+/// mAddContained            -65  100000  avgt    2   1992140.126          ns/op
+/// mContains                -65      10  avgt    2        19.856          ns/op
+/// mContains                -65    1000  avgt    2      5167.463          ns/op
+/// mContains                -65  100000  avgt    2   2232320.875          ns/op
+/// mContainsAll             -65      10  avgt    2        45.614          ns/op
+/// mContainsAll             -65    1000  avgt    2      8473.466          ns/op
+/// mContainsAll             -65  100000  avgt    2   2838307.035          ns/op
+/// mContainsAllSameType     -65      10  avgt    2        54.893          ns/op
+/// mContainsAllSameType     -65    1000  avgt    2     10504.696          ns/op
+/// mContainsAllSameType     -65  100000  avgt    2   1678911.115          ns/op
+/// mCopyOf                  -65      10  avgt    2       233.209          ns/op
+/// mCopyOf                  -65    1000  avgt    2     24771.853          ns/op
+/// mCopyOf                  -65  100000  avgt    2   6546373.709          ns/op
+/// mGetFirst                -65      10  avgt    2         1.091          ns/op
+/// mGetFirst                -65    1000  avgt    2         9.019          ns/op
+/// mGetFirst                -65  100000  avgt    2        12.632          ns/op
+/// mIterate                 -65      10  avgt    2        25.017          ns/op
+/// mIterate                 -65    1000  avgt    2      3706.868          ns/op
+/// mIterate                 -65  100000  avgt    2    698077.224          ns/op
+/// mRemove                  -65      10  avgt    2       138.045          ns/op
+/// mRemove                  -65    1000  avgt    2     36136.914          ns/op
+/// mRemove                  -65  100000  avgt    2  10812175.640          ns/op
+/// mRemoveAll               -65      10  avgt    2        96.604          ns/op
+/// mRemoveAll               -65    1000  avgt    2     24331.176          ns/op
+/// mRemoveAll               -65  100000  avgt    2   8366146.704          ns/op
+/// mRemoveAllSameType       -65      10  avgt    2        27.005          ns/op
+/// mRemoveAllSameType       -65    1000  avgt    2      9622.622          ns/op
+/// mRemoveAllSameType       -65  100000  avgt    2   1090335.965          ns/op
+/// mRemoveFirst             -65      10  avgt    2       192.411          ns/op
+/// mRemoveFirst             -65    1000  avgt    2     53704.964          ns/op
+/// mRemoveFirst             -65  100000  avgt    2   8595315.303          ns/op
+/// mRetainAll               -65      10  avgt    2       138.870          ns/op
+/// mRetainAll               -65    1000  avgt    2     23391.418          ns/op
+/// mRetainAll               -65  100000  avgt    2   4891726.496          ns/op
+/// mRetainAllSameType       -65      10  avgt    2        23.106          ns/op
+/// mRetainAllSameType       -65    1000  avgt    2      7185.787          ns/op
+/// mRetainAllSameType       -65  100000  avgt    2    737232.599          ns/op
 /// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
@@ -88,14 +88,12 @@ public class PersistentHashSetJmh {
     private PersistentHashSet<Key> setA;
     private PersistentHashSet<Key> setAA;
     private PersistentHashSet<Key> setC;
-    private PersistentHashSet<Key> setB;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
         setA = PersistentHashSet.copyOf(data.setA);
         setAA = PersistentHashSet.copyOf(data.listA);
-        setB = PersistentHashSet.copyOf(data.listB);
         setC = PersistentHashSet.copyOf(data.listC);
     }
 

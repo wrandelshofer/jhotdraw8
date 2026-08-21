@@ -98,7 +98,7 @@ public class KotlinxPersistentHashSetJmh {
         assert set.size() == data.listA.size();
         return set;
     }
-/*
+
     @Benchmark
     public PersistentSet<Key> mAddAll() {
         PersistentSet<Key> set = setA;
@@ -134,7 +134,7 @@ public class KotlinxPersistentHashSetJmh {
         assert count == data.listC.size() / 2;
         return count;
     }
-    */
+
 
     @Benchmark
     public boolean mContainsAll() {

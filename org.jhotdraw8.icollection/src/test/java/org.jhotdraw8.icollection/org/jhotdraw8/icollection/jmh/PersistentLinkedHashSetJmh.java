@@ -1,6 +1,7 @@
 package org.jhotdraw8.icollection.jmh;
 
 import org.jhotdraw8.icollection.PersistentLinkedHashSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -20,46 +21,55 @@ import java.util.concurrent.TimeUnit;
 /// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
 /// # Mac Mini M4 Pro, 4.40 GHz
 ///
-/// Benchmark                                          (mask)  (size)  Mode  Cnt         Score   Error  Units
-/// PersistentLinkedHashSetJmh.mAdd                       -65      10  avgt    2       366.794          ns/op
-/// PersistentLinkedHashSetJmh.mAdd                       -65    1000  avgt    2     77870.971          ns/op
-/// PersistentLinkedHashSetJmh.mAdd                       -65  100000  avgt    2  20964397.433          ns/op
-/// PersistentLinkedHashSetJmh.mAddContained              -65      10  avgt    2        57.588   *      ns/op
-/// PersistentLinkedHashSetJmh.mAddContained              -65    1000  avgt    2     32807.924   *      ns/op
-/// PersistentLinkedHashSetJmh.mAddContained              -65  100000  avgt    2   3826495.979   *      ns/op
-/// PersistentLinkedHashSetJmh.mContainsFound             -65      10  avgt    2        22.505          ns/op
-/// PersistentLinkedHashSetJmh.mContainsFound             -65    1000  avgt    2      6050.271          ns/op
-/// PersistentLinkedHashSetJmh.mContainsFound             -65  100000  avgt    2   1924379.054          ns/op
-/// PersistentLinkedHashSetJmh.mContainsNotFound          -65      10  avgt    2         9.725          ns/op
-/// PersistentLinkedHashSetJmh.mContainsNotFound          -65    1000  avgt    2      4482.954          ns/op
-/// PersistentLinkedHashSetJmh.mContainsNotFound          -65  100000  avgt    2   1672341.356          ns/op
-/// PersistentLinkedHashSetJmh.mCopyOf                    -65      10  avgt    2       254.167          ns/op
-/// PersistentLinkedHashSetJmh.mCopyOf                    -65    1000  avgt    2     42279.369          ns/op
-/// PersistentLinkedHashSetJmh.mCopyOf                    -65  100000  avgt    2   8270214.334   *      ns/op
-/// PersistentLinkedHashSetJmh.mGetFirst                  -65      10  avgt    2         0.763          ns/op
-/// PersistentLinkedHashSetJmh.mGetFirst                  -65    1000  avgt    2         0.788          ns/op
-/// PersistentLinkedHashSetJmh.mGetFirst                  -65  100000  avgt    2         0.786          ns/op
-/// PersistentLinkedHashSetJmh.mIterate                   -65      10  avgt    2       105.641          ns/op
-/// PersistentLinkedHashSetJmh.mIterate                   -65    1000  avgt    2     27805.804          ns/op
-/// PersistentLinkedHashSetJmh.mIterate                   -65  100000  avgt    2   6179073.977          ns/op
-/// PersistentLinkedHashSetJmh.mRemove                    -65      10  avgt    2       389.526          ns/op
-/// PersistentLinkedHashSetJmh.mRemove                    -65    1000  avgt    2    131780.005          ns/op
-/// PersistentLinkedHashSetJmh.mRemove                    -65  100000  avgt    2  38864000.808          ns/op
-/// PersistentLinkedHashSetJmh.mRemoveAll                 -65      10  avgt    2       329.974          ns/op
-/// PersistentLinkedHashSetJmh.mRemoveAll                 -65    1000  avgt    2    106485.436          ns/op
-/// PersistentLinkedHashSetJmh.mRemoveAll                 -65  100000  avgt    2  16934785.037          ns/op
-/// PersistentLinkedHashSetJmh.mRemoveAllSameType         -65      10  avgt    2       570.905          ns/op
-/// PersistentLinkedHashSetJmh.mRemoveAllSameType         -65    1000  avgt    2    156796.566          ns/op
-/// PersistentLinkedHashSetJmh.mRemoveAllSameType         -65  100000  avgt    2  25093804.242   *      ns/op
-/// PersistentLinkedHashSetJmh.mRemoveFirst               -65      10  avgt    2       311.399          ns/op
-/// PersistentLinkedHashSetJmh.mRemoveFirst               -65    1000  avgt    2     87211.136          ns/op
-/// PersistentLinkedHashSetJmh.mRemoveFirst               -65  100000  avgt    2  22360576.868          ns/op
-/// PersistentLinkedHashSetJmh.mRetainAllAllRetained      -65      10  avgt    2        98.480          ns/op
-/// PersistentLinkedHashSetJmh.mRetainAllAllRetained      -65    1000  avgt    2     27760.201          ns/op
-/// PersistentLinkedHashSetJmh.mRetainAllAllRetained      -65  100000  avgt    2   6656120.009          ns/op
-/// PersistentLinkedHashSetJmh.mRetainAllNoneRetained     -65      10  avgt    2       550.856          ns/op
-/// PersistentLinkedHashSetJmh.mRetainAllNoneRetained     -65    1000  avgt    2    123203.328          ns/op
-/// PersistentLinkedHashSetJmh.mRetainAllNoneRetained     -65  100000  avgt    2  18364972.401          ns/op        ns/op
+/// Benchmark                                        (mask)  (size)  Mode  Cnt         Score   Error  Units
+/// PersistentLinkedHashSetJmh.mAdd                     -65      10  avgt    2       342.894          ns/op
+/// PersistentLinkedHashSetJmh.mAdd                     -65    1000  avgt    2     79266.675          ns/op
+/// PersistentLinkedHashSetJmh.mAdd                     -65  100000  avgt    2  23181899.820          ns/op
+/// PersistentLinkedHashSetJmh.mAddAll                  -65      10  avgt    2       207.284          ns/op
+/// PersistentLinkedHashSetJmh.mAddAll                  -65    1000  avgt    2     29675.938          ns/op
+/// PersistentLinkedHashSetJmh.mAddAll                  -65  100000  avgt    2   7796759.382          ns/op
+/// PersistentLinkedHashSetJmh.mAddAllSameType          -65      10  avgt    2       303.973          ns/op
+/// PersistentLinkedHashSetJmh.mAddAllSameType          -65    1000  avgt    2     44948.983          ns/op
+/// PersistentLinkedHashSetJmh.mAddAllSameType          -65  100000  avgt    2  10212961.696          ns/op
+/// PersistentLinkedHashSetJmh.mAddContained            -65      10  avgt    2       109.893          ns/op
+/// PersistentLinkedHashSetJmh.mAddContained            -65    1000  avgt    2     33017.892          ns/op
+/// PersistentLinkedHashSetJmh.mAddContained            -65  100000  avgt    2   3830700.173          ns/op
+/// PersistentLinkedHashSetJmh.mContains                -65      10  avgt    2        21.221          ns/op
+/// PersistentLinkedHashSetJmh.mContains                -65    1000  avgt    2      5024.616          ns/op
+/// PersistentLinkedHashSetJmh.mContains                -65  100000  avgt    2   2707911.777          ns/op
+/// PersistentLinkedHashSetJmh.mContainsAll             -65      10  avgt    2        47.087          ns/op
+/// PersistentLinkedHashSetJmh.mContainsAll             -65    1000  avgt    2      8452.297          ns/op
+/// PersistentLinkedHashSetJmh.mContainsAll             -65  100000  avgt    2   2719955.784          ns/op
+/// PersistentLinkedHashSetJmh.mContainsAllSameType     -65      10  avgt    2       114.914          ns/op
+/// PersistentLinkedHashSetJmh.mContainsAllSameType     -65    1000  avgt    2     34457.492          ns/op
+/// PersistentLinkedHashSetJmh.mContainsAllSameType     -65  100000  avgt    2   8000243.650          ns/op
+/// PersistentLinkedHashSetJmh.mCopyOf                  -65      10  avgt    2       245.891          ns/op
+/// PersistentLinkedHashSetJmh.mCopyOf                  -65    1000  avgt    2     41171.045          ns/op
+/// PersistentLinkedHashSetJmh.mCopyOf                  -65  100000  avgt    2   8395270.885          ns/op
+/// PersistentLinkedHashSetJmh.mGetFirst                -65      10  avgt    2         8.972          ns/op
+/// PersistentLinkedHashSetJmh.mGetFirst                -65    1000  avgt    2        11.599          ns/op
+/// PersistentLinkedHashSetJmh.mGetFirst                -65  100000  avgt    2        12.670          ns/op
+/// PersistentLinkedHashSetJmh.mIterate                 -65      10  avgt    2       107.162          ns/op
+/// PersistentLinkedHashSetJmh.mIterate                 -65    1000  avgt    2     28889.680          ns/op
+/// PersistentLinkedHashSetJmh.mIterate                 -65  100000  avgt    2   6304511.916          ns/op
+/// PersistentLinkedHashSetJmh.mRemove                  -65      10  avgt    2       392.403          ns/op
+/// PersistentLinkedHashSetJmh.mRemove                  -65    1000  avgt    2    131201.573          ns/op
+/// PersistentLinkedHashSetJmh.mRemove                  -65  100000  avgt    2  41785576.769          ns/op
+/// PersistentLinkedHashSetJmh.mRemoveAll               -65      10  avgt    2       250.573          ns/op
+/// PersistentLinkedHashSetJmh.mRemoveAll               -65    1000  avgt    2     75191.933          ns/op
+/// PersistentLinkedHashSetJmh.mRemoveAll               -65  100000  avgt    2  14102922.477          ns/op
+/// PersistentLinkedHashSetJmh.mRemoveAllSameType       -65      10  avgt    2       376.571          ns/op
+/// PersistentLinkedHashSetJmh.mRemoveAllSameType       -65    1000  avgt    2     92846.731          ns/op
+/// PersistentLinkedHashSetJmh.mRemoveAllSameType       -65  100000  avgt    2  17918570.538          ns/op
+/// PersistentLinkedHashSetJmh.mRemoveFirst             -65      10  avgt    2       393.773          ns/op
+/// PersistentLinkedHashSetJmh.mRemoveFirst             -65    1000  avgt    2    114575.544          ns/op
+/// PersistentLinkedHashSetJmh.mRemoveFirst             -65  100000  avgt    2  23273662.727          ns/op
+/// PersistentLinkedHashSetJmh.mRetainAll               -65      10  avgt    2       512.296          ns/op
+/// PersistentLinkedHashSetJmh.mRetainAll               -65    1000  avgt    2     96822.671          ns/op
+/// PersistentLinkedHashSetJmh.mRetainAll               -65  100000  avgt    2  15845390.178          ns/op
+/// PersistentLinkedHashSetJmh.mRetainAllSameType       -65      10  avgt    2       675.682          ns/op
+/// PersistentLinkedHashSetJmh.mRetainAllSameType       -65    1000  avgt    2    103724.478          ns/op
+/// PersistentLinkedHashSetJmh.mRetainAllSameType       -65  100000  avgt    2  17394543.073          ns/op       ns/op        ns/op
 /// </pre>
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
@@ -77,26 +87,18 @@ public class PersistentLinkedHashSetJmh {
     private BenchmarkData data;
     private PersistentLinkedHashSet<Key> setA;
     private PersistentLinkedHashSet<Key> setAA;
-    private PersistentLinkedHashSet<Key> setB;
+    private PersistentLinkedHashSet<Key> setC;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
         setA = PersistentLinkedHashSet.copyOf(data.setA);
-        setB = PersistentLinkedHashSet.copyOf(data.listB);
         setAA = PersistentLinkedHashSet.copyOf(data.listA);
+        setC = PersistentLinkedHashSet.copyOf(data.listC);
     }
 
     @Benchmark
-    public PersistentLinkedHashSet<Key> mCopyOf() {
-        PersistentLinkedHashSet<Key> set = PersistentLinkedHashSet.copyOf(data.listA);
-        assert set.size() == data.listA.size();
-        return set;
-    }
-
-
-    @Benchmark
-    public PersistentLinkedHashSet<Key> mAdd() {
+    public PersistentSet<Key> mAdd() {
         PersistentLinkedHashSet<Key> set = PersistentLinkedHashSet.of();
         for (Key key : data.listA) {
             set = set.adding(key);
@@ -106,8 +108,24 @@ public class PersistentLinkedHashSetJmh {
     }
 
     @Benchmark
-    public PersistentLinkedHashSet<Key> mAddContained() {
+    public PersistentLinkedHashSet<Key> mAddAll() {
         PersistentLinkedHashSet<Key> set = setA;
+        PersistentLinkedHashSet<Key> updated = set.addingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentLinkedHashSet<Key> mAddAllSameType() {
+        PersistentLinkedHashSet<Key> set = setA;
+        PersistentLinkedHashSet<Key> updated = set.addingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mAddContained() {
+        PersistentSet<Key> set = setA;
         for (Key key : data.listA) {
             set = set.adding(key);
         }
@@ -116,48 +134,36 @@ public class PersistentLinkedHashSetJmh {
     }
 
     @Benchmark
-    public PersistentLinkedHashSet<Key> mRemove() {
-        PersistentLinkedHashSet<Key> set = setA;
-        for (Key key : data.listA) {
-            set = set.removing(key);
+    public int mContains() {
+        int count = 0;
+        for (Key k : data.listC) {
+            if (setA.contains(k)) count++;
         }
-        assert set.isEmpty();
+        assert count == data.listC.size() / 2;
+        return count;
+    }
+
+    @Benchmark
+    public boolean mContainsAll() {
+        return setA.containsAll(data.setA);
+    }
+
+    @Benchmark
+    public boolean mContainsAllSameType() {
+        return setA.containsAll(setAA);
+    }
+
+    @Benchmark
+    public PersistentSet<Key> mCopyOf() {
+        PersistentSet<Key> set = PersistentLinkedHashSet.copyOf(data.listA);
+        assert set.size() == data.listA.size();
         return set;
     }
 
     @Benchmark
-    public PersistentLinkedHashSet<Key> mRemoveAll() {
-        PersistentLinkedHashSet<Key> set = setA;
-        PersistentLinkedHashSet<Key> updated = set.removingAll(data.setA);
-        assert updated.isEmpty();
-        return updated;
+    public Key mGetFirst() {
+        return setA.iterator().next();
     }
-
-    @Benchmark
-    public PersistentLinkedHashSet<Key> mRemoveAllSameType() {
-        PersistentLinkedHashSet<Key> set = setA;
-        PersistentLinkedHashSet<Key> updated = set.removingAll(setAA);
-        assert updated.isEmpty();
-        return updated;
-    }
-
-
-    @Benchmark
-    public PersistentLinkedHashSet<Key> mRetainAllAllRetained() {
-        PersistentLinkedHashSet<Key> set = setA;
-        PersistentLinkedHashSet<Key> updated = set.retainingAll(data.setA);
-        assert updated == setA;
-        return updated;
-    }
-
-    @Benchmark
-    public PersistentLinkedHashSet<Key> mRetainAllNoneRetained() {
-        PersistentLinkedHashSet<Key> set = setA;
-        PersistentLinkedHashSet<Key> updated = set.retainingAll(data.setB);
-        assert updated.isEmpty();
-        return updated;
-    }
-
 
     @Benchmark
     public int mIterate() {
@@ -169,35 +175,54 @@ public class PersistentLinkedHashSetJmh {
     }
 
     @Benchmark
-    public Key mGetFirst() {
-        return setA.getFirst();
+    public PersistentSet<Key> mRemove() {
+        PersistentSet<Key> set = setA;
+        for (Key key : data.listA) {
+            set = set.removing(key);
+        }
+        assert set.isEmpty();
+        return set;
     }
 
     @Benchmark
-    public PersistentLinkedHashSet<Key> mRemoveFirst() {
-        var s = setA;
-        for (int i = 0, n = setA.size(); i < n; i++) {
-            s = s.removingFirst();
-        }
-        return s;
+    public PersistentLinkedHashSet<Key> mRemoveAll() {
+        PersistentLinkedHashSet<Key> set = setA;
+        PersistentLinkedHashSet<Key> updated = set.removingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
     }
 
     @Benchmark
-    public boolean mContainsFound() {
-        boolean found = true;
-        for (Key k : data.listA) {
-            found = setA.contains(k) & found;//must be long-circuit and operator
-        }
-        return found;
+    public PersistentLinkedHashSet<Key> mRemoveAllSameType() {
+        PersistentLinkedHashSet<Key> set = setA;
+        PersistentLinkedHashSet<Key> updated = set.removingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
     }
 
     @Benchmark
-    public boolean mContainsNotFound() {
-        boolean found = true;
-        for (Key k : data.listB) {
-            found = setA.contains(k) & found;//must be long-circuit and operator
+    public PersistentSet<Key> mRemoveFirst() {
+        PersistentSet<Key> set = setA;
+        while (!set.isEmpty()) {
+            set = set.removing(set.iterator().next());
         }
-        return found;
+        return set;
+    }
+
+    @Benchmark
+    public PersistentLinkedHashSet<Key> mRetainAll() {
+        PersistentLinkedHashSet<Key> set = setA;
+        PersistentLinkedHashSet<Key> updated = set.retainingAll(data.setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
+    }
+
+    @Benchmark
+    public PersistentLinkedHashSet<Key> mRetainAllSameType() {
+        PersistentLinkedHashSet<Key> set = setA;
+        PersistentLinkedHashSet<Key> updated = set.retainingAll(setC);
+        assert updated.size() == data.listC.size() / 2;
+        return updated;
     }
 
 }
