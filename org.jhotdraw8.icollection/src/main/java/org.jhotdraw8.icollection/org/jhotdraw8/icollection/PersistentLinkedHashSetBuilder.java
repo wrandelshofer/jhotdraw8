@@ -92,7 +92,7 @@ public class PersistentLinkedHashSetBuilder<E> implements SetBuilder<E, Persiste
         }
         BiFunction<Object[], Object[], Object[]> updateFunction = PersistentLinkedHashSet::updReplaceWithNewEntry;
         var newNode = node.mutablePut(Objects.hashCode(delayed[KEY_INDEX]), (E) delayed[KEY_INDEX], delayed,
-                0, new TrieBuilder<E, Object>(), updateFunction, ENTRY_SIZE);
+                0, new TrieBuilder<E, Object>(builder.ownership), updateFunction, ENTRY_SIZE);
         builder.ownership = new MutabilityOwnership();
         return new PersistentLinkedHashSet<>(newNode, size, first, delayed);
     }

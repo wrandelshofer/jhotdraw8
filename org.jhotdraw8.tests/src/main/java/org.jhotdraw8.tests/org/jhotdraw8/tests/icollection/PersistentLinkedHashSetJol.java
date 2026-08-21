@@ -14,21 +14,21 @@ public class PersistentLinkedHashSetJol extends AbstractJol {
 
     /// <pre>
     /// class org.jhotdraw8.icollection.PersistentLinkedHashSet with 1000 elements.
-    /// total size              : 52232
+    /// total size              : 52216
     /// element size            : 24
     /// data size               : 24000 45%
-    /// data structure size     : 28232 54%
-    /// overhead per element    : 28.232 bytes
+    /// data structure size     : 28216 54%
+    /// overhead per element    : 28.216 bytes
     /// ----footprint---
-    /// org.jhotdraw8.icollection.PersistentLinkedHashSet@58c1670bd footprint:
+    /// org.jhotdraw8.icollection.PersistentLinkedHashSet@7113b13fd footprint:
     ///      COUNT       AVG       SUM   DESCRIPTION
     ///        306        60     18424   [Ljava.lang.Object;
     ///          1        16        16   java.lang.Object
     ///          1        32        32   org.jhotdraw8.icollection.PersistentLinkedHashSet
-    ///          2        16        32   org.jhotdraw8.icollection.impl.MutabilityOwnership
+    ///          1        16        16   org.jhotdraw8.icollection.impl.MutabilityOwnership
     ///        304        32      9728   org.jhotdraw8.icollection.impl.champlinked.TrieNode
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
-    ///       1614               52232   (total)
+    ///       1613               52216   (total)
     /// </pre>
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
