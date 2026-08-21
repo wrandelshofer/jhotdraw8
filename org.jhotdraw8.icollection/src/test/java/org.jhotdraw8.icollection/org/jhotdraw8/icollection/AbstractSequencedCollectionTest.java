@@ -10,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.SequencedCollection;
@@ -17,6 +18,7 @@ import java.util.Spliterator;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /// Tests classes that implement the interface [SequencedCollection<Key>].
@@ -116,6 +118,40 @@ public abstract class AbstractSequencedCollectionTest {
             expected.removeLast();
             assertEquals(expected, instance);
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldIterateOverElementsInSequence(SetData data) {
+        var instance = newInstance();
+        instance.addAll(data.a().asSet());
+        Iterator<Key> actual = instance.iterator();
+        Iterator<Key> expected = data.a().iterator();
+        assertEquals(actual.hasNext(), expected.hasNext());
+        while (expected.hasNext()) {
+            assertTrue(actual.hasNext());
+            Key actualKey = actual.next();
+            Key expectedKey = expected.next();
+            assertEquals(expectedKey, actualKey);
+        }
+        assertFalse(actual.hasNext());
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldReverseIterateOverElementsInSequence(SetData data) {
+        var instance = newInstance();
+        instance.addAll(data.a().asSet());
+        Iterator<Key> actual = instance.reversed().iterator();
+        Iterator<Key> expected = new ArrayList<>(data.a().asSet()).reversed().iterator();
+        assertEquals(actual.hasNext(), expected.hasNext());
+        while (expected.hasNext()) {
+            assertTrue(actual.hasNext());
+            Key actualKey = actual.next();
+            Key expectedKey = expected.next();
+            assertEquals(expectedKey, actualKey);
+        }
+        assertFalse(actual.hasNext());
     }
 
     @ParameterizedTest

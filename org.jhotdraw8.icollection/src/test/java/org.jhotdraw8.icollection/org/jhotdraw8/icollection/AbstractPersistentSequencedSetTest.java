@@ -141,6 +141,22 @@ public abstract class AbstractPersistentSequencedSetTest extends AbstractPersist
 
     @ParameterizedTest
     @MethodSource("dataProvider")
+    public void shouldReverseIterateOverElementsInSequence(SetData data) {
+        PersistentSequencedSet<Key> instance = newInstance(data.a());
+        Iterator<Key> actual = instance.readableReversed().iterator();
+        Iterator<Key> expected = new ArrayList<>(data.a().asSet()).reversed().iterator();
+        assertEquals(actual.hasNext(), expected.hasNext());
+        while (expected.hasNext()) {
+            assertTrue(actual.hasNext());
+            Key actualKey = actual.next();
+            Key expectedKey = expected.next();
+            assertEquals(expectedKey, actualKey);
+        }
+        assertFalse(actual.hasNext());
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
     public void removeLastStartingWithEmptySetShouldNotChangeSequence(SetData data) throws Exception {
         PersistentSequencedSet<Key> instance = newInstance();
         instance = instance.addingAll(data.a.asSet());

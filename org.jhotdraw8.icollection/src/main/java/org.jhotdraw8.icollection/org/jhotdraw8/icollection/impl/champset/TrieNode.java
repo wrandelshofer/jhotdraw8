@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 
 
 /// This code has been derived from
-/// [kotlix.collections.immutable, TrieNode.kt](https://github.com/Kotlin/kotlinx.collections.immutable/blob/578f6ed44cbafdb16bef330d1ec4a6b753201516/core/commonMain/src/implementations/immutableSet/TrieNode.kt),
+/// [kotlix.collections.immutable, TrieNode.kt](https://github.com/Kotlin/kotlinx.collections.immutable/blob/1d00eeaf6f4559a7953332cb6171c04b886d9a17/core/commonMain/src/implementations/immutableSet/TrieNode.kt)
 /// JetBrains s.r.o.
 /// [Apache License 2.0](https://github.com/Kotlin/kotlinx.collections.immutable/blob/578f6ed44cbafdb16bef330d1ec4a6b753201516/LICENSE.txt)
 public sealed class TrieNode<E> permits MutableTrieNode {
@@ -360,34 +360,38 @@ public sealed class TrieNode<E> permits MutableTrieNode {
                 } else if (thisIsNode) {
                     // one of them is a node -> add the other one to it
                     var oldSize = mutator.size;
-                    mutableNode.buffer[newNodeIndex] = ((TrieNode<E>) thisCell).mutableAdd(
-                            Objects.hashCode((E) otherNodeCell), (E) otherNodeCell,
-                            shift + LOG_MAX_BRANCHING_FACTOR, mutator);
+                    if (shift == MAX_SHIFT) {
+                        mutableNode.buffer[newNodeIndex] = ((TrieNode<E>) thisCell).mutableCollisionAdd((E) otherNodeCell, mutator);
+                    } else {
+                        mutableNode.buffer[newNodeIndex] = ((TrieNode<E>) thisCell).mutableAdd(
+                                Objects.hashCode((E) otherNodeCell), (E) otherNodeCell,
+                                shift + LOG_MAX_BRANCHING_FACTOR, mutator);
+                    }
 
                     if (mutator.size == oldSize) intersectionSizeRef.count++;
                 } else if (otherIsNode) {
                     // same as last case, but reversed
                     var oldSize = mutator.size;
-                    mutableNode.buffer[newNodeIndex] = ((TrieNode<E>) otherNodeCell).mutableAdd(
-                            Objects.hashCode(thisCell), (E) thisCell,
-                            shift + LOG_MAX_BRANCHING_FACTOR, mutator);
-
+                    if (shift == MAX_SHIFT) {
+                        ((TrieNode<E>) otherNodeCell).mutableCollisionAdd((E) thisCell, mutator);
+                    } else {
+                        mutableNode.buffer[newNodeIndex] = ((TrieNode<E>) otherNodeCell).mutableAdd(
+                                Objects.hashCode(thisCell), (E) thisCell,
+                                shift + LOG_MAX_BRANCHING_FACTOR, mutator);
+                    }
                     if (mutator.size == oldSize) intersectionSizeRef.count++;
                 } else if (thisCell == otherNodeCell) {
                     // both are just E => compare them
                     intersectionSizeRef.count++;
                     mutableNode.buffer[newNodeIndex] = thisCell;
                 } else {
-
                     // both are just E, but different => make a collision-ish node
-
                     mutableNode.buffer[newNodeIndex] = makeNode(
                             thisCell.hashCode(), (E) thisCell,
                             otherNodeCell.hashCode(), (E) otherNodeCell,
                             shift + LOG_MAX_BRANCHING_FACTOR, mutator.ownership);
                 }
             }
-
         }
         return (this.elementsIdentityEquals(mutableNode))
                 ? this
@@ -406,7 +410,6 @@ public sealed class TrieNode<E> permits MutableTrieNode {
         }
         return result;
     }
-
 
     private boolean elementsIdentityEquals(TrieNode<?> otherNode) {
         if (this == otherNode) return true;
@@ -537,20 +540,36 @@ public sealed class TrieNode<E> permits MutableTrieNode {
                     );
                 } else if (thisIsNode) {
                     // one of them is a node -> check containment
-                    if (((TrieNode<E>) thisCell).contains(
-                            Objects.hashCode(otherNodeCell), (E) otherNodeCell,
-                            shift + LOG_MAX_BRANCHING_FACTOR
-                    )) {
+                    boolean hasElement;
+                    if (shift == MAX_SHIFT) {
+                        hasElement = ((TrieNode<E>) thisCell).collisionContainsElement((E) otherNodeCell);
+                    } else {
+                        hasElement = ((TrieNode<E>) thisCell).contains(
+                                Objects.hashCode(otherNodeCell), (E) otherNodeCell,
+                                shift + LOG_MAX_BRANCHING_FACTOR);
+                    }
+                    if (hasElement) {
                         intersectionSizeRef.count += 1;
                         newValue = otherNodeCell;
-                    } else newValue = EMPTY;
+                    } else {
+                        newValue = EMPTY;
+                    }
                 } else if (otherIsNode) {
                     // same as last case, but reversed
-                    if (((TrieNode<E>) otherNodeCell).contains(
-                            Objects.hashCode(thisCell), (E) thisCell, shift + LOG_MAX_BRANCHING_FACTOR)) {
+                    boolean hasElement;
+                    if (shift == MAX_SHIFT) {
+                        hasElement = ((TrieNode<E>) otherNodeCell).collisionContainsElement((E) thisCell);
+                    } else {
+                        hasElement = ((TrieNode<E>) otherNodeCell).contains(
+                                Objects.hashCode(thisCell), (E) thisCell,
+                                shift + LOG_MAX_BRANCHING_FACTOR);
+                    }
+                    if (hasElement) {
                         intersectionSizeRef.count += 1;
                         newValue = thisCell;
-                    } else newValue = EMPTY;
+                    } else {
+                        newValue = EMPTY;
+                    }
                 } else if (Objects.equals(thisCell, otherNodeCell)) {
                     // both are just E => compare them
                     newValue = thisCell;
@@ -658,10 +677,15 @@ public sealed class TrieNode<E> permits MutableTrieNode {
                 } else if (thisIsNode) {
                     // one of them is a node -> remove single element
                     var oldSize = mutator.size;
-                    var removed = ((TrieNode<E>) thisCell).mutableRemove(
-                            Objects.hashCode(otherNodeCell), (E) otherNodeCell,
-                            shift + LOG_MAX_BRANCHING_FACTOR, mutator
-                    );
+                    TrieNode<E> removed;
+                    if (shift == MAX_SHIFT) {
+                        removed = ((TrieNode<E>) thisCell).mutableCollisionRemove((E) otherNodeCell, mutator);
+                    } else {
+                        removed = ((TrieNode<E>) thisCell).mutableRemove(
+                                Objects.hashCode(otherNodeCell), (E) otherNodeCell,
+                                shift + LOG_MAX_BRANCHING_FACTOR, mutator
+                        );
+                    }
                     // additional check needed for removal
                     if (oldSize != mutator.size) {
                         intersectionSizeRef.count += 1;
@@ -672,7 +696,13 @@ public sealed class TrieNode<E> permits MutableTrieNode {
                 } else if (otherIsNode) {
                     // same as last case, but reversed
                     // "removing" a node from a value is basically checking if the value is contained in the node
-                    if (((TrieNode<E>) otherNodeCell).contains(Objects.hashCode(thisCell), (E) thisCell, shift + LOG_MAX_BRANCHING_FACTOR)) {
+                    boolean hasElement;
+                    if (shift == MAX_SHIFT) {
+                        hasElement = ((TrieNode<E>) otherNodeCell).collisionContainsElement((E) thisCell);
+                    } else {
+                        hasElement = ((TrieNode<E>) otherNodeCell).contains(Objects.hashCode(thisCell), (E) thisCell, shift + LOG_MAX_BRANCHING_FACTOR);
+                    }
+                    if (hasElement) {
                         intersectionSizeRef.count += 1;
                         newValue = EMPTY;
                     } else newValue = thisCell;
@@ -770,10 +800,12 @@ public sealed class TrieNode<E> permits MutableTrieNode {
                     return false;
             } else if (thisIsNode) {
                 // left is node, right is just E => check containment
-                if (!((TrieNode<E>) thisCell).contains(
+                var hasElement = (shift == MAX_SHIFT)
+                        ? ((TrieNode<E>) thisCell).collisionContainsElement((E) otherNodeCell)
+                        : ((TrieNode<E>) thisCell).contains(
                         Objects.hashCode(otherNodeCell), (E) otherNodeCell,
-                        shift + LOG_MAX_BRANCHING_FACTOR
-                )) return false;
+                        shift + LOG_MAX_BRANCHING_FACTOR);
+                if (!hasElement) return false;
             } else if (otherIsNode) {
                 // left is just E, right is node => not possible
                 return false;

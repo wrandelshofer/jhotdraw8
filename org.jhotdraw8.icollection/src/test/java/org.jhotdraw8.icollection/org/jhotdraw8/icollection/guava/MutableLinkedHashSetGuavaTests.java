@@ -46,7 +46,7 @@ public class MutableLinkedHashSetGuavaTests {
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         CollectionFeature.KNOWN_ORDER,
-                        //CollectionFeature.ALLOWS_NULL_VALUES,
+                        CollectionFeature.ALLOWS_NULL_VALUES,
                         CollectionFeature.ALLOWS_NULL_QUERIES,
                         CollectionFeature.SUPPORTS_ITERATOR_REMOVE,
                         CollectionFeature.SERIALIZABLE,
@@ -68,7 +68,7 @@ public class MutableLinkedHashSetGuavaTests {
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         //CollectionFeature.KNOWN_ORDER,
-                        //CollectionFeature.ALLOWS_NULL_VALUES,
+                        CollectionFeature.ALLOWS_NULL_VALUES,
                         CollectionFeature.ALLOWS_NULL_QUERIES,
                         //CollectionFeature.SERIALIZABLE,
                         CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,

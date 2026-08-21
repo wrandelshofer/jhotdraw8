@@ -66,7 +66,7 @@ public class PersistentLinkedHashSetBuilder<E> implements SetBuilder<E, Persiste
             return this;
         }
         int keyHash = Objects.hashCode(elem);
-        if (Objects.equals(delayed[KEY_INDEX], NO_DATA)
+        if (Objects.equals(delayed[KEY_INDEX], elem)
                 || node.containsKey(keyHash, elem, 0, ENTRY_SIZE)) {
             // elem is already in set
             return this;

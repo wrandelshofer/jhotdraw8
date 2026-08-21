@@ -10,7 +10,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
 /// This code has been derived from
-/// [kotlix.collections.immutable, TrieNode.kt](https://github.com/Kotlin/kotlinx.collections.immutable/blob/578f6ed44cbafdb16bef330d1ec4a6b753201516/core/commonMain/src/implementations/immutableMap/TrieNode.kt),
+/// [kotlix.collections.immutable, TrieNode.kt](https://github.com/Kotlin/kotlinx.collections.immutable/blob/1d00eeaf6f4559a7953332cb6171c04b886d9a17/core/commonMain/src/implementations/immutableMap/TrieNode.kt),
 /// JetBrains s.r.o.
 /// [Apache License 2.0](https://github.com/Kotlin/kotlinx.collections.immutable/blob/578f6ed44cbafdb16bef330d1ec4a6b753201516/LICENSE.txt)
 
@@ -549,26 +549,37 @@ public final class TrieNode<K> {
             TrieNode<K> otherNode,
             DeltaCounter intersectionCounter,
             MutabilityOwnership owner,
-            int ENTRY_SIZE) {
+            int ENTRY_SIZE, TrieBuilder<K, Object> mutator) {
         assert nodeMap == 0;
         assert dataMap == 0;
         assert otherNode.nodeMap == 0;
         assert otherNode.dataMap == 0;
         var tempBuffer = Arrays.copyOf(this.buffer, this.buffer.length + otherNode.buffer.length);
         var i = this.buffer.length;
+        var replaced = false;
+        var sharedKeys = true;
         for (int j = 0; j < otherNode.buffer.length; j += ENTRY_SIZE) {
-
-            if (!this.collisionContainsKey((K) otherNode.buffer[j], ENTRY_SIZE)) {
+            var keyIndex = this.collisionKeyIndex(otherNode.buffer[j], ENTRY_SIZE);
+            if (keyIndex == -1) {
                 tempBuffer[i] = otherNode.buffer[j];
                 tempBuffer[i + 1] = otherNode.buffer[j + 1];
                 i += ENTRY_SIZE;
-            } else intersectionCounter.count++;
+            } else {
+                intersectionCounter.count++;
+                if (!Objects.equals(tempBuffer[keyIndex], otherNode.buffer[j])) sharedKeys = false;
+                if (!Arrays.equals(tempBuffer, keyIndex + 1, keyIndex - 1 + ENTRY_SIZE,
+                        otherNode.buffer, j + 1, j - 1 + ENTRY_SIZE)) {
+                    System.arraycopy(otherNode.buffer, j + 1, tempBuffer, keyIndex + 1, ENTRY_SIZE - 1);
+                    replaced = true;
+                }
+            }
         }
+        if (replaced) mutator.modCount++;
         int newSize = i;
-        if (newSize == this.buffer.length) return this;
-        if (newSize == otherNode.buffer.length) return otherNode;
-        if (newSize == tempBuffer.length) return newTrieNode(0, 0, tempBuffer, owner);
-        return newTrieNode(0, 0, Arrays.copyOf(tempBuffer, newSize), owner);
+        if (newSize == this.buffer.length && !replaced) return this;
+        if (newSize == otherNode.buffer.length && sharedKeys) return otherNode;
+        if (newSize == tempBuffer.length) return newTrieNode(0, 0, tempBuffer, mutator.ownership);
+        return newTrieNode(0, 0, Arrays.copyOf(tempBuffer, newSize), mutator.ownership);
     }
 
     private TrieNode<K> mutableCollisionRemove(K key, TrieBuilder<K, Object> mutator, int ENTRY_SIZE) {
@@ -698,7 +709,7 @@ public final class TrieNode<K> {
         }
         // the collision case
         if (shift > MAX_SHIFT) {
-            return mutableCollisionPutAll(otherNode, intersectionCounter, mutator.ownership, ENTRY_SIZE);
+            return mutableCollisionPutAll(otherNode, intersectionCounter, mutator.ownership, ENTRY_SIZE, mutator);
         }
 
         // new nodes are where either of the old ones were
@@ -706,7 +717,7 @@ public final class TrieNode<K> {
         // entries stay being entries only if one bits were in exactly one of input nodes
         // but not in the new data nodes
         var newDataMap = dataMap ^ otherNode.dataMap & ~newNodeMap;
-        // (**) now, this is tricky: we have a number of entry-entry pairs and we don't know yet whether
+        // (**) now, this is tricky: we have a number of entry-entry pairs, and we don't know yet whether
         // they result in an entry (if keys are equal) or a new node (if they are not)
         // but we want to keep it to single allocation, so we check and mark equal ones here
         for (ForEachOneBit iter = new ForEachOneBit(dataMap & otherNode.dataMap); iter.moveNext(); ) {
@@ -746,12 +757,22 @@ public final class TrieNode<K> {
             }
             // there is either only one entry in otherNode, or
             // both entries are here => they are equal, see ** above
-            // so just overwrite that
+            // so keep this node's key if both are here, and take the argument's value
             else {
-                var oldKeyIndex = otherNode.entryKeyIndex(positionMask, ENTRY_SIZE);
-                mutableNode.buffer[newKeyIndex] = otherNode.keyAtIndex(oldKeyIndex);
-                mutableNode.buffer[newKeyIndex + 1] = otherNode.valueAtKeyIndex(oldKeyIndex);
-                if (this.hasEntryAt(positionMask)) intersectionCounter.count++;
+                var otherKeyIndex = otherNode.entryKeyIndex(positionMask, ENTRY_SIZE);
+                var otherValue = otherNode.valueAtKeyIndex(otherKeyIndex);
+                if (this.hasEntryAt(positionMask)) {
+                    var thisKeyIndex = this.entryKeyIndex(positionMask, ENTRY_SIZE);
+                    intersectionCounter.count++;
+                    if (mutableNode != this) {
+                        var thisValue = this.valueAtKeyIndex(thisKeyIndex);
+                        if (thisValue != otherValue) mutator.modCount++;
+                    }
+                    mutableNode.buffer[newKeyIndex] = this.keyAtIndex(thisKeyIndex);
+                } else {
+                    mutableNode.buffer[newKeyIndex] = otherNode.keyAtIndex(otherKeyIndex);
+                }
+                mutableNode.buffer[newKeyIndex + 1] = otherValue;
             }
         }
 
@@ -785,7 +806,12 @@ public final class TrieNode<K> {
                 var key = otherNode.keyAtIndex(keyIndex);
                 var value = otherNode.entryAtKeyIndex(keyIndex, ENTRY_SIZE);
                 var oldSize = mutator.size;
-                var result = targetNode.mutablePut(key.hashCode(), key, value, shift + LOG_MAX_BRANCHING_FACTOR, mutator, updateFunction, ENTRY_SIZE);
+                TrieNode<K> result;
+                if (shift == MAX_SHIFT) {
+                    result = targetNode.mutableCollisionPut(key, value, mutator, updateFunction, ENTRY_SIZE);
+                } else {
+                    result = targetNode.mutablePut(key.hashCode(), key, value, shift + LOG_MAX_BRANCHING_FACTOR, mutator, updateFunction, ENTRY_SIZE);
+                }
                 if (mutator.size == oldSize) intersectionCounter.count++;
                 return result;
             } else {
@@ -798,12 +824,17 @@ public final class TrieNode<K> {
                 // if otherTargetNode already has a value associated with the key, do not put this entry
                 var keyIndex = this.entryKeyIndex(positionMask, ENTRY_SIZE);
                 var key = this.keyAtIndex(keyIndex);
-                if (otherTargetNode.containsKey(key.hashCode(), key, shift + LOG_MAX_BRANCHING_FACTOR, ENTRY_SIZE)) {
+                boolean hasKey = (shift == MAX_SHIFT)
+                        ? otherTargetNode.collisionContainsKey(key, ENTRY_SIZE)
+                        : otherTargetNode.containsKey(key.hashCode(), key, shift + LOG_MAX_BRANCHING_FACTOR, ENTRY_SIZE);
+                if (hasKey) {
                     intersectionCounter.count++;
                     return otherTargetNode;
                 } else {
                     Object[] value = this.entryAtKeyIndex(keyIndex, ENTRY_SIZE);
-                    return otherTargetNode.mutablePut(
+                    return (shift == MAX_SHIFT)
+                            ? otherTargetNode.mutableCollisionPut(key, value, mutator, updateFunction, ENTRY_SIZE)
+                            : otherTargetNode.mutablePut(
                             key.hashCode(), key, value,
                             shift + LOG_MAX_BRANCHING_FACTOR, mutator,
                             updateFunction, ENTRY_SIZE);

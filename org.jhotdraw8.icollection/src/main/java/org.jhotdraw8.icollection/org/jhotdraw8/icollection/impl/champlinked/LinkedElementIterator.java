@@ -15,8 +15,9 @@ public class LinkedElementIterator<E> implements Iterator<E> {
     private int ENTRY_SIZE;
     private int NEXT_DATA_INDEX;
 
+    private int size;
 
-    public LinkedElementIterator(TrieNode<E> root, Object @Nullable [] first, Function<Object[], E> mapper, int ENTRY_SIZE, int nextDataIndex) {
+    public LinkedElementIterator(TrieNode<E> root, Object @Nullable [] first, Function<Object[], E> mapper, int ENTRY_SIZE, int nextDataIndex, int size) {
         this.root = root;
         this.mapper = mapper;
         this.NEXT_DATA_INDEX = nextDataIndex;
@@ -24,6 +25,7 @@ public class LinkedElementIterator<E> implements Iterator<E> {
         if (first != null) {
             this.current = first.clone();
         }
+        this.size = size;
     }
 
     @Override
@@ -37,6 +39,7 @@ public class LinkedElementIterator<E> implements Iterator<E> {
         if (current == null) {
             throw new NoSuchElementException();
         }
+        if (--size < 0) throw new IllegalStateException("there is a loop in the links");
         E value = mapper.apply(current);
         if (current[NEXT_DATA_INDEX] == TrieNode.NO_DATA) {
             current = null;

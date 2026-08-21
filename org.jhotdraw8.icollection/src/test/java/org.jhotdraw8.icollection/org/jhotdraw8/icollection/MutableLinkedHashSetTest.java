@@ -74,7 +74,7 @@ public class MutableLinkedHashSetTest extends AbstractSequencedSetTest {
 
     @Override
     protected boolean supportsNullKeys() {
-        return false;
+        return true;
     }
 
 }

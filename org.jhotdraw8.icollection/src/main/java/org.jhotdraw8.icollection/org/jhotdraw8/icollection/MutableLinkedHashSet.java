@@ -85,6 +85,7 @@ public class MutableLinkedHashSet<E> extends AbstractSet<E> implements Sequenced
         if (c instanceof PersistentLinkedHashSet) {
             set = (PersistentLinkedHashSet<E>) c;
         } else {
+            set = PersistentLinkedHashSet.of();
             addAll(c);
         }
     }
@@ -96,6 +97,32 @@ public class MutableLinkedHashSet<E> extends AbstractSet<E> implements Sequenced
         this.set = newSet;
         modCount++;
         return true;
+    }
+
+    @Override
+    public E getFirst() {
+        return set.getFirst();
+    }
+
+    @Override
+    public E getLast() {
+        return set.getLast();
+    }
+
+    @Override
+    public void addFirst(@Nullable E e) {
+        var newSet = set.addingFirst(e, builder);
+        if (newSet == set) return;
+        this.set = newSet;
+        modCount++;
+    }
+
+    @Override
+    public void addLast(@Nullable E e) {
+        var newSet = set.addingLast(e, builder);
+        if (newSet == set) return;
+        this.set = newSet;
+        modCount++;
     }
 
 
@@ -188,7 +215,7 @@ public class MutableLinkedHashSet<E> extends AbstractSet<E> implements Sequenced
         return new FailFastSpliterator<E>(
                 Spliterators.<E>spliterator(
                         set.iterator(),
-                        set.size(), Spliterator.DISTINCT | Spliterator.SIZED),
+                        set.size(), Spliterator.DISTINCT | Spliterator.SIZED | Spliterator.ORDERED),
                 () -> this.modCount, null);
     }
 
@@ -196,7 +223,7 @@ public class MutableLinkedHashSet<E> extends AbstractSet<E> implements Sequenced
         return new FailFastSpliterator<E>(
                 Spliterators.<E>spliterator(
                         set.reverseIterator(),
-                        set.size(), Spliterator.DISTINCT | Spliterator.SIZED),
+                        set.size(), Spliterator.DISTINCT | Spliterator.SIZED | Spliterator.ORDERED),
                 () -> this.modCount, null);
     }
 

@@ -175,7 +175,7 @@ public class PersistentLinkedHashSet<E> implements PersistentSequencedSet<E>, Se
         updatedLast[NEXT_INDEX] = e;
         newNode = newNode.mutablePut(updatedLast, builder, PersistentLinkedHashSet::updReplaceWithNewEntry, ENTRY_SIZE);
         if (newSize == 2) {
-            return new PersistentLinkedHashSet<>(newNode, 1, updatedLast, newEntry);
+            return new PersistentLinkedHashSet<>(newNode, 2, updatedLast, newEntry);
         }
         return new PersistentLinkedHashSet<>(newNode, newSize, first, newEntry);
     }
@@ -191,11 +191,11 @@ public class PersistentLinkedHashSet<E> implements PersistentSequencedSet<E>, Se
     }
 
     @Override
-    public PersistentSequencedSet<E> addingFirst(@Nullable E e) {
+    public PersistentLinkedHashSet<E> addingFirst(@Nullable E e) {
         return addingFirst(e, new TrieBuilder<>());
     }
 
-    PersistentSequencedSet<E> addingFirst(@Nullable E e, TrieBuilder<E, Object> builder) {
+    PersistentLinkedHashSet<E> addingFirst(@Nullable E e, TrieBuilder<E, Object> builder) {
         if (isEmpty()) {
             return adding(e, builder);
         }
@@ -256,11 +256,11 @@ public class PersistentLinkedHashSet<E> implements PersistentSequencedSet<E>, Se
     }
 
     @Override
-    public PersistentSequencedSet<E> addingLast(@Nullable E e) {
+    public PersistentLinkedHashSet<E> addingLast(@Nullable E e) {
         return addingLast(e, new TrieBuilder<>());
     }
 
-    PersistentSequencedSet<E> addingLast(@Nullable E e, TrieBuilder<E, Object> builder) {
+    PersistentLinkedHashSet<E> addingLast(@Nullable E e, TrieBuilder<E, Object> builder) {
         if (isEmpty()) {
             return adding(e, builder);
         }
@@ -324,6 +324,16 @@ public class PersistentLinkedHashSet<E> implements PersistentSequencedSet<E>, Se
     @Override
     public PersistentLinkedHashSet<E> removingAll(Iterable<?> c) {
         return removingAll(c, new TrieBuilder<>());
+    }
+
+    @Override
+    public PersistentLinkedHashSet<E> removingFirst() {
+        return (PersistentLinkedHashSet<E>) PersistentSequencedSet.super.removingFirst();
+    }
+
+    @Override
+    public PersistentLinkedHashSet<E> removingLast() {
+        return (PersistentLinkedHashSet<E>) PersistentSequencedSet.super.removingLast();
     }
 
     PersistentLinkedHashSet<E> removingAll(Iterable<?> c, TrieBuilder<E, Object> builder) {
@@ -427,7 +437,7 @@ public class PersistentLinkedHashSet<E> implements PersistentSequencedSet<E>, Se
 
     @Override
     public Iterator<E> iterator() {
-        return new LinkedElementIterator<>(node, first, o -> (E) o[0], ENTRY_SIZE, NEXT_INDEX);
+        return new LinkedElementIterator<>(node, first, o -> (E) o[0], ENTRY_SIZE, NEXT_INDEX, size);
     }
 
     @Override
@@ -437,7 +447,7 @@ public class PersistentLinkedHashSet<E> implements PersistentSequencedSet<E>, Se
 
 
     Iterator<E> reverseIterator() {
-        return new LinkedElementIterator<>(node, last, o -> (E) o[0], ENTRY_SIZE, PREV_INDEX);
+        return new LinkedElementIterator<>(node, last, o -> (E) o[0], ENTRY_SIZE, PREV_INDEX, size);
     }
 
     @SuppressWarnings({"unchecked", "DataFlowIssue"})
