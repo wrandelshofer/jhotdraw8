@@ -39,7 +39,7 @@ public class MutableHashMapGuavaTests {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
                                 MutableHashMap<String, String> map = new MutableHashMap<>();
-                                map.putEntries(Arrays.asList(entries));
+                                map.putAllEntries(Arrays.asList(entries));
                                 return map;
                             }
                         })

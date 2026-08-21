@@ -46,7 +46,7 @@ public class MutableHashMapTest extends AbstractMapTest {
     @MethodSource("dataProvider")
     public void testNewInstanceReadOnlyArgOfDifferentTypeShouldBeEqualToArg(MapData data) {
         MutableHashMap<Key, Value> actual = new MutableHashMap<>();
-        actual.putEntries(data.a());
+        actual.putAllEntries(data.a());
         assertEqualMap(data.a(), actual);
     }
 

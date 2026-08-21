@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 /// [kotlix.collections.immutable, TrieNode.kt](https://github.com/Kotlin/kotlinx.collections.immutable/blob/578f6ed44cbafdb16bef330d1ec4a6b753201516/core/commonMain/src/implementations/immutableSet/TrieNode.kt),
 /// JetBrains s.r.o.
 /// [Apache License 2.0](https://github.com/Kotlin/kotlinx.collections.immutable/blob/578f6ed44cbafdb16bef330d1ec4a6b753201516/LICENSE.txt)
-public class TrieNode<E> {
+public sealed class TrieNode<E> permits MutableTrieNode {
     int bitmap;
     public Object[] buffer;
 
@@ -251,6 +251,7 @@ public class TrieNode<E> {
         return setProperties(newBitmap, newBuffer, owner);
     }
 
+    /// int newSize = size + mutator.size
     public TrieNode<E> mutableRemove(int elementHash, E element, int shift, TrieBuilder<?> mutator) {
         var cellPositionMask = 1 << indexSegment(elementHash, shift);
 
@@ -690,10 +691,10 @@ public class TrieNode<E> {
             }
             mutableNode.buffer[thisIndex] = newValue;
         }
-        // resulting size is popcount of the resulting mask
-        var realSize = Integer.bitCount(realBitMap);
 
         if (realBitMap == 0) return empty();
+        // resulting size is popcount of the resulting mask
+        var realSize = Integer.bitCount(realBitMap);
         if (realSize == 1 && shift != 0) {
             // single values are kept only on root level
             var single = mutableNode.buffer[mutableNode.indexOfCellAt(realBitMap)];

@@ -58,14 +58,16 @@ public abstract class AbstractPersistentSetTest {
 
     public static Stream<SetData> dataProvider() {
         return Stream.of(
-                NO_COLLISION_NICE_KEYS, NO_COLLISION, ALL_COLLISION, SOME_COLLISION
+                NO_COLLISION_NICE_KEYS, NO_COLLISION,
+                ALL_COLLISION_NICE_KEYS,
+                SOME_COLLISION
         );
     }
 
     private static final int DATA_SIZE = 24;
     private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, DATA_SIZE, 100_000);
     private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, DATA_SIZE, 100_000);
-    private static final SetData ALL_COLLISION = SetData.newData("all collisions", 0, DATA_SIZE, 100_000);
+    private static final SetData ALL_COLLISION_NICE_KEYS = SetData.newNiceData("all collisions nice keys", 0, DATA_SIZE, 100_000);
     private static final SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, DATA_SIZE, 100_000);
 
     private static int createNewValue(Random rng, Set<Integer> usedValues, int bound) {
@@ -92,7 +94,7 @@ public abstract class AbstractPersistentSetTest {
         for (Iterator<Key> iterator = actual.iterator(); iterator.hasNext(); ) {
             var key = iterator.next();
             if (!distinct.add(key)) {
-                IO.println("duplicate key on iterator: " + key);
+                throw new AssertionError("duplicate key on iterator: " + key);
             }
         }
 
@@ -102,7 +104,7 @@ public abstract class AbstractPersistentSetTest {
         for (Spliterator<Key> iterator = actual.spliterator(); iterator.tryAdvance(o -> current[0] = o); ) {
             Key key = (Key) current[0];
             if (!distinct.add(key)) {
-                IO.println("duplicate key on spliterator: " + key);
+                throw new AssertionError("duplicate key on spliterator: " + key);
             }
         }
 
@@ -111,17 +113,16 @@ public abstract class AbstractPersistentSetTest {
         ArrayList<Key> actualValues = new ArrayList<>(actual.asSet());
         expectedValues.sort(Comparator.comparing(Key::getValue));
         actualValues.sort(Comparator.comparing(Key::getValue));
-        assertEquals(expectedValues, actualValues);
+        assertEquals(expectedValues, actualValues, "values mismatch");
 
         for (var e : expected) {
             assertTrue(actual.contains(e), "must contain " + e);
         }
 
-        assertEquals(expected.size(), actual.size());
-        assertEquals(expected.isEmpty(), actual.isEmpty());
-        assertEquals(expected.hashCode(), actual.hashCode());
-        assertEquals(expected, actual.asSet());
-        assertEquals(actual.asSet(), expected);
+        assertEquals(expected.size(), actual.size(), "size mismatch");
+        assertEquals(expected.isEmpty(), actual.isEmpty(), "emptyness mismatch");
+        assertEquals(expected.hashCode(), actual.hashCode(), "hashcode mismatch");
+        assertEquals(expected, actual.asSet(), "equals as set mismatch");
     }
 
     protected void assertNotEqualSet(Set<Key> expected, PersistentSet<Key> actual) {
@@ -336,10 +337,11 @@ public abstract class AbstractPersistentSetTest {
     public void addWithContainedElementShouldReturnSameInstance(SetData data) throws Exception {
         PersistentSet<Key> instance = newInstance(data.a);
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
+        assertEqualSet(expected, instance);
         for (Key e : data.a) {
             PersistentSet<Key> instance2 = instance.adding(e);
             assertSame(instance, instance2);
-            assertEqualSet(expected, instance);
+            assertEqualSet(expected, instance2);
         }
     }
 
@@ -745,7 +747,7 @@ public abstract class AbstractPersistentSetTest {
         assertEquals(actual.hasNext(), expected.hasNext());
         LinkedHashSet<Key> distinctVisited = new LinkedHashSet<>();
         while (expected.hasNext()) {
-            assertTrue(actual.hasNext());
+            assertTrue(actual.hasNext(), "iterator should have next");
             Key actualKey = actual.next();
             expected.next();
             assertTrue(distinctVisited.add(actualKey));

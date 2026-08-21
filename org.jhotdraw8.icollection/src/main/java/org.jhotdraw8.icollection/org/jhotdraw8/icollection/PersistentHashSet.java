@@ -4,9 +4,7 @@
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.impl.champset.DeltaCounter;
 import org.jhotdraw8.icollection.impl.champset.ElementIterator;
-import org.jhotdraw8.icollection.impl.champset.TrieBuilder;
 import org.jhotdraw8.icollection.impl.champset.TrieNode;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.icollection.readable.ReadableCollection;
@@ -128,49 +126,23 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public PersistentHashSet<E> addingAll(Iterable<? extends E> c) {
-        if (c instanceof MutableHashSet<? extends E> m) {
-            c = m.toPersistent();
-        }
-        if (c instanceof PersistentHashSet<? extends E> m) {
-            var deltaCounter = new DeltaCounter();
-            var builder = new TrieBuilder<>();
-            var newNode = node.mutableAddAll((TrieNode<E>) m.node, 0, deltaCounter, builder);
-            var newSize = size + m.size - deltaCounter.count;
-            return (size != newSize) ? new PersistentHashSet<>(newNode, newSize) : this;
-        }
-        return (PersistentHashSet<E>) PersistentSet.super.addingAll(c);
+        var m = toMutable();
+        return m.addAll(c) ? m.toPersistent() : this;
+
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public PersistentHashSet<E> removingAll(Iterable<?> c) {
-        if (c instanceof MutableHashSet<?> m) {
-            c = m.toPersistent();
-        }
-        if (c instanceof PersistentHashSet<?> m) {
-            var deltaCounter = new DeltaCounter();
-            var builder = new TrieBuilder<>();
-            TrieNode<E> newNode = (TrieNode<E>) node.mutableRemoveAll((TrieNode<E>) m.node, 0, deltaCounter, builder);
-            var newSize = size - deltaCounter.count;
-            return (newSize != size) ? newSize == 0 ? of() : new PersistentHashSet<>(newNode, newSize) : this;
-        }
-        return (PersistentHashSet<E>) PersistentSet.super.removingAll(c);
+        var m = toMutable();
+        return m.removeAll(c) ? m.toPersistent() : this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public PersistentHashSet<E> retainingAll(Iterable<?> c) {
-        if (c instanceof MutableHashSet<?> m) {
-            c = m.toPersistent();
-        }
-        if (c instanceof PersistentHashSet<?> m) {
-            var deltaCounter = new DeltaCounter();
-            var builder = new TrieBuilder<>();
-            TrieNode<E> newNode = (TrieNode<E>) node.mutableRetainAll((TrieNode<E>) m.node, 0, deltaCounter, builder);
-            var newSize = deltaCounter.count;
-            return (newSize != size) ? newSize == 0 ? of() : new PersistentHashSet<>(newNode, newSize) : this;
-        }
-        return (PersistentHashSet<E>) PersistentSet.super.retainingAll(c);
+        var m = toMutable();
+        return m.retainAll(c) ? m.toPersistent() : this;
     }
 
     @Override
@@ -222,6 +194,15 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
         }
     }
 
+
+    public MutableHashSet<E> toMutable() {
+        return new MutableHashSet<>(this.node, size);
+    }
+
+    public MutableHashSet<E> asSet() {
+        return new MutableHashSet<>(this.node, size);
+    }
+
     @Override
     public boolean equals(Object obj) {
         return ReadableSet.setEquals(this, obj);
@@ -230,14 +211,6 @@ public class PersistentHashSet<E> implements PersistentSet<E>, Serializable {
     @Override
     public int hashCode() {
         return ReadableSet.iteratorToHashCode(this.iterator());
-    }
-
-    public MutableHashSet<E> toMutable() {
-        return new MutableHashSet<>(this.node, size);
-    }
-
-    public MutableHashSet<E> asSet() {
-        return new MutableHashSet<>(this.node, size);
     }
 
     @Override

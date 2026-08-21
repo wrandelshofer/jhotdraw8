@@ -42,13 +42,29 @@ public abstract class AbstractPersistentSequencedSetTest extends AbstractPersist
     @MethodSource("dataProvider")
     public void addFirstWithContainedElementShouldMoveElementToFirst(SetData data) throws Exception {
         PersistentSequencedSet<Key> instance = newInstance(data.a());
+        instance = instance.reversed();
         List<Key> expected = new ArrayList<>(data.a().asSet());
+        expected = expected.reversed();
         assertEqualSequence(expected, instance, "initial");
         for (Key e : data.a()) {
             instance = instance.addingFirst(e);
             expected.remove(e);
             expected.addFirst(e);
-            assertEqualSequence(expected, instance, "addFirst");
+            assertEqualSequence(expected, instance, "addFirst e=" + e);
+            assertEquals(e, instance.getFirst());
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void addFirstWithNewElementShouldAddElementAtFirst(SetData data) throws Exception {
+        PersistentSequencedSet<Key> instance = newInstance();
+        List<Key> expected = new ArrayList<>();
+        assertEqualSequence(expected, instance, "initial");
+        for (Key e : data.a()) {
+            instance = instance.addingFirst(e);
+            expected.addFirst(e);
+            assertEqualSequence(expected, instance, "addFirst e=" + e);
             assertEquals(e, instance.getFirst());
         }
     }
@@ -64,7 +80,22 @@ public abstract class AbstractPersistentSequencedSetTest extends AbstractPersist
             instance = instance.addingLast(e);
             expected.remove(e);
             expected.addLast(e);
-            assertEqualSequence(expected, instance, "addLast");
+            assertEqualSequence(expected, instance, "addLast, e=" + e);
+            assertEquals(e, instance.getLast());
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void addLastWithNewElementShouldAddElementAtLast(SetData data) throws Exception {
+        PersistentSequencedSet<Key> instance = newInstance();
+        List<Key> expected = new ArrayList<>();
+        List<Key> listA = new ArrayList<>(data.a().asSet());
+        assertEqualSequence(expected, instance, "initial");
+        for (Key e : listA.reversed()) {
+            instance = instance.addingLast(e);
+            expected.addLast(e);
+            assertEqualSequence(expected, instance, "addLast e=" + e);
             assertEquals(e, instance.getLast());
         }
     }
@@ -129,12 +160,13 @@ public abstract class AbstractPersistentSequencedSetTest extends AbstractPersist
         ArrayList<E> expectedList = new ArrayList<>(expected);
         assertEquals(expectedList, new ArrayList<>(actual.asSet()), message);
         if (!expected.isEmpty()) {
-            assertEquals(expectedList.get(0), actual.getFirst(), message);
-            assertEquals(expectedList.get(0), actual.iterator().next(), message);
-            assertEquals(expectedList.get(expectedList.size() - 1), actual.getLast(), message);
-            //assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().iterator().next(), message);
+            assertEquals(expectedList.get(0), actual.getFirst(), message + ". first element does not match");
+            assertEquals(expectedList.get(0), actual.iterator().next(), message + ". last element does not match");
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.getLast(), message + ". get last mismatch");
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.readableReversed().iterator().next(), message + ". readableReversed get first mismatch");
         }
         assertEquals(expected.toString(), actual.toString(), message);
+        assertEquals(expected.size(), actual.size(), message + ". size mismatch");
     }
 
     @Test

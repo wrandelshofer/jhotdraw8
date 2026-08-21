@@ -5,7 +5,6 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.facade.ReadableSetFacade;
-import org.jhotdraw8.icollection.impl.champmap.DeltaCounter;
 import org.jhotdraw8.icollection.impl.champmap.EntryIterator;
 import org.jhotdraw8.icollection.impl.champmap.TrieBuilder;
 import org.jhotdraw8.icollection.impl.champmap.TrieNode;
@@ -210,32 +209,15 @@ public class PersistentHashMap<K, V>
 
     @Override
     public PersistentHashMap<K, V> puttingAll(Map<? extends K, ? extends V> m) {
-        if (m instanceof MutableHashMap<? extends K, ? extends V> mhm) {
-            return puttingAll((java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>>) mhm.toPersistent());
-        }
-        return puttingAll(m.entrySet());
+        var mutable = toMutable();
+        return mutable.putAllEntries(m.entrySet()) ? mutable.toPersistent() : this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public PersistentHashMap<K, V> puttingAll(java.lang.Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
-        var mutator = new TrieBuilder<K, V>();
-        var newNode = node;
-        if (c instanceof PersistentHashMap<?, ?> pm) {
-            if (pm.node == this.node) {
-                return this;
-            }
-            var deltaCounter = new DeltaCounter();
-            newNode = newNode.mutablePutAll((TrieNode<K, V>) pm.node, 0, deltaCounter, mutator);
-            var newSize = size + pm.size - deltaCounter.count;
-            return (size != newSize | mutator.isModified()) ? new PersistentHashMap<>(newNode, size + pm.size - deltaCounter.count) : this;
-
-        }
-        for (Map.Entry<? extends K, ? extends V> e : c) {
-            var key = e.getKey();
-            newNode = newNode.mutablePut(Objects.hashCode(key), key, e.getValue(), 0, mutator);
-        }
-        return (mutator.isModified()) ? new PersistentHashMap<>(newNode, size + mutator.size) : this;
+        var mutable = toMutable();
+        return mutable.putAllEntries(c) ? mutable.toPersistent() : this;
     }
 
     @Override

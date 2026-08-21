@@ -123,12 +123,15 @@ public class MutableHashSet<E> extends AbstractSet<E> implements Cloneable, Seri
                 return true;
             }
             var delta = new DeltaCounter();
-            node.mutableAddAll((TrieNode<E>) cc.node, 0, delta, mutator.reset());
-            if (delta.isModified()) {
-                size += delta.count;
+            var newNode = node.mutableAddAll((TrieNode<E>) cc.node, 0, delta, mutator.reset());
+            int newSize = size + cc.size() - delta.count;
+            if (newSize != size) {
+                size = newSize;
                 modCount++;
+                node = newNode;
+                return true;
             }
-            return delta.isModified();
+            return false;
         }
         mutator.reset();
         for (E e : c) {
@@ -154,48 +157,59 @@ public class MutableHashSet<E> extends AbstractSet<E> implements Cloneable, Seri
         }
         if (c instanceof PersistentHashSet<?> cc) {
             var delta = new DeltaCounter();
-            node.mutableRemoveAll((TrieNode<E>) cc.node, 0, delta, mutator.reset());
-            if (delta.isModified()) {
-                size += delta.count;
+            var newNode = (TrieNode<E>) node.mutableRemoveAll((TrieNode<E>) cc.node, 0, delta, mutator.reset());
+            int newSize = size - delta.count;
+            if (newSize != size) {
+                node = newNode;
+                size = newSize;
                 modCount++;
+                return true;
             }
-            return delta.isModified();
+            return false;
         }
         mutator.reset();
         for (Object e : c) {
             node = node.mutableRemove(Objects.hashCode(e), (E) e, 0, mutator);
         }
-        if (mutator.isModified()) {
-            size += mutator.size;
+        int newSize = size + mutator.size;
+        if (newSize != size) {
+            size = newSize;
             modCount++;
+            return true;
         }
-        return mutator.isModified();
+        return false;
     }
 
     @SuppressWarnings("unchecked")
     public boolean retainAll(Iterable<?> c) {
-        if (isEmpty()
-                || (c instanceof Collection<?> cc) && cc.isEmpty()
-                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
+        if (isEmpty() || c == this) {
             return false;
         }
-        if (c == this) {
-            clear();
-            return true;
-        }
         if (c instanceof PersistentHashSet<?> cc) {
-            var delta = new DeltaCounter();
-            node.mutableRetainAll((TrieNode<E>) cc.node, 0, delta, mutator.reset());
-            if (delta.isModified()) {
-                size += delta.count;
-                modCount++;
+            if (cc.isEmpty()) {
+                clear();
+                return true;
             }
-            return delta.isModified();
+            var delta = new DeltaCounter();
+            var newNode = (TrieNode<E>) node.mutableRetainAll((TrieNode<E>) cc.node, 0, delta, mutator.reset());
+            int newSize = delta.count;
+            if (newSize != size) {
+                node = newNode;
+                size = newSize;
+                modCount++;
+                return true;
+            }
+            return false;
         }
 
         int count = 0;
         if (c instanceof ReadableCollection<?> rc) {
-            for (E e : this) {
+            if (rc.isEmpty()) {
+                clear();
+                return true;
+            }
+            for (Iterator<E> iterator = new ElementIterator<>(node); iterator.hasNext(); ) {
+                E e = iterator.next();
                 if (!rc.contains(e)) {
                     remove(e);
                     count++;
@@ -204,23 +218,24 @@ public class MutableHashSet<E> extends AbstractSet<E> implements Cloneable, Seri
         }
         if (!(c instanceof Collection<?>)) {
             var cc = new HashSet<E>();
-            for (var it = c.iterator(); it.hasNext(); ) {
-                cc.add((E) it.next());
+            for (Object o : c) {
+                cc.add((E) o);
             }
             c = cc;
         }
         var ccc = (Collection<E>) c;
-        boolean modified = false;
-        for (E e : this) {
+        if (ccc.isEmpty()) {
+            clear();
+            return true;
+        }
+        for (Iterator<E> iterator = new ElementIterator<>(node); iterator.hasNext(); ) {
+            E e = iterator.next();
             if (!ccc.contains(e)) {
                 remove(e);
                 count++;
             }
         }
-
         if (count != 0) {
-            size -= count;
-            modCount++;
             return true;
         }
         return false;
@@ -301,6 +316,21 @@ public class MutableHashSet<E> extends AbstractSet<E> implements Cloneable, Seri
         return size == 0
                 ? PersistentHashSet.of()
                 : new PersistentHashSet<>(node, size);
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return removeAll((Iterable<?>) c);
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return retainAll((Iterable<?>) c);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        return addAll((Iterable<? extends E>) c);
     }
 
     @Serial

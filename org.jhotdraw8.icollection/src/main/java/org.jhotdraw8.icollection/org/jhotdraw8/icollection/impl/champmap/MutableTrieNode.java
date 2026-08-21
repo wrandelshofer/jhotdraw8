@@ -4,7 +4,7 @@ import org.jhotdraw8.icollection.impl.MutabilityOwnership;
 
 import org.jspecify.annotations.Nullable;
 
-public class MutableTrieNode<K, V> extends TrieNode<K, V> {
+public final class MutableTrieNode<K, V> extends TrieNode<K, V> {
     private @Nullable MutabilityOwnership ownedBy;
 
     public MutableTrieNode(int dataMap, int nodeMap, Object[] buffer, @Nullable MutabilityOwnership ownedBy) {

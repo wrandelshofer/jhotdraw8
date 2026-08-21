@@ -34,7 +34,8 @@ import java.io.Serializable;
 /// }
 ///
 /// ```
-public class MutabilityOwnership implements Serializable {
+@SuppressWarnings("FinalClass")
+public final class MutabilityOwnership implements Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
 

@@ -13,22 +13,22 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.icollection.MutableLinkedHashSetWithLinkedElement;
+import org.jhotdraw8.icollection.MutableLinkedHashSet;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-/// Tests [MutableLinkedHashSetWithLinkedElement] with the Guava test suite.
-public class MutableLinkedHashSetWithLinkedElementGuavaTests {
+/// Tests [MutableLinkedHashSet] with the Guava test suite.
+public class MutableLinkedHashSetGuavaTests {
 
     public static Test suite() {
-        return new MutableLinkedHashSetWithLinkedElementGuavaTests().allTests();
+        return new MutableLinkedHashSetGuavaTests().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(MutableLinkedHashSetWithLinkedElement.class.getSimpleName());
+        TestSuite suite = new TestSuite(MutableLinkedHashSet.class.getSimpleName());
         suite.addTest(testsForSet());
         suite.addTest(testsForReversedSet());
         return suite;
@@ -39,10 +39,10 @@ public class MutableLinkedHashSetWithLinkedElementGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new MutableLinkedHashSetWithLinkedElement<>(MinimalCollection.of(elements));
+                                return new MutableLinkedHashSet<>(MinimalCollection.of(elements));
                             }
                         })
-                .named(MutableLinkedHashSetWithLinkedElement.class.getSimpleName())
+                .named(MutableLinkedHashSet.class.getSimpleName())
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         CollectionFeature.KNOWN_ORDER,
@@ -61,10 +61,10 @@ public class MutableLinkedHashSetWithLinkedElementGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new MutableLinkedHashSetWithLinkedElement<>(MinimalCollection.of(elements)).reversed();
+                                return new MutableLinkedHashSet<>(MinimalCollection.of(elements)).reversed();
                             }
                         })
-                .named(MutableLinkedHashSetWithLinkedElement.class.getSimpleName() + "Reversed")
+                .named(MutableLinkedHashSet.class.getSimpleName() + "Reversed")
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         //CollectionFeature.KNOWN_ORDER,

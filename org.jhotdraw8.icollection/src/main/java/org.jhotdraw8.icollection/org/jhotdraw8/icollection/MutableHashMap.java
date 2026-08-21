@@ -208,32 +208,47 @@ public class MutableHashMap<K, V> extends AbstractMap<K, V> implements Cloneable
         return mutator.getAndClearOperationResult();// must clear result to prevent memory leak
     }
 
+
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
         if (m == this || m.isEmpty()) return;
         if (m instanceof MutableHashMap<? extends K, ? extends V> pm) {
-            putEntries(pm.toPersistent());
+            putAllEntries(pm.toPersistent());
         } else {
             super.putAll(m);
         }
     }
 
-    public void putEntries(Iterable<? extends Map.Entry<? extends K, ? extends V>> m) {
-        if (m == this) return;
+    public boolean putAllEntries(Iterable<? extends Map.Entry<? extends K, ? extends V>> m) {
+        if (m instanceof MutableHashMap<?, ?> mh) {
+            m = (Iterable<? extends Entry<? extends K, ? extends V>>) mh.toPersistent();
+        }
         if (m instanceof PersistentHashMap<?, ?> pm) {
             var newNode = node;
             var deltaCounter = new DeltaCounter();
             newNode = newNode.mutablePutAll((TrieNode<K, V>) pm.node, 0, deltaCounter, mutator);
             var newSize = size + pm.size - deltaCounter.count;
-            if (newSize != size) {
-                size += pm.size - deltaCounter.count;
+            if (newSize != size || mutator.isModified()) {
+                size = newSize;
                 this.node = newNode;
+                modCount++;
+                return true;
             }
-            return;
+            return false;
         }
+        boolean changed = false;
         for (var entry : m) {
-            put(entry.getKey(), entry.getValue());
+            var newNode = node.mutablePut(Objects.hashCode(entry.getKey()), entry.getKey(), entry.getValue(), 0, mutator.reset());
+            if (!mutator.isModified()) {
+                continue;
+            }
+            changed = true;
+            if (mutator.size != 0) modCount++;
+            this.node = newNode;
+            size += mutator.size;
         }
+        mutator.getAndClearOperationResult();// must clear result to prevent memory leak
+        return changed;
     }
 
 
@@ -300,7 +315,7 @@ public class MutableHashMap<K, V> extends AbstractMap<K, V> implements Cloneable
         @Override
         protected Object readResolve() {
             MutableHashMap<Object, Object> map = new MutableHashMap<>();
-            map.putEntries(deserializedEntries);
+            map.putAllEntries(deserializedEntries);
             return map;
         }
     }

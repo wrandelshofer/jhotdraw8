@@ -5,22 +5,21 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.impl.MutabilityOwnership;
+import org.jhotdraw8.icollection.impl.champlinked.TrieBuilder;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
-import org.jhotdraw8.icollection.readable.ReadableCollection;
+import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedSetView;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.SequencedSet;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.function.Predicate;
 
 /// Implements the [Set] interface using a Compressed Hash-Array Mapped
 /// Prefix-tree (CHAMP).
@@ -48,7 +47,7 @@ import java.util.function.Predicate;
 ///
 /// Implementation details:
 ///
-/// See description at [PersistentLinkedHashSetWithNodeSubClasses].
+/// See description at [PersistentLinkedHashSet].
 ///
 /// References:
 ///
@@ -64,159 +63,109 @@ import java.util.function.Predicate;
 /// </dl>
 ///
 /// @param <E> the element type
-public class MutableLinkedHashSet<E> extends AbstractSet<E> implements SequencedSet<E> {
+public class MutableLinkedHashSet<E> extends AbstractSet<E> implements SequencedSet<E>, Cloneable, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
-    private PersistentLinkedHashSetWithNodeSubClasses<E> delegate;
+
+    private TrieBuilder<E, Object> builder = new TrieBuilder<>();
+    private PersistentLinkedHashSet<E> set;
     private int modCount;
-    private MutabilityOwnership owner;
 
     /// Constructs a new empty set.
     public MutableLinkedHashSet() {
-        delegate = PersistentLinkedHashSetWithNodeSubClasses.<E>of();
+        set = PersistentLinkedHashSet.of();
     }
+
 
     /// Constructs a set containing the elements in the specified iterable.
     ///
     /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableLinkedHashSet(Iterable<? extends E> c) {
-        this();
-        if (c instanceof PersistentLinkedHashSetWithNodeSubClasses) {
-            delegate = (PersistentLinkedHashSetWithNodeSubClasses<E>) c;
+        if (c instanceof PersistentLinkedHashSet) {
+            set = (PersistentLinkedHashSet<E>) c;
         } else {
             addAll(c);
         }
     }
 
-    /// Adds all specified elements that are not already in this set.
-    ///
-    /// @param c an iterable of elements
-    /// @return `true` if this set changed
+    @Override
+    public boolean add(@Nullable E e) {
+        var newSet = set.adding(e, builder);
+        if (newSet == set) return false;
+        this.set = newSet;
+        modCount++;
+        return true;
+    }
+
+
     @SuppressWarnings("unchecked")
     public boolean addAll(Iterable<? extends E> c) {
-        boolean added = false;
-        for (E e : c) {
-            added |= add(e);
+        var newSet = set.addingAll(c, builder);
+        if (newSet == set) return false;
+        this.set = newSet;
+        modCount++;
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    public boolean removeAll(Iterable<?> c) {
+        var newSet = set.removingAll(c, builder);
+        if (newSet == set) return false;
+        this.set = newSet;
+        modCount++;
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    public boolean retainAll(Iterable<?> c) {
+        var newSet = set.retainingAll(c, builder);
+        if (newSet == set) return false;
+        this.set = newSet;
+        modCount++;
+        return true;
+    }
+
+
+    /// Removes all elements from this set.
+    @Override
+    public void clear() {
+        set = PersistentLinkedHashSet.of();
+        modCount++;
+    }
+
+    /// Returns a shallow copy of this set.
+    @Override
+    public MutableLinkedHashSet<E> clone() {
+        MutableLinkedHashSet<E> that = null;
+        try {
+            that = (MutableLinkedHashSet<E>) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
         }
-        return added;
+        that.builder = new TrieBuilder<>();
+        return that;
     }
 
     @Override
-    public boolean remove(Object o) {
-        var newDelegate = delegate.remove((E) o, owner);
-        if (newDelegate != null) {
-            modCount++;
-            this.delegate = newDelegate;
-            return true;
-        }
-        return false;
-    }
-
-    /// Retains all specified elements that are in this set.
-    ///
-    /// @param c an iterable of elements
-    /// @return `true` if this set changed
-    public boolean retainAll(Iterable<?> c) {
-        if (c == this || isEmpty()) {
-            return false;
-        }
-        if ((c instanceof Collection<?> cc && cc.isEmpty())
-                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
-            clear();
-            return true;
-        }
-        Predicate<E> predicate;
-        if (c instanceof Collection<?> that) {
-            predicate = that::contains;
-        } else if (c instanceof ReadableCollection<?> that) {
-            predicate = that::contains;
-        } else {
-            HashSet<Object> that = new HashSet<>();
-            c.forEach(that::add);
-            predicate = that::contains;
-        }
-        boolean removed = false;
-        for (Iterator<E> i = iterator(); i.hasNext(); ) {
-            E e = i.next();
-            if (!predicate.test(e)) {
-                i.remove();
-                removed = true;
-            }
-        }
-        return removed;
-    }
-
-    /// Removes all specified elements that are in this set.
-    ///
-    /// @param c an iterable of elements
-    /// @return `true` if this set changed
-    public boolean removeAll(Iterable<?> c) {
-        if (isEmpty()) {
-            return false;
-        }
-        if (c == this) {
-            clear();
-            return true;
-        }
-        boolean modified = false;
-        for (Object o : c) {
-            modified |= remove(o);
-        }
-        return modified;
+    @SuppressWarnings("unchecked")
+    public boolean contains(@Nullable Object o) {
+        return set.contains(o);
     }
 
     @Override
     public Iterator<E> iterator() {
-        return new FailFastIterator<>(delegate.iterator(),
-                this::iteratorRemove, this::getModCount);
+        return new FailFastIterator<>(
+                set.iterator(),
+                this::iteratorRemove, this::getModCount
+        );
     }
 
-    @Override
-    public boolean add(E e) {
-        var newDelegate = delegate.addLast(e, false, owner);
-        if (newDelegate != delegate) {
-            this.modCount++;
-            this.delegate = newDelegate;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void addFirst(E e) {
-        var newDelegate = delegate.addFirst(e, true, owner);
-        if (newDelegate != delegate) {
-            this.modCount++;
-            this.delegate = newDelegate;
-        }
-    }
-
-    @Override
-    public void addLast(E e) {
-        var newDelegate = delegate.addLast(e, true, owner);
-        if (newDelegate != delegate) {
-            this.modCount++;
-            this.delegate = newDelegate;
-        }
-    }
-
-    @Override
-    public E getFirst() {
-        return delegate.getFirst();
-    }
-
-    @Override
-    public E getLast() {
-        return delegate.getLast();
-    }
-
-    /// Returns a persistent copy of this set.
-    ///
-    /// @return a persistent copy
-    public PersistentLinkedHashSetWithNodeSubClasses<E> toPersistent() {
-        owner = new MutabilityOwnership();
-        return delegate;
+    Iterator<E> reverseIterator() {
+        return new FailFastIterator<>(
+                set.reverseIterator(),
+                this::iteratorRemove, this::getModCount
+        );
     }
 
     @Override
@@ -227,28 +176,51 @@ public class MutableLinkedHashSet<E> extends AbstractSet<E> implements Sequenced
 
     @Override
     public int size() {
-        return delegate.size();
+        return set.size();
+    }
+
+    private int getModCount() {
+        return modCount;
+    }
+
+    @Override
+    public Spliterator<E> spliterator() {
+        return new FailFastSpliterator<E>(
+                Spliterators.<E>spliterator(
+                        set.iterator(),
+                        set.size(), Spliterator.DISTINCT | Spliterator.SIZED),
+                () -> this.modCount, null);
+    }
+
+    Spliterator<E> reverseSpliterator() {
+        return new FailFastSpliterator<E>(
+                Spliterators.<E>spliterator(
+                        set.reverseIterator(),
+                        set.size(), Spliterator.DISTINCT | Spliterator.SIZED),
+                () -> this.modCount, null);
     }
 
     private void iteratorRemove(E e) {
         remove(e);
     }
 
-    private Iterator<E> reverseIterator() {
-        return new FailFastIterator<>(
-                delegate.reverseIterator(),
-                this::iteratorRemove, this::getModCount
-        );
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean remove(Object o) {
+        var newSet = set.removing((E) o, builder);
+        if (newSet == set) return false;
+        this.set = newSet;
+        modCount++;
+        return true;
     }
 
-    protected int getModCount() {
-        return modCount;
+    /// Returns a persistent copy of this set.
+    ///
+    /// @return a persistent copy
+    public PersistentLinkedHashSet<E> toPersistent() {
+        builder = new TrieBuilder<>();
+        return set;
     }
-
-    private Spliterator<E> reverseSpliterator() {
-        return Spliterators.spliterator(reverseIterator(), size(), Spliterator.SIZED | Spliterator.ORDERED | Spliterator.NONNULL | Spliterator.DISTINCT);
-    }
-
 
     @Serial
     private Object writeReplace() {
