@@ -9,13 +9,13 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 
 public interface SvgSceneGraphWriter {
     /// If [Node#getProperties()] contains a String property with this name,
-    /// the `SvgSceneGraphExporter` exports a {@literal <title>}
+    /// the `SvgSceneGraphExporter` exports a `<title>`
     /// element with the property value as its content.
     ///
     /// The value of this constant is: {@value #TITLE_PROPERTY_NAME}.
     String TITLE_PROPERTY_NAME = "title";
     /// If [Node#getProperties()] contains a String property with this name,
-    /// the `SvgSceneGraphExporter` exports a {@literal <desc>}
+    /// the `SvgSceneGraphExporter` exports a `<desc>`
     /// element with the property value as its content.
     ///
     /// The value of this constant is: {@value #DESC_PROPERTY_NAME}.

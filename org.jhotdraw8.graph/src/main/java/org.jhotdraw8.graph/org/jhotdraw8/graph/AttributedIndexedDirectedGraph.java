@@ -53,18 +53,6 @@ public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGra
     /// @return the specified arrow
     A getNextArrow(int v, int index);
 
-        /*
-    /**
-     * Returns the arrow if b is next of a.
-     *
-     * @param a a vertex
-     * @param b a vertex
-     * @return the arrow or null if b is not next of a
-     * /
-        default A findArrow(int a, int b) {
-        int index = findIndexOfNext(a, b);
-        return index < 0 ? null : getArrow(a, index);
-    }*/
 
     /// Returns the direct successor vertices of the specified vertex.
     ///

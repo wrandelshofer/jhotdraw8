@@ -28,7 +28,7 @@ package org.jhotdraw8.graph;
 /// </dl>
 /// Example of a bidirectional graph with a chunk-size of 2, and the following
 /// graph:
-/// <pre>
+/// ```
 /// The vertices have indices 0 through 4 and the same data.
 /// The arrows have negative values.
 ///
@@ -65,7 +65,7 @@ package org.jhotdraw8.graph;
 ///                 siblings: 4←1, 4←3
 ///                 arrows:   -13  -34
 ///
-/// </pre>
+/// ```
 public interface GraphChunk {
     /// Tries to add an arrow from vertex `v` to vertex `u`.
     ///

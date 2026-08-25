@@ -42,14 +42,14 @@ import java.util.function.BiConsumer;
 
 
 /// Draws a chromacity diagram.
-/// <pre>
+/// ```
 /// 0.9 ^
 ///     |
 ///  y  |
 ///     |
 ///   0 +----------------->
 ///     0       x        0.8
-/// </pre>
+/// ```
 public class ChromaticityDiagram extends Pane {
     private static final float xwMax = 0.8f;
     private static final float xwMin = 0f;

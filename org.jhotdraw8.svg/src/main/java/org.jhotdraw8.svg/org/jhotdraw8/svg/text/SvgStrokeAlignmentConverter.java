@@ -18,9 +18,9 @@ import java.text.ParseException;
 import java.util.function.Consumer;
 
 /// Converts SVG 2 stroke-alignment.
-/// <pre>
+/// ```
 ///  StrokeAlignment = "type(" , ("inner"|"outer"|"center"), ")";
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>

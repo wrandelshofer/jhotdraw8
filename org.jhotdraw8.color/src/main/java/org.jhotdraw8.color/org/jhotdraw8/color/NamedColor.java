@@ -8,7 +8,7 @@ package org.jhotdraw8.color;
 
 /// A named color.
 ///
-/// The name should be a CSS Color Module 4 {@literal <color>} production.
+/// The name should be a CSS Color Module 4 `<color>` production.
 ///
 /// References:
 /// <dl>

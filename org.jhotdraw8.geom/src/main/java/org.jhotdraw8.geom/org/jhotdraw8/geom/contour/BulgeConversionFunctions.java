@@ -73,7 +73,7 @@ public class BulgeConversionFunctions {
 
     /// This version uses the relationship between the arc sagitta and bulge
     /// factor, illustrated by the following diagram:
-    /// <pre>
+    /// ```
     ///                .
     ///         .      |    .
     ///     .          |s        .
@@ -83,7 +83,7 @@ public class BulgeConversionFunctions {
     ///       \                / r
     ///          \    ∡θ    /
     ///                c
-    /// </pre>
+    /// ```
     ///
     ///   - chord = 2*d = |p1 - p2|
     ///   - bulge = b = tan(θ/4)

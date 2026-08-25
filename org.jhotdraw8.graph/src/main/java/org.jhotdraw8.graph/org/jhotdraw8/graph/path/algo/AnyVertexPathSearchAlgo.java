@@ -20,7 +20,6 @@ import java.util.function.ToIntBiFunction;
 /// algorithm.
 ///
 /// @param <V> the vertex data type
-/// @param <C> the cost number type
 public class AnyVertexPathSearchAlgo<V> implements VertexPathSearchAlgo<V> {
     public AnyVertexPathSearchAlgo() {
     }
@@ -31,7 +30,7 @@ public class AnyVertexPathSearchAlgo<V> implements VertexPathSearchAlgo<V> {
     /// @param goalPredicate        the goal predicate
     /// @param nextVerticesFunction the next vertices function
     /// @param maxDepth             the maximal depth (inclusive) of the search
-    ///                             Must be {@literal >= 0}.
+    ///                             Must be `>= 0`.
     /// @param costLimit            the cost limit is **ignored**
     /// @param costFunction         the cost function
     /// @param visited

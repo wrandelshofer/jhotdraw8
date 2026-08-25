@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /// Processes the var() function.
-/// <pre>
+/// ```
 ///     var = "var(" ,  s* , custom-property-name, s* , [",",s*,declaration-value] ,  s* , ")" ;
 ///     custom-property-name = ident-token;
 ///     declaration-value = fallback-value;
-/// </pre>
+/// ```
 /// The custom-property-name must start with two dashes "--".
 ///
 /// References:

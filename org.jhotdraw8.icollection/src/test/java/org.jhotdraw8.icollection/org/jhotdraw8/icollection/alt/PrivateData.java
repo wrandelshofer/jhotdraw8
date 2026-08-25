@@ -19,7 +19,7 @@ import org.jspecify.annotations.Nullable;
 /// class PersistentFoo provides a protected constructor and
 /// a protected `newInstance` method that take an PrivateData object
 /// as parameters.
-/// <pre>
+/// ```
 /// {@literal
 ///  module org.foo {
 ///      exports org.foo;

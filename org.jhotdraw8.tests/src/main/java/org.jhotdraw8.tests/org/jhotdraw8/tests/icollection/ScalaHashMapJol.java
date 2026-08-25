@@ -14,7 +14,7 @@ public class ScalaHashMapJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.HashMap with 1000 elements.
     /// total size              : 84504
     /// element size            : 48
@@ -31,7 +31,7 @@ public class ScalaHashMapJol extends AbstractJol {
     ///        317        40     12680   scala.collection.immutable.BitmapIndexedMapNode
     ///          1        16        16   scala.collection.immutable.HashMap
     ///       2950               84504   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);

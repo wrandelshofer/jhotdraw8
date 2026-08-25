@@ -9,7 +9,7 @@ public class KotlinPersistentOrderedSetJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class kotlinx.collections.immutable.implementations.persistentOrderedSet.PersistentOrderedSet with 1000 elements.
     /// total size              : 71984
     /// element size            : 24
@@ -28,7 +28,7 @@ public class KotlinPersistentOrderedSetJol extends AbstractJol {
     ///          1        16        16   kotlinx.collections.immutable.internal.MutabilityOwnership
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
     ///       2612               71984   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = generateSet(size, mask);

@@ -14,7 +14,7 @@ public class VavrHashMapJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class io.vavr.collection.HashMap with 1000 elements.
     /// total size              : 90920
     /// element size            : 48
@@ -33,7 +33,7 @@ public class VavrHashMapJol extends AbstractJol {
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Value
     ///       3649               90920   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = ~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);
@@ -45,7 +45,7 @@ public class VavrHashMapJol extends AbstractJol {
         AbstractJol.estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class io.vavr.collection.HashMap with 250 elements.
     /// total size              : 22664
     /// element size            : 48
@@ -62,7 +62,7 @@ public class VavrHashMapJol extends AbstractJol {
     ///          1        16        16   io.vavr.collection.HashMap
     ///        500        24     12000   org.jhotdraw8.icollection.jmh.Key
     ///        913               22664   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;

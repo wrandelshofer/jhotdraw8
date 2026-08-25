@@ -3,21 +3,26 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.icollection.alt;
+package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.MutableMapEntry;
-import org.jhotdraw8.icollection.alt.impl.champmap.AbstractMutableChampMap;
-import org.jhotdraw8.icollection.alt.impl.champmap.BitmapIndexedNode;
-import org.jhotdraw8.icollection.alt.impl.champmap.ChangeEvent;
-import org.jhotdraw8.icollection.alt.impl.champmap.Node;
-import org.jhotdraw8.icollection.alt.impl.champmap.ReverseTombSkippingVectorSpliterator;
-import org.jhotdraw8.icollection.alt.impl.champmap.SequencedData;
-import org.jhotdraw8.icollection.alt.impl.champmap.SequencedEntry;
-import org.jhotdraw8.icollection.alt.impl.champmap.TombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.alt.impl.champset.AbstractMutableChampMap;
+import org.jhotdraw8.icollection.alt.impl.champset.BitmapIndexedNode;
+import org.jhotdraw8.icollection.alt.impl.champset.ChangeEvent;
+import org.jhotdraw8.icollection.alt.impl.champset.Node;
+import org.jhotdraw8.icollection.alt.impl.champset.ReverseTombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.alt.impl.champset.SequencedData;
+import org.jhotdraw8.icollection.alt.impl.champset.SequencedEntry;
+import org.jhotdraw8.icollection.alt.impl.champset.TombSkippingVectorIterator;
+import org.jhotdraw8.icollection.alt.impl.champset.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedSetFacade;
+import org.jhotdraw8.icollection.impl.EditableMapEntry;
+import org.jhotdraw8.icollection.impl.MutabilityOwnership;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTreeAPI;
+import org.jhotdraw8.icollection.impl.fingertree.FingerTreeSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
+import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.readable.ReadableSequencedMap;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedMapView;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
@@ -33,6 +38,7 @@ import java.util.SequencedSet;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.function.Function;
 
 /// Implements the [SequencedMap] interface using a Compressed
 /// Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
@@ -63,7 +69,7 @@ import java.util.Spliterators;
 ///
 /// Implementation details:
 ///
-/// See description at [PersistentBMTrieMap].
+/// See description at [PersistentVectorHashMap].
 ///
 /// References:
 /// <dl>
@@ -79,21 +85,23 @@ import java.util.Spliterators;
 /// @param <K> the key type
 /// @param <V> the value type
 @SuppressWarnings("exports")
-public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, SequencedEntry<K, V>>
+public class MutableVectorHashMap<K, V> extends AbstractMutableChampMap<K, V, SequencedEntry<K, V>>
         implements SequencedMap<K, V>, ReadableSequencedMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
-    /// Offset of sequence numbers to vector indices.
-    /// <pre>vector offset = sequence number + offset</pre>
+    /// Sequence number of the first entry.
+    /// `vector index = sequence number - offset`
     private int offset = 0;
     /// In this vector we store the elements in the order in which they were inserted.
-    private PersistentBMTrieList<Object> vector;
+
+    @SuppressWarnings("serialization")
+    private PersistentVectorList<Object> vector;
 
 
     /// Constructs a new empty map.
-    public MutableBMTrieMap() {
-        root = BitmapIndexedNode.emptyNode();
-        vector = PersistentBMTrieList.of();
+    public MutableVectorHashMap() {
+        hashMap = BitmapIndexedNode.emptyNode();
+        vector = FingerTreeAPI.of();
     }
 
     /// Constructs a map containing the same entries as in the specified
@@ -101,10 +109,9 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     ///
     /// @param c a map
     @SuppressWarnings("unchecked")
-    public MutableBMTrieMap(Map<? extends K, ? extends V> c) {
-        this((c instanceof MutableBMTrieMap<?, ?> mvm)
-                ? ((MutableBMTrieMap<K, V>) mvm).toPersistent()
-                : c.entrySet());
+    public MutableVectorHashMap(Map<? extends K, ? extends V> c) {
+        this();
+        putAll(c);
     }
 
     /// Constructs a map containing the same entries as in the specified
@@ -112,53 +119,58 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     ///
     /// @param c an iterable
     @SuppressWarnings({"unchecked", "this-escape"})
-    public MutableBMTrieMap(Iterable<? extends Entry<? extends K, ? extends V>> c) {
-        if (c instanceof PersistentBMTrieMap<?, ?>) {
-            PersistentBMTrieMap<K, V> that = (PersistentBMTrieMap<K, V>) c;
-            this.root = that.root;
-            this.size = that.size;
-            this.offset = that.offset;
-            this.vector = that.vector;
-        } else {
-            this.root = BitmapIndexedNode.emptyNode();
-            this.vector = PersistentBMTrieList.of();
-            putAll(c);
-        }
-
+    public MutableVectorHashMap(Iterable<? extends Entry<? extends K, ? extends V>> c) {
+        this();
+        putAll(c);
     }
 
 
     /// Removes all entries from this map.
     @Override
     public void clear() {
-        root = BitmapIndexedNode.emptyNode();
-        vector = PersistentBMTrieList.of();
+        hashMap = BitmapIndexedNode.emptyNode();
+        vector = FingerTreeAPI.of();
         size = 0;
         modCount++;
-        offset = -1;
+        offset = 0;
     }
 
     /// Returns a shallow copy of this map.
     @Override
-    public MutableBMTrieMap<K, V> clone() {
-        return (MutableBMTrieMap<K, V>) super.clone();
+    public MutableVectorHashMap<K, V> clone() {
+        MutableVectorHashMap<K, V> that = (MutableVectorHashMap<K, V>) super.clone();
+        that.owner = new MutabilityOwnership();
+        return that;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean containsKey(@Nullable Object o) {
-        return Node.NO_DATA != root.find(new SequencedEntry<>((K) o),
+        return Node.NO_DATA != hashMap.find(new SequencedEntry<>((K) o),
                 SequencedEntry.keyHash(o), 0,
                 SequencedEntry::keyEquals);
     }
 
     @Override
-    public Iterator<Entry<K, V>> iterator() {
-        return new FailFastIterator<>(Spliterators.iterator(spliterator()),
+    public Iterator<Map.Entry<K, V>> iterator() {
+        Iterator<Map.Entry<K, V>> inner;
+        Function<Object, Entry<K, V>> mapper = o -> {
+            var se = (SequencedEntry<K, V>) o;
+            var eme = new EditableMapEntry<>(se.getKey(), se.getValue(), se.sequenceNumber());
+            eme.setPutIfPresentFunction(this::iteratorPutIfPresent);
+            return eme;
+        };
+        if (vector.size() == size()) {
+            inner = new MappedIterator<>(FingerTreeAPI.iterator(vector), mapper);
+        } else {
+            inner = new TombSkippingVectorIterator<>(vector, mapper);
+        }
+        return new FailFastIterator<>(inner,
                 this::iteratorRemove, () -> modCount);
+
     }
 
-    private Iterator<Entry<K, V>> reverseIterator() {
+    private Iterator<Map.Entry<K, V>> reverseIterator() {
         return new FailFastIterator<>(Spliterators.iterator(reverseSpliterator()),
                 this::iteratorRemove, () -> modCount);
     }
@@ -174,10 +186,11 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     @SuppressWarnings("unchecked")
     @Override
     public Spliterator<Entry<K, V>> spliterator() {
-        return new TombSkippingVectorSpliterator<>(vector.root,
-                e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
-                        ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
-                0, size(), vector.size(), characteristics() | Spliterator.NONNULL);
+        return new TombSkippingVectorSpliterator<>(
+                new FingerTreeSpliterator<>(vector),
+                e -> ((Map.Entry<K, V>) e),
+                0, size(), vector.size(),
+                Spliterator.NONNULL | characteristics());
     }
 
 
@@ -229,7 +242,7 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable V get(Object o) {
-        Object result = root.find(
+        Object result = hashMap.find(
                 new SequencedEntry<>((K) o),
                 SequencedEntry.keyHash(o), 0, SequencedEntry::keyEquals);
         return (result instanceof SequencedEntry<?, ?>) ? ((SequencedEntry<K, V>) result).getValue() : null;
@@ -238,13 +251,13 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     private void iteratorPutIfPresent(K k, V v) {
         if (containsKey(k)) {
-            owner = null;
+            owner = new MutabilityOwnership();
             put(k, v);
         }
     }
 
     private void iteratorRemove(Entry<K, V> entry) {
-        owner = null;
+        owner = new MutabilityOwnership();
         remove(entry.getKey());
     }
 
@@ -294,28 +307,28 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     private ChangeEvent<SequencedEntry<K, V>> putFirst(K key, V val, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
-        var newEntry = new SequencedEntry<>(key, val, -offset - 1);
-        root = root.put(getOrCreateOwner(), newEntry,
+        var newEntry = new SequencedEntry<>(key, val, offset - 1);
+        hashMap = hashMap.put(owner, newEntry,
                 SequencedEntry.keyHash(key), 0, details,
                 moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
         if (details.isReplaced()
-                && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
-            vector = vector.settingAt(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
+                && details.getOldDataNonNull().sequenceNumber() == details.getNewDataNonNull().sequenceNumber()) {
+            vector = FingerTreeAPI.setAt(vector, details.getNewDataNonNull().sequenceNumber() - offset, details.getNewDataNonNull()).tree();
             return details;
         }
         if (details.isModified()) {
             if (details.isReplaced()) {
                 if (moveToFirst) {
                     var result = SequencedData.vecRemove(vector, details.getOldDataNonNull(), offset);
-                    vector = result.first();
+                    vector = result.tree();
                 }
             } else {
                 modCount++;
                 size++;
             }
-            offset++;
-            vector = vector.addingFirst(newEntry);
+            offset--;
+            vector = FingerTreeAPI.addFirst(vector, newEntry);
             renumber();
         }
         return details;
@@ -324,14 +337,14 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     @SuppressWarnings("unchecked")
     @Override
     public boolean putAll(Iterable<? extends Entry<? extends K, ? extends V>> c) {
-        if (c instanceof MutableBMTrieMap<?, ?> that) {
+        if (c instanceof MutableVectorHashMap<?, ?> that) {
             c = (Iterable<? extends Entry<? extends K, ? extends V>>) that.toPersistent();
         }
-        if (isEmpty() && c instanceof PersistentBMTrieMap<?, ?> that) {
+        if (isEmpty() && c instanceof PersistentVectorHashMap<?, ?> that) {
             if (that.isEmpty()) {
                 return false;
             }
-            root = (BitmapIndexedNode<SequencedEntry<K, V>>) (BitmapIndexedNode<?>) that.root;
+            hashMap = (BitmapIndexedNode<SequencedEntry<K, V>>) (BitmapIndexedNode<?>) that.hashMap;
             vector = that.vector;
             offset = that.offset;
             size = that.size;
@@ -349,26 +362,26 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     ChangeEvent<SequencedEntry<K, V>> putLast(K key, V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
-        var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
-        root = root.put(getOrCreateOwner(), newEntry,
+        var newEntry = new SequencedEntry<>(key, value, vector.size() + offset);
+        hashMap = hashMap.put(owner, newEntry,
                 SequencedEntry.keyHash(key), 0, details,
                 moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
         if (details.isReplaced()
-                && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
-            vector = vector.settingAt(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
+                && details.getOldDataNonNull().sequenceNumber() == details.getNewDataNonNull().sequenceNumber()) {
+            vector = FingerTreeAPI.setAt(vector, details.getNewDataNonNull().sequenceNumber() - offset, details.getNewDataNonNull()).tree();
             return details;
         }
         if (details.isModified()) {
             if (details.isReplaced()) {
                 var result = SequencedData.vecRemove(vector, details.getOldDataNonNull(), offset);
-                vector = result.first();
-                offset = result.second();
+                vector = result.tree();
+                offset = result.offset();
             } else {
                 size++;
             }
             modCount++;
-            vector = vector.adding(newEntry);
+            vector = FingerTreeAPI.addLast(vector, newEntry);
             renumber();
         }
         return details;
@@ -399,14 +412,14 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(K key) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
-        root = root.remove(getOrCreateOwner(),
+        hashMap = hashMap.remove(owner,
                 new SequencedEntry<>(key),
                 SequencedEntry.keyHash(key), 0, details, SequencedEntry::keyEquals);
         if (details.isModified()) {
             var oldElem = details.getOldDataNonNull();
             var result = SequencedData.vecRemove(vector, oldElem, offset);
-            vector = result.first();
-            offset = result.second();
+            vector = result.tree();
+            offset = result.offset();
             size--;
             modCount++;
             renumber();
@@ -419,12 +432,13 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     /// 4 times the size of the set.
     private void renumber() {
         if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
-            var result = SequencedData.vecRenumber(getOrCreateOwner(), size, vector.size(), root, vector.root,
-                    SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
-                    (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
-            root = result.first();
-            vector = result.second();
-            offset = 0;
+            // center the numbers around 0 so that we have the interval [-size/2,size]
+            var b = new PersistentVectorHashMapBuilder<K, V>(owner, size / -2);
+            b.putAll(this);
+            var tmp = b.build();
+            hashMap = tmp.hashMap;
+            vector = tmp.vector;
+            offset = tmp.offset;
         }
     }
 
@@ -436,10 +450,10 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     /// Returns a persistent copy of this map.
     ///
     /// @return a persistent copy
-    public PersistentBMTrieMap<K, V> toPersistent() {
-        owner = null;
-        return size == 0 ? PersistentBMTrieMap.of()
-                : new PersistentBMTrieMap<>(root, vector, size, offset);
+    public PersistentVectorHashMap<K, V> toPersistent() {
+        owner = new MutabilityOwnership();
+        return size == 0 ? PersistentVectorHashMap.of()
+                : new PersistentVectorHashMap<>(hashMap, vector, size, offset);
     }
 
     @Override
@@ -463,7 +477,7 @@ public class MutableBMTrieMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         @Serial
         @Override
         protected Object readResolve() {
-            return new MutableBMTrieMap<>(deserializedEntries);
+            return new MutableVectorHashMap<>(deserializedEntries);
         }
     }
 }

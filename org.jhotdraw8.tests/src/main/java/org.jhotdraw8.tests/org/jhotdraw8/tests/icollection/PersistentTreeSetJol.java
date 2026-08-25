@@ -13,7 +13,7 @@ public class PersistentTreeSetJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.PersistentTreeSet with 1000 elements.
     /// total size              : 56056
     /// element size            : 24
@@ -29,7 +29,7 @@ public class PersistentTreeSetJol extends AbstractJol {
     ///       1000        32     32000   org.jhotdraw8.icollection.impl.redblack.Node
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
     ///       2003               56056   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = AbstractJol.generateSet(size, mask);
@@ -37,7 +37,7 @@ public class PersistentTreeSetJol extends AbstractJol {
         AbstractJol.estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.SimpleImmutableNavigableSet with 250 elements.
     /// total size              : 14056
     /// element size            : 24
@@ -53,7 +53,7 @@ public class PersistentTreeSetJol extends AbstractJol {
     ///        250        32      8000   org.jhotdraw8.icollection.impl.redblack.Node
     ///        250        24      6000   org.jhotdraw8.icollection.jmh.Key
     ///        503               14056   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;

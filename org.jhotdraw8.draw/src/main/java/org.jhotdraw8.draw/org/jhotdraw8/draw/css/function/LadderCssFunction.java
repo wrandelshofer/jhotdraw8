@@ -26,12 +26,12 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 
 /// Processes the ladder() function.
-/// <pre>
+/// ```
 ///     ladder = "ladder(" , s* , color , "," , color-stop , { "," , color-stop } , ")" ;
 ///     color = (* a css color *);
 ///     color-stop = color , number-or-percentage ;
 ///     number-or-percentage = number | percentage ;
-/// </pre>
+/// ```
 /// The ladder function interpolates between colors.
 /// The effect is as if a gradient is created using the stops provided, and then
 /// the brightness of the provided `color` is used to index a color value within

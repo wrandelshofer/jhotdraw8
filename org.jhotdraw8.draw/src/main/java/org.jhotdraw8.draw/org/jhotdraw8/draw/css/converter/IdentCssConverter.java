@@ -17,7 +17,7 @@ import java.text.ParseException;
 import java.util.function.Consumer;
 
 /// CssIdentifier converter.
-/// <pre>
+/// ```
 /// ident         = ['-'] , nmstart , { nmchar } ;
 /// name          = { nmchar }- ;
 /// nmstart       = '_' | letter | nonascii | escape ;
@@ -37,7 +37,7 @@ import java.util.function.Consumer;
 ///                 [ 'e'  , [ '+' | '-' ] , { digit }- ] ;
 /// digit         = ? '0' through '9' ?
 /// letter        = ? 'a' through 'z' ? | ? 'A' through 'Z' ? ;
-/// </pre>
+/// ```
 public class IdentCssConverter extends AbstractCssConverter<String> {
 
     public IdentCssConverter(boolean nullable) {

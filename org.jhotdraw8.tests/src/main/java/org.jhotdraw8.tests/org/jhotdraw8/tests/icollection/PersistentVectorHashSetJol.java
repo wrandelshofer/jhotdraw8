@@ -1,10 +1,6 @@
 package org.jhotdraw8.tests.icollection;
 
-import org.jhotdraw8.icollection.PersistentVectorHashSet;
-
-
-import java.util.ArrayList;
-import java.util.Collections;
+//import org.jhotdraw8.icollection.PersistentVectorHashSet;
 
 
 public class PersistentVectorHashSetJol extends AbstractJol {
@@ -14,7 +10,7 @@ public class PersistentVectorHashSetJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.PersistentVectorHashSet with 1000 elements.
     /// total size              : 72816
     /// element size            : 24
@@ -36,11 +32,11 @@ public class PersistentVectorHashSetJol extends AbstractJol {
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = AbstractJol.generateSet(size, mask);
-        PersistentVectorHashSet<Key> setA = PersistentVectorHashSet.copyOf(data);
-        AbstractJol.estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
+        // PersistentVectorHashSet<Key> setA = PersistentVectorHashSet.copyOf(data);
+        // AbstractJol.estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.SimpleImmutableSequencedSet with 250 elements.
     /// total size              : 19560
     /// element size            : 24
@@ -61,19 +57,16 @@ public class PersistentVectorHashSetJol extends AbstractJol {
     ///          1        32        32   org.jhotdraw8.icollection.impl.vector.BitMappedTrie
     ///        252        24      6048   org.jhotdraw8.icollection.jmh.Key
     ///        683               19560   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;
         var data = AbstractJol.generateSet(size, mask);
-        PersistentVectorHashSet<Key> setA = PersistentVectorHashSet.copyOf(data);
-
-        ArrayList<Key> keys = new ArrayList<>(data);
-        Collections.shuffle(keys);
-        setA = setA.removingAll(keys.subList(0, (int) (keys.size() * 0.75)));
-
-
-        AbstractJol.estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
+        // PersistentVectorHashSet<Key> setA = PersistentVectorHashSet.copyOf(data);
+        // ArrayList<Key> keys = new ArrayList<>(data);
+        // Collections.shuffle(keys);
+        // setA = setA.removingAll(keys.subList(0, (int) (keys.size() * 0.75)));
+        // AbstractJol.estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
 

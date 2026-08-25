@@ -21,7 +21,6 @@ import java.util.function.ToIntBiFunction;
 /// algorithm.
 ///
 /// @param <V> the vertex data type
-/// @param <C> the cost number type
 public class UniqueShortestVertexPathSearchAlgo<V> implements VertexPathSearchAlgo<V> {
     public UniqueShortestVertexPathSearchAlgo() {
     }
@@ -32,13 +31,13 @@ public class UniqueShortestVertexPathSearchAlgo<V> implements VertexPathSearchAl
     /// @param goalPredicate the goal predicate
     /// @param nextVertices  the next vertices function
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the maximal cost (inclusive) of a path.
-    ///                      Must be {@literal >= zero}.
+    ///                      Must be `>= zero`.
     /// @param costFunction  the cost function
-    ///                      The cost must be {@literal > 0} if the graph
+    ///                      The cost must be `> 0` if the graph
     ///                      has cycles.
-    ///                      The cost must be {@literal >= 0} if the graph
+    ///                      The cost must be `>= 0` if the graph
     ///                      is acyclic.
     /// @param visited
     /// @return on success: a back link, otherwise: null

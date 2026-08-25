@@ -6,7 +6,6 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.collection.enumerator.AbstractIntEnumerator;
 import org.jhotdraw8.collection.enumerator.Enumerator;
-import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -17,15 +16,15 @@ import static java.lang.Math.max;
 /// **Implementation:**
 ///
 /// Example graph:
-/// <pre>
+/// ```
 ///     0 ──→ 1 ──→ 2
 ///     │     │
 ///     ↓     ↓
 ///     3 ←── 4
-/// </pre>
+/// ```
 /// If the graph is inserted in the following sequence
 /// into the builder:
-/// <pre>
+/// ```
 ///     buildAddVertex();
 ///     buildAddVertex();
 ///     buildAddVertex();
@@ -37,7 +36,7 @@ import static java.lang.Math.max;
 ///     build.addArrow(1, 2);
 ///     build.addArrow(1, 4);
 ///     build.addArrow(4, 3);
-/// </pre>
+/// ```
 /// Then the internal representation is as follows:
 ///
 ///   - For each vertex, there is an entry in table `lastArrows`.
@@ -59,7 +58,7 @@ import static java.lang.Math.max;
 /// A sentinel={@value #SENTINEL} marks the end of a linked list.
 ///     </ol>
 ///
-/// <pre>
+/// ```
 /// vertexCount: 5
 /// arrowCountInclusiveDeleted: 5
 /// deletedArrowCount: 0
@@ -72,10 +71,10 @@ import static java.lang.Math.max;
 ///    2     [0  ][0] X  │         2    [2  ][SENT] ←┐
 ///    3     [0  ][0] X  └───────→ 3    [4  ][2] ─┘
 ///    4     [4  ][1] ───────────→ 4    [3  ][SENT] X
-/// </pre>
+/// ```
 /// If the arrow 1 → 3 is deleted, it is removed from the linked
 /// list of vertex 1. The arrow head is marked with a tombstone.
-/// <pre>
+/// ```
 /// vertexCount: 5
 /// arrowCountInclusiveDeleted: 5
 /// deletedArrowCount: 1
@@ -88,7 +87,7 @@ import static java.lang.Math.max;
 ///    2     [0  ][0] X  │         2    [2  ][SENT] ←┐
 ///    3     [0  ][0] X  └───────→ 3    [4  ][2] ─┘
 ///    4     [4  ][1] ───────────→ 4    [3  ][SENT] X
-/// </pre>
+/// ```
 public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirectedGraph {
 
     protected static final int ARROWS_NEXT_FIELD = 1;
@@ -460,8 +459,13 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
                 return false;
             }
 
+            /// XXX Build crashes when we annotate this method with @Nullable!
+            /// ```
+                    /// java.lang.NullPointerException: Cannot invoke "com.sun.tools.javac.code.Type.getEnclosingType()" because "curr" is null
+                    /// 	at jdk.compiler/com.sun.tools.javac.jvm.ClassReader$TypeAnnotationStructuralTypeMapping.visitClassType(ClassReader.java:2556)
+                    /// ```
             @Override
-            public @Nullable MyOrderedEnumerator trySplit() {
+            public /*@Nullable*/ MyOrderedEnumerator trySplit() {
                 int hi = limit, lo = index, mid = (lo + hi) >>> 1;
                 return (lo >= mid) ? null : // divide range in half unless too small
                         new MyOrderedEnumerator(vidx, lo, index = mid, arrows);

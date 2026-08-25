@@ -19,7 +19,7 @@ import java.util.Spliterator;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.36
 /// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
@@ -113,7 +113,7 @@ public class ArrayListJmh {
         return set;
     }
 
-    ////@Benchmark
+    /// /@Benchmark
     public ArrayList<Key> mRemoveOneByOne() {
         var map = (ArrayList<Key>) listA.clone();
         for (var e : data.listA) {
@@ -123,7 +123,7 @@ public class ArrayListJmh {
         return map;
     }
 
-    ////@Benchmark
+    /// /@Benchmark
     public boolean mRemoveAll() {
         ArrayList<Key> set = ((ArrayList<Key>) listA.clone());
         return set.removeAll(data.listA);

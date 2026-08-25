@@ -69,11 +69,11 @@ public record Matrix3Double(double a, double b, double c,
     }
 
     /// Vector multiplication.
-    /// <pre>
+    /// ```
     /// x1       [a1]
     /// x2 = M * [a2]
     /// x3       [a3]
-    /// </pre>
+    /// ```
     public Point3D mul(double a1, double a2, double a3) {
         return new Point3D(
                 a * a1 + b * a2 + c * a3,
@@ -158,10 +158,10 @@ public record Matrix3Double(double a, double b, double c,
     }
 
     /// Computes the determinant of a 2x2 matrix:
-    /// <pre>
+    /// ```
     ///    | [ab] |
     ///    | [cd] | = a * d - b * c
-    /// </pre>
+    /// ```
     ///
     /// References:
     /// <dl>

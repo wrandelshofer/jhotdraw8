@@ -60,7 +60,7 @@ public interface IndexedDirectedGraph {
     ///
     /// @param v a vertex
     /// @param u another vertex
-    /// @return index of vertex b. Returns a value {@literal < 0}
+    /// @return index of vertex b. Returns a value `< 0`
     /// if b is not a next vertex of a.
     default int findIndexOfNextAsInt(int v, int u) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {

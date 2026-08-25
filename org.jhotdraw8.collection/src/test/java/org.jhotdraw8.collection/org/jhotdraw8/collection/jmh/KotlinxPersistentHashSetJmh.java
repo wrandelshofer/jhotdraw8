@@ -16,7 +16,7 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.28
 /// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 /// mIterate           1000000  avgt    4  71_505927.591 ± 1063359.317  ns/op
 /// mRemoveThenAdd     1000000  avgt    4    _   458.736 ±       6.936  ns/op
 /// mTail              1000000  avgt    4    _   197.068 ±       3.920  ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 4)
 @Warmup(iterations = 4)

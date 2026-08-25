@@ -15,7 +15,6 @@ import java.util.function.Predicate;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public interface AllArrowsSequencesFinder<V, A> {
 
     /// Finds all arrow paths up to (including) the specified maximal cost.
@@ -23,7 +22,7 @@ public interface AllArrowsSequencesFinder<V, A> {
     /// @param startVertices the set of start vertices
     /// @param goalPredicate the goal predicate
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the algorithm-specific cost limit
     /// @return all paths
     Iterable<OrderedPair<PersistentList<A>, Integer>> findAllArrowSequences(

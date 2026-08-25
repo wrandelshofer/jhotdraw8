@@ -140,9 +140,9 @@ public interface StylesheetsManager<E> {
     /// By default, this class does not log anything.
     ///
     /// A good logger value would be:
-    /// <pre>
+    /// ```
     /// (l, s,t)->Logger.getLogger(SimpleStylesheetsManager.class.getName()).log(l,s,t);
-    /// </pre>
+    /// ```
     ///
     /// @param logger a logger
     void setLogger(Consumer3<Level, String, Throwable> logger);

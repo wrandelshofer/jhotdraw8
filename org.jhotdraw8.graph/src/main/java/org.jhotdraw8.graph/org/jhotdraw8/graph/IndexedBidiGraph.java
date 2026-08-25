@@ -54,7 +54,7 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
     /// @param v vertex `v`
     /// @param u vertex `u`
     /// @return index of vertex `u` in the list of next-vertices from
-    /// `v`. Returns a value {@literal < 0} if `u` is not in
+    /// `v`. Returns a value `< 0` if `u` is not in
     /// the list.
     default int findIndexOfPrevAsInt(int v, int u) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {

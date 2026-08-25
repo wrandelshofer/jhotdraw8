@@ -25,8 +25,7 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
     /// Returns an empty set instance that has the specified
     /// element type.
     ///
-    /// @param <T> the element type of the returned set
-    /// @return an empty set of the specified element type.
+    /// @return an empty set
     @Override
     PersistentSet<E> cleared();
 

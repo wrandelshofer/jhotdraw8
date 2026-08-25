@@ -46,7 +46,7 @@ import java.util.Map;
 import java.util.function.ToIntFunction;
 
 /// Data flow:
-/// <pre>
+/// ```
 ///     colorChooser + targetColorSpace
 ///                  |
 ///                  v
@@ -71,7 +71,7 @@ import java.util.function.ToIntFunction;
 ///         |
 ///         v
 ///     hueSliderLightness
-/// </pre>
+/// ```
 public class ColorChooserPaneModel {
     public static final CieLabColorSpace CIE_LAB_COLOR_SPACE = new CieLabColorSpace();
     public static final ParametricLchColorSpace CIE_LCH_COLOR_SPACE = new ParametricLchColorSpace("CIE LCH", CIE_LAB_COLOR_SPACE);

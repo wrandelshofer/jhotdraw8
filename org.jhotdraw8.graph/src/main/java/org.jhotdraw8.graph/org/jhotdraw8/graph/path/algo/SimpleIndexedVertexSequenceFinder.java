@@ -19,8 +19,6 @@ import java.util.function.Supplier;
 import java.util.function.ToIntBiFunction;
 
 /// Implements the [VertexSequenceFinder] interface.
-///
-/// @param <C> the cost number type
 public class SimpleIndexedVertexSequenceFinder implements VertexSequenceFinder<Integer> {
     private final IndexedVertexPathSearchAlgo algo;
 
@@ -48,7 +46,6 @@ public class SimpleIndexedVertexSequenceFinder implements VertexSequenceFinder<I
     /// @param nextVerticesFunction a function that given a vertex,
     ///                             returns an [Iterable] for the next vertices
     ///                             of that vertex.
-    /// @param costFunction         the cost function
     public SimpleIndexedVertexSequenceFinder(
             Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             IndexedVertexPathSearchAlgo algo) {

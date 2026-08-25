@@ -42,17 +42,17 @@ public class CssParserTest {
     ///
     /// Takes a stylesheet and applies it to the given XML document.
     public static void testCssSyntax(boolean valid, String stylesheet, String xml, String expectedValue) throws Exception {
-        //---
+        ///--
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null, null);
-        //---
+        ///--
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
         // We do not want that the reader creates a socket connection!
         builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
         Document doc = builder.parse(new InputSource(new StringReader(xml)));
-        //---
+        ///--
         DocumentSelectorModel dsd = new DocumentSelectorModel();
 
         NodeList elements = doc.getElementsByTagName("*");
@@ -68,7 +68,7 @@ public class CssParserTest {
             }
         }
 
-        //---
+        ///--
         Transformer t = TransformerFactory.newInstance().newTransformer();
         DOMSource source = new DOMSource(doc);
         StringWriter w = new StringWriter();
@@ -77,7 +77,7 @@ public class CssParserTest {
         String actualValue = w.toString();
         actualValue = actualValue.substring(XML_PREFIX.length());
 
-        //---
+        ///--
         assertEquals(expectedValue, actualValue);
         assertEquals(valid, p.getParseExceptions().isEmpty());
     }
@@ -256,18 +256,18 @@ public class CssParserTest {
     ///
     /// Takes a stylesheet and applies it to the given XML document.
     public static void testSelectorSyntax(boolean valid, String stylesheet, String xml, String expectedValue) throws Exception {
-        //---
+        ///--
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null, null);
         //
-        //---
+        ///--
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
         // We do not want that the reader creates a socket connection!
         builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
         Document doc = builder.parse(new InputSource(new StringReader(xml)));
-        //---
+        ///--
         DocumentSelectorModel dsd = new DocumentSelectorModel();
 
         NodeList elements = doc.getElementsByTagName("*");
@@ -283,7 +283,7 @@ public class CssParserTest {
             }
         }
 
-        //---
+        ///--
         Transformer t = TransformerFactory.newInstance().newTransformer();
         DOMSource source = new DOMSource(doc);
         StringWriter w = new StringWriter();
@@ -292,7 +292,7 @@ public class CssParserTest {
         String actualValue = w.toString();
         actualValue = actualValue.substring(XML_PREFIX.length());
 
-        //---
+        ///--
         assertEquals(expectedValue, actualValue);
         assertEquals(valid, p.getParseExceptions().isEmpty());
     }

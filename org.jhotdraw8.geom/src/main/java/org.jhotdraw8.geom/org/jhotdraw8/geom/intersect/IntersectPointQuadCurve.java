@@ -25,38 +25,38 @@ public class IntersectPointQuadCurve {
     ///
     /// This method solves the last equation shown in the list below.
     /// <ol>
-    ///   - {@literal (1 - t)²·p0 + 2·(1 - t)·t·p1 + t²·p2 , 0 ≤ t ≤ 1 }
+    ///   - `(1 - t)²·p0 + 2·(1 - t)·t·p1 + t²·p2 , 0 ≤ t ≤ 1 `
     ///     : quadratic bezier equation, vector form
     ///
-    ///   - {@literal  (p0 - 2·p1 + p2)·t² - 2·(p0 - p1)·t + p0 }
+    ///   - ` (p0 - 2·p1 + p2)·t² - 2·(p0 - p1)·t + p0 `
     ///     : expanded, and then collected for t
     ///
-    ///   - {@literal c2·t² + c1·t + c0 }
+    ///   - `c2·t² + c1·t + c0 `
     ///     : coefficients compacted
     ///
-    ///   - {@literal c2x·t² + c1x·t + c0x , c2y·t² + c1y·t + c0y }
+    ///   - `c2x·t² + c1x·t + c0x , c2y·t² + c1y·t + c0y `
     ///     : bezier equation in matrix form
     ///
-    ///   - {@literal fx , fy }
+    ///   - `fx , fy `
     ///     : compacted matrix form
     ///
-    ///   - {@literal (fx - cx)² + (fy - cy)² = 0 }
+    ///   - `(fx - cx)² + (fy - cy)² = 0 `
     ///     : distance to point equation, with fx, fy inserted from matrix form
     ///
     ///   - {@literal c2x²·t⁴ + 2·c1x·c2x·t³ + (c1x² - 2·cx·c2x + 2·c0x·c2x)·t² + cx² - 2·cx·c0x + c0x² - 2·(cx·c1x - c0x·c1x)·t
     ///     }
-    /// {@literal + ..same for y-axis... }
+    /// `+ ..same for y-axis... `
     ///     : coefficients expanded
     ///
-    ///   - {@literal (c2x^2 + c2y^2)*t^4 }
-    ///     {@literal + 2*(c1x*c2x + c1y*c2y)*t^3 }
-    ///     {@literal + (c1x ^ 2 + c1y ^ 2 + 2 * c0x * c2x + 2 * c0y * c2y - 2 * c2x * cx - 2 * c2y * cy)*t^2 }
-    ///     {@literal + c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2 + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t}
+    ///   - `(c2x^2 + c2y^2)*t^4 `
+    ///     `+ 2*(c1x*c2x + c1y*c2y)*t^3 `
+    ///     `+ (c1x ^ 2 + c1y ^ 2 + 2 * c0x * c2x + 2 * c0y * c2y - 2 * c2x * cx - 2 * c2y * cy)*t^2 `
+    ///     `+ c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2 + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t`
     ///     : coefficients collected for t
-    ///   - {@literal a·t⁴ + b·t³ + c·t² + d·t + e = 0, 0 ≤ t ≤ 1 }
+    ///   - `a·t⁴ + b·t³ + c·t² + d·t + e = 0, 0 ≤ t ≤ 1 `
     ///     : final polynomial equation
     ///
-    ///   - {@literal 4·a·t³ + 3·b·t² + 2·c·t + d = 0, 0 ≤ t ≤ 1 }
+    ///   - `4·a·t³ + 3·b·t² + 2·c·t + d = 0, 0 ≤ t ≤ 1 `
     ///     : derivative
     ///
     /// </ol>

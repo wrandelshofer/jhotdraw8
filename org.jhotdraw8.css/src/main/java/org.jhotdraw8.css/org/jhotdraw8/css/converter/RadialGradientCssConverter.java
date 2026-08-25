@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 /// <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
 /// CSS Reference Guide</a>.
 ///
-/// <pre>
+/// ```
 /// RadialGradient := "radial-gradient(", RadialGradientParameters,  Cycle, ColorStop,{"," ColorStop}")"
 /// RadialGradientParameters := [FocusAngle","], [FocusDistance","], [Center","], Radius ;
 /// FocusAngle = "focus-angle", CssSize"deg";
@@ -40,7 +40,7 @@ import java.util.function.Consumer;
 /// ColorStop = Color, ["",Offset] ;
 /// Point = (Number|CssSize|Percentage), (Number|CssSize|Percentage) ;
 ///
-/// </pre>
+/// ```
 public class RadialGradientCssConverter extends AbstractCssConverter<CssRadialGradient> {
 
     private static final ColorCssConverter colorConverter = new ColorCssConverter(false);

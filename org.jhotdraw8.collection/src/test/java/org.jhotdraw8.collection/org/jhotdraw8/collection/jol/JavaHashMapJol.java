@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-/// <pre>
+/// ```
 /// class java.util.HashMap with 1000000 elements.
 /// total size              : 88388688
 /// element size            : 48
@@ -21,7 +21,7 @@ import java.util.HashMap;
 ///    1000000        32  32000000   java.util.HashMap$Node
 ///    2000000        24  48000000   org.jhotdraw8.collection.jmh.Key
 ///    3000003            88388688   (total)
-/// </pre>
+/// ```
 public class JavaHashMapJol extends AbstractJol {
 
     @Test

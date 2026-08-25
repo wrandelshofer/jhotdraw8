@@ -39,7 +39,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
     ///
     /// @param v a vertex
     /// @param u a vertex
-    /// @return index of vertex `u` or a value {@literal < 0}
+    /// @return index of vertex `u` or a value `< 0`
     default int findIndexOfNext(V v, V u) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {
             if (u.equals(getNext(v, i))) {

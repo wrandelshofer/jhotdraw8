@@ -12,7 +12,7 @@ import java.io.IOException;
 ///
 /// The scanner filters out the characters '\r', '\f' and '\000' using the
 /// following ISO 14977 EBNF productions:
-/// <pre>
+/// ```
 /// char          = inline | newline;
 /// newline       = ( '\r' , ['\n']
 ///                 | '\n' | '\t' | '\f
@@ -21,7 +21,7 @@ import java.io.IOException;
 /// legalInline   = char - ( '\r' | '\n' | '\t' | '\f' | '\000' ) ;
 /// illegalInline = '\000' ;
 /// char          = (* the set of unicode UTF-16 characters *) ;
-/// </pre>
+/// ```
 ///
 /// Any `illegalInline` production is replaced with U+FFFD REPLACEMENT
 /// CHARACTER. Any `newline` production is replaced with U+000A LINE FEED

@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.icollection.alt.impl.champmap;
 
+import org.jhotdraw8.icollection.impl.EditableMapEntry;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;

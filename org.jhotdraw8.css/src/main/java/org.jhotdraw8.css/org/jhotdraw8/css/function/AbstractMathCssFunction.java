@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /// Provides protected methods for processing the following productions:
-/// <pre>
+/// ```
 /// calc-sum            = calc-product ,  { ['+'|'-'] , calc-product } ;
 /// calc-product        = calc-value , { '*' , calc-value | '/' , calc-number-value } ;
 /// calc-value          = number | dimension | percentage | '(' , calc-sum , ')' ;
 /// calc-number-sum     = calc-number-product , { ['+'|'-'] calc-number-product } ;
 /// calc-number-product = calc-number-value> , { '*' , calc-number-value | '/' , calc-number-value } ;
 /// calc-number-value   = number | calc-number-sum ;
-/// </pre>
+/// ```
 /// In addition, white space is required on both sides of the '+' and '-' operators.
 /// (The '*' and '/' operaters can be used without white space around them.)
 /// References:

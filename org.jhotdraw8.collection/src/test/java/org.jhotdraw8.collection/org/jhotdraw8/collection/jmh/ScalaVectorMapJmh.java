@@ -17,7 +17,7 @@ import scala.collection.mutable.Builder;
 
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.36
 /// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
@@ -88,7 +88,7 @@ import java.util.concurrent.TimeUnit;
 /// ScalaVectorMapJmh.mTail                 -65    100000  avgt    2      _   155.144          ns/op
 /// ScalaVectorMapJmh.mTail                 -65   1000000  avgt    2      _   220.500          ns/op
 /// ScalaVectorMapJmh.mTail                 -65  10000000  avgt    2      _   254.799          ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 2)

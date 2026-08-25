@@ -18,10 +18,10 @@ import java.util.function.Consumer;
 /// CssNumberConverter.
 ///
 /// Parses the following EBNF:
-/// <pre>
+/// ```
 /// Number := number-token | "-INF" | "INF" | "NaN";
 /// number-token = (* CSS number-token *)
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>

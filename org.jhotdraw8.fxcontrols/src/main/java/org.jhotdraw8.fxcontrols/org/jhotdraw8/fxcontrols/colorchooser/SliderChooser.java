@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 /// Shows 3 horizontal sliders:
-/// <pre>
+/// ```
 ///     +---------------------+
 ///     |                     |
 ///     +---------------------+
@@ -31,7 +31,7 @@ import java.util.ResourceBundle;
 ///     +---------------------+
 ///     |                     |
 ///     +---------------------+
-/// </pre>
+/// ```
 public class SliderChooser extends VBox {
     @SuppressWarnings("this-escape")
     private final ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");

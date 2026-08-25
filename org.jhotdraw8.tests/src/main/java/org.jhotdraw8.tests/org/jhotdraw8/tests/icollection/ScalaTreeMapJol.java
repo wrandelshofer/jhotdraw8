@@ -15,7 +15,7 @@ public class ScalaTreeMapJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.TreeMap with 1000 elements.
     /// total size              : 80112
     /// element size            : 48
@@ -34,7 +34,7 @@ public class ScalaTreeMapJol extends AbstractJol {
     ///          1        24        24   scala.collection.immutable.TreeMap
     ///          1        16        16   scala.math.LowPriorityOrderingImplicits$$anon$5
     ///       3005               80112   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);
@@ -47,7 +47,7 @@ public class ScalaTreeMapJol extends AbstractJol {
         AbstractJol.estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.TreeMap with 250 elements.
     /// total size              : 46560
     /// element size            : 48
@@ -69,7 +69,7 @@ public class ScalaTreeMapJol extends AbstractJol {
     ///          1        32        32   scala.collection.immutable.TreeMap
     ///        750        16     12000   scala.collection.immutable.TreeMap$Tombstone
     ///       1972               46560   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;

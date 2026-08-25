@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 /// # JMH version: 1.37
 /// # VM version: JDK 21.0.1, OpenJDK 64-Bit Server VM, 21.0.1+12-LTS
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
-/// <pre>
+/// ```
 /// Benchmark                                               Mode  Cnt    Score   Error  Units
 /// QuadCurvesJmh.arcLengthIntegrated                       avgt    2   75.586          ns/op
 /// QuadCurvesJmh.invArcLengthIntegrated                    avgt    2  137.378          ns/op
 /// QuadCurvesJmh.invArcLengthIntegratedWithKnownArcLength  avgt    2   72.492          ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 2)
@@ -41,6 +41,7 @@ public class QuadCurvesJmh {
     public double invArcLengthIntegratedWithKnownArcLength() {
         return QuadCurves.invArcLength(curve, 0, 70, arcLength, 0.125);
     }
+
     @Benchmark
     public double invArcLengthIntegrated() {
         return QuadCurves.invArcLength(curve, 0, 70, 0.125);

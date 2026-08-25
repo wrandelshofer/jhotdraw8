@@ -18,28 +18,25 @@ import java.util.Spliterator;
 ///
 /// A node has zero or one parents, and zero or more children.
 ///
-/// All nodes in the same tree structure are of the same type {@literal <T>}.
+/// All nodes in the same tree structure are of the same type `<T>`.
 ///
 /// A node may support only a restricted set of parent types
-/// {@literal <P extends T>}.
+/// `<P extends T>`.
 ///
 /// A node may only support a restricted set of child types
-/// {@literal <C extends T>}.
+/// `<C extends T>`.
 ///
 /// Usage:
-/// <pre>
+/// ```
 /// {@literal
 ///      public class MyTree implements TreeNode<MyTree> {
 ///         private @Nullable MyTree parent;
 ///         private ChildList<MyTree> children=new ChildList<>(this);
 ///
-/// @Override
 ///         public @Nullable MyTree getParent() { return parent; }
 ///
-/// @Override
 ///         public void setParent(@Nullable MyTree p) { this.parent = p; }
 ///
-/// @Override
 ///         public ObservableList<MyTree> getChildren() { return children; }
 ///      }
 ///  }</pre>
@@ -99,9 +96,9 @@ public interface TreeNode<T extends TreeNode<T>> {
     ///
     /// @param <TT>         The ancestor type
     /// @param ancestorType The ancestor type
-    /// @return Nearest ancestor of type {@literal <T>} or null if no ancestor of
+    /// @return Nearest ancestor of type `<T>` or null if no ancestor of
     /// this type is present. Returns `this` if this object is of type
-    /// {@literal <T>}.
+    /// `<T>`.
     default @Nullable <TT> TT getAncestor(Class<TT> ancestorType) {
         @SuppressWarnings("unchecked")
         T ancestor = (T) this;

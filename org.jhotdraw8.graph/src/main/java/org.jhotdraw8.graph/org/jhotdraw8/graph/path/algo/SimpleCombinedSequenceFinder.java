@@ -22,7 +22,6 @@ import java.util.function.Supplier;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public class SimpleCombinedSequenceFinder<V, A> implements CombinedSequenceFinder<V, A> {
 
 

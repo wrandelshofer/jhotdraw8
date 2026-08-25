@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.AbstractMap;
 
-/// <pre>
+/// ```
 /// class io.vavr.collection.TreeMap with 1000000 elements.
 /// total size              : 112000192
 /// element size            : 48
@@ -27,7 +27,7 @@ import java.util.AbstractMap;
 ///          2        24        48   java.lang.String
 ///    2000000        24  48000000   org.jhotdraw8.collection.jmh.Key
 ///    4000009           112000192   (total)
-/// </pre>
+/// ```
 public class VavrTreeMapJol extends AbstractJol {
 
     @Test

@@ -8,7 +8,7 @@ import scala.collection.mutable.ReusableBuilder;
 
 import java.util.AbstractMap;
 
-/// <pre>
+/// ```
 /// class scala.collection.immutable.HashMap with 1000000 elements.
 /// total size              : 83774440
 /// element size            : 48
@@ -26,10 +26,10 @@ import java.util.AbstractMap;
 ///          1        16        16   scala.collection.immutable.HashMap
 ///        102        16      1632   scala.collection.immutable.Vector1
 ///    2919062            83774440   (total)
-/// </pre>
+/// ```
 public class ScalaHashMapJol extends AbstractJol {
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.HashMap with 1000 elements.
     /// total size              : 82864
     /// element size            : 48
@@ -44,7 +44,7 @@ public class ScalaHashMapJol extends AbstractJol {
     ///        296        40     11840   scala.collection.immutable.BitmapIndexedMapNode
     ///          1        16        16   scala.collection.immutable.HashMap
     ///       2886               82864   (total)
-    /// </pre>
+    /// ```
     @Test
     @Disabled
     public void estimateMemoryUsage() {

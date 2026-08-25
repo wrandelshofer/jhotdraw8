@@ -16,14 +16,13 @@ import java.util.function.Predicate;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public interface AllArcSequencesFinder<V, A> {
     /// Finds all arc paths up to (including) the specified maximal cost.
     ///
     /// @param startVertices the set of start vertices
     /// @param goalPredicate the goal predicate
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the algorithm-specific cost limit
     /// @return all paths
     Iterable<OrderedPair<PersistentList<Arc<V, A>>, Integer>> findAllArcSequences(

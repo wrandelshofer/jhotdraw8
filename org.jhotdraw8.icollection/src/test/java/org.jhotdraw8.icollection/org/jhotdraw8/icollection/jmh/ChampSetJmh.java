@@ -65,15 +65,15 @@ import java.util.concurrent.TimeUnit;
 /// ChampSetJmh.mTail                                       -65       10  avgt    2         11.572          ns/op
 /// ChampSetJmh.mTail                                       -65     1000  avgt    2         20.039          ns/op
 /// ChampSetJmh.mTail                                       -65  1000000  avgt    2         49.542          ns/op       ns/op
-/// <pre>
+/// ```
 /// # JMH version: 1.36
 /// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
 /// Benchmark                          (mask)  (size)  Mode  Cnt        Score   Error  Units
 /// ChampSetJmh.mIterate                  -65  100000  avgt        844158.536          ns/op
 /// ChampSetJmh.mIterateEnumerator        -65  100000  avgt       1244576.380          ns/op
-/// </pre>
-/// <pre>
+/// ```
+/// ```
 /// # JMH version: 1.36
 /// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
@@ -147,7 +147,7 @@ import java.util.concurrent.TimeUnit;
 /// ChampSetJmh.mTail                                       -65      1000  avgt               48.886          ns/op
 /// ChampSetJmh.mTail                                       -65    100000  avgt               88.017          ns/op
 /// ChampSetJmh.mTail                                       -65  10000000  avgt              112.837          ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 1)

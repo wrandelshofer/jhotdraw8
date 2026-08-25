@@ -24,7 +24,6 @@ import java.util.function.Supplier;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public interface ArrowSequenceFinder<V, A> {
 
 
@@ -34,7 +33,7 @@ public interface ArrowSequenceFinder<V, A> {
     /// @param startVertices the start vertex
     /// @param goalPredicate the goal predicate
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the algorithm-specific cost limit
     /// @param visited       the visited function
     /// @return an ordered pair (arrow sequence, cost),
@@ -53,7 +52,7 @@ public interface ArrowSequenceFinder<V, A> {
     /// @param startVertices the start vertex
     /// @param goalPredicate the goal predicate
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the algorithm-specific cost limit
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
@@ -85,7 +84,7 @@ public interface ArrowSequenceFinder<V, A> {
     /// @param start     the start vertex
     /// @param goal      the goal vertex
     /// @param maxDepth  the maximal depth (inclusive) of the search
-    ///                  Must be {@literal >= 0}.
+    ///                  Must be `>= 0`.
     /// @param costLimit the algorithm-specific cost limit
     /// @param visited   the visited function
     /// @return an ordered pair (arrow sequence, cost),
@@ -103,7 +102,7 @@ public interface ArrowSequenceFinder<V, A> {
     /// @param start     the start vertex
     /// @param goal      the goal vertex
     /// @param maxDepth  the maximal depth (inclusive) of the search
-    ///                  Must be {@literal >= 0}.
+    ///                  Must be `>= 0`.
     /// @param costLimit the algorithm-specific cost limit
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
@@ -133,7 +132,7 @@ public interface ArrowSequenceFinder<V, A> {
     ///
     /// @param waypoints         a list of waypoints
     /// @param maxDepth          the maximal depth (inclusive) of the search
-    ///                          Must be {@literal >= 0}.
+    ///                          Must be `>= 0`.
     /// @param costLimit         the algorithm-specific cost limit for paths between waypoints
     /// @param visitedSetFactory the visited set factory
     /// @return an ordered pair (arrow sequence, cost),
@@ -147,7 +146,7 @@ public interface ArrowSequenceFinder<V, A> {
     ///
     /// @param waypoints a list of waypoints
     /// @param maxDepth  the maximal depth (inclusive) of the search
-    ///                  Must be {@literal >= 0}.
+    ///                  Must be `>= 0`.
     /// @param costLimit the algorithm-specific cost limit for paths between waypoints
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
@@ -167,10 +166,9 @@ public interface ArrowSequenceFinder<V, A> {
         return findArrowSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, costLimit, () -> new HashSet<>()::add);
     }
 
-    /// Helper function for implementing [#findArrowSequenceOverWaypoints(Iterable, int, Number, Supplier)].
+    /// Helper function for implementing [#findArrowSequenceOverWaypoints(Iterable, int, int, Supplier)].
     ///
     /// @param <VV>                      the vertex type
-    /// @param <CC>                      the number type
     /// @param waypoints                 the waypoints
     /// @param findArrowSequenceFunction the search function, for example `this::findArrowSequence`
     /// @return an ordered pair with the combined sequence

@@ -23,7 +23,7 @@ import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 import java.util.List;
 
 /// Show sliders for RGB color spaces.
-/// <pre>
+/// ```
 /// +-----------------+
 /// |   cyan →        |
 /// +-----------------+
@@ -36,7 +36,7 @@ import java.util.List;
 /// +-----------------+
 /// |   black →       |
 /// +-----------------+
-/// </pre>
+/// ```
 public class ColorSlidersCmykMain extends AbstractColorSlidersMain {
 
     @Override

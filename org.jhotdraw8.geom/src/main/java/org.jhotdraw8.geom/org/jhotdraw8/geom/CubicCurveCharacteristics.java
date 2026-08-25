@@ -104,12 +104,12 @@ public class CubicCurveCharacteristics {
     /// Transforms the given cubic curve into canonical form.
     ///
     /// Where:
-    /// <pre>
+    /// ```
     ///   B0: x0 = 0, y0 = 0
     ///   B1: x1 = 0, y1 = 1
     ///   B2: x2 = 1, y2 = 1
     ///   B3: x3 = ..., y3 = ...
-    /// </pre>
+    /// ```
     /// References:
     /// <dl>
     ///     <dt>Calculating the Extremal Points of a Cubic Bezier Curve</dt>
@@ -123,9 +123,9 @@ public class CubicCurveCharacteristics {
     /// @return returns the coordinates of x3,y3 or null if the mapping
     /// failed
     public static Point2D.@Nullable Double canonicalForm(double x0, double y0,
-                                               double x1, double y1,
-                                               double x2, double y2,
-                                               double x3, double y3
+                                                         double x1, double y1,
+                                                         double x2, double y2,
+                                                         double x3, double y3
     ) {
 
         // Handle degenerate forms
@@ -219,9 +219,9 @@ public class CubicCurveCharacteristics {
     ///    <dd><a href="https://cie.nwsuaf.edu.cn/docs/20170614173651207557.pdf">cie.nwsuaf.edu.cn</a></dd>
     /// </dl>
     public static DoubleArrayList inflectionPoints(double x0, double y0,
-                                                            double x1, double y1,
-                                                            double x2, double y2,
-                                                            double x3, double y3) {
+                                                   double x1, double y1,
+                                                   double x2, double y2,
+                                                   double x3, double y3) {
 
         DoubleArrayList result = new DoubleArrayList(2);
         double[] n = align(x0, y0, x1, y1, x2, y2, x3, y3);
@@ -308,9 +308,9 @@ public class CubicCurveCharacteristics {
     ///     <dd><a href="https://github.polettix.it/ETOOBUSY/2020/07/09/bezier-extremes/">github.polettix.it</a></dd>
     /// </dl>
     public static DoubleArrayList extremePoints(double x0, double y0,
-                                                         double x1, double y1,
-                                                         double x2, double y2,
-                                                         double x3, double y3) {
+                                                double x1, double y1,
+                                                double x2, double y2,
+                                                double x3, double y3) {
         double ax, ay, bx, by, cx, cy, t0, t1, t2, t3;
         double detx, dety;
 

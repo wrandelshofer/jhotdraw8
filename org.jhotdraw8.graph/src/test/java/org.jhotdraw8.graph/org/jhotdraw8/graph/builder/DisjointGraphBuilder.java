@@ -9,11 +9,11 @@ import java.util.List;
 
 /// Builds a graph with two disjoint vertex sets.
 /// Each disjoint vertex set contains two pairs of vertices that are strongly connected.
-/// <pre>
+/// ```
 /// a ←─1─→ b ──1─→ c ←─1─→ d
 ///
 /// A ←─1─→ B ──1─→ C ←─1─→ D
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>

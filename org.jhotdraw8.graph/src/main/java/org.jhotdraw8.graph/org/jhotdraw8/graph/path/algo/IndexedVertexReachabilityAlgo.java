@@ -13,8 +13,6 @@ import java.util.function.IntPredicate;
 import java.util.function.ToIntBiFunction;
 
 /// Interface for a reachability checker algorithm over a directed graph.
-///
-/// @param <C> the cost number type
 public interface IndexedVertexReachabilityAlgo {
     /// Search engine method.
     ///
@@ -22,7 +20,7 @@ public interface IndexedVertexReachabilityAlgo {
     /// @param goalPredicate        the goal predicate
     /// @param nextVerticesFunction the next vertices function
     /// @param maxDepth             the maximal depth (inclusive) of the search
-    ///                             Must be {@literal >= 0}.
+    ///                             Must be `>= 0`.
     /// @param costLimit            the algorithm-specific cost limit
     /// @param costFunction         the cost function
     /// @param visited              the visited function

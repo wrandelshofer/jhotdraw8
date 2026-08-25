@@ -180,9 +180,9 @@ public interface Converter<T> {
     ///     width angle brackets: `｛x｝`.
     ///
     /// Example:
-    /// <pre>
+    /// ```
     /// Format of ⟨Color⟩: ⟨name⟩｜ #⟨hex⟩｜ rgb(⟨r⟩,⟨g⟩,⟨b⟩)｜ rgba(⟨r⟩,⟨g⟩,⟨b⟩,⟨a⟩)｜ hsb(⟨h⟩,⟨s⟩,⟨b⟩)｜ hsba(⟨h⟩,⟨s⟩,⟨b⟩,⟨a⟩)
-    /// </pre>
+    /// ```
     ///
     /// @return help text. Returns null if no help text is available.
     default @Nullable String getHelpText() {

@@ -13,7 +13,7 @@ public class VavrTreeMapJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class io.vavr.collection.TreeMap with 1000 elements.
     /// total size              : 112192
     /// element size            : 48
@@ -34,7 +34,7 @@ public class VavrTreeMapJol extends AbstractJol {
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Value
     ///       4009              112192   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = ~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);

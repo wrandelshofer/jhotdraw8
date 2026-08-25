@@ -42,7 +42,6 @@ import java.util.function.Predicate;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 /// @param <E> the element type of the path
 public class AllWalksSpliterator<V, A, E> extends AbstractEnumerator<OrderedPair<PersistentList<E>, Integer>> {
     private final Queue<ArcBackLinkWithCost<V, A>> queue = new ArrayDeque<>();
@@ -61,9 +60,9 @@ public class AllWalksSpliterator<V, A, E> extends AbstractEnumerator<OrderedPair
     /// @param nextArcsFunction the next arcs function
     /// @param sequenceFunction the function that maps back links to a sequence
     /// @param maxDepth         the maximal depth (inclusive) of the search
-    ///                         Must be {@literal >= 0}.
+    ///                         Must be `>= 0`.
     /// @param maxCost          the maximal cost (inclusive) of a sequence
-    ///                         Must be {@literal >= zero}.
+    ///                         Must be `>= zero`.
     /// @param costFunction     the cost function.
     public AllWalksSpliterator(Iterable<V> startVertices,
                                Predicate<V> goalPredicate,

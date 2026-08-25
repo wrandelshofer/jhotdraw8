@@ -141,9 +141,9 @@ public class NaturalSortCollator extends Collator {
 
     /// Prepends each group of digits with the number of digits - 1.
     /// The number of digits - 1 is always two digits long.
-    /// <pre>e.g.
+    /// ```e.g.
     /// "a3b21" becomes "a003b0121".
-    /// </pre>
+    /// ```
     @Nullable
     String expandNumbers(@Nullable String s) {
         if (s == null) {

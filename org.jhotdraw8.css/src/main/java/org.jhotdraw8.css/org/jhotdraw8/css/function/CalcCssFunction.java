@@ -18,7 +18,7 @@ import java.util.Deque;
 import java.util.function.Consumer;
 
 /// Processes the `calc()` function.
-/// <pre>
+/// ```
 /// calc               = "calc(", calc-sum, ")" ;
 /// calc-sum            = calc-product ,  { ['+'|'-'] , calc-product } ;
 /// calc-product        = calc-value , { '*' , calc-value | '/' , calc-number-value } ;
@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 /// calc-number-sum     = calc-number-product , { ['+'|'-'] calc-number-product } ;
 /// calc-number-product = calc-number-value> , { '*' , calc-number-value | '/' , calc-number-value } ;
 /// calc-number-value   = number | calc-number-sum ;
-/// </pre>
+/// ```
 /// In addition, white space is required on both sides of the '+' and '-' operators.
 /// (The '*' and '/' operaters can be used without white space around them.)
 /// References:

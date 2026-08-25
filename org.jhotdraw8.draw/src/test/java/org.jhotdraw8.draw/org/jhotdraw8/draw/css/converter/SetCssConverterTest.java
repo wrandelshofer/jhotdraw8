@@ -9,7 +9,7 @@ import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.converter.SetCssConverter;
 import org.jhotdraw8.css.converter.StringCssConverter;
-import org.jhotdraw8.icollection.PersistentVectorHashSet;
+import org.jhotdraw8.icollection.PersistentLinkedHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
@@ -35,7 +35,7 @@ public class SetCssConverterTest {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         SetCssConverter<Double> instance = new SetCssConverter<>(new DoubleCssConverter(false), null);
-        instance.toString(out, idFactory, value == null ? null : PersistentVectorHashSet.copyOf(value));
+        instance.toString(out, idFactory, value == null ? null : PersistentLinkedHashSet.copyOf(value));
         String actual = out.toString();
         assertEquals(expected, actual);
     }

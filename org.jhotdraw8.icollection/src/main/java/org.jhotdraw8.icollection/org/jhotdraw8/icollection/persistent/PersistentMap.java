@@ -190,9 +190,9 @@ public interface PersistentMap<K, V> extends ReadableMap<K, V> {
     /// Otherwise, replaces the associated value with the results of the given remapping function,
     /// or removes if the result is null. This method may be of use when combining multiple mapped
     /// values for a key. For example, to either create or append a String msg to a value mapping:
-    /// <pre>
+    /// ```
     /// map.merge(key, msg, String::concat)
-    /// </pre>
+    /// ```
     ///
     /// @param key               key with which the resulting value is to be associated
     /// @param value             the non-null value to be merged with the existing value associated with the key or,

@@ -9,7 +9,7 @@ public class JavaUnmodifiableMapJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class java.util.ImmutableCollections$MapN with 1000 elements.
     /// total size              : 64048
     /// element size            : 48
@@ -24,7 +24,7 @@ public class JavaUnmodifiableMapJol extends AbstractJol {
     ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
     ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Value
     ///       2002               64048   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = ~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);

@@ -11,7 +11,6 @@ import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
-import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -93,7 +92,7 @@ public class ArbitraryArcPathSearchAlgoTest {
     public void testFindVertexPath_3args(Integer start, Integer goal, PersistentList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double> instance = newInstance(graph);
-        @Nullable SimpleOrderedPair<PersistentList<Integer>, Integer> actual = instance.findVertexSequence(start, goal,
+        SimpleOrderedPair<PersistentList<Integer>, Integer> actual = instance.findVertexSequence(start, goal,
                 Integer.MAX_VALUE, Integer.MAX_VALUE, new LinkedHashSet<>()::add);
         assertNotNull(actual);
         assertEquals(expected, actual.first());

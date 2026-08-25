@@ -314,11 +314,11 @@ public class FXTransforms {
     /// The point will not be clipped off by the line.
     ///
     /// Formula: b = project(a, p1,p2)
-    /// <pre>
+    /// ```
     ///  v = p2 - p1;
     ///  b = vvT / vTv * (a - p1) + p1;
     ///  b = [vvT/vTv|vvT/vTv*p1] * a; // 2 by 3 matrix
-    /// </pre>
+    /// ```
     ///
     /// @param x1 x-coordinate of p1 of the line
     /// @param y1 y-coordinate of p1 of the line

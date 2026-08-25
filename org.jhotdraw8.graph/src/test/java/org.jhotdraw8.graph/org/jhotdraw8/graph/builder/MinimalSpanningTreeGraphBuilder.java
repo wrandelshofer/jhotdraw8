@@ -4,13 +4,13 @@ import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 
 /// Builds a graph with only the edges for a minimal spanning tree.
-/// <pre>
+/// ```
 /// A     B     C
 /// |     |     |
 /// 1     2     4
 /// |     |     |
 /// D--3--E--5--F
-/// </pre>
+/// ```
 public class MinimalSpanningTreeGraphBuilder {
     /// Builds the graph.
     public DirectedGraph<String, Integer> build() {

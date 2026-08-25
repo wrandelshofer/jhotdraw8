@@ -47,7 +47,6 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
     ///
     /// @param <VV>         the vertex data type
     /// @param <AA>         the arrow data type
-    /// @param <CC>         the cost number type
     /// @param node         the [ArcBackLinkWithAncestorSet]
     /// @param costFunction the cost function
     /// @return the converted [ArcBackLinkWithCost]

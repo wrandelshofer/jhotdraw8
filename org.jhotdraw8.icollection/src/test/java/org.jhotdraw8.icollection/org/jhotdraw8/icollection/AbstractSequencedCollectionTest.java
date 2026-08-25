@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/// Tests classes that implement the interface [SequencedCollection<Key>].
+/// Tests classes that implement the interface [SequencedCollection].
 public abstract class AbstractSequencedCollectionTest {
     private static int size = 17;
     private static int bound = (int) Math.min(Integer.MAX_VALUE, size * 1000L);

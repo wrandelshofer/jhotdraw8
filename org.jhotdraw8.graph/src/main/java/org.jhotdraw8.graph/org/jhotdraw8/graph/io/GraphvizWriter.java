@@ -15,8 +15,7 @@ import java.util.function.Function;
 /// Writes a graph into a graphviz "dot" file.
 ///
 /// Writes the following productions. **Does not write subgraphs!**
-/// <pre>
-/// {@literal
+/// ```
 ///  graph        : digrap [ ID ] '{' stmt_list '}'
 ///  stmt_list    : [ stmt [ ';' ] stmt_list ]
 ///  stmt         : node_stmt
@@ -34,7 +33,7 @@ import java.util.function.Function;
 ///  subgraph     : [ subgraph [ ID ] ] '{' stmt_list '}'
 ///  compass_pt   : (n | ne | e | se | s | sw | w | nw | c | _)
 ///  edgeop       : -> | --
-///  }</pre>
+///  ```
 ///
 /// References:
 /// <dl>

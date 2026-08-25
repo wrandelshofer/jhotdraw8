@@ -15,7 +15,7 @@ public class ScalaVectorMapJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.VectorMap with 1000 elements.
     /// total size              : 129216
     /// element size            : 48
@@ -37,7 +37,7 @@ public class ScalaVectorMapJol extends AbstractJol {
     ///          1        32        32   scala.collection.immutable.Vector2
     ///          1        32        32   scala.collection.immutable.VectorMap
     ///       4985              129216   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);
@@ -50,7 +50,7 @@ public class ScalaVectorMapJol extends AbstractJol {
         AbstractJol.estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.SimpleImmutableSequencedMap with 250 elements.
     /// total size              : 46560
     /// element size            : 48
@@ -72,7 +72,7 @@ public class ScalaVectorMapJol extends AbstractJol {
     ///          1        32        32   scala.collection.immutable.SimpleImmutableSequencedMap
     ///        750        16     12000   scala.collection.immutable.SimpleImmutableSequencedMap$Tombstone
     ///       1972               46560   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;

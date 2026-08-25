@@ -39,7 +39,6 @@ import java.util.function.Predicate;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public class AnyArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     public AnyArcPathSearchAlgo() {
     }
@@ -50,7 +49,7 @@ public class AnyArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     /// @param goalPredicate    the goal predicate
     /// @param nextArcsFunction the next arcs function
     /// @param maxDepth         the maximal depth (inclusive) of the search
-    ///                         Must be {@literal >= 0}.
+    ///                         Must be `>= 0`.
     /// @param costLimit        the cost limit is **ignored**
     /// @param costFunction     the cost function
     /// @param visited
@@ -76,7 +75,7 @@ public class AnyArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     /// @param nextArcsFunction the next arcs function
     /// @param visited          the set of visited vertices (see [AddToSet])
     /// @param maxDepth         the maximal depth (inclusive) of the search
-    ///                         Must be {@literal >= 0}.
+    ///                         Must be `>= 0`.
     /// @return on success: a back link, otherwise: null
     public @Nullable ArcBackLink<V, A> search(Iterable<V> startVertices,
                                               Predicate<V> goalPredicate,

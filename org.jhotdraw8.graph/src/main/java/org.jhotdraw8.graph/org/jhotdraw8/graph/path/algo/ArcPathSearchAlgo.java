@@ -26,7 +26,7 @@ public interface ArcPathSearchAlgo<V, A> {
     /// @param goalPredicate    the goal predicate
     /// @param nextArcsFunction the next arcs function
     /// @param maxDepth         the maximal depth (inclusive) of the search
-    ///                         Must be {@literal >= 0}.
+    ///                         Must be `>= 0`.
     /// @param costLimit        the algorithm-specific cost limit.
     /// @param costFunction     the cost function
     /// @param visited          the visited function

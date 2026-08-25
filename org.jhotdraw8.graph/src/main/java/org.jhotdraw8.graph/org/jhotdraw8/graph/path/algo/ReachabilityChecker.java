@@ -13,7 +13,6 @@ import java.util.function.Predicate;
 /// up to (inclusive) a maximal cost in a directed graph.
 ///
 /// @param <V> the vertex data type
-/// @param <C> the cost number type
 public interface ReachabilityChecker<V> {
     /// Checks if a vertex sequence from a set of start vertices to a vertex
     /// that satisfies the goal predicate exists.
@@ -21,7 +20,7 @@ public interface ReachabilityChecker<V> {
     /// @param startVertices the start vertices
     /// @param goalPredicate the goal vertex
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the algorithm-specific cost limit
     /// @param visited       the visited function
     /// @return true if a sequence was found.
@@ -35,7 +34,7 @@ public interface ReachabilityChecker<V> {
     /// @param start         the start vertex
     /// @param goalPredicate the goal vertex
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the algorithm-specific cost limit
     /// @param visited       the visited function
     /// @return true if a sequence was found.
@@ -48,7 +47,7 @@ public interface ReachabilityChecker<V> {
     /// @param start     the start vertex
     /// @param goal      the goal vertex
     /// @param maxDepth  the maximal depth (inclusive) of the search
-    ///                  Must be {@literal >= 0}.
+    ///                  Must be `>= 0`.
     /// @param costLimit the algorithm-specific cost limit
     /// @param visited   the visited function
     /// @return true if a sequence was found.

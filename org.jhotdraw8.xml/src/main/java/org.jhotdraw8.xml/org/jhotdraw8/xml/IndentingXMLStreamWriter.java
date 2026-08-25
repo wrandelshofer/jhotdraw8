@@ -48,7 +48,7 @@ import java.util.TreeSet;
 ///
 ///
 /// This writer writes an XML 1.0 document with the following syntax rules.
-/// <pre>
+/// ```
 /// Document
 ///  [1]  document       ::=  prolog element Misc*
 ///
@@ -211,7 +211,7 @@ import java.util.TreeSet;
 /// Notation Declarations
 /// [82]  NotationDecl   ::=  '&lt;!NOTATION' S Name S (ExternalID | PublicID) S? '&gt;'
 /// [83]  PublicID       ::=  'PUBLIC' S PubidLiteral
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>
@@ -436,7 +436,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         return escapeClosingAngleBracket;
     }
 
-    /// Whether to replace {@literal '<'} and {@literal '>} characters by
+    /// Whether to replace `'<'` and `'>'` characters by
     /// entity references.
     ///
     /// These characters should always be replaced by entity references,
@@ -451,7 +451,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         return escapeLineBreak;
     }
 
-    /// Whether to replace the {@literal '\n'} character by an
+    /// Whether to replace the `'\n'` character by an
     /// entity references.
     ///
     /// This character should always be replaced by an entity reference,

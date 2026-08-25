@@ -75,7 +75,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
     /// Creates a new instance.
     ///
     /// @param mapFactory used to create a map which maps from nodes of
-    ///                   type `N` to [TreeItem<N>].
+    ///                   type `N` to [TreeItem].
     ///                   For best performance, try to
     ///                   provide an [IdentityHashMap] here.
     public SimpleTreePresentationModel(Supplier<Map<N, TreeItem<N>>> mapFactory) {

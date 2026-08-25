@@ -18,7 +18,7 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.PathIterator;
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.37
 /// # VM version: JDK 21.0.1, OpenJDK 64-Bit Server VM, 21.0.1+12-LTS
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
@@ -29,8 +29,8 @@ import java.util.concurrent.TimeUnit;
 /// CubicCurvesJmh.invArcLengthIntegrated                         1  avgt    2  282.595          ns/op
 /// CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       0  avgt    2   80.758          ns/op
 /// CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       1  avgt    2  196.637          ns/op
-/// </pre>
-/// <pre>
+/// ```
+/// ```
 /// # JMH version: 1.37
 /// # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
 /// # Apple M2 Max @ 3.70GHz
@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 /// CubicCurvesJmh.invArcLengthIntegrated                         1  avgt    2  189.029          ns/op
 /// CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       0  avgt    2   39.451          ns/op
 /// CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       1  avgt    2  117.550          ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 2)

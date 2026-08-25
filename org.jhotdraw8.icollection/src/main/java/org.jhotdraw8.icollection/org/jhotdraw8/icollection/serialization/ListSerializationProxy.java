@@ -18,7 +18,7 @@ import java.util.List;
 /// structure.
 ///
 /// Usage:
-/// <pre>
+/// ```
 /// class MyList&lt;E&gt; implements List&lt;E&gt;, Serializable {
 ///   private final static long serialVersionUID = 0L;
 ///
@@ -32,13 +32,13 @@ import java.util.List;
 ///      SerializationProxy(Set&lt;E&gt; target) {
 ///          super(target);
 ///      }
-///     {@literal @Override}
+///     `@Override`
 ///      protected Object readResolve() {
 ///          return new MyList&lt;&gt;(deserializedElements);
 ///      }
 ///   }
 /// }
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>

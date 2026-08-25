@@ -31,7 +31,7 @@ public class AnyShortestArcPathSearchAlgoTest {
     public AnyShortestArcPathSearchAlgoTest() {
     }
 
-    /// <pre>
+    /// ```
     /// __|  1  |  2  |  3  |  4  |  5  |   6
     /// 1 |       7.0   9.0               14.0
     /// 2 | 7.0        10.0  15.0
@@ -39,7 +39,7 @@ public class AnyShortestArcPathSearchAlgoTest {
     /// 4 |                         6.0
     /// 5 |                                9.0
     /// 6 |14.0                     9.0
-    /// </pre>
+    /// ```
     ///
     /// @return
     private DirectedGraph<Integer, Double> createGraph() {

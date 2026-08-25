@@ -28,11 +28,11 @@ import static org.jhotdraw8.css.converter.SizeCssConverter.parseSize;
 /// List of four sizes in the sequence top, right, bottom, left. If left is
 /// omitted, it is the same as right. If bottom is omitted, it is the same as
 /// top. If right is omitted it is the same as top.
-/// <pre>
+/// ```
 /// insets       = top-right-bottom-left ;
 /// insets       = top-bottom, right-left ;
 /// insets       = top , right , bottom, left ;
-/// </pre> *
+/// ``` *
 public class InsetsCssConverter extends AbstractCssConverter<CssInsets> {
     public InsetsCssConverter(boolean nullable) {
         super(nullable);
@@ -43,34 +43,34 @@ public class InsetsCssConverter extends AbstractCssConverter<CssInsets> {
         List<CssSize> list = new ArrayList<>(4);
         for (int i = 0; i < 4; i++) {
             switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-            case CssTokenType.TT_DIMENSION:
-                tt.pushBack();
-                list.add(parseSize(tt, i + ""));
-                break;
-            case CssTokenType.TT_COMMA:
-                break;
-            default:
-                tt.pushBack();
-                break;
+                case CssTokenType.TT_NUMBER:
+                case CssTokenType.TT_DIMENSION:
+                    tt.pushBack();
+                    list.add(parseSize(tt, i + ""));
+                    break;
+                case CssTokenType.TT_COMMA:
+                    break;
+                default:
+                    tt.pushBack();
+                    break;
             }
         }
         switch (list.size()) {
-        case 1:
-            CssSize trbl = list.getFirst();
-            return new CssInsets(trbl, trbl, trbl, trbl);
-        case 2:
-            CssSize tb = list.get(0);
-            CssSize rl = list.get(1);
-            return new CssInsets(tb, rl, tb, rl);
-        case 4:
-            CssSize t = list.get(0);
-            CssSize r = list.get(1);
-            CssSize b = list.get(2);
-            CssSize l = list.get(3);
-            return new CssInsets(t, r, b, l);
-        default:
-            throw new ParseException("⟨DimensionInsets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩,⟨left-right⟩ ｜ ⟨top⟩,⟨right⟩,⟨bottom⟩,⟨left⟩ expected.", tt.getStartPosition());
+            case 1:
+                CssSize trbl = list.getFirst();
+                return new CssInsets(trbl, trbl, trbl, trbl);
+            case 2:
+                CssSize tb = list.get(0);
+                CssSize rl = list.get(1);
+                return new CssInsets(tb, rl, tb, rl);
+            case 4:
+                CssSize t = list.get(0);
+                CssSize r = list.get(1);
+                CssSize b = list.get(2);
+                CssSize l = list.get(3);
+                return new CssInsets(t, r, b, l);
+            default:
+                throw new ParseException("⟨DimensionInsets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩,⟨left-right⟩ ｜ ⟨top⟩,⟨right⟩,⟨bottom⟩,⟨left⟩ expected.", tt.getStartPosition());
 
         }
     }

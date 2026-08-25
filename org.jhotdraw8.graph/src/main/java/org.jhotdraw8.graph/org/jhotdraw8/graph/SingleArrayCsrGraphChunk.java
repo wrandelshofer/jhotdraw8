@@ -29,7 +29,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
     private int gapSize;
 
     /// Chunk array layout:
-    /// <pre>
+    /// ```
     /// vertices: [data...] // Stores the vertex data for each vertex.
     ///                        // There are [#vertexCount] vertices in this array.
     ///
@@ -52,7 +52,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
     /// arrows: [data,...] // Stores the arrow data of the vertices.
     ///                       // There are [#capacity] vertices in this array.
     ///                       // The structure is the same as for the siblings.
-    /// </pre>
+    /// ```
     ///
     /// @param free the initial free space for arrows
     /// @return a new chunk

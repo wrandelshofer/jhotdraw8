@@ -16,7 +16,6 @@ import java.util.function.Function;
 /// Represents a vertex back link with cost and depth.
 ///
 /// @param <V> the vertex data type
-/// @param <C> the cost number type
 public class VertexBackLinkWithCost<V> extends AbstractBackLinkWithCost<VertexBackLinkWithCost<V>> {
     private final V vertex;
 
@@ -39,7 +38,6 @@ public class VertexBackLinkWithCost<V> extends AbstractBackLinkWithCost<VertexBa
     /// @param node            the [VertexBackLinkWithCost]
     /// @param mappingFunction the mapping function
     /// @param <VV>            the vertex data type
-    /// @param <CC>            the cost number type
     /// @param <XX>            the vertex sequence element type
     /// @return the vertex sequence
     public static <VV, XX> @Nullable SimpleOrderedPair<PersistentList<XX>, Integer> toVertexSequence(

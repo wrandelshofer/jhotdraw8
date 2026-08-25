@@ -57,7 +57,7 @@ import java.util.concurrent.TimeUnit;
 /// ScalaHashSetJmh.mRetainAllSameTypeAllRetained     -65       10  avgt    2         27.834          ns/op
 /// ScalaHashSetJmh.mRetainAllSameTypeAllRetained     -65     1000  avgt    2      11263.946          ns/op
 /// ScalaHashSetJmh.mRetainAllSameTypeAllRetained     -65  1000000  avgt    2   40427134.082          ns/op      ns/op
-/// </pre>
+/// ```
 @SuppressWarnings("unchecked")
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)

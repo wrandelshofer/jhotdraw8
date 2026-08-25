@@ -24,10 +24,10 @@ import java.util.function.Consumer;
 /// <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
 /// CSS Reference Guide</a>.
 ///
-/// <pre>
+/// ```
 /// Size := Double, [Unit] ;
 /// Unit := ("px"|"mm"|"cm"|in"|"pt"|"pc"]"em"|"ex") ;
-/// </pre>
+/// ```
 public final class SizeCssConverter implements CssConverter<CssSize> {
     private final boolean nullable;
 

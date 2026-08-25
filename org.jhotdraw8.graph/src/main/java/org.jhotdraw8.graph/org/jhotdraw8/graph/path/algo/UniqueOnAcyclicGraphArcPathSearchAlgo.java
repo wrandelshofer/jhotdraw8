@@ -50,7 +50,6 @@ import java.util.function.Predicate;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public class UniqueOnAcyclicGraphArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     public UniqueOnAcyclicGraphArcPathSearchAlgo() {
     }
@@ -61,7 +60,7 @@ public class UniqueOnAcyclicGraphArcPathSearchAlgo<V, A> implements ArcPathSearc
     /// @param goalPredicate    the goal predicate
     /// @param nextArcsFunction the next arcs function
     /// @param maxDepth         the maximal depth (inclusive) of the search
-    ///                         Must be {@literal >= 0}.
+    ///                         Must be `>= 0`.
     /// @param costLimit        the cost limit is **ignored**
     /// @param costFunction     the cost function
     /// @param visited
@@ -87,7 +86,7 @@ public class UniqueOnAcyclicGraphArcPathSearchAlgo<V, A> implements ArcPathSearc
     /// @param goalPredicate    the goal predicate
     /// @param nextArcsFunction the next arcs function
     /// @param maxDepth         the maximal depth (inclusive) of the search
-    ///                         Must be {@literal >= 0}.
+    ///                         Must be `>= 0`.
     /// @return
     public @Nullable ArcBackLink<V, A> search(
             Iterable<V> startVertices,

@@ -18,7 +18,7 @@ import scala.collection.mutable.ReusableBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.36
 /// # VM version: JDK 1.8.0_345, OpenJDK 64-Bit Server VM, 25.345-b01
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
@@ -73,7 +73,7 @@ import java.util.concurrent.TimeUnit;
 /// ScalaHashSetJmh.mTail                                  -65      1000  avgt               70.390          ns/op
 /// ScalaHashSetJmh.mTail                                  -65    100000  avgt               95.061          ns/op
 /// ScalaHashSetJmh.mTail                                  -65  10000000  avgt              139.069          ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)
@@ -119,60 +119,60 @@ public class ScalaHashSetJmh {
 
 
     @Benchmark
-        public HashSet<Key> mCopyOf() {
-            HashSet<Key> set = HashSet.<Key>newBuilder().result();
-            set=set.concat(vectorA);
-            assert set.size() == data.listA.size();
-            return set;
+    public HashSet<Key> mCopyOf() {
+        HashSet<Key> set = HashSet.<Key>newBuilder().result();
+        set = set.concat(vectorA);
+        assert set.size() == data.listA.size();
+        return set;
+    }
+
+    @Benchmark
+    public HashSet<Key> mCopyOnyByOne() {
+        HashSet<Key> set = HashSet.<Key>newBuilder().result();
+        for (Key key : data.listA) {
+            set = (HashSet<Key>) set.$plus(key);
         }
+        assert set.size() == data.listA.size();
+        return set;
+    }
 
-        @Benchmark
-        public HashSet<Key> mCopyOnyByOne() {
-            HashSet<Key> set = HashSet.<Key>newBuilder().result();
-            for (Key key : data.listA) {
-                set = (HashSet<Key>) set.$plus(key);
-            }
-            assert set.size() == data.listA.size();
-            return set;
+
+    @Benchmark
+    public HashSet<Key> mRemoveOneByOne() {
+        HashSet<Key> set = setA;
+        for (Key key : data.listA) {
+            set = (HashSet<Key>) set.$minus(key);
         }
+        assert set.isEmpty();
+        return set;
+    }
 
 
-        @Benchmark
-        public HashSet<Key> mRemoveOneByOne() {
-            HashSet<Key> set = setA;
-            for (Key key : data.listA) {
-                set = (HashSet<Key>) set.$minus(key);
-            }
-            assert set.isEmpty();
-            return set;
-        }
+    @Benchmark
+    public HashSet<Key> mRemoveAllFromSameType() {
+        HashSet<Key> set = setA;
+        HashSet<Key> updated = set.diff(setAA);
+        assert updated.isEmpty();
+        return updated;
+    }
 
 
-        @Benchmark
-        public HashSet<Key> mRemoveAllFromSameType() {
-            HashSet<Key> set = setA;
-            HashSet<Key> updated = set.diff(setAA);
-            assert updated.isEmpty();
-            return updated;
-        }
+    @Benchmark
+    public HashSet<Key> mRetainAllFromSameTypeAllRetained() {
+        HashSet<Key> set = setA;
+        HashSet<Key> updated = set.intersect(setAA);
+        assert updated == setA;
+        return updated;
+    }
 
 
-        @Benchmark
-        public HashSet<Key> mRetainAllFromSameTypeAllRetained() {
-            HashSet<Key> set = setA;
-            HashSet<Key> updated = set.intersect(setAA);
-            assert updated == setA;
-            return updated;
-        }
-
-
-        @Benchmark
-        public HashSet<Key> mRetainAllFromSameTypeNoneRetained() {
-            HashSet<Key> set = setA;
-            HashSet<Key> updated = set.intersect(setB);
-            assert updated.isEmpty();
-            return updated;
-        }
+    @Benchmark
+    public HashSet<Key> mRetainAllFromSameTypeNoneRetained() {
+        HashSet<Key> set = setA;
+        HashSet<Key> updated = set.intersect(setB);
+        assert updated.isEmpty();
+        return updated;
+    }
 
     @Benchmark
     public int mIterate() {

@@ -21,7 +21,7 @@ import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 import java.awt.color.ColorSpace;
 
 /// Show sliders for RGB color spaces.
-/// <pre>
+/// ```
 /// +-----------------+
 /// |   red →         |
 /// +-----------------+
@@ -31,7 +31,7 @@ import java.awt.color.ColorSpace;
 /// +-----------------+
 /// |   blue →        |
 /// +-----------------+
-/// </pre>
+/// ```
 public class ColorSlidersTristimulusMain extends AbstractColorSlidersMain {
 
 

@@ -96,7 +96,6 @@ public class CssColor implements Paintable {
     }
 
 
-
     @Override
     public int hashCode() {
         return Objects.hash(this.color, this.name);

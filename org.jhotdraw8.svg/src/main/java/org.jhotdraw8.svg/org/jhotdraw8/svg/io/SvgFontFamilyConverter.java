@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /// Parses a font family.
-/// <pre>
+/// ```
 /// font-family = ( { family-name | generic-family , "," }
 ///     	             family-name | generic-family )
 ///     	       | "inherit" ;
@@ -32,7 +32,7 @@ import java.util.function.Consumer;
 ///             | IDENT, { IDENT } ;
 ///
 /// generic-family = 'serif' | 'sans-serif' | 'cursive' | 'fantasy' | 'monospace' ;
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>

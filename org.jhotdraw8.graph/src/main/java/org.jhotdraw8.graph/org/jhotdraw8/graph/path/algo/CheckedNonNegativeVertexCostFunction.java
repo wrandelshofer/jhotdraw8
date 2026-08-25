@@ -14,7 +14,6 @@ import java.util.function.ToIntBiFunction;
 /// This class is package private.
 ///
 /// @param <V> the vertex data type
-/// @param <C> the cost number type
 record CheckedNonNegativeVertexCostFunction<V>(
         ToIntBiFunction<V, V> costFunction) implements ToIntBiFunction<V, V> {
     CheckedNonNegativeVertexCostFunction {

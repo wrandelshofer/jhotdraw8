@@ -101,7 +101,7 @@ public interface FileBasedActivity extends Activity {
     /// See [Disableable].
     ///
     /// Usage:
-    /// <pre><code>
+    /// ```<code>
     /// WorkState ws = new WorkState("read");
     /// activity.addDisablers(ws);
     /// activity.read(uri, format, options, insert, workState).handle((fmt,ex)-&gt;{
@@ -127,7 +127,7 @@ public interface FileBasedActivity extends Activity {
     ///
     /// The activity must be disabled with the [Action] that invokes
     /// this method.
-    /// <pre><code>
+    /// ```<code>
     /// activity.addDisablers(anAction);
     /// activity.read(uri, options).handle((data,ex)-&gt;{
     ///    ...
@@ -166,7 +166,7 @@ public interface FileBasedActivity extends Activity {
     ///
     /// The activity must be disabled with the [Action] that invokes
     /// this method.
-    /// <pre><code>
+    /// ```<code>
     /// activity.addDisablers(anAction);
     /// activity.write(uri, options).handle((data,ex)-&gt;{
     ///    ...

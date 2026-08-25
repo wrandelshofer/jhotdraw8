@@ -88,9 +88,9 @@ import static java.lang.Math.min;
 /// provides stages to present them on screen.
 ///
 /// This implementation supports the following command line parameters:
-/// <pre>
+/// ```
 ///     [path...]
-/// </pre>
+/// ```
 /// <dl>
 /// <dt>path</dt><dd>The URI to a file. Opens a [FileBasedActivity] for each provided path.</dd>
 /// </dl>

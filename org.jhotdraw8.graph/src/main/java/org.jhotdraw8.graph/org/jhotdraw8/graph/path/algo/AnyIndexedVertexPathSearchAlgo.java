@@ -23,9 +23,7 @@ import java.util.function.ToIntBiFunction;
 /// algorithm.
 ///
 /// This implementation is optimized for [org.jhotdraw8.graph.IndexedDirectedGraph].
-///
-/// @param <C> the cost number type
-public class AnyIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
+public class AnyIndexedVertexPathSearchAlgo
         implements IndexedVertexPathSearchAlgo {
     public AnyIndexedVertexPathSearchAlgo() {
     }

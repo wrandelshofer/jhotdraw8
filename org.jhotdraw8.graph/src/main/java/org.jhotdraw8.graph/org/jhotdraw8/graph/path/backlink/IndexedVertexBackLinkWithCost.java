@@ -15,8 +15,6 @@ import java.util.Deque;
 import java.util.function.Function;
 
 /// Represents an indexed vertex back link with cost and depth.
-///
-/// @param <C> the cost number type
 public class IndexedVertexBackLinkWithCost extends AbstractBackLinkWithCost<IndexedVertexBackLinkWithCost> {
 
     final int vertex;

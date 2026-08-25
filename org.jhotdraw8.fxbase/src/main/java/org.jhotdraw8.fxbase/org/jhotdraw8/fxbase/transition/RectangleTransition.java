@@ -15,7 +15,12 @@ public class RectangleTransition extends Transition {
     private final Bounds fromBounds;
     private final Bounds toBounds;
 
-
+    /// Creates a new instance.
+    ///
+    /// @param duration   the duration of the transition
+    /// @param rectangle  the rectangle to transform
+    /// @param fromBounds the bounds at the start of the transition
+    /// @param toBounds   the bounds at the end of the transition
     @SuppressWarnings("this-escape")
     public RectangleTransition(Duration duration, Rectangle rectangle, Bounds fromBounds, Bounds toBounds) {
         this.rectangle = rectangle;
@@ -24,10 +29,12 @@ public class RectangleTransition extends Transition {
         setCycleDuration(duration);
     }
 
+    /// Gets the bounds from which the transition starts.
     public Bounds getFromBounds() {
         return fromBounds;
     }
 
+    /// Gets the bounds to which the transition ends.
     public Bounds getToBounds() {
         return toBounds;
     }

@@ -14,7 +14,6 @@ import java.util.function.ToIntBiFunction;
 /// Interface for a reachability test algorithm.
 ///
 /// @param <V> the vertex data type
-/// @param <C> the cost number type
 public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
 
     /// Search engine method.
@@ -22,7 +21,7 @@ public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
     /// @param startVertices        the set of start vertices
     /// @param goalPredicate        the goal predicate
     /// @param maxDepth             the maximal depth (inclusive) of the search
-    ///                             Must be {@literal >= 0}.
+    ///                             Must be `>= 0`.
     /// @param costLimit            the algorithm-specific cost limit
     /// @param nextVerticesFunction the next nodes function
     /// @param costFunction         the cost function

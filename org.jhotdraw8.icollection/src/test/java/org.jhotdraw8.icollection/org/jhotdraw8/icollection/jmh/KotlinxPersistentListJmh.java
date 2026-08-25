@@ -18,7 +18,7 @@ import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.37
 /// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
 /// # Mac Mini M4 Pro, 4.40 GHz

@@ -16,10 +16,10 @@ import java.util.regex.Pattern;
 /// prefix.
 ///
 /// The property value must have the following format:
-/// <pre>
+/// ```
 /// format = prefix, "U+", codePoint ;
 /// prefix = "fonticon:" ;
-/// </pre>
+/// ```
 public class FontIconDecoder implements ResourceDecoder {
 
     private final Pattern keyPattern;

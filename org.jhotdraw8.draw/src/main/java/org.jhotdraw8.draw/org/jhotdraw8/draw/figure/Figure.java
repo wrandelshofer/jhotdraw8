@@ -341,7 +341,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /// to create a JavaFX scene graph for a figure.
     ///
     /// A typical implementation should look like this:
-    /// <pre>
+    /// ```
     /// `public Node createNode(RenderContext v){return new ...desired subclass of Node...();}`</pre>
     ///
     /// A figure may be rendered with multiple `RenderContext`s
@@ -994,7 +994,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     ///
     /// This method can forward a call to [#reshapeInLocal(Transform)]
     /// using the following code:
-    /// <pre><code>
+    /// ```<code>
     /// void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
     ///   Transform tx = Transforms.createReshapeTransform(getCssBoundsInLocal(), x, y, width, height);
     ///   reshapeInLocal(tx);
@@ -1091,14 +1091,14 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /// transformations of the composed figure are properly propagated to its
     /// getChildren.
     ///
-    /// <pre>
+    /// ```
     /// public void updateNode(RenderContext rc, Node n) {
     ///     ObservableList&lt;Node&gt; group = ((Group) n).getChildren();
     /// group.clear();
     /// for (Figure child : children()) {
     /// group.addChild(rc.getNode(child));
     /// }
-    /// </pre>
+    /// ```
     ///
     /// A figure may be shown in multiple `RenderContext`s. Each
     /// `RenderContext` uses this method to update the a JavaFX node for

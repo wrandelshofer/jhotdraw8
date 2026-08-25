@@ -23,8 +23,8 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     protected abstract MutableBidiGraph<V, A> newInstance(DirectedGraph<V, A> g);
 
     /// Test getters.
-    /// <pre>
-    /// <pre>
+    /// ```
+    /// ```
     ///            x
     ///           ⟲
     ///     0 ─a→ 1 ─c→ 2
@@ -32,8 +32,8 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     ///     b     d
     ///     ↓     ↓
     ///     3 ←e─ 4
-    /// </pre>
-    /// </pre>
+    /// ```
+    /// ```
     @Override
     @Test
     public void testAddVerticesAndArrows() {
@@ -76,12 +76,12 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     }
 
     /// Test arrow removal.
-    /// <pre>
+    /// ```
     ///     0 ─x→ 1 ──→ 2
     ///     |     │
     ///     ↓     ↓
     ///     3 ←── 4
-    /// </pre>
+    /// ```
     @Test
     public void testRemoveArrowBidi() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
@@ -112,13 +112,13 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     }
 
     /// Test remove arrow.
-    /// <pre>
+    /// ```
     ///           ⟲
     ///     0 ─a→ 1 ──→ 2
     ///     |     │
     ///     ↓     ↓
     ///     3 ←── 4
-    /// </pre>
+    /// ```
     @Test
     public void testRemoveArrowAtBidi() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
@@ -151,13 +151,13 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     }
 
     /// Test remove arrow with self-loop.
-    /// <pre>
+    /// ```
     ///           ⟲x
     ///     0 ──→ 1 ──→ 2
     ///     |     │
     ///     ↓     ↓
     ///     3 ←── 4
-    /// </pre>
+    /// ```
     @Test
     public void testRemoveArrowAtBidiWithSelfLoop() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
@@ -192,12 +192,12 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     /// Test remove vertex 1.
     ///
     /// Example graph after removal of 1:
-    /// <pre>
+    /// ```
     ///     0          2
     ///     │
     ///     ↓
     ///     3 ←── 4
-    /// </pre>
+    /// ```
     @Test
     public void testRemoveVertexBidi() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();

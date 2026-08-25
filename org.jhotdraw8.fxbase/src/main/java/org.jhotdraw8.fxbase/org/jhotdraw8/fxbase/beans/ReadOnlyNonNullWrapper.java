@@ -12,7 +12,11 @@ import java.util.Objects;
 ///
 /// @param <T> the type of the wrapped object
 public class ReadOnlyNonNullWrapper<T> extends ReadOnlyObjectWrapper<T> {
-
+    /// Creates a new instance
+    ///
+    /// @param bean         the bean
+    /// @param name         the name of the property
+    /// @param initialValue the initial value
     public ReadOnlyNonNullWrapper(Object bean, String name, T initialValue) {
         super(bean, name, initialValue);
     }

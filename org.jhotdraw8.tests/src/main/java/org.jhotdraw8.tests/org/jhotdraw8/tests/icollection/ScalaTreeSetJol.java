@@ -10,7 +10,7 @@ public class ScalaTreeSetJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.TreeSet with 1000 elements.
     /// total size              : 56072
     /// element size            : 24
@@ -27,7 +27,7 @@ public class ScalaTreeSetJol extends AbstractJol {
     ///          1        24        24   scala.collection.immutable.TreeSet
     ///          1        16        16   scala.runtime.BoxedUnit
     ///       2004               56072   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = AbstractJol.generateSet(size, mask);

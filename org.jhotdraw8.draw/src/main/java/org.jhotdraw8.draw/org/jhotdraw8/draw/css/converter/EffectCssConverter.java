@@ -41,45 +41,45 @@ import java.util.function.Consumer;
 ///
 /// Parses the following EBNF:
 ///
-/// <pre>
+/// ```
 /// Effect = "none" | ( Blend | Bloom | BoxBlur | ColorAdjust | DropShadow | GaussianBlur | Glow | InnerShadow | Shadow ) , { Effect };
 /// Blend = "blend(" , [
-///blendType
-///] , ")";
+/// blendType
+/// ] , ")";
 /// Bloom = "bloom(" , [
-///threshold
-///] , ")";
+/// threshold
+/// ] , ")";
 /// BoxBlur = "box-blur(" , [
-///width,Sep,height,Sep,iterations
-///] , ")";
+/// width,Sep,height,Sep,iterations
+/// ] , ")";
 /// ColorAdjust = "color-adjust(" , [
-///"hue",S,hue,Sep,
+/// "hue",S,hue,Sep,
 ///                 "saturation",S,saturation,Sep,
 ///                 "brightness",S,brightness,Sep,
 ///                 "contrast",S,contrast
-///] , ")";
+/// ] , ")";
 /// DropShadow = "drop-shadow(" , [
-///blurType,Sep,color,Sep,
+/// blurType,Sep,color,Sep,
 ///                 radius,Sep,spread,Sep,xOffset,Sep,yOffset
-///] , ")";
+/// ] , ")";
 /// GaussianBlur = "gaussian-blur(" , [
-///radius
-///] , ")";
+/// radius
+/// ] , ")";
 /// Glow = "glow(" , [
-///level
-///] , ")";
+/// level
+/// ] , ")";
 /// InnerShadow = "inner-shadow(" , [
-///blurType,Sep,color,Sep,
+/// blurType,Sep,color,Sep,
 ///                 radius,Sep,choke,Sep,xOffset,Sep,yOffset
-///] , ")";
+/// ] , ")";
 /// Shadow = "shadow(" , [
-///blurType,Sep,color,Sep,
+/// blurType,Sep,color,Sep,
 ///                 radius
-///] , ")";
+/// ] , ")";
 ///
 /// Sep         = ( S , { S } | { S } , "," , { S } ) ;
 /// S           = (* white space character *)
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>

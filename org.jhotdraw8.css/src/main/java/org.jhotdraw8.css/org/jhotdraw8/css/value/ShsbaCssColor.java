@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 
 /// sHSBA color encoded with numbers and/or percentages.
-/// <pre>ISO EBNF 14977:
+/// ```ISO EBNF 14977:
 ///
 /// sRGBA = "hsb(" hue , [","] , saturation , [","] , brightness ,
 ///              [ [("/",",")] , alpha ] ,
@@ -27,7 +27,7 @@ import org.jhotdraw8.css.converter.DoubleCssConverter;
 /// decimal = {digit} , '.' , digit , {digit} ;
 ///
 /// digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;
-/// </pre>
+/// ```
 /// References:
 /// <dl>
 ///     <dt>CSS-4 HSL Colors</dt>
@@ -69,7 +69,7 @@ public class ShsbaCssColor extends CssColor {
     private static String toName(CssSize hue, CssSize saturation, CssSize brightness, CssSize opacity) {
         StringBuilder buf = new StringBuilder(20);
         if (UnitConverter.PERCENTAGE.equals(opacity.getUnits()) && opacity.getValue() == 100.0
-            || opacity.getValue() == 1) {
+                || opacity.getValue() == 1) {
             buf.append("hsb(");
             buf.append(num.toString(hue.getValue()));
             buf.append(hue.getUnits());

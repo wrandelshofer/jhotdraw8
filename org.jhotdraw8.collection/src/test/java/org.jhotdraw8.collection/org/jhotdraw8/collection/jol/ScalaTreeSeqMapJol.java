@@ -9,7 +9,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/// <pre>
+/// ```
 /// class scala.collection.immutable.TreeSeqMap with 1000000 elements.
 /// total size              : 179774456
 /// element size            : 48
@@ -32,10 +32,10 @@ import java.util.Collections;
 ///    1000000        24  24000000   scala.collection.immutable.TreeSeqMap$Ordering$Tip
 ///        102        16      1632   scala.collection.immutable.Vector1
 ///    6919063           179774456   (total)
-/// </pre>
+/// ```
 public class ScalaTreeSeqMapJol extends AbstractJol {
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.TreeSeqMap with 1000 elements.
     /// total size              : 178880
     /// element size            : 48
@@ -56,7 +56,7 @@ public class ScalaTreeSeqMapJol extends AbstractJol {
     ///        999        32     31968   scala.collection.immutable.TreeSeqMap$Ordering$Bin
     ///       1000        24     24000   scala.collection.immutable.TreeSeqMap$Ordering$Tip
     ///       6887              178880   (total)
-    /// </pre>
+    /// ```
     @Test
     public void estimateMemoryUsage() {
         int size = 1_000;
@@ -71,7 +71,7 @@ public class ScalaTreeSeqMapJol extends AbstractJol {
         estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.TreeSeqMap with 250 elements.
     /// total size              : 43488
     /// element size            : 48
@@ -92,7 +92,7 @@ public class ScalaTreeSeqMapJol extends AbstractJol {
     ///        249        32      7968   scala.collection.immutable.TreeSeqMap$Ordering$Bin
     ///        250        24      6000   scala.collection.immutable.TreeSeqMap$Ordering$Tip
     ///       1673               43488   (total)
-    /// </pre>
+    /// ```
     @Test
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;

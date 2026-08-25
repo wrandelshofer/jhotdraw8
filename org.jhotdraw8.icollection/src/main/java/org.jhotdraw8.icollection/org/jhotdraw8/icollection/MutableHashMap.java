@@ -6,8 +6,8 @@
 package org.jhotdraw8.icollection;
 
 
-import org.jhotdraw8.icollection.alt.impl.champmap.EditableMapEntry;
 import org.jhotdraw8.icollection.facade.SetFacade;
+import org.jhotdraw8.icollection.impl.EditableMapEntry;
 import org.jhotdraw8.icollection.impl.champmap.DeltaCounter;
 import org.jhotdraw8.icollection.impl.champmap.EntryIterator;
 import org.jhotdraw8.icollection.impl.champmap.TrieBuilder;

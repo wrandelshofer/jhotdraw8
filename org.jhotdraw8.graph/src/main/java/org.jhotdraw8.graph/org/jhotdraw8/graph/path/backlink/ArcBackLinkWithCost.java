@@ -19,7 +19,6 @@ import java.util.function.Function;
 ///
 /// @param <V> the vertex type
 /// @param <A> the arrow type
-/// @param <C> the cost number type
 public class ArcBackLinkWithCost<V, A> extends AbstractBackLinkWithCost<ArcBackLinkWithCost<V, A>> {
     private final V vertex;
     private final @Nullable A arrow;
@@ -64,7 +63,6 @@ public class ArcBackLinkWithCost<V, A> extends AbstractBackLinkWithCost<ArcBackL
     /// @param mappingFunction the mapping function
     /// @param <VV>            the vertex data type
     /// @param <AA>            the arrow data type
-    /// @param <CC>            the cost number type
     /// @param <XX>            the arrow sequence element type
     /// @return the arrow sequence
     public static <VV, AA, XX> @Nullable SimpleOrderedPair<PersistentList<XX>, Integer> toArrowSequence(

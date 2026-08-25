@@ -37,14 +37,14 @@ public interface TreeModel<N> extends ObservableMixin {
     /// @return the root
     ObjectProperty<N> rootProperty();
 
-    /// Adds a listener for `TreeModelEvent<E>`s.
+    /// Adds a listener for `TreeModelEvent`s.
     ///
     /// @param l the listener
     default void addTreeModelListener(Listener<TreeModelEvent<N>> l) {
         getTreeModelListeners().add(l);
     }
 
-    /// Removes a listener for `TreeModelEvent<E>`s.
+    /// Removes a listener for `TreeModelEvent`s.
     ///
     /// @param l the listener
     default void removeTreeModelListener(Listener<TreeModelEvent<N>> l) {
@@ -59,7 +59,7 @@ public interface TreeModel<N> extends ObservableMixin {
     }
 
     /// Sets the root of the tree and fires appropriate
-    /// `TreeModelEvent<E>`s.
+    /// `TreeModelEvent`s.
     ///
     /// @param root the new root
     default void setRoot(@Nullable N root) {
@@ -86,13 +86,13 @@ public interface TreeModel<N> extends ObservableMixin {
     N getChild(N parent, int index);
 
     /// Removes the specified child from its parent and fires appropriate
-    /// `TreeModelEvent<E>`s.
+    /// `TreeModelEvent`s.
     ///
     /// @param child the child
     void removeFromParent(N child);
 
     /// Adds the specified child to a parent and fires appropriate
-    /// `TreeModelEvent<E>`s.
+    /// `TreeModelEvent`s.
     ///
     /// @param child  the new child
     /// @param parent the parent.
@@ -100,7 +100,7 @@ public interface TreeModel<N> extends ObservableMixin {
     void insertChildAt(N child, N parent, int index);
 
     /// Adds the specified child to a parent and fires appropriate
-    /// `TreeModelEvent<E>`s.
+    /// `TreeModelEvent`s.
     ///
     /// @param child  the new child
     /// @param parent the parent.

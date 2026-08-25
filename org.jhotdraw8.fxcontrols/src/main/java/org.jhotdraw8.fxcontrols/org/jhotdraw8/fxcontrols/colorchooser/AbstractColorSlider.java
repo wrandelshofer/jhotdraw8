@@ -432,7 +432,7 @@ public abstract class AbstractColorSlider extends Pane {
     ///
     /// However, with epsilon 0, pure white color converted from sRGB to Display P3 is out of gamut, because
     /// the converted color value is slightly greater than 1.0.
-    /// <pre>
+    /// ```
     ///     +---
     ///     |   ----
     ///     |       ------
@@ -441,11 +441,11 @@ public abstract class AbstractColorSlider extends Pane {
     ///     |         ----
     ///     |    ----
     ///     +----
-    /// </pre>
+    /// ```
     ///
     /// If epsilon is too large, we get wiggles in the OK LCH rendering: the shape wiggles at the bottom left
     /// before it goes to the right. The curved line from the right to the top left is still good.
-    /// <pre>
+    /// ```
     ///     +---
     ///     |   ----
     ///     |       ------
@@ -454,7 +454,7 @@ public abstract class AbstractColorSlider extends Pane {
     ///     |         ----
     ///     |      ----
     ///     +----------
-    /// </pre>
+    /// ```
     ///
     /// @param colorSpace a color space
     /// @param component  component values in the specified color space

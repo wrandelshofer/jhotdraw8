@@ -40,7 +40,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
     protected abstract int getVertexId(V v);
 
     /// Example graph:
-    /// <pre>
+    /// ```
     ///            x
     ///           ⟲
     ///     0 ─a→ 1 ─c→ 2
@@ -48,7 +48,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
     ///     b     d
     ///     ↓     ↓
     ///     3 ←e─ 4
-    /// </pre>
+    /// ```
     protected MutableDirectedGraph<V, A> buildGraph() {
         MutableDirectedGraph<V, A> g = newInstance();
         V v0 = newVertex(0);
@@ -223,12 +223,12 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
     /// Test remove vertex 1. Vertex 1 has a self-loop.
     ///
     /// Example graph after removal of 1:
-    /// <pre>
+    /// ```
     ///     0          2
     ///     │
     ///     ↓
     ///     3 ←── 4
-    /// </pre>
+    /// ```
     @Test
     public void testRemoveVertexWithSelfLoop() {
         MutableDirectedGraph<V, A> g = buildGraph();

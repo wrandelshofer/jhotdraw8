@@ -52,7 +52,6 @@ public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
     ///
     /// @param <VV>         the vertex data type
     /// @param <AA>         the arrow data type
-    /// @param <CC>         the cost number type
     /// @param node         the [ArcBackLink]
     /// @param costFunction the cost function
     /// @return the converted [ArcBackLinkWithCost]

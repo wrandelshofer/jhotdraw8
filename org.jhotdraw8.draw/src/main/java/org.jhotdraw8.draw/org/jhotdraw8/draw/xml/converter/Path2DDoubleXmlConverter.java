@@ -16,7 +16,7 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 
 /// Converts an `Path2D.Double` from/to an XML attribute text.
-/// <pre>
+/// ```
 /// unicode       = '\' , ( 6 * hexd
 ///                       | hexd , 5 * [hexd] , w
 ///                       );
@@ -26,7 +26,7 @@ import java.text.ParseException;
 /// string        = string1 | string2 ;
 /// string1       = '"' , { -( '"' ) | '\\' , newline |  escape } , '"' ;
 /// string2       = "'" , { -( "'" ) | '\\' , newline |  escape } , "'" ;
-/// </pre>
+/// ```
 public class Path2DDoubleXmlConverter implements Converter<Path2D.Double> {
 
     public Path2DDoubleXmlConverter() {

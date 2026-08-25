@@ -13,7 +13,7 @@ public class PersistentHashMapJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.PersistentHashMap with 1000 elements.
     /// total size              : 70808
     /// element size            : 48
@@ -30,7 +30,7 @@ public class PersistentHashMapJol extends AbstractJol {
     ///       1000        24     24000   org.jhotdraw8.icollection.util.Key
     ///       1000        24     24000   org.jhotdraw8.icollection.util.Value
     ///       2568               70808   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);
@@ -38,7 +38,7 @@ public class PersistentHashMapJol extends AbstractJol {
         AbstractJol.estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.ChampMap with 1000 elements.
     /// total size              : 68528
     /// element size            : 48
@@ -54,7 +54,7 @@ public class PersistentHashMapJol extends AbstractJol {
     ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
     ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Value
     ///       2567               68528   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsageNoBulkOperations(int size) {
         final int mask = -1;//~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);
@@ -92,7 +92,7 @@ public class PersistentHashMapJol extends AbstractJol {
         AbstractJol.estimateMemoryUsage(mapB, mapA.iterator().next(), mapA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.champ.SimpleImmutableMap with 250 elements.
     /// total size              : 23224
     /// element size            : 48
@@ -108,7 +108,7 @@ public class PersistentHashMapJol extends AbstractJol {
     ///  78        32      2496   org.jhotdraw8.icollection.champ.MutableBitmapIndexedNode
     /// 500        24     12000   org.jhotdraw8.icollection.jmh.Key
     /// 910               23224   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsageAfter75PercentRandomRemoves(int size) {
         final int mask = ~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);

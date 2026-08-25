@@ -10,12 +10,13 @@ package org.jhotdraw8.graph.algo;
 ///
 ///   - The set can be an implementation of one of the collection classes
 ///     provided by the Java API.
-///     <pre>
-///         {@literal AddToSet<E> = new HashSet<>()::add;}
-///         </pre>
+///     ```
+///     AddToSet<E> = new HashSet<>()::add;
+///     ```
+///
 ///
 ///   - The set can be a marker bit on an element object.
-///     <pre>
+///     ```
 ///         class Element {
 ///             private boolean marked;
 ///             public boolean mark() {
@@ -24,8 +25,8 @@ package org.jhotdraw8.graph.algo;
 ///                 return wasMarked;
 ///             }
 ///         }
-///        {@literal AddToSet<Element> = Element::mark;}
-///        </pre>
+///        AddToSet<Element> = Element::mark;
+///        ```
 ///
 /// @param <E> the element type of the set.
 @FunctionalInterface

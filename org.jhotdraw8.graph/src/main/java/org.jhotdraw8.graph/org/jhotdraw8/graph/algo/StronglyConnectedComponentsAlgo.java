@@ -84,7 +84,7 @@ public class StronglyConnectedComponentsAlgo {
         /// Visit time counter.
         private int time = UNVISITED;
         /// The earliest time a vertex could have been visited.
-        /// <p<
+        ///
         /// This is the earliest visit time of a vertex if we had performed the depth-first search
         /// using a different permutation of the 'neighbor' vertices.
         private final int[] earliest;

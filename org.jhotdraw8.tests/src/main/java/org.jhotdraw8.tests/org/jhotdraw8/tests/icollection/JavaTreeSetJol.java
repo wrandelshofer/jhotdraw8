@@ -11,7 +11,7 @@ public class JavaTreeSetJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class java.util.TreeSet with 1000 elements.
     /// total size              : 64096
     /// element size            : 24
@@ -28,7 +28,7 @@ public class JavaTreeSetJol extends AbstractJol {
     ///          1        16        16   java.util.TreeSet
     ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
     ///       2004               64096   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = AbstractJol.generateSet(size, mask);
@@ -36,7 +36,7 @@ public class JavaTreeSetJol extends AbstractJol {
         AbstractJol.estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class java.util.TreeSet with 250 elements.
     /// total size              : 16096
     /// element size            : 24
@@ -53,7 +53,7 @@ public class JavaTreeSetJol extends AbstractJol {
     ///          1        16        16   java.util.TreeSet
     ///        250        24      6000   org.jhotdraw8.icollection.jmh.Key
     ///        504               16096   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;

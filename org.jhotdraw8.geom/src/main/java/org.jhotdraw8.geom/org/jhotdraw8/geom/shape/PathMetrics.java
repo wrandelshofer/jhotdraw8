@@ -86,11 +86,11 @@ public interface PathMetrics extends Shape {
 
     /// Implementations of PathMetrics should implement their `toString`
     /// as follows:
-    /// <pre>
+    /// ```
     /// public toString() {
     ///     return PathMetrics.pathMetricsToString(this);
     /// }
-    /// </pre>
+    /// ```
     ///
     /// @param pm the path metrics implementation
     /// @return a string representation

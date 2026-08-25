@@ -72,18 +72,18 @@ public class IntersectCircleLine {
     ///
     ///
     /// This method solves the following equation:
-    /// <pre>
-    /// {@literal x0 + (x1 - x0) · t, y0 + (y1 - y0) · t, with t in range [0,1] : line equation}
-    /// {@literal (x - cx)² + (y - cy)² = r²} : circle equation
-    /// {@literal (x0 + (x1 - x0) · t - cx)² + (y0 + (y1 - y0) · t - cy)² - r² =0} : intersection equation
-    /// {@literal (x0 + x1·t - x0·t - cx)² + (y0 + y1· t - y0· t - cy)² - r² =0}
-    /// {@literal -2·x0·x1·t²  + 2·x0·(cx+x1)·t - 2·x0*cx +(x0²+x1²)·t² - 2·(x0² - x1·cx)·t + x0² + cx²  ...+same for y...   - r² =0}
-    /// {@literal (x0²+-2·x0·x1+x1²)·t²  + (2·x0·(cx+x1)- 2·(x0² - x1·cx))·t  - 2·x0*cx + x0² + cx²  ...+same for y...   - r² =0}
-    /// {@literal (x1 - x0)²·t²  + 2·((x1 - x0)·(x0 - cx))·t  - 2·x0*cx + x0² + cx²  ...+same for y...   - r² =0}
-    /// {@literal (x1 - x0)²·(y1 - y0)²·t²  + 2·((x1 - x0)·(x0 - cx)+(y1 - y0)·(y0 - cy))·t - 2·(x0·cx + y0·cy) + cx² + cy² + x0² + y0²  - r² =0}
-    /// {@literal Δx²·Δy²·t²  + 2·(Δx·(x0 - cx)+Δy·(y0 - cy))·t - 2·(x0·cx + y0·cy) + cx² + cy² + x0² + y0²  - r² =0}
-    /// {@literal a·t² + b·t + c = 0 : quadratic polynomial, with t in range [0,1]}
-    /// </pre>
+    /// ```
+    /// `x0 + (x1 - x0) · t, y0 + (y1 - y0) · t, with t in range [0,1] : line equation`
+    /// `(x - cx)² + (y - cy)² = r²` : circle equation
+    /// `(x0 + (x1 - x0) · t - cx)² + (y0 + (y1 - y0) · t - cy)² - r² =0` : intersection equation
+    /// `(x0 + x1·t - x0·t - cx)² + (y0 + y1· t - y0· t - cy)² - r² =0`
+    /// `-2·x0·x1·t²  + 2·x0·(cx+x1)·t - 2·x0*cx +(x0²+x1²)·t² - 2·(x0² - x1·cx)·t + x0² + cx²  ...+same for y...   - r² =0`
+    /// `(x0²+-2·x0·x1+x1²)·t²  + (2·x0·(cx+x1)- 2·(x0² - x1·cx))·t  - 2·x0*cx + x0² + cx²  ...+same for y...   - r² =0`
+    /// `(x1 - x0)²·t²  + 2·((x1 - x0)·(x0 - cx))·t  - 2·x0*cx + x0² + cx²  ...+same for y...   - r² =0`
+    /// `(x1 - x0)²·(y1 - y0)²·t²  + 2·((x1 - x0)·(x0 - cx)+(y1 - y0)·(y0 - cy))·t - 2·(x0·cx + y0·cy) + cx² + cy² + x0² + y0²  - r² =0`
+    /// `Δx²·Δy²·t²  + 2·(Δx·(x0 - cx)+Δy·(y0 - cy))·t - 2·(x0·cx + y0·cy) + cx² + cy² + x0² + y0²  - r² =0`
+    /// `a·t² + b·t + c = 0 : quadratic polynomial, with t in range [0,1]`
+    /// ```
     ///
     /// @param x0 point 0 of the line
     /// @param y0 point 0 of the line

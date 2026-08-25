@@ -19,11 +19,11 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /// Processes the `round()` function.
-/// <pre>
+/// ```
 /// round               = "round(", [rounding-strategy,","] , calc-sum , [",",calc-sum] ")" ;
 /// rounding-strategy   = "nearest" | "up" | "down" | "to-zero" ;
 /// calc-sum            = (* see superclass *)
-/// </pre>
+/// ```
 /// <dl>
 ///     <dt>CSS Values and Units Module Level 4.
 ///     Paragraph 10.3. Stepped Value Functions: round(), mod(), and rem()</dt>

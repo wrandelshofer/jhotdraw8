@@ -50,47 +50,47 @@ import java.util.Objects;
 /// [FillableFigure], [StrokableFigure], [ShapeableFigure].
 /// Other figures can get its path with [PathIterableFigure]. The label
 /// box is connectable by means of [ConnectableFigure].
-/// <pre>
+/// ```
 /// +---------------+
 /// | layout bounds |
 /// +---------------+
-/// </pre>
+/// ```
 /// Layout bounds: The layout bounds consist of a content box with padding around it.
-/// <pre>
+/// ```
 /// +-------------------+
 /// | padding           |
 /// | +---------------+ |
 /// | | content box   | |
 /// | +---------------+ |
 /// +-------------------+
-/// </pre>
+/// ```
 /// Content box: The content is controlled by [#ICON_POSITION],
 /// [#ICON_SIZE], [#ICON_TEXT_GAP].
-/// <pre>
+/// ```
 /// +------+  +---------------+  +---------------+
 /// | text |  | icon gap text |  | text gap icon |
 /// +------+  +---------------+  +---------------+
-/// </pre>
+/// ```
 ///
 /// The placement of the label is controlled by [#ORIGIN],
 /// [TextLayoutableFigure#TEXT_VPOS], [TextLayoutableFigure#TEXT_HPOS].
 /// Note that the placement affects the content box.
-/// <pre>
+/// ```
 /// text-hpos: left;  ┆ center;            ┆ right;
 ///                   ┆                    ┆
 /// x                 ┆       x            ┆               x
 /// +-------------+   ┆ +-------------+    ┆ +-------------+
 /// | content box |   ┆ | content box |    ┆ | content box |
 /// +-------------+   ┆ +-------------+    ┆ +-------------+
-/// </pre>
-/// <pre>
+/// ```
+/// ```
 /// text-vpos: top; ┆ center;        ┆ baseline;     ┆ bottom;
 ///                 ┆                ┆               ┆
 /// y +---------+   ┆   +---------+  ┆   +---------+ ┆   +---------+
 ///   | content |   ┆ y | content |  ┆ y_| content | ┆   | content |
 ///   | box     |   ┆   | box     |  ┆   | box     | ┆   | box     |
 ///   +---------+   ┆   +---------+  ┆   +---------+ ┆ y +---------+
-/// </pre>
+/// ```
 public abstract class AbstractLabelFigure extends AbstractLeafFigure
         implements TextFillableFigure, FillableFigure, StrokableFigure,
         TextFontableFigure, TextLayoutableFigure, ConnectableFigure, PathIterableFigure, ShapeableFigure,
@@ -137,12 +137,12 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     /// Creates the node for this label. The node has the following structure:
-    /// <pre>
+    /// ```
     /// Group   holds all other elements of the label
     /// . Path  the path draws the background and border of the label
     /// . Text  draws the text of the label
     /// . Group draws the icon of the label
-    /// </pre>
+    /// ```
     ///
     /// @param ctx the render context
     /// @return the node

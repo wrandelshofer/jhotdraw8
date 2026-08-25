@@ -62,13 +62,13 @@ public class UniqueShortestArcPathSearchAlgoTest {
         return builder;
     }
 
-    /// <pre>
+    /// ```
     ///  __|  1  |  2  |  3  |  4  |  5  |
     ///  1 |       1.0   1.0
     ///  2 |                   1.0
     ///  3 |                   1.0
     ///  4 |                         1.0
-    /// </pre>
+    /// ```
     ///
     /// @return
     private DirectedGraph<Integer, Double> createDiamondGraph() {

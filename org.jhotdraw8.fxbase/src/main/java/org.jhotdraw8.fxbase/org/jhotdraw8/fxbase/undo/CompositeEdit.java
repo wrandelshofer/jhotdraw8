@@ -16,12 +16,12 @@ import java.text.MessageFormat;
 /// UndoableEdits into great big ones.
 ///
 /// Usage:
-/// <pre>
+/// ```
 ///     CompositeEdit compositeEdit=new CompositeEdit();
 ///     fire(compositeEdit);
 ///     fire(...other edits...);
 ///     fire(compositeEdit);
-/// </pre>
+/// ```
 @SuppressWarnings({"serial", "RedundantSuppression"})
 public class CompositeEdit extends CompoundEdit {
     private @Nullable String localizedName;

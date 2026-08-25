@@ -25,11 +25,11 @@ import java.util.function.Consumer;
 /// List of four sizes in the sequence top, right, bottom, left. If left is
 /// omitted, it is the same as right. If bottom is omitted, it is the same as
 /// top. If right is omitted it is the same as top.
-/// <pre>
+/// ```
 /// insets       = top-right-bottom-left ;
 /// insets       = top-bottom, right-left ;
 /// insets       = top , right , bottom, left ;
-/// </pre> *
+/// ``` *
 public class InsetsConverter extends AbstractCssConverter<Insets> {
     public InsetsConverter(boolean nullable) {
         super(nullable);
@@ -40,32 +40,32 @@ public class InsetsConverter extends AbstractCssConverter<Insets> {
         List<Number> list = new ArrayList<>(4);
         for (int i = 0; i < 4; i++) {
             switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                list.add(tt.currentNumberNonNull());
-                break;
-            case CssTokenType.TT_COMMA:
-                break;
-            default:
-                tt.pushBack();
-                break;
+                case CssTokenType.TT_NUMBER:
+                    list.add(tt.currentNumberNonNull());
+                    break;
+                case CssTokenType.TT_COMMA:
+                    break;
+                default:
+                    tt.pushBack();
+                    break;
             }
         }
         switch (list.size()) {
-        case 1:
-            double trbl = list.getFirst().doubleValue();
-            return new Insets(trbl);
-        case 2:
-            double tb = list.get(0).doubleValue();
-            double rl = list.get(1).doubleValue();
-            return new Insets(tb, rl, tb, rl);
-        case 4:
-            double t = list.get(0).doubleValue();
-            double r = list.get(1).doubleValue();
-            double b = list.get(2).doubleValue();
-            double l = list.get(3).doubleValue();
-            return new Insets(t, r, b, l);
-        default:
-            throw new ParseException("⟨Insets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩,⟨left-right⟩ ｜ ⟨top⟩,⟨right⟩,⟨bottom⟩,⟨left⟩ expected.", tt.getStartPosition());
+            case 1:
+                double trbl = list.getFirst().doubleValue();
+                return new Insets(trbl);
+            case 2:
+                double tb = list.get(0).doubleValue();
+                double rl = list.get(1).doubleValue();
+                return new Insets(tb, rl, tb, rl);
+            case 4:
+                double t = list.get(0).doubleValue();
+                double r = list.get(1).doubleValue();
+                double b = list.get(2).doubleValue();
+                double l = list.get(3).doubleValue();
+                return new Insets(t, r, b, l);
+            default:
+                throw new ParseException("⟨Insets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩,⟨left-right⟩ ｜ ⟨top⟩,⟨right⟩,⟨bottom⟩,⟨left⟩ expected.", tt.getStartPosition());
 
         }
     }

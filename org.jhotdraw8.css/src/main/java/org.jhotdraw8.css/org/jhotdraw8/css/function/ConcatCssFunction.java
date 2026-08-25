@@ -16,11 +16,11 @@ import java.util.Deque;
 import java.util.function.Consumer;
 
 /// Processes the concat() function.
-/// <pre>
+/// ```
 /// concat              = "concat(", string-list, ")" ;
 /// string-list         = value ,  { [','] , value } ;
 /// value               = string | number | dimension | percentage | url ;
-/// </pre>
+/// ```
 ///
 /// @param <T> the element type of the DOM
 public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
@@ -57,17 +57,17 @@ public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
         boolean first = true;
         while (tt.next() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
             switch (tt.current()) {
-            case CssTokenType.TT_COMMA:
-                if (!first) {
-                    continue;
-                }
-                tt.pushBack();
-                buf.append(evalString(element, tt, getName(), functionProcessor));
-                break;
-            default:
-                tt.pushBack();
-                buf.append(evalString(element, tt, getName(), functionProcessor));
-                break;
+                case CssTokenType.TT_COMMA:
+                    if (!first) {
+                        continue;
+                    }
+                    tt.pushBack();
+                    buf.append(evalString(element, tt, getName(), functionProcessor));
+                    break;
+                default:
+                    tt.pushBack();
+                    buf.append(evalString(element, tt, getName(), functionProcessor));
+                    break;
             }
             first = false;
         }

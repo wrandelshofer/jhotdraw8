@@ -4,7 +4,7 @@ import kotlinx.collections.immutable.ExtensionsKt;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-/// <pre>
+/// ```
 /// class kotlinx.collections.immutable.implementations.immutableMap.PersistentHashMap with 1000000 elements.
 /// total size              : 74035176
 /// element size            : 48
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 ///     344064        32  11010048   kotlinx.collections.immutable.implementations.immutableMap.TrieNode
 ///    2000000        24  48000000   org.jhotdraw8.collection.jmh.Key
 ///    2688129            74035176   (total)
-/// </pre>
+/// ```
 public class KotlinPersistentHashMapJol extends AbstractJol {
 
     @Test

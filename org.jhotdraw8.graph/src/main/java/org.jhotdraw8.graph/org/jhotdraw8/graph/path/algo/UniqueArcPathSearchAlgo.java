@@ -52,7 +52,6 @@ import java.util.stream.StreamSupport;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public class UniqueArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     private enum SearchResultType {SUCCESS_UNIQUE_PATH, FAILURE_NO_PATH, FAILURE_NOT_UNIQUE}
 
@@ -65,11 +64,9 @@ public class UniqueArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     /// @param goalPredicate    the goal predicate
     /// @param nextArcsFunction the next arcs function
     /// @param maxDepth         the maximal depth (inclusive) of the search
-    ///                         Must be {@literal >= 0}.
-    /// @param zero             the zero cost value
+    ///                         Must be `>= 0`.
     /// @param costLimit        the cost limit is **ignored**
     /// @param costFunction     the cost function
-    /// @param sumFunction      the sum function for adding two cost values
     /// @param visited
     /// @return
     @Override
@@ -92,7 +89,7 @@ public class UniqueArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     /// @param goalPredicate    the goal predicate
     /// @param nextArcsFunction the next arcs function
     /// @param maxDepth         the maximal depth (inclusive) of the search
-    ///                         Must be {@literal >= 0}.
+    ///                         Must be `>= 0`.
     /// @return on success: a back link, otherwise: null
     public @Nullable ArcBackLinkWithAncestorSet<V, A> search(
             final Iterable<V> startVertices,

@@ -8,7 +8,7 @@ public class KotlinPersistentHashMapJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class kotlinx.collections.immutable.implementations.immutableMap.PersistentHashMap with 1000 elements.
     /// total size              : 87688
     /// element size            : 48
@@ -24,7 +24,7 @@ public class KotlinPersistentHashMapJol extends AbstractJol {
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Value
     ///       3177               87688   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = ~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);

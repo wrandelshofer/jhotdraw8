@@ -17,7 +17,6 @@ import java.util.function.Predicate;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public class SimpleReachabilityChecker<V, A>
         implements ReachabilityChecker<V> {
     private final ArcReachabilityAlgo<V, A> algo;

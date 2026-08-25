@@ -17,7 +17,7 @@ import java.util.function.Function;
 /// Builder for bindings that go via multiple properties.
 ///
 /// Usage: Bind a text field to `person.address.city`.
-/// <pre>
+/// ```
 /// {@literal
 ///      TextField cityField;
 ///      Property<Person> personProperty;

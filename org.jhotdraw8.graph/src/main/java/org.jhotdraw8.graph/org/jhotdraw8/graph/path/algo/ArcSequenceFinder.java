@@ -25,7 +25,6 @@ import java.util.function.Supplier;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public interface ArcSequenceFinder<V, A> {
 
     /// Finds an arc sequence from a set of start vertices to a vertex
@@ -34,7 +33,7 @@ public interface ArcSequenceFinder<V, A> {
     /// @param startVertices the start vertices
     /// @param goalPredicate the goal vertex
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the algorithm-specific search limit
     /// @param visited       the visited function
     /// @return an ordered pair (arc sequence, cost),
@@ -50,7 +49,7 @@ public interface ArcSequenceFinder<V, A> {
     /// @param start     the start vertex
     /// @param goal      the goal vertex
     /// @param maxDepth  the maximal depth (inclusive) of the search
-    ///                  Must be {@literal >= 0}.
+    ///                  Must be `>= 0`.
     /// @param costLimit the algorithm-specific cost limit
     /// @param visited   the visited function
     /// @return an ordered pair (arc sequence, cost),
@@ -68,7 +67,7 @@ public interface ArcSequenceFinder<V, A> {
     /// @param start     the start vertex
     /// @param goal      the goal vertex
     /// @param maxDepth  the maximal depth (inclusive) of the search
-    ///                  Must be {@literal >= 0}.
+    ///                  Must be `>= 0`.
     /// @param costLimit the algorithm-specific cost limit
     /// @return an ordered pair (arc sequence, cost),
     /// or null if no sequence was found.
@@ -98,7 +97,7 @@ public interface ArcSequenceFinder<V, A> {
     ///
     /// @param waypoints         an iterable of waypoints
     /// @param maxDepth          the maximal depth (inclusive) of the search
-    ///                          Must be {@literal >= 0}.
+    ///                          Must be `>= 0`.
     /// @param costLimit         the algorithm-specific cost limit for paths between waypoints
     /// @param visitedSetFactory the visited set factory
     /// @return an ordered pair (arc sequence, cost),
@@ -114,7 +113,7 @@ public interface ArcSequenceFinder<V, A> {
     ///
     /// @param waypoints an iterable of waypoints
     /// @param maxDepth  the maximal depth (inclusive) of the search
-    ///                  Must be {@literal >= 0}.
+    ///                  Must be `>= 0`.
     /// @param costLimit the algorithm-specific cost limit for paths between waypoints
     /// @return an ordered pair (arc sequence, cost),
     /// or null if no sequence was found.
@@ -138,10 +137,9 @@ public interface ArcSequenceFinder<V, A> {
     }
 
 
-    /// Helper function for implementing [#findArcSequenceOverWaypoints(Iterable, int, Number, Supplier)].
+    /// Helper function for implementing [#findArcSequenceOverWaypoints(Iterable, int, int, Supplier)].
     ///
     /// @param <VV>                    the vertex type
-    /// @param <CC>                    the number type
     /// @param waypoints               the waypoints
     /// @param findArcSequenceFunction the search function, for example `this::findArrowSequence`
     /// @return an ordered pair with the combined sequence

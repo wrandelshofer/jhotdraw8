@@ -39,7 +39,7 @@ import java.util.function.Consumer;
 ///
 /// Parses the following EBNF:
 ///
-/// <pre>
+/// ```
 /// CssColor ::= NamedColor | HexColor | ColorFunction  ;
 ///
 /// NamedColor ::= 'none' | TT_IDENT;
@@ -80,7 +80,7 @@ import java.util.function.Consumer;
 ///                     | 'xyz-d50'
 ///                     | 'xyz-d65'
 ///                     ;
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>
@@ -90,7 +90,7 @@ import java.util.function.Consumer;
 ///     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-syntax">w3.org</a></dd>
 ///     <dt>CSS Color Module Level 4. 5. sRGB Colors.</dt>
 ///     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#rgb-functions">w3.org</a></dd>
-///     <dt>JavaFX 20. JavaFX CSS Reference Guide. Types. {@literal <color>}.</dt>
+///     <dt>JavaFX 20. JavaFX CSS Reference Guide. Types. `<color>`.</dt>
 ///     <dd><a href="https://openjfx.io/javadoc/20/javafx.graphics/javafx/scene/doc-files/cssref.html#typecolor">openjfx.io</a></dd>
 /// </dl>
 public class ColorCssConverter implements CssConverter<CssColor> {

@@ -235,7 +235,7 @@ public class ArcToCubicCurve {
 
     /// Returns the angle in radians between two unit vectors `u` and
     /// `v`.
-    /// <pre>
+    /// ```
     /// {@literal
     ///   angle = sign * acos( <u,v> )
     ///  }</pre>

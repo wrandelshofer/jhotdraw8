@@ -42,7 +42,7 @@ public class AsyncFxmlLoader {
     /// You can then get the root and the controller of the loaded scene from the FXMLLoader.
     ///
     /// Example usage:
-    /// <pre>
+    /// ```
     ///  // Load a menu bar asynchronously and add it to the top of a border pane.
     ///
     ///  BorderPane borderPane = new BorderPane();
@@ -60,7 +60,7 @@ public class AsyncFxmlLoader {
     ///                 return loader.getController();
     ///              }
     ///          });
-    /// </pre>
+    /// ```
     ///
     /// @param location  the location of the FXML file
     /// @param resources the resource file for internationalized texts in the FXML file

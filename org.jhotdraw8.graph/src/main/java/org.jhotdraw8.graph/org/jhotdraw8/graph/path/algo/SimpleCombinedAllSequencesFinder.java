@@ -21,7 +21,6 @@ import java.util.function.Predicate;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public class SimpleCombinedAllSequencesFinder<V, A> implements CombinedAllSequencesFinder<V, A> {
     private final Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
     private final ToIntFunction3<V, V, A> costFunction;

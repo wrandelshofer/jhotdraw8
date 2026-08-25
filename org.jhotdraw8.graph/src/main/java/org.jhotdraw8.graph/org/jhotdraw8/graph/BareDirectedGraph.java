@@ -14,13 +14,13 @@ import org.jspecify.annotations.Nullable;
 ///
 /// and `A` is a bag of ordered pairs `{(v[i], v[j]), ...}`.
 ///
-/// This interface supports arbitrary data types {@literal <V>} and {@literal <A>}
+/// This interface supports arbitrary data types `<V>` and `<A>`
 /// for the vertices and arrows of the graph.
 ///
-/// The type {@literal <A>} can be used to store data about an arrow.
-/// You may define {@literal <A>} as an ordered pair `(v[i], v[j])`,
+/// The type `<A>` can be used to store data about an arrow.
+/// You may define `<A>` as an ordered pair `(v[i], v[j])`,
 /// but you are not required to do so, because implementations of this interface
-/// do not need to access the content of {@literal <A>}.
+/// do not need to access the content of `<A>`.
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type

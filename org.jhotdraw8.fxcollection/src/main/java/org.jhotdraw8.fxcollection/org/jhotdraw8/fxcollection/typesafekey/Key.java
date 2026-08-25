@@ -27,10 +27,13 @@ import java.util.Objects;
 /// the identity of the key.
 ///
 /// The following code example shows how to set and get a value from a map.
-/// <pre>
 ///
-/// `String value = "Werner";Key<String> stringKey = new Key("name",String.class,null);Map<Key<?>,Object> map = new HashMap<>();stringKey.put(map, value);`
-/// </pre>
+/// ```
+/// `String value = "Werner";
+/// Key<String> stringKey = new Key("name",String.class,null);
+/// Map<Key<?>,Object> map = new HashMap<>();
+/// stringKey.put(map, value);`
+/// ```
 ///
 /// Note that `Key` is not a value type. Thus using two distinct instances
 /// of a Key will result in two distinct entries in the hash map, even if both

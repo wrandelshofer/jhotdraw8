@@ -9,7 +9,7 @@ public class VavrLinkedHashSetJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class io.vavr.collection.LinkedHashSet with 1000 elements.
     /// total size              : 116008
     /// element size            : 24
@@ -32,7 +32,7 @@ public class VavrLinkedHashSetJol extends AbstractJol {
     ///          1        24        24   io.vavr.collection.Queue
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
     ///       4707              116008   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = ~64;
         var data = AbstractJol.generateSet(size, mask);

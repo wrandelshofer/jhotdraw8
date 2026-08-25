@@ -9,7 +9,7 @@ public class VavrTreeSetJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class io.vavr.collection.TreeSet with 1000 elements.
     /// total size              : 64192
     /// element size            : 24
@@ -28,7 +28,7 @@ public class VavrTreeSetJol extends AbstractJol {
     ///          2        24        48   java.lang.String
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
     ///       2009               64192   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = ~64;
         var data = AbstractJol.generateSet(size, mask);

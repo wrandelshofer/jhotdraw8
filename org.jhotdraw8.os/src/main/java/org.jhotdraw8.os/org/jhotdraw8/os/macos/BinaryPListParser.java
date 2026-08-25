@@ -412,7 +412,7 @@ public class BinaryPListParser {
     }
 
     /// Object Formats (marker byte followed by additional info in some cases)
-    /// <pre>
+    /// ```
     /// null	0000 0000
     /// bool	0000 1000			// false
     /// bool	0000 1001			// true
@@ -432,7 +432,7 @@ public class BinaryPListParser {
     /// dict	1101 nnnn	[int]	keyref* objref*	// nnnn is count, unless '1111', then int count follows
     /// 1110 xxxx			// unused
     /// 1111 xxxx			// unused
-    /// </pre>
+    /// ```
     private void parseObjectTable(DataInputStream in) throws IOException {
         int marker;
         while ((marker = in.read()) != -1) {
@@ -613,9 +613,9 @@ public class BinaryPListParser {
         objectTable.add(dict);
     }
 
-    /// <pre>
+    /// ```
     /// short dict	1101 ffff int keyref* objref*	// int is count
-    /// </pre>
+    /// ```
     private void parseShortDict(DataInputStream in, int count) throws IOException {
         BPLDict dict = new BPLDict();
         dict.objectTable = objectTable;

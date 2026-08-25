@@ -42,18 +42,18 @@ public class CssSelectorTest {
 
     /// Test various selectors.
     public static void testSelector(String stylesheet, String before, String expectedValue) throws Exception {
-        //---
+        ///--
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null, null);
         //
-        //---
+        ///--
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
         // We do not want that the reader creates a socket connection!
         builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
         Document doc = builder.parse(new InputSource(new StringReader(before)));
-        //---
+        ///--
         DocumentSelectorModel dsd = new DocumentSelectorModel();
 
         NodeList elements = doc.getElementsByTagName("*");
@@ -69,7 +69,7 @@ public class CssSelectorTest {
             }
         }
 
-        //---
+        ///--
         Transformer t = TransformerFactory.newInstance().newTransformer();
         DOMSource source = new DOMSource(doc);
         StringWriter w = new StringWriter();
@@ -78,7 +78,7 @@ public class CssSelectorTest {
         String actualValue = w.toString();
         actualValue = actualValue.substring(XML_PREFIX.length());
 
-        //---
+        ///--
         assertEquals(expectedValue, actualValue);
     }
 
@@ -166,12 +166,12 @@ public class CssSelectorTest {
 
     /// Test various selectors.
     public static void testSelectorSpecificity(String stylesheet, String xml, int expectedSpecifity) throws IOException, ParserConfigurationException, SAXException {
-        //---
+        ///--
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null, null);
 
 
-        //---
+        ///--
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();

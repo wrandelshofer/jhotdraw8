@@ -1,10 +1,7 @@
 package org.jhotdraw8.tests.icollection;
 
-import org.jhotdraw8.icollection.PersistentVectorHashMap;
+//import org.jhotdraw8.icollection.PersistentVectorHashMap;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class PersistentVectorHashMapJol extends AbstractJol {
     void main() {
@@ -12,7 +9,7 @@ public class PersistentVectorHashMapJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.PersistentVectorHashMap with 1000 elements.
     /// total size              : 95696
     /// element size            : 48
@@ -32,15 +29,15 @@ public class PersistentVectorHashMapJol extends AbstractJol {
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Value
     ///       3602               95696   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = -1;
         var data = AbstractJol.generateMap(size, mask, size * 10);
-        PersistentVectorHashMap<Key, Value> mapA = PersistentVectorHashMap.copyOf(data);
-        AbstractJol.estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
+        // PersistentVectorHashMap<Key, Value> mapA = PersistentVectorHashMap.copyOf(data);
+        // AbstractJol.estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.ChampVectorMap with 250 elements.
     /// total size              : 26832
     /// element size            : 48
@@ -63,17 +60,15 @@ public class PersistentVectorHashMapJol extends AbstractJol {
     ///        250        24      6000   org.jhotdraw8.icollection.jmh.Key
     ///        250        24      6000   org.jhotdraw8.icollection.jmh.Value
     ///        979               26832   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1000;
         final int mask = ~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);
-        PersistentVectorHashMap<Key, Value> mapA = PersistentVectorHashMap.copyOf(data);
-
-        ArrayList<Key> keys = new ArrayList<>(data.keySet());
-        Collections.shuffle(keys);
-        mapA = mapA.removingAll(keys.subList(0, (int) (keys.size() * 0.75)));
-
-        AbstractJol.estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
+        // PersistentVectorHashMap<Key, Value> mapA = PersistentVectorHashMap.copyOf(data);
+        // ArrayList<Key> keys = new ArrayList<>(data.keySet());
+        // Collections.shuffle(keys);
+        // mapA = mapA.removingAll(keys.subList(0, (int) (keys.size() * 0.75)));
+        // AbstractJol.estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
     }
 }

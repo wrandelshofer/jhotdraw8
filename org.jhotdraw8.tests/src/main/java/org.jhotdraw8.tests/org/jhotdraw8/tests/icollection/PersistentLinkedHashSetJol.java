@@ -12,7 +12,7 @@ public class PersistentLinkedHashSetJol extends AbstractJol {
     }
 
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.PersistentLinkedHashSet with 1000 elements.
     /// total size              : 52216
     /// element size            : 24
@@ -29,7 +29,7 @@ public class PersistentLinkedHashSetJol extends AbstractJol {
     ///        304        32      9728   org.jhotdraw8.icollection.impl.champlinked.TrieNode
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
     ///       1613               52216   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
         var data = generateSet(size, mask);
@@ -37,7 +37,7 @@ public class PersistentLinkedHashSetJol extends AbstractJol {
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.ChampSet with 1000 elements.
     /// total size              : 41248
     /// element size            : 24
@@ -52,7 +52,7 @@ public class PersistentLinkedHashSetJol extends AbstractJol {
     ///        293        24      7032   org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode
     ///       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
     ///       1587               41248   (total)
-    /// </pre>
+    /// ```
 
     public void estimateMemoryUsageAddingOneByOne(int size) {
         final int mask = -1;//~64;
@@ -64,7 +64,7 @@ public class PersistentLinkedHashSetJol extends AbstractJol {
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.ChampSet with 250 elements.
     /// total size              : 11000
     /// element size            : 24
@@ -80,7 +80,7 @@ public class PersistentLinkedHashSetJol extends AbstractJol {
     ///         74        32      2368   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
     ///        250        24      6000   org.jhotdraw8.icollection.jmh.Key
     ///        401               11000   (total)
-    /// </pre>
+    /// ```
 
     public void estimateMemoryUsageAfter75PercentRandomRemoves(int size) {
         final int mask = ~64;

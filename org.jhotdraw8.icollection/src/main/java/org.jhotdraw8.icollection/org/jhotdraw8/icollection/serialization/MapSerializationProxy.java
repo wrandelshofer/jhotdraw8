@@ -20,7 +20,7 @@ import java.util.Map;
 /// structure.
 ///
 /// Usage:
-/// <pre>
+/// ```
 /// class MyMap&lt;K, V&gt; implements Map&lt;K, V&gt;, Serializable {
 ///   private final static long serialVersionUID = 0L;
 ///
@@ -34,13 +34,13 @@ import java.util.Map;
 ///      SerializationProxy(Map&lt;K, V&gt; target) {
 ///          super(target);
 ///      }
-///     {@literal @Override}
+///     `@Override`
 ///      protected Object readResolve() {
 ///          return new MyMap&lt;&gt;(deserializedEntries);
 ///      }
 ///   }
 /// }
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>

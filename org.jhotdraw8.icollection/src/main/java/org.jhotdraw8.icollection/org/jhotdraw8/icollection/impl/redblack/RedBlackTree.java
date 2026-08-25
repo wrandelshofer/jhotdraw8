@@ -202,7 +202,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
     /// Internally an in-order traversal of the RedBlackTree is performed.
     ///
     /// Example:
-    /// <pre><code>
+    /// ```<code>
     ///       4
     ///      / \
     ///     2   6
@@ -257,7 +257,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
     /// Internally an in-order traversal of the RedBlackTree is performed.
     ///
     /// Example:
-    /// <pre><code>
+    /// ```<code>
     ///       4
     ///      / \
     ///     2   6

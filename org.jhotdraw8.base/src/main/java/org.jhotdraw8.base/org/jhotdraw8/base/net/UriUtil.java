@@ -32,7 +32,7 @@ public class UriUtil {
     /// directory, only the relative path is shown.
     ///
     /// Examples:
-    /// <pre>
+    /// ```
     ///     uri = /User/me/Desktop/Hello.txt
     ///     ⊢ title = Hello.txt [~/Desktop]
     ///
@@ -41,7 +41,7 @@ public class UriUtil {
     ///
     ///     uri = /Volumes/NetworkDrive/Hello.txt
     ///     ⊢ title = Hello.txt [/Volumes/NetworkDrive]
-    /// </pre>
+    /// ```
     ///
     /// @param uri the uri
     /// @return the name
@@ -64,9 +64,9 @@ public class UriUtil {
         return uri.toString();
     }
 
-    /// Adds a query. If a query is already present, adds it after a {@literal '&'}
+    /// Adds a query. If a query is already present, adds it after a `'&'`
     /// character. Both, the key, and the value may not include the characters
-    /// {@literal '&'} and '='.
+    /// `'&'` and '='.
     ///
     /// @param uri   an uri
     /// @param key   the key
@@ -86,8 +86,8 @@ public class UriUtil {
         return addQuery(uri, key + '=' + value);
     }
 
-    /// Adds a query. If a query is already present, adds it after a {@literal '&'}
-    /// character. The query may not include the characters {@literal '&'} or {@literal '='}.
+    /// Adds a query. If a query is already present, adds it after a `'&'`
+    /// character. The query may not include the characters `'&'` or `'='`.
     ///
     /// @param uri   an uri
     /// @param query the query
@@ -132,7 +132,7 @@ public class UriUtil {
     }
 
     /// Parses the query of the URI. Assumes that the query consists of
-    /// {@literal '&'}-separated, key '=' value pairs.
+    /// `'&'`-separated, key '=' value pairs.
     ///
     /// @param uri an URI
     /// @return a map

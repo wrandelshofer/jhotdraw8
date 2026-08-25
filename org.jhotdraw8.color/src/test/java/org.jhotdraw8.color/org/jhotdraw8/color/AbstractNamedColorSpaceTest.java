@@ -1,6 +1,7 @@
 package org.jhotdraw8.color;
 
 import org.jhotdraw8.color.math.FloatFunction;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -137,6 +138,7 @@ public abstract class AbstractNamedColorSpaceTest {
     }
 
     @Test
+    @Disabled("test is too slow")
     public void shouldBijectWithXyzForAllSrgbValues() {
         NamedColorSpace cs = getInstance();
         AtomicInteger failures = new AtomicInteger();

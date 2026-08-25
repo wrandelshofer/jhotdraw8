@@ -13,10 +13,10 @@ import java.lang.reflect.Type;
 /// including its type parameters.
 ///
 /// Usage:
-/// <pre>
-/// {@literal TypeToken<List<Double>> tt = new TypeToken<List<Double>>{};}
-/// {@literal Type type = tt.getType();}
-/// </pre>
+/// ```
+/// `TypeToken<List<Double>> tt = new TypeToken<List<Double>>{};`
+/// `Type type = tt.getType();`
+/// ```
 ///
 /// @param <T> The type that this type token captures
 public class TypeToken<T> {

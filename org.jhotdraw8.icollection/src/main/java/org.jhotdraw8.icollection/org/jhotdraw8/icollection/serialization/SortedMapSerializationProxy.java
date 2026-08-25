@@ -22,7 +22,7 @@ import java.util.SortedMap;
 /// structure.
 ///
 /// Usage:
-/// <pre>
+/// ```
 /// class MyMap&lt;K, V&gt; implements Map&lt;K, V&gt;, Serializable {
 ///   private final static long serialVersionUID = 0L;
 ///
@@ -36,13 +36,13 @@ import java.util.SortedMap;
 ///      SerializationProxy(Map&lt;K, V&gt; target) {
 ///          super(target);
 ///      }
-///     {@literal @Override}
+///     `@Override`
 ///      protected Object readResolve() {
 ///          return new MyMap&lt;&gt;(deserializedComparator,deserializedEntries);
 ///      }
 ///   }
 /// }
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>

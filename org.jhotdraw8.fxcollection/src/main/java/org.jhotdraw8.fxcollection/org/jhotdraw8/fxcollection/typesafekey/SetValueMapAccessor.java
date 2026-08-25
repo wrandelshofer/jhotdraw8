@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.icollection.PersistentVectorHashSet;
+import org.jhotdraw8.icollection.PersistentLinkedHashSet;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
@@ -62,7 +62,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
 
     @Override
     public PersistentSequencedSet<MapAccessor<?>> getSubAccessors() {
-        return PersistentVectorHashSet.of(setAccessor);
+        return PersistentLinkedHashSet.of(setAccessor);
     }
 
     @Override

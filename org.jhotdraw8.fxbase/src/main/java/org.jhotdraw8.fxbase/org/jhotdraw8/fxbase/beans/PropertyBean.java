@@ -26,17 +26,16 @@ import java.util.Objects;
 /// To implement this interface, you need to implement method
 /// [#getProperties()] as shown below.
 ///
-/// <pre><code>
-/// {@literal
+/// ```
 ///  public class MyBean implements PropertyBean {
 ///       protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableMap(new LinkedHashMap<>());
 ///
-///      {@literal @}Override
-///      public ObservableMap{@literal <Key<?>, Object>} getProperties() {
+///      public ObservableMap<Key<?>, Object> getProperties() {
 ///         return properties;
 ///       }
 ///  }
-///  }</code></pre>
+///  }
+/// ```
 public interface PropertyBean {
 
     // ---

@@ -58,7 +58,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
     ///
     /// @param v a vertex
     /// @param u a vertex
-    /// @return index of vertex `u` or a value {@literal < 0}
+    /// @return index of vertex `u` or a value `< 0`
     default int findIndexOfPrev(final V v, final V u) {
         for (int i = 0, n = getPrevCount(v); i < n; i++) {
             if (u.equals(getPrev(v, i))) {

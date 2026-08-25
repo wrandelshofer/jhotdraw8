@@ -34,15 +34,15 @@ import java.util.Set;
 /// **Implementation:**
 ///
 /// Example graph:
-/// <pre>
+/// ```
 ///     0 ──→ 1 ──→ 2
 ///     │     │
 ///     ↓     ↓
 ///     3 ←── 4
-/// </pre>
+/// ```
 /// If the graph is inserted in the following sequence
 /// into the builder:
-/// <pre>
+/// ```
 ///     addVertex(0);
 ///     addVertex(1);
 ///     addVertex(2);
@@ -53,9 +53,9 @@ import java.util.Set;
 ///     addArrow(1, 2);
 ///     addArrow(1, 4);
 ///     addArrow(4, 3);
-/// </pre>
+/// ```
 /// Then the internal representation is as follows:
-/// <pre>
+/// ```
 /// vertex#  next- and prev-arrows
 ///
 ///    0:    next={1, 3};  prev={}
@@ -63,7 +63,7 @@ import java.util.Set;
 ///    2:    next={};      prev={1}
 ///    3:    next={};      prev={0, 4}
 ///    4:    next={3};     prev={1}
-/// </pre>
+/// ```
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
@@ -268,7 +268,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         }
     }
 
-    /// List of adjacent nodes, each element is a tuple {@literal (Node<V,A>,A)}.
+    /// List of adjacent nodes, each element is a tuple `(Node<V,A>,A)`.
     ///
     /// @param <V> the vertex data type
     /// @param <A> the arrow data type

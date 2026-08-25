@@ -61,7 +61,7 @@ import static org.jhotdraw8.css.ast.TypeSelector.WITHOUT_NAMESPACE;
 ///
 /// The CSS Syntax Module Level 3 defines a grammar which is equivalent to the
 /// following EBNF ISO/IEC 14977 productions:
-/// <pre>
+/// ```
 /// stylesheet_core = { S | CDO | CDC | qualified_rule | at_rule } ;
 ///
 /// rule_list    = { S | qualified_rule | at_rule} ;
@@ -90,8 +90,9 @@ import static org.jhotdraw8.css.ast.TypeSelector.WITHOUT_NAMESPACE;
 /// function_block
 ///              = ROUND_BLOCK , { component_value } , ')' ;
 ///
-/// </pre> This parser parses the following syntax:
-/// <pre>
+/// ```
+/// This parser parses the following syntax:
+/// ```
 /// stylesheet   = { S | CDO | CDC | qualified_rule | style_rule } ;
 ///
 /// operator     = ( '/' | ',' ) , { S } ;
@@ -145,12 +146,12 @@ import static org.jhotdraw8.css.ast.TypeSelector.WITHOUT_NAMESPACE;
 ///
 /// function     = ROUND_BLOCK , { S } , expr , ')' , { S } ;
 /// expr         = term , { [operator] , term } ;
-/// </pre>
+/// ```
 /// The parser interprets the following at rules:
-/// <pre>
+/// ```
 /// namespace_rule = "@namespace" , [namespace_prefix] , ( STRING | URI ) ;
 /// namespace_prefix = IDENT ;
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>

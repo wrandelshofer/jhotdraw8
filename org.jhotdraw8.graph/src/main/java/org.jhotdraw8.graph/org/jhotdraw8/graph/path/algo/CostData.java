@@ -6,8 +6,6 @@
 package org.jhotdraw8.graph.path.algo;
 
 /// Holds cost and visit count data.
-///
-/// @param <C> the cost number type
 class CostData {
     private final int cost;
     private int visiCount;

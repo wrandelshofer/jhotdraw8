@@ -10,7 +10,6 @@ package org.jhotdraw8.graph.path.algo;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public interface CombinedSequenceFinder<V, A>
         extends ArrowSequenceFinder<V, A>,
         ArcSequenceFinder<V, A>,

@@ -15,12 +15,12 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.37
 /// # VM version: JDK 21.0.1, OpenJDK 64-Bit Server VM, 21.0.1+12-LTS
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
-/// </pre>
-/// <pre>
+/// ```
+/// ```
 /// without specialized retainAll method
 ///
 /// Benchmark                                               (mask)  (size)  Mode  Cnt         Score   Error  Units
@@ -39,8 +39,8 @@ import java.util.concurrent.TimeUnit;
 /// RedBlackSetJmh.mRetainAllFromSameTypeAllRetained           -65  100000  avgt    2  13563797.557          ns/op
 /// RedBlackSetJmh.mRetainAllFromSameTypeNoneRetained          -65  100000  avgt    2  41174937.247          ns/op
 /// RedBlackSetJmh.mTail                                       -65  100000  avgt    2       309.179          ns/op
-/// </pre>
-/// <pre>
+/// ```
+/// ```
 /// with speciaized retainAll method
 ///
 /// Benchmark                                               (mask)  (size)  Mode  Cnt         Score   Error  Units
@@ -59,7 +59,7 @@ import java.util.concurrent.TimeUnit;
 /// RedBlackSetJmh.mRetainAllFromSameTypeAllRetained           -65  100000  avgt    2  10184702.314          ns/op
 /// RedBlackSetJmh.mRetainAllFromSameTypeNoneRetained          -65  100000  avgt    2  17160108.223          ns/op
 /// RedBlackSetJmh.mTail                                       -65  100000  avgt    2       295.686          ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 2)

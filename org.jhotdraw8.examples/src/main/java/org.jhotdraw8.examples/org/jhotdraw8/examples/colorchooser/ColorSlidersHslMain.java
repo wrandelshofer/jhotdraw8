@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.function.ToIntFunction;
 
 /// Shows sliders for HSB/HSV color spaces.
-/// <pre>
+/// ```
 ///     saturation →
 /// +-----------------+
 /// |                 | ↑
@@ -62,7 +62,7 @@ import java.util.function.ToIntFunction;
 /// +-----------------+
 /// |   hue →         |
 /// +-----------------+
-/// </pre>
+/// ```
 public class ColorSlidersHslMain extends AbstractColorSlidersMain {
 
 

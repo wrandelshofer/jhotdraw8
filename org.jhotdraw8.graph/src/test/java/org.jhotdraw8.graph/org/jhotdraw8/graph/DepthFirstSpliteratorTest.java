@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /// DepthFirstSpliteratorTest.
 public class DepthFirstSpliteratorTest {
 
-    /// <pre>
+    /// ```
     /// 1 ←→ 2
     /// 1 → 3
     /// 1 ←→ 6
@@ -35,7 +35,7 @@ public class DepthFirstSpliteratorTest {
     /// 3 → 6
     /// 4 → 5
     /// 5 ←→ 6
-    /// </pre>
+    /// ```
     ///
     /// @return
     static DirectedGraph<Integer, Double> createGraph() {

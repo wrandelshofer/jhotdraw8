@@ -8,7 +8,7 @@ public class KotlinPersistentHashSetJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class kotlinx.collections.immutable.implementations.immutableSet.PersistentHashSet with 1000 elements.
     /// total size              : 41696
     /// element size            : 24
@@ -24,7 +24,7 @@ public class KotlinPersistentHashSetJol extends AbstractJol {
     ///          1        16        16   kotlinx.collections.immutable.internal.MutabilityOwnership
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
     ///       1610               41696   (total)
-    /// </pre>
+    /// ```
 
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;

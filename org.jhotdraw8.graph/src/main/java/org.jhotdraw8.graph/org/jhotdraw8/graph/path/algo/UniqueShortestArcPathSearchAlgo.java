@@ -22,16 +22,16 @@ import java.util.function.Predicate;
 /// vertices using Dijkstra's algorithm.
 ///
 /// If the graph is acyclic, then the provided cost function must return values
-/// {@literal >= 0} for all arrows.
+/// `>= 0` for all arrows.
 /// If the graph has cycles, then the provided cost function must return values
-/// {@literal > 0} for all arrows. (If the graph has cycles and the cost function
+/// `> 0` for all arrows. (If the graph has cycles and the cost function
 /// returns values that are 0, then this algorithm incorrectly considers a
 /// path as non-unique, if it can be reached by a walk).
 ///
 /// Performance characteristics:
 /// <dl>
-///     <dt>When the algorithm returns a back link</dt><dd>less or equal {@literal O( |A| + |V|*log|V| )} within max cost</dd>
-///     <dt>When the algorithm returns null</dt><dd>less or equal {@literal O( |A| + |V|*log|V| )} within max cost</dd>
+///     <dt>When the algorithm returns a back link</dt><dd>less or equal `O( |A| + |V|*log|V| )` within max cost</dd>
+///     <dt>When the algorithm returns null</dt><dd>less or equal `O( |A| + |V|*log|V| )` within max cost</dd>
 /// </dl>
 ///
 /// References:
@@ -47,7 +47,6 @@ import java.util.function.Predicate;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public class UniqueShortestArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     public UniqueShortestArcPathSearchAlgo() {
     }
@@ -58,16 +57,14 @@ public class UniqueShortestArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<
     /// @param goalPredicate    the goal predicate
     /// @param nextArcsFunction the next arcs function
     /// @param maxDepth         the maximal depth (inclusive) of the search
-    ///                         Must be {@literal >= 0}.
-    /// @param zero             the zero cost value
+    ///                         Must be `>= 0`.
     /// @param costLimit        the maximal cost (inclusive) of a path.
-    ///                         Must be {@literal >= zero}.
+    ///                         Must be `>= zero`.
     /// @param costFunction     the cost function.
-    ///                         The cost must be {@literal > 0} if the graph
+    ///                         The cost must be `> 0` if the graph
     ///                         has cycles.
-    ///                         The cost must be {@literal >= 0} if the graph
+    ///                         The cost must be `>= 0` if the graph
     ///                         is acyclic.
-    /// @param sumFunction      the sum function for adding two cost values
     /// @param visited
     /// @return on success: a back link, otherwise: null
     @Override

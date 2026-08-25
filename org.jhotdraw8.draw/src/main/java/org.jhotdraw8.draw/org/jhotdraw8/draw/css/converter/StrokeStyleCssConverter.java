@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /// Allows to set all stroke properties at once.
-/// <pre>
+/// ```
 ///     StrokeStyle := {Options};
 ///     Options = ( Type | Linecap | Linejoin | Miterlimit | Dashoffset | Dasharray );
 ///     Type = "type(" , ("inside"|"outside"|"centered"), ")";
@@ -36,7 +36,7 @@ import java.util.function.Consumer;
 ///     Miterlimit = "miterlimit(",Size,")";
 ///     Dashoffset = "dashoffset(",Size,")";
 ///     Dasharray = "dasharray(",Size,{Size},")";
-/// </pre>
+/// ```
 public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle> {
 
     public static final String INSIDE = "inside";

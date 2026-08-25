@@ -17,16 +17,13 @@ import java.util.List;
 /// An Algorithm for Automatically Fitting Digitized Curves.
 ///
 /// References:
-/// <dl>
-///     <dt>gems/FitCurves.c</dt>
-///     <dd>An Algorithm for Automatically Fitting Digitized Curves. Graphics Gems, Academic Press.
-///     Copyright (c) 1990 Philip J. Schneider.
 ///
-/// <a href="https://github.com/erich666/GraphicsGems/blob/7ef8b6990e125fa908dfaeb80bc42f4b4fae65b8/gems/FitCurves.c">github.com</a>
+/// - `gems/FitCurves.c`
+///   An Algorithm for Automatically Fitting Digitized Curves. Graphics Gems, Academic Press.
+///   Copyright (c) 1990 Philip J. Schneider.
+///   [github.com](https://github.com/erich666/GraphicsGems/blob/7ef8b6990e125fa908dfaeb80bc42f4b4fae65b8/gems/FitCurves.c)
+///   [Graphics Gems License](https://github.com/erich666/GraphicsGems/blob/7ef8b6990e125fa908dfaeb80bc42f4b4fae65b8/LICENSE.md)
 ///
-/// <a href="https://github.com/erich666/GraphicsGems/blob/7ef8b6990e125fa908dfaeb80bc42f4b4fae65b8/LICENSE.md">Graphics Gems License</a>
-///     </dd>
-/// </dl>
 public class PolylineToCubicCurve {
 
     /// Prevent instance creation.
@@ -291,9 +288,10 @@ public class PolylineToCubicCurve {
     /// a gaussian filter to the data.
     ///
     /// The filter does the following for each point P, with weight 0.5:
-    ///
+    /// ```
     /// x[i] = 0.5*x[i] + 0.25*x[i-1] + 0.25*x[i+1]; y[i] = 0.5*y[i] +
     /// 0.25*y[i-1] + 0.25*y[i+1];
+    /// ```
     ///
     /// @param digitizedPoints Digitized points
     /// @param weight          Weight of the current point

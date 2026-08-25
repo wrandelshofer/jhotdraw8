@@ -27,7 +27,7 @@ import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 import java.util.List;
 
 /// Shows sliders for HSV color spaces.
-/// <pre>
+/// ```
 ///     saturation →
 /// +-----------------+
 /// |                 | ↑
@@ -38,7 +38,7 @@ import java.util.List;
 /// +-----------------+
 /// |   hue →         |
 /// +-----------------+
-/// </pre>
+/// ```
 public class ColorSlidersHsvMain extends AbstractColorSlidersMain {
 
 

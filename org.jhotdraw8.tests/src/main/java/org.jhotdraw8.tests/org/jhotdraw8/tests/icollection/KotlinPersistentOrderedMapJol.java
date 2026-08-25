@@ -9,7 +9,7 @@ public class KotlinPersistentOrderedMapJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class kotlinx.collections.immutable.implementations.persistentOrderedMap.PersistentOrderedMap with 1000 elements.
     /// total size              : 111736
     /// element size            : 48
@@ -28,7 +28,7 @@ public class KotlinPersistentOrderedMapJol extends AbstractJol {
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Key
     ///       1000        24     24000   org.jhotdraw8.tests.icollection.Value
     ///       4179              111736   (total)
-    /// </pre>
+    /// ```
     public void estimateMemoryUsage(int size) {
         final int mask = ~64;
         var data = AbstractJol.generateMap(size, mask, size * 10);

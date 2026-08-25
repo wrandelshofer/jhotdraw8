@@ -16,15 +16,15 @@ import java.util.Objects;
 /// **Implementation:**
 ///
 /// Example graph:
-/// <pre>
+/// ```
 ///     0 ──→ 1 ──→ 2
 ///     │     │
 ///     ↓     ↓
 ///     3 ←── 4
-/// </pre>
+/// ```
 /// If the graph is inserted in the following sequence
 /// into the builder:
-/// <pre>
+/// ```
 ///     buildAddVertex();
 ///     buildAddVertex();
 ///     buildAddVertex();
@@ -36,9 +36,9 @@ import java.util.Objects;
 ///     build.addArrow(1, 2);
 ///     build.addArrow(1, 4);
 ///     build.addArrow(4, 3);
-/// </pre>
+/// ```
 /// Then the internal representation is as follows:
-/// <pre>
+/// ```
 ///     vertexCount: 5
 ///
 ///  vertex#    nodes
@@ -48,7 +48,7 @@ import java.util.Objects;
 ///    2        Node.prev{1}
 ///    3        Node.prev{0}.prev{4}
 ///    4        Node.next{3}.prev{1}
-/// </pre>
+/// ```
 public class SimpleMutableIndexedBidiGraph implements IndexedBidiGraph {
     private Node[] nodes = new Node[0];
     private int vertexCount;

@@ -49,11 +49,11 @@ public class FXGeom {
     }
 
     /// Homogenizes the vector (x1,y1,z1) to (x1,y1,1).
-    /// <pre>
+    /// ```
     ///   ( y1 / z1,
     ///     z1 / z1,
     ///     1  )
-    /// </pre> With z1=1 and z2=1;
+    /// ``` With z1=1 and z2=1;
     ///
     /// @param p the vector
     /// @return the normalized vector
@@ -66,11 +66,11 @@ public class FXGeom {
     }
 
     /// Homogenizes the vector (x1,y1,z1) to (x1,y1,1).
-    /// <pre>
+    /// ```
     ///   ( y1 / z1,
     ///     z1 / z1,
     ///     1  )
-    /// </pre> With z1=1 and z2=1;
+    /// ``` With z1=1 and z2=1;
     ///
     /// @param p the vector
     /// @return the normalized vector
@@ -552,11 +552,11 @@ public class FXGeom {
 
     /// Computes the cross product of the homogenous vectors (x1,y1,1) x
     /// (x2,y2,1).
-    /// <pre>
+    /// ```
     ///   ( y1 * z2 - z1 * y2,
     ///     z1 * x2 - x1 * z2,
     ///     x1 * y2 - y1 * x2  )
-    /// </pre> With z1=1 and z2=1;
+    /// ``` With z1=1 and z2=1;
     ///
     /// @param p1 point 1
     /// @param p2 point 2
@@ -567,11 +567,11 @@ public class FXGeom {
 
     /// Computes the cross product of the homogenous vectors (x1,y1,1) x
     /// (x2,y2,1).
-    /// <pre>
+    /// ```
     ///   ( y1 * z2 - z1 * y2,
     ///     z1 * x2 - x1 * z2,
     ///     x1 * y2 - y1 * x2  )
-    /// </pre> With z1=1 and z2=1;
+    /// ``` With z1=1 and z2=1;
     ///
     /// @param x1 x1
     /// @param y1 y1

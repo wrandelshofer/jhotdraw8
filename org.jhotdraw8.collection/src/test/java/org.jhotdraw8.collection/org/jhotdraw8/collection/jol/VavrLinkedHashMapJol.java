@@ -10,7 +10,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/// <pre>
+/// ```
 /// class io.vavr.collection.LinkedHashMap with 1000000 elements.
 /// total size              : 139872904
 /// element size            : 48
@@ -33,10 +33,10 @@ import java.util.Collections;
 ///          1        24        24   io.vavr.collection.Queue
 ///    2000000        24  48000000   org.jhotdraw8.collection.jmh.Key
 ///    5687497           139872904   (total)
-/// </pre>
+/// ```
 public class VavrLinkedHashMapJol extends AbstractJol {
 
-    /// <pre>
+    /// ```
     /// class io.vavr.collection.LinkedHashMap with 1000 elements.
     /// total size              : 140008
     /// element size            : 48
@@ -57,7 +57,7 @@ public class VavrLinkedHashMapJol extends AbstractJol {
     ///          1        24        24   io.vavr.collection.Queue
     ///       2000        24     48000   org.jhotdraw8.collection.jmh.Key
     ///       5704              140008   (total)
-    /// </pre>
+    /// ```
     @Test
     @Disabled
     public void estimateMemoryUsage() {
@@ -72,7 +72,7 @@ public class VavrLinkedHashMapJol extends AbstractJol {
         estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class io.vavr.collection.LinkedHashMap with 250 elements.
     /// total size              : 34696
     /// element size            : 48
@@ -93,7 +93,7 @@ public class VavrLinkedHashMapJol extends AbstractJol {
     ///          1        24        24   io.vavr.collection.Queue
     ///        500        24     12000   org.jhotdraw8.collection.jmh.Key
     ///       1416               34696   (total)
-    /// </pre>
+    /// ```
     @Test
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;

@@ -15,7 +15,7 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.37
 /// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
 /// # Mac Mini M4 Pro, 4.40 GHz
@@ -57,7 +57,7 @@ import java.util.concurrent.TimeUnit;
 /// MutableHashSetJmh.mRetainAllNoneRetained     -65      10  avgt    2      186.721          ns/op
 /// MutableHashSetJmh.mRetainAllNoneRetained     -65    1000  avgt    2    42511.754          ns/op
 /// MutableHashSetJmh.mRetainAllNoneRetained     -65  100000  avgt    2  9361055.457          ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 1)

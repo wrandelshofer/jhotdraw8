@@ -19,7 +19,7 @@ import java.util.Set;
 /// structure.
 ///
 /// Usage:
-/// <pre>
+/// ```
 /// class MySet&lt;E&gt; implements Set&lt;E&gt;, Serializable {
 ///   private final static long serialVersionUID = 0L;
 ///
@@ -33,13 +33,13 @@ import java.util.Set;
 ///      SerializationProxy(Set&lt;E&gt; target) {
 ///          super(target);
 ///      }
-///     {@literal @Override}
+///     `@Override`
 ///      protected Object readResolve() {
 ///          return new MySet&lt;&gt;(deserializedElements);
 ///      }
 ///   }
 /// }
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>

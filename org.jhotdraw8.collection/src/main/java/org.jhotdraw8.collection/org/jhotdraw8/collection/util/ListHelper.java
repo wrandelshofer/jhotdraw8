@@ -82,7 +82,7 @@ public class ListHelper {
 
     /// Grows an items array.
     ///
-    /// @param targetCapacity {@literal >= 0}
+    /// @param targetCapacity `>= 0`
     /// @param itemSize       number of array elements that an item occupies
     /// @param items          the items array
     /// @return a new item array of larger size or the same if no resizing is necessary
@@ -96,7 +96,7 @@ public class ListHelper {
 
     /// Grows an items array.
     ///
-    /// @param targetCapacity {@literal >= 0}
+    /// @param targetCapacity `>= 0`
     /// @param itemSize       number of array elements that an item occupies
     /// @param items          the items array
     /// @return a new item array of larger size or the same if no resizing is necessary
@@ -110,7 +110,7 @@ public class ListHelper {
 
     /// Grows an items array.
     ///
-    /// @param targetCapacity {@literal >= 0}
+    /// @param targetCapacity `>= 0`
     /// @param itemSize       number of array elements that an item occupies
     /// @param items          the items array
     /// @return a new item array of larger size or the same if no resizing is necessary
@@ -124,7 +124,7 @@ public class ListHelper {
 
     /// Grows an items array.
     ///
-    /// @param targetCapacity {@literal >= 0}
+    /// @param targetCapacity `>= 0`
     /// @param itemSize       number of array elements that an item occupies
     /// @param items          the items array
     /// @return a new item array of larger size or the same if no resizing is necessary
@@ -138,7 +138,7 @@ public class ListHelper {
 
     /// Grows an items array.
     ///
-    /// @param targetCapacity {@literal >= 0}
+    /// @param targetCapacity `>= 0`
     /// @param itemSize       number of array elements that an item occupies
     /// @param items          the items array
     /// @return a new item array of larger size or the same if no resizing is necessary
@@ -152,7 +152,7 @@ public class ListHelper {
 
     /// Grows an items array.
     ///
-    /// @param targetCapacity {@literal >= 0}
+    /// @param targetCapacity `>= 0`
     /// @param itemSize       number of array elements that an item occupies
     /// @param items          the items array
     /// @return a new item array of larger size or the same if no resizing is necessary
@@ -166,7 +166,7 @@ public class ListHelper {
 
     /// Grows an items array.
     ///
-    /// @param targetCapacity {@literal >= 0}
+    /// @param targetCapacity `>= 0`
     /// @param itemSize       number of array elements that an item occupies
     /// @param items          the items array
     /// @return a new item array of larger size or the same if no resizing is necessary

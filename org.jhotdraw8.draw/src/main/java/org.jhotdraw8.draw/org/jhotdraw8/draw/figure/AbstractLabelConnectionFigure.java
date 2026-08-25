@@ -45,7 +45,7 @@ import java.util.Set;
 /// [#LABEL_CONNECTOR] on the target figure. Then it computes the [#ORIGIN]
 /// and rotation of the label using the properties [#LABEL_OFFSET]
 /// and [#LABEL_AUTOROTATE].
-/// <pre>
+/// ```
 /// LABELED_LOCATION:    x,y (has a derivative that can be rotated)
 ///                       |
 ///                       | + LABEL_OFFSET (perpendicular to
@@ -58,7 +58,7 @@ import java.util.Set;
 ///                   |    layout bounds   |
 ///                   +--------------------+
 ///
-/// </pre>
+/// ```
 public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         implements ConnectingFigure, TransformableFigure, LabelConnectionFigure {
 

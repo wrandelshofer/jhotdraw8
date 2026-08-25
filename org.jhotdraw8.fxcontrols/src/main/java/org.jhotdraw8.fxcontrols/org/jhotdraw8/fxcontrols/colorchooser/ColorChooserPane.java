@@ -184,14 +184,14 @@ public class ColorChooserPane extends VBox {
 
     /// Target color region shows a fat white rectangle with the target color overlaid over a white and black
     /// pattern.
-    /// <pre>
+    /// ```
     ///  +----------+
     ///  |  +----+  |
     ///  |  |   /|  |
     ///  |  |/   |  |
     ///  |  +----+  |
     ///  +----------+
-    /// </pre>
+    /// ```
     private void updatePreviewColor(Observable o, Color oldv, Color newv) {
         Color previewColor = newv == null ? Color.TRANSPARENT : newv;
         targetColorRegion.setBackground(new Background(

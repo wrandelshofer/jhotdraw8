@@ -13,7 +13,7 @@ public class PersistentVectorListJol extends AbstractJol {
         test.estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class org.jhotdraw8.icollection.impl.fingertree.Tree2 with 1000 elements.
     /// total size              : 28680
     /// element size            : 24
@@ -28,7 +28,7 @@ public class PersistentVectorListJol extends AbstractJol {
     ///          1        32        32   org.jhotdraw8.icollection.impl.fingertree.Tree2
     ///       1000        24     24000   org.jhotdraw8.icollection.util.Key
     ///       1034               28680   (total)
-    /// </pre>
+    /// ```
 
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;
@@ -37,7 +37,7 @@ public class PersistentVectorListJol extends AbstractJol {
         AbstractJol.estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
-    /// <pre>
+    /// ```
     /// cclass org.jhotdraw8.icollection.SimpleImmutableList with 250 elements.
     /// total size              : 7240
     /// element size            : 24
@@ -53,7 +53,7 @@ public class PersistentVectorListJol extends AbstractJol {
     ///          1        32        32   org.jhotdraw8.icollection.impl.vector.BitMappedTrie
     ///        250        24      6000   org.jhotdraw8.icollection.jmh.Key
     ///        262                7240   (total)
-    /// </pre>
+    /// ```
 
     public void estimateMemoryUsageAfter75PercentRandomRemoves(int size) {
         final int mask = ~64;

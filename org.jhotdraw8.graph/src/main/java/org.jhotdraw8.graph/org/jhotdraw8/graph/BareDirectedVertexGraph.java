@@ -15,10 +15,10 @@ import java.util.Set;
 ///
 /// and `A` is a bag of ordered pairs `{(v[i], v[j]), ...}`.
 ///
-/// This interface supports an arbitrary data type {@literal <V>} for the vertices of the graph.
+/// This interface supports an arbitrary data type `<V>` for the vertices of the graph.
 ///
 /// Use the interface [BareDirectedGraph] if you also need support for
-/// the arrow data type {@literal <A>} of a graph.
+/// the arrow data type `<A>` of a graph.
 ///
 /// @param <V> the vertex data type
 public interface BareDirectedVertexGraph<V> {

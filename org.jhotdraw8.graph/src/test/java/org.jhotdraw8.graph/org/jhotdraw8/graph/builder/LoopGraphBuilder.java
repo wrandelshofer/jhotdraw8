@@ -8,13 +8,13 @@ import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import java.util.List;
 
 /// Builds a graph with a loop.
-/// <pre>
+/// ```
 /// a ──1─→ b
 /// ↑       │
 /// 1       1
 /// ↓       ↓
 /// d ←─1─→ c
-/// </pre>
+/// ```
 public class LoopGraphBuilder {
 
     /// Builds the graph.

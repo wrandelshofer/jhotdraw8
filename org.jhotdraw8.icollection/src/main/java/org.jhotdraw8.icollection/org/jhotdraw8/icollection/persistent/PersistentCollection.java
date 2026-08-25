@@ -57,8 +57,7 @@ public interface PersistentCollection<E> extends ReadableCollection<E> {
     /// Returns an empty collection instance that has the specified
     /// element type.
     ///
-    /// @param <T> the element type of the returned collection
-    /// @return an empty collection of the specified element type.
+    /// @return an empty collection
     PersistentCollection<E> cleared();
 
     /// Removes all elements in this collection that satisfy the specified predicate.

@@ -16,7 +16,7 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.37
 /// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
 /// # Mac Mini M4 Pro, 4.40 GHz
@@ -59,7 +59,7 @@ import java.util.concurrent.TimeUnit;
 /// KotlinxPersistentHashMapJmh.mRemoveFirst             -65      10  avgt    2       245.384          ns/op
 /// KotlinxPersistentHashMapJmh.mRemoveFirst             -65    1000  avgt    2     53918.664          ns/op
 /// KotlinxPersistentHashMapJmh.mRemoveFirst             -65  100000  avgt    2   9764591.609          ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 1)

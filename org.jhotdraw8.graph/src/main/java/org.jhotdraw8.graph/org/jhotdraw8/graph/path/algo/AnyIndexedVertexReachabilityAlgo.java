@@ -20,14 +20,12 @@ import java.util.function.ToIntBiFunction;
 /// algorithm.
 ///
 /// This implementation is optimized for [org.jhotdraw8.graph.IndexedDirectedGraph].
-///
-/// @param <C> the numeric type of cost values
 public class AnyIndexedVertexReachabilityAlgo implements IndexedVertexReachabilityAlgo {
     public AnyIndexedVertexReachabilityAlgo() {
     }
 
     /// A SearchNode stores for a given vertex, how long the remaining
-    /// path to gaol may be until we abort the search.
+    /// path to goal may be until we abort the search.
     ///
     /// @param vertex a vertex
     /// @param depth  number of remaining path elements until abort
@@ -58,7 +56,7 @@ public class AnyIndexedVertexReachabilityAlgo implements IndexedVertexReachabili
     /// @param goalPredicate        the goal predicate
     /// @param nextVerticesFunction the next vertices function
     /// @param maxDepth             the maximal depth (inclusive) of the search
-    ///                             Must be {@literal >= 0}.
+    ///                             Must be `>= 0`.
     /// @param costLimit            the cost limit is **ignored**
     /// @param costFunction         the cost function
     /// @param visited
@@ -79,9 +77,9 @@ public class AnyIndexedVertexReachabilityAlgo implements IndexedVertexReachabili
     /// Searches breadth-first whether a path from root to goal exists.
     ///
     /// @param startVertices the starting points of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param goalPredicate the goal of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param visited       a predicate with side effect. The predicate returns true
     ///                      if the specified vertex has been visited, and marks the specified vertex
     ///                      as visited.

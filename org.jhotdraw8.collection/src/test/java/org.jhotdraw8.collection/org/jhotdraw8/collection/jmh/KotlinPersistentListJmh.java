@@ -18,7 +18,7 @@ import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.36
 /// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz

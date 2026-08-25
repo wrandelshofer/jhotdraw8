@@ -20,12 +20,12 @@ public class CardinalSplines {
     ///
     /// Cardinal spline from B to E with control points A, B, E, F and
     /// tension parameter c:
-    /// <pre>
+    /// ```
     ///       B         F
     ///     /   \     /
     ///   /      \   /
     /// A          E
-    /// </pre>
+    /// ```
     /// The tangent vectors of the cardinal spline are:
     ///
     ///   - Tb = c * (E - A)
@@ -33,12 +33,12 @@ public class CardinalSplines {
     ///
     ///
     /// Cubic bezier curve from B to E with control points B, C, D, E.
-    /// <pre>
+    /// ```
     ///       B----C   F
     ///     /   \     /
     ///   /      \   /
     /// A     D----E
-    /// </pre>
+    /// ```
     /// The tangent vectors of the cubic bezier curve are:
     ///
     ///   - Tb = 3 * (C - B)

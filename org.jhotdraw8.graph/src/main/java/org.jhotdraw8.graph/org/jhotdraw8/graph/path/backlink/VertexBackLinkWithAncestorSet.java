@@ -41,7 +41,6 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
     /// Converts an [VertexBackLinkWithAncestorSet] to [VertexBackLinkWithCost].
     ///
     /// @param <VV>         the vertex data type
-    /// @param <CC>         the cost number type
     /// @param node         the [VertexBackLinkWithAncestorSet]
     /// @param costFunction the cost function
     /// @return the converted [VertexBackLinkWithCost]

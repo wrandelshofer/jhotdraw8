@@ -10,7 +10,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/// <pre>
+/// ```
 /// class io.vavr.collection.HashMap with 1000000 elements.
 /// total size              : 91872840
 /// element size            : 48
@@ -28,10 +28,10 @@ import java.util.Collections;
 ///          1        16        16   io.vavr.collection.HashMap
 ///    2000000        24  48000000   org.jhotdraw8.collection.jmh.Key
 ///    3687494            91872840   (total)
-/// </pre>
+/// ```
 public class VavrHashMapJol extends AbstractJol {
 
-    /// <pre>
+    /// ```
     /// class io.vavr.collection.HashMap with 1000 elements.
     /// total size              : 91944
     /// element size            : 48
@@ -47,7 +47,7 @@ public class VavrHashMapJol extends AbstractJol {
     ///          1        16        16   io.vavr.collection.HashMap
     ///       2000        24     48000   org.jhotdraw8.collection.jmh.Key
     ///       3701               91944   (total)
-    /// </pre>
+    /// ```
     @Test
     @Disabled
     public void estimateMemoryUsage() {
@@ -62,7 +62,7 @@ public class VavrHashMapJol extends AbstractJol {
         estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class io.vavr.collection.HashMap with 250 elements.
     /// total size              : 22640
     /// element size            : 48
@@ -78,7 +78,7 @@ public class VavrHashMapJol extends AbstractJol {
     ///          1        16        16   io.vavr.collection.HashMap
     ///        500        24     12000   org.jhotdraw8.collection.jmh.Key
     ///        911               22640   (total)
-    /// </pre>
+    /// ```
     @Test
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;

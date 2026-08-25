@@ -21,12 +21,12 @@ import java.util.function.Predicate;
 /// Searches an arbitrary shortest path from a set of start vertices to a set of goal
 /// vertices using Dijkstra's algorithm.
 ///
-/// The provided cost function must return values {@literal >= 0} for all arrows.
+/// The provided cost function must return values `>= 0` for all arrows.
 ///
 /// Performance characteristics:
 /// <dl>
-///     <dt>When the algorithm returns a back link</dt><dd>less or equal {@literal O( (|A| + |V|)*log|V| )} within max cost</dd>
-///     <dt>When the algorithm returns null</dt><dd>exactly {@literal O( (|A| + |V|)*log|V| )} within max cost</dd>
+///     <dt>When the algorithm returns a back link</dt><dd>less or equal `O( (|A| + |V|)*log|V| )` within max cost</dd>
+///     <dt>When the algorithm returns null</dt><dd>exactly `O( (|A| + |V|)*log|V| )` within max cost</dd>
 /// </dl>
 /// References:
 /// <dl>
@@ -37,7 +37,6 @@ import java.util.function.Predicate;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 public class AnyShortestArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     public AnyShortestArcPathSearchAlgo() {
     }
@@ -48,9 +47,9 @@ public class AnyShortestArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, 
     /// @param goalPredicate    the goal predicate
     /// @param nextArcsFunction the next arcs function
     /// @param maxDepth         the maximal depth (inclusive) of the search
-    ///                         Must be {@literal >= 0}.
+    ///                         Must be `>= 0`.
     /// @param costLimit        the maximal cost (inclusive) of a path.
-    ///                         Must be {@literal >= zero}.
+    ///                         Must be `>= zero`.
     /// @param costFunction     the cost function
     /// @param visited
     /// @return on success: a back link, otherwise: null

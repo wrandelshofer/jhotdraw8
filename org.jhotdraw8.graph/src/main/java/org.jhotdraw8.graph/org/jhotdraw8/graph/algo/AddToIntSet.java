@@ -11,16 +11,16 @@ import java.util.BitSet;
 ///
 /// The set can be implemented in various ways. For example:
 ///
-///   - The set can be an implementation of one of the collection classes
+/// The set can be an implementation of one of the collection classes
 ///     provided by the Java API.
-///     <pre>
-///         {@literal AddToIntSet=new HashSet<Integer>()::add;}
-///         </pre>
+/// ```
+/// AddToIntSet=new HashSet<Integer>()::add;
+/// ```
 ///
-///   - The set can be a marker bit in a [BitSet].
-///     <pre>
-///        {@literal AddToIntSet=AddToIntSet.addToBitSet(new BitSet());}
-///        </pre>
+/// The set can be a marker bit in a [BitSet].
+/// ```
+/// AddToIntSet=AddToIntSet.addToBitSet(new BitSet());
+/// ```
 ///
 ///
 @FunctionalInterface

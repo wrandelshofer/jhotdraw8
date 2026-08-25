@@ -34,7 +34,6 @@ public class VertexBackLink<V> extends AbstractBackLink<VertexBackLink<V>> {
     /// Converts an [VertexBackLink] to [VertexBackLinkWithCost].
     ///
     /// @param <VV>         the vertex data type
-    /// @param <CC>         the cost number type
     /// @param node         the [VertexBackLink]
     /// @param costFunction the cost function
     /// @return the converted [VertexBackLinkWithCost]

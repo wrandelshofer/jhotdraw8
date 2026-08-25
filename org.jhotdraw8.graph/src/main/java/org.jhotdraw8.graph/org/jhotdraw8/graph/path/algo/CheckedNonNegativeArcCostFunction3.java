@@ -15,7 +15,6 @@ import org.jspecify.annotations.Nullable;
 ///
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
-/// @param <C> the cost number type
 record CheckedNonNegativeArcCostFunction3<V, A>(
         ToIntFunction3<V, V, A> costFunction) implements ToIntFunction3<V, V, A> {
     CheckedNonNegativeArcCostFunction3 {

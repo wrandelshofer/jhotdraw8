@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 /// ScalaVectorMapJmh.mTail                 -65     1000  avgt    2         57.453          ns/op
 /// ScalaVectorMapJmh.mTail                 -65  1000000  avgt    2        115.194          ns/op
 ///
-/// </pre>
+/// ```
 @SuppressWarnings("unchecked")
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)

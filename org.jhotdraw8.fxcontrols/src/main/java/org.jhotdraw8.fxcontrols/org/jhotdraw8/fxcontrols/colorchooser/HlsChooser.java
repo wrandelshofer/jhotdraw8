@@ -33,14 +33,14 @@ import java.util.ResourceBundle;
 ///     <dt>HSL</dt><dd>Hue, Saturation, Lightness</dd>
 ///     <dt>HSB</dt><dd>Hue, Saturation, Brightness</dd>
 /// </dl>
-/// <pre>
+/// ```
 ///           saturation→
 ///           +--------------+ +---+
 ///           |              | |   |
 ///         ↑ |              | |   | ↑
 /// lightness |              | |   | hue
 ///           +--------------+ +---+
-/// </pre>
+/// ```
 public class HlsChooser extends HBox {
 
     private final ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");

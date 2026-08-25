@@ -16,13 +16,13 @@ import org.jhotdraw8.icollection.PersistentVectorList;
 /// Provides properties for compositing a figure.
 ///
 /// Usage:
-/// <pre>
+/// ```
 /// class MyFigureClass implements CompositableFigure {
 ///     public void updateNode(RenderContext ctx, Node n) {
 ///         applyCompositableFigureProperties(ctx, n);
 ///     }
 /// }
-/// </pre>
+/// ```
 public interface CompositableFigure extends Figure {
 
     /// Specifies a blend mode applied to the figure.

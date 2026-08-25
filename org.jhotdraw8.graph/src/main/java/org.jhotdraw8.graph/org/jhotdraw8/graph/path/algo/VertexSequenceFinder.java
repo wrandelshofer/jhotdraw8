@@ -24,7 +24,6 @@ import java.util.function.Supplier;
 /// in a directed graph.
 ///
 /// @param <V> the vertex data type
-/// @param <C> the cost number type
 public interface VertexSequenceFinder<V> {
 
 
@@ -34,7 +33,7 @@ public interface VertexSequenceFinder<V> {
     /// @param startVertices the start vertices
     /// @param goalPredicate the goal vertex
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the algorithm-specific cost limit
     /// @param visited       the visited set
     /// @return an ordered pair (vertex sequence, cost),
@@ -53,7 +52,7 @@ public interface VertexSequenceFinder<V> {
     /// @param startVertices the start vertices
     /// @param goalPredicate the goal vertex
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the algorithm-specific cost limit
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
@@ -86,7 +85,7 @@ public interface VertexSequenceFinder<V> {
     /// @param start         the start vertex
     /// @param goalPredicate the goal vertex
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the algorithm-specific cost limit
     /// @param visited       the visited function
     /// @return an ordered pair (vertex sequence, cost),
@@ -105,7 +104,7 @@ public interface VertexSequenceFinder<V> {
     /// @param start         the start vertex
     /// @param goalPredicate the goal vertex
     /// @param maxDepth      the maximal depth (inclusive) of the search
-    ///                      Must be {@literal >= 0}.
+    ///                      Must be `>= 0`.
     /// @param costLimit     the algorithm-specific cost limit
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
@@ -137,7 +136,7 @@ public interface VertexSequenceFinder<V> {
     /// @param start     the start vertex
     /// @param goal      the goal vertex
     /// @param maxDepth  the maximal depth (inclusive) of the search
-    ///                  Must be {@literal >= 0}.
+    ///                  Must be `>= 0`.
     /// @param costLimit the algorithm-specific cost limit
     /// @param visited   the visited function
     /// @return an ordered pair (vertex sequence, cost),
@@ -157,7 +156,7 @@ public interface VertexSequenceFinder<V> {
     /// @param start     the start vertex
     /// @param goal      the goal vertex
     /// @param maxDepth  the maximal depth (inclusive) of the search
-    ///                  Must be {@literal >= 0}.
+    ///                  Must be `>= 0`.
     /// @param costLimit the algorithm-specific cost limit
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
@@ -189,7 +188,7 @@ public interface VertexSequenceFinder<V> {
     ///
     /// @param waypoints         a list of waypoints
     /// @param maxDepth          the maximal depth (inclusive) of the search
-    ///                          Must be {@literal >= 0}.
+    ///                          Must be `>= 0`.
     /// @param costLimit         the algorithm-specific cost limit for paths between waypoints
     /// @param visitedSetFactory the visited set factory
     /// @return an ordered pair (vertex sequence, cost),
@@ -206,7 +205,7 @@ public interface VertexSequenceFinder<V> {
     ///
     /// @param waypoints a list of waypoints
     /// @param maxDepth  the maximal depth (inclusive) of the search
-    ///                  Must be {@literal >= 0}.
+    ///                  Must be `>= 0`.
     /// @param costLimit the algorithm-specific cost limit for paths between waypoints
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.

@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 /// <a href="https://openjfx.io/javadoc/22/javafx.graphics/javafx/scene/doc-files/cssref.html#typepaint">JavaFX
 /// CSS Reference Guide</a>.
 ///
-/// <pre>
+/// ```
 /// Paint := (Color|LinearGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
 /// LinearGradient := "linear-gradient(", LinearGradientParameters, [Cycle], ColorStop,{"," ColorStop} ")"
 /// LinearGradientParameters := [PointToPoint|SideOrCorner] ]) ;
@@ -39,7 +39,7 @@ import java.util.function.Consumer;
 /// Point = (Number|CssSize|Percentage), (Number|CssSize|Percentage) ;
 /// ColorStop = Color, ["",Offset] ;
 ///
-/// </pre>
+/// ```
 public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGradient> {
     private static final ColorCssConverter colorConverter = new ColorCssConverter(false);
     public static final String LINEAR_GRADIENT_FUNCTION = "linear-gradient";

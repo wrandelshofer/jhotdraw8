@@ -11,7 +11,7 @@ import java.util.Spliterators;
 ///
 /// Subclasses should only implement the [Enumerator#moveNext()]
 /// method and (optionally) the [Spliterator#trySplit()] method:
-/// <pre>
+/// ```
 ///     public boolean moveNext() {
 ///         if (...end not reached...) {
 ///             current = ...;
@@ -19,7 +19,7 @@ import java.util.Spliterators;
 ///         }
 ///         return false;
 ///     }
-/// </pre>
+/// ```
 ///
 /// @param <E> the element type
 public abstract class AbstractEnumerator<E> extends Spliterators.AbstractSpliterator<E>

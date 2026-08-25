@@ -47,7 +47,7 @@ import static org.jhotdraw8.css.parser.CssTokenType.TT_URL;
 /// The tokenizer uses `CssScanner` for preprocessing the input stream. The
 /// preprocessed input stream does not contain the following characters: \000,
 /// \r, \f.
-/// <pre>
+/// ```
 /// IDENT       = ident ;
 /// AT_KEYWORD  = "@" , ident ;
 /// STRING      = string ;
@@ -74,7 +74,7 @@ import static org.jhotdraw8.css.parser.CssTokenType.TT_URL;
 /// (             = '(' ;
 /// )             = ')' ;
 /// [             = '[';
-///]             = ']' ;
+/// ]             = ']' ;
 /// S             = { w }- ;
 /// COMMENT       = '/', '*' , { ? anything but '*' followed by '/' ? } , '*', '/' ;
 /// ROUND_BLOCK      = ident , '(' ;
@@ -126,7 +126,7 @@ import static org.jhotdraw8.css.parser.CssTokenType.TT_URL;
 /// urichar       = '!' | '#' | '$' | '%' | '&amp;' | ? '*' through '['?
 ///                 |?']' through '~' ? ;
 /// hexd           = digit | ? 'a' through 'f' ? | ? 'A' through 'F' ? ;
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>

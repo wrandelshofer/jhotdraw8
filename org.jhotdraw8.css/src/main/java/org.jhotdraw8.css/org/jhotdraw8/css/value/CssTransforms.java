@@ -34,6 +34,7 @@ public class CssTransforms {
                 destX, destY, destW, destH
         );
     }
+
     public static Transform createReshapeTransform(CssRectangle2D csssrc, CssSize destX, CssSize destY, CssSize destW, CssSize destH) {
         return createReshapeTransform(csssrc.getConvertedValue(),
                 destX.getConvertedValue(), destY.getConvertedValue(), destW.getConvertedValue(), destH.getConvertedValue()
@@ -46,8 +47,8 @@ public class CssTransforms {
 
         Transform t = new Translate(dx - sx, dy - sy);
         if (!Double.isNaN(scaleX) && !Double.isNaN(scaleY)
-            && !Double.isInfinite(scaleX) && !Double.isInfinite(scaleY)
-            && (scaleX != 1d || scaleY != 1d)) {
+                && !Double.isInfinite(scaleX) && !Double.isInfinite(scaleY)
+                && (scaleX != 1d || scaleY != 1d)) {
             t = concat(t, new Scale(scaleX, scaleY, sx, sy));
         }
         return t;

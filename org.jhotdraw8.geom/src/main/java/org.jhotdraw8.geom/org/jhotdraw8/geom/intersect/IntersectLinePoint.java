@@ -34,24 +34,24 @@ public class IntersectLinePoint {
     ///
     /// This method solves the last equation shown in the list below.
     /// <ol>
-    ///   - {@literal p0 + (p1 - p0) · t1 , 0 ≤ t1 ≤ 1}
+    ///   - `p0 + (p1 - p0) · t1 , 0 ≤ t1 ≤ 1`
     ///     : line equation in vector form
-    ///   - {@literal x0 + (x1 - x0) · t1, y0 + (y1 - y0) · t1 }
+    ///   - `x0 + (x1 - x0) · t1, y0 + (y1 - y0) · t1 `
     ///     : line equation in matrix form
-    ///   - {@literal x0 + Δx · t1, y0 + Δy · t1 }
+    ///   - `x0 + Δx · t1, y0 + Δy · t1 `
     ///     : partially compacted coefficients
-    ///   - {@literal fx, fy }
+    ///   - `fx, fy `
     ///     : compacted coefficients in matrix form
-    ///   - {@literal (fx - cx)² + (fy - cy)² = 0}
+    ///   - `(fx - cx)² + (fy - cy)² = 0`
     ///     : distance to point equation with fx, fy coefficients inserted
-    ///   - {@literal Δx²·Δy²·t1² }
-    ///     {@literal + 2·(Δx·(x0 - cx)+Δy·(y0 - cy))·t1 }
-    ///     {@literal - 2·(x0·cx + y0·cy) + cx² + cy² + x0² + y0²  = 0 }
+    ///   - `Δx²·Δy²·t1² `
+    ///     `+ 2·(Δx·(x0 - cx)+Δy·(y0 - cy))·t1 `
+    ///     `- 2·(x0·cx + y0·cy) + cx² + cy² + x0² + y0²  = 0 `
     ///     : fx, fy coefficients expanded and equation reordered
-    ///   - {@literal a·t1² + b·t1 + c = 0, 0 ≤ t1 ≤ 1 }
+    ///   - `a·t1² + b·t1 + c = 0, 0 ≤ t1 ≤ 1 `
     ///     : final quadratic polynomial
     ///
-    ///   - {@literal 2·a·t1 + b = 0, 0 ≤ t1 ≤ 1 }
+    ///   - `2·a·t1 + b = 0, 0 ≤ t1 ≤ 1 `
     ///     : derivative
     /// </ol>
     ///

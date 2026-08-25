@@ -22,7 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.37
 /// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
 /// # Mac Mini M4 Pro, 4.40 GHz
@@ -56,7 +56,7 @@ import java.util.concurrent.TimeUnit;
 /// ScalaHashMapJmh.mRemoveFirst      -65      10  avgt    2       148.939          ns/op
 /// ScalaHashMapJmh.mRemoveFirst      -65    1000  avgt    2     52868.478          ns/op
 /// ScalaHashMapJmh.mRemoveFirst      -65  100000  avgt    2  11112966.863          ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 1)

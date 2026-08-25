@@ -41,7 +41,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
     private static final double EPSILON = 1.0 / (1L << 33);
 
     /// Holds the coefficients from lowest to highest degree, that is
-    /// {@literal coefs[i]*x^i}.
+    /// `coefs[i]*x^i`.
     private final double[] coefs;
 
     /// Creates a new polynomial.
@@ -49,9 +49,9 @@ public class Polynomial implements ToDoubleFunction<Double> {
     /// The coefficients are in order by highest degree monomial first. For
     /// example, the following example initializes a Polynomial object for:
     /// <code>3x^4 + 2x^2 + 5</code>.
-    /// <pre>
+    /// ```
     /// var poly = new Polynomial(3, 0, 2, 0, 5);
-    /// </pre> All coefficients from highest degree to degree 0 must be provided.
+    /// ``` All coefficients from highest degree to degree 0 must be provided.
     /// A zero is used for monomials that are not present in the polynomial.
     ///
     /// NOTE: The polynomial coefficients are stored in an array in the reverse
@@ -313,13 +313,13 @@ public class Polynomial implements ToDoubleFunction<Double> {
     }
 
     /// Returns the roots of a quadratic polynomial (degree equals two).
-    /// <pre>
+    /// ```
     ///     a*t^2 + b*t + c = 0
     ///
     ///     d = b^2 - 4 * c
     ///     t1 = ( -b + sqrt(d) ) / 2
     ///     t2 = ( -b - sqrt(d) ) / 2
-    /// </pre>
+    /// ```
     ///
     /// @return the roots
     public static double[] getQuadraticRoots(double a, double b, double c) {
@@ -611,7 +611,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
 
     /// Estimates the arc length of the polynomial in the interval [min,max].
     ///
-    /// Computes {@literal  ∫_min‾max sqrt(1 + (f'(x))^2 ) }
+    /// Computes ` ∫_min‾max sqrt(1 + (f'(x))^2 ) `
     ///
     /// @param min the lower bound of the interval
     /// @param max the upper bound of the interval

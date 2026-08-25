@@ -22,7 +22,6 @@ import java.util.Set;
 /// [vavr Option.java](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/control/Option.java)
 /// [vavr MIT-License](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE)
 ///
-///
 /// @param <T> The type of the optional value.
 public interface Option<T> extends ReadableCollection<T> {
     @SuppressWarnings("unchecked")
@@ -36,8 +35,6 @@ public interface Option<T> extends ReadableCollection<T> {
 
 
     /// Creates a new `Option` of a given value.
-    /// <pre>
-    /// `// = Some(3), an Option which contains the value 3Option<Integer> option = Option.of(3);// = None, the empty OptionOption<Integer> none = Option.of(null);`</pre>
     ///
     /// @param value A value
     /// @param <T>   type of the value
@@ -45,6 +42,7 @@ public interface Option<T> extends ReadableCollection<T> {
     static <T> Option<T> of(T value) {
         return (value == null) ? none() : some(value);
     }
+
     record Some<T>(T value) implements Option<T> {
 
         @Override
@@ -135,15 +133,13 @@ public interface Option<T> extends ReadableCollection<T> {
     }
 
     /// Returns true, if this is `None`, otherwise false, if this is `Some`.
-    /// <pre>
+    /// ```
     /// `// Prints "false"System.out.println(Option.of(10).isEmpty());// Prints "true"System.out.println(Option.none().isEmpty());`</pre>
     ///
     /// @return true, if this `Option` is empty, false otherwise
     boolean isEmpty();
 
     /// Returns this `Option` if it is nonempty, otherwise return the alternative.
-    /// <pre>
-    /// `Option<String> other = Option.of("Other");// = Some("Hello World")Option.of("Hello World").orElse(other);// = Some("Other")Option.none().orElse(other);`</pre>
     ///
     /// @param other An alternative `Option`
     /// @return this `Option` if it is nonempty, otherwise return the alternative.
@@ -153,7 +149,7 @@ public interface Option<T> extends ReadableCollection<T> {
     /// Returns the value if this is a `Some` or the `other` value if this is a `None`.
     ///
     /// Please note, that the other value is eagerly evaluated.
-    /// <pre>
+    /// ```
     /// `// Prints "Hello"System.out.println(Option.of("Hello").getOrElse("World"));// Prints "World"Option.none().getOrElse("World");`</pre>
     ///
     /// @param other An alternative value
@@ -163,7 +159,7 @@ public interface Option<T> extends ReadableCollection<T> {
     }
 
     /// Gets the value if this is a `Some` or throws if this is a `None`.
-    /// <pre>
+    /// ```
     /// `// Prints "57"System.out.println(Option.of(57).get());// Throws a NoSuchElementExceptionOption.none().get();`</pre>
     ///
     /// @return the value
@@ -171,14 +167,14 @@ public interface Option<T> extends ReadableCollection<T> {
     @Nullable T get();
 
     /// Returns this `Option` if this is defined, or `null` if it is empty.
-    /// <pre>
+    /// ```
     /// `// = Some("Hello World")Option.of("Hello World").orNull();// = nullOption.none().orNull();`</pre>
     ///
     /// @return this value if it is defined, or `null` if it is empty.
     @Nullable T orNull();
 
     /// Returns this `Option` if this is defined, or throws a `NoSuchElementException` if it is empty.
-    /// <pre>
+    /// ```
     /// `// = Some("Hello World")Option.of("Hello World").orThrow();// = nullOption.none().orThrow();`</pre>
     ///
     /// @return this value if it is defined, or `null` if it is empty.

@@ -21,15 +21,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.36
 /// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
 /// jvmArgsAppend = {"-ea", "-Xmx28g","-XX:-Inline"})
 /// Benchmark                 (mask)  (size)  Mode  Cnt        Score   Error  Units
 /// ScalaHashMapJmh.mIterate     -65  100000  avgt       1800621.175          ns/op
-/// </pre>
-/// <pre>
+/// ```
+/// ```
 /// # JMH version: 1.36
 /// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
@@ -79,7 +79,7 @@ import java.util.concurrent.TimeUnit;
 /// ScalaHashMapJmh.mTail                 -65      1000  avgt               73.006          ns/op
 /// ScalaHashMapJmh.mTail                 -65    100000  avgt               92.645          ns/op
 /// ScalaHashMapJmh.mTail                 -65  10000000  avgt              143.238          ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)

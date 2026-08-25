@@ -28,7 +28,7 @@ import static java.lang.Math.tan;
 /// CssTransformConverter.
 ///
 /// Parses a transform given in the following EBNF:
-/// <pre>
+/// ```
 /// Transform     = ( Matrix | Translate | Scale | Rotate | SkewX | SkewY ) ;
 ///
 /// Matrix        = "matrix(" ,
@@ -42,7 +42,7 @@ import static java.lang.Math.tan;
 ///
 /// C             = ( S , { S } | { S } , "," , { S } ) ;
 /// S             = (* white space *) ;
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>
@@ -105,13 +105,13 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
     @Override
     public @Nullable String getHelpText() {
         return """
-               Format of ⟨Transform⟩: ⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨SkewX⟩｜⟨SkewY⟩｜⟨Matrix⟩
-               Format of ⟨Translate⟩: translate(⟨tx⟩,⟨ty⟩)
-               Format of ⟨Scale⟩: scale(⟨sx⟩,⟨sy⟩)
-               Format of ⟨Rotate⟩: rotate(⟨angle⟩［,⟨pivotx⟩,⟨pivoty⟩］)
-               Format of ⟨SkewX⟩: skewX(⟨skew-angle⟩)
-               Format of ⟨SkewY⟩: skewY(⟨skew-angle⟩)
-               Format of ⟨Matrix⟩: matrix(⟨xx⟩,⟨yx⟩, ⟨xy⟩,⟨yy⟩, ⟨tx⟩,⟨ty⟩)"""
+                Format of ⟨Transform⟩: ⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨SkewX⟩｜⟨SkewY⟩｜⟨Matrix⟩
+                Format of ⟨Translate⟩: translate(⟨tx⟩,⟨ty⟩)
+                Format of ⟨Scale⟩: scale(⟨sx⟩,⟨sy⟩)
+                Format of ⟨Rotate⟩: rotate(⟨angle⟩［,⟨pivotx⟩,⟨pivoty⟩］)
+                Format of ⟨SkewX⟩: skewX(⟨skew-angle⟩)
+                Format of ⟨SkewY⟩: skewY(⟨skew-angle⟩)
+                Format of ⟨Matrix⟩: matrix(⟨xx⟩,⟨yx⟩, ⟨xy⟩,⟨yy⟩, ⟨tx⟩,⟨ty⟩)"""
                 ;
     }
 

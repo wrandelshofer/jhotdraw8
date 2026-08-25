@@ -64,7 +64,7 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
 ///
 /// The line extends from the pick node to the top of the figure.
 ///
-/// <pre>
+/// ```
 ///              ○             pick node
 ///              |             line
 ///     +-----------------+
@@ -72,7 +72,7 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
 ///     |        +        |    pivot node
 ///     |                 |
 ///     +-----------------+
-/// </pre>
+/// ```
 public class RotateHandle extends AbstractHandle {
     public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 

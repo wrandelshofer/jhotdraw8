@@ -183,7 +183,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     /// Returns the next power of two that is equal or greater than the specified
     /// value.
     ///
-    /// @param value a value in the range [0,1<<29].
+    /// @param value a value in the range [0,2^29].
     /// @return nextUp with nextUp @gt;= value && nextUp == highestOneBit(nextUp).
     private int nextPowerOfTwoUp(int value) {
         Objects.checkIndex(value, 1 << 29);

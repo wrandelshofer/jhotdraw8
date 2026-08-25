@@ -29,20 +29,20 @@ public class StaticSpatialIndex {
     /// corresponding element in m_boxes.
     ///
     /// Invariants:
-    /// <pre>
+    /// ```
     /// Context StaticSpatialIndex inv:
     ///   m_indices.length = numItems
     ///   m_indices->forAll( i | i &gt;= 0 )
-    /// </pre>
+    /// ```
     private final int[] m_indices;
     /// Describes the bounding box of the elements. Contains 4 entries
     /// for each element: minX,minY,maxX,maxY.
     ///
     /// Invariants:
-    /// <pre>
+    /// ```
     /// Context StaticSpatialIndex inv:
     ///   m_boxes.length = numItems * 4
-    /// </pre>
+    /// ```
     private final double[] m_boxes;
     /// Maximal number of elements inside a level.
     private final int nodeSize;
@@ -50,19 +50,19 @@ public class StaticSpatialIndex {
     /// for each level: minX,minY,maxX,maxY.
     ///
     /// Invariants:
-    /// <pre>
+    /// ```
     /// Context StaticSpatialIndex inv:
     ///   m_levelBounds.length = m_numNodes * 4
-    /// </pre>
+    /// ```
     private final int[] m_levelBounds;
     private final int m_numItems;
     /// Number of levels in the spatial index.
     ///
     /// Invariants:
-    /// <pre>
+    /// ```
     /// Context StaticSpatialIndex inv:
     ///   m_numLevels = ceil( ln(m_numItems) / ln(nodeSize )
-    /// </pre>
+    /// ```
     private final int m_numLevels;
     /// The total number of nodes (the sum of all nodes in all levels).
     private final int m_numNodes;
@@ -414,12 +414,12 @@ public class StaticSpatialIndex {
     /// Query the spatial index adding indexes to the results vector given. This overload accepts an
     /// existing vector to use as a stack and takes care of clearing the stack before use.
     ///
-    /// @param minX query rectangle min x coordinate
-    /// @param minY query rectangle min y coordinate
-    /// @param maxX query rectangle max x coordinate
-    /// @param maxY query rectangle max y coordinate
+    /// @param minX    query rectangle min x coordinate
+    /// @param minY    query rectangle min y coordinate
+    /// @param maxX    query rectangle max x coordinate
+    /// @param maxY    query rectangle max y coordinate
     /// @param results result indices
-    /// @param stack stack for reuse
+    /// @param stack   stack for reuse
     public void query(double minX, double minY, double maxX, double maxY, IntArrayList results,
                       IntArrayDeque stack) {
         IntPredicate visitor = (index) -> {
@@ -432,10 +432,10 @@ public class StaticSpatialIndex {
 
     /// [#visitQuery(double, double, double, double, IntPredicate, IntArrayDeque)]
     ///
-    /// @param minX query rectangle min x coordinate
-    /// @param minY query rectangle min y coordinate
-    /// @param maxX query rectangle max x coordinate
-    /// @param maxY query rectangle max y coordinate
+    /// @param minX    query rectangle min x coordinate
+    /// @param minY    query rectangle min y coordinate
+    /// @param maxX    query rectangle max x coordinate
+    /// @param maxY    query rectangle max y coordinate
     /// @param visitor visitor
     public void visitQuery(double minX, double minY, double maxX, double maxY, IntPredicate visitor) {
         IntArrayDeque stack = new IntArrayDeque(16);
@@ -447,12 +447,12 @@ public class StaticSpatialIndex {
     /// the query stops early, otherwise the query continues. This overload accepts an existing vector
     /// to use as a stack and takes care of clearing the stack before use.
     ///
-    /// @param minX query rectangle min x coordinate
-    /// @param minY query rectangle min y coordinate
-    /// @param maxX query rectangle max x coordinate
-    /// @param maxY query rectangle max y coordinate
+    /// @param minX    query rectangle min x coordinate
+    /// @param minY    query rectangle min y coordinate
+    /// @param maxX    query rectangle max x coordinate
+    /// @param maxY    query rectangle max y coordinate
     /// @param visitor visitor
-    /// @param stack stack for reuse
+    /// @param stack   stack for reuse
     public void visitQuery(double minX, double minY, double maxX, double maxY, IntPredicate visitor,
                            IntArrayDeque stack) {
         if (m_pos != 4 * m_numNodes) {

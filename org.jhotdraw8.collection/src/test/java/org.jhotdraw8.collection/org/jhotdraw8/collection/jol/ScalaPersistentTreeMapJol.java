@@ -10,7 +10,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/// <pre>
+/// ```
 /// class scala.collection.immutable.SimpleImmutableSequencedMap with 1000000 elements.
 /// total size              : 128419696
 /// element size            : 48
@@ -34,10 +34,10 @@ import java.util.Collections;
 ///          1        56        56   scala.collection.immutable.Vector4
 ///          1        32        32   scala.collection.immutable.SimpleImmutableSequencedMap
 ///    4951323           128419696   (total)
-/// </pre>
+/// ```
 public class ScalaPersistentTreeMapJol extends AbstractJol {
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.SimpleImmutableSequencedMap with 1000 elements.
     /// total size              : 127576
     /// element size            : 48
@@ -57,7 +57,7 @@ public class ScalaPersistentTreeMapJol extends AbstractJol {
     ///          1        32        32   scala.collection.immutable.Vector2
     ///          1        32        32   scala.collection.immutable.SimpleImmutableSequencedMap
     ///       4921              127576   (total)
-    /// </pre>
+    /// ```
     @Test
     @Disabled
     public void estimateMemoryUsage() {
@@ -73,7 +73,7 @@ public class ScalaPersistentTreeMapJol extends AbstractJol {
         estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.SimpleImmutableSequencedMap with 250 elements.
     /// total size              : 45792
     /// element size            : 48
@@ -94,7 +94,7 @@ public class ScalaPersistentTreeMapJol extends AbstractJol {
     ///          1        32        32   scala.collection.immutable.SimpleImmutableSequencedMap
     ///        750        16     12000   scala.collection.immutable.SimpleImmutableSequencedMap$Tombstone
     ///       1942               45792   (total)
-    /// </pre>
+    /// ```
     @Test
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;

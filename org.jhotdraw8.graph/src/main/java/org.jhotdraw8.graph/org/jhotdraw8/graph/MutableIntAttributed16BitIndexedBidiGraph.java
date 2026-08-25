@@ -37,25 +37,25 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
     private final int maxArity;
     private final int stride;
     /// The array contains `stride` elements for each vertex.
-    /// <pre>
+    /// ```
     /// [vertexData0,vertexData1,arrowCount,vertexIndex...]
-    /// </pre>
+    /// ```
     private short[] prev;
     /// The array contains `stride` elements for each vertex.
-    /// <pre>
+    /// ```
     /// [vertexData0,vertexData1,arrowCount,vertexIndex...]
-    /// </pre>
+    /// ```
     private short[] next;
 
     /// The array contains `maxArity` elements for each vertex.
-    /// <pre>
+    /// ```
     /// [arrowData...]
-    /// </pre>
+    /// ```
     private int[] nextArrow;
     /// The array contains `maxArity` elements for each vertex.
-    /// <pre>
+    /// ```
     /// [arrowData...]
-    /// </pre>
+    /// ```
     private int[] prevArrow;
 
     private int vertexCount;

@@ -7,17 +7,15 @@ package org.jhotdraw8.geom;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 
-import java.util.stream.Collector;
-
 /// A state object for finding the combined bounds of a stream of Bounds objects.
 ///
 /// This class is designed to work with a (parallel) stream of Bounds objects with:
-/// <pre>
+/// ```
 /// `Stream<Bounds> boundsStream = ... ;BoundsCalculator stats = boundsStream.collect(BoundsCalculator::new,BoundsCalculator::accept,BoundsCalculator::combine);`</pre>
 ///
 /// The BoundsCalculator can be used as a
 /// {@linkplain java.util.stream.Stream#collect(Collector) reduction}
-/// <pre>
+/// ```
 /// `BoundsCalculator stats = figures.stream().collect(BoundsCalculator.collectBounds(Figure::getBoundsInWorld));`</pre>
 public class BoundsCalculator {
     private double minX = Double.POSITIVE_INFINITY;

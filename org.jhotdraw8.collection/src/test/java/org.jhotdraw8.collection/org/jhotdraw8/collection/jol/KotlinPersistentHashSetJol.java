@@ -5,7 +5,7 @@ import org.jhotdraw8.collection.jmh.Key;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-/// <pre>
+/// ```
 /// class kotlinx.collections.immutable.implementations.immutableSet.PersistentHashSet with 1000000 elements.
 ///
 /// total size              : 43618720
@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 ///     344264        24   8262336   kotlinx.collections.immutable.implementations.immutableSet.TrieNode
 ///    1000000        24  24000000   org.jhotdraw8.collection.jmh.Key
 ///    1688529            43618720   (total)
-/// </pre>
+/// ```
 public class KotlinPersistentHashSetJol extends AbstractJol {
 
     @Test

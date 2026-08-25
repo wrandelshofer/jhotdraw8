@@ -8,7 +8,7 @@ import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import java.util.List;
 
 /// Builds the graph that is shown in Tarjans paper on figure 3.
-/// <pre>
+/// ```
 ///              ┌───┐      ┌───┐
 ///   ┌─────────→│ 1 │─────→│ 2 │───────┐
 ///   │          └───┘      └───┘       │
@@ -25,13 +25,13 @@ import java.util.List;
 ///   │          ┌───┐      ┌───┐       │
 ///   └────────→ │ 6 │←─────│ 5 │←──────┘
 ///              └───┘      └───┘
-/// </pre>
+/// ```
 /// Strongly connected components:
-/// <pre>
+/// ```
 ///     1, 2, 8
 ///     3, 4, 5, 7
 ///     6
-/// </pre>
+/// ```
 /// References:
 /// <dl>
 ///     <dt>Robert Tarjan (1972). Depth-first search and linear graph algorithms.

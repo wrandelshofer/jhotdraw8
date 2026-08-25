@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-/// <pre>
+/// ```
 /// class java.util.ImmutableCollections$MapN with 1000000 elements.
 /// total size              : 64000048
 /// element size            : 48
@@ -19,7 +19,7 @@ import java.util.Map;
 ///          1        32        32   java.util.ImmutableCollections$MapN
 ///    2000000        24  48000000   org.jhotdraw8.collection.jmh.Key
 ///    2000002            64000048   (total)
-/// </pre>
+/// ```
 public class JavaUnmodifiableMapJol extends AbstractJol {
 
     @Test

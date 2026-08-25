@@ -15,7 +15,7 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
-/// <pre>
+/// ```
 /// # JMH version: 1.28
 /// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
 /// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 /// Put               1000000  avgt          _   399.898          ns/op
 /// RemoveThenAdd     1000000  avgt          _   543.379          ns/op
 /// Tail              1000000  avgt          _   145.562          ns/op
-/// </pre>
+/// ```
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)

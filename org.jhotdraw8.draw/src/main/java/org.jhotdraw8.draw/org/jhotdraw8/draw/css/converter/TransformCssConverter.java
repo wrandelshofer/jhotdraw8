@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 /// CssTransformConverter.
 ///
 /// Parses a transform given in the following EBNF:
-/// <pre>
+/// ```
 /// Transform     = ( Affine | Matrix | Translate | Scale | Rotate | Shear ) ;
 ///
 /// Affine        = "affine(" , [S] ,
@@ -56,7 +56,7 @@ import java.util.function.Consumer;
 ///
 /// C             = ( S , { S } | { S } , "," , { S } ) ;
 /// S             = (* white space *)
-/// </pre>
+/// ```
 public class TransformCssConverter extends AbstractCssConverter<Transform> {
 
     public TransformCssConverter() {

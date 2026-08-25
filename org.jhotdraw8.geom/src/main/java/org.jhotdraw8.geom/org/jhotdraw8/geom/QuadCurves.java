@@ -18,15 +18,15 @@ import static org.jhotdraw8.geom.Lines.lerp;
 /// Provides utility methods for quadratic Bézier curves.
 ///
 /// Quadratic Bezier curves are defined by second order polynomial, and can be written as:
-/// <pre>
+/// ```
 /// B(t) = (1 − t)*P₀ + 2*(1 − t)*t*P₁ + t²*P₂
-/// </pre>
+/// ```
 /// where t is real parameter with values in range [0,1]. P’s are respectively curve starting point,
 /// anchor point and the end point. Derivative of the quadratic Bézier curve can be written as
 /// Quadratic Bézier Curve derivative:
-/// <pre>
+/// ```
 /// ∂B∂t(t) = 2*t*(P₀ − 2*P₁ + P₂) + 2*P₁ − 2*P₀
-/// </pre>
+/// ```
 ///
 /// References:
 /// <dl>
@@ -117,13 +117,13 @@ public class QuadCurves {
     /// Gets the integrand function for the arc-length of a quadratic bézier curve.
     ///
     /// The arc-length `s` can be computed with the following equation:
-    /// <pre>
+    /// ```
     ///     s = integrate( √( A*t² + B*t +C ), d:t, from:0, to:t)
-    /// </pre>
+    /// ```
     /// The integrand function is therefore:
-    /// <pre>
+    /// ```
     ///     s = √( A*t² + B*t +C )
-    /// </pre>
+    /// ```
     ///
     /// References:
     /// <dl>
@@ -169,7 +169,7 @@ public class QuadCurves {
     ///
     /// @param p       the coordinates of the control points of the bézier curve
     /// @param offset  the offset of the first control point in `b`
-    /// @param s       the arc-length value where {@literal s >= 0}
+    /// @param s       the arc-length value where `s >= 0`
     /// @param epsilon
     public static double invArcLength(double[] p, int offset, double s, double epsilon) {
         return invArcLength(p, offset, s, arcLength(p, offset, 1, epsilon), epsilon);

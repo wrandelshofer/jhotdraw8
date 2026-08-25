@@ -8,13 +8,13 @@ import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 /// The shortest path from A to B is A→D→E→B = 5.
 ///
 /// The shortest path from E to C is either E→C = 9, or E→F→C = 9.
-/// <pre>
+/// ```
 /// A--8--B     C
 /// |   / |   / |
 /// 1  6  2  9  4
 /// |/    |/    |
 /// D--3--E--5--F
-/// </pre>
+/// ```
 public class NonMinimalSpanningTreeGraphBuilder {
     /// Builds the graph.
     public DirectedGraph<String, Integer> build() {

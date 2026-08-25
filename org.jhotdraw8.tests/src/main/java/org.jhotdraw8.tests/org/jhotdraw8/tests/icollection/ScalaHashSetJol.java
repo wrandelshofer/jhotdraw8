@@ -8,7 +8,7 @@ public class ScalaHashSetJol extends AbstractJol {
         estimateMemoryUsage(size);
     }
 
-    /// <pre>
+    /// ```
     /// class scala.collection.immutable.HashSet with 1000 elements.
     /// total size              : 57104
     /// element size            : 24
@@ -24,7 +24,7 @@ public class ScalaHashSetJol extends AbstractJol {
     ///        321        40     12840   scala.collection.immutable.BitmapIndexedSetNode
     ///          1        16        16   scala.collection.immutable.HashSet
     ///       1959               57104   (total)
-    /// </pre>
+    /// ```
 
     public void estimateMemoryUsage(int size) {
         final int mask = -1;//~64;

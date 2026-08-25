@@ -53,43 +53,43 @@ public class IntersectCubicCurvePoint {
     ///
     /// This method solves the last equation shown in the list below.
     /// <ol>
-    ///   - {@literal (1 - t)³·p0 + 3·(1 - t)²·t·p1 + 3·(1 - t)·t²·p2 + t³·p3 , 0 ≤ t ≤ 1
-    ///     }
+    ///   - `(1 - t)³·p0 + 3·(1 - t)²·t·p1 + 3·(1 - t)·t²·p2 + t³·p3 , 0 ≤ t ≤ 1``
+    ///
     ///     : cubic bezier equation, vector form
     ///
-    ///   - {@literal  -(p0 - 3*p1 + 3*p2 - p3)*t^3 + 3*(p0 - 2*p1 + p2)*t^2 - 3*(p0 - p1)*t + p0 }
+    ///   - ` -(p0 - 3*p1 + 3*p2 - p3)*t^3 + 3*(p0 - 2*p1 + p2)*t^2 - 3*(p0 - p1)*t + p0 `
     ///     : expanded, and then collected for t
     ///
-    ///   - {@literal c3·t³ + c2·t² + c1·t + c0 }
+    ///   - `c3·t³ + c2·t² + c1·t + c0 `
     ///     : coefficients compacted
     ///
-    ///   - {@literal c3x·t³ + c2x·t² + c1x·t + c0x , c3y·t³ + c2y·t² + c1y·t + c0y }
+    ///   - `c3x·t³ + c2x·t² + c1x·t + c0x , c3y·t³ + c2y·t² + c1y·t + c0y `
     ///     : bezier equation in matrix form
     ///
-    ///   - {@literal fx , fy }
+    ///   - `fx , fy `
     ///     : compacted matrix form
     ///
-    ///   - {@literal (fx - cx)² + (fy - cy)² = 0 }
+    ///   - `(fx - cx)² + (fy - cy)² = 0 `
     ///     : distance to point equation, with fx, fy inserted from matrix form
     ///
     ///   - {@literal c3x^2*t^6 + 2*c2x*c3x*t^5 + (c2x^2 + 2*c1x*c3x)*t^4 + 2*(c1x*c2x
     ///     + c0x*c3x - c3x*cx)*t^3 + (c1x^2 + 2*c0x*c2x - 2*c2x*cx)*t^2 + c0x^2 -
     ///     2*c0x*cx + cx^2 + 2*(c0x*c1x - c1x*cx)*t }
-    ///     {@literal + ..same for y-axis... }
+    ///     `+ ..same for y-axis... `
     ///     : coefficients expanded
     ///
-    ///   - {@literal (c3x^2 + c3y^2)*t^6 }
-    ///     {@literal + 2*(c2x*c3x + c2y*c3y)*t^5 }
-    ///     {@literal + (c2x^2 + c2y^2 + 2*c1x*c3x + 2*c1y*c3y)*t^4 }
-    ///     {@literal + 2*(c1x*c2x + c1y*c2y + c0x*c3x + c0y*c3y - c3x*cx - c3y*cy)*t^3 }
-    ///     {@literal + (c1x^2 + c1y^2 + 2*c0x*c2x + 2*c0y*c2y - 2*c2x*cx - 2*c2y*cy)*t^2 }
-    ///     {@literal + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t }
-    ///     {@literal + c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2 }
+    ///   - `(c3x^2 + c3y^2)*t^6 `
+    ///     `+ 2*(c2x*c3x + c2y*c3y)*t^5 `
+    ///     `+ (c2x^2 + c2y^2 + 2*c1x*c3x + 2*c1y*c3y)*t^4 `
+    ///     `+ 2*(c1x*c2x + c1y*c2y + c0x*c3x + c0y*c3y - c3x*cx - c3y*cy)*t^3 `
+    ///     `+ (c1x^2 + c1y^2 + 2*c0x*c2x + 2*c0y*c2y - 2*c2x*cx - 2*c2y*cy)*t^2 `
+    ///     `+ 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t `
+    ///     `+ c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2 `
     ///     : coefficients collected for t
-    ///   - {@literal a·t⁶ + b·t⁵ + c·t⁴ + d·t³ + e·t² + f·t + g = 0, 0 ≤ t ≤ 1 }
+    ///   - `a·t⁶ + b·t⁵ + c·t⁴ + d·t³ + e·t² + f·t + g = 0, 0 ≤ t ≤ 1 `
     ///     : final polynomial equation
     ///
-    ///   - {@literal 6·a·t⁵ + 5·b·t⁴ + 4·c·t³ + 3·d·t² + 2·e·t + f = 0, 0 ≤ t ≤ 1 }
+    ///   - `6·a·t⁵ + 5·b·t⁴ + 4·c·t³ + 3·d·t² + 2·e·t + f = 0, 0 ≤ t ≤ 1 `
     ///     : derivative
     ///
     /// </ol>
