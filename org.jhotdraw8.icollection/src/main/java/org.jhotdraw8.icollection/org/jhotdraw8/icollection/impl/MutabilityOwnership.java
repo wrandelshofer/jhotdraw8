@@ -20,13 +20,16 @@ import java.io.Serializable;
 /// Example:
 /// ```
 /// class DataObject {
-///   private final MutabilityOwnership owner;
+///   private final @Nullable MutabilityOwnership owner;
 ///   private String name;
 ///   public DataObject(MutabilityOwnership owner, String name) {
 ///      this.owner=owner; this.name=name;
 ///   }
+///   public boolean isOwnedBy(MutabilityOwnership owner) {
+///      return owner != null && owner == this.owner;
+///   }
 ///   public DataObject settingName(MutabilityOwnership owner, String name) {
-///     if (owner==this.owner) {
+///     if (isOwnedBy(owner)) {
 ///         this.name=name;return this;
 ///     }
 ///     return new DataObject(owner, name);

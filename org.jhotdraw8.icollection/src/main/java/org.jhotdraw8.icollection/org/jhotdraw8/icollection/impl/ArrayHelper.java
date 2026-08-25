@@ -6,6 +6,8 @@
 package org.jhotdraw8.icollection.impl;
 
 
+import org.jspecify.annotations.Nullable;
+
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Objects;
@@ -24,6 +26,12 @@ public class ArrayHelper {
             }
         }
         return false;
+    }
+
+    private static final Object[] empty = new Object[0];
+
+    public static @Nullable Object[] copyOfOrEmpty(@Nullable Object[] array, int n) {
+        return n == 0 ? empty : Arrays.copyOf(array, n);
     }
 
     public static int indexOf(Object[] a, Object element) {
