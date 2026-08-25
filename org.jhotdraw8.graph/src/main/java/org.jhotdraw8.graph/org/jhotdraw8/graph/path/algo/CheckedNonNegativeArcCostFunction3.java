@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.base.function.Function3;
+import org.jhotdraw8.base.function.ToIntFunction3;
 import org.jspecify.annotations.Nullable;
 
 /// A cost function that checks if the provided cost function always returns
@@ -16,16 +16,16 @@ import org.jspecify.annotations.Nullable;
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
 /// @param <C> the cost number type
-record CheckedNonNegativeArcCostFunction3<V, A, C extends Number & Comparable<C>>(C zero,
-                                                                                  Function3<V, V, A, C> costFunction) implements Function3<V, V, A, C> {
+record CheckedNonNegativeArcCostFunction3<V, A>(
+        ToIntFunction3<V, V, A> costFunction) implements ToIntFunction3<V, V, A> {
     CheckedNonNegativeArcCostFunction3 {
-        AlgoArguments.checkZero(zero);
+
     }
 
     @Override
-    public C apply(V v1, V v2, @Nullable A a) {
-        C cost = costFunction.apply(v1, v2, a);
-        if (cost.compareTo(zero) < 0) {
+    public int applyAsInt(V v1, V v2, @Nullable A a) {
+        int cost = costFunction.applyAsInt(v1, v2, a);
+        if (cost < 0) {
             throw new IllegalStateException("cost must be >= 0. v1=" + v1 + ", v2=" + v2 + ", a=" + a + ", cost=" + cost);
         }
         return cost;

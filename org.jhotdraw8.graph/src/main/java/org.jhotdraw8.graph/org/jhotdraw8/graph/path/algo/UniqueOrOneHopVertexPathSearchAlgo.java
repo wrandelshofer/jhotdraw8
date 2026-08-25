@@ -13,9 +13,9 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Queue;
 import java.util.SequencedSet;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToIntBiFunction;
 
 /// Builder for creating unique paths from a directed graph.
 ///
@@ -24,14 +24,16 @@ import java.util.function.Predicate;
 /// from start to goal.
 ///
 /// @param <V> the vertex data type
-/// @param <C> the cost number type
-public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+public class UniqueOrOneHopVertexPathSearchAlgo<V> implements VertexPathSearchAlgo<V> {
     public UniqueOrOneHopVertexPathSearchAlgo() {
     }
 
     @Override
-    public @Nullable VertexBackLinkWithCost<V, C> search(Iterable<V> startVertices, Predicate<V> goalPredicate, Function<V, Iterable<V>> nextVerticesFunction, int maxDepth, C zero, C costLimit, BiFunction<V, V, C> costFunction, BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
-        return search(startVertices, goalPredicate, nextVerticesFunction, new HashSet<>(16)::add, maxDepth, zero, costFunction, sumFunction);
+    public @Nullable VertexBackLinkWithCost<V> search(Iterable<V> startVertices,
+                                                      Predicate<V> goalPredicate,
+                                                      Function<V, Iterable<V>> nextVerticesFunction,
+                                                      int maxDepth, int costLimit, ToIntBiFunction<V, V> costFunction, AddToSet<V> visited) {
+        return search(startVertices, goalPredicate, nextVerticesFunction, new HashSet<>(16)::add, maxDepth, costFunction);
     }
 
 
@@ -41,33 +43,28 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
     /// @param goalPredicate        the goal predicate
     /// @param nextVerticesFunction the next arcs function
     /// @param visited              the set of visited vertices (see [AddToSet])
-    /// @param zero                 the zero cost value
     /// @param costFunction         the cost function
-    /// @param sumFunction          the sum function for adding two cost values
     /// @return on success: a back link, otherwise: null
-    public @Nullable VertexBackLinkWithCost<V, C> search(Iterable<V> startVertices,
-                                                         Predicate<V> goalPredicate,
-                                                         Function<V, Iterable<V>> nextVerticesFunction,
-                                                         AddToSet<V> visited,
-                                                         int maxDepth,
-                                                         C zero,
-                                                         BiFunction<V, V, C> costFunction,
-                                                         BiFunction<C, C, C> sumFunction) {
-        AlgoArguments.checkZero(zero);
+    public @Nullable VertexBackLinkWithCost<V> search(Iterable<V> startVertices,
+                                                      Predicate<V> goalPredicate,
+                                                      Function<V, Iterable<V>> nextVerticesFunction,
+                                                      AddToSet<V> visited, int maxDepth,
+                                                      ToIntBiFunction<V, V> costFunction) {
+
         AlgoArguments.checkMaxDepth(maxDepth);
-        Queue<VertexBackLinkWithCost<V, C>> queue = new ArrayDeque<>(16);
+        Queue<VertexBackLinkWithCost<V>> queue = new ArrayDeque<>(16);
 
         for (V start : startVertices) {
-            VertexBackLinkWithCost<V, C> rootBackLink = new VertexBackLinkWithCost<>(start, null, zero);
+            VertexBackLinkWithCost<V> rootBackLink = new VertexBackLinkWithCost<>(start, null, 0);
             if (visited.add(start)) {
                 queue.add(rootBackLink);
             }
         }
 
-        VertexBackLinkWithCost<V, C> found = null;
+        VertexBackLinkWithCost<V> found = null;
         SequencedSet<V> nonUnique = new LinkedHashSet<>();
         while (!queue.isEmpty()) {
-            VertexBackLinkWithCost<V, C> u = queue.remove();
+            VertexBackLinkWithCost<V> u = queue.remove();
             if (goalPredicate.test(u.getVertex())) {
                 if (found != null) {
                     return null;// path is not unique!
@@ -81,7 +78,7 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
             if (u.getDepth() < maxDepth) {
                 for (V v : nextVerticesFunction.apply(u.getVertex())) {
                     if (visited.add(v)) {
-                        VertexBackLinkWithCost<V, C> backLink = new VertexBackLinkWithCost<>(v, u, sumFunction.apply(u.getCost(), costFunction.apply(u.getVertex(), v)));
+                        VertexBackLinkWithCost<V> backLink = new VertexBackLinkWithCost<>(v, u, (u.getCost() + costFunction.applyAsInt(u.getVertex(), v)));
                         queue.add(backLink);
                     } else {
                         nonUnique.add(v);
@@ -90,7 +87,7 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
             }
         }
 
-        for (VertexBackLinkWithCost<V, C> node = found; node != null; node = node.getParent()) {
+        for (VertexBackLinkWithCost<V> node = found; node != null; node = node.getParent()) {
             if (nonUnique.contains(node.getVertex())) {
                 // path is not unique!
                 return null;

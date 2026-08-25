@@ -10,10 +10,10 @@ import org.jhotdraw8.collection.primitive.LongArrayDeque;
 import org.jhotdraw8.graph.algo.AddToIntSet;
 
 import java.util.Spliterator;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
+import java.util.function.ToIntBiFunction;
 
 
 /// See [AnyArcPathSearchAlgo] for a description of this
@@ -22,7 +22,7 @@ import java.util.function.IntPredicate;
 /// This implementation is optimized for [org.jhotdraw8.graph.IndexedDirectedGraph].
 ///
 /// @param <C> the numeric type of cost values
-public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> implements IndexedVertexReachabilityAlgo<C> {
+public class AnyIndexedVertexReachabilityAlgo implements IndexedVertexReachabilityAlgo {
     public AnyIndexedVertexReachabilityAlgo() {
     }
 
@@ -59,10 +59,8 @@ public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> 
     /// @param nextVerticesFunction the next vertices function
     /// @param maxDepth             the maximal depth (inclusive) of the search
     ///                             Must be {@literal >= 0}.
-    /// @param zero                 the zero cost value
     /// @param costLimit            the cost limit is **ignored**
     /// @param costFunction         the cost function
-    /// @param sumFunction          the sum function for adding two cost values
     /// @param visited
     /// @return
     @Override
@@ -70,11 +68,9 @@ public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> 
                               IntPredicate goalPredicate,
                               Function<Integer, Spliterator.OfInt> nextVerticesFunction,
                               int maxDepth,
-                              C zero,
-                              C costLimit,
-                              BiFunction<Integer, Integer, C> costFunction,
-                              BiFunction<C, C, C> sumFunction, AddToIntSet visited) {
-        AlgoArguments.checkZero(zero);
+                              int costLimit,
+                              ToIntBiFunction<Integer, Integer> costFunction,
+                              AddToIntSet visited) {
         return tryToReach(startVertices, goalPredicate, nextVerticesFunction,
                 new GrowableIntSet8Bit()::addAsInt,
                 maxDepth);

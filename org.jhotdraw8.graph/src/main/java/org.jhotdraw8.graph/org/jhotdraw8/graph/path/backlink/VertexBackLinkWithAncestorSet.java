@@ -10,7 +10,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.function.BiFunction;
+import java.util.function.ToIntBiFunction;
 
 /// Represents a vertex back link with depth and a set of ancestors.
 ///
@@ -40,18 +40,14 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
 
     /// Converts an [VertexBackLinkWithAncestorSet] to [VertexBackLinkWithCost].
     ///
-    /// @param node         the [VertexBackLinkWithAncestorSet]
-    /// @param zero         the zero cost value
-    /// @param costFunction the cost function
-    /// @param sumFunction  the sum function for cost values
     /// @param <VV>         the vertex data type
     /// @param <CC>         the cost number type
+    /// @param node         the [VertexBackLinkWithAncestorSet]
+    /// @param costFunction the cost function
     /// @return the converted [VertexBackLinkWithCost]
-    public static <VV, CC extends Number & Comparable<CC>> @Nullable VertexBackLinkWithCost<VV, CC> toVertexBackLinkWithCost(
+    public static <VV> @Nullable VertexBackLinkWithCost<VV> toVertexBackLinkWithCost(
             @Nullable VertexBackLinkWithAncestorSet<VV> node,
-            CC zero,
-            BiFunction<VV, VV, CC> costFunction,
-            BiFunction<CC, CC, CC> sumFunction) {
+            ToIntBiFunction<VV, VV> costFunction) {
         if (node == null) {
             return null;
         }
@@ -63,13 +59,13 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
         }
 
 
-        VertexBackLinkWithCost<VV, CC> newNode = null;
+        VertexBackLinkWithCost<VV> newNode = null;
         for (VertexBackLinkWithAncestorSet<VV> n : deque) {
             newNode = new VertexBackLinkWithCost<>(n.getVertex(), newNode,
                     newNode == null
-                            ? zero
-                            : sumFunction.apply(newNode.getCost(),
-                            costFunction.apply(newNode.getVertex(), n.getVertex())));
+                            ? 0
+                            : (newNode.getCost() +
+                            costFunction.applyAsInt(newNode.getVertex(), n.getVertex())));
         }
         return newNode;
     }

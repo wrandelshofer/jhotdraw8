@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.base.function.Function3;
+import org.jhotdraw8.base.function.ToIntFunction3;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLink;
@@ -15,7 +15,6 @@ import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
 import java.util.Queue;
 import java.util.SequencedMap;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -52,7 +51,7 @@ import java.util.function.Predicate;
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
 /// @param <C> the cost number type
-public class UniqueOnAcyclicGraphArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
+public class UniqueOnAcyclicGraphArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     public UniqueOnAcyclicGraphArcPathSearchAlgo() {
     }
 
@@ -63,26 +62,22 @@ public class UniqueOnAcyclicGraphArcPathSearchAlgo<V, A, C extends Number & Comp
     /// @param nextArcsFunction the next arcs function
     /// @param maxDepth         the maximal depth (inclusive) of the search
     ///                         Must be {@literal >= 0}.
-    /// @param zero             the zero cost value
     /// @param costLimit        the cost limit is **ignored**
     /// @param costFunction     the cost function
-    /// @param sumFunction      the sum function for adding two cost values
     /// @param visited
     /// @return
-    @Override
-    public @Nullable ArcBackLinkWithCost<V, A, C> search(
+    public @Nullable ArcBackLinkWithCost<V, A> search(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             int maxDepth,
-            C zero,
-            C costLimit,
-            Function3<V, V, A, C> costFunction,
-            BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
-        AlgoArguments.checkZero(zero);
+            int costLimit,
+            ToIntFunction3<V, V, A> costFunction,
+            AddToSet<V> visited) {
+
         return ArcBackLink.toArcBackLinkWithCost(
                 search(startVertices, goalPredicate, nextArcsFunction, maxDepth),
-                zero, costFunction, sumFunction);
+                costFunction);
     }
 
 

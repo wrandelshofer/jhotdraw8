@@ -5,21 +5,19 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jspecify.annotations.Nullable;
-
 /// Holds cost and visit count data.
 ///
 /// @param <C> the cost number type
-class CostData<C> {
-    private final @Nullable C cost;
+class CostData {
+    private final int cost;
     private int visiCount;
 
-    public CostData(@Nullable C cost, int visiCount) {
+    public CostData(int cost, int visiCount) {
         this.cost = cost;
         this.visiCount = visiCount;
     }
 
-    public @Nullable C getCost() {
+    public int getCost() {
         return cost;
     }
 

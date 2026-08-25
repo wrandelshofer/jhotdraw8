@@ -5,13 +5,12 @@
 
 package org.jhotdraw8.graph.path.backlink;
 
-import org.jhotdraw8.base.function.Function3;
+import org.jhotdraw8.base.function.ToIntFunction3;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.function.BiFunction;
 
 /// Represents an arc back link with depth and a set of ancestors.
 ///
@@ -46,18 +45,14 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
 
     /// Converts an [ArcBackLinkWithAncestorSet] to [ArcBackLinkWithCost].
     ///
-    /// @param node         the [ArcBackLinkWithAncestorSet]
-    /// @param zero         the zero cost value
-    /// @param costFunction the cost function
-    /// @param sumFunction  the sum function for cost values
     /// @param <VV>         the vertex data type
     /// @param <AA>         the arrow data type
     /// @param <CC>         the cost number type
+    /// @param node         the [ArcBackLinkWithAncestorSet]
+    /// @param costFunction the cost function
     /// @return the converted [ArcBackLinkWithCost]
-    public static <VV, AA, CC extends Number & Comparable<CC>> @Nullable ArcBackLinkWithCost<VV, AA, CC> toArcBackLinkWithCost(@Nullable ArcBackLinkWithAncestorSet<VV, AA> node,
-                                                                                                                               CC zero,
-                                                                                                                               Function3<VV, VV, AA, CC> costFunction,
-                                                                                                                               BiFunction<CC, CC, CC> sumFunction) {
+    public static <VV, AA> @Nullable ArcBackLinkWithCost<VV, AA> toArcBackLinkWithCost(@Nullable ArcBackLinkWithAncestorSet<VV, AA> node,
+                                                                                       ToIntFunction3<VV, VV, AA> costFunction) {
         if (node == null) {
             return null;
         }
@@ -69,12 +64,12 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
         }
 
 
-        ArcBackLinkWithCost<VV, AA, CC> newNode = null;
+        ArcBackLinkWithCost<VV, AA> newNode = null;
         for (ArcBackLinkWithAncestorSet<VV, AA> n : deque) {
             newNode = new ArcBackLinkWithCost<>(n.getVertex(), n.getArrow(), newNode,
                     newNode == null
-                            ? zero
-                            : sumFunction.apply(newNode.getCost(),
+                            ? 0
+                            : (newNode.getCost() +
                             costFunction.apply(newNode.getVertex(), n.getVertex(), n.getArrow())));
         }
         return newNode;
@@ -100,10 +95,10 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
     @Override
     public String toString() {
         return "ArcBackLink{" +
-               "depth=" + depth +
-               ", vertex=" + vertex +
-               ", arrow=" + arrow +
-               '}';
+                "depth=" + depth +
+                ", vertex=" + vertex +
+                ", arrow=" + arrow +
+                '}';
     }
 
 }

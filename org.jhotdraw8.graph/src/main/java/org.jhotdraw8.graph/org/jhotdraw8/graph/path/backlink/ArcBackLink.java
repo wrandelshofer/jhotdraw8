@@ -5,12 +5,11 @@
 
 package org.jhotdraw8.graph.path.backlink;
 
-import org.jhotdraw8.base.function.Function3;
+import org.jhotdraw8.base.function.ToIntFunction3;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.function.BiFunction;
 
 /// Represents an arc back link with depth.
 ///
@@ -51,18 +50,14 @@ public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
 
     /// Converts an [ArcBackLink] to [ArcBackLinkWithCost].
     ///
-    /// @param node         the [ArcBackLink]
-    /// @param zero         the zero cost value
-    /// @param costFunction the cost function
-    /// @param sumFunction  the sum function for cost values
     /// @param <VV>         the vertex data type
     /// @param <AA>         the arrow data type
     /// @param <CC>         the cost number type
+    /// @param node         the [ArcBackLink]
+    /// @param costFunction the cost function
     /// @return the converted [ArcBackLinkWithCost]
-    public static <VV, AA, CC extends Number & Comparable<CC>> @Nullable ArcBackLinkWithCost<VV, AA, CC> toArcBackLinkWithCost(@Nullable ArcBackLink<VV, AA> node,
-                                                                                                                               CC zero,
-                                                                                                                               Function3<VV, VV, AA, CC> costFunction,
-                                                                                                                               BiFunction<CC, CC, CC> sumFunction) {
+    public static <VV, AA> @Nullable ArcBackLinkWithCost<VV, AA> toArcBackLinkWithCost(@Nullable ArcBackLink<VV, AA> node,
+                                                                                       ToIntFunction3<VV, VV, AA> costFunction) {
         if (node == null) {
             return null;
         }
@@ -74,13 +69,13 @@ public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
         }
 
 
-        ArcBackLinkWithCost<VV, AA, CC> newNode = null;
+        ArcBackLinkWithCost<VV, AA> newNode = null;
         for (ArcBackLink<VV, AA> n : deque) {
             newNode = new ArcBackLinkWithCost<>(n.getVertex(), n.getArrow(), newNode,
                     newNode == null
-                            ? zero
-                            : sumFunction.apply(newNode.getCost(),
-                            costFunction.apply(newNode.getVertex(), n.getVertex(), n.getArrow())));
+                            ? 0
+                            : newNode.getCost() +
+                            costFunction.apply(newNode.getVertex(), n.getVertex(), n.getArrow()));
         }
         return newNode;
     }

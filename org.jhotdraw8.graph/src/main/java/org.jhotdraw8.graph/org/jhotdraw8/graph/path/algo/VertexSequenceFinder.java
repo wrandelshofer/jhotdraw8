@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 ///
 /// @param <V> the vertex data type
 /// @param <C> the cost number type
-public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
+public interface VertexSequenceFinder<V> {
 
 
     /// Finds a vertex sequence from a set of start vertices to a vertex
@@ -40,11 +40,11 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
     @Nullable
-    SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
+    SimpleOrderedPair<PersistentList<V>, Integer> findVertexSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth,
-            C costLimit,
+            int costLimit,
             AddToSet<V> visited);
 
     /// Finds a vertex sequence from a set of start vertices to a vertex
@@ -57,11 +57,11 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @param costLimit     the algorithm-specific cost limit
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable OrderedPair<PersistentList<V>, C> findVertexSequence(
+    default @Nullable OrderedPair<PersistentList<V>, Integer> findVertexSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth,
-            C costLimit) {
+            int costLimit) {
         return findVertexSequence(startVertices, goalPredicate, maxDepth, costLimit, new HashSet<>()::add);
     }
 
@@ -73,10 +73,10 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @param costLimit     the algorithm-specific cost limit
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, Integer> findVertexSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
-            C costLimit) {
+            int costLimit) {
         return findVertexSequence(startVertices, goalPredicate, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
@@ -91,11 +91,11 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @param visited       the visited function
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable OrderedPair<PersistentList<V>, C> findVertexSequence(
+    default @Nullable OrderedPair<PersistentList<V>, Integer> findVertexSequence(
             V start,
             Predicate<V> goalPredicate,
             int maxDepth,
-            C costLimit, AddToSet<V> visited) {
+            int costLimit, AddToSet<V> visited) {
         return findVertexSequence(Collections.singletonList(start), goalPredicate, maxDepth, costLimit, visited);
     }
 
@@ -109,11 +109,11 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @param costLimit     the algorithm-specific cost limit
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable OrderedPair<PersistentList<V>, C> findVertexSequence(
+    default @Nullable OrderedPair<PersistentList<V>, Integer> findVertexSequence(
             V start,
             Predicate<V> goalPredicate,
             int maxDepth,
-            C costLimit) {
+            int costLimit) {
         return findVertexSequence(Collections.singletonList(start), goalPredicate, maxDepth, costLimit, new HashSet<>()::add);
     }
 
@@ -125,10 +125,10 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @param costLimit     the algorithm-specific cost limit
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, Integer> findVertexSequence(
             V start,
             Predicate<V> goalPredicate,
-            C costLimit) {
+            int costLimit) {
         return findVertexSequence(Collections.singletonList(start), goalPredicate, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
@@ -143,11 +143,11 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
     @SuppressWarnings("unchecked")
-    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, Integer> findVertexSequence(
             V start,
             V goal,
             int maxDepth,
-            C costLimit,
+            int costLimit,
             AddToSet<V> visited) {
         return findVertexSequence(PersistentVectorList.of(start), goal::equals, maxDepth, costLimit, visited);
     }
@@ -162,11 +162,11 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
     @SuppressWarnings("unchecked")
-    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, Integer> findVertexSequence(
             V start,
             V goal,
             int maxDepth,
-            C costLimit) {
+            int costLimit) {
         return findVertexSequence(PersistentVectorList.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
     }
 
@@ -178,10 +178,10 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
     @SuppressWarnings("unchecked")
-    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, Integer> findVertexSequence(
             V start,
             V goal,
-            C costLimit) {
+            int costLimit) {
         return findVertexSequence(PersistentVectorList.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
@@ -195,10 +195,10 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
     @Nullable
-    SimpleOrderedPair<PersistentList<V>, C> findVertexSequenceOverWaypoints(
+    SimpleOrderedPair<PersistentList<V>, Integer> findVertexSequenceOverWaypoints(
             Iterable<V> waypoints,
             int maxDepth,
-            C costLimit,
+            int costLimit,
             Supplier<AddToSet<V>> visitedSetFactory);
 
 
@@ -210,10 +210,10 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @param costLimit the algorithm-specific cost limit for paths between waypoints
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequenceOverWaypoints(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, Integer> findVertexSequenceOverWaypoints(
             Iterable<V> waypoints,
             int maxDepth,
-            C costLimit) {
+            int costLimit) {
         return findVertexSequenceOverWaypoints(waypoints, maxDepth, costLimit, () -> new HashSet<>()::add);
     }
 
@@ -223,40 +223,36 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     /// @param costLimit the algorithm-specific cost limit for paths between waypoints
     /// @return an ordered pair (vertex sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequenceOverWaypoints(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, Integer> findVertexSequenceOverWaypoints(
             Iterable<V> waypoints,
-            C costLimit) {
+            int costLimit) {
         return findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, costLimit, () -> new HashSet<>()::add);
     }
 
-    /// Helper function for implementing [#findVertexSequenceOverWaypoints(Iterable, int, Number, Supplier)].
+    /// Helper function for implementing [#findVertexSequenceOverWaypoints(Iterable, int, int, Supplier)].
     ///
     /// @param <VV>                       the vertex type
-    /// @param <CC>                       the number type
+
     /// @param waypoints                  the waypoints
     /// @param findVertexSequenceFunction the search function, for example `this::findVertexSequence`
-    /// @param zero                       the zero value
-    /// @param sumFunction                the sum function
     /// @return an ordered pair with the combined sequence
     @SuppressWarnings("unchecked")
-    static <VV, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<PersistentList<VV>, CC> findVertexSequenceOverWaypoints(
+    static <VV> @Nullable SimpleOrderedPair<PersistentList<VV>, Integer> findVertexSequenceOverWaypoints(
             Iterable<VV> waypoints,
-            BiFunction<VV, VV, OrderedPair<PersistentList<VV>, CC>> findVertexSequenceFunction,
-            CC zero,
-            BiFunction<CC, CC, CC> sumFunction) {
+            BiFunction<VV, VV, OrderedPair<PersistentList<VV>, Integer>> findVertexSequenceFunction) {
         List<VV> sequence = new ArrayList<>();
         VV prev = null;
-        CC sum = zero;
+        int sum = 0;
         int count = 0;
         for (VV next : waypoints) {
             if (prev != null) {
-                final OrderedPair<PersistentList<VV>, CC> result = findVertexSequenceFunction.apply(prev, next);
+                final OrderedPair<PersistentList<VV>, Integer> result = findVertexSequenceFunction.apply(prev, next);
                 if (result == null) {
                     return null;
                 } else {
                     final List<VV> nextSequence = result.first().asList();
                     sequence.addAll(sequence.isEmpty() ? nextSequence : nextSequence.subList(1, nextSequence.size()));
-                    sum = sumFunction.apply(sum, result.second());
+                    sum = (sum + result.second());
                 }
             }
             prev = next;
@@ -265,7 +261,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
 
         if (count == 1) {
             // the set of waypoints is degenerate
-            return new SimpleOrderedPair<>(PersistentVectorList.of(prev), zero);
+            return new SimpleOrderedPair<>(PersistentVectorList.of(prev), 0);
         }
 
         return new SimpleOrderedPair<>(PersistentVectorList.copyOf(sequence), sum);

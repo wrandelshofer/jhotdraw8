@@ -13,10 +13,10 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.Spliterator;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
+import java.util.function.ToIntBiFunction;
 
 
 /// See [AnyArcPathSearchAlgo] for a description of this
@@ -26,7 +26,7 @@ import java.util.function.IntPredicate;
 ///
 /// @param <C> the cost number type
 public class AnyIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
-        implements IndexedVertexPathSearchAlgo<C> {
+        implements IndexedVertexPathSearchAlgo {
     public AnyIndexedVertexPathSearchAlgo() {
     }
 
@@ -40,18 +40,17 @@ public class AnyIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
     }
 
     @Override
-    public @Nullable IndexedVertexBackLinkWithCost<C> search(
+    public @Nullable IndexedVertexBackLinkWithCost search(
             Iterable<Integer> startVertices,
             IntPredicate goalPredicate,
             Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-            int maxDepth, C zero, C costLimit,
-            BiFunction<Integer, Integer, C> costFunction,
-            BiFunction<C, C, C> sumFunction, AddToIntSet visited) {
-        AlgoArguments.checkZero(zero);
+            int maxDepth, int costLimit,
+            ToIntBiFunction<Integer, Integer> costFunction,
+            AddToIntSet visited) {
         return IndexedVertexBackLink.toIndexedVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction,
                         new GrowableIntSet8Bit()::addAsInt, maxDepth),
-                zero, costFunction, sumFunction
+                costFunction
         );
     }
 

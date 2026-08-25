@@ -10,18 +10,17 @@ import org.jspecify.annotations.Nullable;
 /// Abstract base class for back links.
 ///
 /// @param <T> the concrete back link type
-/// @param <C> the cost number type
-public class AbstractBackLinkWithCost<T extends AbstractBackLinkWithCost<T, C>, C extends Number & Comparable<C>>
+public class AbstractBackLinkWithCost<T extends AbstractBackLinkWithCost<T>>
         extends AbstractBackLink<T> {
     /// The cost for reaching this back link from the root ancestor.
-    private final C cost;
+    private final int cost;
 
 
     /// Creates a new instance.
     ///
     /// @param parent the parent back link
     /// @param cost   the cumulated cost of this back link. Must be zero if parent is null.
-    public AbstractBackLinkWithCost(@Nullable T parent, C cost) {
+    public AbstractBackLinkWithCost(@Nullable T parent, int cost) {
         super(parent);
         this.cost = cost;
     }
@@ -29,7 +28,7 @@ public class AbstractBackLinkWithCost<T extends AbstractBackLinkWithCost<T, C>, 
     /// The cost
     ///
     /// @return cost
-    public C getCost() {
+    public int getCost() {
         return cost;
     }
 }

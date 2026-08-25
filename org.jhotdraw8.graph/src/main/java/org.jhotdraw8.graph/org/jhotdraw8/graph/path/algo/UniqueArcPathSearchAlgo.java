@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.base.function.Function3;
+import org.jhotdraw8.base.function.ToIntFunction3;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
@@ -19,7 +19,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Queue;
 import java.util.SequencedMap;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -54,7 +53,7 @@ import java.util.stream.StreamSupport;
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
 /// @param <C> the cost number type
-public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
+public class UniqueArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     private enum SearchResultType {SUCCESS_UNIQUE_PATH, FAILURE_NO_PATH, FAILURE_NOT_UNIQUE}
 
     public UniqueArcPathSearchAlgo() {
@@ -74,19 +73,16 @@ public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> imp
     /// @param visited
     /// @return
     @Override
-    public @Nullable ArcBackLinkWithCost<V, A, C> search(
+    public @Nullable ArcBackLinkWithCost<V, A> search(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             int maxDepth,
-            C zero,
-            C costLimit,
-            Function3<V, V, A, C> costFunction,
-            BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
-        AlgoArguments.checkZero(zero);
+            int costLimit,
+            ToIntFunction3<V, V, A> costFunction, AddToSet<V> visited) {
         return ArcBackLinkWithAncestorSet.toArcBackLinkWithCost(
                 search(startVertices, goalPredicate, nextArcsFunction, maxDepth),
-                zero, costFunction, sumFunction);
+                costFunction);
     }
 
 

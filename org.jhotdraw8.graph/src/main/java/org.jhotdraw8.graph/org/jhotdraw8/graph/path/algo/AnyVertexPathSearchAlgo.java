@@ -12,16 +12,16 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.Queue;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToIntBiFunction;
 
 /// See [AnyArcPathSearchAlgo] for a description of this
 /// algorithm.
 ///
 /// @param <V> the vertex data type
 /// @param <C> the cost number type
-public class AnyVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+public class AnyVertexPathSearchAlgo<V> implements VertexPathSearchAlgo<V> {
     public AnyVertexPathSearchAlgo() {
     }
 
@@ -32,28 +32,24 @@ public class AnyVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implem
     /// @param nextVerticesFunction the next vertices function
     /// @param maxDepth             the maximal depth (inclusive) of the search
     ///                             Must be {@literal >= 0}.
-    /// @param zero                 the zero cost value
     /// @param costLimit            the cost limit is **ignored**
     /// @param costFunction         the cost function
-    /// @param sumFunction          the sum function for adding two cost values
     /// @param visited
     /// @return
     @Override
-    public @Nullable VertexBackLinkWithCost<V, C> search(
+    public @Nullable VertexBackLinkWithCost<V> search(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             Function<V, Iterable<V>> nextVerticesFunction,
-            int maxDepth, C zero,
-            C costLimit,
-            BiFunction<V, V, C> costFunction,
-            BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
-        AlgoArguments.checkZero(zero);
+            int maxDepth,
+            int costLimit,
+            ToIntBiFunction<V, V> costFunction,
+            AddToSet<V> visited) {
         return VertexBackLink.toVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction,
                         new HashSet<V>()::add,
                         maxDepth),
-                zero,
-                costFunction, sumFunction);
+                costFunction);
     }
 
     /// Search engine method.

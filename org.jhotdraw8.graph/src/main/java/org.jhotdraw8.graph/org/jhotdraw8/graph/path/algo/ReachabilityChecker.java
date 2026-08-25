@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 ///
 /// @param <V> the vertex data type
 /// @param <C> the cost number type
-public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
+public interface ReachabilityChecker<V> {
     /// Checks if a vertex sequence from a set of start vertices to a vertex
     /// that satisfies the goal predicate exists.
     ///
@@ -27,7 +27,7 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
     /// @return true if a sequence was found.
     boolean isReachable(Iterable<V> startVertices,
                         Predicate<V> goalPredicate,
-                        int maxDepth, C costLimit, AddToSet<V> visited);
+                        int maxDepth, int costLimit, AddToSet<V> visited);
 
     /// Checks if a vertex sequence from a start vertex to a vertex
     /// that satisfies the goal predicate exists.
@@ -41,7 +41,7 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
     /// @return true if a sequence was found.
     boolean isReachable(V start,
                         Predicate<V> goalPredicate,
-                        int maxDepth, C costLimit, AddToSet<V> visited);
+                        int maxDepth, int costLimit, AddToSet<V> visited);
 
     /// Checks if a vertex sequence from start to goal exists.
     ///
@@ -52,7 +52,7 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
     /// @param costLimit the algorithm-specific cost limit
     /// @param visited   the visited function
     /// @return true if a sequence was found.
-    boolean isReachable(V start, V goal, int maxDepth, C costLimit, AddToSet<V> visited);
+    boolean isReachable(V start, V goal, int maxDepth, int costLimit, AddToSet<V> visited);
 
 
 }

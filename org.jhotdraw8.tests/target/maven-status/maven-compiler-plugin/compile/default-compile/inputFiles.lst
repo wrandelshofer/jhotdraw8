@@ -1,11 +1,13 @@
 /Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/module-info.java
 /Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/AbstractJol.java
 /Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/JavaHashMapJol.java
+/Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/JavaLinkedHashMapJol.java
 /Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/JavaTreeSetJol.java
 /Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/JavaUnmodifiableMapJol.java
 /Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/Key.java
 /Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/KotlinPersistentHashMapJol.java
 /Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/KotlinPersistentHashSetJol.java
+/Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/KotlinPersistentOrderedMapJol.java
 /Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/KotlinPersistentOrderedSetJol.java
 /Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/PersistentHashMapJol.java
 /Volumes/Projects/Java/JHotDraw/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.tests/src/main/java/org.jhotdraw8.tests/org/jhotdraw8/tests/icollection/PersistentHashSetJol.java

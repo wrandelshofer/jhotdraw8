@@ -24,8 +24,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /// AnyPathBuilderTest.
 public class AllWalksSpliteratorTest {
 
-    private CombinedAllSequencesFinder<Integer, Double, Double> newAllInstance(final DirectedGraph<Integer, Double> graph) {
-        return new SimpleCombinedAllSequencesFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
+    private CombinedAllSequencesFinder<Integer, Double> newAllInstance(final DirectedGraph<Integer, Double> graph) {
+        return new SimpleCombinedAllSequencesFinder<>(graph::getNextArcs, (u, v, a) -> a.intValue());
     }
 
 
@@ -101,8 +101,8 @@ public class AllWalksSpliteratorTest {
         );
     }
 
-    private void testFindAllPaths(DirectedGraph<Integer, Double> graph, int start, int goal, double maxCost, List<PersistentList<Integer>> expected) {
-        CombinedAllSequencesFinder<Integer, Double, Double> instance = newAllInstance(graph);
+    private void testFindAllPaths(DirectedGraph<Integer, Double> graph, int start, int goal, int maxCost, List<PersistentList<Integer>> expected) {
+        CombinedAllSequencesFinder<Integer, Double> instance = newAllInstance(graph);
         List<PersistentList<Integer>> actual = StreamSupport.stream(instance.findAllVertexSequences(
                         Collections.singletonList(start),
                         a -> a == goal, Integer.MAX_VALUE, maxCost).spliterator(), false)

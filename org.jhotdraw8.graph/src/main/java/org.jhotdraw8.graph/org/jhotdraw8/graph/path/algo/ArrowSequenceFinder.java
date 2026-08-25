@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
 /// @param <C> the cost number type
-public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
+public interface ArrowSequenceFinder<V, A> {
 
 
     /// Finds an arrow sequence from a set of start vertices to a vertex
@@ -40,11 +40,11 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
     @Nullable
-    SimpleOrderedPair<PersistentList<A>, C> findArrowSequence(
+    SimpleOrderedPair<PersistentList<A>, Integer> findArrowSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth,
-            C costLimit,
+            int costLimit,
             AddToSet<V> visited);
 
     /// Finds an arrow sequence from a set of start vertices to a vertex
@@ -57,11 +57,11 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param costLimit     the algorithm-specific cost limit
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<A>, Integer> findArrowSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth,
-            C costLimit) {
+            int costLimit) {
         return findArrowSequence(startVertices, goalPredicate, maxDepth, costLimit, new HashSet<>()::add);
     }
 
@@ -73,10 +73,10 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param costLimit     the algorithm-specific cost limit
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<A>, Integer> findArrowSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
-            C costLimit) {
+            int costLimit) {
         return findArrowSequence(startVertices, goalPredicate, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
@@ -90,11 +90,11 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param visited   the visited function
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable OrderedPair<PersistentList<A>, C> findArrowSequence(
+    default @Nullable OrderedPair<PersistentList<A>, Integer> findArrowSequence(
             V start,
             V goal,
             int maxDepth,
-            C costLimit, AddToSet<V> visited) {
+            int costLimit, AddToSet<V> visited) {
         return findArrowSequence(PersistentVectorList.of(start), goal::equals, maxDepth, costLimit, visited);
     }
 
@@ -107,11 +107,11 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param costLimit the algorithm-specific cost limit
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<A>, Integer> findArrowSequence(
             V start,
             V goal,
             int maxDepth,
-            C costLimit) {
+            int costLimit) {
         return findArrowSequence(PersistentVectorList.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
     }
 
@@ -122,10 +122,10 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param costLimit the algorithm-specific cost limit
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<A>, Integer> findArrowSequence(
             V start,
             V goal,
-            C costLimit) {
+            int costLimit) {
         return findArrowSequence(PersistentVectorList.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
@@ -139,8 +139,8 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
     @Nullable
-    SimpleOrderedPair<PersistentList<A>, C> findArrowSequenceOverWaypoints(
-            Iterable<V> waypoints, int maxDepth, C costLimit,
+    SimpleOrderedPair<PersistentList<A>, Integer> findArrowSequenceOverWaypoints(
+            Iterable<V> waypoints, int maxDepth, int costLimit,
             Supplier<AddToSet<V>> visitedSetFactory);
 
     /// Finds an arrow sequence through the given waypoints.
@@ -151,8 +151,8 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param costLimit the algorithm-specific cost limit for paths between waypoints
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequenceOverWaypoints(
-            Iterable<V> waypoints, int maxDepth, C costLimit) {
+    default @Nullable SimpleOrderedPair<PersistentList<A>, Integer> findArrowSequenceOverWaypoints(
+            Iterable<V> waypoints, int maxDepth, int costLimit) {
         return findArrowSequenceOverWaypoints(waypoints, maxDepth, costLimit, () -> new HashSet<>()::add);
     }
 
@@ -162,8 +162,8 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param costLimit the algorithm-specific cost limit for paths between waypoints
     /// @return an ordered pair (arrow sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequenceOverWaypoints(
-            Iterable<V> waypoints, C costLimit) {
+    default @Nullable SimpleOrderedPair<PersistentList<A>, Integer> findArrowSequenceOverWaypoints(
+            Iterable<V> waypoints, int costLimit) {
         return findArrowSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, costLimit, () -> new HashSet<>()::add);
     }
 
@@ -173,27 +173,23 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param <CC>                      the number type
     /// @param waypoints                 the waypoints
     /// @param findArrowSequenceFunction the search function, for example `this::findArrowSequence`
-    /// @param zero                      the zero value
-    /// @param sumFunction               the sum function
     /// @return an ordered pair with the combined sequence
-    static <VV, AA, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<PersistentList<AA>, CC> findArrowSequenceOverWaypoints(
+    static <VV, AA> @Nullable SimpleOrderedPair<PersistentList<AA>, Integer> findArrowSequenceOverWaypoints(
             Iterable<VV> waypoints,
-            BiFunction<VV, VV, OrderedPair<PersistentList<AA>, CC>> findArrowSequenceFunction,
-            CC zero,
-            BiFunction<CC, CC, CC> sumFunction) {
+            BiFunction<VV, VV, OrderedPair<PersistentList<AA>, Integer>> findArrowSequenceFunction) {
         List<AA> sequence = new ArrayList<>();
-        CC sum = zero;
+        int sum = 0;
         VV prev = null;
         int count = 0;
         for (VV next : waypoints) {
             if (prev != null) {
-                final OrderedPair<PersistentList<AA>, CC> result = findArrowSequenceFunction.apply(prev, next);
+                final OrderedPair<PersistentList<AA>, Integer> result = findArrowSequenceFunction.apply(prev, next);
                 if (result == null) {
                     return null;
                 } else {
                     final List<AA> nextSequence = result.first().asList();
                     sequence.addAll(nextSequence);
-                    sum = sumFunction.apply(sum, result.second());
+                    sum = (sum + result.second());
                 }
             }
             prev = next;
@@ -202,7 +198,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
 
         if (count == 1) {
             // the set of waypoints is degenerate
-            return new SimpleOrderedPair<>(PersistentVectorList.of(), zero);
+            return new SimpleOrderedPair<>(PersistentVectorList.of(), 0);
         }
 
         return new SimpleOrderedPair<>(PersistentVectorList.copyOf(sequence), sum);

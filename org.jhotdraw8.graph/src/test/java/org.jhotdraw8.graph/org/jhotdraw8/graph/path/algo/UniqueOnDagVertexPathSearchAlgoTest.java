@@ -17,6 +17,7 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -119,8 +120,8 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
 
     /// Test of findAnyPath method, of class UniqueShortestPathBuilder.
     public void testFindUniqueVertexPath(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, PersistentList<Integer> expPath) throws Exception {
-        VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
-                graph::getNextVertices, new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
+        VertexSequenceFinder<Integer> instance = new SimpleVertexSequenceFinder<>(
+                graph::getNextVertices, (u, v) -> 1, new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
         SimpleOrderedPair<PersistentList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals,
                 Integer.MAX_VALUE);
         if (expPath == null) {
@@ -150,7 +151,8 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
 
     /// Test of findAnyPath method, of class UniqueShortestPathBuilder.
     public void testFindUniqueMultiGoalPath(DirectedGraph<Integer, Double> graph, Integer start, List<Integer> multiGoal, PersistentList<Integer> expResult) throws Exception {
-        VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
+        VertexSequenceFinder<Integer> instance = new SimpleVertexSequenceFinder<>((Function<Integer, Iterable<Integer>>) graph::getNextVertices,
+                (u, v) -> 1,
                 new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
 
         // Find unique path to any of the goals
@@ -196,8 +198,8 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
     /// Test of findAnyVertexPath method, of class AnyPathBuilder.
     private void testFindUniqueVertexPathOverWaypoints(List<Integer> waypoints, @Nullable PersistentList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
-                new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
+        VertexSequenceFinder<Integer> instance = new SimpleVertexSequenceFinder<>((Function<Integer, Iterable<Integer>>) graph::getNextVertices,
+                (u, v) -> 1, new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
         SimpleOrderedPair<PersistentList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE);
         if (expResult == null) {
             assertNull(actual);

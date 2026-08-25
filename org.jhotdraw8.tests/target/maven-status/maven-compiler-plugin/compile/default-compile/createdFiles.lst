@@ -1,4 +1,5 @@
 org/jhotdraw8/tests/icollection/PersistentHashMapJol.class
+org/jhotdraw8/tests/icollection/JavaLinkedHashMapJol.class
 org/jhotdraw8/tests/icollection/ScalaHashMapJol.class
 org/jhotdraw8/tests/icollection/ScalaTreeSetJol$1.class
 org/jhotdraw8/tests/icollection/KotlinPersistentOrderedSetJol.class
@@ -16,6 +17,7 @@ org/jhotdraw8/tests/icollection/ScalaHashSetJol.class
 org/jhotdraw8/tests/icollection/VavrHashMapJol.class
 org/jhotdraw8/tests/icollection/AbstractJol.class
 org/jhotdraw8/tests/icollection/JavaTreeSetJol.class
+org/jhotdraw8/tests/icollection/KotlinPersistentOrderedMapJol.class
 org/jhotdraw8/tests/icollection/VavrLinkedHashSetJol.class
 org/jhotdraw8/tests/icollection/PersistentHashSetJol.class
 org/jhotdraw8/tests/icollection/PersistentVectorHashMapJol.class

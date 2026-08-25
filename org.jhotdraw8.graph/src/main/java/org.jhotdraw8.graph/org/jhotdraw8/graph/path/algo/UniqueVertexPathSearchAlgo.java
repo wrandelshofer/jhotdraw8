@@ -16,9 +16,9 @@ import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
 import java.util.Queue;
 import java.util.SequencedMap;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -27,7 +27,7 @@ import java.util.stream.StreamSupport;
 ///
 /// @param <V> the vertex data type
 /// @param <C> the cost number type
-public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+public class UniqueVertexPathSearchAlgo<V> implements VertexPathSearchAlgo<V> {
     private enum SearchResultType {SUCCESS_UNIQUE_PATH, FAILURE_NO_PATH, FAILURE_NOT_UNIQUE}
 
     public UniqueVertexPathSearchAlgo() {
@@ -40,26 +40,22 @@ public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> imp
     /// @param nextVerticesFunction the next vertices function
     /// @param maxDepth             the maximal depth (inclusive) of the search
     ///                             Must be {@literal >= 0}.
-    /// @param zero                 the zero cost value
     /// @param costLimit            the cost limit is **ignored**
     /// @param costFunction         the cost function
-    /// @param sumFunction          the sum function for adding two cost values
     /// @param visited
     /// @return on success: a back link, otherwise: null
     @Override
-    public @Nullable VertexBackLinkWithCost<V, C> search(
+    public @Nullable VertexBackLinkWithCost<V> search(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             Function<V, Iterable<V>> nextVerticesFunction,
             int maxDepth,
-            C zero,
-            C costLimit,
-            BiFunction<V, V, C> costFunction,
-            BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
-        AlgoArguments.checkZero(zero);
+            int costLimit,
+            ToIntBiFunction<V, V> costFunction,
+            AddToSet<V> visited) {
         return VertexBackLinkWithAncestorSet.toVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction, maxDepth),
-                zero, costFunction, sumFunction);
+                costFunction);
     }
 
     /// Search engine method.

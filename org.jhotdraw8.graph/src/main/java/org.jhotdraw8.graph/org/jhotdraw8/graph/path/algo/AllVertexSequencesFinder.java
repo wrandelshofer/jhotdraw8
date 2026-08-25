@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
 /// @param <C> the cost number type
-public interface AllVertexSequencesFinder<V, A, C extends Number & Comparable<C>> {
+public interface AllVertexSequencesFinder<V, A> {
 
     /// Finds all vertex paths up to (including) the specified maximal cost.
     ///
@@ -27,8 +27,8 @@ public interface AllVertexSequencesFinder<V, A, C extends Number & Comparable<C>
     ///                      Must be {@literal >= 0}.
     /// @param costLimit     the algorithm-specific search limit
     /// @return all paths
-    Iterable<OrderedPair<PersistentList<V>, C>> findAllVertexSequences(
+    Iterable<OrderedPair<PersistentList<V>, Integer>> findAllVertexSequences(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
-            int maxDepth, C costLimit);
+            int maxDepth, int costLimit);
 }

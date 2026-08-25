@@ -92,24 +92,21 @@ public class ArbitraryArcPathSearchAlgoTest {
     /// Test of findAnyVertexPath method, of class AnyPathBuilder.
     public void testFindVertexPath_3args(Integer start, Integer goal, PersistentList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);
+        CombinedSequenceFinder<Integer, Double> instance = newInstance(graph);
         @Nullable SimpleOrderedPair<PersistentList<Integer>, Integer> actual = instance.findVertexSequence(start, goal,
                 Integer.MAX_VALUE, Integer.MAX_VALUE, new LinkedHashSet<>()::add);
         assertNotNull(actual);
         assertEquals(expected, actual.first());
     }
 
-    private CombinedSequenceFinder<Integer, Double, Integer> newInstance(DirectedGraph<Integer, Double> graph) {
+    private CombinedSequenceFinder<Integer, Double> newInstance(DirectedGraph<Integer, Double> graph) {
         ToIntFunction3<Integer, Integer, Double> costFunction = (u, v, a) -> a.intValue();
-        CombinedSequenceFinder<Integer, Double, Integer> instance = SimpleCombinedSequenceFinder.newIntCostInstance(
-                graph::getNextArcs,
-                costFunction,
-                new AnyArcPathSearchAlgo<>());
+        CombinedSequenceFinder<Integer, Double> instance = new SimpleCombinedSequenceFinder<>(graph::getNextArcs, costFunction, new AnyArcPathSearchAlgo<Integer, Double>());
         return instance;
     }
 
-    private CombinedAllSequencesFinder<Integer, Double, Double> newAllInstance(DirectedGraph<Integer, Double> graph) {
-        CombinedAllSequencesFinder<Integer, Double, Double> instance = new SimpleCombinedAllSequencesFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
+    private CombinedAllSequencesFinder<Integer, Double> newAllInstance(DirectedGraph<Integer, Double> graph) {
+        CombinedAllSequencesFinder<Integer, Double> instance = new SimpleCombinedAllSequencesFinder<>(graph::getNextArcs, (u, v, a) -> a.intValue());
         return instance;
     }
 
@@ -126,7 +123,7 @@ public class ArbitraryArcPathSearchAlgoTest {
     /// Test of findAnyVertexPath method, of class AnyPathBuilder.
     private void testFindVertexPathOverWaypoints(List<Integer> waypoints, PersistentList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);
+        CombinedSequenceFinder<Integer, Double> instance = newInstance(graph);
         SimpleOrderedPair<PersistentList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Integer.MAX_VALUE,
                 () -> new LinkedHashSet<>()::add);
         assertNotNull(actual);

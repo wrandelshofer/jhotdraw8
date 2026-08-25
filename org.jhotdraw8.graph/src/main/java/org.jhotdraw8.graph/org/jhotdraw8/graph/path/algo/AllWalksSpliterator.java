@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.base.function.Function3;
+import org.jhotdraw8.base.function.ToIntFunction3;
 import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.graph.Arc;
@@ -14,7 +14,6 @@ import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -45,16 +44,15 @@ import java.util.function.Predicate;
 /// @param <A> the arrow data type
 /// @param <C> the cost number type
 /// @param <E> the element type of the path
-public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumerator<OrderedPair<PersistentList<E>, C>> {
-    private final Queue<ArcBackLinkWithCost<V, A, C>> queue = new ArrayDeque<>();
+public class AllWalksSpliterator<V, A, E> extends AbstractEnumerator<OrderedPair<PersistentList<E>, Integer>> {
+    private final Queue<ArcBackLinkWithCost<V, A>> queue = new ArrayDeque<>();
     private final Predicate<V> goalPredicate;
     private final int maxDepth;
-    private final C maxCost;
-    private final Function3<V, V, A, C> costFunction;
-    private final BiFunction<C, C, C> sumFunction;
+    private final int maxCost;
+    private final ToIntFunction3<V, V, A> costFunction;
     private final Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
-    private final Function<ArcBackLinkWithCost<V, A, C>,
-            OrderedPair<PersistentList<E>, C>> sequenceFunction;
+    private final Function<ArcBackLinkWithCost<V, A>,
+            OrderedPair<PersistentList<E>, Integer>> sequenceFunction;
 
     /// Creates a new instance.
     ///
@@ -66,21 +64,17 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
     ///                         Must be {@literal >= 0}.
     /// @param maxCost          the maximal cost (inclusive) of a sequence
     ///                         Must be {@literal >= zero}.
-    /// @param zero             the zero cost value
     /// @param costFunction     the cost function.
-    /// @param sumFunction      the function for adding two cost values
     public AllWalksSpliterator(Iterable<V> startVertices,
                                Predicate<V> goalPredicate,
                                Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-                               Function<ArcBackLinkWithCost<V, A, C>,
-                                       OrderedPair<PersistentList<E>, C>> sequenceFunction,
+                               Function<ArcBackLinkWithCost<V, A>,
+                                       OrderedPair<PersistentList<E>, Integer>> sequenceFunction,
                                int maxDepth,
-                               C maxCost,
-                               C zero,
-                               Function3<V, V, A, C> costFunction,
-                               BiFunction<C, C, C> sumFunction) {
+                               int maxCost,
+                               ToIntFunction3<V, V, A> costFunction) {
         super(Long.MAX_VALUE, 0);
-        AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, maxCost);
+        AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, maxCost);
 
         this.maxDepth = maxDepth;
         this.maxCost = maxCost;
@@ -88,10 +82,9 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
         this.nextArcsFunction = nextArcsFunction;
         this.sequenceFunction = sequenceFunction;
 
-        this.costFunction = new CheckedNonNegativeArcCostFunction3<>(zero, costFunction);
-        this.sumFunction = sumFunction;
+        this.costFunction = new CheckedNonNegativeArcCostFunction3<>(costFunction);
         for (V start : startVertices) {
-            queue.add(new ArcBackLinkWithCost<>(start, null, null, zero));
+            queue.add(new ArcBackLinkWithCost<>(start, null, null, 0));
         }
 
     }
@@ -103,16 +96,16 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
     @Override
     public boolean moveNext() {
         while (!queue.isEmpty()) {
-            ArcBackLinkWithCost<V, A, C> u = queue.remove();
+            ArcBackLinkWithCost<V, A> u = queue.remove();
             if (goalPredicate.test(u.getVertex())) {
                 this.current = sequenceFunction.apply(u);
                 return true;
             }
             if (u.getDepth() < maxDepth) {
                 for (Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
-                    C cost = sumFunction.apply(u.getCost(), costFunction.apply(u.getVertex(), v.getEnd(), v.getArrow()));
-                    if (cost.compareTo(maxCost) <= 0) {
-                        ArcBackLinkWithCost<V, A, C> newNode = new ArcBackLinkWithCost<>(v.getEnd(), v.getArrow(), u, cost);
+                    int cost = (u.getCost() + costFunction.apply(u.getVertex(), v.getEnd(), v.getArrow()));
+                    if (cost <= maxCost) {
+                        ArcBackLinkWithCost<V, A> newNode = new ArcBackLinkWithCost<>(v.getEnd(), v.getArrow(), u, cost);
                         queue.add(newNode);
                     }
                 }

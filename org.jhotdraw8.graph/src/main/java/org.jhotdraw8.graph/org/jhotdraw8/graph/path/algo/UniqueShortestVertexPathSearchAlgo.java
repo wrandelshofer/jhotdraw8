@@ -13,16 +13,16 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToIntBiFunction;
 
 /// See [UniqueShortestArcPathSearchAlgo] for a description of this
 /// algorithm.
 ///
 /// @param <V> the vertex data type
 /// @param <C> the cost number type
-public class UniqueShortestVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+public class UniqueShortestVertexPathSearchAlgo<V> implements VertexPathSearchAlgo<V> {
     public UniqueShortestVertexPathSearchAlgo() {
     }
 
@@ -33,7 +33,6 @@ public class UniqueShortestVertexPathSearchAlgo<V, C extends Number & Comparable
     /// @param nextVertices  the next vertices function
     /// @param maxDepth      the maximal depth (inclusive) of the search
     ///                      Must be {@literal >= 0}.
-    /// @param zero          the zero cost value
     /// @param costLimit     the maximal cost (inclusive) of a path.
     ///                      Must be {@literal >= zero}.
     /// @param costFunction  the cost function
@@ -41,64 +40,62 @@ public class UniqueShortestVertexPathSearchAlgo<V, C extends Number & Comparable
     ///                      has cycles.
     ///                      The cost must be {@literal >= 0} if the graph
     ///                      is acyclic.
-    /// @param sumFunction   the sum function for adding two cost values
     /// @param visited
     /// @return on success: a back link, otherwise: null
     @Override
-    public @Nullable VertexBackLinkWithCost<V, C> search(
+    public @Nullable VertexBackLinkWithCost<V> search(
             final Iterable<V> startVertices,
             final Predicate<V> goalPredicate,
             final Function<V, Iterable<V>> nextVertices,
             int maxDepth,
-            final C zero,
-            final C costLimit,
-            final BiFunction<V, V, C> costFunction,
-            final BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
+            final int costLimit,
+            final ToIntBiFunction<V, V> costFunction,
+            AddToSet<V> visited) {
 
-        AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, costLimit);
-        CheckedNonNegativeVertexCostFunction<V, C> costf = new CheckedNonNegativeVertexCostFunction<>(zero, costFunction);
+        AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, costLimit);
+        CheckedNonNegativeVertexCostFunction<V> costf = new CheckedNonNegativeVertexCostFunction<>(costFunction);
 
         // Priority queue: back-links by lower cost and shallower depth.
         //          Ordering by depth prevents that the algorithm
         //          unnecessarily follows zero-length arrows.
-        PriorityQueue<VertexBackLinkWithCost<V, C>> queue = new PriorityQueue<>(
-                Comparator.<VertexBackLinkWithCost<V, C>, C>comparing(VertexBackLinkWithCost::getCost).thenComparing(VertexBackLinkWithCost::getDepth)
+        PriorityQueue<VertexBackLinkWithCost<V>> queue = new PriorityQueue<>(
+                Comparator.<VertexBackLinkWithCost<V>, Integer>comparing(VertexBackLinkWithCost::getCost).thenComparing(VertexBackLinkWithCost::getDepth)
         );
 
         // Map with best known costs from start to a vertex and with the number
         // of times we have reached the map.
         // If an entry is missing, we assume infinity.
-        Map<V, CostData<C>> costMap = new HashMap<>();
+        Map<V, CostData> costMap = new HashMap<>();
 
-        CostData<C> infiniteCost = new CostData<>(null, 0);
+        CostData infiniteCost = new CostData(Integer.MAX_VALUE, 0);
 
         // Insert start itself in priority queue and initialize its cost as 0,
         // and number of paths with 1.
         for (V start : startVertices) {
-            queue.add(new VertexBackLinkWithCost<>(start, null, zero));
-            costMap.put(start, new CostData<>(zero, 1));
+            queue.add(new VertexBackLinkWithCost<>(start, null, 0));
+            costMap.put(start, new CostData(0, 1));
         }
 
         // Loop until we have reached the goal, or queue is exhausted.
-        C maxCost = costLimit;
-        VertexBackLinkWithCost<V, C> found = null;
+        int maxCost = costLimit;
+        VertexBackLinkWithCost<V> found = null;
         while (!queue.isEmpty()) {
-            VertexBackLinkWithCost<V, C> u = queue.remove();
-            C costToU = u.getCost();
+            VertexBackLinkWithCost<V> u = queue.remove();
+            int costToU = u.getCost();
             if (goalPredicate.test(u.getVertex())) {
                 if (found == null) {
                     // We have found a shortest path for the first time.
                     // We can now limit the maxCost of further searches.
                     found = u;
                     maxCost = costToU;
-                } else if (costToU.compareTo(maxCost) == 0) {
+                } else if (costToU == maxCost) {
                     // We have found another shortest path with exactly
                     // the same cost!
                     return null;
                 }
             }
 
-            if (found != null && costToU.compareTo(maxCost) > 0) {
+            if (found != null && costToU > maxCost) {
                 // Once we have found a shortest path, we are only interested
                 // in other paths that have the same cost.
                 break;
@@ -106,18 +103,17 @@ public class UniqueShortestVertexPathSearchAlgo<V, C extends Number & Comparable
 
             if (u.getDepth() < maxDepth) {
                 for (V v : nextVertices.apply(u.getVertex())) {
-                    CostData<C> costDataV = costMap.getOrDefault(v, infiniteCost);
-                    final C bestKnownCost = costDataV.getCost();
-                    C cost = sumFunction.apply(costToU, costf.apply(u.getVertex(), v));
+                    CostData costDataV = costMap.getOrDefault(v, infiniteCost);
+                    final int bestKnownCost = costDataV.getCost();
+                    int cost = (costToU + costf.applyAsInt(u.getVertex(), v));
 
                     // If there is a shorter path to v through u.
-                    if (cost.compareTo(maxCost) <= 0) {
-                        final int compare = bestKnownCost == null ? -1 : cost.compareTo(bestKnownCost);
-                        if (compare < 0) {
+                    if (cost <= maxCost) {
+                        if (cost < bestKnownCost) {
                             // Update cost data to v.
-                            costMap.put(v, new CostData<>(cost, 1));
+                            costMap.put(v, new CostData(cost, 1));
                             queue.add(new VertexBackLinkWithCost<>(v, u, cost));
-                        } else if (compare == 0) {
+                        } else if (cost == bestKnownCost) {
                             // There is more than one shortest path to v!
                             costDataV.increaseVisitCount();
                         }
@@ -128,7 +124,7 @@ public class UniqueShortestVertexPathSearchAlgo<V, C extends Number & Comparable
 
         // The shortest path to the goal is only unique, if all vertices on the
         // path have been visited only once.
-        for (VertexBackLinkWithCost<V, C> node = found; node != null; node = node.getParent()) {
+        for (VertexBackLinkWithCost<V> node = found; node != null; node = node.getParent()) {
             if (costMap.get(node.getVertex()).getVisiCount() != 1) {
                 return null;
             }

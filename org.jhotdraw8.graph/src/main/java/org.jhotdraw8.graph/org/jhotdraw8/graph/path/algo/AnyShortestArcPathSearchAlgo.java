@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.base.function.Function3;
+import org.jhotdraw8.base.function.ToIntFunction3;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
@@ -15,7 +15,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -39,7 +38,7 @@ import java.util.function.Predicate;
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
 /// @param <C> the cost number type
-public class AnyShortestArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
+public class AnyShortestArcPathSearchAlgo<V, A> implements ArcPathSearchAlgo<V, A> {
     public AnyShortestArcPathSearchAlgo() {
     }
 
@@ -50,48 +49,45 @@ public class AnyShortestArcPathSearchAlgo<V, A, C extends Number & Comparable<C>
     /// @param nextArcsFunction the next arcs function
     /// @param maxDepth         the maximal depth (inclusive) of the search
     ///                         Must be {@literal >= 0}.
-    /// @param zero             the zero cost value
     /// @param costLimit        the maximal cost (inclusive) of a path.
     ///                         Must be {@literal >= zero}.
     /// @param costFunction     the cost function
-    /// @param sumFunction      the sum function for adding two cost values
     /// @param visited
     /// @return on success: a back link, otherwise: null
     @Override
-    public @Nullable ArcBackLinkWithCost<V, A, C> search(
+    public @Nullable ArcBackLinkWithCost<V, A> search(
             final Iterable<V> startVertices,
             final Predicate<V> goalPredicate,
             final Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             int maxDepth,
-            final C zero,
-            final C costLimit,
-            final Function3<V, V, A, C> costFunction,
-            final BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
+            final int costLimit,
+            final ToIntFunction3<V, V, A> costFunction,
+            AddToSet<V> visited) {
 
-        AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, costLimit);
-        CheckedNonNegativeArcCostFunction3<V, A, C> costf = new CheckedNonNegativeArcCostFunction3<>(zero, costFunction);
+        AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, costLimit);
+        CheckedNonNegativeArcCostFunction3<V, A> costf = new CheckedNonNegativeArcCostFunction3<>(costFunction);
 
 
         // Priority queue: back-links by lower cost and shallower depth.
         //          Ordering by depth prevents that the algorithm
         //          unnecessarily follows zero-length arrows.
-        PriorityQueue<ArcBackLinkWithCost<V, A, C>> queue = new PriorityQueue<>(
-                Comparator.<ArcBackLinkWithCost<V, A, C>, C>comparing(ArcBackLinkWithCost::getCost).thenComparing(ArcBackLinkWithCost::getDepth)
+        PriorityQueue<ArcBackLinkWithCost<V, A>> queue = new PriorityQueue<>(
+                Comparator.<ArcBackLinkWithCost<V, A>, Integer>comparing(ArcBackLinkWithCost::getCost).thenComparing(ArcBackLinkWithCost::getDepth)
         );
 
         // Map with best known costs from start to a specific vertex.
         // If an entry is missing, we assume infinity.
-        Map<V, C> costMap = new HashMap<>();
+        Map<V, Integer> costMap = new HashMap<>();
 
         // Insert start itself in priority queue and initialize its cost to 0.
         for (V start : startVertices) {
-            queue.add(new ArcBackLinkWithCost<>(start, null, null, zero));
-            costMap.put(start, zero);
+            queue.add(new ArcBackLinkWithCost<>(start, null, null, 0));
+            costMap.put(start, 0);
         }
 
         // Loop until we have reached the goal, or queue is exhausted.
         while (!queue.isEmpty()) {
-            ArcBackLinkWithCost<V, A, C> u = queue.remove();
+            ArcBackLinkWithCost<V, A> u = queue.remove();
             if (goalPredicate.test(u.getVertex())) {
                 return u;
             }
@@ -99,12 +95,12 @@ public class AnyShortestArcPathSearchAlgo<V, A, C extends Number & Comparable<C>
             if (u.getDepth() < maxDepth) {
                 for (Arc<V, A> arc : nextArcsFunction.apply(u.getVertex())) {
                     V v = arc.getEnd();
-                    C bestKnownCost = costMap.get(v);
-                    C cost = sumFunction.apply(u.getCost(), costf.apply(u.getVertex(), v, arc.getArrow()));
+                    int bestKnownCost = costMap.getOrDefault(v, Integer.MAX_VALUE);
+                    int cost = (u.getCost() + costf.apply(u.getVertex(), v, arc.getArrow()));
 
                     // If there is a cheaper path to v through u.
-                    if ((bestKnownCost == null || cost.compareTo(bestKnownCost) < 0)
-                            && cost.compareTo(costLimit) <= 0) {
+                    if (cost < bestKnownCost
+                            && cost <= costLimit) {
                         // Update cost to v and add v again to the queue.
                         costMap.put(v, cost);
                         queue.add(new ArcBackLinkWithCost<>(v, arc.getArrow(), u, cost));

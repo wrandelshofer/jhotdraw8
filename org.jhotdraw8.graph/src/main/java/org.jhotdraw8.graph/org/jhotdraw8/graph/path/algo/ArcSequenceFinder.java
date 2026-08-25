@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 /// @param <V> the vertex data type
 /// @param <A> the arrow data type
 /// @param <C> the cost number type
-public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
+public interface ArcSequenceFinder<V, A> {
 
     /// Finds an arc sequence from a set of start vertices to a vertex
     /// that satisfies the goal predicate.
@@ -40,10 +40,10 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @return an ordered pair (arc sequence, cost),
     /// or null if no sequence was found.
     @Nullable
-    OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequence(
+    OrderedPair<PersistentList<Arc<V, A>>, Integer> findArcSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
-            int maxDepth, C costLimit, AddToSet<V> visited);
+            int maxDepth, int costLimit, AddToSet<V> visited);
 
     /// Finds an arc sequence from start to goal.
     ///
@@ -55,10 +55,10 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param visited   the visited function
     /// @return an ordered pair (arc sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequence(
+    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, Integer> findArcSequence(
             V start,
             V goal,
-            int maxDepth, C costLimit, AddToSet<V> visited) {
+            int maxDepth, int costLimit, AddToSet<V> visited) {
         return findArcSequence(PersistentVectorList.of(start), goal::equals, maxDepth, costLimit, visited);
     }
 
@@ -72,10 +72,10 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param costLimit the algorithm-specific cost limit
     /// @return an ordered pair (arc sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequence(
+    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, Integer> findArcSequence(
             V start,
             V goal,
-            int maxDepth, C costLimit) {
+            int maxDepth, int costLimit) {
         return findArcSequence(PersistentVectorList.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
     }
 
@@ -86,10 +86,10 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param costLimit the algorithm-specific cost limit
     /// @return an ordered pair (arc sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequence(
+    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, Integer> findArcSequence(
             V start,
             V goal,
-            C costLimit) {
+            int costLimit) {
         return findArcSequence(PersistentVectorList.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
@@ -104,10 +104,10 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @return an ordered pair (arc sequence, cost),
     /// or null if no sequence was found.
     @Nullable
-    OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
+    OrderedPair<PersistentList<Arc<V, A>>, Integer> findArcSequenceOverWaypoints(
             Iterable<V> waypoints,
             int maxDepth,
-            C costLimit,
+            int costLimit,
             Supplier<AddToSet<V>> visitedSetFactory);
 
     /// Finds an arc sequence through the given waypoints.
@@ -118,10 +118,10 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param costLimit the algorithm-specific cost limit for paths between waypoints
     /// @return an ordered pair (arc sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
+    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, Integer> findArcSequenceOverWaypoints(
             Iterable<V> waypoints,
             int maxDepth,
-            C costLimit) {
+            int costLimit) {
         return findArcSequenceOverWaypoints(waypoints, maxDepth, costLimit, () -> new HashSet<>()::add);
     }
 
@@ -131,9 +131,9 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param costLimit the algorithm-specific cost limit for paths between waypoints
     /// @return an ordered pair (arc sequence, cost),
     /// or null if no sequence was found.
-    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
+    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, Integer> findArcSequenceOverWaypoints(
             Iterable<V> waypoints,
-            C costLimit) {
+            int costLimit) {
         return findArcSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, costLimit, () -> new HashSet<>()::add);
     }
 
@@ -144,28 +144,24 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /// @param <CC>                    the number type
     /// @param waypoints               the waypoints
     /// @param findArcSequenceFunction the search function, for example `this::findArrowSequence`
-    /// @param zero                    the zero value
-    /// @param sumFunction             the sum function
     /// @return an ordered pair with the combined sequence
-    static <VV, AA, CC extends Number & Comparable<CC>> @Nullable OrderedPair<PersistentList<Arc<VV, AA>>, CC>
+    static <VV, AA> @Nullable OrderedPair<PersistentList<Arc<VV, AA>>, Integer>
     findArcSequenceOverWaypoints(
             Iterable<VV> waypoints,
-            BiFunction<VV, VV, OrderedPair<PersistentList<Arc<VV, AA>>, CC>> findArcSequenceFunction,
-            CC zero,
-            BiFunction<CC, CC, CC> sumFunction) {
+            BiFunction<VV, VV, OrderedPair<PersistentList<Arc<VV, AA>>, Integer>> findArcSequenceFunction) {
         List<Arc<VV, AA>> sequence = new ArrayList<>();
-        CC sum = zero;
+        int sum = 0;
         VV prev = null;
         int count = 0;
         for (VV next : waypoints) {
             if (prev != null) {
-                final OrderedPair<PersistentList<Arc<VV, AA>>, CC> result = findArcSequenceFunction.apply(prev, next);
+                final OrderedPair<PersistentList<Arc<VV, AA>>, Integer> result = findArcSequenceFunction.apply(prev, next);
                 if (result == null) {
                     return null;
                 } else {
                     final List<Arc<VV, AA>> nextSequence = result.first().asList();
                     sequence.addAll(nextSequence);
-                    sum = sumFunction.apply(sum, result.second());
+                    sum = (sum + result.second());
                 }
             }
             prev = next;
@@ -173,7 +169,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
         }
         if (count == 1) {
             // the set of waypoints is degenerate
-            return new SimpleOrderedPair<>(PersistentVectorList.of(), zero);
+            return new SimpleOrderedPair<>(PersistentVectorList.of(), 0);
         }
 
         return new SimpleOrderedPair<>(PersistentVectorList.copyOf(sequence), sum);

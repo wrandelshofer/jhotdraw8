@@ -17,7 +17,7 @@ import java.util.function.Function;
 ///
 /// @param <V> the vertex data type
 /// @param <C> the cost number type
-public class VertexBackLinkWithCost<V, C extends Number & Comparable<C>> extends AbstractBackLinkWithCost<VertexBackLinkWithCost<V, C>, C> {
+public class VertexBackLinkWithCost<V> extends AbstractBackLinkWithCost<VertexBackLinkWithCost<V>> {
     private final V vertex;
 
     /// Creates a new instance.
@@ -25,7 +25,7 @@ public class VertexBackLinkWithCost<V, C extends Number & Comparable<C>> extends
     /// @param vertex the vertex data
     /// @param parent the parent back link
     /// @param cost   the cumulated cost of this back link. Must be zero if parent is null.
-    public VertexBackLinkWithCost(V vertex, @Nullable VertexBackLinkWithCost<V, C> parent, C cost) {
+    public VertexBackLinkWithCost(V vertex, @Nullable VertexBackLinkWithCost<V> parent, int cost) {
         super(parent, cost);
         this.vertex = vertex;
     }
@@ -42,15 +42,15 @@ public class VertexBackLinkWithCost<V, C extends Number & Comparable<C>> extends
     /// @param <CC>            the cost number type
     /// @param <XX>            the vertex sequence element type
     /// @return the vertex sequence
-    public static <VV, CC extends Number & Comparable<CC>, XX> @Nullable SimpleOrderedPair<PersistentList<XX>, CC> toVertexSequence(
-            @Nullable VertexBackLinkWithCost<VV, CC> node,
-            Function<VertexBackLinkWithCost<VV, CC>, XX> mappingFunction) {
+    public static <VV, XX> @Nullable SimpleOrderedPair<PersistentList<XX>, Integer> toVertexSequence(
+            @Nullable VertexBackLinkWithCost<VV> node,
+            Function<VertexBackLinkWithCost<VV>, XX> mappingFunction) {
         if (node == null) {
             return null;
         }
         //
         ArrayDeque<XX> deque = new ArrayDeque<>();
-        for (VertexBackLinkWithCost<VV, CC> parent = node; parent != null; parent = parent.getParent()) {
+        for (VertexBackLinkWithCost<VV> parent = node; parent != null; parent = parent.getParent()) {
             deque.addFirst(mappingFunction.apply(parent));
         }
         return new SimpleOrderedPair<>(PersistentVectorList.copyOf(deque), node.getCost());
