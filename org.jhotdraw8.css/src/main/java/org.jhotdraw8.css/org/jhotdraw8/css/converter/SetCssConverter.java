@@ -10,10 +10,10 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
-import org.jhotdraw8.icollection.PersistentLinkedHashSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
 import org.jhotdraw8.icollection.PersistentVectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
-import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -48,7 +48,7 @@ import java.util.function.Consumer;
 /// </dl>
 ///
 /// @param <T> the element type
-public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T>> {
+public class SetCssConverter<T> implements CssConverter<PersistentSet<T>> {
     /// When nonnull this comparator is used to sort the list.
     private final @Nullable Comparator<T> comparatorForSorting;
 
@@ -132,9 +132,9 @@ public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T
 
 
     @Override
-    public PersistentSequencedSet<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public PersistentSet<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return PersistentLinkedHashSet.of();
+            return PersistentHashSet.of();
         } else {
             tt.pushBack();
         }
@@ -170,11 +170,11 @@ public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T
         if (comparatorForSorting != null) {
             list.sort(comparatorForSorting);
         }
-        return PersistentLinkedHashSet.copyOf(list);
+        return PersistentHashSet.copyOf(list);
     }
 
     @Override
-    public <TT extends PersistentSequencedSet<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
+    public <TT extends PersistentSet<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
         if (value == null || value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;
@@ -210,8 +210,8 @@ public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T
     }
 
     @Override
-    public @Nullable PersistentSequencedSet<T> getDefaultValue() {
-        return PersistentLinkedHashSet.of();
+    public @Nullable PersistentSet<T> getDefaultValue() {
+        return PersistentHashSet.of();
     }
 
     @Override

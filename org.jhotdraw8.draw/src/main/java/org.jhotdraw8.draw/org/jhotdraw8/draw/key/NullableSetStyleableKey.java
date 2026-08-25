@@ -9,17 +9,17 @@ import org.jhotdraw8.css.converter.SetCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
-import org.jhotdraw8.icollection.PersistentLinkedHashSet;
-import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 
 import java.lang.reflect.Type;
 
 /// NonNullSetStyleableKey.
 ///
 /// @param <T> the element type of the set
-public class NullableSetStyleableKey<T> extends AbstractReadableStyleableKey<PersistentSequencedSet<T>>
-        implements WritableStyleableMapAccessor<PersistentSequencedSet<T>>,
-        NullableKey<PersistentSequencedSet<T>> {
+public class NullableSetStyleableKey<T> extends AbstractReadableStyleableKey<PersistentSet<T>>
+        implements WritableStyleableMapAccessor<PersistentSet<T>>,
+        NullableKey<PersistentSet<T>> {
 
 
     /// Creates a new instance with the specified name and with an empty list as the
@@ -29,6 +29,6 @@ public class NullableSetStyleableKey<T> extends AbstractReadableStyleableKey<Per
     /// @param elementType      the class of the type
     /// @param elementConverter String converter for a list element
     public NullableSetStyleableKey(String name, Type elementType, CssConverter<T> elementConverter) {
-        super(name, new SimpleParameterizedType(PersistentSequencedSet.class, elementType), new SetCssConverter<>(elementConverter), PersistentLinkedHashSet.of());
+        super(name, new SimpleParameterizedType(PersistentSet.class, elementType), new SetCssConverter<>(elementConverter), PersistentHashSet.of());
     }
 }

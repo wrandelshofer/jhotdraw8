@@ -8,8 +8,8 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.SetCssConverter;
 import org.jhotdraw8.draw.css.converter.IdentCssConverter;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
-import org.jhotdraw8.icollection.PersistentLinkedHashSet;
-import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
+import org.jhotdraw8.icollection.PersistentHashSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 
 /// WordSetStyleableKey.
 public class WordSetStyleableKey extends NonNullSetStyleableKey<String> {
@@ -20,14 +20,14 @@ public class WordSetStyleableKey extends NonNullSetStyleableKey<String> {
     ///
     /// @param name The name of the key.
     public WordSetStyleableKey(String name) {
-        this(name, PersistentLinkedHashSet.of());
+        this(name, PersistentHashSet.of());
     }
 
     /// Creates a new instance with the specified name, mask and default value.
     ///
     /// @param name         The name of the key.
     /// @param defaultValue The default value.
-    public WordSetStyleableKey(String name, PersistentSequencedSet<String> defaultValue) {
+    public WordSetStyleableKey(String name, PersistentSet<String> defaultValue) {
         this(name,
                 new SetCssConverter<>(new IdentCssConverter(false)),
                 defaultValue);
@@ -37,9 +37,9 @@ public class WordSetStyleableKey extends NonNullSetStyleableKey<String> {
     ///
     /// @param name         The name of the key.
     /// @param defaultValue The default value.
-    public WordSetStyleableKey(String name, CssConverter<PersistentSequencedSet<String>> converter, PersistentSequencedSet<String> defaultValue) {
+    public WordSetStyleableKey(String name, CssConverter<PersistentSet<String>> converter, PersistentSet<String> defaultValue) {
         super(name,
-                new SimpleParameterizedType(PersistentSequencedSet.class, String.class),
+                new SimpleParameterizedType(PersistentSet.class, String.class),
                 converter,
                 defaultValue);
     }

@@ -10,7 +10,7 @@ import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.converter.SetCssConverter;
 import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.icollection.PersistentLinkedHashSet;
-import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -19,6 +19,7 @@ import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,8 +46,8 @@ public class SetCssConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SetCssConverter<Double> instance = new SetCssConverter<>(new DoubleCssConverter(false));
-        PersistentSequencedSet<Double> actual = instance.fromString(buf, idFactory);
-        assertEquals(expected, new ArrayList<>(actual.toMutable()));
+        PersistentSet<Double> actual = instance.fromString(buf, idFactory);
+        assertEquals(new HashSet<>(expected), actual.toMutable());
     }
 
     /// Test of fromString method with a `Double` element type and "=>" delimiter.
@@ -54,8 +55,8 @@ public class SetCssConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SetCssConverter<Double> instance = new SetCssConverter<>(new DoubleCssConverter(false), "=>");
-        PersistentSequencedSet<Double> actual = instance.fromString(buf, idFactory);
-        assertEquals(expected, new ArrayList<>(actual.toMutable()));
+        PersistentSet<Double> actual = instance.fromString(buf, idFactory);
+        assertEquals(new HashSet<>(expected), actual.toMutable());
     }
 
 
@@ -64,7 +65,7 @@ public class SetCssConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SetCssConverter<String> instance = new SetCssConverter<>(new StringCssConverter(false));
-        PersistentSequencedSet<String> actual = instance.fromString(buf, idFactory);
+        PersistentSet<String> actual = instance.fromString(buf, idFactory);
         assertEquals(expected, new ArrayList<>(actual.toMutable()));
     }
 

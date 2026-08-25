@@ -46,9 +46,9 @@ import java.util.concurrent.TimeUnit;
 /// PersistentLinkedHashSetJmh.mCopyOf                  -65      10  avgt    2       245.891          ns/op
 /// PersistentLinkedHashSetJmh.mCopyOf                  -65    1000  avgt    2     41171.045          ns/op
 /// PersistentLinkedHashSetJmh.mCopyOf                  -65  100000  avgt    2   8395270.885          ns/op
-/// PersistentLinkedHashSetJmh.mGetFirst                -65      10  avgt    2         8.972          ns/op
-/// PersistentLinkedHashSetJmh.mGetFirst                -65    1000  avgt    2        11.599          ns/op
-/// PersistentLinkedHashSetJmh.mGetFirst                -65  100000  avgt    2        12.670          ns/op
+/// PersistentLinkedHashSetJmh.mGetFirst                -65      10  avgt    2         0.816          ns/op
+/// PersistentLinkedHashSetJmh.mGetFirst                -65    1000  avgt    2         0.769          ns/op
+/// PersistentLinkedHashSetJmh.mGetFirst                -65  100000  avgt    2         0.761          ns/op
 /// PersistentLinkedHashSetJmh.mIterate                 -65      10  avgt    2       107.162          ns/op
 /// PersistentLinkedHashSetJmh.mIterate                 -65    1000  avgt    2     28889.680          ns/op
 /// PersistentLinkedHashSetJmh.mIterate                 -65  100000  avgt    2   6304511.916          ns/op
@@ -160,9 +160,10 @@ public class PersistentLinkedHashSetJmh {
         return set;
     }
 
+
     @Benchmark
     public Key mGetFirst() {
-        return setA.iterator().next();
+        return setA.getFirst();
     }
 
     @Benchmark

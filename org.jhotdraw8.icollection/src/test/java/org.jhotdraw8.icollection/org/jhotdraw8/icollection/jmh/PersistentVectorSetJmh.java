@@ -48,9 +48,9 @@ import java.util.concurrent.TimeUnit;
 /// PersistentVectorSetJmh.mRemoveAllSameType         -65      10  avgt    2       409.004          ns/op
 /// PersistentVectorSetJmh.mRemoveAllSameType         -65    1000  avgt    2    105750.570          ns/op
 /// PersistentVectorSetJmh.mRemoveAllSameType         -65  100000  avgt    2  32000360.890          ns/op
-/// PersistentVectorSetJmh.mRemoveFirst               -65      10  avgt    2        28.786          ns/op
-/// PersistentVectorSetJmh.mRemoveFirst               -65    1000  avgt    2        43.934          ns/op
-/// PersistentVectorSetJmh.mRemoveFirst               -65  100000  avgt    2        68.948          ns/op
+/// PersistentVectorSetJmh.mRemoveFirst               -65      10  avgt    2       192.491          ns/op
+/// PersistentVectorSetJmh.mRemoveFirst               -65    1000  avgt    2     56988.350          ns/op
+/// PersistentVectorSetJmh.mRemoveFirst               -65  100000  avgt    2  14739482.773          ns/op
 /// PersistentVectorSetJmh.mRetainAllAllRetained      -65      10  avgt    2        45.691          ns/op
 /// PersistentVectorSetJmh.mRetainAllAllRetained      -65    1000  avgt    2      4357.346          ns/op
 /// PersistentVectorSetJmh.mRetainAllAllRetained      -65  100000  avgt    2    686318.479          ns/op
