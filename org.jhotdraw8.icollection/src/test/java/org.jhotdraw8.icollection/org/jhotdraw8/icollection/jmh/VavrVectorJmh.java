@@ -18,53 +18,74 @@ import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /// ```
-/// # JMH version: 1.36
-/// # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
-/// # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+/// # JMH version: 1.37
+/// # VM version: JDK 25.0.2, OpenJDK 64-Bit Server VM, 25.0.2+10-LTS
+/// # Mac Mini M4 Pro, 4.40 GHz
 ///
-/// Benchmark            (size)  Mode  Cnt          Score   Error  Units
-/// mAddAll                 10  avgt              64.076          ns/op
-/// mAddAll               1000  avgt            3901.188          ns/op
-/// mAddAll            1000000  avgt        11149468.773          ns/op
-/// mAddAllArray            10  avgt              37.557          ns/op
-/// mAddAllArray          1000  avgt            4227.075          ns/op
-/// mAddAllArray       1000000  avgt        24717308.914          ns/op
-/// mAddFirst               10  avgt              97.450          ns/op
-/// mAddFirst             1000  avgt              58.759          ns/op
-/// mAddFirst          1000000  avgt             201.288          ns/op
-/// mAddLast                10  avgt              31.247          ns/op
-/// mAddLast              1000  avgt              48.038          ns/op
-/// mAddLast           1000000  avgt             158.035          ns/op
-/// mAddOneByOne            10  avgt             520.625          ns/op
-/// mAddOneByOne          1000  avgt           57651.413          ns/op
-/// mAddOneByOne       1000000  avgt       149117084.265          ns/op
-/// mContainsNotFound       10  avgt              29.026          ns/op
-/// mContainsNotFound     1000  avgt            2957.783          ns/op
-/// mContainsNotFound  1000000  avgt        10539231.087          ns/op
-/// mGet                    10  avgt               4.153          ns/op
-/// mGet                  1000  avgt               7.605          ns/op
-/// mGet               1000000  avgt              91.964          ns/op
-/// mHead                   10  avgt               2.330          ns/op
-/// mHead                 1000  avgt               2.896          ns/op
-/// mHead              1000000  avgt               5.705          ns/op
-/// mIterate                10  avgt              14.248          ns/op
-/// mIterate              1000  avgt            1371.090          ns/op
-/// mIterate           1000000  avgt        12618108.195          ns/op
-/// mRemoveAtIndex          10  avgt              62.606          ns/op
-/// mRemoveAtIndex        1000  avgt            3600.120          ns/op
-/// mRemoveAtIndex     1000000  avgt         3686395.115          ns/op
-/// mRemoveLast             10  avgt               7.967          ns/op
-/// mRemoveLast           1000  avgt               8.969          ns/op
-/// mRemoveLast        1000000  avgt               8.651          ns/op
-/// mReversedIterate        10  avgt             183.846          ns/op
-/// mReversedIterate      1000  avgt           11118.000          ns/op
-/// mReversedIterate   1000000  avgt        31897269.280          ns/op
-/// mSet                    10  avgt              18.467          ns/op
-/// mSet                  1000  avgt              37.343          ns/op
-/// mSet               1000000  avgt             209.726          ns/op
-/// mTail                   10  avgt               7.729          ns/op
-/// mTail                 1000  avgt               8.202          ns/op
-/// mTail              1000000  avgt               8.605          ns/op
+/// Benchmark                        (size)  Mode  Cnt            Score   Error  Units
+/// VavrVectorJmh.mAdd                   10  avgt               147.260          ns/op
+/// VavrVectorJmh.mAdd                 1000  avgt             23659.417          ns/op
+/// VavrVectorJmh.mAdd               100000  avgt           4194729.665          ns/op
+/// VavrVectorJmh.mAddAll                10  avgt                22.433          ns/op
+/// VavrVectorJmh.mAddAll              1000  avgt              1996.897          ns/op
+/// VavrVectorJmh.mAddAll            100000  avgt            617845.709          ns/op
+/// VavrVectorJmh.mAddAllSameType        10  avgt                20.775          ns/op
+/// VavrVectorJmh.mAddAllSameType      1000  avgt              3102.321          ns/op
+/// VavrVectorJmh.mAddAllSameType    100000  avgt            314964.253          ns/op
+/// VavrVectorJmh.mAddAt                 10  avgt               605.977          ns/op
+/// VavrVectorJmh.mAddAt               1000  avgt            957602.637          ns/op
+/// VavrVectorJmh.mAddAt             100000  avgt       13034088000.000          ns/op
+/// VavrVectorJmh.mAddFirst              10  avgt               201.979          ns/op
+/// VavrVectorJmh.mAddFirst            1000  avgt             20392.101          ns/op
+/// VavrVectorJmh.mAddFirst          100000  avgt           2798310.741          ns/op
+/// VavrVectorJmh.mAddLast               10  avgt               149.128          ns/op
+/// VavrVectorJmh.mAddLast             1000  avgt             23866.846          ns/op
+/// VavrVectorJmh.mAddLast           100000  avgt           4316758.308          ns/op
+/// VavrVectorJmh.mContainsNotFound      10  avgt                12.942          ns/op
+/// VavrVectorJmh.mContainsNotFound    1000  avgt              1249.637          ns/op
+/// VavrVectorJmh.mContainsNotFound  100000  avgt            139885.574          ns/op
+/// VavrVectorJmh.mCopyOf                10  avgt                20.029          ns/op
+/// VavrVectorJmh.mCopyOf              1000  avgt              2054.083          ns/op
+/// VavrVectorJmh.mCopyOf            100000  avgt            657834.852          ns/op
+/// VavrVectorJmh.mGet                   10  avgt                 2.121          ns/op
+/// VavrVectorJmh.mGet                 1000  avgt                 2.659          ns/op
+/// VavrVectorJmh.mGet               100000  avgt                 8.032          ns/op
+/// VavrVectorJmh.mGetFirst              10  avgt                 1.329          ns/op
+/// VavrVectorJmh.mGetFirst            1000  avgt                 1.689          ns/op
+/// VavrVectorJmh.mGetFirst          100000  avgt                 2.574          ns/op
+/// VavrVectorJmh.mIndexOfLast           10  avgt                25.349          ns/op
+/// VavrVectorJmh.mIndexOfLast         1000  avgt              3048.140          ns/op
+/// VavrVectorJmh.mIndexOfLast       100000  avgt            427207.584          ns/op
+/// VavrVectorJmh.mIterate               10  avgt                 5.359          ns/op
+/// VavrVectorJmh.mIterate             1000  avgt              1457.782          ns/op
+/// VavrVectorJmh.mIterate           100000  avgt            197108.013          ns/op
+/// VavrVectorJmh.mListIterate           10  avgt                 5.365          ns/op
+/// VavrVectorJmh.mListIterate         1000  avgt              1463.508          ns/op
+/// VavrVectorJmh.mListIterate       100000  avgt            193696.139          ns/op
+/// VavrVectorJmh.mOfArray               10  avgt                 2.676          ns/op
+/// VavrVectorJmh.mOfArray             1000  avgt               168.888          ns/op
+/// VavrVectorJmh.mOfArray           100000  avgt             18177.694          ns/op
+/// VavrVectorJmh.mRemove                10  avgt               165.158          ns/op
+/// VavrVectorJmh.mRemove              1000  avgt           1121755.364          ns/op
+/// VavrVectorJmh.mRemove            100000  avgt       14914560833.000          ns/op
+/// VavrVectorJmh.mRemoveAll             10  avgt               196.635          ns/op
+/// VavrVectorJmh.mRemoveAll           1000  avgt             41006.259          ns/op
+/// VavrVectorJmh.mRemoveAll         100000  avgt          16295205.756          ns/op
+/// VavrVectorJmh.mRemoveAt              10  avgt               202.594          ns/op
+/// VavrVectorJmh.mRemoveAt            1000  avgt            660155.622          ns/op
+/// VavrVectorJmh.mRemoveAt          100000  avgt        9573558625.000          ns/op
+/// VavrVectorJmh.mRemoveFirst           10  avgt                24.297          ns/op
+/// VavrVectorJmh.mRemoveFirst         1000  avgt              4445.531          ns/op
+/// VavrVectorJmh.mRemoveFirst       100000  avgt            410016.443          ns/op
+/// VavrVectorJmh.mRemoveLast            10  avgt                24.580          ns/op
+/// VavrVectorJmh.mRemoveLast          1000  avgt              5549.121          ns/op
+/// VavrVectorJmh.mRemoveLast        100000  avgt            366018.305          ns/op
+/// VavrVectorJmh.mReversedIterate       10  avgt                 5.588          ns/op
+/// VavrVectorJmh.mReversedIterate     1000  avgt               795.155          ns/op
+/// VavrVectorJmh.mReversedIterate   100000  avgt            229833.227          ns/op
+/// VavrVectorJmh.mSet                   10  avgt                 9.374          ns/op
+/// VavrVectorJmh.mSet                 1000  avgt                20.512          ns/op
+/// VavrVectorJmh.mSet               100000  avgt                41.219          ns/op
 ///
 /// Process finished with exit code 0
 @State(Scope.Benchmark)
@@ -81,6 +102,7 @@ public class VavrVectorJmh {
 
     private BenchmarkData data;
     private Vector<Key> listA;
+    private Vector<Key> listB;
 
     private int index;
 
@@ -91,43 +113,113 @@ public class VavrVectorJmh {
         for (Key key : data.setA) {
             listA = listA.append(key);
         }
+        listB = Vector.of();
+        for (Key key : data.setB) {
+            listB = listB.append(key);
+        }
         index = Math.min(listA.length() - 1, BigInteger.valueOf(listA.length() / 2).nextProbablePrime().intValue());
     }
 
 
     @Benchmark
-    public Vector<Key> mAddAllArray() {
+    public Vector<Key> mCopyOf() {
         return Vector.<Key>of(data.setA.toArray(new Key[0]));
     }
 
     @Benchmark
     public Vector<Key> mAddAll() {
-        return Vector.ofAll(data.setA);
+        return Vector.<Key>of(data.setA.toArray(new Key[0]));
     }
 
     @Benchmark
-    public Vector<Key> mAddOneByOne() {
-        Vector<Key> set = Vector.of();
+    public Vector<Key> mAddAllSameType() {
+        return listA.appendAll(listB);
+    }
+
+    @Benchmark
+    public Vector<Key> mOfArray() {
+        return Vector.<Key>of(data.arrayA);
+    }
+
+    @Benchmark
+    public Vector<Key> mAdd() {
+        Vector<Key> l = Vector.of();
         for (Key key : data.listA) {
-            set = set.append(key);
+            l = l.append(key);
         }
-        return set;
+        return l;
     }
 
-    //@Benchmark
-    public Vector<Key> mRemoveOneByOne() {
-        var map = listA;
+    @Benchmark
+    public Vector<Key> mAddLast() {
+        Vector<Key> l = Vector.of();
+        for (Key key : data.listA) {
+            l = l.append(key);
+        }
+        return l;
+    }
+
+    @Benchmark
+    public Vector<Key> mAddFirst() {
+        Vector<Key> l = Vector.of();
+        for (Key key : data.listA) {
+            l = l.prepend(key);
+        }
+        return l;
+    }
+
+    @Benchmark
+    public Vector<Key> mAddAt() {
+        Vector<Key> l = Vector.of();
+        for (Key key : data.listA) {
+            l = l.insert(l.size() / 2, key);
+        }
+        return l;
+    }
+
+    @Benchmark
+    public Vector<Key> mRemove() {
+        var l = listA;
         for (var e : data.listA) {
-            map = map.remove(e);
+            l = l.remove(e);
         }
-        if (!map.isEmpty()) throw new AssertionError("map: " + map);
-        return map;
+        if (!l.isEmpty()) throw new AssertionError("map: " + l);
+        return l;
     }
 
-    //@Benchmark
+    @Benchmark
+    public Vector<Key> mRemoveAt() {
+        var l = listA;
+        for (var e : data.listA) {
+            l = l.removeAt(l.size() / 2);
+        }
+        if (!l.isEmpty()) throw new AssertionError("map: " + l);
+        return l;
+    }
+
+    @Benchmark
+    public Vector<Key> mRemoveFirst() {
+        var l = listA;
+        while (!l.isEmpty()) {
+            l = l.tail();
+        }
+        return l;
+    }
+
+    @Benchmark
+    public Vector<Key> mRemoveLast() {
+        var l = listA;
+        while (!l.isEmpty()) {
+            l = l.init();
+        }
+        return l;
+    }
+
+
+    @Benchmark
     public Vector<Key> mRemoveAll() {
-        Vector<Key> set = listA;
-        return set.removeAll(data.listA);
+        Vector<Key> l = listA;
+        return l.removeAll(data.setA);
     }
 
 
@@ -141,45 +233,28 @@ public class VavrVectorJmh {
     }
 
     @Benchmark
-    public int mReversedIterate() {
+    public int mListIterate() {
         int sum = 0;
-        for (Iterator<Key> i = listA.reverse().iterator(); i.hasNext(); ) {
+        for (Iterator<Key> i = listA.iterator(); i.hasNext(); ) {
             sum += i.next().value;
         }
         return sum;
     }
 
     @Benchmark
-    public Vector<Key> mTail() {
-        return listA.removeAt(0);
+    public int mReversedIterate() {
+        int sum = 0;
+        for (int i = listA.size() - 1; i >= 0; i--) {
+            sum += listA.get(i).value;
+        }
+        return sum;
     }
 
-    @Benchmark
-    public Vector<Key> mAddLast() {
-        Key key = data.nextKeyInB();
-        return (listA).append(key);
-    }
-
-    @Benchmark
-    public Vector<Key> mAddFirst() {
-        Key key = data.nextKeyInB();
-        return (listA).prepend(key);
-    }
-
-    @Benchmark
-    public Vector<Key> mRemoveLast() {
-        return listA.removeAt(listA.size() - 1);
-    }
-
-    @Benchmark
-    public Vector<Key> mRemoveAtIndex() {
-        return listA.removeAt(index);
-    }
 
     @Benchmark
     public Key mGet() {
-        int index = data.nextIndexInA();
-        return listA.get(index);
+        int offset = data.nextIndexInA();
+        return listA.get(offset);
     }
 
     @Benchmark
@@ -189,15 +264,20 @@ public class VavrVectorJmh {
     }
 
     @Benchmark
-    public Key mHead() {
+    public Key mGetFirst() {
         return listA.get(0);
     }
 
     @Benchmark
     public Vector<Key> mSet() {
-        int index = data.nextIndexInA();
+        int offset = data.nextIndexInA();
         Key key = data.nextKeyInB();
-        return listA.update(index, key);
+        return listA.update(offset, key);
+    }
+
+    @Benchmark
+    public int mIndexOfLast() {
+        return listA.indexOf(listA.last());
     }
 
 }

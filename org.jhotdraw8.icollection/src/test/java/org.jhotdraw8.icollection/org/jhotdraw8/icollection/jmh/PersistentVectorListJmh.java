@@ -2,7 +2,6 @@ package org.jhotdraw8.icollection.jmh;
 
 
 import org.jhotdraw8.icollection.PersistentVectorList;
-import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -16,7 +15,6 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
 import java.math.BigInteger;
-import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /// # JMH version: 1.37
@@ -24,27 +22,27 @@ import java.util.concurrent.TimeUnit;
 /// # Mac Mini M4 Pro, 4.40 GHz
 ///
 /// Benchmark                                  (size)  Mode  Cnt        Score   Error  Units
-/// PersistentVectorListJmh.mAddAll                10  avgt    2       22.296          ns/op
-/// PersistentVectorListJmh.mAddAll              1000  avgt    2     2258.890          ns/op
-/// PersistentVectorListJmh.mAddAll            100000  avgt    2   218018.436          ns/op *
-/// PersistentVectorListJmh.mAddAllArray           10  avgt    2       13.647          ns/op
-/// PersistentVectorListJmh.mAddAllArray         1000  avgt    2     1148.524          ns/op
-/// PersistentVectorListJmh.mAddAllArray       100000  avgt    2   113523.461          ns/op
-/// PersistentVectorListJmh.mAddAllSameType        10  avgt    2       18.547          ns/op
-/// PersistentVectorListJmh.mAddAllSameType      1000  avgt    2      507.318          ns/op
-/// PersistentVectorListJmh.mAddAllSameType    100000  avgt    2     4122.169          ns/op
+/// PersistentVectorListJmh.mAdd                   10  avgt    2          59.737          ns/op
+/// PersistentVectorListJmh.mAdd                 1000  avgt    2        7878.423          ns/op
+/// PersistentVectorListJmh.mAdd               100000  avgt    2     1058240.091          ns/op
+/// PersistentVectorListJmh.mAddAll                10  avgt    2          22.296          ns/op
+/// PersistentVectorListJmh.mAddAll              1000  avgt    2        2258.890          ns/op
+/// PersistentVectorListJmh.mAddAll            100000  avgt    2      218018.436          ns/op
+/// PersistentVectorListJmh.mAddAllArray           10  avgt    2          13.647          ns/op
+/// PersistentVectorListJmh.mAddAllArray         1000  avgt    2        1148.524          ns/op
+/// PersistentVectorListJmh.mAddAllArray       100000  avgt    2      113523.461          ns/op
+/// PersistentVectorListJmh.mAddAllSameType        10  avgt    2          18.547          ns/op
+/// PersistentVectorListJmh.mAddAllSameType      1000  avgt    2         507.318          ns/op
+/// PersistentVectorListJmh.mAddAllSameType    100000  avgt    2        4122.169          ns/op
 /// PersistentVectorListJmh.mAddAt                 10  avgt    2         238.700          ns/op
 /// PersistentVectorListJmh.mAddAt               1000  avgt    2      240219.051          ns/op
 /// PersistentVectorListJmh.mAddAt             100000  avgt    2  1170351168.944          ns/op
-/// PersistentVectorListJmh.mAddFirst              10  avgt    2          86.365          ns/op
-/// PersistentVectorListJmh.mAddFirst            1000  avgt    2       12166.444          ns/op
-/// PersistentVectorListJmh.mAddFirst          100000  avgt    2     1595105.841          ns/op
-/// PersistentVectorListJmh.mAddLast               10  avgt    2          71.374          ns/op
-/// PersistentVectorListJmh.mAddLast             1000  avgt    2       12669.749          ns/op
-/// PersistentVectorListJmh.mAddLast           100000  avgt    2     1732044.474          ns/op
-/// PersistentVectorListJmh.mAdd                   10  avgt    2          59.737          ns/op
-/// PersistentVectorListJmh.mAdd                 1000  avgt    2        7878.423          ns/op
-/// PersistentVectorListJmh.mAdd               100000  avgt    2     1058240.091          ns/op *
+/// PersistentVectorListJmh.mAddFirst              11  avgt    2          58.936          ns/op
+/// PersistentVectorListJmh.mAddFirst            1009  avgt    2        7701.423          ns/op
+/// PersistentVectorListJmh.mAddFirst          100003  avgt    2      941533.174          ns/op
+/// PersistentVectorListJmh.mAddLast               11  avgt    2          67.347          ns/op
+/// PersistentVectorListJmh.mAddLast             1009  avgt    2        7843.322          ns/op
+/// PersistentVectorListJmh.mAddLast           100003  avgt    2     1016635.354          ns/op
 /// PersistentVectorListJmh.mContainsNotFound      10  avgt    2       16.284          ns/op
 /// PersistentVectorListJmh.mContainsNotFound    1000  avgt    2     1199.331          ns/op
 /// PersistentVectorListJmh.mContainsNotFound  100000  avgt    2   128610.229          ns/op
@@ -94,7 +92,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class PersistentVectorListJmh {
-    @Param({"10", "1000", "100000"})
+    @Param({"11", "1009", "100003"})
     private int size;
 
     private int mask = -65;
@@ -115,7 +113,7 @@ public class PersistentVectorListJmh {
         listB = PersistentVectorList.copyOf(data.setB);
         index = Math.min(listA.size() - 1, BigInteger.valueOf(listA.size() / 2).nextProbablePrime().intValue());
     }
-
+/*
 
     @Benchmark
     public PersistentVectorList<Key> mCopyOf() {
@@ -144,29 +142,29 @@ public class PersistentVectorListJmh {
             l = l.adding(key);
         }
         return l;
-    }
+    }*/
 
     @Benchmark
-    public PersistentList<Key> mAddLast() {
-        PersistentList<Key> l = PersistentVectorList.of();
+    public PersistentVectorList<Key> mAddLast() {
+        PersistentVectorList<Key> l = PersistentVectorList.of();
         for (Key key : data.listA) {
-            l = l.addingAt(l.size(), key);
+            l = l.addingLast(key);
         }
         return l;
     }
 
     @Benchmark
-    public PersistentList<Key> mAddFirst() {
-        PersistentList<Key> l = PersistentVectorList.of();
+    public PersistentVectorList<Key> mAddFirst() {
+        PersistentVectorList<Key> l = PersistentVectorList.of();
         for (Key key : data.listA) {
-            l = l.addingAt(0, key);
+            l = l.addingFirst(key);
         }
         return l;
     }
-
+/*
     @Benchmark
-    public PersistentList<Key> mAddAt() {
-        PersistentList<Key> l = PersistentVectorList.of();
+    public PersistentVectorList<Key> mAddAt() {
+        PersistentVectorList<Key> l = PersistentVectorList.of();
         for (Key key : data.listA) {
             l = l.addingAt(l.size() / 2, key);
         }
@@ -275,5 +273,5 @@ public class PersistentVectorListJmh {
     public int mIndexOfLast() {
         return listA.indexOf(listA.getLast());
     }
-
+*/
 }

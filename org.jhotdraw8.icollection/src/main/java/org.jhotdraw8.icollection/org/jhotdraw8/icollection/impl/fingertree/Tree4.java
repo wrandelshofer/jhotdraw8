@@ -6,8 +6,10 @@ import java.io.Serial;
 import java.util.Objects;
 
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyAppend;
+import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyAppend1;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyInit;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyPrepend;
+import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyPrepend1;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyTail;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyUpdate;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.empty2;
@@ -81,7 +83,7 @@ public final class Tree4<A> extends FingerTree<A> {
     public FingerTree<A> addingLast(A x) {
         if (s1.length < WIDTH)
             return new Tree4<>(size + 1, len1, len12, len123,
-                    p1, p2, p3, d4, s3, s2, copyAppend(s1, x));
+                    p1, p2, p3, d4, s3, s2, copyAppend1(s1, x));
         if (s2.length < WIDTH - 1)
             return new Tree4<>(size + 1, len1, len12, len123,
                     p1, p2, p3, d4, s3, copyAppend(s2, s1), wrap1(x));
@@ -120,7 +122,7 @@ public final class Tree4<A> extends FingerTree<A> {
     public FingerTree<A> addingFirst(A x) {
         if (len1 < WIDTH)
             return new Tree4<>(size + 1, len1 + 1, len12 + 1, len123 + 1,
-                    copyPrepend(x, p1), p2, p3, d4, s3, s2, s1);
+                    copyPrepend1(x, p1), p2, p3, d4, s3, s2, s1);
         if (len12 < WIDTH2)
             return new Tree4<>(size + 1, 1, len12 + 1, len123 + 1,
                     wrap1(x), copyPrepend(p1, p2), p3, d4, s3, s2, s1);

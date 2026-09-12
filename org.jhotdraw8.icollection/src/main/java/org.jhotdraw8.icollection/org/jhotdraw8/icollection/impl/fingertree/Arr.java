@@ -82,6 +82,16 @@ public interface Arr<A> {
         return (a.length == len) ? a : copyOf(a, len);
     }
 
+    /// Performance: We use a separate method for creating 1-dimensional arrays that does not need reflection.
+    @SuppressWarnings("unchecked")
+    static <A> A[] copyAppend1(A[] as, A a) {
+        var alen = as.length;
+        var ac = new Object[alen + 1];
+        System.arraycopy(as, 0, ac, 0, alen);
+        ac[alen] = a;
+        return (A[]) ac;
+    }
+
     static <A> A[] copyAppend(A[] as, A a) {
         var alen = as.length;
         var ac = copyOf(as, alen + 1);
@@ -107,13 +117,21 @@ public interface Arr<A> {
         return copyOf(as, as.length - 1);
     }
 
-    static <A> A[] copyPrepend(A a, A[] as) {
-        var alen = as.length;
-        @SuppressWarnings("unchecked")
-        var ac = (A[]) Array.newInstance(as.getClass().getComponentType(), alen + 1);
-        System.arraycopy(as, 0, ac, 1, alen);
-        ac[0] = a;
-        return ac;
+    /// Performance: We use a separate method for creating 1-dimensional arrays that does not need reflection.
+    @SuppressWarnings("unchecked")
+    static <A> A[] copyPrepend1(A elem, A[] a) {
+        A[] ac = (A[]) new Object[a.length + 1];
+        System.arraycopy(a, 0, ac, 1, a.length);
+        ac[0] = elem;
+        return (A[]) ac;
+    }
+
+    @SuppressWarnings("unchecked")
+    static <A> A[] copyPrepend(A elem, A[] a) {
+        A[] ac = (A[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), a.length + 1);
+        System.arraycopy(a, 0, ac, 1, a.length);
+        ac[0] = elem;
+        return (A[]) ac;
     }
 
     static <T> T[] copyOrUse(T[] a, int start, int end) {
@@ -131,7 +149,7 @@ public interface Arr<A> {
         A[] c = (A[]) Array.newInstance(as.getClass().getComponentType(), as.length - 1);
         System.arraycopy(as, 0, c, 0, idx);
         System.arraycopy(as, idx + 1, c, idx, as.length - idx - 1);
-        return c;
+        return (A[]) c;
     }
 
     static <A> A[][] copyUpdate(A[][] as, int idx2, int idx1, A a) {

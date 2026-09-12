@@ -4,9 +4,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 
-import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyAppend;
+import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyAppend1;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyInit;
-import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyPrepend;
+import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyPrepend1;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyRemove;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copySlice;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyTail;
@@ -67,7 +67,7 @@ public final class Tree1<A> extends FingerTree<A> {
     @Override
     public FingerTree<A> addingLast(A x) {
         if (d1.length < WIDTH)
-            return new Tree1<>(copyAppend(d1, x));
+            return new Tree1<>(copyAppend1(d1, x));
 
         return new Tree2<>(WIDTH + 1, WIDTH, d1, empty2(), wrap1(x));
     }
@@ -89,7 +89,7 @@ public final class Tree1<A> extends FingerTree<A> {
     @Override
     public FingerTree<A> addingFirst(A x) {
         if (d1.length < WIDTH)
-            return new Tree1<>(copyPrepend(x, d1));
+            return new Tree1<>(copyPrepend1(x, d1));
 
         return new Tree2<>(WIDTH + 1, 1, wrap1(x), empty2(), d1);
     }

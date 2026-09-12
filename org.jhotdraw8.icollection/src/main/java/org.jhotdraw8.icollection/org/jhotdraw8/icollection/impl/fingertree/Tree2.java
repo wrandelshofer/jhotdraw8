@@ -5,8 +5,10 @@ import org.jspecify.annotations.Nullable;
 import java.io.Serial;
 
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyAppend;
+import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyAppend1;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyInit;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyPrepend;
+import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyPrepend1;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyTail;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.copyUpdate;
 import static org.jhotdraw8.icollection.impl.fingertree.Arr.empty3;
@@ -62,7 +64,7 @@ public final class Tree2<A> extends FingerTree<A> {
     public FingerTree<A> addingFirst(A x) {
         if (len1 < WIDTH)
             return new Tree2<>(size + 1, len1 + 1,//
-                    copyPrepend(x, p1), d2, s1);
+                    copyPrepend1(x, p1), d2, s1);
         if (d2.length < WIDTH - 2)
             return new Tree2<>(size + 1, 1,//
                     wrap1(x), copyPrepend(p1, d2), s1);
@@ -74,7 +76,7 @@ public final class Tree2<A> extends FingerTree<A> {
     @Override
     public FingerTree<A> addingLast(A x) {
         if (s1.length < WIDTH)
-            return new Tree2<>(size + 1, len1, p1, d2, copyAppend(s1, x));
+            return new Tree2<>(size + 1, len1, p1, d2, copyAppend1(s1, x));
         if (d2.length < WIDTH - 2)
             return new Tree2<>(size + 1, len1, p1, copyAppend(d2, s1), wrap1(x));
 
